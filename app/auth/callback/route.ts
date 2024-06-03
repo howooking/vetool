@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
+  const supabase = createClient()
 
   const code = searchParams.get('code')
 
@@ -10,16 +11,51 @@ export async function GET(request: Request) {
   const next = searchParams.get('next') ?? '/'
 
   if (code) {
-    const supabase = createClient()
+    const { error: codeExchangeError } =
+      await supabase.auth.exchangeCodeForSession(code)
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    if (!codeExchangeError) {
+      const {
+        data: { user: authUser },
+        error: authUserError,
+      } = await supabase.auth.getUser()
 
-    if (!error) {
+      if (authUserError) {
+        return NextResponse.redirect(
+          `${origin}/error/auth-error?message=${authUserError.message}`,
+        )
+      }
+
+      const { data: user, error: userError } = await supabase
+        .from('users')
+        .select('user_id')
+        .match({ user_id: authUser?.id })
+
+      if (userError) {
+        return NextResponse.redirect(
+          `${origin}/error/auth-error?message=${userError.message}`,
+        )
+      }
+
+      if (user.length) {
+        return NextResponse.redirect(`${origin}/private`)
+      }
+
+      const { error: insertUserError } = await supabase.from('users').insert({
+        user_id: authUser?.id,
+        email: authUser?.email,
+        avatar_url: authUser?.user_metadata?.avatar_url,
+        name: authUser?.user_metadata?.full_name,
+      })
+
+      if (insertUserError) {
+        return NextResponse.redirect(
+          `${origin}/error/auth-error?message=${insertUserError.message}`,
+        )
+      }
+
       return NextResponse.redirect(`${origin}/private`)
     }
   }
-
-  // api route에서는 throw new Error() 호출이 되지 않음
-
-  return NextResponse.redirect(`${origin}/error/google-oauth-error`)
+  return NextResponse.redirect(`${origin}/error/auth-error?message=login-error`)
 }

@@ -4,9 +4,12 @@ import { Button } from '@/components/ui/button'
 import { googleLogin } from '@/lib/actions/auth'
 import { cn } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useFormStatus } from 'react-dom'
 
 export default function GoogleLoginButton() {
+  const { push } = useRouter()
+
   const { pending } = useFormStatus()
 
   return (
