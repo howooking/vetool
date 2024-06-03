@@ -38,3 +38,18 @@ export async function logout() {
   // revalidatePath('/', 'layout')
   redirect('/')
 }
+
+export async function getUser() {
+  const supabase = createClient()
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
+
+  if (error) {
+    redirect('/login')
+  }
+
+  return { user }
+}
