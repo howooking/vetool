@@ -4,118 +4,65 @@ import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { toast } from '@/components/ui/use-toast'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createClient } from '@/lib/supabase/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { newHospitalFormSchema } from './schema'
+import { ADDRESS } from '@/constants/hospital/new/address'
+import { toast } from '@/components/ui/use-toast'
 
 export default function NewHospitalForm() {
+  const [districts, setDistricts] = useState([''])
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const { back, push, replace, refresh } = useRouter()
   const form = useForm<z.infer<typeof newHospitalFormSchema>>({
     resolver: zodResolver(newHospitalFormSchema),
     defaultValues: {
       name: undefined,
-      city: undefined,
+      city: '서울특별시',
       district: undefined,
     },
   })
   const supabase = createClient()
+  const city = form.watch('city')
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  useEffect(() => {
+    if (city) {
+      const selectedCity = ADDRESS.find(value => value.city === city)
+      if (selectedCity) setDistricts(selectedCity.districts)
+      
+    }
+  }, [city])
+
   const handleSubmit = async (
     values: z.infer<typeof newHospitalFormSchema>,
   ) => {
     const { city, district, name } = values
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+    const {error} = await supabase.rpc("insert_user_data_when_create_hospital", {
+      name_input: name,
+      city_input: city,
+      district_input: district
+    })            
 
-    if (!user) {
-      return
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: error.message,
+        description: '관리자에게 문의하세요',
+      })
     }
-
-    setIsSubmitting(true)
-
-    // try {
-    //   const { data, error: hospitalError } = await supabase
-    //     .from('hospitals')
-    //     .insert({
-    //       business_no: businessNumber,
-    //       master_id: user.id,
-    //       name,
-    //       address,
-    //       phone_no: phoneNumber,
-    //     })
-    //     .select('hos_id')
-    //     .single()
-
-    //   if (hospitalError) {
-    //     toast({
-    //       variant: 'destructive',
-    //       title: hospitalError.message,
-    //       description: '관리자에게 문의하세요',
-    //     })
-    //     return
-    //   }
-
-    //   const { error: mappingError } = await supabase
-    //     .from('hos_vet_mapping')
-    //     .insert({
-    //       hos_id: data.hos_id,
-    //       vet_id: user.id,
-    //       vet_approved: true,
-    //       rank: 1,
-    //     })
-
-    //   if (mappingError) {
-    //     toast({
-    //       variant: 'destructive',
-    //       title: mappingError.message,
-    //       description: '관리자에게 문의하세요',
-    //     })
-    //     return
-    //   }
-
-    //   const { error: defaultHosError } = await supabase
-    //     .from('vets')
-    //     .update({ default_hos_id: data.hos_id })
-    //     .eq('vet_id', user.id)
-    //     .is('default_hos_id', null)
-
-    //   if (defaultHosError) {
-    //     toast({
-    //       variant: 'destructive',
-    //       title: defaultHosError.message,
-    //       description: '관리자에게 문의하세요',
-    //     })
-    //     return
-    //   }
-
-    //   toast({
-    //     title: '사업자등록증 확인 후 생성이 완료됩니다',
-    //     description: '잠시 후 페이지가 이동합니다.',
-    //   })
-    //   replace(`/hospital/${data.hos_id}`)
-    //   refresh()
-    //   return
-    // } catch (error) {
-    //   // eslint-disable-next-line no-console
-    //   console.error(error, 'error while adding a hospital')
-    // } finally {
-    //   setIsSubmitting(false)
-    // }
   }
 
   return (
@@ -138,6 +85,57 @@ export default function NewHospitalForm() {
             </FormItem>
           )}
         />
+
+        <FormLabel className="text-lg font-semibold">병원 주소</FormLabel>
+        <div className='flex'>
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+               <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="시·도" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {ADDRESS.map((value) => (
+                    <SelectItem key={value.city} value={value.city}>
+                      {value.city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="district"
+            render={({ field }) => (
+              <FormItem>
+               <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="군·구" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {districts.map((district) => (
+                    <SelectItem key={district} value={district}>
+                      {district}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className="flex gap-2">
           {/* <Button type="button" variant="outline" onClick={() => router.back()}>

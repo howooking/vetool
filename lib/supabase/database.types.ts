@@ -11,7 +11,9 @@ export type Database = {
     Tables: {
       hospitals: {
         Row: {
+          city: string | null
           created_at: string
+          district: string | null
           group_list: string[] | null
           hos_id: string
           is_personal: boolean | null
@@ -22,7 +24,9 @@ export type Database = {
           position_list: string[] | null
         }
         Insert: {
+          city?: string | null
           created_at?: string
+          district?: string | null
           group_list?: string[] | null
           hos_id?: string
           is_personal?: boolean | null
@@ -33,7 +37,9 @@ export type Database = {
           position_list?: string[] | null
         }
         Update: {
+          city?: string | null
           created_at?: string
+          district?: string | null
           group_list?: string[] | null
           hos_id?: string
           is_personal?: boolean | null
@@ -61,6 +67,7 @@ export type Database = {
           group: string[] | null
           hos_id: string | null
           is_active: boolean | null
+          is_admin: boolean
           name: string | null
           position: string | null
           rank: number | null
@@ -74,6 +81,7 @@ export type Database = {
           group?: string[] | null
           hos_id?: string | null
           is_active?: boolean | null
+          is_admin?: boolean
           name?: string | null
           position?: string | null
           rank?: number | null
@@ -87,6 +95,7 @@ export type Database = {
           group?: string[] | null
           hos_id?: string | null
           is_active?: boolean | null
+          is_admin?: boolean
           name?: string | null
           position?: string | null
           rank?: number | null
@@ -115,7 +124,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      insert_user_data_when_create_hospital: {
+        Args: {
+          name_input: string
+          city_input: string
+          district_input: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
