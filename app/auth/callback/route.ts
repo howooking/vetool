@@ -22,7 +22,7 @@ export async function GET(request: Request) {
 
       if (authUserError) {
         return NextResponse.redirect(
-          `${origin}/error/auth-error?message=${authUserError.message}`,
+          `${origin}/error?message=${authUserError.message}`,
         )
       }
 
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
 
       if (userError) {
         return NextResponse.redirect(
-          `${origin}/error/auth-error?message=${userError.message}`,
+          `${origin}/error?message=${userError.message}`,
         )
       }
 
@@ -50,12 +50,12 @@ export async function GET(request: Request) {
 
       if (insertUserError) {
         return NextResponse.redirect(
-          `${origin}/error/auth-error?message=${insertUserError.message}`,
+          `${origin}/error?message=${insertUserError.message}`,
         )
       }
 
       return NextResponse.redirect(`${origin}/private`)
     }
   }
-  return NextResponse.redirect(`${origin}/error/auth-error?message=login-error`)
+  return NextResponse.redirect(`${origin}/error?message=login-error`)
 }
