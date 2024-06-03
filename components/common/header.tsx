@@ -21,9 +21,14 @@ export default async function Header() {
       </Button>
 
       {user ? (
-        <form action={logout}>
-          <Button variant="destructive">Logout</Button>
-        </form>
+        <>
+          <Button asChild variant="outline">
+            <Link href="/hospital/new">병원생성</Link>
+          </Button>
+          <form action={logout}>
+            <Button variant="destructive">Logout</Button>
+          </form>
+        </>
       ) : (
         <Button asChild variant="secondary">
           <Link href="/login">Login</Link>
