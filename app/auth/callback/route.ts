@@ -20,5 +20,6 @@ export async function GET(request: Request) {
   }
 
   // api route에서는 throw new Error() 호출이 되지 않음
+
   return NextResponse.redirect(`${origin}/error/google-oauth-error`)
 }
