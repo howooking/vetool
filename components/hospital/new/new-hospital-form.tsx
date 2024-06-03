@@ -11,15 +11,15 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { toast } from '@/components/ui/use-toast'
+import { ADDRESS } from '@/constants/hospital/new/address'
 import { createClient } from '@/lib/supabase/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { newHospitalFormSchema } from './schema'
-import { ADDRESS } from '@/constants/hospital/new/address'
-import { toast } from '@/components/ui/use-toast'
+import { newHospitalFormSchema } from '@/components/hospital/new/schema'
 
 export default function NewHospitalForm() {
   const [districts, setDistricts] = useState([''])
@@ -48,9 +48,19 @@ export default function NewHospitalForm() {
   const handleSubmit = async (
     values: z.infer<typeof newHospitalFormSchema>,
   ) => {
-    const { city, district, name } = values
+    // 병원을 등록하려는 유저에게 이미 등록된 병원이 존재하는 경우
+    if (await supabase.from('users').select('hos_id')) {
+      toast({
+         variant: 'destructive',
+        title: '이미 등록된 병원이 존재합니다.',
+        description: '등록된 병원을 선택해주세요.',
+      })
 
-    const {error} = await supabase.rpc("insert_user_data_when_create_hospital", {
+      return
+    }
+
+    const { city, district, name } = values
+    const { error } = await supabase.rpc("insert_user_data_when_create_hospital", {
       name_input: name,
       city_input: city,
       district_input: district
