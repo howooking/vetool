@@ -32,13 +32,14 @@ export default function SelectHospitalInput() {
   const handleSubmit = async () => {
     setIsSubmitting(true)
 
-    const { error } = await supabase.rpc(
+    const { data, error } = await supabase.rpc(
       'update_user_hos_id_when_select_hospital',
       {
         hos_id_input: selectedHosId,
       },
     )
 
+    // TODO: error handling
     if (error) {
       toast({
         variant: 'destructive',
@@ -54,8 +55,8 @@ export default function SelectHospitalInput() {
 
     setIsSubmitting(false)
 
-    // router.replace(`/hospital/${data.hos_id}`)
-    // router.refresh()
+    router.replace(`/hospital/${selectedHosId}`)
+    router.refresh()
   }
 
   const [hospitals, setHospitals] = useState<

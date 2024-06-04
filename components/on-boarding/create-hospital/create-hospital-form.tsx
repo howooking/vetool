@@ -54,7 +54,7 @@ export default function CreateHospitalForm() {
     values: z.infer<typeof newHospitalFormSchema>,
   ) => {
     const { city, district, name, businessNumber } = values
-    const { error } = await supabase.rpc(
+    const { data: hosId, error } = await supabase.rpc(
       'insert_user_data_when_create_hospital',
       {
         name_input: name,
@@ -70,12 +70,17 @@ export default function CreateHospitalForm() {
         title: error.message,
         description: '관리자에게 문의하세요',
       })
+
+      return
     }
 
     toast({
       variant: 'default',
       title: `${name} 등록 성공`,
     })
+
+    replace(`/hospital/${hosId}`)
+    refresh()
   }
 
   return (
@@ -154,27 +159,27 @@ export default function CreateHospitalForm() {
               </FormItem>
             )}
           />
-
-          <FormField
-            control={form.control}
-            name="businessNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-semibold">
-                  사업자 등록번호
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="10자리 사업자 등록번호"
-                    {...field}
-                    className="h-[40px] border-2 px-2"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
+
+        <FormField
+          control={form.control}
+          name="businessNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-lg font-semibold">
+                사업자 등록번호
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="10자리 사업자 등록번호"
+                  {...field}
+                  className="h-[40px] border-2 px-2"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="flex gap-2">
           <Button type="button" variant="outline" onClick={() => back()}>

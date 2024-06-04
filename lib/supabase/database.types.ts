@@ -134,7 +134,7 @@ export type Database = {
           district_input: string
           business_number_input: string
         }
-        Returns: undefined
+        Returns: string
       }
       update_user_hos_id_when_select_hospital: {
         Args: {

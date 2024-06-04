@@ -45,7 +45,7 @@ export async function GET(request: Request) {
       // 등록된 병원이 존재하지 않으면서 동시에 유저 아이디도 없는 경우 (첫 로그인)
       if (!user.length) {
         const { error: insertUserError } = await supabase.from('users').insert({
-          user_id: authUser?.id,
+          user_id: authUser?.id!,
           email: authUser?.email,
           avatar_url: authUser?.user_metadata?.avatar_url,
           name: authUser?.user_metadata?.full_name,
