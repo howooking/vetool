@@ -11,7 +11,7 @@ export default async function Header() {
   } = await supabase.auth.getUser()
 
   return (
-    <header className="bg-zinc-600 fixed flex">
+    <header className="fixed flex bg-zinc-600">
       <Button asChild variant="default">
         <Link href="/">Home</Link>
       </Button>
@@ -22,9 +22,6 @@ export default async function Header() {
 
       {user ? (
         <>
-          <Button asChild variant="outline">
-            <Link href="/hospital/new">병원생성</Link>
-          </Button>
           <form action={logout}>
             <Button variant="destructive">Logout</Button>
           </form>

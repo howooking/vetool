@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       hospitals: {
         Row: {
+          business_number: string
           city: string | null
           created_at: string
           district: string | null
@@ -24,6 +25,7 @@ export type Database = {
           position_list: string[] | null
         }
         Insert: {
+          business_number?: string
           city?: string | null
           created_at?: string
           district?: string | null
@@ -37,6 +39,7 @@ export type Database = {
           position_list?: string[] | null
         }
         Update: {
+          business_number?: string
           city?: string | null
           created_at?: string
           district?: string | null
@@ -86,7 +89,7 @@ export type Database = {
           position?: string | null
           rank?: number | null
           user_approved?: boolean | null
-          user_id?: string
+          user_id: string
         }
         Update: {
           avatar_url?: string | null
@@ -129,6 +132,13 @@ export type Database = {
           name_input: string
           city_input: string
           district_input: string
+          business_number_input: string
+        }
+        Returns: undefined
+      }
+      update_user_hos_id_when_select_hospital: {
+        Args: {
+          hos_id_input: string
         }
         Returns: undefined
       }
