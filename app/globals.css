@@ -73,4 +73,14 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.hospital-admin-user-grid {
+  @apply grid grid-cols-6 items-center gap-4 border p-2 text-center text-zinc-50;
 }
