@@ -84,3 +84,11 @@
 .hospital-admin-user-grid {
   @apply grid grid-cols-6 items-center gap-4 border p-2 text-center text-zinc-50;
 }
+
+.sidebar-list-style > li {
+  @apply p-4 hover:bg-gray-400;
+}
+
+.sidebar-list-style > li > a {
+  @apply flex items-center;
+}

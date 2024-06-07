@@ -13,12 +13,13 @@ export default async function HospitalAdminPage({
   const { data: users } = await supabase
     .from('users')
     .select('name, position, user_approved, rank, group, is_admin, user_id')
-    .eq('hos_id', params.id)
+    .match({ hos_id: params.id })
+    .order('rank', { ascending: true })
 
   const { data: hospital } = await supabase
     .from('hospitals')
     .select('position_list')
-    .eq('hos_id', params.id)
+    .match({ hos_id: params.id })
   const { user: userData } = await getUser()
   const positionList = hospital?.[0].position_list
   const currentUser = users?.find((user) => user.user_id === userData?.id)
@@ -29,7 +30,7 @@ export default async function HospitalAdminPage({
   }
 
   return (
-    <div className="flex flex-col justify-center">
+    <div className="flex w-full flex-col">
       <div className="hospital-admin-user-grid">
         {TITLES.map((title, index) => (
           <div key={index}>{title}</div>
