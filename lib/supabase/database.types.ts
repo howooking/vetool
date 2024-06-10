@@ -9,6 +9,166 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      drug_doses: {
+        Row: {
+          bw_unit: string
+          created_at: string
+          cri_unit: string | null
+          default_dose: string
+          description: string | null
+          does_id: string
+          dose_unit: string
+          drug_id: string | null
+          max_dose: string | null
+          min_dose: string | null
+          route: string
+          species: string
+        }
+        Insert: {
+          bw_unit?: string
+          created_at?: string
+          cri_unit?: string | null
+          default_dose?: string
+          description?: string | null
+          does_id?: string
+          dose_unit?: string
+          drug_id?: string | null
+          max_dose?: string | null
+          min_dose?: string | null
+          route?: string
+          species?: string
+        }
+        Update: {
+          bw_unit?: string
+          created_at?: string
+          cri_unit?: string | null
+          default_dose?: string
+          description?: string | null
+          does_id?: string
+          dose_unit?: string
+          drug_id?: string | null
+          max_dose?: string | null
+          min_dose?: string | null
+          route?: string
+          species?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drug_doses_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "drugs"
+            referencedColumns: ["drug_id"]
+          },
+        ]
+      }
+      drug_products: {
+        Row: {
+          company: string | null
+          created_at: string
+          description: string | null
+          drug_id: string | null
+          drug_product_id: string
+          hos_id: string | null
+          mass_unit: string
+          name: string
+          price: string | null
+          tag: string | null
+          type: string
+          unit: string
+          volume: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          description?: string | null
+          drug_id?: string | null
+          drug_product_id?: string
+          hos_id?: string | null
+          mass_unit?: string
+          name?: string
+          price?: string | null
+          tag?: string | null
+          type?: string
+          unit?: string
+          volume?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          description?: string | null
+          drug_id?: string | null
+          drug_product_id?: string
+          hos_id?: string | null
+          mass_unit?: string
+          name?: string
+          price?: string | null
+          tag?: string | null
+          type?: string
+          unit?: string
+          volume?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drug_products_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "drugs"
+            referencedColumns: ["drug_id"]
+          },
+          {
+            foreignKeyName: "drug_products_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+        ]
+      }
+      drugs: {
+        Row: {
+          classification: string | null
+          created_at: string
+          description: string | null
+          drug_id: string
+          hos_id: string | null
+          indication: string | null
+          name: string | null
+          side_effect: string | null
+          tag: string | null
+        }
+        Insert: {
+          classification?: string | null
+          created_at?: string
+          description?: string | null
+          drug_id?: string
+          hos_id?: string | null
+          indication?: string | null
+          name?: string | null
+          side_effect?: string | null
+          tag?: string | null
+        }
+        Update: {
+          classification?: string | null
+          created_at?: string
+          description?: string | null
+          drug_id?: string
+          hos_id?: string | null
+          indication?: string | null
+          name?: string | null
+          side_effect?: string | null
+          tag?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drugs_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+        ]
+      }
       hospitals: {
         Row: {
           business_number: string
@@ -59,6 +219,62 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      patients: {
+        Row: {
+          birth: string | null
+          breed: string
+          created_at: string
+          gender: string
+          hos_id: string | null
+          hos_owner_id: string | null
+          hos_patient_id: string
+          memo: string | null
+          microchip_no: string | null
+          name: string
+          patient_id: string
+          species: string
+          state: string | null
+        }
+        Insert: {
+          birth?: string | null
+          breed?: string
+          created_at?: string
+          gender?: string
+          hos_id?: string | null
+          hos_owner_id?: string | null
+          hos_patient_id?: string
+          memo?: string | null
+          microchip_no?: string | null
+          name?: string
+          patient_id?: string
+          species?: string
+          state?: string | null
+        }
+        Update: {
+          birth?: string | null
+          breed?: string
+          created_at?: string
+          gender?: string
+          hos_id?: string | null
+          hos_owner_id?: string | null
+          hos_patient_id?: string
+          memo?: string | null
+          microchip_no?: string | null
+          name?: string
+          patient_id?: string
+          species?: string
+          state?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patients_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
           },
         ]
       }
@@ -122,11 +338,67 @@ export type Database = {
           },
         ]
       }
+      vitals: {
+        Row: {
+          blood_pressure: string | null
+          body_weight: string | null
+          created_at: string
+          heart_rate: string | null
+          patient_id: string | null
+          respiratory_rate: string | null
+          temperature: string | null
+          vital_id: number
+        }
+        Insert: {
+          blood_pressure?: string | null
+          body_weight?: string | null
+          created_at?: string
+          heart_rate?: string | null
+          patient_id?: string | null
+          respiratory_rate?: string | null
+          temperature?: string | null
+          vital_id?: number
+        }
+        Update: {
+          blood_pressure?: string | null
+          body_weight?: string | null
+          created_at?: string
+          heart_rate?: string | null
+          patient_id?: string | null
+          respiratory_rate?: string | null
+          temperature?: string | null
+          vital_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vitals_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      insert_patient_data_when_register_patient: {
+        Args: {
+          hos_id_input: string
+          hos_patient_id_input: string
+          birth_input: string
+          species_input: string
+          breed_input: string
+          gender_input: string
+          name_input: string
+          memo_input: string
+          microchip_no_input: string
+          body_weight_input: string
+        }
+        Returns: undefined
+      }
       insert_user_data_when_create_hospital: {
         Args: {
           name_input: string

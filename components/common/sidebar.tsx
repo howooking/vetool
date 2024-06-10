@@ -1,9 +1,9 @@
 'use client'
 
 import { Switch } from '@/components/ui/switch'
+import { SIDE_BAR_ITEMS } from '@/constants/common/sidebar'
 import { useSidebarStore } from '@/lib/store/sidebar'
 import { cn } from '@/lib/utils'
-import { Home, Hospital, UserCheck } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -22,33 +22,21 @@ export default function Sidebar() {
     >
       {/* 사이드바 내용 */}
       <ul className="sidebar-list-style">
-        <li>
-          <Link href={`/hospital/${hosId}`}>
-            <Hospital size={20} />
-            <span
-              className={cn(
-                'absolute left-12',
-                isExpanded ? 'block' : 'hidden',
-              )}
-            >
-              병원 홈
-            </span>
-          </Link>
-        </li>
-
-        <li>
-          <Link href={`/hospital/${hosId}/admin`}>
-            <UserCheck size={20} />
-            <span
-              className={cn(
-                'absolute left-12',
-                isExpanded ? 'block' : 'hidden',
-              )}
-            >
-              병원 관리
-            </span>
-          </Link>
-        </li>
+        {SIDE_BAR_ITEMS.map((item, index) => (
+          <li key={index}>
+            <Link href={`/hospital/${hosId}${item.path}`} title={item.name}>
+              {<item.icon size={20} />}
+              <span
+                className={cn(
+                  'absolute left-12',
+                  isExpanded ? 'block' : 'hidden',
+                )}
+              >
+                {item.name}
+              </span>
+            </Link>
+          </li>
+        ))}
       </ul>
 
       {/* 사이드바 스위치 버튼 */}

@@ -86,9 +86,9 @@
 }
 
 .sidebar-list-style > li {
-  @apply p-4 hover:bg-gray-400;
+  @apply hover:bg-gray-400;
 }
 
 .sidebar-list-style > li > a {
-  @apply flex items-center;
+  @apply flex items-center p-4;
 }
