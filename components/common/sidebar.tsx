@@ -2,7 +2,7 @@
 
 import { Switch } from '@/components/ui/switch'
 import { SIDE_BAR_ITEMS } from '@/constants/common/sidebar'
-import { useSidebarStore } from '@/lib/store/sidebar'
+import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -13,10 +13,10 @@ export default function Sidebar() {
   const { isExpanded, toggleSidebar } = useSidebarStore()
 
   return (
-    <nav
+    <aside
       data-state={isExpanded ? 'expanded' : 'collapse'}
       className={cn(
-        'h-screen bg-gray-800 text-white transition-all duration-200',
+        'flex min-h-[calc(100vh-48px)] flex-col bg-primary text-white transition-all duration-200',
         isExpanded ? 'w-48' : 'w-14',
       )}
     >
@@ -43,8 +43,8 @@ export default function Sidebar() {
       <Switch
         checked={isExpanded}
         onCheckedChange={toggleSidebar}
-        className="mt-auto"
+        className="mb-4 ml-2 mt-auto"
       />
-    </nav>
+    </aside>
   )
 }
