@@ -129,8 +129,6 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
     })
 
     setIsSubmitting(false)
-
-    return
   }
 
   return (
