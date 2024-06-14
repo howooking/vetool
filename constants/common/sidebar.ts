@@ -1,4 +1,4 @@
-import { Home, Hospital, UserPlus, Contact, Cat } from 'lucide-react'
+import { Contact, Home, Hospital, UserPlus, Activity } from 'lucide-react'
 
 // root/hospital/{hos_id}/
 export const SIDE_BAR_ITEMS = [
@@ -6,6 +6,11 @@ export const SIDE_BAR_ITEMS = [
     name: '병원 홈',
     path: '/',
     icon: Home,
+  },
+  {
+    name: '입원실',
+    path: '/icu',
+    icon: Activity,
   },
   {
     name: '병원 관리',
