@@ -3,8 +3,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import MaxWidthContainer from './max-width-container'
-import { createClient } from '@/lib/supabase/server'
-import { logout } from '@/lib/actions/auth'
 
 const NAV_MENUS = [
   { label: '벳툴소개', href: '/company' },
@@ -12,12 +10,6 @@ const NAV_MENUS = [
   { label: '가격안내', href: '/pricing' },
 ]
 export default async function HomepageHeader() {
-  const supabase = createClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
   return (
     <header className="sticky top-0 border-b">
       <MaxWidthContainer>
@@ -42,24 +34,18 @@ export default async function HomepageHeader() {
           </div>
 
           <div className="flex items-center gap-2">
-            {user ? (
-              <form action={logout}>
-                <Button variant="destructive">Logout</Button>
-              </form>
-            ) : (
-              <>
-                <Button asChild variant="secondary">
-                  <Link href="/login" className="font-bold">
-                    로그인
-                  </Link>
-                </Button>
-                <Button asChild variant="default">
-                  <Link href="/login" className="font-bold">
-                    무료로 시작하기
-                  </Link>
-                </Button>
-              </>
-            )}
+            <>
+              <Button asChild variant="secondary">
+                <Link href="/login" className="font-bold">
+                  로그인
+                </Link>
+              </Button>
+              <Button asChild variant="default">
+                <Link href="/login" className="font-bold">
+                  무료로 시작하기
+                </Link>
+              </Button>
+            </>
           </div>
         </div>
       </MaxWidthContainer>
