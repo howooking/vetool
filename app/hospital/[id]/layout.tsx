@@ -13,7 +13,7 @@ export default function Layout({
   return (
     <div className="flex">
       <Sidebar />
-      {children}
+      <section className="w-full px-16">{children}</section>
     </div>
   )
 }

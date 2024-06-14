@@ -3,10 +3,10 @@ import { Button } from '../ui/button'
 import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/lib/actions/auth'
 import { Cat } from 'lucide-react'
+import { COLORS } from '@/constants/common/colors'
 
 export default async function Header() {
   const supabase = createClient()
-
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -15,7 +15,7 @@ export default async function Header() {
     <header className="sticky top-0 flex items-center justify-between border-b bg-white">
       {/* 벳툴 로고 */}
       <div className="flex items-center justify-center px-2 py-2">
-        <Cat size={32} color="#fff" fill="#14B8A6" />
+        <Cat size={32} color="#fff" fill={COLORS.primary} />
       </div>
 
       <div className="flex">

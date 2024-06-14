@@ -24,13 +24,14 @@ export default async function HospitalAdminPage({
   const positionList = hospital?.[0].position_list
   const currentUser = users?.find((user) => user.user_id === userData?.id)
 
-  // Page Access Control
+  // AdminPage Access Control
   if (currentUser && !currentUser.is_admin) {
     redirect(`/hospital/${params.id}`)
   }
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex flex-col">
+      <h1>병원 관리</h1>
       <div className="hospital-admin-user-grid">
         {TITLES.map((title, index) => (
           <div key={index}>{title}</div>

@@ -13,14 +13,14 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 168 79.8% 40%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 210, 24.6%, 45.85%;
 
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
@@ -29,7 +29,7 @@
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --input: 210, 15.5%, 87.84%;
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
@@ -79,14 +79,29 @@
     -webkit-appearance: none;
     margin: 0;
   }
+
+  h1 {
+    padding: 1rem 0;
+    font-size: 40px;
+    font-weight: bold;
+  }
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .hospital-admin-user-grid {
-  @apply grid grid-cols-6 items-center gap-4 border p-2 text-center text-zinc-50;
+  @apply grid grid-cols-6 items-center gap-4 border p-2 text-center;
 }
 
 .sidebar-list-style > li {
-  @apply hover:bg-gray-400;
+  @apply hover:bg-teal-700;
 }
 
 .sidebar-list-style > li > a {

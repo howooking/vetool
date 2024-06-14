@@ -135,7 +135,7 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="grid grid-cols-2 gap-8"
+        className="grid grid-cols-2 gap-8 sm:w-1/2"
       >
         {/* 이름 */}
         <FormField
@@ -186,7 +186,12 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger className="h-8 text-sm">
+                  <SelectTrigger
+                    className={cn(
+                      'h-8 text-sm',
+                      !field.value && 'text-muted-foreground',
+                    )}
+                  >
                     <SelectValue placeholder="종을 선택해주세요." />
                   </SelectTrigger>
                 </FormControl>
@@ -218,7 +223,7 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        'relative h-8 justify-start border border-input bg-inherit px-3 text-sm font-normal',
+                        'relative h-8 justify-start overflow-hidden border border-input bg-inherit px-3 text-sm font-normal',
                         !field.value && 'text-muted-foreground',
                       )}
                     >
@@ -283,7 +288,12 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
               </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="h-8 text-sm">
+                  <SelectTrigger
+                    className={cn(
+                      'h-8 text-sm',
+                      !field.value && 'text-muted-foreground',
+                    )}
+                  >
                     <SelectValue placeholder="성별을 선택해주세요." />
                   </SelectTrigger>
                 </FormControl>
@@ -317,14 +327,16 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
                     <Button
                       variant={'outline'}
                       className={cn(
-                        'h-8 border border-input bg-inherit pl-3 text-left text-sm font-normal',
+                        'h-8 overflow-hidden border border-input bg-inherit pl-3 text-left text-sm font-normal',
                         !field.value && 'text-muted-foreground',
                       )}
                     >
                       {field.value ? (
                         <>{format(field.value, 'yyyy-MM-dd')}</>
                       ) : (
-                        <span>출생일을 선택해주세요.</span>
+                        <span className="overflow-hidden whitespace-nowrap">
+                          출생일을 선택해주세요.
+                        </span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>

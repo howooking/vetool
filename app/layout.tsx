@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={cn(inter.className, 'antialiased')}>
         <Header />
-        <main className="min-h-screen bg-zinc-600 pt-10">{children}</main>
+        <main className="bg-white">{children}</main>
         <Toaster />
       </body>
     </html>
