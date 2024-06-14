@@ -1,3 +1,3 @@
-export default function Home() {
-  return <h1>sweet home</h1>
+export default function CompanyHomePage() {
+  return <h1>회사 소개 홈페이지</h1>
 }
