@@ -1,11 +1,34 @@
 'use client'
 
 import { Switch } from '@/components/ui/switch'
-import { SIDE_BAR_ITEMS } from '@/constants/common/sidebar'
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { Activity, Contact, Home, UserPlus } from 'lucide-react'
+
+const SIDE_BAR_ITEMS = [
+  {
+    name: '병원 홈',
+    path: '/',
+    icon: Home,
+  },
+  {
+    name: '입원실',
+    path: '/icu',
+    icon: Activity,
+  },
+  {
+    name: '환자 등록',
+    path: '/register',
+    icon: UserPlus,
+  },
+  {
+    name: '환자 조회',
+    path: '/patients',
+    icon: Contact,
+  },
+] as const
 
 export default function Sidebar() {
   const pathname = usePathname()
@@ -16,11 +39,10 @@ export default function Sidebar() {
     <aside
       data-state={isExpanded ? 'expanded' : 'collapse'}
       className={cn(
-        'flex min-h-[calc(100vh-48px)] flex-col bg-primary text-white transition-all duration-200',
+        'flex h-screen flex-col bg-primary text-white transition-all duration-200',
         isExpanded ? 'w-48' : 'w-14',
       )}
     >
-      {/* 사이드바 내용 */}
       <ul className="sidebar-list-style">
         {SIDE_BAR_ITEMS.map((item, index) => (
           <li key={index}>
@@ -39,7 +61,6 @@ export default function Sidebar() {
         ))}
       </ul>
 
-      {/* 사이드바 스위치 버튼 */}
       <Switch
         checked={isExpanded}
         onCheckedChange={toggleSidebar}

@@ -8,7 +8,7 @@ const NAV_MENUS = [
   { label: '벳툴소개', href: '/company' },
   { label: '제품안내', href: '/products' },
   { label: '가격안내', href: '/pricing' },
-]
+] as const
 export default async function HomepageHeader() {
   return (
     <header className="sticky top-0 border-b">
