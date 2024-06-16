@@ -49,8 +49,6 @@ export default async function UserInfo({ hosId }: { hosId: string }) {
     redirect(`/error?message=${userInfoError.message}`)
   }
 
-  console.log(userInfo)
-
   return (
     <div className="flex items-center gap-2">
       <span>{userInfo?.at(0)?.hos_id.name}</span>

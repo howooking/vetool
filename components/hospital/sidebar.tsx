@@ -3,9 +3,25 @@
 import { Switch } from '@/components/ui/switch'
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
+import {
+  Activity,
+  ArrowLeft,
+  ArrowRight,
+  CircleChevronLeft,
+  CircleChevronRight,
+  Contact,
+  Home,
+  UserPlus,
+} from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Activity, Contact, Home, UserPlus } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip'
+import { Button } from '../ui/button'
 
 const SIDE_BAR_ITEMS = [
   {
@@ -44,28 +60,41 @@ export default function Sidebar() {
       )}
     >
       <ul className="sidebar-list-style">
-        {SIDE_BAR_ITEMS.map((item, index) => (
-          <li key={index}>
-            <Link href={`/hospital/${hosId}${item.path}`} title={item.name}>
-              {<item.icon size={20} />}
-              <span
-                className={cn(
-                  'absolute left-12',
-                  isExpanded ? 'block' : 'hidden',
-                )}
-              >
-                {item.name}
-              </span>
-            </Link>
+        {SIDE_BAR_ITEMS.map((item) => (
+          <li key={item.name}>
+            <TooltipProvider delayDuration={70}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link href={`/hospital/${hosId}${item.path}`}>
+                    {<item.icon size={16} />}
+                    <span
+                      className={cn(
+                        'absolute left-12',
+                        isExpanded ? 'block' : 'hidden',
+                      )}
+                    >
+                      {item.name}
+                    </span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>{item.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </li>
         ))}
       </ul>
 
-      <Switch
-        checked={isExpanded}
-        onCheckedChange={toggleSidebar}
-        className="mb-4 ml-2 mt-auto"
-      />
+      <div className="mb-4 ml-2 mt-auto">
+        <Button size="icon" onClick={toggleSidebar}>
+          {isExpanded ? (
+            <ArrowLeft className="text-white" size={16} />
+          ) : (
+            <ArrowRight className="text-white" size={16} />
+          )}
+        </Button>
+      </div>
     </aside>
   )
 }
