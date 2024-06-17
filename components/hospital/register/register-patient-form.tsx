@@ -46,14 +46,16 @@ import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { LoaderCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
+export default function RegisterPatientForm({ hosId }: { hosId: string }) {
   const [breedOpen, setBreedOpen] = useState(false)
   const [selectedSpecies, setSelectedSpecies] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { push } = useRouter()
 
   const supabase = createClient()
   const BREEDS = selectedSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS
@@ -101,7 +103,7 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
         body_weight_input: weight,
         breed_input: breed,
         gender_input: gender,
-        hos_id_input: hos_id,
+        hos_id_input: hosId,
         hos_patient_id_input: hos_patient_id,
         memo_input: memo,
         microchip_no_input: microchipNumber,
@@ -120,22 +122,19 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
     }
 
     toast({
-      title: '환자가 등록되었습니다.',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
+      title: '신규 환자가 등록되었습니다.',
     })
 
     setIsSubmitting(false)
+
+    push(`/hospital/${hosId}/patients`)
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="grid grid-cols-2 gap-8 sm:w-1/2"
+        className="grid grid-cols-2 gap-8"
       >
         {/* 이름 */}
         <FormField
@@ -143,8 +142,8 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="pb-2 pt-4 text-xl font-semibold">
-                이름 *
+              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
+                이름*
               </FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
@@ -160,8 +159,8 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
           name="hos_patient_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="pb-2 pt-4 text-xl font-semibold">
-                환자 번호 *
+              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
+                환자 번호*
               </FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
@@ -178,8 +177,8 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
           name="species"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="pb-2 pt-4 text-xl font-semibold">
-                종 *
+              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
+                종*
               </FormLabel>
               <Select
                 onValueChange={handleSpeciesChange}
@@ -215,7 +214,7 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
           name="breed"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel className="text-xl font-semibold">품종 *</FormLabel>
+              <FormLabel className="text-sm font-semibold">품종*</FormLabel>
               <Popover open={breedOpen} onOpenChange={setBreedOpen}>
                 <PopoverTrigger asChild disabled={!selectedSpecies}>
                   <FormControl>
@@ -283,7 +282,7 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
           name="gender"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="pb-2 pt-4 text-xl font-semibold">
+              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
                 성별*
               </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -320,7 +319,7 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
           name="birth"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel className="text-xl font-semibold">출생일</FormLabel>
+              <FormLabel className="text-sm font-semibold">출생일</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -374,7 +373,7 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
           name="microchip_no"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="pb-2 pt-4 text-xl font-semibold">
+              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
                 마이크로칩 번호
               </FormLabel>
               <FormControl>
@@ -392,7 +391,7 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
           name="weight"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="pb-2 pt-4 text-xl font-semibold">
+              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
                 몸무게
               </FormLabel>
               <FormControl>
@@ -411,7 +410,7 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
             name="memo"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="pb-2 pt-4 text-xl font-semibold">
+                <FormLabel className="pb-2 pt-4 text-sm font-semibold">
                   메모
                 </FormLabel>
                 <FormControl>
@@ -425,10 +424,10 @@ export default function RegisterPatientForm({ hos_id }: { hos_id: string }) {
 
         <Button
           type="submit"
-          className="col-span-2 mt-4 w-full font-semibold"
+          className="col-span-2 ml-auto mt-4 font-semibold"
           disabled={isSubmitting}
         >
-          환자 등록
+          등록
           <LoaderCircle
             className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
           />
