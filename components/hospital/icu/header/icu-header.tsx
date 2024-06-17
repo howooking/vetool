@@ -10,7 +10,7 @@ export default function IcuHeader() {
   return (
     <>
       {pathname.endsWith('icu') ? (
-        <div className="flex items-center gap-8 px-4">
+        <div className="flex items-center gap-2">
           <IcuDateSelector />
           <IcuAddPatientTrigger />
         </div>

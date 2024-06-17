@@ -22,13 +22,11 @@ export default function Layout({
   params: { id: string }
 }) {
   return (
-    <div>
-      <div className="flex">
-        <Sidebar />
-        <div className="w-full">
-          <HospitalHeader hosId={params.id} />
-          <main className="px-4">{children}</main>
-        </div>
+    <div className="flex">
+      <Sidebar />
+      <div className="w-full">
+        <HospitalHeader hosId={params.id} />
+        <main className="p-2">{children}</main>
       </div>
     </div>
   )

@@ -1,16 +1,18 @@
 import { Button } from '@/components/ui/button'
 import { Bell, Search, Settings } from 'lucide-react'
-import UserInfo from './user-info'
 import { Suspense } from 'react'
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import { UserInfoSkeleton } from './user-info-skeleton'
 import IcuHeader from '../icu/header/icu-header'
+import HeaderTitle from './header-title'
+import UserInfo from './user-info'
+import { UserInfoSkeleton } from './user-info-skeleton'
 
 export default async function HospitalHeader({ hosId }: { hosId: string }) {
   return (
-    <header className="flex h-12 items-center justify-between gap-4 border-b px-4">
-      <IcuHeader />
+    <header className="flex h-12 items-center justify-between gap-4 border-b px-2">
+      <div className="flex items-center gap-4">
+        <HeaderTitle />
+        <IcuHeader />
+      </div>
 
       <div className="flex items-center gap-4">
         <Suspense fallback={<UserInfoSkeleton />}>

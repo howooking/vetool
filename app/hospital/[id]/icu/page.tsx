@@ -8,10 +8,5 @@ export default async function IcuPage({ params }: { params: { id: string } }) {
     .select('*')
     .match({ hos_id: params.id })
 
-  return (
-    <div>
-      <span>IcuPage</span>
-      <IcuDialog hosId={params.id} patients={patientsData!} />
-    </div>
-  )
+  return <IcuDialog hosId={params.id} patients={patientsData!} />
 }

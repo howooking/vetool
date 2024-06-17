@@ -1,55 +1,13 @@
 'use client'
 
-import { Switch } from '@/components/ui/switch'
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
-import {
-  Activity,
-  ArrowLeft,
-  ArrowRight,
-  CircleChevronLeft,
-  CircleChevronRight,
-  Contact,
-  Home,
-  UserPlus,
-} from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '../../ui/tooltip'
+import { ArrowLeft } from 'lucide-react'
 import { Button } from '../../ui/button'
 import SidebarItem from './sidebar-item'
-
-const SIDE_BAR_ITEMS = [
-  {
-    name: '병원 홈',
-    path: '/',
-    icon: Home,
-  },
-  {
-    name: '입원실',
-    path: '/icu',
-    icon: Activity,
-  },
-  {
-    name: '환자 등록',
-    path: '/register',
-    icon: UserPlus,
-  },
-  {
-    name: '환자 조회',
-    path: '/patients',
-    icon: Contact,
-  },
-] as const
+import { SIDE_BAR_ITEMS } from '@/constants/hospital/sidebar/sidebar-items'
 
 export default function Sidebar() {
-  const pathname = usePathname()
-  const hosId = pathname.split('/').at(2)
   const { isExpanded, toggleSidebar } = useSidebarStore()
 
   return (

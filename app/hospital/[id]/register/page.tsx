@@ -5,10 +5,5 @@ export default async function HospitalRegisterPage({
 }: {
   params: { id: string }
 }) {
-  return (
-    <div>
-      <h1>환자 등록</h1>
-      <RegisterPatientForm hosId={params.id} />
-    </div>
-  )
+  return <RegisterPatientForm hosId={params.id} />
 }
