@@ -34,8 +34,6 @@ export async function logout() {
     throw new Error(`로그아웃 중 에러 발생 : ${error.message}`)
   }
 
-  // 캐싱 초기화 불필요한 듯
-  // revalidatePath('/', 'layout')
   redirect('/')
 }
 
