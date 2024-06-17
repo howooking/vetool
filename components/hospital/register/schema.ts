@@ -9,5 +9,5 @@ export const registerPatientFormSchema = z.object({
   gender: z.string({ required_error: '성별을 선택해주세요.' }),
   birth: z.date({ required_error: '생년월일을 선택해주세요.' }),
   microchip_no: z.string({ required_error: '마이크로칩 넘버를 입력해주세요.' }),
-  memo: z.string({ required_error: '종을 선택해주세요.' }).nullable(),
+  memo: z.string({ required_error: '종을 선택해주세요.' }),
 })
