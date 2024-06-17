@@ -20,8 +20,9 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '../ui/tooltip'
-import { Button } from '../ui/button'
+} from '../../ui/tooltip'
+import { Button } from '../../ui/button'
+import SidebarItem from './sidebar-item'
 
 const SIDE_BAR_ITEMS = [
   {
@@ -55,44 +56,27 @@ export default function Sidebar() {
     <aside
       data-state={isExpanded ? 'expanded' : 'collapse'}
       className={cn(
-        'flex h-screen flex-col bg-primary text-white transition-all duration-200',
+        'flex h-screen flex-col border-r transition-all duration-200',
         isExpanded ? 'w-48' : 'w-14',
       )}
     >
-      <ul className="sidebar-list-style">
+      <ul>
         {SIDE_BAR_ITEMS.map((item) => (
-          <li key={item.name}>
-            <TooltipProvider delayDuration={70}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href={`/hospital/${hosId}${item.path}`}>
-                    {<item.icon size={16} />}
-                    <span
-                      className={cn(
-                        'absolute left-12',
-                        isExpanded ? 'block' : 'hidden',
-                      )}
-                    >
-                      {item.name}
-                    </span>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>{item.name}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </li>
+          <SidebarItem item={item} key={item.name} />
         ))}
       </ul>
 
       <div className="mb-4 ml-2 mt-auto">
-        <Button size="icon" onClick={toggleSidebar}>
-          {isExpanded ? (
-            <ArrowLeft className="text-white" size={16} />
-          ) : (
-            <ArrowRight className="text-white" size={16} />
-          )}
+        <Button
+          size="icon"
+          onClick={toggleSidebar}
+          className="rounded-full"
+          variant="outline"
+        >
+          <ArrowLeft
+            className={cn(isExpanded ? '' : 'rotate-180', 'transition-all')}
+            size={16}
+          />
         </Button>
       </div>
     </aside>
