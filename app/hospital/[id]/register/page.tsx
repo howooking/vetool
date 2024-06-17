@@ -8,7 +8,7 @@ export default async function HospitalRegisterPage({
   return (
     <div>
       <h1>환자 등록</h1>
-      <RegisterPatientForm hos_id={params.id} />
+      <RegisterPatientForm hosId={params.id} />
     </div>
   )
 }

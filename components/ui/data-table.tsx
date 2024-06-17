@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Table,
@@ -116,7 +117,7 @@ export default function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        {/* <Button
+        <Button
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
@@ -132,7 +133,7 @@ export default function DataTable<TData, TValue>({
           disabled={!table.getCanNextPage()}
         >
           다음
-        </Button> */}
+        </Button>
       </div>
     </div>
   )
