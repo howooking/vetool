@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/button'
+import { logout } from '@/lib/actions/auth'
 import { Hospital, Plus } from 'lucide-react'
 import Link from 'next/link'
 
@@ -18,6 +20,10 @@ export default async function SelectHospitalPage() {
         <Plus size={96} />
         새로운 병원 등록하기
       </Link>
+
+      <form action={logout}>
+        <Button type="submit">취소</Button>
+      </form>
     </div>
   )
 }

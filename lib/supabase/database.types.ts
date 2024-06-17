@@ -222,6 +222,150 @@ export type Database = {
           },
         ]
       }
+      icu_chart: {
+        Row: {
+          caution: string | null
+          created_at: string
+          hos_id: string | null
+          icu_chart_id: string
+          icu_io_id: string | null
+          main_vet: string | null
+          memo_a: string | null
+          memo_b: string | null
+          memo_c: string | null
+          patient_id: string | null
+          sub_vet: string | null
+          target_date: string | null
+          weight: number | null
+          weight_measured_date: string | null
+        }
+        Insert: {
+          caution?: string | null
+          created_at?: string
+          hos_id?: string | null
+          icu_chart_id?: string
+          icu_io_id?: string | null
+          main_vet?: string | null
+          memo_a?: string | null
+          memo_b?: string | null
+          memo_c?: string | null
+          patient_id?: string | null
+          sub_vet?: string | null
+          target_date?: string | null
+          weight?: number | null
+          weight_measured_date?: string | null
+        }
+        Update: {
+          caution?: string | null
+          created_at?: string
+          hos_id?: string | null
+          icu_chart_id?: string
+          icu_io_id?: string | null
+          main_vet?: string | null
+          memo_a?: string | null
+          memo_b?: string | null
+          memo_c?: string | null
+          patient_id?: string | null
+          sub_vet?: string | null
+          target_date?: string | null
+          weight?: number | null
+          weight_measured_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_chart_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "icu_chart_icu_io_id_fkey"
+            columns: ["icu_io_id"]
+            isOneToOne: false
+            referencedRelation: "icu_io"
+            referencedColumns: ["icu_io_id"]
+          },
+          {
+            foreignKeyName: "icu_chart_main_vet_fkey"
+            columns: ["main_vet"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "icu_chart_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
+          },
+          {
+            foreignKeyName: "icu_chart_sub_vet_fkey"
+            columns: ["sub_vet"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      icu_io: {
+        Row: {
+          age_in_days: number | null
+          cc: string | null
+          created_at: string
+          dx: string | null
+          group: string | null
+          hos_id: string | null
+          icu_io_id: string
+          in_date: string | null
+          out_date: string | null
+          out_due_date: string | null
+          patient_id: string | null
+        }
+        Insert: {
+          age_in_days?: number | null
+          cc?: string | null
+          created_at?: string
+          dx?: string | null
+          group?: string | null
+          hos_id?: string | null
+          icu_io_id?: string
+          in_date?: string | null
+          out_date?: string | null
+          out_due_date?: string | null
+          patient_id?: string | null
+        }
+        Update: {
+          age_in_days?: number | null
+          cc?: string | null
+          created_at?: string
+          dx?: string | null
+          group?: string | null
+          hos_id?: string | null
+          icu_io_id?: string
+          in_date?: string | null
+          out_date?: string | null
+          out_due_date?: string | null
+          patient_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_io_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "icu_io_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
+          },
+        ]
+      }
       patients: {
         Row: {
           birth: string | null

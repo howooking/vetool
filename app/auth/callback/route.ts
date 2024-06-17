@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const code = searchParams.get('code')
 
   // if "next" is in param, use it as the redirect URL
-  const next = searchParams.get('next') ?? '/'
+  // const next = searchParams.get('next') ?? '/'
 
   if (code) {
     const { error: codeExchangeError } =
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
 
       // 등록된 병원이 존재할 때
       if (user[0] && user[0].hos_id) {
-        return NextResponse.redirect(`${origin}/private`)
+        return NextResponse.redirect(`${origin}/hospital/${user[0].hos_id}`)
       }
 
       // 등록된 병원이 존재하지 않으면서 동시에 유저 아이디도 없는 경우 (첫 로그인)
