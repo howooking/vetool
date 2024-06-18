@@ -2,10 +2,32 @@
 
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
-import { ArrowLeft } from 'lucide-react'
+import { Activity, ArrowLeft, Contact, Home, UserPlus } from 'lucide-react'
 import { Button } from '../../ui/button'
 import SidebarItem from './sidebar-item'
-import { SIDE_BAR_ITEMS } from '@/constants/hospital/sidebar/sidebar-items'
+
+const SIDE_BAR_ITEMS = [
+  {
+    name: '병원 홈',
+    path: '/',
+    icon: Home,
+  },
+  {
+    name: '입원실',
+    path: '/icu',
+    icon: Activity,
+  },
+  {
+    name: '환자 등록',
+    path: '/patients/register',
+    icon: UserPlus,
+  },
+  {
+    name: '환자 조회',
+    path: '/patients',
+    icon: Contact,
+  },
+] as const
 
 export default function Sidebar() {
   const { isExpanded, toggleSidebar } = useSidebarStore()

@@ -10,6 +10,7 @@ export default async function HospitalAdminPage({
   params: { id: string }
 }) {
   const supabase = createClient()
+
   const { data: users } = await supabase
     .from('users')
     .select('name, position, user_approved, rank, group, is_admin, user_id')
@@ -31,7 +32,6 @@ export default async function HospitalAdminPage({
 
   return (
     <div className="flex flex-col">
-      <h1>병원 관리</h1>
       <div className="hospital-admin-user-grid">
         {TITLES.map((title, index) => (
           <div key={index}>{title}</div>
