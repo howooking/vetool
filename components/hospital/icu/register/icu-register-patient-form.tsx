@@ -216,10 +216,7 @@ export default function IcuRegisterPatientForm({
               </FormLabel>
               <div className="flex">
                 {range && range.to ? (
-                  <Input
-                    defaultValue={`${format(range.to, 'yyyy-MM-dd')}`}
-                    disabled
-                  />
+                  <Input value={`${format(range.to, 'yyyy-MM-dd')}`} disabled />
                 ) : (
                   <span className="overflow-hidden whitespace-nowrap">
                     퇴원일을 선택해주세요.
