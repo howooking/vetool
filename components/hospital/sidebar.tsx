@@ -36,7 +36,7 @@ const SIDE_BAR_ITEMS = [
   },
   {
     name: '환자 등록',
-    path: '/register',
+    path: '/patients/register',
     icon: UserPlus,
   },
   {
