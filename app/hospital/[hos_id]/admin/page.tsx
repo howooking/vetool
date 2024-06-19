@@ -12,7 +12,7 @@ export default async function HospitalAdminPage({
   const supabase = createClient()
   const { data: users } = await supabase
     .from('users')
-    .select('name, position, user_approved, rank, group, is_admin, user_id')
+    .select('name, position, rank, group, is_admin, user_id')
     .match({ hos_id: params.id })
     .order('rank', { ascending: true })
 
