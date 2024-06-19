@@ -61,30 +61,69 @@ export async function middleware(request: NextRequest) {
     data: { user: authUser },
   } = await supabase.auth.getUser()
 
-  // 세션이 있고 벳툴 홈페이지에 접근시 병원홈으로 이동
-
   if (VETOOL_COMPANY_ROUTES.includes(request.nextUrl.pathname)) {
     if (authUser) {
-      const { data: user, error: userError } = await supabase
+      const { data: userData, error: userDataError } = await supabase
         .from('users')
-        .select('hos_id, user_id')
+        .select('hos_id')
         .match({ user_id: authUser?.id })
 
-      if (userError) {
+      if (userDataError) {
         return NextResponse.redirect(
-          new URL(`error?message=${userError.message}`, request.url),
+          new URL(`error?message=${userDataError.message}`, request.url),
         )
       }
 
-      // 등록된 병원이 있는 경우
-      if (user[0] && user[0].hos_id) {
+      // user가 존재하지 않을 때 users table에 삽입하고 onboarding 페이지로 이동
+      if (userData.length === 0) {
+        const { error: insertUserError } = await supabase.from('users').insert({
+          user_id: authUser.id,
+          name: authUser.user_metadata.full_name,
+          email: authUser.email,
+          avatar_url: authUser.user_metadata.avatar_url,
+        })
+
+        if (insertUserError) {
+          return NextResponse.redirect(
+            new URL(`/error?message=${insertUserError.message}`, request.url),
+          )
+        }
+
+        return NextResponse.redirect(new URL('/on-boarding', request.url))
+      }
+
+      // user가 존재하고 등록된 병원이 존재할 경우
+      if (userData[0].hos_id) {
         return NextResponse.redirect(
-          new URL(`hospital/${user[0].hos_id}`, request.url),
+          new URL(`/hospital/${userData[0].hos_id}`, request.url),
         )
       }
 
-      // 등록된 병원이 없는 경우
-      return NextResponse.redirect(new URL('/on-boarding', request.url))
+      // user가 존재하고 등록된 병원이 없는 경우
+      const { data: userApprovalData, error: userApprovalDataError } =
+        await supabase
+          .from('user_approval')
+          .select()
+          .match({ user_id: authUser?.id })
+
+      if (userApprovalDataError) {
+        return NextResponse.redirect(
+          new URL(
+            `/error?message=${userApprovalDataError.message}`,
+            request.url,
+          ),
+        )
+      }
+
+      // 승인신청을 아직 안한 경우
+      if (userApprovalData.length === 0) {
+        return NextResponse.redirect(new URL('/on-boarding', request.url))
+      }
+
+      // 승인신청을 했지만 아직 승인을 안한 경우
+      return NextResponse.redirect(
+        new URL('/on-boarding/approval-waiting', request.url),
+      )
     }
   }
 
