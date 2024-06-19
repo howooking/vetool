@@ -22,7 +22,7 @@ export default function SidebarItem({
   }
 }) {
   const { isExpanded } = useSidebarStore()
-  const hospitalId = useHospitalId()
+  const hosId = useHospitalId()
   const pathname = usePathname()
 
   const isActive =
@@ -35,7 +35,7 @@ export default function SidebarItem({
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
-              href={`/hospital/${hospitalId}${item.path}`}
+              href={`/hospital/${hosId}${item.path}`}
               className={cn(
                 'flex h-12 items-center',
                 isActive && 'bg-primary text-white',
