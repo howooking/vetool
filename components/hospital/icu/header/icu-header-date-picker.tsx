@@ -13,7 +13,7 @@ import { ko } from 'date-fns/locale'
 import { CalendarDays } from 'lucide-react'
 import { useState } from 'react'
 
-export default function IcuDatePicker() {
+export default function IcuHeaderDatePicker() {
   const { selectedDate } = useSelectedDateStore()
   const [open, setOpen] = useState(false)
 

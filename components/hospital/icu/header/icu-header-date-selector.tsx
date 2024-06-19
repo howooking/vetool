@@ -1,12 +1,12 @@
 'use client'
 
+import IcuHeaderDatePicker from '@/components/hospital/icu/header/icu-header-date-picker'
 import { Button } from '@/components/ui/button'
-import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
-import IcuDatePicker from './icu-date-picker'
-import { format } from 'date-fns'
 import { useSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
+import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
+import { format } from 'date-fns'
 
-export default function IcuDateSelector() {
+export default function IcuHeaderDateSelector() {
   const { selectedDate } = useSelectedDateStore()
 
   const updateDate = (days: number) => {
@@ -31,7 +31,7 @@ export default function IcuDateSelector() {
 
       <div className="flex items-center gap-1">
         <span className="min-w-20 text-sm">{selectedDate}</span>
-        <IcuDatePicker />
+        <IcuHeaderDatePicker />
       </div>
 
       <Button
