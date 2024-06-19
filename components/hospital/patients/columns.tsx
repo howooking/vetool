@@ -19,6 +19,7 @@ export const HospitalPatientsColumns: ColumnDef<Patients>[] = [
           row.toggleSelected(!!value)
           useSelectedPatientStore.setState({
             patientId: value ? row.original.patient_id : null,
+            birth: value ? row.original.birth : null,
           })
         }}
         aria-label="Select row"
