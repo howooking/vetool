@@ -1,7 +1,11 @@
-import UserGrid from '@/components/hospital/admin/user-grid'
-import { TITLES } from '@/constants/hospital/admin/grid'
-import { getUser } from '@/lib/actions/auth'
+import { columns } from '@/components/hospital/admin/columns'
+import DataTable from '@/components/ui/data-table'
+import { checkIsAdmin } from '@/lib/actions/auth'
 import { createClient } from '@/lib/supabase/server'
+import {
+  type HospitalUserData,
+  type HospitalUserDataTable,
+} from '@/types/hospital/adimin'
 import { redirect } from 'next/navigation'
 
 export default async function HospitalAdminPage({
@@ -9,38 +13,57 @@ export default async function HospitalAdminPage({
 }: {
   params: { id: string }
 }) {
-  const supabase = createClient()
+  const isAdmin = await checkIsAdmin()
 
-  const { data: users } = await supabase
-    .from('users')
-    .select('name, position, user_approved, rank, group, is_admin, user_id')
-    .match({ hos_id: params.id })
-    .order('rank', { ascending: true })
-
-  const { data: hospital } = await supabase
-    .from('hospitals')
-    .select('position_list')
-    .match({ hos_id: params.id })
-  const { user: userData } = await getUser()
-  const positionList = hospital?.[0].position_list
-  const currentUser = users?.find((user) => user.user_id === userData?.id)
-
-  // AdminPage Access Control
-  if (currentUser && !currentUser.is_admin) {
+  if (!isAdmin) {
     redirect(`/hospital/${params.id}`)
   }
 
-  return (
-    <div className="flex flex-col">
-      <div className="hospital-admin-user-grid">
-        {TITLES.map((title, index) => (
-          <div key={index}>{title}</div>
-        ))}
-      </div>
+  const supabase = createClient()
+  const { data: hospitalUsersData, error: hospitalUsersDataError } =
+    await supabase
+      .from('users')
+      .select(
+        `
+          name, position, rank, group, is_admin, user_id, is_vet, avatar_url,
+          hos_id(master_user_id, group_list)
+        `,
+      )
+      .match({ hos_id: params.id })
+      .returns<HospitalUserData[]>()
+      .order('rank', { ascending: true })
 
-      {users?.map((user) => (
-        <UserGrid key={user.user_id} positionList={positionList} {...user} />
-      ))}
-    </div>
-  )
+  if (hospitalUsersDataError) {
+    console.log(hospitalUsersDataError)
+    throw new Error(hospitalUsersDataError.message)
+  }
+
+  const {
+    data: { user: authUser },
+    error: authUserError,
+  } = await supabase.auth.getUser()
+
+  if (authUserError) {
+    console.log(authUserError)
+    throw new Error(authUserError.message)
+  }
+
+  const isMaster =
+    hospitalUsersData.at(0)?.hos_id.master_user_id === authUser?.id
+
+  const data: HospitalUserDataTable[] = hospitalUsersData!.map((user) => ({
+    group: user.group,
+    name: user.name,
+    position: user.position,
+    rank: user.rank,
+    is_admin: user.is_admin,
+    is_vet: user.is_vet,
+    user_id: user.user_id,
+    avatar_url: user.avatar_url,
+    master_user_id: user.hos_id.master_user_id,
+    group_list: user.hos_id.group_list,
+    isMaster,
+  }))
+
+  return <DataTable columns={columns} data={data} />
 }

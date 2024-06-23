@@ -24,6 +24,7 @@ type UserInfo = {
   avatar_url: string
   position: string
   hos_id: { name: string }
+  is_admin: boolean
 }
 
 export default async function UserInfo({ hosId }: { hosId: string }) {
@@ -40,7 +41,7 @@ export default async function UserInfo({ hosId }: { hosId: string }) {
 
   const { data: userInfo, error: userInfoError } = await supabase
     .from('users')
-    .select('email, name, avatar_url, position, hos_id (name)')
+    .select('email, name, avatar_url, position, hos_id (name), is_admin')
     .match({ user_id: user?.id })
     .returns<UserInfo[]>()
 
@@ -73,9 +74,11 @@ export default async function UserInfo({ hosId }: { hosId: string }) {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem asChild>
-              <Link href={`/hospital/${hosId}/admin`}>관리자</Link>
-            </DropdownMenuItem>
+            {userInfo?.at(0)?.is_admin && (
+              <DropdownMenuItem asChild>
+                <Link href={`/hospital/${hosId}/admin`}>관리자</Link>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem>프로필 수정</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
