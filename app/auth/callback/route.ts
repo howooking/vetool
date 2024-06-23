@@ -6,21 +6,26 @@ export async function GET(request: Request) {
   const supabase = createClient()
 
   const code = searchParams.get('code')
-
   if (code) {
     const { error: codeExchangeError } =
       await supabase.auth.exchangeCodeForSession(code)
 
-    if (!codeExchangeError) {
-      const { error } = await supabase.auth.getUser()
-
-      if (error) {
-        return NextResponse.redirect(
-          new URL(`/error?message=${error.message}`, request.url),
-        )
-      }
-
-      return NextResponse.redirect(new URL('/', request.url))
+    if (codeExchangeError) {
+      console.log(codeExchangeError)
+      return NextResponse.redirect(
+        new URL(`/error?message=${codeExchangeError.message}`, request.url),
+      )
     }
+
+    const { error } = await supabase.auth.getUser()
+
+    if (error) {
+      console.log(error)
+      return NextResponse.redirect(
+        new URL(`/error?message=${error.message}`, request.url),
+      )
+    }
+
+    return NextResponse.redirect(new URL('/', request.url))
   }
 }
