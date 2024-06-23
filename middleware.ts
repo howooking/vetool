@@ -74,7 +74,7 @@ export async function middleware(request: NextRequest) {
         )
       }
 
-      // user가 존재하지 않을 때 users table에 삽입하고 onboarding 페이지로 이동
+      // If the user does not exist, insert into users table and redirect to onboarding page
       if (userData.length === 0) {
         const { error: insertUserError } = await supabase.from('users').insert({
           user_id: authUser.id,
@@ -92,14 +92,14 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/on-boarding', request.url))
       }
 
-      // user가 존재하고 등록된 병원이 존재할 경우
-      if (userData[0].hos_id) {
+      // If the user exists and has a registered hospital
+      if (userData.at(0)?.hos_id) {
         return NextResponse.redirect(
-          new URL(`/hospital/${userData[0].hos_id}`, request.url),
+          new URL(`/hospital/${userData.at(0)?.hos_id}`, request.url),
         )
       }
 
-      // user가 존재하고 등록된 병원이 없는 경우
+      // If the user exists but has no registered hospital
       const { data: userApprovalData, error: userApprovalDataError } =
         await supabase
           .from('user_approval')
@@ -107,6 +107,7 @@ export async function middleware(request: NextRequest) {
           .match({ user_id: authUser?.id })
 
       if (userApprovalDataError) {
+        console.log(userApprovalDataError)
         return NextResponse.redirect(
           new URL(
             `/error?message=${userApprovalDataError.message}`,
@@ -115,19 +116,19 @@ export async function middleware(request: NextRequest) {
         )
       }
 
-      // 승인신청을 아직 안한 경우
+      // If the user has not applied for approval yet
       if (userApprovalData.length === 0) {
         return NextResponse.redirect(new URL('/on-boarding', request.url))
       }
 
-      // 승인신청을 했지만 아직 승인을 안한 경우
+      // If the user has applied for approval but not yet approved
       return NextResponse.redirect(
         new URL('/on-boarding/approval-waiting', request.url),
       )
     }
   }
 
-  // 로그아웃 상태에서 병원라우트로 이동시 로그인 페이지로 이동
+  // Redirect to login page if the user is not logged in and tries to access hospital routes
   if (request.nextUrl.pathname.startsWith('/hospital')) {
     if (!authUser) {
       return NextResponse.redirect(new URL('/login', request.url))
