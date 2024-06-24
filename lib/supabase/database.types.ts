@@ -291,18 +291,18 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: "icu_chart_patient_id_fkey"
-            columns: ["patient_id"]
-            isOneToOne: false
-            referencedRelation: "patients"
-            referencedColumns: ["patient_id"]
-          },
-          {
             foreignKeyName: "icu_chart_sub_vet_fkey"
             columns: ["sub_vet"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "icu_chart_환자 id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
           },
         ]
       }
@@ -769,6 +769,7 @@ export type Database = {
           created_at: string
           hos_id: string | null
           is_approved: boolean
+          updated_at: string | null
           user_approval_id: string
           user_id: string | null
         }
@@ -776,6 +777,7 @@ export type Database = {
           created_at?: string
           hos_id?: string | null
           is_approved?: boolean
+          updated_at?: string | null
           user_approval_id?: string
           user_id?: string | null
         }
@@ -783,6 +785,7 @@ export type Database = {
           created_at?: string
           hos_id?: string | null
           is_approved?: boolean
+          updated_at?: string | null
           user_approval_id?: string
           user_id?: string | null
         }
@@ -952,7 +955,14 @@ export type Database = {
         }
         Returns: string
       }
-      update_user_hos_id_when_select_hospital: {
+      update_user_approval_and_user_hos_id_when_approved: {
+        Args: {
+          hos_id_input: string
+          user_id_input: string
+        }
+        Returns: undefined
+      }
+      "update_user_hos_id_when_select_hospital(x)": {
         Args: {
           hos_id_input: string
         }
