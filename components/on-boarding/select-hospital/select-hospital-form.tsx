@@ -10,14 +10,17 @@ import { toast } from '@/components/ui/use-toast'
 import { useSelectHospitalStore } from '@/lib/store/on-boarding/select-hospital'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
+import type { User } from '@/types/hospital'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function SelectHospitalForm({
   hospitalData,
+  authUser,
 }: {
   hospitalData: SelectHosptialColumnsType[]
+  authUser: User
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { hosId } = useSelectHospitalStore()
