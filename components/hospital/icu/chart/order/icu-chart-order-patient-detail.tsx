@@ -200,7 +200,6 @@ export default function IcuChartPatientDetail({
         <Separator orientation="vertical" />
 
         {/* 주치의 */}
-        {/* TODO: onSelect */}
         <div className="flex flex-col items-center gap-2">
           <p className="text-sm text-muted-foreground">주치의</p>
           <Popover open={isMainVetPopOpen} onOpenChange={setIsMainVetPopOpen}>
@@ -317,9 +316,8 @@ export default function IcuChartPatientDetail({
           <label className="text-sm text-muted-foreground">주의 사항</label>
           <Input
             type="text"
-            value={caution ?? '없음'}
+            value={cautionValue ?? '없음'}
             onChange={(e) => setCautionValue(e.target.value)}
-            onBlur={handleCautionBlur}
             className="max-w-48"
           />
         </div>

@@ -1,5 +1,6 @@
 import IcuChartOrderMemos from '@/components/hospital/icu/chart/order/icu-chart-order-memos'
 import IcuChartOrderPatientDetail from '@/components/hospital/icu/chart/order/icu-chart-order-patient-detail'
+import IcuChartOrderTx from '@/components/hospital/icu/chart/order/icu-chart-order-tx'
 import type { IcuChartJoined, Vets } from '@/types/hospital'
 
 export default function IcuChartOrder({
@@ -17,7 +18,7 @@ export default function IcuChartOrder({
         chartData={restChartData}
         vetsData={vetsData}
       />
-      <div className="h-[500px]">chart</div>
+      <IcuChartOrderTx />
       <IcuChartOrderMemos memoA={memo_a} memoB={memo_b} memoC={memo_c} />
     </div>
   )
