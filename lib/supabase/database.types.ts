@@ -764,7 +764,7 @@ export type Database = {
           },
         ]
       }
-      user_approval: {
+      user_approvals: {
         Row: {
           created_at: string
           hos_id: string | null
@@ -962,8 +962,10 @@ export type Database = {
         }
         Returns: undefined
       }
-      "update_user_hos_id_when_select_hospital(x)": {
+      update_user_info_when_sending_approval: {
         Args: {
+          name_input: string
+          is_vet_input: boolean
           hos_id_input: string
         }
         Returns: undefined
