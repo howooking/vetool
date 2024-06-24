@@ -27,7 +27,7 @@ export default function Layout({
         <Sidebar />
         <div className="w-full">
           <HospitalHeader hosId={params.id} />
-          <main className="px-4">{children}</main>
+          <main>{children}</main>
         </div>
       </div>
     </div>

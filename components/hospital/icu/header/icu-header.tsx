@@ -9,7 +9,7 @@ export default function IcuHeader() {
 
   return (
     <>
-      {pathname.endsWith('icu') ? (
+      {pathname.split('/').at(3) === 'icu' ? (
         <div className="flex items-center gap-8 px-4">
           <IcuHeaderDateSelector />
           <IcuAddPatientTrigger />

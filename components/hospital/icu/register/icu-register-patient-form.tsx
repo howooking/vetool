@@ -249,9 +249,9 @@ export default function IcuRegisterPatientForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {vets.map((vet, index) => (
+                  {vets.map((vet) => (
                     <SelectItem
-                      key={index}
+                      key={vet.user_id}
                       value={vet.user_id}
                       className="text-xs"
                     >
@@ -323,8 +323,8 @@ export default function IcuRegisterPatientForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {groupList?.map((group, index) => (
-                    <SelectItem key={index} value={group} className="text-xs">
+                  {groupList?.map((group) => (
+                    <SelectItem key={group} value={group} className="text-xs">
                       {group ?? '미분류'}
                     </SelectItem>
                   ))}
