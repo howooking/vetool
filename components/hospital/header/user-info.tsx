@@ -76,7 +76,7 @@ export default async function UserInfo({ hosId }: { hosId: string }) {
           <DropdownMenuGroup>
             {userInfo?.at(0)?.is_admin && (
               <DropdownMenuItem asChild>
-                <Link href={`/hospital/${hosId}/admin`}>관리자</Link>
+                <Link href={`/hospital/${hosId}/admin/staff`}>관리자</Link>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem>프로필 수정</DropdownMenuItem>

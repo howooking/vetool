@@ -9,51 +9,55 @@ import {
 import useHospitalId from '@/hooks/useHospitalId'
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
+import { type LucideProps } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import type { ForwardRefExoticComponent, RefAttributes } from 'react'
 
 export default function SidebarItem({
-  item,
+  name,
+  path,
+  icon: Icon,
 }: {
-  item: {
-    name: string
-    path: string
-    icon: any
-  }
+  name: string
+  path: string
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
+  >
 }) {
   const { isExpanded } = useSidebarStore()
   const hosId = useHospitalId()
   const pathname = usePathname()
 
   const isActive =
-    (pathname.split('/').length === 3 && item.path === '/') ||
-    pathname.endsWith(item.path)
+    (pathname.split('/').length === 3 && path === '/') ||
+    pathname.endsWith(path)
 
   return (
-    <li key={item.name} className="transition-all hover:bg-muted">
+    <li key={name} className="transition-all hover:bg-muted">
       <TooltipProvider delayDuration={70}>
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
-              href={`/hospital/${hosId}${item.path}`}
+              href={`/hospital/${hosId}${path}`}
               className={cn(
                 'flex h-12 items-center',
                 isActive && 'bg-primary text-white',
               )}
             >
-              {<item.icon size={18} className="ml-[17px]" />}
+              <Icon size={18} className="ml-[17px]" />
               <span
                 className={cn(
                   'absolute left-12',
                   isExpanded ? 'block' : 'hidden',
                 )}
               >
-                {item.name}
+                {name}
               </span>
             </Link>
           </TooltipTrigger>
           <TooltipContent side="right">
-            <p>{item.name}</p>
+            <p>{name}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

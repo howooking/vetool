@@ -8,7 +8,7 @@ import {
 } from '@/types/hospital/adimin'
 import { redirect } from 'next/navigation'
 
-export default async function HospitalAdminPage({
+export default async function AdminStaffPage({
   params,
 }: {
   params: { id: string }

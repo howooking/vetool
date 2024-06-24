@@ -42,7 +42,7 @@ export default function Sidebar() {
     >
       <ul>
         {SIDE_BAR_ITEMS.map((item) => (
-          <SidebarItem item={item} key={item.name} />
+          <SidebarItem {...item} key={item.name} />
         ))}
       </ul>
 
