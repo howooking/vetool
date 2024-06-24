@@ -236,7 +236,7 @@ export type Database = {
           patient_id: string | null
           sub_vet: string | null
           target_date: string | null
-          weight: number | null
+          weight: string | null
           weight_measured_date: string | null
         }
         Insert: {
@@ -252,7 +252,7 @@ export type Database = {
           patient_id?: string | null
           sub_vet?: string | null
           target_date?: string | null
-          weight?: number | null
+          weight?: string | null
           weight_measured_date?: string | null
         }
         Update: {
@@ -268,7 +268,7 @@ export type Database = {
           patient_id?: string | null
           sub_vet?: string | null
           target_date?: string | null
-          weight?: number | null
+          weight?: string | null
           weight_measured_date?: string | null
         }
         Relationships: [
@@ -315,7 +315,7 @@ export type Database = {
           cc: string | null
           created_at: string
           dx: string | null
-          group: string | null
+          group_list: Json | null
           hos_id: string | null
           icu_io_id: string
           in_date: string | null
@@ -328,7 +328,7 @@ export type Database = {
           cc?: string | null
           created_at?: string
           dx?: string | null
-          group?: string | null
+          group_list?: Json | null
           hos_id?: string | null
           icu_io_id?: string
           in_date?: string | null
@@ -341,7 +341,7 @@ export type Database = {
           cc?: string | null
           created_at?: string
           dx?: string | null
-          group?: string | null
+          group_list?: Json | null
           hos_id?: string | null
           icu_io_id?: string
           in_date?: string | null
@@ -422,6 +422,45 @@ export type Database = {
           },
         ]
       }
+      user_approval: {
+        Row: {
+          created_at: string
+          hos_id: string | null
+          is_approved: boolean
+          user_approval_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          hos_id?: string | null
+          is_approved?: boolean
+          user_approval_id?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          hos_id?: string | null
+          is_approved?: boolean
+          user_approval_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_approval_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "user_approval_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       users: {
         Row: {
           avatar_url: string | null
@@ -431,10 +470,10 @@ export type Database = {
           hos_id: string | null
           is_active: boolean | null
           is_admin: boolean
+          is_vet: boolean
           name: string | null
           position: string | null
           rank: number | null
-          user_approved: boolean | null
           user_id: string
         }
         Insert: {
@@ -445,10 +484,10 @@ export type Database = {
           hos_id?: string | null
           is_active?: boolean | null
           is_admin?: boolean
+          is_vet?: boolean
           name?: string | null
           position?: string | null
           rank?: number | null
-          user_approved?: boolean | null
           user_id: string
         }
         Update: {
@@ -459,10 +498,10 @@ export type Database = {
           hos_id?: string | null
           is_active?: boolean | null
           is_admin?: boolean
+          is_vet?: boolean
           name?: string | null
           position?: string | null
           rank?: number | null
-          user_approved?: boolean | null
           user_id?: string
         }
         Relationships: [
@@ -528,6 +567,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      insert_icu_io_data_with_registered_patient: {
+        Args: {
+          hos_id_input: string
+          patient_id_input: string
+          dx_input: string
+          cc_input: string
+          in_date_input: string
+          out_due_date_input: string
+          main_vet_input: string
+          sub_vet_input: string
+          group_list_input: Json
+          age_in_days_input: number
+        }
+        Returns: string
+      }
       insert_patient_data_when_register_patient: {
         Args: {
           hos_id_input: string
@@ -541,7 +595,7 @@ export type Database = {
           microchip_no_input: string
           body_weight_input: string
         }
-        Returns: undefined
+        Returns: string
       }
       insert_user_data_when_create_hospital: {
         Args: {

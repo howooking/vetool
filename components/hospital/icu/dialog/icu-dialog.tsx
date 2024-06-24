@@ -1,19 +1,18 @@
 'use client'
 
-import IcuRegisterPatient from '@/components/hospital/icu/dialog/icu-register-patient'
+import IcuAddPatient from '@/components/hospital/icu/dialog/icu-add-patient'
 import IcuSelectPatient from '@/components/hospital/icu/dialog/icu-select-patient'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useAddPatientTriggerStore } from '@/lib/store/hospital/icu/add-patient'
-import { Patients } from '@/types/hospital'
+import type { IcuDialogProps } from '@/types/hospital/icu'
 
 export default function IcuDialog({
   hosId,
   patients,
-}: {
-  hosId: string
-  patients: Patients[]
-}) {
+  groupList,
+  vets,
+}: IcuDialogProps) {
   const { isOpen, setIsOpen } = useAddPatientTriggerStore()
 
   return (
@@ -24,11 +23,20 @@ export default function IcuDialog({
             <TabsTrigger value="search">환자 조회</TabsTrigger>
             <TabsTrigger value="register">신규 환자 등록</TabsTrigger>
           </TabsList>
+
+          {/* 등록된 환자 조회 */}
           <TabsContent value="search">
-            <IcuSelectPatient patients={patients} />
+            <IcuSelectPatient
+              hosId={hosId}
+              patients={patients}
+              groupList={groupList}
+              vets={vets}
+            />
           </TabsContent>
+
+          {/* 신규 환자 등록 */}
           <TabsContent value="register">
-            <IcuRegisterPatient hostId={hosId} />
+            <IcuAddPatient hosId={hosId} groupList={groupList} vets={vets} />
           </TabsContent>
         </Tabs>
       </DialogContent>

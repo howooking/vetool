@@ -20,7 +20,6 @@ type UserGridProps = {
   position: string | null
   group: string[] | null
   rank: number | null
-  user_approved: boolean | null
   is_admin: boolean
   user_id: string
   positionList?: string[] | null
@@ -32,13 +31,11 @@ export default function UserGrid({
   position,
   group,
   rank,
-  user_approved: userApproved,
   is_admin: isAdmin,
   user_id: userId,
 }: UserGridProps) {
   const [currentRank, setCurrentRank] = useState(rank?.toString() ?? '99')
   const [newPosition, setNewPosition] = useState(position ?? '미분류')
-  const [isApproved, setIsApproved] = useState(userApproved)
   const [hasPermission, setHasPermission] = useState(isAdmin)
   const supabase = createClient()
 
@@ -147,32 +144,6 @@ export default function UserGrid({
     }
   }
 
-  // 병원 가입 승인 핸들러 함수
-  const handleApprovedChange = async (value: string) => {
-    const newApprovalStatus = value === 'approved'
-    setIsApproved(newApprovalStatus)
-
-    const { error } = await supabase
-      .from('users')
-      .update({ user_approved: newApprovalStatus })
-      .eq('user_id', userId)
-
-    if (!error) {
-      toast({
-        title: '승인되었습니다.',
-      })
-
-      return
-    }
-
-    if (error) {
-      toast({
-        variant: 'destructive',
-        title: error.message,
-      })
-    }
-  }
-
   // 유저 관리 권한 핸들러 함수
   const handlePermissionChange = async (value: string) => {
     const newPermissionStatus = value === 'O'
@@ -242,22 +213,6 @@ export default function UserGrid({
         max={999}
         className="no-spin border border-b text-center"
       />
-
-      {/* 승인 여부 */}
-      <Select
-        value={isApproved ? 'approved' : 'unApproved'}
-        onValueChange={handleApprovedChange}
-      >
-        <SelectTrigger className="justify-center gap-2 border-none">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="approved">승인</SelectItem>
-            <SelectItem value="unApproved">미승인</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
 
       {/* 관리자 여부 */}
       <Select
