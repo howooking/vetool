@@ -1,4 +1,4 @@
-import { columns } from '@/components/hospital/admin/columns'
+import { columns } from '@/components/hospital/admin/staff/columns'
 import DataTable from '@/components/ui/data-table'
 import { checkIsAdmin } from '@/lib/actions/auth'
 import { createClient } from '@/lib/supabase/server'

@@ -20,11 +20,6 @@ export default function IsAdminColumn({
 }) {
   const handleUpdateIsAdmin = async (value: string) => {
     const supabase = createClient()
-
-    const {
-      data: { session },
-    } = await supabase.auth.getSession()
-
     const parsedIsAdmin = value === 'true'
 
     const { error: isAdminUpdateError } = await supabase

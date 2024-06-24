@@ -1,5 +1,3 @@
-import { CopyIcon } from '@radix-ui/react-icons'
-
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -11,14 +9,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { LoaderCircle, UserRoundMinus, UserX } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
 import { toast } from '@/components/ui/use-toast'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
+import { LoaderCircle, UserRoundMinus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export function DeleteUserColumn({
   name,
@@ -32,13 +28,12 @@ export function DeleteUserColumn({
   masterUserId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
-  const { refresh } = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const { refresh } = useRouter()
 
   const handleUpdateUser = async () => {
-    const supabase = createClient()
-
     setIsUpdating(true)
+    const supabase = createClient()
 
     const { error: updateUserError } = await supabase
       .from('users')
@@ -75,7 +70,6 @@ export function DeleteUserColumn({
         <Button
           variant="ghost"
           size="icon"
-          // className="h-6 w-6"
           disabled={!isMaster || userId === masterUserId}
         >
           <UserRoundMinus size={14} />

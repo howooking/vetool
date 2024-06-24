@@ -47,12 +47,12 @@ export const columns: ColumnDef<HospitalUserDataTable>[] = [
       )
     },
     cell: ({ row }) => {
-      const name = row.original.name!
-      const avatar_url = row.original.avatar_url
+      const name = row.original.name
+      const avatarUrl = row.original.avatar_url
       return (
         <div className="flex items-center gap-2">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={avatar_url} alt={name ?? 'user avatar image'} />
+            <AvatarImage src={avatarUrl} alt={name ?? 'user avatar image'} />
             <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
           </Avatar>
           <span>{name}</span>
@@ -166,7 +166,6 @@ export const columns: ColumnDef<HospitalUserDataTable>[] = [
     id: 'delete-user',
     cell: ({ row }) => {
       const name = row.original.name
-      const isAdmin = row.original.is_admin
       const userId = row.original.user_id
       const isMaster = row.original.isMaster
       const masterUserId = row.original.master_user_id
