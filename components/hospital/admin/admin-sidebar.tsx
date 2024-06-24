@@ -12,7 +12,7 @@ import AdminSidebarItem from './admin-sidebar-item'
 
 const ADMIN_SIDE_BAR_ITEMS = [
   {
-    name: '직원관리',
+    name: '스태프관리',
     path: 'staff',
     icon: Users,
   },

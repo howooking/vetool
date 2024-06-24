@@ -9,8 +9,8 @@ export const HOSPITAL_ROUTES = {
   admin: '관리자',
   'drug-settings': '약물설정',
   statistics: '데이터분석',
-  staff: '직원관리',
-  permission: '사용승인',
+  staff: '스태프관리',
+  approval: '사용승인',
   'test-settings': '검사설정',
   'food-settings': '사료설정',
 } as const

@@ -1,4 +1,3 @@
-import { CopyIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -10,14 +9,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { toast } from '@/components/ui/use-toast'
-import { redirect, useRouter } from 'next/navigation'
-import { LoaderCircle } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
+import { LoaderCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function SelectColumn({
   hosId,
@@ -70,7 +67,7 @@ export default function SelectColumn({
         </DialogHeader>
 
         <DialogFooter className="ml-auto sm:justify-start">
-          <Button onClick={handleSubmit}>
+          <Button onClick={handleSubmit} disabled={isSubmitting}>
             확인
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}

@@ -57,7 +57,7 @@ export function DeleteUserColumn({
     }
 
     toast({
-      title: `${name}님을 병원 직원목록에서 삭제하였습니다.`,
+      title: `${name}님을 스태프목록에서 삭제하였습니다.`,
     })
     setIsUpdating(false)
     setIsOpen(false)
@@ -77,9 +77,9 @@ export function DeleteUserColumn({
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>병원 직원 목록 삭제</DialogTitle>
+          <DialogTitle>스태프 목록 삭제</DialogTitle>
           <DialogDescription>
-            {name}님을 병원직원목록에서 삭제하시겠습니까?
+            {name}님을 스태프목록에서 삭제하시겠습니까?
           </DialogDescription>
         </DialogHeader>
 

@@ -41,7 +41,7 @@ export const columns: ColumnDef<HospitalUserDataTable>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          직원이름
+          스태프이름
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
