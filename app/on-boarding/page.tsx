@@ -1,23 +1,18 @@
-import { Hospital, Plus } from 'lucide-react'
-import Link from 'next/link'
+import { SignupForm } from '@/components/on-boarding/signup-form'
+import logoWhite from '@/public/logo-white.svg'
+import Image from 'next/image'
 
 export default function SelectHospitalPage() {
   return (
-    <div className="flex h-screen items-center justify-center gap-10">
-      <Link
-        href="/on-boarding/select-hospital"
-        className="flex h-[400px] w-[400px] flex-col items-center justify-center gap-4 rounded-lg bg-zinc-400 text-2xl text-white hover:bg-primary"
-      >
-        <Hospital size={96} />
-        등록된 병원에 가입하기
-      </Link>
-      <Link
-        href="/on-boarding/create-hospital"
-        className="flex h-[400px] w-[400px] flex-col items-center justify-center gap-4 rounded-lg bg-zinc-400 text-2xl text-white hover:bg-primary"
-      >
-        <Plus size={96} />
-        새로운 병원 등록하기
-      </Link>
+    <div className="flex h-screen w-full">
+      <div className="flex h-screen w-3/5 items-center justify-center bg-primary">
+        <Image alt="vetool logo" src={logoWhite} unoptimized width={320} />
+      </div>
+
+      <div className="flex h-screen w-2/5 flex-col items-center justify-center gap-10 p-8">
+        <h2 className="text-3xl font-bold tracking-wider">회원가입</h2>
+        <SignupForm />
+      </div>
     </div>
   )
 }
