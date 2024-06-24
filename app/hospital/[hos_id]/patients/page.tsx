@@ -5,13 +5,13 @@ import { createClient } from '@/lib/supabase/server'
 export default async function HospitalPatientsPage({
   params,
 }: {
-  params: { id: string }
+  params: { hos_id: string }
 }) {
   const supabase = createClient()
   const { data: patientsData } = await supabase
     .from('patients')
     .select('*')
-    .match({ hos_id: params.id })
+    .match({ hos_id: params.hos_id })
 
   return (
     <div>

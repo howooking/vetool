@@ -567,6 +567,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_icu_patient_data_with_due: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       insert_icu_io_data_with_registered_patient: {
         Args: {
           hos_id_input: string

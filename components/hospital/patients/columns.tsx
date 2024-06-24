@@ -17,10 +17,10 @@ export const HospitalPatientsColumns: ColumnDef<Patients>[] = [
           // 다중 선택 방지
           table.toggleAllPageRowsSelected(false)
           row.toggleSelected(!!value)
-          useSelectedPatientStore.setState({
-            patientId: value ? row.original.patient_id : null,
-            birth: value ? row.original.birth : null,
-          })
+          useSelectedPatientStore().setBirth(value ? row.original.birth : null)
+          useSelectedPatientStore().setPatientId(
+            value ? row.original.patient_id : null,
+          )
         }}
         aria-label="Select row"
       />

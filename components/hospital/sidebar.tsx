@@ -1,26 +1,24 @@
 'use client'
 
-import { Switch } from '@/components/ui/switch'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
 import {
   Activity,
   ArrowLeft,
   ArrowRight,
-  CircleChevronLeft,
-  CircleChevronRight,
   Contact,
   Home,
+  NotepadText,
   UserPlus,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '../ui/tooltip'
 import { Button } from '../ui/button'
 
 const SIDE_BAR_ITEMS = [
@@ -33,6 +31,11 @@ const SIDE_BAR_ITEMS = [
     name: '입원실',
     path: '/icu',
     icon: Activity,
+  },
+  {
+    name: '입원 차트',
+    path: '/icu/chart',
+    icon: NotepadText,
   },
   {
     name: '환자 등록',

@@ -1,11 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { Bell, Search, Settings } from 'lucide-react'
-import UserInfo from './user-info'
 import { Suspense } from 'react'
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import IcuHeader from '@/components/hospital/icu/header/icu-header'
+import UserInfo from './user-info'
 import { UserInfoSkeleton } from './user-info-skeleton'
-import IcuHeader from '../icu/header/icu-header'
 
 export default async function HospitalHeader({ hosId }: { hosId: string }) {
   return (
