@@ -2,7 +2,6 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-// import { revalidatePath } from 'next/cache'
 
 export async function googleLogin(formData: FormData) {
   const path = formData.get('path') as string
@@ -21,7 +20,7 @@ export async function googleLogin(formData: FormData) {
   }
 
   if (data.url) {
-    redirect(data.url) // use the redirect API for your server framework
+    redirect(data.url)
   }
 }
 
