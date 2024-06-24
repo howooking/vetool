@@ -1,12 +1,12 @@
 import { create } from 'zustand'
 import { format } from 'date-fns'
 
-type SelectedDateState = {
+type IcuSelectedDateState = {
   selectedDate: string
-  setSelectedDatea: (date: string) => void
+  setSelectedDate: (date: string) => void
 }
 
-export const useSelectedDateStore = create<SelectedDateState>((set) => ({
+export const useIcuSelectedDateStore = create<IcuSelectedDateState>((set) => ({
   selectedDate: format(new Date(), 'yyyy-MM-dd'),
-  setSelectedDatea: (date) => set({ selectedDate: date }),
+  setSelectedDate: (date) => set({ selectedDate: date }),
 }))
