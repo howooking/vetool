@@ -1,4 +1,4 @@
-import GoogleLoginButton from './google-login-button'
+import GoogleLoginButton from '../../components/login/google-login-button'
 import { createClient } from '@/lib/supabase/server'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
@@ -19,7 +19,7 @@ export default async function LoginPage() {
     <div className="flex h-screen">
       <div className="flex h-screen w-2/5 flex-col items-center justify-center gap-10 p-10">
         <h2 className="text-3xl font-bold tracking-wider">
-          로그인 및 회원가입
+          로그인 또는 회원가입
         </h2>
         <form>
           <GoogleLoginButton />

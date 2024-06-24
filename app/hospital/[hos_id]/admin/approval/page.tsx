@@ -12,6 +12,7 @@ export default async function AdminApprovalPage({
 
   const { data: approvalData, error: approvalDataError } = await supabase
     .from('user_approval')
+    .from('user_approvals')
     .select(
       `
         is_approved, created_at, updated_at,
