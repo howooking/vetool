@@ -16,7 +16,7 @@ import RankColumn from './rank-column'
 export const columns: ColumnDef<HospitalUserDataTable>[] = [
   {
     accessorKey: 'rank',
-    header: ({ column, header }) => {
+    header: ({ column }) => {
       return (
         <Button
           variant="ghost"
