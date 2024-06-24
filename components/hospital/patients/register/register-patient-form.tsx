@@ -1,6 +1,6 @@
 'use client'
 
-import { registerPatientFormSchema } from '@/components/hospital/register/schema'
+import { registerPatientFormSchema } from '@/components/hospital/patients/register/schema'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -39,6 +39,7 @@ import {
   FELINE_BREEDS,
   SEX,
 } from '@/constants/hospital/register/breed'
+import { useSelectedPatientStore } from '@/lib/store/hospital/patients/selected-patient'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -47,14 +48,23 @@ import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-export default function RegisterPatientForm({ hosId }: { hosId: string }) {
+export default function HospitalRegisterPatientForm({
+  hosId,
+  setIsNextStep,
+  icu = false,
+}: {
+  hosId: string
+  setIsNextStep?: Dispatch<SetStateAction<boolean>>
+  icu?: boolean
+}) {
   const [breedOpen, setBreedOpen] = useState(false)
   const [selectedSpecies, setSelectedSpecies] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { setPatientId } = useSelectedPatientStore()
   const { push } = useRouter()
 
   const supabase = createClient()
@@ -68,10 +78,10 @@ export default function RegisterPatientForm({ hosId }: { hosId: string }) {
       species: undefined,
       breed: undefined,
       gender: undefined,
-      birth: undefined,
-      microchip_no: undefined,
-      memo: undefined,
-      weight: undefined,
+      birth: new Date(),
+      microchip_no: '',
+      memo: '',
+      weight: '',
     },
   })
 
@@ -96,7 +106,7 @@ export default function RegisterPatientForm({ hosId }: { hosId: string }) {
     } = values
     setIsSubmitting(true)
 
-    const { error } = await supabase.rpc(
+    const { data: patientId, error } = await supabase.rpc(
       'insert_patient_data_when_register_patient',
       {
         birth_input: format(birth, 'yyyy-MM-dd'),
@@ -127,14 +137,19 @@ export default function RegisterPatientForm({ hosId }: { hosId: string }) {
 
     setIsSubmitting(false)
 
-    push(`/hospital/${hosId}/patients`)
+    if (icu && setIsNextStep) {
+      setIsNextStep(true)
+      setPatientId(patientId)
+    } else {
+      push(`/hospital/${hosId}/patients`)
+    }
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="grid grid-cols-2 gap-8"
+        className="grid grid-cols-2 gap-4"
       >
         {/* 이름 */}
         <FormField
@@ -427,7 +442,7 @@ export default function RegisterPatientForm({ hosId }: { hosId: string }) {
           className="col-span-2 ml-auto mt-4 font-semibold"
           disabled={isSubmitting}
         >
-          등록
+          {icu ? '다음' : '등록'}
           <LoaderCircle
             className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
           />

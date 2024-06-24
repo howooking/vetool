@@ -7,5 +7,5 @@ type SelectHospitalState = {
 
 export const useSelectHospitalStore = create<SelectHospitalState>((set) => ({
   hosId: '',
-  setHosId: () => set((state) => ({ hosId: state.hosId })),
+  setHosId: (hosId) => set({ hosId }),
 }))

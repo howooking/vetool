@@ -21,9 +21,7 @@ export const SelectHospitalColumns: ColumnDef<SelectHosptialColumnsType>[] = [
           // 다중 선택 방지
           table.toggleAllPageRowsSelected(false)
           row.toggleSelected(!!value)
-          useSelectHospitalStore.setState({
-            hosId: row.original.hos_id,
-          })
+          useSelectHospitalStore().setHosId(row.original.hos_id)
         }}
         aria-label="Select row"
       />

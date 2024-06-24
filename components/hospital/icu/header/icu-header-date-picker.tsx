@@ -7,21 +7,28 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarDays } from 'lucide-react'
 import { useState } from 'react'
 
-export default function IcuDatePicker() {
-  const { selectedDate } = useSelectedDateStore()
+export default function IcuHeaderDatePicker({
+  selectedDate,
+  setSelectedDate,
+  onChange,
+}: {
+  selectedDate: string
+  setSelectedDate: (date: string) => void
+  onChange?: (date: string) => Promise<void>
+}) {
   const [open, setOpen] = useState(false)
 
-  const handleSelect = (date: Date | undefined) => {
-    useSelectedDateStore.setState({
-      selectedDate: format(date!, 'yyyy-MM-dd'),
-    })
+  const handleSelectDate = (date: Date | undefined) => {
+    const formattedDate = format(date!, 'yyyy-MM-dd')
+    setSelectedDate(formattedDate)
     setOpen(false)
+
+    if (onChange) onChange(formattedDate)
   }
 
   return (
@@ -48,7 +55,7 @@ export default function IcuDatePicker() {
           mode="single"
           initialFocus
           selected={new Date(selectedDate)}
-          onSelect={(date) => handleSelect(date)}
+          onSelect={(date) => handleSelectDate(date)}
         />
       </PopoverContent>
     </Popover>

@@ -1,7 +1,7 @@
 'use client'
 
 import IcuAddPatientTrigger from '@/components/hospital/icu/header/icu-add-patient-trigger'
-import IcuDateSelector from '@/components/hospital/icu/header/icu-date-selector'
+import IcuHeaderDateSelector from '@/components/hospital/icu/header/icu-header-date-selector'
 import { usePathname } from 'next/navigation'
 
 export default function IcuHeader() {
@@ -9,9 +9,9 @@ export default function IcuHeader() {
 
   return (
     <>
-      {pathname.endsWith('icu') ? (
-        <div className="flex items-center gap-2">
-          <IcuDateSelector />
+      {pathname.split('/').at(3) === 'icu' ? (
+        <div className="flex items-center gap-8 px-4">
+          <IcuHeaderDateSelector />
           <IcuAddPatientTrigger />
         </div>
       ) : (

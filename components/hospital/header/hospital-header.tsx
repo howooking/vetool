@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { Bell, Search, Settings } from 'lucide-react'
 import { Suspense } from 'react'
-import IcuHeader from '../icu/header/icu-header'
 import HeaderTitle from './header-title'
+import IcuHeader from '@/components/hospital/icu/header/icu-header'
 import UserInfo from './user-info'
 import { UserInfoSkeleton } from './user-info-skeleton'
 
