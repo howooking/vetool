@@ -62,6 +62,14 @@ export type IcuChartJoined = IcuChart & {
   sub_vet: Users
 }
 
+export type IcuIoPatientsJoined = IcuIo & {
+  patient_id: {
+    name: string
+    breed: string
+    patient_id: string
+  }
+}
+
 export type Vets = {
   user_id: string
   name: string | null
