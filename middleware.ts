@@ -61,34 +61,74 @@ export async function middleware(request: NextRequest) {
     data: { user: authUser },
   } = await supabase.auth.getUser()
 
-  // 세션이 있고 벳툴 홈페이지에 접근시 병원홈으로 이동
-
   if (VETOOL_COMPANY_ROUTES.includes(request.nextUrl.pathname)) {
     if (authUser) {
-      const { data: user, error: userError } = await supabase
+      const { data: userData, error: userDataError } = await supabase
         .from('users')
-        .select('hos_id, user_id')
+        .select('hos_id')
         .match({ user_id: authUser?.id })
 
-      if (userError) {
+      if (userDataError) {
         return NextResponse.redirect(
-          new URL(`error?message=${userError.message}`, request.url),
+          new URL(`error?message=${userDataError.message}`, request.url),
         )
       }
 
-      // 등록된 병원이 있는 경우
-      if (user[0] && user[0].hos_id) {
+      // If the user does not exist, insert into users table and redirect to onboarding page
+      if (userData.length === 0) {
+        const { error: insertUserError } = await supabase.from('users').insert({
+          user_id: authUser.id,
+          name: authUser.user_metadata.full_name,
+          email: authUser.email,
+          avatar_url: authUser.user_metadata.avatar_url,
+        })
+
+        if (insertUserError) {
+          return NextResponse.redirect(
+            new URL(`/error?message=${insertUserError.message}`, request.url),
+          )
+        }
+
+        return NextResponse.redirect(new URL('/on-boarding', request.url))
+      }
+
+      // If the user exists and has a registered hospital
+      if (userData.at(0)?.hos_id) {
         return NextResponse.redirect(
-          new URL(`hospital/${user[0].hos_id}`, request.url),
+          new URL(`/hospital/${userData.at(0)?.hos_id}`, request.url),
         )
       }
 
-      // 등록된 병원이 없는 경우
-      return NextResponse.redirect(new URL('/on-boarding', request.url))
+      // If the user exists but has no registered hospital
+      const { data: userApprovalData, error: userApprovalDataError } =
+        await supabase
+          .from('user_approval')
+          .select()
+          .match({ user_id: authUser?.id })
+
+      if (userApprovalDataError) {
+        console.log(userApprovalDataError)
+        return NextResponse.redirect(
+          new URL(
+            `/error?message=${userApprovalDataError.message}`,
+            request.url,
+          ),
+        )
+      }
+
+      // If the user has not applied for approval yet
+      if (userApprovalData.length === 0) {
+        return NextResponse.redirect(new URL('/on-boarding', request.url))
+      }
+
+      // If the user has applied for approval but not yet approved
+      return NextResponse.redirect(
+        new URL('/on-boarding/approval-waiting', request.url),
+      )
     }
   }
 
-  // 로그아웃 상태에서 병원라우트로 이동시 로그인 페이지로 이동
+  // Redirect to login page if the user is not logged in and tries to access hospital routes
   if (request.nextUrl.pathname.startsWith('/hospital')) {
     if (!authUser) {
       return NextResponse.redirect(new URL('/login', request.url))

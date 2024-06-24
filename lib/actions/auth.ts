@@ -41,7 +41,7 @@ export async function getUser() {
   const supabase = createClient()
 
   const {
-    data: { user },
+    data: { user: authUser },
     error,
   } = await supabase.auth.getUser()
 
@@ -49,5 +49,34 @@ export async function getUser() {
     redirect('/login')
   }
 
-  return { user }
+  return { authUser }
+}
+
+// 현재 로그인 된 사용자가 admin인지를 boolean으로 반환
+export async function checkIsAdmin() {
+  const supabase = createClient()
+
+  const {
+    data: { user: authUser },
+    error: authUsererror,
+  } = await supabase.auth.getUser()
+
+  if (authUsererror) {
+    console.log(authUsererror)
+    throw new Error(authUsererror.message)
+  }
+
+  const { data: userAdminData, error: userAdminDataError } = await supabase
+    .from('users')
+    .select('is_admin')
+    .match({ user_id: authUser?.id })
+
+  if (userAdminDataError) {
+    console.log(userAdminDataError)
+    throw new Error(userAdminDataError.message)
+  }
+
+  const isAdmin = userAdminData.at(0)?.is_admin ?? false
+
+  return isAdmin
 }

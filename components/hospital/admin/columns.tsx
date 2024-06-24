@@ -1,0 +1,188 @@
+'use client'
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { HospitalUserDataTable } from '@/types/hospital/adimin'
+import { ColumnDef } from '@tanstack/react-table'
+import { ArrowUpDown } from 'lucide-react'
+import { DeleteUserColumn } from './delete-user-column'
+import { GroupListDialog } from './goup-list-dialog'
+import GroupColumn from './group-column'
+import IsAdminColumn from './is-admin-column'
+import IsVetColumn from './is-vet-column'
+import PositionColumn from './position-column'
+import RankColumn from './rank-column'
+
+export const columns: ColumnDef<HospitalUserDataTable>[] = [
+  {
+    accessorKey: 'rank',
+    header: ({ column, header }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          순번
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const rank = row.original.rank
+      const userId = row.original.user_id
+      return <RankColumn rank={rank} userId={userId} />
+    },
+  },
+  {
+    accessorKey: 'name',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          직원이름
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const name = row.original.name!
+      const avatar_url = row.original.avatar_url
+      return (
+        <div className="flex items-center gap-2">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={avatar_url} alt={name ?? 'user avatar image'} />
+            <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
+          </Avatar>
+          <span>{name}</span>
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: 'position',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          직책
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const position = row.original.position
+      const userId = row.original.user_id
+      return <PositionColumn position={position} userId={userId} />
+    },
+  },
+  {
+    accessorKey: 'group',
+    header: ({ table }) => {
+      const groupList = table.getRow('0').original.group_list
+      return (
+        <div className="flex items-center justify-center gap-2">
+          그룹
+          <GroupListDialog groupList={groupList} />
+        </div>
+      )
+    },
+    cell: ({ row }) => {
+      const group = row.original.group
+      const groupList = row.original.group_list
+      const userId = row.original.user_id
+      const name = row.original.name
+      return (
+        <GroupColumn
+          userId={userId}
+          group={group}
+          groupList={groupList}
+          name={name}
+        />
+      )
+    },
+  },
+  {
+    accessorKey: 'is_vet',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          수의사
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const isVet = row.original.is_vet
+      const userId = row.original.user_id
+      return <IsVetColumn isVet={isVet} userId={userId} />
+    },
+  },
+  {
+    accessorKey: 'is_admin',
+    header: ({ column, table }) => {
+      const isMaster = table.getRow('0').original.isMaster
+
+      if (!isMaster) {
+        return null
+      }
+
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          관리자
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const isAdmin = row.original.is_admin
+      const userId = row.original.user_id
+      const isMaster = row.original.isMaster
+      const masterUserId = row.original.master_user_id
+
+      if (!isMaster) {
+        return null
+      }
+
+      return (
+        <IsAdminColumn
+          isAdmin={isAdmin}
+          userId={userId}
+          masterUserId={masterUserId}
+        />
+      )
+    },
+  },
+  {
+    id: 'delete-user',
+    cell: ({ row }) => {
+      const name = row.original.name
+      const isAdmin = row.original.is_admin
+      const userId = row.original.user_id
+      const isMaster = row.original.isMaster
+      const masterUserId = row.original.master_user_id
+
+      if (!isMaster) {
+        return null
+      }
+
+      return (
+        <DeleteUserColumn
+          name={name}
+          userId={userId}
+          isMaster={isMaster}
+          masterUserId={masterUserId}
+        />
+      )
+    },
+  },
+]

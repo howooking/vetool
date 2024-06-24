@@ -13,10 +13,5 @@ export default async function HospitalPatientsPage({
     .select('*')
     .match({ hos_id: params.hos_id })
 
-  return (
-    <div>
-      <h1>환자 조회</h1>
-      <DataTable columns={HospitalPatientsColumns} data={patientsData!} />
-    </div>
-  )
+  return <DataTable columns={HospitalPatientsColumns} data={patientsData!} />
 }

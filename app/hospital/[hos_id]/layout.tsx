@@ -1,5 +1,5 @@
 import HospitalHeader from '@/components/hospital/header/hospital-header'
-import Sidebar from '@/components/hospital/sidebar'
+import Sidebar from '@/components/hospital/sidebar/sidebar'
 import { createClient } from '@/lib/supabase/server'
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
@@ -22,13 +22,11 @@ export default function Layout({
   params: { id: string }
 }) {
   return (
-    <div>
-      <div className="flex">
-        <Sidebar />
-        <div className="w-full">
-          <HospitalHeader hosId={params.id} />
-          <main>{children}</main>
-        </div>
+    <div className="flex">
+      <Sidebar />
+      <div className="w-full">
+        <HospitalHeader hosId={params.id} />
+        <main>{children}</main>
       </div>
     </div>
   )

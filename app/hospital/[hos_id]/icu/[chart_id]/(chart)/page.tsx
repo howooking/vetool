@@ -1,6 +1,6 @@
 import IcuChart from '@/components/hospital/icu/chart/icu-chart'
 import { createClient } from '@/lib/supabase/server'
-import { IcuChartJoined } from '@/types/hospital'
+import type { IcuChartJoined } from '@/types/hospital'
 export default async function HospitalIcuChartPage({
   params,
 }: {
