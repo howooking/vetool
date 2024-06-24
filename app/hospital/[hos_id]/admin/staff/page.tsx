@@ -11,12 +11,12 @@ import { redirect } from 'next/navigation'
 export default async function AdminStaffPage({
   params,
 }: {
-  params: { id: string }
+  params: { hos_id: string }
 }) {
   const isAdmin = await checkIsAdmin()
 
   if (!isAdmin) {
-    redirect(`/hospital/${params.id}`)
+    redirect(`/hospital/${params.hos_id}`)
   }
 
   const supabase = createClient()
@@ -29,7 +29,7 @@ export default async function AdminStaffPage({
           hos_id(master_user_id, group_list)
         `,
       )
-      .match({ hos_id: params.id })
+      .match({ hos_id: params.hos_id })
       .returns<HospitalUserData[]>()
       .order('rank', { ascending: true })
 
