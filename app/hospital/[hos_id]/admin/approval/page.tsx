@@ -11,12 +11,11 @@ export default async function AdminApprovalPage({
   const supabase = createClient()
 
   const { data: approvalData, error: approvalDataError } = await supabase
-    .from('user_approval')
     .from('user_approvals')
     .select(
       `
         is_approved, created_at, updated_at,
-        user_id(user_id, name, avatar_url)
+        user_id(user_id, name, avatar_url, is_vet)
       `,
     )
     .match({ hos_id: params.hos_id })
@@ -39,6 +38,7 @@ export default async function AdminApprovalPage({
     name: approval.user_id.name,
     user_id: approval.user_id.user_id,
     avatar_url: approval.user_id.avatar_url,
+    is_vet: approval.user_id.is_vet,
   }))
 
   return <DataTable columns={columns} data={data} />

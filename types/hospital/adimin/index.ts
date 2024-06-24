@@ -35,6 +35,7 @@ export type ApprovalData = {
     name: string
     user_id: string
     avatar_url: string
+    is_vet: boolean
   }
 }
 
@@ -45,4 +46,5 @@ export type ApprovalDataTable = {
   name: string
   user_id: string
   avatar_url: string
+  is_vet: boolean
 }

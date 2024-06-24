@@ -23,5 +23,5 @@ export default function HeaderTitle() {
       pathname.split('/').at(-1) as keyof typeof HOSPITAL_ROUTES
     ] ?? '병원 홈'
 
-  return <h1 className="text-lg font-semibold text-primary">{title}</h1>
+  return <h1 className="text-xl font-semibold text-primary">{title}</h1>
 }

@@ -38,6 +38,24 @@ export const columns: ColumnDef<ApprovalDataTable>[] = [
     },
   },
   {
+    accessorKey: 'name',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          수의사
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const isVet = row.original.is_vet
+      return <span>{isVet ? 'O' : 'X'}</span>
+    },
+  },
+  {
     accessorKey: 'created_at',
     header: ({ column }) => {
       return (
