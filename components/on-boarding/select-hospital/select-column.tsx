@@ -13,29 +13,35 @@ import { toast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function SelectColumn({
   hosId,
-  authUserId,
   name,
 }: {
   hosId: string
-  authUserId: string
   name: string
 }) {
   const { replace } = useRouter()
+  const searchParams = useSearchParams()
+  const isVet = searchParams.get('is_vet')
+  const username = searchParams.get('name')
+
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const handleSubmit = async () => {
     setIsSubmitting(true)
     const supabase = createClient()
 
-    const { error } = await supabase.from('user_approval').insert({
-      user_id: authUserId,
-      hos_id: hosId,
-    })
+    const { error } = await supabase.rpc(
+      'update_user_info_when_sending_approval',
+      {
+        is_vet_input: isVet === 'true',
+        name_input: username!,
+        hos_id_input: hosId,
+      },
+    )
 
     if (error) {
       console.log(error)
@@ -58,7 +64,7 @@ export default function SelectColumn({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>선택</Button>
+        <Button size="sm">선택</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>

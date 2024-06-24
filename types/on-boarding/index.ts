@@ -3,5 +3,4 @@ export type SelectHosptialDataTable = {
   name: string
   city: string
   district: string
-  authUserId: string
 }

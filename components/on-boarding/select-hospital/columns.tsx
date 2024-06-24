@@ -54,10 +54,9 @@ export const columns: ColumnDef<SelectHosptialDataTable>[] = [
     id: 'action',
     cell: ({ row }) => {
       const hosId = row.original.hos_id
-      const authUserId = row.original.authUserId
       const name = row.original.name
 
-      return <SelectColumn hosId={hosId} authUserId={authUserId} name={name} />
+      return <SelectColumn hosId={hosId} name={name} />
     },
   },
 ]
