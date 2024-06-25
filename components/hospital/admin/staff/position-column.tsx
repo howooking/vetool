@@ -2,7 +2,7 @@ import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function PositionColumn({
   position,
@@ -13,6 +13,10 @@ export default function PositionColumn({
 }) {
   const [positionInput, setPositionInput] = useState(position)
   const { refresh } = useRouter()
+
+  useEffect(() => {
+    setPositionInput(position)
+  }, [position])
 
   const handleUpdatePosition = async () => {
     const supabase = createClient()

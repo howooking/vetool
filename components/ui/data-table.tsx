@@ -33,16 +33,18 @@ import { useState } from 'react'
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  search?: boolean
   visibility?: boolean
   rowSelect?: boolean
+  searchKeyword?: string
+  searchPlaceHolder?: string
 }
 export default function DataTable<TData, TValue>({
   columns,
   data,
-  search,
   visibility,
   rowSelect,
+  searchKeyword,
+  searchPlaceHolder,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -69,14 +71,16 @@ export default function DataTable<TData, TValue>({
   })
 
   return (
-    <div>
-      {search && (
+    <div className="w-full">
+      {searchKeyword && (
         <div className="flex items-center pb-4">
           <Input
-            placeholder="검색어를 입력하세요."
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            placeholder={searchPlaceHolder}
+            value={
+              (table.getColumn(searchKeyword)?.getFilterValue() as string) ?? ''
+            }
             onChange={(event) =>
-              table.getColumn('name')?.setFilterValue(event.target.value)
+              table.getColumn(searchKeyword)?.setFilterValue(event.target.value)
             }
           />
         </div>

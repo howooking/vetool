@@ -1,29 +1,27 @@
+import { SignupForm } from '@/components/on-boarding/signup-form'
 import { Button } from '@/components/ui/button'
 import { logout } from '@/lib/actions/auth'
-import { Hospital, Plus } from 'lucide-react'
-import Link from 'next/link'
+import logoWhite from '@/public/logo-white.svg'
+import { ChevronLeft } from 'lucide-react'
+import Image from 'next/image'
 
-export default async function SelectHospitalPage() {
+export default function SelectHospitalPage() {
   return (
-    <div className="flex h-screen flex-col">
-      <Link
-        href="/on-boarding/select-hospital"
-        className="flex h-1/2 flex-col items-center justify-center gap-4 bg-zinc-400 text-2xl text-white hover:bg-teal-500"
-      >
-        <Hospital size={96} />
-        등록된 병원에 가입하기
-      </Link>
-      <Link
-        href="/on-boarding/create-hospital"
-        className="flex h-1/2 flex-col items-center justify-center gap-4 bg-zinc-400 text-2xl text-white hover:bg-teal-500"
-      >
-        <Plus size={96} />
-        새로운 병원 등록하기
-      </Link>
+    <div className="flex h-screen w-full">
+      <div className="flex h-screen w-3/5 items-center justify-center bg-primary">
+        <Image alt="vetool logo" src={logoWhite} unoptimized width={320} />
+      </div>
 
-      <form action={logout}>
-        <Button type="submit">취소</Button>
-      </form>
+      <div className="relative flex h-screen w-2/5 flex-col items-center justify-center gap-10 p-8">
+        <form action={logout} className="absolute left-4 top-4">
+          <Button variant="outline" type="submit" className="absolute pl-2">
+            <ChevronLeft size={20} />
+            뒤로가기
+          </Button>
+        </form>
+        <h2 className="text-2xl font-bold tracking-wider">회원가입</h2>
+        <SignupForm />
+      </div>
     </div>
   )
 }

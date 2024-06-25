@@ -3,12 +3,17 @@
 import { Button } from '@/components/ui/button'
 import { googleLogin } from '@/lib/actions/auth'
 import { cn } from '@/lib/utils'
+import googleLogo from '@/public/google-logo.svg'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useFormStatus } from 'react-dom'
 
 export default function GoogleLoginButton() {
-  const { push } = useRouter()
+  let currentUrl
+  if (typeof window !== 'undefined') {
+    currentUrl = location.origin
+  }
 
   const { pending } = useFormStatus()
 
@@ -17,18 +22,21 @@ export default function GoogleLoginButton() {
       <input
         type="text"
         name="path"
-        defaultValue={location.origin}
+        defaultValue={currentUrl ?? ''}
         className="hidden"
       />
+
       <Button
-        className="w-full"
+        className="flex w-full items-center gap-2"
         type="submit"
+        variant="outline"
         disabled={pending}
         formAction={googleLogin}
       >
-        Google Login
+        <Image unoptimized src={googleLogo} alt="google logo" />
+        구글계정으로 로그인하기
         <LoaderCircle
-          className={cn(pending ? 'animate-spin ml-2' : 'hidden')}
+          className={cn(pending ? 'ml-2 animate-spin' : 'hidden')}
         />
       </Button>
     </>

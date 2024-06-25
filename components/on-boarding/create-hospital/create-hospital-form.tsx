@@ -24,7 +24,7 @@ import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -32,7 +32,12 @@ import * as z from 'zod'
 export default function CreateHospitalForm() {
   const [districts, setDistricts] = useState([''])
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { back, push, replace, refresh } = useRouter()
+  const { push } = useRouter()
+
+  const searchParams = useSearchParams()
+  const isVet = searchParams.get('is_vet')
+  const username = searchParams.get('name')
+
   const form = useForm<z.infer<typeof newHospitalFormSchema>>({
     resolver: zodResolver(newHospitalFormSchema),
     defaultValues: {
@@ -59,9 +64,11 @@ export default function CreateHospitalForm() {
 
     const { city, district, name, businessNumber } = values
     const { data: hosId, error } = await supabase.rpc(
-      'insert_user_data_when_create_hospital',
+      'update_user_info_when_creating_new_hospital',
       {
-        name_input: name,
+        hos_name_input: name,
+        user_name_input: username!,
+        is_vet_input: isVet === 'true',
         city_input: city,
         district_input: district,
         business_number_input: businessNumber,
@@ -74,7 +81,7 @@ export default function CreateHospitalForm() {
         title: error.message,
         description: '관리자에게 문의하세요',
       })
-
+      setIsSubmitting(false)
       return
     }
 
@@ -84,26 +91,25 @@ export default function CreateHospitalForm() {
       description: '잠시후 페이지가 이동됩니다.',
     })
 
-    replace(`/hospital/${hosId}`)
-    refresh()
-
     setIsSubmitting(false)
+    push(`/hospital/${hosId}`)
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="flex w-full flex-col gap-6"
+      >
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem className="py-3">
-              <FormLabel className="pb-2 text-base font-semibold">
-                병원 이름
-              </FormLabel>
+            <FormItem>
+              <FormLabel>병원 이름</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="병원명 입력"
+                  placeholder="벳툴 동물병원"
                   {...field}
                   className="h-[40px] border bg-transparent px-2"
                 />
@@ -113,15 +119,13 @@ export default function CreateHospitalForm() {
           )}
         />
 
-        <div className="flex">
+        <div className="flex items-start">
           <FormField
             control={form.control}
             name="city"
             render={({ field }) => (
-              <FormItem className="min-w-44 py-3">
-                <FormLabel className="pb-2 text-base font-semibold">
-                  병원 주소
-                </FormLabel>
+              <FormItem className="w-full">
+                <FormLabel>병원 주소</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -148,7 +152,10 @@ export default function CreateHospitalForm() {
             control={form.control}
             name="district"
             render={({ field }) => (
-              <FormItem className="mt-auto min-w-44 py-3 pl-4">
+              <FormItem className="ml-2 w-full">
+                <FormLabel className="select-none text-white">
+                  병원 주소
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -176,37 +183,22 @@ export default function CreateHospitalForm() {
           control={form.control}
           name="businessNumber"
           render={({ field }) => (
-            <FormItem className="py-3">
-              <FormLabel className="pb-2 text-base font-semibold">
-                사업자 등록번호
-              </FormLabel>
+            <FormItem>
+              <FormLabel>사업자 등록번호</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="10자리 사업자 등록번호"
-                  {...field}
-                  className="h-[40px] bg-transparent px-2"
-                />
+                <Input placeholder="사업자 등록번호 10자리" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="flex gap-2 pt-3">
-          <Button type="button" variant="outline" onClick={() => back()}>
-            이전
-          </Button>
-          <Button
-            type="submit"
-            className="font-semibold"
-            disabled={isSubmitting}
-          >
-            다음
-            <LoaderCircle
-              className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-            />
-          </Button>
-        </div>
+        <Button type="submit" disabled={isSubmitting} className="ml-auto">
+          생성
+          <LoaderCircle
+            className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
+          />
+        </Button>
       </form>
     </Form>
   )

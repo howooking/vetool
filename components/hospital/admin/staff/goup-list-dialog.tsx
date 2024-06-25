@@ -17,12 +17,12 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export function GroupListDialog({ groupList }: { groupList: string[] }) {
-  const hosId = useHospitalId()
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { refresh } = useRouter()
   const [tempGroupList, setTempGroupList] = useState(groupList)
   const [groupInput, setGroupInput] = useState('')
+  const hosId = useHospitalId()
+  const { refresh } = useRouter()
 
   useEffect(() => {
     if (!isOpen && isSubmitting) {
@@ -33,6 +33,7 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     const supabase = createClient()
+
     const { error: groupListUpdateError } = await supabase
       .from('hospitals')
       .update({ group_list: tempGroupList })
@@ -51,8 +52,8 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
       title: '병원 그룹목록을 변경하였습니다.',
     })
     setIsOpen(false)
-    refresh()
     setIsSubmitting(false)
+    refresh()
   }
 
   return (
@@ -99,7 +100,7 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="ml-auto w-20"
+          className="ml-auto"
           onClick={handleSubmit}
         >
           수정

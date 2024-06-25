@@ -62,6 +62,7 @@ export function GroupColumnDialog({
   const handleSubmit = async (data: z.infer<typeof GroupCheckFormSchema>) => {
     setIsSubmitting(true)
     const supabase = createClient()
+
     const { error: groupUpdateError } = await supabase
       .from('users')
       .update({ group: data.items })
@@ -80,8 +81,8 @@ export function GroupColumnDialog({
       title: '그룹을 변경하였습니다.',
     })
     refresh()
-    setIsSubmitting(false)
     setIsOpen(false)
+    setIsSubmitting(false)
   }
 
   return (
@@ -142,11 +143,7 @@ export function GroupColumnDialog({
                 </FormItem>
               )}
             />
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="ml-auto w-20"
-            >
+            <Button type="submit" disabled={isSubmitting} className="ml-auto">
               수정
               <LoaderCircle
                 className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
