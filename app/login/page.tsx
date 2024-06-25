@@ -18,7 +18,7 @@ export default async function LoginPage() {
   return (
     <div className="flex h-screen">
       <div className="flex h-screen w-2/5 flex-col items-center justify-center gap-10 p-10">
-        <h2 className="text-3xl font-bold tracking-wider">
+        <h2 className="text-2xl font-bold tracking-wider">
           로그인 또는 회원가입
         </h2>
         <form>
