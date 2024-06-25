@@ -79,3 +79,19 @@ export async function checkIsAdmin() {
 
   return isAdmin
 }
+
+export const cancelApproval = async (formData: FormData) => {
+  const userApprovalId = formData.get('user_approval_id') as string
+  const supabase = createClient()
+
+  const { error } = await supabase.from('user_approvals').delete().match({
+    user_approval_id: userApprovalId,
+  })
+
+  if (error) {
+    console.log(error)
+    throw new Error(error.message)
+  }
+
+  redirect('/on-boarding')
+}
