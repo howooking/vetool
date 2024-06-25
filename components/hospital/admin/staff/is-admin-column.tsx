@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
+import { useEffect, useState } from 'react'
 
 export default function IsAdminColumn({
   isAdmin,
@@ -18,6 +19,11 @@ export default function IsAdminColumn({
   userId: string
   masterUserId: string
 }) {
+  const [isAdminInput, setIsAdminInput] = useState(isAdmin ? 'true' : 'false')
+  useEffect(() => {
+    setIsAdminInput(isAdmin ? 'true' : 'false')
+  }, [isAdmin])
+
   const handleUpdateIsAdmin = async (value: string) => {
     const supabase = createClient()
     const parsedIsAdmin = value === 'true'
@@ -44,7 +50,11 @@ export default function IsAdminColumn({
   return (
     <Select
       defaultValue={isAdmin ? 'true' : 'false'}
-      onValueChange={handleUpdateIsAdmin}
+      value={isAdminInput}
+      onValueChange={(value) => {
+        setIsAdminInput(value)
+        handleUpdateIsAdmin(value)
+      }}
       disabled={userId === masterUserId}
     >
       <SelectTrigger className="mx-auto w-[128px]">

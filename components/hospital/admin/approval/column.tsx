@@ -38,7 +38,7 @@ export const columns: ColumnDef<ApprovalDataTable>[] = [
     },
   },
   {
-    accessorKey: 'name',
+    accessorKey: 'is_vet',
     header: ({ column }) => {
       return (
         <Button

@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
+import { useEffect, useState } from 'react'
 
 export default function IsVetColumn({
   isVet,
@@ -16,6 +17,11 @@ export default function IsVetColumn({
   isVet: boolean
   userId: string
 }) {
+  const [isVetIput, setIsVetIput] = useState(isVet ? 'true' : 'false')
+  useEffect(() => {
+    setIsVetIput(isVet ? 'true' : 'false')
+  }, [isVet])
+
   const handleUpdateIsVet = async (value: string) => {
     const supabase = createClient()
     const parsedIsVet = value === 'true'
@@ -42,7 +48,11 @@ export default function IsVetColumn({
   return (
     <Select
       defaultValue={isVet ? 'true' : 'false'}
-      onValueChange={handleUpdateIsVet}
+      value={isVetIput}
+      onValueChange={(value) => {
+        setIsVetIput(value)
+        handleUpdateIsVet(value)
+      }}
     >
       <SelectTrigger className="mx-auto w-[128px]">
         <SelectValue />
