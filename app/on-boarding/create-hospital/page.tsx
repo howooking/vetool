@@ -2,6 +2,7 @@ import CreateHospitalForm from '@/components/on-boarding/create-hospital/create-
 import PrevButton from '@/components/on-boarding/prev-button'
 import logoWhite from '@/public/logo-white.svg'
 import Image from 'next/image'
+import { Suspense } from 'react'
 
 export default function CreateHospitalPage() {
   return (
@@ -13,7 +14,9 @@ export default function CreateHospitalPage() {
       <div className="relative flex h-screen w-2/5 flex-col items-center justify-center gap-10 p-8">
         <PrevButton />
         <h2 className="text-2xl font-bold tracking-wider">병원 생성</h2>
-        <CreateHospitalForm />
+        <Suspense fallback={<></>}>
+          <CreateHospitalForm />
+        </Suspense>
       </div>
     </div>
   )
