@@ -53,6 +53,7 @@ export function DeleteUserColumn({
         title: updateUserError.message,
         description: '관리자에게 문의하세요',
       })
+      setIsUpdating(false)
       return
     }
 

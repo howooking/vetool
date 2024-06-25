@@ -45,6 +45,7 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
         variant: 'destructive',
         title: groupListUpdateError.message,
       })
+      setIsSubmitting(false)
       return
     }
 

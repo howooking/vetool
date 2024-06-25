@@ -49,6 +49,7 @@ export default function SelectColumn({
         variant: 'destructive',
         title: error.message,
       })
+      setIsSubmitting(false)
       return
     }
 

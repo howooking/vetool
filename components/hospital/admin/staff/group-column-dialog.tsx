@@ -74,6 +74,7 @@ export function GroupColumnDialog({
         variant: 'destructive',
         title: groupUpdateError.message,
       })
+      setIsSubmitting(false)
       return
     }
 

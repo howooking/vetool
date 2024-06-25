@@ -99,7 +99,7 @@ export default function CreateHospitalForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex w-full flex-col gap-6"
+        className="flex w-full flex-col gap-10"
       >
         <FormField
           control={form.control}
