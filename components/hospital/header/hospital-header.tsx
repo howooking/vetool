@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { Bell, Search, Settings } from 'lucide-react'
-import { Suspense } from 'react'
-import HeaderTitle from './header-title'
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
+import { Button } from '@/components/ui/button'
+import { Bell, Dog, Search } from 'lucide-react'
+import Link from 'next/link'
+import { Suspense } from 'react'
 import UserInfo from './user-info'
 import { UserInfoSkeleton } from './user-info-skeleton'
 
@@ -10,7 +10,8 @@ export default async function HospitalHeader({ hosId }: { hosId: string }) {
   return (
     <header className="flex h-12 items-center justify-between gap-4 border-b px-2">
       <div className="flex items-center gap-4">
-        <HeaderTitle />
+        {/* 굳이 있어야 하나 고민중 */}
+        {/* <HeaderTitle /> */}
         <IcuHeader />
       </div>
 
@@ -30,8 +31,10 @@ export default async function HospitalHeader({ hosId }: { hosId: string }) {
             </Button>
           </li>
           <li>
-            <Button size="icon" variant="secondary">
-              <Settings size={16} />
+            <Button size="icon" variant="secondary" asChild>
+              <Link href={`/hospital/${hosId}/patients`}>
+                <Dog size={16} />
+              </Link>
             </Button>
           </li>
         </ul>
