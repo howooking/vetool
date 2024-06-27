@@ -1,45 +1,62 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
+import { SelectHosptialDataTable } from '@/types/on-boarding'
 import { ColumnDef } from '@tanstack/react-table'
-import { Checkbox } from '@/components/ui/checkbox'
-import { useSelectHospitalStore } from '@/lib/store/on-boarding/select-hospital'
+import { ArrowUpDown } from 'lucide-react'
+import SelectColumn from './select-column'
 
-export type SelectHosptialColumnsType = {
-  hos_id: string
-  name: string | null
-  city: string | null
-  district: string | null
-}
-
-export const SelectHospitalColumns: ColumnDef<SelectHosptialColumnsType>[] = [
-  {
-    id: 'select',
-    cell: ({ row, table }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => {
-          // 다중 선택 방지
-          table.toggleAllPageRowsSelected(false)
-          row.toggleSelected(!!value)
-          useSelectHospitalStore().setHosId(row.original.hos_id)
-        }}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+export const columns: ColumnDef<SelectHosptialDataTable>[] = [
   {
     accessorKey: 'name',
-    header: '병원명',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          병원명
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
 
   {
     accessorKey: 'city',
-    header: '지역',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          지역
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: 'district',
-    header: '시·군·구',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          시·군·구
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+  },
+  {
+    id: 'action',
+    cell: ({ row }) => {
+      const hosId = row.original.hos_id
+      const name = row.original.name
+
+      return <SelectColumn hosId={hosId} name={name} />
+    },
   },
 ]

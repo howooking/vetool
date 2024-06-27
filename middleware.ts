@@ -102,7 +102,7 @@ export async function middleware(request: NextRequest) {
       // If the user exists but has no registered hospital
       const { data: userApprovalData, error: userApprovalDataError } =
         await supabase
-          .from('user_approval')
+          .from('user_approvals')
           .select()
           .match({ user_id: authUser?.id })
 

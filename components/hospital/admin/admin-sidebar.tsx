@@ -12,13 +12,13 @@ import AdminSidebarItem from './admin-sidebar-item'
 
 const ADMIN_SIDE_BAR_ITEMS = [
   {
-    name: '직원관리',
+    name: '스태프관리',
     path: 'staff',
     icon: Users,
   },
   {
     name: '사용승인',
-    path: 'permission',
+    path: 'approval',
     icon: UserCheck,
   },
   {
@@ -45,12 +45,12 @@ const ADMIN_SIDE_BAR_ITEMS = [
 
 export default function AdminSidebar() {
   return (
-    <div className="h-[calc(100vh-48px)] w-48 border-r">
+    <aside className="h-[calc(100vh-48px)] w-48 border-r">
       <ul className="flex flex-col gap-2 p-2">
         {ADMIN_SIDE_BAR_ITEMS.map((item) => (
           <AdminSidebarItem key={item.name} {...item} />
         ))}
       </ul>
-    </div>
+    </aside>
   )
 }

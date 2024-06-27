@@ -291,18 +291,18 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: "icu_chart_patient_id_fkey"
-            columns: ["patient_id"]
-            isOneToOne: false
-            referencedRelation: "patients"
-            referencedColumns: ["patient_id"]
-          },
-          {
             foreignKeyName: "icu_chart_sub_vet_fkey"
             columns: ["sub_vet"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "icu_chart_환자 id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
           },
         ]
       }
@@ -657,7 +657,7 @@ export type Database = {
           cc: string | null
           created_at: string
           dx: string | null
-          group_list: Json | null
+          group_list: string[] | null
           hos_id: string | null
           icu_io_id: string
           in_date: string | null
@@ -670,7 +670,7 @@ export type Database = {
           cc?: string | null
           created_at?: string
           dx?: string | null
-          group_list?: Json | null
+          group_list?: string[] | null
           hos_id?: string | null
           icu_io_id?: string
           in_date?: string | null
@@ -683,7 +683,7 @@ export type Database = {
           cc?: string | null
           created_at?: string
           dx?: string | null
-          group_list?: Json | null
+          group_list?: string[] | null
           hos_id?: string | null
           icu_io_id?: string
           in_date?: string | null
@@ -764,11 +764,12 @@ export type Database = {
           },
         ]
       }
-      user_approval: {
+      user_approvals: {
         Row: {
           created_at: string
           hos_id: string | null
           is_approved: boolean
+          updated_at: string | null
           user_approval_id: string
           user_id: string | null
         }
@@ -776,6 +777,7 @@ export type Database = {
           created_at?: string
           hos_id?: string | null
           is_approved?: boolean
+          updated_at?: string | null
           user_approval_id?: string
           user_id?: string | null
         }
@@ -783,6 +785,7 @@ export type Database = {
           created_at?: string
           hos_id?: string | null
           is_approved?: boolean
+          updated_at?: string | null
           user_approval_id?: string
           user_id?: string | null
         }
@@ -952,8 +955,43 @@ export type Database = {
         }
         Returns: string
       }
-      update_user_hos_id_when_select_hospital: {
+      test_insert_icu_io_data_with_registered_patient: {
         Args: {
+          hos_id_input: string
+          patient_id_input: string
+          dx_input: string
+          cc_input: string
+          in_date_input: string
+          out_due_date_input: string
+          main_vet_input: string
+          sub_vet_input: string
+          group_list_input: string
+          age_in_days_input: number
+        }
+        Returns: string
+      }
+      update_user_approval_and_user_hos_id_when_approved: {
+        Args: {
+          hos_id_input: string
+          user_id_input: string
+        }
+        Returns: undefined
+      }
+      update_user_info_when_creating_new_hospital: {
+        Args: {
+          hos_name_input: string
+          city_input: string
+          district_input: string
+          business_number_input: string
+          user_name_input: string
+          is_vet_input: boolean
+        }
+        Returns: string
+      }
+      update_user_info_when_sending_approval: {
+        Args: {
+          name_input: string
+          is_vet_input: boolean
           hos_id_input: string
         }
         Returns: undefined
