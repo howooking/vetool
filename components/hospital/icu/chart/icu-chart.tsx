@@ -1,71 +1,121 @@
 'use client'
 
-import IcuChartOrder from '@/components/hospital/icu/chart/order/icu-chart-order'
-
+import IcuChartOrder from '@/components/hospital/icu/chart/icu-chart-order'
 import IcuNewChartDialog from '@/components/hospital/icu/chart/icu-new-chart-dialog'
-import { FOOTER_CATEGORIES } from '@/constants/hospital/icu/chart'
-import { useIcuChartStore } from '@/lib/store/hospital/icu/icu-chart'
+import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
+import { FOOTER_CATEGORIES } from '@/constants/hospital/icu/chart/footer'
 import { useIcuSelectedChartCategoryStore } from '@/lib/store/hospital/icu/icu-selected-category'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
-import type { IcuChartJoined, Vets } from '@/types/hospital'
-import { useEffect, useMemo, useState } from 'react'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  Vets,
+} from '@/types/hospital'
+import { useMemo, useState } from 'react'
+
+type OrderName =
+  | '체온(T)'
+  | '심박수(P)'
+  | '호흡수(R)'
+  | '혈압(BP)'
+  | '활력'
+  | '구토'
+  | '배변'
+  | '배뇨'
+  | '수액'
+  | '사료'
 
 export default function IcuChart({
   icuChartData,
+  icuChartOrderData,
   vetsData,
 }: {
   icuChartData: IcuChartJoined[]
+  icuChartOrderData: IcuChartOrderJoined[]
   vetsData: Vets[]
 }) {
-  const [chartData, setChartData] = useState<IcuChartJoined[]>([])
+  const [targetDateChartData, setTargetDateChartData] = useState<
+    IcuChartJoined[]
+  >([])
   const [selectedPatientChartData, setSelectedPatientChartData] =
     useState<IcuChartJoined>()
-  const { setIcuChartData } = useIcuChartStore()
+  const [targetDateChartOrderData, setTargetDateChartOrderData] = useState<
+    IcuChartOrderJoined[]
+  >([])
   const { selectedCategory } = useIcuSelectedChartCategoryStore()
-  const { selectedPatient } = useIcuSelectedPatientStore()
+  const { selectedPatientId } = useIcuSelectedPatientStore()
   const { selectedDate } = useIcuSelectedDateStore()
   const [overall, icuChart] = FOOTER_CATEGORIES.map(
     (category) => category.value,
   )
 
-  useEffect(() => {
-    setIcuChartData(icuChartData)
-  }, [icuChartData, setIcuChartData])
+  const orderIndex = useMemo(() => {
+    return DEFAULT_ICU_ORDER_NAME.reduce(
+      (acc, item, idx) => {
+        acc[item.orderName] = idx
+        return acc
+      },
+      {} as Record<OrderName, number>,
+    )
+  }, [])
 
   useMemo(() => {
-    const filteredChartData = icuChartData.filter(
+    // targeted date의 특정 patient의 차트 데이터 필터링
+    const targetDateChartData = icuChartData.filter(
       (chartData) =>
-        chartData.patient_id.patient_id === selectedPatient &&
+        chartData.patient_id.patient_id === selectedPatientId &&
         chartData.target_date === selectedDate,
     )
 
-    const patientChartData = icuChartData.find(
-      (chartData) => chartData.patient_id.patient_id === selectedPatient,
+    // date와 상관없이 특정 patient의 차트 데이터 필터링
+    const selectedPatientChartData = icuChartData.find(
+      (chartData) => chartData.patient_id.patient_id === selectedPatientId,
     )
 
-    setChartData(filteredChartData)
-    setSelectedPatientChartData(patientChartData)
-  }, [icuChartData, selectedDate, selectedPatient])
+    // 특정 환자의 차트가 존재할 때, 오더 차트 데이터 필터링
+    if (selectedPatientId && targetDateChartData.length) {
+      const targetDateOrderData = icuChartOrderData
+        .filter(
+          (orderData) =>
+            orderData.icu_chart_id === targetDateChartData[0].icu_chart_id,
+        )
+        .sort(
+          (prev, next) =>
+            orderIndex[prev.icu_chart_order_name as OrderName] -
+            orderIndex[next.icu_chart_order_name as OrderName],
+        )
 
-  // TODO: LOADING SKELETON
+      setTargetDateChartOrderData(targetDateOrderData)
+    }
+
+    setTargetDateChartData(targetDateChartData)
+    setSelectedPatientChartData(selectedPatientChartData)
+  }, [
+    icuChartData,
+    icuChartOrderData,
+    orderIndex,
+    selectedDate,
+    selectedPatientId,
+  ])
 
   return (
-    <section className="w-full bg-gray-100">
+    <section className="bg-gray-100">
       {/* 종합 현황 && 환자 미선택 */}
-      {selectedCategory === overall && !selectedPatient && (
+      {selectedCategory === overall && !selectedPatientId && (
         <span>종합 현황</span>
       )}
 
       {/* 입원 차트 */}
-      {selectedPatient && (
-        <div className="h-[800px] overflow-y-scroll p-4">
-          {/* ICU 차트가 존재하는 경우 / 존재하지 않는 경우 */}
-          {chartData.length ? (
-            chartData.map((filteredData) => (
+      {selectedPatientId && (
+        <div className="p-4">
+          {/* targeted date 차트가 존재하는 경우 / 존재하지 않는 경우 */}
+          {targetDateChartData.length ? (
+            targetDateChartData.map((filteredData) => (
               <IcuChartOrder
                 key={filteredData.icu_chart_id}
                 chartData={filteredData}
+                chartOrderData={targetDateChartOrderData}
                 vetsData={vetsData}
               />
             ))
@@ -79,7 +129,7 @@ export default function IcuChart({
         </div>
       )}
 
-      {selectedCategory === icuChart && !selectedPatient && (
+      {selectedCategory === icuChart && !selectedPatientId && (
         <span>환자를 선택해주세요</span>
       )}
     </section>
