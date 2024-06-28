@@ -9,6 +9,7 @@ import type { IcuDialogProps } from '@/types/hospital/icu'
 
 export default function IcuDialog({
   hosId,
+  icuIoId,
   patients,
   groupList,
   vets,
@@ -28,6 +29,7 @@ export default function IcuDialog({
           <TabsContent value="search">
             <IcuSelectPatient
               hosId={hosId}
+              icuIoId={icuIoId}
               patients={patients}
               groupList={groupList}
               vets={vets}

@@ -4,7 +4,12 @@ import IcuRegisterPatientForm from '@/components/hospital/icu/register/icu-regis
 import { HospitalPatientsColumns } from '@/components/hospital/patients/columns'
 import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
-import { DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { useIcuRegisterPatientStore } from '@/lib/store/hospital/icu/register-patient'
 import { useSelectedPatientStore } from '@/lib/store/hospital/patients/selected-patient'
@@ -13,6 +18,7 @@ import { IcuDialogProps } from '@/types/hospital/icu'
 
 export default function IcuSelectPatientDialog({
   hosId,
+  icuIoId,
   patients,
   groupList,
   vets,
@@ -29,7 +35,6 @@ export default function IcuSelectPatientDialog({
       .order('created_at', { ascending: false })
       .maybeSingle()
 
-    // ERROR HANDLINg
     if (patientError) {
       console.log(patientError)
       throw new Error(patientError.message)
@@ -50,7 +55,7 @@ export default function IcuSelectPatientDialog({
   }
 
   return (
-    <>
+    <Dialog>
       <DialogHeader>
         <DialogTitle>{isNextStep ? '입원 등록' : '환자 조회'}</DialogTitle>
       </DialogHeader>
@@ -58,6 +63,7 @@ export default function IcuSelectPatientDialog({
       {isNextStep ? (
         <IcuRegisterPatientForm
           hosId={hosId}
+          icuIoId={icuIoId}
           groupList={groupList}
           vets={vets}
         />
@@ -76,6 +82,6 @@ export default function IcuSelectPatientDialog({
           </Button>
         )}
       </DialogFooter>
-    </>
+    </Dialog>
   )
 }

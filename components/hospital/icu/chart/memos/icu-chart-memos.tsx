@@ -17,18 +17,21 @@ export default function IcuChartOrderMemos({
         type="text"
         placeholder="Memo A"
         value={memoA ?? ''}
+        onChange={() => {}}
       />
       <Input
         className="min-h-64 w-1/3 bg-white"
         type="text"
         placeholder="Memo B"
         value={memoB ?? ''}
+        onChange={() => {}}
       />
       <Input
         className="min-h-64 w-1/3 bg-white"
         type="text"
         placeholder="Memo C"
         value={memoC ?? ''}
+        onChange={() => {}}
       />
     </div>
   )
