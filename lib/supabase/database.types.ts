@@ -291,18 +291,18 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
           {
+            foreignKeyName: "icu_chart_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
+          },
+          {
             foreignKeyName: "icu_chart_sub_vet_fkey"
             columns: ["sub_vet"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "icu_chart_환자 id_fkey"
-            columns: ["patient_id"]
-            isOneToOne: false
-            referencedRelation: "patients"
-            referencedColumns: ["patient_id"]
           },
         ]
       }
@@ -708,6 +708,39 @@ export type Database = {
           },
         ]
       }
+      owners: {
+        Row: {
+          created_at: string
+          hos_owner_id: string | null
+          owner_address: string | null
+          owner_id: string
+          owner_level: Database["public"]["Enums"]["owner_level_enum"]
+          owner_memo: string | null
+          owner_name: string
+          owner_phone_number: string | null
+        }
+        Insert: {
+          created_at?: string
+          hos_owner_id?: string | null
+          owner_address?: string | null
+          owner_id?: string
+          owner_level?: Database["public"]["Enums"]["owner_level_enum"]
+          owner_memo?: string | null
+          owner_name?: string
+          owner_phone_number?: string | null
+        }
+        Update: {
+          created_at?: string
+          hos_owner_id?: string | null
+          owner_address?: string | null
+          owner_id?: string
+          owner_level?: Database["public"]["Enums"]["owner_level_enum"]
+          owner_memo?: string | null
+          owner_name?: string
+          owner_phone_number?: string | null
+        }
+        Relationships: []
+      }
       patients: {
         Row: {
           birth: string | null
@@ -715,11 +748,11 @@ export type Database = {
           created_at: string
           gender: string
           hos_id: string | null
-          hos_owner_id: string | null
           hos_patient_id: string
           memo: string | null
           microchip_no: string | null
           name: string
+          owner_id: string
           patient_id: string
           species: string
           state: string | null
@@ -730,11 +763,11 @@ export type Database = {
           created_at?: string
           gender?: string
           hos_id?: string | null
-          hos_owner_id?: string | null
           hos_patient_id?: string
           memo?: string | null
           microchip_no?: string | null
           name?: string
+          owner_id: string
           patient_id?: string
           species?: string
           state?: string | null
@@ -745,11 +778,11 @@ export type Database = {
           created_at?: string
           gender?: string
           hos_id?: string | null
-          hos_owner_id?: string | null
           hos_patient_id?: string
           memo?: string | null
           microchip_no?: string | null
           name?: string
+          owner_id?: string
           patient_id?: string
           species?: string
           state?: string | null
@@ -761,6 +794,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "patients_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "owners"
+            referencedColumns: ["owner_id"]
           },
         ]
       }
@@ -926,7 +966,7 @@ export type Database = {
           out_due_date_input: string
           main_vet_input: string
           sub_vet_input: string
-          group_list_input: Json
+          group_list_input: string
           age_in_days_input: number
         }
         Returns: string
@@ -952,21 +992,6 @@ export type Database = {
           city_input: string
           district_input: string
           business_number_input: string
-        }
-        Returns: string
-      }
-      test_insert_icu_io_data_with_registered_patient: {
-        Args: {
-          hos_id_input: string
-          patient_id_input: string
-          dx_input: string
-          cc_input: string
-          in_date_input: string
-          out_due_date_input: string
-          main_vet_input: string
-          sub_vet_input: string
-          group_list_input: string
-          age_in_days_input: number
         }
         Returns: string
       }
@@ -998,7 +1023,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      owner_level_enum: "S" | "A" | "B" | "C"
     }
     CompositeTypes: {
       [_ in never]: never
