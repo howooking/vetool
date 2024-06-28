@@ -73,7 +73,7 @@ export default function DataTable<TData, TValue>({
   return (
     <div className="w-full">
       {searchKeyword && (
-        <div className="flex items-center pb-4">
+        <div className="flex items-center pb-2">
           <Input
             placeholder={searchPlaceHolder}
             value={
