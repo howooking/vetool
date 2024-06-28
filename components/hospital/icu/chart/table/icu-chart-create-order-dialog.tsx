@@ -15,7 +15,13 @@ import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { FilePlus } from 'lucide-react'
 import { useState } from 'react'
 
-export default function IcuChartCreateOrderDialog() {
+export default function IcuChartCreateOrderDialog({
+  chartId,
+  ioId,
+}: {
+  chartId: string
+  ioId: string
+}) {
   const [isOpen, setIsOpen] = useState(false)
   const { selectedPatientName: patientName } = useIcuSelectedPatientStore()
   const { selectedDate } = useIcuSelectedDateStore()
@@ -33,7 +39,11 @@ export default function IcuChartCreateOrderDialog() {
           <DialogDescription>{selectedDate}</DialogDescription>
           <DialogTitle>{patientName}님 처치 추가</DialogTitle>
         </DialogHeader>
-        <IcuChartCreateOrderForm />
+        <IcuChartCreateOrderForm
+          chartId={chartId}
+          ioId={ioId}
+          setIsOpen={setIsOpen}
+        />
       </DialogContent>
     </Dialog>
   )

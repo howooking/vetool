@@ -69,7 +69,10 @@ export default function IcuChartTable({
           ))}
           <TableRow className="flex w-[240px] justify-center">
             <TableCell>
-              <IcuChartCreateOrderDialog />
+              <IcuChartCreateOrderDialog
+                chartId={chartOrderData[0].icu_chart_id!}
+                ioId={chartOrderData[0].icu_io_id.icu_io_id!}
+              />
             </TableCell>
           </TableRow>
         </TableBody>

@@ -1,6 +1,7 @@
 import { GroupCheckFormSchema } from '@/components/hospital/icu/chart/table/schema'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -20,71 +21,95 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/'
 import {
   TIME,
   TX_ORDER_TIME_INTERVAL,
 } from '@/constants/hospital/icu/chart/time'
+import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Dispatch, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function IcuChartCreateOrderForm() {
+export default function IcuChartCreateOrderForm({
+  chartId,
+  ioId,
+  setIsOpen,
+}: {
+  chartId: string
+  ioId: string
+  setIsOpen: Dispatch<React.SetStateAction<boolean>>
+}) {
   const { refresh } = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime, setStartTime] = useState<string | undefined>(undefined)
   const [timeTerm, setTimeTerm] = useState<string | undefined>(undefined)
+  const [orderTime, setOrderTime] = useState<string[]>([])
+  const { selectedPatientId: patientId } = useIcuSelectedPatientStore()
 
   const form = useForm<z.infer<typeof GroupCheckFormSchema>>({
     resolver: zodResolver(GroupCheckFormSchema),
+    defaultValues: {
+      icu_chart_order_name: '',
+      icu_chart_order_comment: '',
+    },
   })
 
   const handleSubmit = async (data: z.infer<typeof GroupCheckFormSchema>) => {
     setIsSubmitting(true)
 
-    // const supabase = createClient()
-    // const { error: groupUpdateError } = await supabase
-    //   .from('icu_chart_order')
-    //   .update({ group_list: data.items })
-    //   .match({ patient_id: patientId })
+    const supabase = createClient()
+    const { error: createOrderError } = await supabase
+      .from('icu_chart_order')
+      .insert({
+        icu_chart_id: chartId,
+        icu_io_id: ioId,
+        icu_chart_order_type: data.icu_chart_order_type,
+        icu_chart_order_name: data.icu_chart_order_name,
+        icu_chart_order_comment: data.icu_chart_order_comment,
+        icu_chart_order_time: orderTime,
+      })
+      .match({ patient_id: patientId })
 
-    // if (groupUpdateError) {
-    //   console.log(groupUpdateError)
-    //   toast({
-    //     variant: 'destructive',
-    //     title: groupUpdateError.message,
-    //   })
-    //   return
-    // }
+    if (createOrderError) {
+      console.log(createOrderError)
+      throw new Error(createOrderError.message)
+    }
 
-    // toast({
-    //   title: '그룹을 변경하였습니다.',
-    // })
+    toast({
+      title: `${data.icu_chart_order_name} 오더를 추가하였습니다.`,
+    })
+
     refresh()
     setIsSubmitting(false)
+    setIsOpen(false)
   }
 
   useEffect(() => {
     const start = Number(startTime)
     const term = Number(timeTerm)
-
-    const indicesToSetTrue = []
+    const initialArray = Array(23).fill(0)
 
     for (let i = start; i <= 24; i += term) {
-      indicesToSetTrue.push(i)
+      initialArray[i] = 1
     }
 
-    for (let i = 1; i <= 24; i += 1) {
+    initialArray.forEach((time, index) => {
       form.setValue(
-        `icu_chart_order_tx_${i}` as keyof z.infer<typeof GroupCheckFormSchema>,
-        indicesToSetTrue.includes(i),
+        `icu_chart_order_tx_${index}` as keyof z.infer<
+          typeof GroupCheckFormSchema
+        >,
+        time ? true : false,
       )
-    }
+    })
+
+    setOrderTime(initialArray)
   }, [form, startTime, timeTerm])
 
   return (
@@ -210,6 +235,7 @@ export default function IcuChartCreateOrderForm() {
           <div>전체선택</div>
           <div>전체취소</div>
         </div>
+
         {/* 처치 시간 - 타임 테이블 */}
         <div className="col-span-2 flex w-full">
           {TIME.map((element, index) => (
@@ -243,12 +269,20 @@ export default function IcuChartCreateOrderForm() {
           ))}
         </div>
 
-        <Button type="submit" disabled={isSubmitting} className="ml-auto w-16">
-          추가
-          <LoaderCircle
-            className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-          />
-        </Button>
+        <DialogFooter className="ml-auto">
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              닫기
+            </Button>
+          </DialogClose>
+
+          <Button type="submit" disabled={isSubmitting}>
+            추가
+            <LoaderCircle
+              className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
+            />
+          </Button>
+        </DialogFooter>
       </form>
     </Form>
   )
