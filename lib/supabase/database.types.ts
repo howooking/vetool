@@ -926,7 +926,7 @@ export type Database = {
           out_due_date_input: string
           main_vet_input: string
           sub_vet_input: string
-          group_list_input: Json
+          group_list_input: string
           age_in_days_input: number
         }
         Returns: string
