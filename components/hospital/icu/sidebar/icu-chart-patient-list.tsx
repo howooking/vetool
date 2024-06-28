@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { useIcuSelectedChartCategoryStore } from '@/lib/store/hospital/icu/icu-selected-category'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { cn } from '@/lib/utils'
@@ -14,18 +15,19 @@ export default function IcuChartPatientList({
   const { selectedPatientId, setSelectedPatientId, setSelectedPatientName } =
     useIcuSelectedPatientStore()
   const { selectedDate } = useIcuSelectedDateStore()
+  const { setSelectedCategory } = useIcuSelectedChartCategoryStore()
 
   const handlePatientButtonClick = (data: IcuIoPatientsJoined) => {
     setSelectedPatientId(data.patient_id.patient_id)
     setSelectedPatientName(data.patient_id.name)
+    setSelectedCategory('icuChart')
   }
 
-  const selectedDaysChartData = icuIoData?.filter((chartdata) => {
-    return (
-      (chartdata.in_date && selectedDate >= chartdata.in_date) ||
-      chartdata.out_date! >= selectedDate
-    )
-  })
+  const selectedDaysChartData = icuIoData?.filter(
+    ({ in_date, out_date }) =>
+      in_date! <= selectedDate &&
+      (out_date == null || out_date >= selectedDate),
+  )
 
   return (
     <>
