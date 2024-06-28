@@ -1,5 +1,6 @@
 import IcuChart from '@/components/hospital/icu/chart/icu-chart'
 import IcuDialog from '@/components/hospital/icu/dialog/icu-dialog'
+import IcuHeaderDateSelector from '@/components/hospital/icu/header/icu-header-date-selector'
 import { createClient } from '@/lib/supabase/server'
 import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
 
@@ -112,17 +113,18 @@ export default async function IcuPage({
 
   return (
     <div className="h-icu-chart w-full overflow-y-scroll">
-      <IcuChart
-        icuChartData={icuChartData}
-        icuChartOrderData={icuChartOrderData}
-        vetsData={vetsData}
-      />
+      <IcuHeaderDateSelector />
       <IcuDialog
         hosId={hosId}
         icuIoId={icuIoId.length ? icuIoId[0].icu_io_id : ''}
         patients={patientsData}
         vets={vetsData}
         groupList={groupListData[0].group_list}
+      />
+      <IcuChart
+        icuChartData={icuChartData}
+        icuChartOrderData={icuChartOrderData}
+        vetsData={vetsData}
       />
     </div>
   )
