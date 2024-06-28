@@ -39,13 +39,16 @@ import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import { useAddPatientTriggerStore } from '@/lib/store/hospital/icu/add-patient'
+import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
+import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 
 export default function IcuRegisterPatientForm({
   hosId,
   groupList,
   vets,
 }: Omit<IcuDialogProps, 'patients'>) {
-  const { push } = useRouter()
+  const { refresh } = useRouter()
   const supabase = createClient()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
@@ -54,6 +57,8 @@ export default function IcuRegisterPatientForm({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { setIsNextStep } = useIcuRegisterPatientStore()
   const { patientId, birth, setPatientId } = useSelectedPatientStore()
+  const { setIsOpen } = useAddPatientTriggerStore()
+  const { setSelectedDate } = useIcuSelectedDateStore()
 
   const form = useForm<z.infer<typeof registerIcuPatientFormSchema>>({
     resolver: zodResolver(registerIcuPatientFormSchema),
@@ -74,7 +79,7 @@ export default function IcuRegisterPatientForm({
 
     setIsSubmitting(true)
 
-    const { data: IcuChartId, error: IcuIoError } = await supabase.rpc(
+    const { data: icuChartId, error: icuChartError } = await supabase.rpc(
       'insert_icu_io_data_with_registered_patient',
       {
         hos_id_input: hosId,
@@ -90,18 +95,53 @@ export default function IcuRegisterPatientForm({
       },
     )
 
-    if (IcuIoError) {
-      console.log(IcuIoError.message)
-      throw new Error(IcuIoError.message)
+    if (icuChartError) {
+      console.log(icuChartError.message)
+      throw new Error(icuChartError.message)
     }
+
+    const { data: icuIoId, error: icuIoError } = await supabase
+      .from('icu_io')
+      .select('icu_io_id')
+      .match({ patient_id: patientId })
+      .order('created_at', { ascending: true })
+      .single()
+
+    if (icuIoError) {
+      console.log(icuIoError)
+      throw new Error(icuIoError.message)
+    }
+
+    // 기본 차트 삽입
+    DEFAULT_ICU_ORDER_NAME.forEach(async (element) => {
+      const { error: icuChartOrderError } = await supabase
+        .from('icu_chart_order')
+        .insert({
+          icu_chart_order_type: element.dataType,
+          icu_chart_id: icuChartId,
+          icu_io_id: icuIoId?.icu_io_id,
+          icu_chart_order_name: element.orderName,
+          icu_chart_order_comment: element.orderComment,
+        })
+
+      if (icuChartOrderError) {
+        toast({
+          variant: 'destructive',
+          title: icuChartOrderError.message,
+          description: '관리자에게 문의하세요',
+        })
+        return
+      }
+    })
 
     toast({
       title: '입원 환자가 등록되었습니다.',
     })
 
+    setIsOpen()
     setIsSubmitting(false)
-
-    push(`/hospital/${hosId}/icu/${IcuChartId}`)
+    setSelectedDate(format(in_date, 'yyyy-MM-dd'))
+    refresh()
   }
 
   // 입원 - 퇴원 예정일 업데이트

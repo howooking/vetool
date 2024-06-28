@@ -1,14 +1,16 @@
-import IcuChartFooter from '@/components/hospital/icu/chart/icu-chart-footer'
-import IcuChartSidebar from '@/components/hospital/icu/chart/sidebar/icu-chart-sidebar'
+import IcuChartFooter from '@/components/hospital/icu/chart/footer/icu-chart-footer'
+import IcuChartSidebar from '@/components/hospital/icu/sidebar/icu-chart-sidebar'
 export default async function Layout({
   children,
+  params,
 }: {
   children: React.ReactNode
+  params: { hos_id: string }
 }) {
   return (
     <div className="flex flex-col">
       <main className="flex">
-        <IcuChartSidebar />
+        <IcuChartSidebar hosId={params.hos_id} />
         {children}
       </main>
       <IcuChartFooter />

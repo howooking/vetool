@@ -4,27 +4,38 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useSelectedPatientStore } from '@/lib/store/hospital/patients/selected-patient'
 import { Patients } from '@/types/hospital'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, Row, Table } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
+
+const SelectableCheckbox = ({
+  row,
+  table,
+}: {
+  row: Row<Patients>
+  table: Table<Patients>
+}) => {
+  const setBirth = useSelectedPatientStore((state) => state.setBirth)
+  const setPatientId = useSelectedPatientStore((state) => state.setPatientId)
+
+  return (
+    <Checkbox
+      checked={row.getIsSelected()}
+      onCheckedChange={(value) => {
+        // 다중 선택 방지
+        table.toggleAllPageRowsSelected(false)
+        row.toggleSelected(!!value)
+        setBirth(value ? row.original.birth : null)
+        setPatientId(value ? row.original.patient_id : null)
+      }}
+      aria-label="Select row"
+    />
+  )
+}
 
 export const HospitalPatientsColumns: ColumnDef<Patients>[] = [
   {
     id: 'select',
-    cell: ({ row, table }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => {
-          // 다중 선택 방지
-          table.toggleAllPageRowsSelected(false)
-          row.toggleSelected(!!value)
-          useSelectedPatientStore().setBirth(value ? row.original.birth : null)
-          useSelectedPatientStore().setPatientId(
-            value ? row.original.patient_id : null,
-          )
-        }}
-        aria-label="Select row"
-      />
-    ),
+    cell: ({ row, table }) => <SelectableCheckbox row={row} table={table} />,
     enableSorting: false,
     enableHiding: false,
   },

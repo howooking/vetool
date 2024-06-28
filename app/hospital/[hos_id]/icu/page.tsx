@@ -1,7 +1,7 @@
 import IcuChart from '@/components/hospital/icu/chart/icu-chart'
 import IcuDialog from '@/components/hospital/icu/dialog/icu-dialog'
 import { createClient } from '@/lib/supabase/server'
-import type { IcuChartJoined } from '@/types/hospital'
+import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
 
 export default async function IcuPage({
   params,
@@ -18,10 +18,11 @@ export default async function IcuPage({
         icu_io_id(*),
         patient_id("name", "gender", "breed", "patient_id"),
         main_vet("name", "user_id"),
-        sub_vet("name", "user_id")
+        sub_vet("name", "user_id"),
+        hos_id("group_list", "hos_id")
         `,
     )
-    .match({ hos_id: params.hos_id })
+    .match({ hos_id: hosId })
     .order('created_at', { ascending: true })
     .returns<IcuChartJoined[]>()
 
@@ -30,6 +31,45 @@ export default async function IcuPage({
     throw new Error(icuChartError.message)
   }
 
+  const { data: icuChartOrderData, error: icuChartOrderError } = await supabase
+    .from('icu_chart_order')
+    .select(
+      `*,
+      icu_io_id!inner(*),
+      icu_chart_order_tx_1(*),
+      icu_chart_order_tx_2(*),
+      icu_chart_order_tx_3(*),
+      icu_chart_order_tx_4(*),
+      icu_chart_order_tx_5(*),
+      icu_chart_order_tx_6(*),
+      icu_chart_order_tx_7(*),
+      icu_chart_order_tx_8(*),
+      icu_chart_order_tx_9(*),
+      icu_chart_order_tx_10(*),
+      icu_chart_order_tx_11(*),
+      icu_chart_order_tx_12(*),
+      icu_chart_order_tx_13(*),
+      icu_chart_order_tx_14(*),
+      icu_chart_order_tx_15(*),
+      icu_chart_order_tx_16(*),
+      icu_chart_order_tx_17(*),
+      icu_chart_order_tx_18(*),
+      icu_chart_order_tx_19(*),
+      icu_chart_order_tx_20(*),
+      icu_chart_order_tx_21(*),
+      icu_chart_order_tx_22(*),
+      icu_chart_order_tx_23(*),
+      icu_chart_order_tx_24(*)
+      `,
+    )
+    .match({ 'icu_io_id.hos_id': hosId })
+    .order('created_at', { ascending: true })
+    .returns<IcuChartOrderJoined[]>()
+
+  if (icuChartOrderError) {
+    console.log(icuChartOrderError)
+    throw new Error(icuChartOrderError.message)
+  }
   const { data: patientsData, error: patientsError } = await supabase
     .from('patients')
     .select('*')
@@ -60,11 +100,26 @@ export default async function IcuPage({
     throw new Error(groupListError.message)
   }
 
+  const { data: icuIoId, error: icuIoError } = await supabase
+    .from('icu_io')
+    .select('icu_io_id')
+    .match({ hos_id: hosId })
+
+  if (icuIoError) {
+    console.log(icuIoError)
+    throw new Error(icuIoError.message)
+  }
+
   return (
-    <div className="w-full">
-      <IcuChart icuChartData={icuChartData} vetsData={vetsData} />
+    <div className="h-icu-chart w-full overflow-y-scroll">
+      <IcuChart
+        icuChartData={icuChartData}
+        icuChartOrderData={icuChartOrderData}
+        vetsData={vetsData}
+      />
       <IcuDialog
         hosId={hosId}
+        icuIoId={icuIoId.length ? icuIoId[0].icu_io_id : ''}
         patients={patientsData}
         vets={vetsData}
         groupList={groupListData[0].group_list}
