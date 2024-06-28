@@ -139,6 +139,7 @@ export default function IcuRegisterPatientForm({
     })
 
     setIsOpen()
+    setIsNextStep()
     setIsSubmitting(false)
     setSelectedDate(format(in_date, 'yyyy-MM-dd'))
     refresh()
