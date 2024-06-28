@@ -5,4 +5,5 @@ export type IcuDialogProps = {
   patients: Patients[]
   groupList: string[] | null
   vets: Vets[]
+  icuIoId?: string
 }

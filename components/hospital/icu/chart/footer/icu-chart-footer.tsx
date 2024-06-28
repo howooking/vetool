@@ -1,12 +1,13 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { FOOTER_CATEGORIES } from '@/constants/hospital/icu/chart'
+import { FOOTER_CATEGORIES } from '@/constants/hospital/icu/chart/footer'
 import { useIcuSelectedChartCategoryStore } from '@/lib/store/hospital/icu/icu-selected-category'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 
 export default function IcuChartFooter() {
-  const { selectedPatient, setSelectedPatient } = useIcuSelectedPatientStore()
+  const { selectedPatientId, setSelectedPatientId } =
+    useIcuSelectedPatientStore()
   const { selectedCategory, setSelectedCategory } =
     useIcuSelectedChartCategoryStore()
 
@@ -14,12 +15,12 @@ export default function IcuChartFooter() {
     setSelectedCategory(value)
 
     if (value === 'overall') {
-      setSelectedPatient(null)
+      setSelectedPatientId(null)
     }
   }
 
   return (
-    <footer className="h-12 bg-white">
+    <footer className="fixed bottom-0 h-12 w-full bg-white">
       <ul className="flex h-full items-center gap-4 pl-4">
         {FOOTER_CATEGORIES.map(({ label, value }) => (
           <li key={value}>
