@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 
 export const HOSPITAL_ROUTES = {
-  icu: '입원실',
+  icu: '입원차트',
   register: '환자 등록',
   patients: '환자 조회',
   admin: '관리자',
@@ -13,6 +13,9 @@ export const HOSPITAL_ROUTES = {
   approval: '사용승인',
   'test-settings': '검사설정',
   'food-settings': '사료설정',
+  surgery: '외과차트',
+  echocardio: '심초차트',
+  checkup: '건강검진차트',
 } as const
 
 export default function HeaderTitle() {
