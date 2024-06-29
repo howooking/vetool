@@ -27,10 +27,12 @@ export function PatientRegisterDialog({
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => {
-      setStep('ownerSearch')
-    }, 500)
-  }, [setStep])
+    if (!isDialogOpen) {
+      setTimeout(() => {
+        setStep('ownerSearch')
+      }, 500)
+    }
+  }, [setStep, isDialogOpen])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
