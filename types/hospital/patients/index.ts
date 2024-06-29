@@ -5,3 +5,5 @@ export type PatientData = Omit<Patients, 'owner_id'> & {
 }
 
 export type PatientDataTable = Omit<Patients, 'owner_id'> & Owner
+
+export type OwnerDataTable = Owner

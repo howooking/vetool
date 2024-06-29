@@ -34,6 +34,7 @@ export default async function HospitalPatientsPage({
     .from('owners')
     .select('*')
     .match({ hos_id: params.hos_id })
+    .order('created_at', { ascending: false })
 
   if (ownerDataError) {
     console.log(ownerDataError.message)

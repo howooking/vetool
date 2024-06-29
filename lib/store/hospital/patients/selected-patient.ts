@@ -13,3 +13,13 @@ export const useSelectedPatientStore = create<SelectHospitalState>((set) => ({
   setPatientId: (patientId) => set({ patientId }),
   setBirth: (birth) => set({ birth }),
 }))
+
+type PatientRegisterStep = {
+  step: 'ownerSearch' | 'ownerRegister' | 'patientRegister'
+  setStep: (step: 'ownerSearch' | 'ownerRegister' | 'patientRegister') => void
+}
+
+export const usePatientRegisterStep = create<PatientRegisterStep>((set) => ({
+  step: 'ownerSearch',
+  setStep: (step) => set({ step }),
+}))

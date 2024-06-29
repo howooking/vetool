@@ -1,11 +1,9 @@
-import IcuHeader from '@/components/hospital/icu/header/icu-header'
 import { Button } from '@/components/ui/button'
 import { Bell, Dog, Search } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import UserInfo from './user-info'
 import { UserInfoSkeleton } from './user-info-skeleton'
-import PatientsHeader from '../patients/patients-header'
 
 export default async function HospitalHeader({ hosId }: { hosId: string }) {
   return (
