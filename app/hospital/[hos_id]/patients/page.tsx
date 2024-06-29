@@ -1,4 +1,6 @@
-import { HospitalPatientsColumns } from '@/components/hospital/patients/columns'
+import NoResult from '@/components/common/no-result'
+import { patientsColumns } from '@/components/hospital/patients/patient-columns'
+import { PatientRegisterDialog } from '@/components/hospital/patients/patient-register-dialog'
 import DataTable from '@/components/ui/data-table'
 import { createClient } from '@/lib/supabase/server'
 import { PatientData, PatientDataTable } from '@/types/hospital/patients'
@@ -9,6 +11,7 @@ export default async function HospitalPatientsPage({
   params: { hos_id: string }
 }) {
   const supabase = createClient()
+
   const { data: patientsData, error: patientsError } = await supabase
     .from('patients')
     .select(
@@ -27,8 +30,14 @@ export default async function HospitalPatientsPage({
     throw new Error(patientsError.message)
   }
 
-  if (patientsData.length === 0) {
-    return <>환자 없음</>
+  const { data: ownerData, error: ownerDataError } = await supabase
+    .from('owners')
+    .select('*')
+    .match({ hos_id: params.hos_id })
+
+  if (ownerDataError) {
+    console.log(ownerDataError.message)
+    throw new Error(ownerDataError.message)
   }
 
   const data: PatientDataTable[] = patientsData.map((patient) => ({
@@ -55,12 +64,18 @@ export default async function HospitalPatientsPage({
 
   return (
     <div className="p-2">
-      <DataTable
-        columns={HospitalPatientsColumns}
-        data={data}
-        searchKeyword="name"
-        searchPlaceHolder="환자이름을 검색해주세요"
-      />
+      <PatientRegisterDialog ownerData={ownerData} hosId={params.hos_id} />
+      {patientsData.length === 0 ? (
+        <NoResult title="환자가 없습니다." />
+      ) : (
+        <DataTable
+          columns={patientsColumns}
+          data={data}
+          searchKeyword="name"
+          searchPlaceHolder="환자이름을 검색해주세요"
+          rowLength={12}
+        />
+      )}
     </div>
   )
 }

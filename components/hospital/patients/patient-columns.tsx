@@ -9,12 +9,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { calculateAge, cn, formatTimestamp } from '@/lib/utils'
+import { calculateAge, cn } from '@/lib/utils'
 import { PatientDataTable } from '@/types/hospital/patients'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, Cat, Dog, MoreHorizontal } from 'lucide-react'
 
-export const HospitalPatientsColumns: ColumnDef<PatientDataTable>[] = [
+export const patientsColumns: ColumnDef<PatientDataTable>[] = [
   {
     accessorKey: 'species',
     header: ({ column }) => {

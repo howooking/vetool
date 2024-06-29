@@ -28,6 +28,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 
 type DataTableProps<TData, TValue> = {
@@ -37,6 +38,7 @@ type DataTableProps<TData, TValue> = {
   rowSelect?: boolean
   searchKeyword?: string
   searchPlaceHolder?: string
+  rowLength?: number
 }
 export default function DataTable<TData, TValue>({
   columns,
@@ -45,6 +47,7 @@ export default function DataTable<TData, TValue>({
   rowSelect,
   searchKeyword,
   searchPlaceHolder,
+  rowLength = 10,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -67,6 +70,11 @@ export default function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
       rowSelection,
+    },
+    initialState: {
+      pagination: {
+        pageSize: rowLength,
+      },
     },
   })
 
@@ -165,6 +173,7 @@ export default function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
@@ -173,7 +182,7 @@ export default function DataTable<TData, TValue>({
           disabled={!table.getCanPreviousPage()}
           className="text-black"
         >
-          이전
+          <ChevronLeft />
         </Button>
         <Button
           variant="outline"
@@ -181,7 +190,7 @@ export default function DataTable<TData, TValue>({
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          다음
+          <ChevronRight />
         </Button>
       </div>
     </div>
