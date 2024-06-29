@@ -289,6 +289,7 @@ export const CANINE_BREEDS = [
   'Miniature Shar Pei',
   'Molossus',
   'Montenegrin Mountain Hound',
+  'Mongrel',
   'Moscow Watchdog',
   'Moscow Water Dog',
   'Mountain Cur',
