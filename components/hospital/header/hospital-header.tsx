@@ -9,14 +9,7 @@ import PatientsHeader from '../patients/patients-header'
 
 export default async function HospitalHeader({ hosId }: { hosId: string }) {
   return (
-    <header className="flex h-12 items-center justify-between gap-4 border-b px-2">
-      {/* 굳이 있어야 하나 고민중 */}
-      {/* <HeaderTitle /> */}
-      <div>
-        <IcuHeader />
-        <PatientsHeader hosId={hosId} />
-      </div>
-
+    <header className="flex h-12 items-center justify-end gap-4 border-b px-2">
       <div className="flex items-center gap-4">
         <Suspense fallback={<UserInfoSkeleton />}>
           <UserInfo hosId={hosId} />
