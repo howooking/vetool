@@ -46,28 +46,39 @@ import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { registerPatientFormSchema } from './schema'
 
-export default function PatientRegisterForm({
+export default function PatientForm({
   hosId,
+  setStep,
   setIsNextStep,
-  icu = false,
+  icu,
+  setIsDialogOpen,
 }: {
   hosId: string
+  setStep: (step: 'ownerSearch' | 'ownerRegister' | 'patientRegister') => void
   setIsNextStep?: Dispatch<SetStateAction<boolean>>
   icu?: boolean
+  setIsDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
   const [breedOpen, setBreedOpen] = useState(false)
   const [selectedSpecies, setSelectedSpecies] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { setPatientId } = useSelectedPatientStore()
-  const { push } = useRouter()
+  const { refresh, push } = useRouter()
 
-  const supabase = createClient()
+  const searchParams = useSearchParams()
+  const ownerId = searchParams.get('owner_id') ?? null
+  const ownerName = searchParams.get('owner_name') ?? ''
+  const hosOwnerId = searchParams.get('hos_owner_id') ?? ''
+  const ownerAddress = searchParams.get('owner_address') ?? ''
+  const ownerPhoneNumber = searchParams.get('owner_phone_number') ?? ''
+  const ownerMemo = searchParams.get('owner_memo') ?? ''
+
   const BREEDS = selectedSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS
 
   const form = useForm<z.infer<typeof registerPatientFormSchema>>({
@@ -78,7 +89,7 @@ export default function PatientRegisterForm({
       species: undefined,
       breed: undefined,
       gender: undefined,
-      birth: new Date(),
+      birth: undefined,
       microchip_no: '',
       memo: '',
       weight: '',
@@ -100,48 +111,96 @@ export default function PatientRegisterForm({
       breed,
       gender,
       birth,
-      microchip_no: microchipNumber,
+      microchip_no,
       memo,
       weight,
     } = values
-    setIsSubmitting(true)
 
-    const { data: patientId, error } = await supabase.rpc(
-      'insert_patient_data_when_register_patient',
-      {
-        birth_input: format(birth, 'yyyy-MM-dd'),
-        body_weight_input: weight,
-        breed_input: breed,
-        gender_input: gender,
-        hos_id_input: hosId,
-        hos_patient_id_input: hos_patient_id,
-        memo_input: memo,
-        microchip_no_input: microchipNumber,
-        name_input: name,
-        species_input: species,
-      },
-    )
-    if (error) {
+    setIsSubmitting(true)
+    const supabase = createClient()
+
+    // 선택한 보호자가 있는 경우
+    if (ownerId) {
+      const { data: patientId, error } = await supabase.rpc(
+        'insert_patient_with_selected_owner',
+        {
+          birth_input: format(birth, 'yyyy-MM-dd'),
+          body_weight_input: weight,
+          breed_input: breed,
+          gender_input: gender,
+          hos_id_input: hosId,
+          hos_patient_id_input: hos_patient_id,
+          memo_input: memo,
+          microchip_no_input: microchip_no,
+          name_input: name,
+          species_input: species,
+          owner_id_input: ownerId,
+        },
+      )
+      if (error) {
+        console.log(error)
+        toast({
+          variant: 'destructive',
+          title: error.message,
+          description: '관리자에게 문의하세요',
+        })
+        setIsSubmitting(false)
+        return
+      }
+
       toast({
-        variant: 'destructive',
-        title: error.message,
-        description: '관리자에게 문의하세요',
+        title: '환자가 등록되었습니다.',
       })
-      return
     }
 
-    toast({
-      title: '신규 환자가 등록되었습니다.',
-    })
+    // 선택한 보호자가 없는 경우 === 보호자를 생성해야하는 경우
+    if (!ownerId) {
+      const { data: patientId, error } = await supabase.rpc(
+        'insert_patient_without_selected_owner',
+        {
+          birth_input: format(birth, 'yyyy-MM-dd'),
+          body_weight_input: weight,
+          breed_input: breed,
+          gender_input: gender,
+          hos_id_input: hosId,
+          hos_patient_id_input: hos_patient_id,
+          memo_input: memo,
+          microchip_no_input: microchip_no,
+          name_input: name,
+          species_input: species,
+          owner_name_input: ownerName,
+          owner_address_input: ownerAddress,
+          hos_owner_id_input: hosOwnerId,
+          owner_phone_number_input: ownerPhoneNumber,
+          owner_memo_input: ownerMemo,
+        },
+      )
+      if (error) {
+        console.log(error)
+        toast({
+          variant: 'destructive',
+          title: error.message,
+          description: '관리자에게 문의하세요',
+        })
+        setIsSubmitting(false)
+        return
+      }
+
+      toast({
+        title: '보호자 및 환자가 등록되었습니다.',
+      })
+    }
 
     setIsSubmitting(false)
+    setIsDialogOpen(false)
+    push('patients')
+    refresh()
 
-    if (icu && setIsNextStep) {
-      setIsNextStep(true)
-      setPatientId(patientId)
-    } else {
-      push(`/hospital/${hosId}/patients`)
-    }
+    // if (icu && setIsNextStep) {
+    //   setIsNextStep(true)
+    //   setPatientId(patientId)
+    // } else {
+    // }
   }
 
   return (
@@ -150,7 +209,6 @@ export default function PatientRegisterForm({
         onSubmit={form.handleSubmit(handleSubmit)}
         className="grid grid-cols-2 gap-4"
       >
-        {/* 이름 */}
         <FormField
           control={form.control}
           name="name"
@@ -165,7 +223,6 @@ export default function PatientRegisterForm({
           )}
         />
 
-        {/* 번호 */}
         <FormField
           control={form.control}
           name="hos_patient_id"
@@ -181,7 +238,6 @@ export default function PatientRegisterForm({
           )}
         />
 
-        {/* 종 */}
         <FormField
           control={form.control}
           name="species"
@@ -216,12 +272,11 @@ export default function PatientRegisterForm({
           )}
         />
 
-        {/* 품종 */}
         <FormField
           control={form.control}
           name="breed"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
+            <FormItem className="flex flex-col justify-end">
               <FormLabel>품종*</FormLabel>
               <Popover open={breedOpen} onOpenChange={setBreedOpen}>
                 <PopoverTrigger asChild disabled={!selectedSpecies}>
@@ -247,7 +302,7 @@ export default function PatientRegisterForm({
                 <PopoverContent className="w-[352px] p-0">
                   <Command>
                     <CommandInput
-                      placeholder="품종 검색"
+                      placeholder="품종 검색, 잡종시 'Mongrel' 선택"
                       className="h-8 text-xs"
                     />
                     <CommandList>
@@ -284,7 +339,6 @@ export default function PatientRegisterForm({
           )}
         />
 
-        {/* 성별 */}
         <FormField
           control={form.control}
           name="gender"
@@ -319,13 +373,12 @@ export default function PatientRegisterForm({
           )}
         />
 
-        {/* 출생일 */}
         <FormField
           control={form.control}
           name="birth"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>출생일</FormLabel>
+            <FormItem className="flex flex-col justify-end">
+              <FormLabel>출생일*</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -351,6 +404,8 @@ export default function PatientRegisterForm({
                   <Calendar
                     styles={{
                       caption_label: { display: 'none' },
+                      dropdown_month: { fontSize: 14 },
+                      dropdown_year: { fontSize: 14 },
                       button: { fontSize: 14 },
                     }}
                     captionLayout="dropdown-buttons"
@@ -373,7 +428,6 @@ export default function PatientRegisterForm({
           )}
         />
 
-        {/* 마이크로칩 번호*/}
         <FormField
           control={form.control}
           name="microchip_no"
@@ -389,7 +443,6 @@ export default function PatientRegisterForm({
           )}
         />
 
-        {/* 몸무게 */}
         <FormField
           control={form.control}
           name="weight"
@@ -405,7 +458,6 @@ export default function PatientRegisterForm({
           )}
         />
 
-        {/* 메모 */}
         <div className="col-span-2">
           <FormField
             control={form.control}
@@ -422,16 +474,22 @@ export default function PatientRegisterForm({
           />
         </div>
 
-        <Button
-          type="submit"
-          className="col-span-2 ml-auto mt-4 font-semibold"
-          disabled={isSubmitting}
-        >
-          {icu ? '다음' : '등록'}
-          <LoaderCircle
-            className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-          />
-        </Button>
+        <div className="col-span-2 ml-auto flex gap-2">
+          <Button
+            type="button"
+            disabled={isSubmitting}
+            variant="outline"
+            onClick={() => setStep(ownerId ? 'ownerSearch' : 'ownerRegister')}
+          >
+            이전
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {icu ? '다음' : '등록'}
+            <LoaderCircle
+              className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
+            />
+          </Button>
+        </div>
       </form>
     </Form>
   )

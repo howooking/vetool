@@ -30,7 +30,6 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
     },
     cell: ({ row }) => {
       const species = row.original.species
-      // TODO slice 없에야함
       return (
         <div className="flex justify-center">
           {species === 'canine' ? <Dog /> : <Cat />}
@@ -75,7 +74,6 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
       const name = row.original.name
       const isAlive = row.original.is_alive
 
-      // TODO slice 없에야함
       return (
         <div className={cn(!isAlive && 'text-destructive')}>
           {name} {!isAlive && '(사망)'}
@@ -96,11 +94,6 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
-    },
-    cell: ({ row }) => {
-      const breed = row.original.breed
-      // TODO slice 없에야함
-      return <>{breed.slice(0, 10)}</>
     },
   },
   {

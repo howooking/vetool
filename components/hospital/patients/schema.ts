@@ -1,8 +1,14 @@
 import * as z from 'zod'
 
 export const registerPatientFormSchema = z.object({
-  name: z.string({ required_error: '환자 이름을 입력해주세요.' }),
-  hos_patient_id: z.string({ required_error: '환자 번호를 입력해주세요.' }),
+  name: z
+    .string({ required_error: '환자 이름을 입력해주세요.' })
+    .trim()
+    .min(1, { message: '환자 이름을 입력해주세요.' }),
+  hos_patient_id: z
+    .string({ required_error: '환자 번호를 입력해주세요.' })
+    .trim()
+    .min(1, { message: '환자 이름을 입력해주세요.' }),
   breed: z.string({ required_error: '품종을 선택해주세요.' }),
   species: z.string({ required_error: '종을 선택해주세요.' }),
   weight: z.string({ required_error: '몸무게를 입력해주세요.' }),
