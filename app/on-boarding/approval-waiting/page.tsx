@@ -1,17 +1,10 @@
 import DotLottie from '@/components/common/dot-lottie'
 import { Button } from '@/components/ui/button'
-import { toast } from '@/components/ui/use-toast'
 import { cancelApproval, getUser, logout } from '@/lib/actions/auth'
 import { createClient } from '@/lib/supabase/server'
 import logoWhite from '@/public/logo-white.svg'
+import { UserApproval } from '@/types/on-boarding'
 import Image from 'next/image'
-
-type UserApproval = {
-  user_approval_id: string
-  hos_id: {
-    name: string
-  }
-}
 
 export default async function ApprovalWaiting() {
   const supabase = createClient()
