@@ -35,8 +35,7 @@ export default async function SelectHospitalPage() {
         <DataTable
           columns={columns}
           data={data}
-          searchKeyword="name"
-          searchPlaceHolder="병원명을 검색하세요."
+          searchPlaceHolder="병원을 검색"
         />
       </div>
     </div>

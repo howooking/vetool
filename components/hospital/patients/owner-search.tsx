@@ -15,8 +15,7 @@ export default function OwnerSearch({
       <DataTable
         columns={ownerColumns}
         data={ownerData}
-        searchKeyword="owner_name"
-        searchPlaceHolder="보호자 이름을 검색하세요."
+        searchPlaceHolder="보호자번호, 이름, 연락처을 검색하세요."
         rowLength={8}
       />
 

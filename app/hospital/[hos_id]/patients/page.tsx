@@ -72,8 +72,7 @@ export default async function HospitalPatientsPage({
         <DataTable
           columns={patientsColumns}
           data={data}
-          searchKeyword="name"
-          searchPlaceHolder="환자이름을 검색해주세요"
+          searchPlaceHolder="환자번호, 환자이름, 보호자이름 검색"
           rowLength={12}
         />
       )}

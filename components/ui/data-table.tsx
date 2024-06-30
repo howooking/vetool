@@ -18,7 +18,6 @@ import {
 } from '@/components/ui/table'
 import {
   ColumnDef,
-  ColumnFiltersState,
   SortingState,
   VisibilityState,
   flexRender,
@@ -36,7 +35,6 @@ type DataTableProps<TData, TValue> = {
   data: TData[]
   visibility?: boolean
   rowSelect?: boolean
-  searchKeyword?: string
   searchPlaceHolder?: string
   rowLength?: number
 }
@@ -45,12 +43,11 @@ export default function DataTable<TData, TValue>({
   data,
   visibility,
   rowSelect,
-  searchKeyword,
   searchPlaceHolder,
   rowLength = 10,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [globalFilter, setGlobalFilter] = useState('')
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
@@ -61,13 +58,12 @@ export default function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
+      globalFilter: globalFilter,
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
     },
@@ -76,20 +72,18 @@ export default function DataTable<TData, TValue>({
         pageSize: rowLength,
       },
     },
+    onGlobalFilterChange: setGlobalFilter,
   })
 
   return (
     <div className="w-full">
-      {searchKeyword && (
+      {searchPlaceHolder && (
         <div className="flex items-center pb-2">
           <Input
+            type="text"
             placeholder={searchPlaceHolder}
-            value={
-              (table.getColumn(searchKeyword)?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table.getColumn(searchKeyword)?.setFilterValue(event.target.value)
-            }
+            value={globalFilter}
+            onChange={(event) => setGlobalFilter(event.target.value ?? '')}
           />
         </div>
       )}
