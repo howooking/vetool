@@ -17,6 +17,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { ownerFormSchema } from './schema'
+import HelperTooltip from '@/components/common/helper-tooltip'
 
 export default function OwnerForm({
   setStep,
@@ -96,8 +97,14 @@ export default function OwnerForm({
           control={form.control}
           name="hos_owner_id"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>보호자 번호*</FormLabel>
+            <FormItem className="flex flex-col">
+              <div className="flex flex-1 items-center gap-2">
+                <FormLabel>보호자 번호*</FormLabel>
+                <HelperTooltip>
+                  메인차트에 등록된 고유한 보호자 등록번호로 반드시 입력해주세요
+                  .
+                </HelperTooltip>
+              </div>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
               </FormControl>
