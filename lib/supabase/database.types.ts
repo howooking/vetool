@@ -172,42 +172,42 @@ export type Database = {
       hospitals: {
         Row: {
           business_number: string
-          city: string | null
+          city: string
           created_at: string
-          district: string | null
-          group_list: string[] | null
+          district: string
+          group_list: string[]
           hos_id: string
-          is_personal: boolean | null
-          master_user_id: string | null
-          memo_list: string[] | null
-          name: string | null
-          plan: string | null
+          is_personal: boolean
+          master_user_id: string
+          memo_list: string[]
+          name: string
+          plan: string
         }
         Insert: {
           business_number?: string
-          city?: string | null
+          city: string
           created_at?: string
-          district?: string | null
-          group_list?: string[] | null
+          district: string
+          group_list?: string[]
           hos_id?: string
-          is_personal?: boolean | null
-          master_user_id?: string | null
-          memo_list?: string[] | null
-          name?: string | null
-          plan?: string | null
+          is_personal?: boolean
+          master_user_id: string
+          memo_list?: string[]
+          name: string
+          plan?: string
         }
         Update: {
           business_number?: string
-          city?: string | null
+          city?: string
           created_at?: string
-          district?: string | null
-          group_list?: string[] | null
+          district?: string
+          group_list?: string[]
           hos_id?: string
-          is_personal?: boolean | null
-          master_user_id?: string | null
-          memo_list?: string[] | null
-          name?: string | null
-          plan?: string | null
+          is_personal?: boolean
+          master_user_id?: string
+          memo_list?: string[]
+          name?: string
+          plan?: string
         }
         Relationships: [
           {
