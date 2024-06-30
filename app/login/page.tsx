@@ -1,20 +1,9 @@
-import GoogleLoginButton from '../../components/login/google-login-button'
-import { createClient } from '@/lib/supabase/server'
-import Image from 'next/image'
-import { redirect } from 'next/navigation'
 import logoWhite from '@/public/logo-white.svg'
+import Image from 'next/image'
 import Link from 'next/link'
+import GoogleLoginButton from '../../components/login/google-login-button'
 
 export default async function LoginPage() {
-  const supabase = createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (user) {
-    redirect('/')
-  }
-
   return (
     <div className="flex h-screen">
       <div className="flex h-screen w-2/5 flex-col items-center justify-center gap-10 p-10">
