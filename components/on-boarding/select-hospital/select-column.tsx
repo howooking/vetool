@@ -65,7 +65,9 @@ export default function SelectColumn({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">선택</Button>
+        <Button size="sm" variant="outline">
+          선택
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
