@@ -25,8 +25,13 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
+import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
 import { useIcuRegisterPatientStore } from '@/lib/store/hospital/icu/register-patient'
-import { useSelectedPatientStore } from '@/lib/store/hospital/patients/selected-patient'
+import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
+import {
+  usePatientRegisterStep,
+  useSelectedPatientStore,
+} from '@/lib/store/hospital/patients/selected-patient'
 import { createClient } from '@/lib/supabase/client'
 import { cn, getDaysSince } from '@/lib/utils'
 import { IcuDialogProps } from '@/types/hospital/icu'
@@ -39,15 +44,13 @@ import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { useAddPatientTriggerStore } from '@/lib/store/hospital/icu/add-patient'
-import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
-import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 
 export default function IcuRegisterPatientForm({
   hosId,
   groupList,
   vets,
-}: Omit<IcuDialogProps, 'patients'>) {
+  setIsDialogOpen,
+}: Omit<IcuDialogProps, 'patients' | 'ownerData'>) {
   const { refresh } = useRouter()
   const supabase = createClient()
   const [range, setRange] = useState<DateRange | undefined>({
@@ -55,10 +58,9 @@ export default function IcuRegisterPatientForm({
     to: addDays(new Date(), 1),
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { setIsNextStep } = useIcuRegisterPatientStore()
   const { patientId, birth, setPatientId } = useSelectedPatientStore()
-  const { setIsOpen } = useAddPatientTriggerStore()
   const { setSelectedDate } = useIcuSelectedDateStore()
+  const { step, setStep } = usePatientRegisterStep()
 
   const form = useForm<z.infer<typeof registerIcuPatientFormSchema>>({
     resolver: zodResolver(registerIcuPatientFormSchema),
@@ -138,8 +140,7 @@ export default function IcuRegisterPatientForm({
       title: '입원 환자가 등록되었습니다.',
     })
 
-    setIsOpen()
-    setIsNextStep()
+    setIsDialogOpen(false)
     setIsSubmitting(false)
     setSelectedDate(format(in_date, 'yyyy-MM-dd'))
     refresh()
@@ -155,7 +156,7 @@ export default function IcuRegisterPatientForm({
 
   // 이전 버튼 클릭 핸들러
   const handlePreviousButtonClick = () => {
-    setIsNextStep()
+    setStep('patientSearch')
     setPatientId(null)
   }
 

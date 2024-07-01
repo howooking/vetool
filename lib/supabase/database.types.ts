@@ -341,6 +341,7 @@ export type Database = {
           icu_chart_order_tx_9: string | null
           icu_chart_order_type: string | null
           icu_io_id: string | null
+          target_date: string | null
           updated_at: string
         }
         Insert: {
@@ -377,6 +378,7 @@ export type Database = {
           icu_chart_order_tx_9?: string | null
           icu_chart_order_type?: string | null
           icu_io_id?: string | null
+          target_date?: string | null
           updated_at?: string
         }
         Update: {
@@ -413,6 +415,7 @@ export type Database = {
           icu_chart_order_tx_9?: string | null
           icu_chart_order_type?: string | null
           icu_io_id?: string | null
+          target_date?: string | null
           updated_at?: string
         }
         Relationships: [

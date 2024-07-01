@@ -33,8 +33,8 @@ export default async function IcuChartSidebar({ hosId }: { hosId: string }) {
   }
 
   return (
-    <aside className="mr-4 flex h-chart-sidebar w-[120px] justify-center text-white">
-      <ul className="flex w-full flex-col gap-3 text-center text-black">
+    <aside className="flex h-chart-sidebar min-w-[144px] justify-center text-white">
+      <ul className="flex w-full flex-col gap-3 border-r px-2 pt-4 text-center text-black">
         <IcuPatientList icuIoData={icuIoData} />
       </ul>
     </aside>

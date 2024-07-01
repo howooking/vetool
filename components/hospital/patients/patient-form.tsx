@@ -55,13 +55,13 @@ import { registerPatientFormSchema } from './schema'
 export default function PatientForm({
   hosId,
   setStep,
-  setIsNextStep,
   icu,
   setIsDialogOpen,
 }: {
   hosId: string
-  setStep: (step: 'ownerSearch' | 'ownerRegister' | 'patientRegister') => void
-  setIsNextStep?: Dispatch<SetStateAction<boolean>>
+  setStep: (
+    step: 'ownerSearch' | 'ownerRegister' | 'patientRegister' | 'icuRegister',
+  ) => void
   icu?: boolean
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
@@ -148,6 +148,8 @@ export default function PatientForm({
         return
       }
 
+      icu && setPatientId(patientId)
+
       toast({
         title: '환자가 등록되었습니다.',
       })
@@ -186,21 +188,20 @@ export default function PatientForm({
         return
       }
 
+      icu && setPatientId(patientId)
+
       toast({
         title: '보호자 및 환자가 등록되었습니다.',
       })
     }
 
     setIsSubmitting(false)
-    setIsDialogOpen(false)
-    push('patients')
+
+    icu ? push('icu') : push('patients')
     refresh()
 
-    // if (icu && setIsNextStep) {
-    //   setIsNextStep(true)
-    //   setPatientId(patientId)
-    // } else {
-    // }
+    icu && setStep('icuRegister')
+    !icu && setIsDialogOpen(false)
   }
 
   return (

@@ -1,17 +1,25 @@
 import { Button } from '@/components/ui/button'
 import { usePatientRegisterStep } from '@/lib/store/hospital/patients/selected-patient'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 export default function OwnerSelectButton({ ownerId }: { ownerId: string }) {
   const { setStep } = usePatientRegisterStep()
   const { push } = useRouter()
+  const pathname = usePathname()
+
+  const isIcuPage = pathname.includes('icu')
+
   return (
     <Button
       size="sm"
       variant="outline"
       onClick={() => {
         setStep('patientRegister')
-        push(`patients/?owner_id=${ownerId}`)
+        push(
+          isIcuPage
+            ? `icu/?owner_id=${ownerId}`
+            : `patients/?owner_id=${ownerId}`,
+        )
       }}
     >
       선택

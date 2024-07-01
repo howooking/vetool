@@ -1,7 +1,6 @@
 'use client'
 
 import IcuRegisterPatientForm from '@/components/hospital/icu/register/icu-register-patient-form'
-import { HospitalPatientsColumns } from '@/components/hospital/patients/columns'
 import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
 import {
@@ -59,17 +58,6 @@ export default function IcuSelectPatientDialog({
       <DialogHeader>
         <DialogTitle>{isNextStep ? '입원 등록' : '환자 조회'}</DialogTitle>
       </DialogHeader>
-
-      {isNextStep ? (
-        <IcuRegisterPatientForm
-          hosId={hosId}
-          icuIoId={icuIoId}
-          groupList={groupList}
-          vets={vets}
-        />
-      ) : (
-        <DataTable columns={HospitalPatientsColumns} data={patients!} />
-      )}
 
       <DialogFooter>
         {!isNextStep && (

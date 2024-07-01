@@ -15,8 +15,20 @@ export const useSelectedPatientStore = create<SelectHospitalState>((set) => ({
 }))
 
 type PatientRegisterStep = {
-  step: 'ownerSearch' | 'ownerRegister' | 'patientRegister'
-  setStep: (step: 'ownerSearch' | 'ownerRegister' | 'patientRegister') => void
+  step:
+    | 'ownerSearch'
+    | 'ownerRegister'
+    | 'patientRegister'
+    | 'icuRegister'
+    | 'patientSearch'
+  setStep: (
+    step:
+      | 'ownerSearch'
+      | 'ownerRegister'
+      | 'patientRegister'
+      | 'icuRegister'
+      | 'patientSearch',
+  ) => void
 }
 
 export const usePatientRegisterStep = create<PatientRegisterStep>((set) => ({

@@ -45,10 +45,10 @@ export default function IcuChartPatientList({
               )}
               onClick={() => handlePatientButtonClick(data)}
             >
-              <span className="max-w-12 truncate pr-1 text-xs">
+              <span className="max-w-14 truncate pr-1 text-xs">
                 {data.patient_id.name}
               </span>
-              <span className="max-w-10 truncate text-[10px] text-slate-600">
+              <span className="max-w-14 truncate text-[10px] text-slate-600">
                 {data.patient_id.breed}
               </span>
             </Button>
