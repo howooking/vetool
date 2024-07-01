@@ -29,3 +29,41 @@ export function formatTimestamp(utcTimestamp: string) {
   const minutes = String(date.getMinutes()).padStart(2, '0')
   return `${year}-${month}-${day} ${hours}:${minutes}`
 }
+
+export function calculateAge(dateString: string) {
+  // Parse the input date string
+  const birthDate = new Date(dateString)
+
+  // Get the current date
+  const today = new Date()
+
+  // Calculate the difference in years
+  let ageYears = today.getFullYear() - birthDate.getFullYear()
+
+  // Calculate the difference in months
+  let ageMonths = today.getMonth() - birthDate.getMonth()
+
+  // Adjust if the birth month hasn't occurred yet this year
+  if (ageMonths < 0) {
+    ageYears--
+    ageMonths += 12
+  }
+
+  // Check if the birth day hasn't occurred yet this month
+  if (today.getDate() < birthDate.getDate()) {
+    ageMonths--
+    if (ageMonths < 0) {
+      ageYears--
+      ageMonths += 12
+    }
+  }
+  if (ageYears === 0 && ageMonths === 0) {
+    return '1개월'
+  } else if (ageYears === 0) {
+    return `${ageMonths}개월`
+  } else if (ageMonths === 0) {
+    return `${ageYears}년`
+  } else {
+    return `${ageYears}년 ${ageMonths}개월`
+  }
+}

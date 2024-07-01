@@ -9,7 +9,7 @@ export default async function Layout({
 }) {
   return (
     <div className="flex flex-col">
-      <main className="flex">
+      <main className="flex p-2">
         <IcuChartSidebar hosId={params.hos_id} />
         {children}
       </main>

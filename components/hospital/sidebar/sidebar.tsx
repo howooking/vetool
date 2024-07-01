@@ -2,7 +2,15 @@
 
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
-import { Activity, ArrowLeft, Contact, Home, UserPlus } from 'lucide-react'
+import {
+  ArrowLeft,
+  Contact,
+  HeartPulse,
+  Home,
+  ListChecks,
+  Slice,
+  Syringe,
+} from 'lucide-react'
 import { Button } from '../../ui/button'
 import SidebarItem from './sidebar-item'
 
@@ -13,19 +21,24 @@ const SIDE_BAR_ITEMS = [
     icon: Home,
   },
   {
-    name: '입원실',
+    name: '입원차트',
     path: '/icu',
-    icon: Activity,
+    icon: Syringe,
   },
   {
-    name: '환자 등록',
-    path: '/patients/register',
-    icon: UserPlus,
+    name: '외과차트',
+    path: '/surgery',
+    icon: Slice,
   },
   {
-    name: '환자 조회',
-    path: '/patients',
-    icon: Contact,
+    name: '심초차트',
+    path: '/echocardio',
+    icon: HeartPulse,
+  },
+  {
+    name: '건강검진차트',
+    path: '/checkup',
+    icon: ListChecks,
   },
 ] as const
 

@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils'
 import googleLogo from '@/public/google-logo.svg'
 import { LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
 import { useFormStatus } from 'react-dom'
 
 export default function GoogleLoginButton() {
@@ -34,10 +33,12 @@ export default function GoogleLoginButton() {
         formAction={googleLogin}
       >
         <Image unoptimized src={googleLogo} alt="google logo" />
-        구글계정으로 로그인하기
-        <LoaderCircle
-          className={cn(pending ? 'ml-2 animate-spin' : 'hidden')}
-        />
+        <div className="flex items-center">
+          <span>구글계정으로 로그인하기</span>
+          <LoaderCircle
+            className={cn(pending ? 'ml-2 animate-spin' : 'hidden')}
+          />
+        </div>
       </Button>
     </>
   )

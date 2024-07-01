@@ -28,9 +28,9 @@ export default function Layout({
   return (
     <div className="flex">
       <Sidebar />
-      <div className="w-full">
+      <div className="relative w-full">
         <HospitalHeader hosId={params.hos_id} />
-        <main className="px-4 pt-4">{children}</main>
+        <main>{children}</main>
       </div>
     </div>
   )

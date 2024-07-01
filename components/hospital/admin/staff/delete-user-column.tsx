@@ -78,7 +78,7 @@ export function DeleteUserColumn({
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>스태프 목록 삭제</DialogTitle>
+          <DialogTitle>스태프 삭제</DialogTitle>
           <DialogDescription>
             {name}님을 스태프목록에서 삭제하시겠습니까?
           </DialogDescription>

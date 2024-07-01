@@ -63,3 +63,7 @@
 .hospital-admin-user-grid {
   @apply grid grid-cols-6 items-center gap-4 border p-2 text-center;
 }
+
+.hospital-page-height {
+  height: calc(100vh - 48px);
+}

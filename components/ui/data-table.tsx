@@ -18,7 +18,6 @@ import {
 } from '@/components/ui/table'
 import {
   ColumnDef,
-  ColumnFiltersState,
   SortingState,
   VisibilityState,
   flexRender,
@@ -28,6 +27,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 
 type DataTableProps<TData, TValue> = {
@@ -35,19 +35,19 @@ type DataTableProps<TData, TValue> = {
   data: TData[]
   visibility?: boolean
   rowSelect?: boolean
-  searchKeyword?: string
   searchPlaceHolder?: string
+  rowLength?: number
 }
 export default function DataTable<TData, TValue>({
   columns,
   data,
   visibility,
   rowSelect,
-  searchKeyword,
   searchPlaceHolder,
+  rowLength = 10,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [globalFilter, setGlobalFilter] = useState('')
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
@@ -58,30 +58,32 @@ export default function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
+      globalFilter: globalFilter,
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
     },
+    initialState: {
+      pagination: {
+        pageSize: rowLength,
+      },
+    },
+    onGlobalFilterChange: setGlobalFilter,
   })
 
   return (
     <div className="w-full">
-      {searchKeyword && (
-        <div className="flex items-center pb-4">
+      {searchPlaceHolder && (
+        <div className="flex items-center pb-2">
           <Input
+            type="text"
             placeholder={searchPlaceHolder}
-            value={
-              (table.getColumn(searchKeyword)?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table.getColumn(searchKeyword)?.setFilterValue(event.target.value)
-            }
+            value={globalFilter}
+            onChange={(event) => setGlobalFilter(event.target.value ?? '')}
           />
         </div>
       )}
@@ -165,6 +167,7 @@ export default function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
@@ -173,7 +176,7 @@ export default function DataTable<TData, TValue>({
           disabled={!table.getCanPreviousPage()}
           className="text-black"
         >
-          이전
+          <ChevronLeft />
         </Button>
         <Button
           variant="outline"
@@ -181,7 +184,7 @@ export default function DataTable<TData, TValue>({
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          다음
+          <ChevronRight />
         </Button>
       </div>
     </div>
