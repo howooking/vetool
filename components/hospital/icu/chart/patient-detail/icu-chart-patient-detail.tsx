@@ -60,7 +60,7 @@ export default function IcuChartPatientDetail({
     }
 
     toast({
-      title: 'DX가 변경되었습니다.',
+      title: 'DX가 변경되었습니다',
     })
 
     refresh()
@@ -81,7 +81,7 @@ export default function IcuChartPatientDetail({
     }
 
     toast({
-      title: 'CC가 변경되었습니다.',
+      title: 'CC가 변경되었습니다',
     })
 
     refresh()
@@ -100,7 +100,7 @@ export default function IcuChartPatientDetail({
     }
 
     toast({
-      title: '주치의가 변경되었습니다.',
+      title: '주치의가 변경되었습니다',
     })
 
     refresh()
@@ -119,7 +119,7 @@ export default function IcuChartPatientDetail({
     }
 
     toast({
-      title: '부치의가 변경되었습니다.',
+      title: '부치의가 변경되었습니다',
     })
 
     refresh()
@@ -140,7 +140,7 @@ export default function IcuChartPatientDetail({
     }
 
     toast({
-      title: '주의 사항이 변경되었습니다.',
+      title: '주의 사항이 변경되었습니다',
     })
 
     refresh()
@@ -159,7 +159,7 @@ export default function IcuChartPatientDetail({
     }
 
     toast({
-      title: '체중 측정일이 변경되었습니다.',
+      title: '체중 측정일이 변경되었습니다',
     })
   }
 

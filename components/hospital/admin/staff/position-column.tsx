@@ -49,7 +49,7 @@ export default function PositionColumn({
     }
 
     toast({
-      title: '직책을을 변경하였습니다.',
+      title: '직책을을 변경하였습니다',
     })
     refresh()
   }

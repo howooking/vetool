@@ -137,7 +137,7 @@ export default function IcuRegisterPatientForm({
     })
 
     toast({
-      title: '입원 환자가 등록되었습니다.',
+      title: '입원 환자가 등록되었습니다',
     })
 
     setIsDialogOpen(false)
@@ -224,7 +224,7 @@ export default function IcuRegisterPatientForm({
                         <>{format(range.from, 'yyyy-MM-dd')}</>
                       ) : (
                         <span className="overflow-hidden whitespace-nowrap">
-                          입원일을 선택해주세요.
+                          입원일을 선택해주세요
                         </span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -261,7 +261,7 @@ export default function IcuRegisterPatientForm({
                   <Input value={`${format(range.to, 'yyyy-MM-dd')}`} disabled />
                 ) : (
                   <span className="overflow-hidden whitespace-nowrap">
-                    퇴원일을 선택해주세요.
+                    퇴원일을 선택해주세요
                   </span>
                 )}
               </div>
@@ -287,7 +287,7 @@ export default function IcuRegisterPatientForm({
                       !field.value && 'text-muted-foreground',
                     )}
                   >
-                    <SelectValue placeholder="주치의를 선택해주세요." />
+                    <SelectValue placeholder="주치의를 선택해주세요" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -324,7 +324,7 @@ export default function IcuRegisterPatientForm({
                       !field.value && 'text-muted-foreground',
                     )}
                   >
-                    <SelectValue placeholder="부주치의를 선택해주세요." />
+                    <SelectValue placeholder="부주치의를 선택해주세요" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -361,7 +361,7 @@ export default function IcuRegisterPatientForm({
                       !field.value && 'text-muted-foreground',
                     )}
                   >
-                    <SelectValue placeholder="그룹을 선택해주세요." />
+                    <SelectValue placeholder="그룹을 선택해주세요" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

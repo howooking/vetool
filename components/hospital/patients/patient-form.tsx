@@ -151,7 +151,7 @@ export default function PatientForm({
       icu && setPatientId(patientId)
 
       toast({
-        title: '환자가 등록되었습니다.',
+        title: '환자가 등록되었습니다',
       })
     }
 
@@ -191,7 +191,7 @@ export default function PatientForm({
       icu && setPatientId(patientId)
 
       toast({
-        title: '보호자 및 환자가 등록되었습니다.',
+        title: '보호자 및 환자가 등록되었습니다',
       })
     }
 
@@ -256,7 +256,7 @@ export default function PatientForm({
                       !field.value && 'text-muted-foreground',
                     )}
                   >
-                    <SelectValue placeholder="종을 선택해주세요." />
+                    <SelectValue placeholder="종을 선택해주세요" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -293,8 +293,8 @@ export default function PatientForm({
                       {field.value
                         ? BREEDS.find((breed) => breed === field.value)
                         : selectedSpecies
-                          ? '품종을 선택해주세요.'
-                          : '종을 먼저 선택해주세요.'}
+                          ? '품종을 선택해주세요'
+                          : '종을 먼저 선택해주세요'}
                       <CaretSortIcon className="absolute right-3 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
@@ -354,7 +354,7 @@ export default function PatientForm({
                       !field.value && 'text-muted-foreground',
                     )}
                   >
-                    <SelectValue placeholder="성별을 선택해주세요." />
+                    <SelectValue placeholder="성별을 선택해주세요" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -394,7 +394,7 @@ export default function PatientForm({
                         <>{format(field.value, 'yyyy-MM-dd')}</>
                       ) : (
                         <span className="overflow-hidden whitespace-nowrap">
-                          출생일을 선택해주세요.
+                          출생일을 선택해주세요
                         </span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />

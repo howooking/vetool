@@ -27,7 +27,7 @@ import { z } from 'zod'
 
 const GroupCheckFormSchema = z.object({
   items: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: '적어도 하나의 그룹을 선택해주세요.',
+    message: '적어도 하나의 그룹을 선택해주세요',
   }),
 })
 
@@ -79,7 +79,7 @@ export function GroupColumnDialog({
     }
 
     toast({
-      title: '그룹을 변경하였습니다.',
+      title: '그룹을 변경하였습니다',
     })
     refresh()
     setIsOpen(false)

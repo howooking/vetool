@@ -43,7 +43,7 @@ export default function IsAdminColumn({
     }
 
     toast({
-      title: '관리자여부를 변경하였습니다.',
+      title: '관리자여부를 변경하였습니다',
     })
   }
 

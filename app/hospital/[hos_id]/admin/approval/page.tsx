@@ -45,7 +45,7 @@ export default async function AdminApprovalPage({
   }))
 
   if (noResult) {
-    return <NoResult title="승인요청이 없습니다." />
+    return <NoResult title="승인요청이 없습니다" />
   }
 
   return <DataTable columns={columns} data={data} />

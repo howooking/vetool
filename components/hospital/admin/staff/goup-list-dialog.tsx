@@ -50,7 +50,7 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
     }
 
     toast({
-      title: '병원 그룹목록을 변경하였습니다.',
+      title: '병원 그룹목록을 변경하였습니다',
     })
     setIsOpen(false)
     setIsSubmitting(false)
@@ -88,7 +88,7 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
 
         <Input
           type="text"
-          placeholder="Enter를 누르면 추가됩니다."
+          placeholder="Enter를 누르면 추가됩니다"
           onChange={(e) => setGroupInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {

@@ -28,7 +28,7 @@ import type { PatientDetailGroupProps } from './patient-detail-group'
 
 const GroupCheckFormSchema = z.object({
   items: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: '적어도 하나의 그룹을 선택해주세요.',
+    message: '적어도 하나의 그룹을 선택해주세요',
   }),
 })
 
@@ -74,7 +74,7 @@ export default function PatientDetailGroupDialog({
     }
 
     toast({
-      title: '그룹을 변경하였습니다.',
+      title: '그룹을 변경하였습니다',
     })
     refresh()
     setIsSubmitting(false)

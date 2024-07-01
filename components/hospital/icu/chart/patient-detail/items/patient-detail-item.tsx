@@ -53,7 +53,7 @@ export default function PatientDetailItem({
     }
 
     toast({
-      title: '차트가 삭제되었습니다.',
+      title: '차트가 삭제되었습니다',
     })
 
     setIsDeleting(false)

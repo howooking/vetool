@@ -54,8 +54,8 @@ export default function SelectColumn({
     }
 
     toast({
-      title: '승인 요청을 보냈습니다.',
-      description: '승인 완료 후 로그인 해주세요.',
+      title: '승인 요청을 보냈습니다',
+      description: '승인 완료 후 로그인 해주세요',
     })
     setIsSubmitting(false)
     setIsOpen(false)
@@ -72,7 +72,7 @@ export default function SelectColumn({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>승인 요청하기</DialogTitle>
-          <DialogDescription>{name}에 승인요청을 보냅니다.</DialogDescription>
+          <DialogDescription>{name}에 승인요청을 보냅니다</DialogDescription>
         </DialogHeader>
 
         <DialogFooter className="ml-auto sm:justify-start">

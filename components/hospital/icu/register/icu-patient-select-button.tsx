@@ -34,7 +34,7 @@ export default function IcuPatientSelectButton({
         variant: 'destructive',
         title: '입원중인 환자',
         description:
-          '이미 입원중인 환자입니다. 환자 혹은 입원 관리를 재확인해주세요.',
+          '이미 입원중인 환자입니다 환자 혹은 입원 관리를 재확인해주세요',
       })
       return
     }

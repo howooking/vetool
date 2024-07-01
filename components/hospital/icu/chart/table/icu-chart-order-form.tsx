@@ -114,7 +114,7 @@ export default function IcuChartOrderForm({
     }
 
     toast({
-      title: `${data.icu_chart_order_name} 오더를 추가하였습니다.`,
+      title: `${data.icu_chart_order_name} 오더를 추가하였습니다`,
     })
 
     refresh()

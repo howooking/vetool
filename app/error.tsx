@@ -21,10 +21,10 @@ export default function Error({
       <div className="flex max-w-md flex-col items-center rounded-lg bg-white px-16 py-8 text-center shadow-lg">
         <AlertCircle className="text-primary" size={80} />
         <h1 className="my-4 text-2xl font-semibold text-primary">
-          에러가 발생하였습니다.
+          에러가 발생하였습니다
         </h1>
-        <p>에러가 발생하였습니다.</p>
-        <p>관리자에게 문의하세요.</p>
+        <p>에러가 발생하였습니다</p>
+        <p>관리자에게 문의하세요</p>
         <p className="text-destructive">{error.message}</p>
         <div className="mt-6 flex gap-2">
           <Button onClick={() => reset()} variant="default">

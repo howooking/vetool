@@ -14,7 +14,7 @@ export default async function IcuChartSidebar({ hosId }: { hosId: string }) {
     return (
       <aside className="mr-4 flex h-chart-sidebar w-[120px] justify-center text-white">
         <span className="flex text-center text-xs text-black">
-          입원 환자가 없습니다.
+          입원 환자가 없습니다
         </span>
       </aside>
     )

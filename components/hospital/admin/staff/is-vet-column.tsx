@@ -41,7 +41,7 @@ export default function IsVetColumn({
     }
 
     toast({
-      title: '수의사여부를 변경하였습니다.',
+      title: '수의사여부를 변경하였습니다',
     })
   }
 

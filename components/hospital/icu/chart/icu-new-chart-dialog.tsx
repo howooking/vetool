@@ -160,7 +160,7 @@ export default function IcuNewChartDialog({
     // 전일 차트가 존재하지 않는다면, 새로운 차트를 추가
     else {
       toast({
-        title: '전일 차트가 존재하지 않아 새로운 차트를 추가합니다.',
+        title: '전일 차트가 존재하지 않아 새로운 차트를 추가합니다',
       })
 
       const { data: icuChartData, error: icuChartError } = await supabase
@@ -225,7 +225,7 @@ export default function IcuNewChartDialog({
           <DialogHeader>
             <DialogTitle>새로운 차트 생성</DialogTitle>
             <DialogDescription>
-              {selectedDate} 날짜로 차트가 생성됩니다.
+              {selectedDate} 날짜로 차트가 생성됩니다
             </DialogDescription>
           </DialogHeader>
 
@@ -257,7 +257,7 @@ export default function IcuNewChartDialog({
           <DialogHeader>
             <DialogTitle>전일 차트 불러오기</DialogTitle>
             <DialogDescription>
-              {selectedDate} 날짜로 차트가 생성됩니다.
+              {selectedDate} 날짜로 차트가 생성됩니다
             </DialogDescription>
           </DialogHeader>
 

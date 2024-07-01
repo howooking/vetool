@@ -2,13 +2,13 @@ import { z } from 'zod'
 
 export const GroupCheckFormSchema = z.object({
   icu_chart_order_type: z.string({
-    message: '적어도 하나의 처치 타입을 선택해주세요.',
+    message: '적어도 하나의 처치 타입을 선택해주세요',
   }),
   icu_chart_order_name: z.string({
-    required_error: '값을 입력해주세요.',
+    required_error: '값을 입력해주세요',
   }),
   icu_chart_order_comment: z.string({
-    required_error: '값을 입력해주세요.',
+    required_error: '값을 입력해주세요',
   }),
   icu_chart_order_tx_1: z.boolean().default(false),
   icu_chart_order_tx_2: z.boolean().default(false),
