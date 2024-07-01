@@ -1,33 +1,36 @@
-import IcuChartCreateOrderForm from '@/components/hospital/icu/chart/table/icu-chart-create-order-form'
-import { Button } from '@/components/ui/button'
+import IcuChartOrderForm from '@/components/hospital/icu/chart/table/icu-chart-order-form'
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Separator } from '@/components/ui/separator'
+import { useCreateOrderStore } from '@/lib/store/hospital/icu/chart/create-order'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { FilePlus } from 'lucide-react'
-import { useState } from 'react'
 
-export default function IcuChartCreateOrderDialog({
+export default function IcuChartOrderDialog({
   chartId,
   ioId,
 }: {
   chartId: string
   ioId: string
 }) {
-  const [isOpen, setIsOpen] = useState(false)
   const { selectedPatientName: patientName } = useIcuSelectedPatientStore()
   const { selectedDate } = useIcuSelectedDateStore()
+  const { isOpen, setIsOpen, setMode, resetState } = useCreateOrderStore()
+  const handleDialogOpen = () => {
+    setIsOpen()
+    setMode('create')
+    resetState()
+  }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleDialogOpen}>
       <DialogTrigger>
         <div className="flex w-full items-center rounded-md border border-black px-16 py-1">
           <span>처치 추가</span>
@@ -39,11 +42,9 @@ export default function IcuChartCreateOrderDialog({
           <DialogDescription>{selectedDate}</DialogDescription>
           <DialogTitle>{patientName}님 처치 추가</DialogTitle>
         </DialogHeader>
-        <IcuChartCreateOrderForm
-          chartId={chartId}
-          ioId={ioId}
-          setIsOpen={setIsOpen}
-        />
+        <Separator />
+
+        <IcuChartOrderForm chartId={chartId} ioId={ioId} />
       </DialogContent>
     </Dialog>
   )

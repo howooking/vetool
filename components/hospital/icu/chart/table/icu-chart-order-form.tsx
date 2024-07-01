@@ -27,39 +27,70 @@ import {
   TIME,
   TX_ORDER_TIME_INTERVAL,
 } from '@/constants/hospital/icu/chart/time'
+import { useCreateOrderStore } from '@/lib/store/hospital/icu/chart/create-order'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Dispatch, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function IcuChartCreateOrderForm({
+export default function IcuChartOrderForm({
   chartId,
   ioId,
-  setIsOpen,
 }: {
   chartId: string
   ioId: string
-  setIsOpen: Dispatch<React.SetStateAction<boolean>>
 }) {
   const { refresh } = useRouter()
+  const { mode, setIsOpen, chartOrder } = useCreateOrderStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime, setStartTime] = useState<string | undefined>(undefined)
   const [timeTerm, setTimeTerm] = useState<string | undefined>(undefined)
-  const [orderTime, setOrderTime] = useState<string[]>([])
+  const [orderTime, setOrderTime] = useState<string[]>(
+    chartOrder.icu_chart_order_time!,
+  )
   const { selectedPatientId: patientId } = useIcuSelectedPatientStore()
 
   const form = useForm<z.infer<typeof GroupCheckFormSchema>>({
     resolver: zodResolver(GroupCheckFormSchema),
     defaultValues: {
-      icu_chart_order_name: '',
-      icu_chart_order_comment: '',
+      icu_chart_order_type: chartOrder.icu_chart_order_type ?? '',
+      icu_chart_order_name: chartOrder.icu_chart_order_name ?? '',
+      icu_chart_order_comment: chartOrder.icu_chart_order_comment ?? '',
     },
   })
+
+  const handleSelectAllClick = () => {
+    const allSelected = Array(24).fill(1)
+    setOrderTime(allSelected)
+
+    allSelected.forEach((time, index) => {
+      form.setValue(
+        `icu_chart_order_tx_${index + 1}` as keyof z.infer<
+          typeof GroupCheckFormSchema
+        >,
+        time ? true : false,
+      )
+    })
+  }
+
+  const handleCancelAllClick = () => {
+    const allCanceled = Array(24).fill(0)
+    setOrderTime(allCanceled)
+
+    allCanceled.forEach((time, index) => {
+      form.setValue(
+        `icu_chart_order_tx_${index + 1}` as keyof z.infer<
+          typeof GroupCheckFormSchema
+        >,
+        time ? true : false,
+      )
+    })
+  }
 
   const handleSubmit = async (data: z.infer<typeof GroupCheckFormSchema>) => {
     setIsSubmitting(true)
@@ -88,29 +119,31 @@ export default function IcuChartCreateOrderForm({
 
     refresh()
     setIsSubmitting(false)
-    setIsOpen(false)
+    setIsOpen()
   }
 
   useEffect(() => {
+    setOrderTime(Array(24).fill(0))
+
     const start = Number(startTime)
     const term = Number(timeTerm)
-    const initialArray = Array(23).fill(0)
 
-    for (let i = start; i <= 24; i += term) {
-      initialArray[i] = 1
+    for (let i = start - 1; i < 24; i += term) {
+      orderTime[i] = '1'
     }
 
-    initialArray.forEach((time, index) => {
+    orderTime.forEach((time, index) => {
       form.setValue(
-        `icu_chart_order_tx_${index}` as keyof z.infer<
+        `icu_chart_order_tx_${index + 1}` as keyof z.infer<
           typeof GroupCheckFormSchema
         >,
-        time ? true : false,
+        time === '1' ? true : false,
       )
     })
 
-    setOrderTime(initialArray)
-  }, [form, startTime, timeTerm])
+    setOrderTime(orderTime)
+    console.log(orderTime)
+  }, [form, startTime, timeTerm, setOrderTime, orderTime])
 
   return (
     <Form {...form}>
@@ -186,54 +219,68 @@ export default function IcuChartCreateOrderForm({
           />
         </div>
 
-        {/* 처치 시간 */}
-        <div className="flex items-center gap-2 text-sm font-semibold">
-          <span>처치 시간 설정</span>
-          <div>
-            {/* 처치 시간 - 시작 시간 */}
-            <Select onValueChange={setStartTime} value={startTime}>
-              <SelectTrigger className="h-6 text-xs">
-                <SelectValue placeholder="시작 시간" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {TIME.map((element) => (
-                    <SelectItem
-                      value={element.toString()}
-                      key={element}
-                      className="text-xs"
-                    >
-                      {element}시 시작
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+        <div className="flex flex-col gap-2">
+          {/* 처치 시간 */}
+          <span className="text-sm font-semibold">처치 시간 설정</span>
+          {/* 처치 시간 - 시작 시간 */}
+          <div className="flex justify-between">
+            <div className="flex gap-2">
+              <Select onValueChange={setStartTime} value={startTime}>
+                <SelectTrigger className="h-9 w-36 text-xs">
+                  <SelectValue placeholder="시작 시간" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {TIME.map((element) => (
+                      <SelectItem
+                        value={element.toString()}
+                        key={element}
+                        className="text-xs"
+                      >
+                        {element}시 시작
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              {/* 처치 시간 - 시간 간격 */}
+              <Select onValueChange={setTimeTerm} value={timeTerm}>
+                <SelectTrigger className="h-9 w-36 text-xs">
+                  <SelectValue placeholder="시간 간격" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>시간간격</SelectLabel>
+                    {TX_ORDER_TIME_INTERVAL.map((element) => (
+                      <SelectItem
+                        value={element.toString()}
+                        key={element}
+                        className="text-xs"
+                      >
+                        {element}시간 간격
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleSelectAllClick}
+              >
+                전체선택
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleCancelAllClick}
+              >
+                전체취소
+              </Button>
+            </div>
           </div>
-          {/* 처치 시간 - 시간 간격 */}
-          <div>
-            <Select onValueChange={setTimeTerm} value={timeTerm}>
-              <SelectTrigger className="h-6 text-xs">
-                <SelectValue placeholder="시간 간격" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>시간간격</SelectLabel>
-                  {TX_ORDER_TIME_INTERVAL.map((element) => (
-                    <SelectItem
-                      value={element.toString()}
-                      key={element}
-                      className="text-xs"
-                    >
-                      {element}시간 간격
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>전체선택</div>
-          <div>전체취소</div>
         </div>
 
         {/* 처치 시간 - 타임 테이블 */}
@@ -248,7 +295,7 @@ export default function IcuChartCreateOrderForm({
                   <FormLabel
                     className={cn(
                       'flex h-7 w-full cursor-pointer items-center justify-center border hover:opacity-80',
-                      field.value ? 'bg-primary text-white' : 'bg-white',
+                      field.value ? 'bg-red-400 text-white' : 'bg-white',
                       index === 0 ? 'border-l-2' : 'border-l',
                       index === TIME.length - 1 ? 'border-r-2' : 'border-r',
                       'border-b border-t border-slate-600',
