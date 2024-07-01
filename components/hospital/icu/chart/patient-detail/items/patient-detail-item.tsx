@@ -63,6 +63,7 @@ export default function PatientDetailItem({
 
   return (
     <div className="flex justify-between space-y-1">
+      {/* 환자 기본 정보 */}
       <div>
         <span className="text-md pr-1 font-bold leading-none">{name}</span>
         <span className="text-xs font-medium leading-none">{breed}</span>
@@ -71,6 +72,7 @@ export default function PatientDetailItem({
         </p>
       </div>
 
+      {/* 차트 삭제 Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="border border-red-600">

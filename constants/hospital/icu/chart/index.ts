@@ -69,7 +69,11 @@ export const DEFAULT_ICU_ORDER_TYPE = [
     value: 'test',
   },
   {
+    label: '메뉴얼',
+    value: 'manual',
+  },
+  {
     label: '식이',
     value: 'feed',
   },
-]
+] as const

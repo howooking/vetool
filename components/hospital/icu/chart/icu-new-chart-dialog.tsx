@@ -67,6 +67,7 @@ export default function IcuNewChartDialog({
           icu_io_id: selectedPatientChartData?.icu_io_id.icu_io_id,
           icu_chart_order_name: element.orderName,
           icu_chart_order_comment: element.orderComment,
+          target_date: selectedDate,
         })
 
       if (icuChartTxError) {
@@ -101,7 +102,7 @@ export default function IcuNewChartDialog({
 
     // 전일 차트가 존재한다면, 전일 차트를 덮어씀
     if (icuPrevChartData.length) {
-      const { data: coverPrevChartData, error: coverPrevChartError } =
+      const { data: coveredPrevChartData, error: coverdPrevChartError } =
         await supabase
           .from('icu_chart')
           .insert({
@@ -118,21 +119,33 @@ export default function IcuNewChartDialog({
           .select('icu_chart_id')
           .single()
 
-      if (coverPrevChartError) {
-        console.log(coverPrevChartError)
-        throw new Error(coverPrevChartError.message)
+      if (coverdPrevChartError) {
+        console.log(coverdPrevChartError)
+        throw new Error(coverdPrevChartError.message)
       }
 
-      // icu_chart_order default values INSERT
-      DEFAULT_ICU_ORDER_NAME.forEach(async (element) => {
+      const { data: coveredPrevOrderData, error: coveredPrevOrderError } =
+        await supabase.from('icu_chart_order').select('*').match({
+          target_data: prevDate,
+          icu_chart_id: coveredPrevChartData?.icu_chart_id,
+        })
+
+      if (coveredPrevOrderError) {
+        console.log(coveredPrevOrderError)
+        throw new Error(coveredPrevOrderError.message)
+      }
+
+      // icu_chart_order prev date values INSERT
+      coveredPrevOrderData?.forEach(async (element) => {
         const { error: icuChartTxError } = await supabase
           .from('icu_chart_order')
           .insert({
-            icu_chart_order_type: element.dataType,
-            icu_chart_id: coverPrevChartData?.icu_chart_id,
+            icu_chart_order_type: element.icu_chart_order_type,
+            icu_chart_id: coveredPrevChartData?.icu_chart_id,
             icu_io_id: selectedPatientChartData?.icu_io_id.icu_io_id,
-            icu_chart_order_name: element.orderName,
-            icu_chart_order_comment: element.orderComment,
+            icu_chart_order_name: element.icu_chart_order_name,
+            icu_chart_order_comment: element.icu_chart_order_comment,
+            target_date: selectedDate,
           })
 
         if (icuChartTxError) {
@@ -170,6 +183,7 @@ export default function IcuNewChartDialog({
         throw new Error(icuChartError.message)
       }
 
+      // icu_chart_order default date values INSERT
       DEFAULT_ICU_ORDER_NAME.forEach(async (element) => {
         const { error: icuChartTxError } = await supabase
           .from('icu_chart_order')
@@ -179,6 +193,7 @@ export default function IcuNewChartDialog({
             icu_io_id: selectedPatientChartData?.icu_io_id.icu_io_id,
             icu_chart_order_name: element.orderName,
             icu_chart_order_comment: element.orderComment,
+            target_date: selectedDate,
           })
 
         if (icuChartTxError) {

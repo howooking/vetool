@@ -164,7 +164,7 @@ export default function IcuChartPatientDetail({
   }
 
   return (
-    <div className="w-full rounded-md bg-white p-4">
+    <div className="w-full rounded-md border p-4">
       <PatientDetailInfoItem
         name={name}
         breed={breed}

@@ -2,7 +2,7 @@
 
 import IcuChartOrder from '@/components/hospital/icu/chart/icu-chart-order'
 import IcuNewChartDialog from '@/components/hospital/icu/chart/icu-new-chart-dialog'
-import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
+import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart'
 import { FOOTER_CATEGORIES } from '@/constants/hospital/icu/chart/footer'
 import { useIcuSelectedChartCategoryStore } from '@/lib/store/hospital/icu/icu-selected-category'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
@@ -15,16 +15,12 @@ import type {
 import { useMemo, useState } from 'react'
 
 type OrderName =
-  | '체온(T)'
-  | '심박수(P)'
-  | '호흡수(R)'
-  | '혈압(BP)'
-  | '활력'
-  | '구토'
-  | '배변'
-  | '배뇨'
-  | '수액'
-  | '사료'
+  | 'checklist'
+  | 'fluid'
+  | 'injection'
+  | 'test'
+  | 'manual'
+  | 'feed'
 
 export default function IcuChart({
   icuChartData,
@@ -51,9 +47,9 @@ export default function IcuChart({
   )
 
   const orderIndex = useMemo(() => {
-    return DEFAULT_ICU_ORDER_NAME.reduce(
+    return DEFAULT_ICU_ORDER_TYPE.reduce(
       (acc, item, idx) => {
-        acc[item.orderName] = idx
+        acc[item.value] = idx
         return acc
       },
       {} as Record<OrderName, number>,
@@ -82,8 +78,8 @@ export default function IcuChart({
         )
         .sort(
           (prev, next) =>
-            orderIndex[prev.icu_chart_order_name as OrderName] -
-            orderIndex[next.icu_chart_order_name as OrderName],
+            orderIndex[prev.icu_chart_order_type as OrderName] -
+            orderIndex[next.icu_chart_order_type as OrderName],
         )
 
       setTargetDateChartOrderData(targetDateOrderData)
@@ -100,7 +96,7 @@ export default function IcuChart({
   ])
 
   return (
-    <section className="bg-gray-100">
+    <section>
       {/* 종합 현황 && 환자 미선택 */}
       {selectedCategory === overall && !selectedPatientId && (
         <span>종합 현황</span>

@@ -11,7 +11,7 @@ export default async function Layout({
     <div className="flex flex-col">
       <main className="flex p-2">
         <IcuChartSidebar hosId={params.hos_id} />
-        {children}
+        <main>{children}</main>
       </main>
       <IcuChartFooter />
     </div>

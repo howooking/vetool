@@ -21,8 +21,10 @@ import HelperTooltip from '@/components/common/helper-tooltip'
 
 export default function OwnerForm({
   setStep,
+  icu,
 }: {
   setStep: (step: 'ownerSearch' | 'ownerRegister' | 'patientRegister') => void
+  icu?: boolean
 }) {
   const { push } = useRouter()
   const searchParams = useSearchParams()
@@ -45,7 +47,7 @@ export default function OwnerForm({
 
   const handleBack = () => {
     setStep('ownerSearch')
-    push('patients')
+    icu ? push('icu') : push('patients')
     form.reset()
   }
 
@@ -68,9 +70,13 @@ export default function OwnerForm({
       hos_owner_id,
     } = values
 
-    push(
-      `patients/?owner_name=${owner_name}&hos_owner_id=${hos_owner_id}&owner_address=${owner_address}&owner_phone_number=${owner_phone_number}&owner_memo=${owner_memo}`,
-    )
+    icu
+      ? push(
+          `icu/?owner_name=${owner_name}&hos_owner_id=${hos_owner_id}&owner_address=${owner_address}&owner_phone_number=${owner_phone_number}&owner_memo=${owner_memo}`,
+        )
+      : push(
+          `patients/?owner_name=${owner_name}&hos_owner_id=${hos_owner_id}&owner_address=${owner_address}&owner_phone_number=${owner_phone_number}&owner_memo=${owner_memo}`,
+        )
     setStep('patientRegister')
   }
 

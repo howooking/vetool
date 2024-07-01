@@ -1,7 +1,9 @@
 import IcuChart from '@/components/hospital/icu/chart/icu-chart'
 import IcuDialog from '@/components/hospital/icu/dialog/icu-dialog'
+import IcuHeaderDateSelector from '@/components/hospital/icu/header/icu-header-date-selector'
 import { createClient } from '@/lib/supabase/server'
 import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
+import { PatientData } from '@/types/hospital/patients'
 
 export default async function IcuPage({
   params,
@@ -72,11 +74,19 @@ export default async function IcuPage({
   }
   const { data: patientsData, error: patientsError } = await supabase
     .from('patients')
-    .select('*')
-    .match({ hos_id: hosId })
+    .select(
+      `
+        *,
+        owner_id(*)
+      `,
+    )
+    .match({ hos_id: params.hos_id })
+    .order('is_alive', { ascending: false })
+    .order('created_at', { ascending: false })
+    .returns<PatientData[]>()
 
   if (patientsError) {
-    console.log(patientsError)
+    console.log(patientsError.message)
     throw new Error(patientsError.message)
   }
 
@@ -110,19 +120,32 @@ export default async function IcuPage({
     throw new Error(icuIoError.message)
   }
 
+  const { data: ownerData, error: ownerDataError } = await supabase
+    .from('owners')
+    .select('*')
+    .match({ hos_id: params.hos_id })
+    .order('created_at', { ascending: false })
+
+  if (ownerDataError) {
+    console.log(ownerDataError.message)
+    throw new Error(ownerDataError.message)
+  }
+
   return (
     <div className="h-icu-chart w-full overflow-y-scroll">
-      <IcuChart
-        icuChartData={icuChartData}
-        icuChartOrderData={icuChartOrderData}
-        vetsData={vetsData}
-      />
+      <IcuHeaderDateSelector />
       <IcuDialog
         hosId={hosId}
         icuIoId={icuIoId.length ? icuIoId[0].icu_io_id : ''}
         patients={patientsData}
         vets={vetsData}
         groupList={groupListData[0].group_list}
+        ownerData={ownerData}
+      />
+      <IcuChart
+        icuChartData={icuChartData}
+        icuChartOrderData={icuChartOrderData}
+        vetsData={vetsData}
       />
     </div>
   )

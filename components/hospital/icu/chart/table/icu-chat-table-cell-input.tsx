@@ -16,10 +16,11 @@ export default function IcuChartTableCellInput({
   icuIoId,
 }: TableCellInputProps) {
   return (
-    <TableCell className={cn('h-2 border-black p-0 leading-4')}>
+    <TableCell className="h-2 border-black p-0 leading-4">
       <Input
         className={cn(
           'rounded-none px-1 focus-visible:border-2 focus-visible:border-primary focus-visible:ring-0',
+          hasOrder ? 'bg-red-200' : 'bg-input',
         )}
       />
     </TableCell>
