@@ -21,7 +21,7 @@ export default function OwnerSearch({
 
       <Button
         onClick={() => setStep('ownerRegister')}
-        className="absolute bottom-6 right-6"
+        className="absolute bottom-6 left-6"
       >
         새로운 보호자 등록
       </Button>

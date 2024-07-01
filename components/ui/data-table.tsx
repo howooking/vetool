@@ -29,6 +29,7 @@ import {
 } from '@tanstack/react-table'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
+import NoResult from '../common/no-result'
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
@@ -160,7 +161,7 @@ export default function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  검색 결과가 없습니다.
+                  <NoResult title="검색 결과가 없습니다" className="h-40" />
                 </TableCell>
               </TableRow>
             )}
