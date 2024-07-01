@@ -8,8 +8,10 @@ import { createClient } from '@/lib/supabase/client'
 
 export default function IcuPatientSelectButton({
   patientId,
+  isIcu,
 }: {
   patientId: string
+  isIcu: boolean
 }) {
   const supabase = createClient()
   const { setStep } = usePatientRegisterStep()
@@ -44,7 +46,13 @@ export default function IcuPatientSelectButton({
   }
 
   return (
-    <Button type="button" variant="outline" onClick={handlePatientClick}>
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      onClick={handlePatientClick}
+      className={isIcu ? 'block' : 'hidden'}
+    >
       선택
     </Button>
   )

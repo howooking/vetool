@@ -61,6 +61,7 @@ export default async function HospitalPatientsPage({
     owner_memo: patient.owner_id.owner_memo,
     owner_name: patient.owner_id.owner_name,
     owner_phone_number: patient.owner_id.owner_phone_number,
+    isIcu: false,
   }))
 
   return (
