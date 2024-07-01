@@ -16,9 +16,9 @@ export default function ErrorPage({
         </h1>
         <p>에러가 발생하였습니다.</p>
         <p>관리자에게 문의하세요.</p>
-        <p>{message}</p>
-        <Button className="mt-6">
-          <Link href="/">홈으로 이동</Link>
+        <p className="text-destructive">{message}</p>
+        <Button className="mt-6" asChild>
+          <Link href="/">홈으로</Link>
         </Button>
       </div>
     </div>
