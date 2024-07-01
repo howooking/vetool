@@ -1,7 +1,8 @@
+import NoResult from '@/components/common/no-result'
 import { columns } from '@/components/hospital/admin/approval/column'
 import DataTable from '@/components/ui/data-table'
 import { createClient } from '@/lib/supabase/server'
-import { ApprovalData, ApprovalDataTable } from '@/types/hospital/adimin'
+import type { ApprovalData, ApprovalDataTable } from '@/types/hospital/adimin'
 
 export default async function AdminApprovalPage({
   params,
@@ -27,8 +28,10 @@ export default async function AdminApprovalPage({
     throw new Error(approvalDataError.message)
   }
 
+  let noResult
+
   if (approvalData.length === 0) {
-    return <>승인요청 없음</>
+    noResult = true
   }
 
   const data: ApprovalDataTable[] = approvalData.map((approval) => ({
@@ -40,6 +43,10 @@ export default async function AdminApprovalPage({
     avatar_url: approval.user_id.avatar_url,
     is_vet: approval.user_id.is_vet,
   }))
+
+  if (noResult) {
+    return <NoResult title="승인요청이 없습니다." />
+  }
 
   return <DataTable columns={columns} data={data} />
 }

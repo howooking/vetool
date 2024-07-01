@@ -12,7 +12,7 @@ export default function NoResult({
   return (
     <div
       className={cn(
-        'hospital-page-height flex w-full flex-col items-center justify-center gap-4 pb-20',
+        'flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center gap-4',
         className,
       )}
       {...rest}

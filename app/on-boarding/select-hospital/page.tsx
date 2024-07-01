@@ -4,7 +4,7 @@ import { columns } from '@/components/on-boarding/select-hospital/columns'
 import DataTable from '@/components/ui/data-table'
 import { createClient } from '@/lib/supabase/server'
 import logoWhite from '@/public/logo-white.svg'
-import { SelectHosptialDataTable } from '@/types/on-boarding'
+import type { SelectHosptialDataTable } from '@/types/on-boarding'
 import Image from 'next/image'
 
 export default async function SelectHospitalPage() {
@@ -25,7 +25,7 @@ export default async function SelectHospitalPage() {
     noResult = true
   }
 
-  const data: SelectHosptialDataTable[] = hospitalData!.map((data) => ({
+  const data: SelectHosptialDataTable[] = hospitalData.map((data) => ({
     city: data.city,
     district: data.district,
     hos_id: data.hos_id,
