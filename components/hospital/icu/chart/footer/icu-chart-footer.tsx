@@ -6,8 +6,7 @@ import { useIcuSelectedChartCategoryStore } from '@/lib/store/hospital/icu/icu-s
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 
 export default function IcuChartFooter() {
-  const { selectedPatientId, setSelectedPatientId } =
-    useIcuSelectedPatientStore()
+  const { setSelectedPatientId } = useIcuSelectedPatientStore()
   const { selectedCategory, setSelectedCategory } =
     useIcuSelectedChartCategoryStore()
 
@@ -20,13 +19,13 @@ export default function IcuChartFooter() {
   }
 
   return (
-    <footer className="fixed bottom-0 h-12 w-full bg-white">
-      <ul className="flex h-full items-center gap-4 pl-4">
+    <footer className="fixed bottom-0 h-12 w-full border-t bg-white">
+      <ul className="flex h-full items-center gap-2 pl-2">
         {FOOTER_CATEGORIES.map(({ label, value }) => (
           <li key={value}>
             <Button
               type="button"
-              className="footer-link"
+              size="sm"
               variant={selectedCategory === value ? 'default' : 'outline'}
               onClick={() => handleButtonClick(value)}
             >

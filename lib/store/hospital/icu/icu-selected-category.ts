@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
 type IcuSelectedChartCategoryState = {
-  selectedCategory: string | null
-  setSelectedCategory: (category: string) => void
+  selectedCategory: 'overall' | 'icuChart'
+  setSelectedCategory: (category: 'overall' | 'icuChart') => void
 }
 
 export const useIcuSelectedChartCategoryStore =
