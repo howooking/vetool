@@ -230,7 +230,7 @@ export type Database = {
           memo_a: string | null
           memo_b: string | null
           memo_c: string | null
-          patient_id: string | null
+          patient_id: string
           sub_vet: string | null
           target_date: string | null
           weight: string | null
@@ -246,7 +246,7 @@ export type Database = {
           memo_a?: string | null
           memo_b?: string | null
           memo_c?: string | null
-          patient_id?: string | null
+          patient_id: string
           sub_vet?: string | null
           target_date?: string | null
           weight?: string | null
@@ -262,7 +262,7 @@ export type Database = {
           memo_a?: string | null
           memo_b?: string | null
           memo_c?: string | null
-          patient_id?: string | null
+          patient_id?: string
           sub_vet?: string | null
           target_date?: string | null
           weight?: string | null
@@ -314,7 +314,7 @@ export type Database = {
           icu_chart_order_id: string
           icu_chart_order_log: string[] | null
           icu_chart_order_name: string | null
-          icu_chart_order_time: string[] | null
+          icu_chart_order_time: string[]
           icu_chart_order_tx_1: string | null
           icu_chart_order_tx_10: string | null
           icu_chart_order_tx_11: string | null
@@ -351,7 +351,7 @@ export type Database = {
           icu_chart_order_id?: string
           icu_chart_order_log?: string[] | null
           icu_chart_order_name?: string | null
-          icu_chart_order_time?: string[] | null
+          icu_chart_order_time?: string[]
           icu_chart_order_tx_1?: string | null
           icu_chart_order_tx_10?: string | null
           icu_chart_order_tx_11?: string | null
@@ -388,7 +388,7 @@ export type Database = {
           icu_chart_order_id?: string
           icu_chart_order_log?: string[] | null
           icu_chart_order_name?: string | null
-          icu_chart_order_time?: string[] | null
+          icu_chart_order_time?: string[]
           icu_chart_order_tx_1?: string | null
           icu_chart_order_tx_10?: string | null
           icu_chart_order_tx_11?: string | null
@@ -666,7 +666,7 @@ export type Database = {
           in_date: string | null
           out_date: string | null
           out_due_date: string | null
-          patient_id: string | null
+          patient_id: string
         }
         Insert: {
           age_in_days?: number | null
@@ -679,7 +679,7 @@ export type Database = {
           in_date?: string | null
           out_date?: string | null
           out_due_date?: string | null
-          patient_id?: string | null
+          patient_id: string
         }
         Update: {
           age_in_days?: number | null
@@ -692,7 +692,7 @@ export type Database = {
           in_date?: string | null
           out_date?: string | null
           out_due_date?: string | null
-          patient_id?: string | null
+          patient_id?: string
         }
         Relationships: [
           {

@@ -12,6 +12,7 @@ import PatientDetailDatePicker from '@/components/hospital/icu/chart/patient-det
 import PatientDetailInput from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-input'
 import PatientDetailInfoItem from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-item'
 import PatientDetailInfoVetsDialog from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-vets-dialog'
+import { format } from 'date-fns'
 
 export default function IcuChartPatientDetail({
   chartData,
@@ -42,8 +43,7 @@ export default function IcuChartPatientDetail({
   const [dxValue, setDxValue] = useState(dx)
   const [ccValue, setCcValue] = useState(cc)
   const [cautionValue, setCautionValue] = useState(caution)
-  const [weightMeasuredDateValue, setWeightMeasuredDateValue] =
-    useState(weightMeasuredDate)
+  const [weightValue, setWeightValue] = useState(weight)
 
   // DX 변경 핸들러
   const handleDxBlur = async () => {
@@ -146,11 +146,16 @@ export default function IcuChartPatientDetail({
     refresh()
   }
 
-  // 체중 측정일 변경 핸들러
-  const handleMeasuredWeightDateChange = async (date: string) => {
+  // 체중 변경 핸들러
+  const handleWeightBlur = async () => {
+    if (weight === weightValue) return
+
     const { error } = await supabase
       .from('icu_chart')
-      .update({ weight_measured_date: date })
+      .update({
+        weight: weightValue,
+        weight_measured_date: format(new Date(), 'yyyy-MM-dd'),
+      })
       .match({ patient_id: patientId, target_date: selectedDate })
 
     if (error) {
@@ -159,7 +164,7 @@ export default function IcuChartPatientDetail({
     }
 
     toast({
-      title: '체중 측정일이 변경되었습니다.',
+      title: '체중이 변경되었습니다.',
     })
   }
 
@@ -170,9 +175,9 @@ export default function IcuChartPatientDetail({
         breed={breed}
         gender={gender}
         ageInDays={ageInDays}
-        weight={weight}
         patientId={patientId}
         selectedDate={selectedDate}
+        weightMeasuredDate={weightMeasuredDate}
       />
       <Separator className="my-4" />
 
@@ -229,12 +234,13 @@ export default function IcuChartPatientDetail({
         />
         <Separator orientation="vertical" />
 
-        {/* 체중 측정일 */}
-        <PatientDetailDatePicker
-          label="체중 측정일"
-          dateValue={weightMeasuredDateValue}
-          setDateValue={setWeightMeasuredDateValue}
-          onChange={handleMeasuredWeightDateChange}
+        {/* 체중 */}
+        <PatientDetailInput
+          label="체중"
+          value={weight}
+          onChange={(e) => setWeightValue(e.target.value)}
+          onBlur={handleWeightBlur}
+          className="max-w-24"
         />
       </div>
     </div>
