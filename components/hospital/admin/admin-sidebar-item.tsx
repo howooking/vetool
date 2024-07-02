@@ -24,7 +24,7 @@ export default function AdminSidebarItem({
   return (
     <li className="flex h-10 w-full items-center gap-2">
       <Button
-        className="felx items center w-full justify-start gap-3 px-2"
+        className="flex w-full items-center justify-start gap-3 px-2"
         variant="ghost"
         asChild
       >

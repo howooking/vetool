@@ -80,8 +80,8 @@ export default function IcuDialog({
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger className="absolute left-[200px] top-1.5" asChild>
-        <Button>환자입원</Button>
+      <DialogTrigger className="absolute left-[200px] top-2" asChild>
+        <Button size="sm">환자입원</Button>
       </DialogTrigger>
 
       <DialogContent className="flex flex-col sm:max-w-[1200px]">

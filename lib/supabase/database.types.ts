@@ -230,7 +230,7 @@ export type Database = {
           memo_a: string | null
           memo_b: string | null
           memo_c: string | null
-          patient_id: string | null
+          patient_id: string
           sub_vet: string | null
           target_date: string | null
           weight: string | null
@@ -246,7 +246,7 @@ export type Database = {
           memo_a?: string | null
           memo_b?: string | null
           memo_c?: string | null
-          patient_id?: string | null
+          patient_id: string
           sub_vet?: string | null
           target_date?: string | null
           weight?: string | null
@@ -262,7 +262,7 @@ export type Database = {
           memo_a?: string | null
           memo_b?: string | null
           memo_c?: string | null
-          patient_id?: string | null
+          patient_id?: string
           sub_vet?: string | null
           target_date?: string | null
           weight?: string | null
@@ -314,7 +314,7 @@ export type Database = {
           icu_chart_order_id: string
           icu_chart_order_log: string[] | null
           icu_chart_order_name: string | null
-          icu_chart_order_time: string[] | null
+          icu_chart_order_time: string[]
           icu_chart_order_tx_1: string | null
           icu_chart_order_tx_10: string | null
           icu_chart_order_tx_11: string | null
@@ -341,7 +341,6 @@ export type Database = {
           icu_chart_order_tx_9: string | null
           icu_chart_order_type: string | null
           icu_io_id: string | null
-          target_date: string | null
           updated_at: string
         }
         Insert: {
@@ -351,7 +350,7 @@ export type Database = {
           icu_chart_order_id?: string
           icu_chart_order_log?: string[] | null
           icu_chart_order_name?: string | null
-          icu_chart_order_time?: string[] | null
+          icu_chart_order_time?: string[]
           icu_chart_order_tx_1?: string | null
           icu_chart_order_tx_10?: string | null
           icu_chart_order_tx_11?: string | null
@@ -378,7 +377,6 @@ export type Database = {
           icu_chart_order_tx_9?: string | null
           icu_chart_order_type?: string | null
           icu_io_id?: string | null
-          target_date?: string | null
           updated_at?: string
         }
         Update: {
@@ -388,7 +386,7 @@ export type Database = {
           icu_chart_order_id?: string
           icu_chart_order_log?: string[] | null
           icu_chart_order_name?: string | null
-          icu_chart_order_time?: string[] | null
+          icu_chart_order_time?: string[]
           icu_chart_order_tx_1?: string | null
           icu_chart_order_tx_10?: string | null
           icu_chart_order_tx_11?: string | null
@@ -415,7 +413,6 @@ export type Database = {
           icu_chart_order_tx_9?: string | null
           icu_chart_order_type?: string | null
           icu_io_id?: string | null
-          target_date?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -663,10 +660,10 @@ export type Database = {
           group_list: string[] | null
           hos_id: string | null
           icu_io_id: string
-          in_date: string | null
+          in_date: string
           out_date: string | null
           out_due_date: string | null
-          patient_id: string | null
+          patient_id: string
         }
         Insert: {
           age_in_days?: number | null
@@ -676,10 +673,10 @@ export type Database = {
           group_list?: string[] | null
           hos_id?: string | null
           icu_io_id?: string
-          in_date?: string | null
+          in_date: string
           out_date?: string | null
           out_due_date?: string | null
-          patient_id?: string | null
+          patient_id: string
         }
         Update: {
           age_in_days?: number | null
@@ -689,10 +686,10 @@ export type Database = {
           group_list?: string[] | null
           hos_id?: string | null
           icu_io_id?: string
-          in_date?: string | null
+          in_date?: string
           out_date?: string | null
           out_due_date?: string | null
-          patient_id?: string | null
+          patient_id?: string
         }
         Relationships: [
           {

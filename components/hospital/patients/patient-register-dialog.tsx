@@ -37,8 +37,8 @@ export function PatientRegisterDialog({
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild className="absolute left-2 top-1.5">
-        <Button>환자등록</Button>
+      <DialogTrigger asChild className="absolute left-2 top-2">
+        <Button size="sm">환자등록</Button>
       </DialogTrigger>
 
       <DialogContent className="flex flex-col sm:max-w-[1000px]">

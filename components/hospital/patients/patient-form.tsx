@@ -215,7 +215,7 @@ export default function PatientForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>이름*</FormLabel>
+              <FormLabel>환자 이름*</FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
               </FormControl>

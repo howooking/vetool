@@ -27,8 +27,7 @@ export default function RegisterDialogHeader({
         {step === 'patientSearch' && '환자를 선택해주세요'}
         {step === 'ownerSearch' && '환자를 등록하기 전 보호자를 선택해주세요'}
         {step === 'ownerRegister' && '환자를 등록하기 전 보호자를 등록해주세요'}
-        {step === 'patientRegister' &&
-          '환자를 등록하기 전 보호자를 등록해주세요'}
+        {step === 'patientRegister' && '신규 환자를 등록합니다'}
         {step === 'icuRegister' && '선택한 환자를 입원시킵니다'}
       </DialogDescription>
     </DialogHeader>
