@@ -22,7 +22,7 @@ type IcuPatientInfoProps = {
   patientId: string
   selectedDate: string
   ageInDays: number | null
-  weight: string | null
+  weightMeasuredDate: string | null
 }
 
 export default function PatientDetailItem({
@@ -30,9 +30,9 @@ export default function PatientDetailItem({
   breed,
   gender,
   ageInDays,
-  weight,
   patientId,
   selectedDate,
+  weightMeasuredDate,
 }: IcuPatientInfoProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -68,7 +68,7 @@ export default function PatientDetailItem({
         <span className="text-md pr-1 font-bold leading-none">{name}</span>
         <span className="text-xs font-medium leading-none">{breed}</span>
         <p className="text-sm text-muted-foreground">
-          {`${ageInDays ?? 0} days old  · ${gender} · ${weight ?? 0}kg`}
+          {`${ageInDays ?? 0} days old  · ${gender} / 체중 측정일: ${weightMeasuredDate}`}
         </p>
       </div>
 

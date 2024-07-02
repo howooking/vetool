@@ -47,7 +47,7 @@ export default function IcuNewChartDialog({
         weight: selectedPatientChartData?.weight,
         weight_measured_date: selectedPatientChartData?.weight_measured_date,
         target_date: selectedDate,
-        patient_id: selectedPatientChartData?.patient_id.patient_id,
+        patient_id: selectedPatientChartData?.patient_id.patient_id!,
       })
       .select('icu_chart_id')
       .single()
@@ -89,10 +89,11 @@ export default function IcuNewChartDialog({
     const prevDate = format(subDays(parseISO(selectedDate), 1), 'yyyy-MM-dd')
     setIsSubmitting(true)
 
+    // 1. 전일 차트 데이터 불러옴
     const { data: icuPrevChartData, error: icuSelectChartError } =
       await supabase.from('icu_chart').select('*').match({
-        target_date: prevDate,
         patient_id: selectedPatientChartData?.patient_id.patient_id,
+        target_date: prevDate,
       })
 
     if (icuSelectChartError) {
@@ -100,7 +101,7 @@ export default function IcuNewChartDialog({
       throw new Error(icuSelectChartError.message)
     }
 
-    // 전일 차트가 존재한다면, 전일 차트를 덮어씀
+    // 2. 전일 차트가 존재한다면, 전일 차트를 INSERT
     if (icuPrevChartData.length) {
       const { data: coveredPrevChartData, error: coverdPrevChartError } =
         await supabase
@@ -116,7 +117,7 @@ export default function IcuNewChartDialog({
             patient_id: icuPrevChartData[0]?.patient_id,
             caution: icuPrevChartData[0]?.caution,
           })
-          .select('icu_chart_id')
+          .select('icu_chart_id, icu_io_id')
           .single()
 
       if (coverdPrevChartError) {
@@ -124,10 +125,10 @@ export default function IcuNewChartDialog({
         throw new Error(coverdPrevChartError.message)
       }
 
+      // 3. 전일 오더 데이터 불러옴
       const { data: coveredPrevOrderData, error: coveredPrevOrderError } =
         await supabase.from('icu_chart_order').select('*').match({
-          target_data: prevDate,
-          icu_chart_id: coveredPrevChartData?.icu_chart_id,
+          icu_chart_id: icuPrevChartData[0].icu_chart_id,
         })
 
       if (coveredPrevOrderError) {
@@ -135,17 +136,17 @@ export default function IcuNewChartDialog({
         throw new Error(coveredPrevOrderError.message)
       }
 
-      // icu_chart_order prev date values INSERT
+      // 4. 전일 오더 데이터 INSERT
       coveredPrevOrderData?.forEach(async (element) => {
         const { error: icuChartTxError } = await supabase
           .from('icu_chart_order')
           .insert({
             icu_chart_order_type: element.icu_chart_order_type,
-            icu_chart_id: coveredPrevChartData?.icu_chart_id,
-            icu_io_id: selectedPatientChartData?.icu_io_id.icu_io_id,
+            icu_chart_id: coveredPrevChartData.icu_chart_id,
+            icu_io_id: coveredPrevChartData.icu_io_id,
             icu_chart_order_name: element.icu_chart_order_name,
             icu_chart_order_comment: element.icu_chart_order_comment,
-            target_date: selectedDate,
+            icu_chart_order_time: element.icu_chart_order_time,
           })
 
         if (icuChartTxError) {
@@ -160,7 +161,7 @@ export default function IcuNewChartDialog({
     // 전일 차트가 존재하지 않는다면, 새로운 차트를 추가
     else {
       toast({
-        title: '전일 차트가 존재하지 않아 새로운 차트를 추가합니다.',
+        title: '전일 차트가 존재하지 않아 새로운 차트를 추가합니다',
       })
 
       const { data: icuChartData, error: icuChartError } = await supabase
@@ -172,8 +173,7 @@ export default function IcuNewChartDialog({
           sub_vet: selectedPatientChartData?.sub_vet.user_id,
           weight: selectedPatientChartData?.weight,
           weight_measured_date: selectedPatientChartData?.weight_measured_date,
-          target_date: selectedDate,
-          patient_id: selectedPatientChartData?.patient_id.patient_id,
+          patient_id: selectedPatientChartData?.patient_id.patient_id!,
         })
         .select('icu_chart_id')
         .single()
@@ -225,7 +225,7 @@ export default function IcuNewChartDialog({
           <DialogHeader>
             <DialogTitle>새로운 차트 생성</DialogTitle>
             <DialogDescription>
-              {selectedDate} 날짜로 차트가 생성됩니다.
+              {selectedDate} 날짜로 차트가 생성됩니다
             </DialogDescription>
           </DialogHeader>
 
@@ -257,7 +257,7 @@ export default function IcuNewChartDialog({
           <DialogHeader>
             <DialogTitle>전일 차트 불러오기</DialogTitle>
             <DialogDescription>
-              {selectedDate} 날짜로 차트가 생성됩니다.
+              {selectedDate} 날짜로 차트가 생성됩니다
             </DialogDescription>
           </DialogHeader>
 

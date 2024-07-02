@@ -9,8 +9,8 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { useCreateOrderStore } from '@/lib/store/hospital/icu/chart/create-order'
-import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
+import { IcuChartOrderJoined } from '@/types/hospital'
 import { FilePlus } from 'lucide-react'
 
 export default function IcuChartOrderDialog({
@@ -20,7 +20,6 @@ export default function IcuChartOrderDialog({
   chartId: string
   ioId: string
 }) {
-  const { selectedPatientName: patientName } = useIcuSelectedPatientStore()
   const { selectedDate } = useIcuSelectedDateStore()
   const { isOpen, setIsOpen, setMode, resetState } = useCreateOrderStore()
   const handleDialogOpen = () => {
@@ -40,7 +39,7 @@ export default function IcuChartOrderDialog({
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogDescription>{selectedDate}</DialogDescription>
-          <DialogTitle>{patientName}님 처치 추가</DialogTitle>
+          <DialogTitle>처치 추가</DialogTitle>
         </DialogHeader>
         <Separator />
 
