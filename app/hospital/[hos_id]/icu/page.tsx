@@ -65,7 +65,7 @@ export default async function IcuPage({
       `,
     )
     .match({ 'icu_io_id.hos_id': hosId })
-    .order('created_at', { ascending: true })
+    .order('icu_chart_order_name', { ascending: true })
     .returns<IcuChartOrderJoined[]>()
 
   if (icuChartOrderError) {
