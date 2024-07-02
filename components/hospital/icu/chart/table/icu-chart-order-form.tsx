@@ -46,12 +46,12 @@ export default function IcuChartOrderForm({
   ioId: string
 }) {
   const { refresh } = useRouter()
-  const { mode, setIsOpen, chartOrder } = useCreateOrderStore()
+  const { setIsOpen, chartOrder } = useCreateOrderStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime, setStartTime] = useState<string | undefined>(undefined)
   const [timeTerm, setTimeTerm] = useState<string | undefined>(undefined)
   const [orderTime, setOrderTime] = useState<string[]>(
-    chartOrder.icu_chart_order_time!,
+    chartOrder.icu_chart_order_time,
   )
   const { selectedPatientId: patientId } = useIcuSelectedPatientStore()
 
@@ -123,7 +123,7 @@ export default function IcuChartOrderForm({
   }
 
   useEffect(() => {
-    setOrderTime(Array(24).fill(0))
+    const orderTime = Array(24).fill(0)
 
     const start = Number(startTime)
     const term = Number(timeTerm)
@@ -140,10 +140,8 @@ export default function IcuChartOrderForm({
         time === '1' ? true : false,
       )
     })
-
     setOrderTime(orderTime)
-    console.log(orderTime)
-  }, [form, startTime, timeTerm, setOrderTime, orderTime])
+  }, [form, startTime, timeTerm, setOrderTime])
 
   return (
     <Form {...form}>

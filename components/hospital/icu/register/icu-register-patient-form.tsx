@@ -26,7 +26,6 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
-import { useIcuRegisterPatientStore } from '@/lib/store/hospital/icu/register-patient'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import {
   usePatientRegisterStep,
