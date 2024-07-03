@@ -1,10 +1,11 @@
 'use client'
 
-import NoResult from '@/components/common/no-result'
+import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { usePatientRegisterStep } from '@/lib/store/hospital/patients/selected-patient'
-import { PatientDataTable } from '@/types/hospital/patients'
+import { cn } from '@/lib/utils'
 import type { Owner, Vet } from '@/types/hospital'
 import type { PatientData, PatientDataTable } from '@/types/hospital/patients'
 import { useEffect, useState } from 'react'
@@ -12,25 +13,25 @@ import OwnerForm from '../../patients/owner-form'
 import OwnerSearch from '../../patients/owner-search'
 import { patientsColumns } from '../../patients/patient-columns'
 import PatientForm from '../../patients/patient-form'
-import IcuRegisterPatientForm from '../register/icu-register-patient-form'
-import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import RegisterDialogHeader from '../../patients/register-dialog-header'
+import IcuRegisterPatientForm from '../register/icu-register-patient-form'
 
 export default function IcuDialog({
   hosId,
   patients,
   groupList,
   vets,
+  ownersData,
+}: {
+  hosId: string
+  patients: PatientData[]
+  groupList: string[] | null
+  vets: Vet[]
+  ownersData: Owner[]
+}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { step, setStep } = usePatientRegisterStep()
+  const [tab, setTab] = useState('search')
 
   useEffect(() => {
     setTimeout(() => {
@@ -62,16 +63,19 @@ export default function IcuDialog({
   }))
 
   const handleTabValueChange = (value: string) => {
-    console.log(value)
     if (value === 'search') {
       if (step !== 'patientSearch') {
-        return setStep('patientSearch')
+        setTab('search')
+        setStep('patientSearch')
+        return
       }
     }
 
     if (value === 'register') {
       if (step !== 'ownerSearch') {
-        return setStep('ownerSearch')
+        setTab('register')
+        setStep('ownerSearch')
+        return
       }
     }
   }
@@ -117,6 +121,8 @@ export default function IcuDialog({
                 groupList={groupList}
                 vets={vets}
                 setIsDialogOpen={setIsDialogOpen}
+                tab={tab}
+                setTab={setTab}
               />
             )}
           </TabsContent>
@@ -140,6 +146,8 @@ export default function IcuDialog({
                 groupList={groupList}
                 vets={vets}
                 setIsDialogOpen={setIsDialogOpen}
+                tab={tab}
+                setTab={setTab}
               />
             )}
           </TabsContent>

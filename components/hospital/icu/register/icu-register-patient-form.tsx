@@ -39,7 +39,7 @@ import { addDays, format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -49,6 +49,16 @@ export default function IcuRegisterPatientForm({
   groupList,
   vets,
   setIsDialogOpen,
+  tab,
+  setTab,
+}: {
+  hosId: string
+  groupList: string[] | null
+  vets: Vet[]
+  setIsDialogOpen: Dispatch<SetStateAction<boolean>>
+  tab: string
+  setTab: Dispatch<SetStateAction<string>>
+}) {
   const { refresh } = useRouter()
   const supabase = createClient()
   const [range, setRange] = useState<DateRange | undefined>({
@@ -154,7 +164,16 @@ export default function IcuRegisterPatientForm({
 
   // 이전 버튼 클릭 핸들러
   const handlePreviousButtonClick = () => {
-    setStep('patientSearch')
+    if (tab === 'search') {
+      setTab('search')
+      setStep('patientSearch')
+      return
+    }
+    if (tab === 'register') {
+      setTab('register')
+      setStep('ownerSearch')
+      return
+    }
     setPatientId(null)
   }
 
