@@ -1,11 +1,7 @@
 import IcuChartMemos from '@/components/hospital/icu/chart/memos/icu-chart-memos'
 import IcuChartPatientDetail from '@/components/hospital/icu/chart/patient-detail/icu-chart-patient-detail'
 import IcuChartTable from '@/components/hospital/icu/chart/table/icu-chart-table'
-import type {
-  IcuChartJoined,
-  IcuChartOrderJoined,
-  Vets,
-} from '@/types/hospital'
+import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
 
 export default function IcuChartOrder({
   chartData,
@@ -14,7 +10,7 @@ export default function IcuChartOrder({
 }: {
   chartData: IcuChartJoined
   chartOrderData: IcuChartOrderJoined[]
-  vetsData: Vets[]
+  vetsData: Vet[]
 }) {
   const { memo_a, memo_b, memo_c, ...restChartData } = chartData
 

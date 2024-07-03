@@ -135,12 +135,11 @@ export default async function IcuPage({
     <div className="h-icu-chart w-full overflow-y-scroll">
       <IcuHeaderDateSelector />
       <IcuDialog
-        hosId={hosId}
-        icuIoId={icuIoId.length ? icuIoId[0].icu_io_id : ''}
+        hosId={params.hos_id}
         patients={patientsData}
         vets={vetsData}
         groupList={groupListData[0].group_list}
-        ownerData={ownerData}
+        ownersData={ownersData}
       />
       <IcuChart
         icuChartData={icuChartData}

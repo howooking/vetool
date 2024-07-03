@@ -4,8 +4,9 @@ import NoResult from '@/components/common/no-result'
 import DataTable from '@/components/ui/data-table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { usePatientRegisterStep } from '@/lib/store/hospital/patients/selected-patient'
-import type { IcuDialogProps } from '@/types/hospital/icu'
 import { PatientDataTable } from '@/types/hospital/patients'
+import type { Owner, Vet } from '@/types/hospital'
+import type { PatientData, PatientDataTable } from '@/types/hospital/patients'
 import { useEffect, useState } from 'react'
 import OwnerForm from '../../patients/owner-form'
 import OwnerSearch from '../../patients/owner-search'
@@ -25,12 +26,9 @@ import RegisterDialogHeader from '../../patients/register-dialog-header'
 
 export default function IcuDialog({
   hosId,
-  icuIoId,
   patients,
   groupList,
   vets,
-  ownerData,
-}: Omit<IcuDialogProps, 'setIsDialogOpen'>) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { step, setStep } = usePatientRegisterStep()
 
@@ -126,7 +124,7 @@ export default function IcuDialog({
 
           <TabsContent value="register">
             {step === 'ownerSearch' && (
-              <OwnerSearch ownerData={ownerData} setStep={setStep} />
+              <OwnerSearch ownersData={ownersData} setStep={setStep} />
             )}
             {step === 'ownerRegister' && <OwnerForm setStep={setStep} icu />}
             {step === 'patientRegister' && (

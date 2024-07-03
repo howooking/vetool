@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Vets } from '@/types/hospital'
+import type { Vet } from '@/types/hospital'
 import { useState } from 'react'
 
 type PatientDetailVetsDialogProps = {
@@ -26,7 +26,7 @@ type PatientDetailVetsDialogProps = {
   subVetId: string
   onMainVetChange: (value: string) => Promise<void>
   onSubVetChange: (value: string) => Promise<void>
-  vetsData: Vets[]
+  vetsData: Vet[]
 }
 
 export default function PatientDetailVetsDialog({

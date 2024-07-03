@@ -33,7 +33,7 @@ import {
 } from '@/lib/store/hospital/patients/selected-patient'
 import { createClient } from '@/lib/supabase/client'
 import { cn, getDaysSince } from '@/lib/utils'
-import { IcuDialogProps } from '@/types/hospital/icu'
+import type { Vet } from '@/types/hospital'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addDays, format } from 'date-fns'
 import { ko } from 'date-fns/locale'
@@ -49,7 +49,6 @@ export default function IcuRegisterPatientForm({
   groupList,
   vets,
   setIsDialogOpen,
-}: Omit<IcuDialogProps, 'patients' | 'ownerData'>) {
   const { refresh } = useRouter()
   const supabase = createClient()
   const [range, setRange] = useState<DateRange | undefined>({

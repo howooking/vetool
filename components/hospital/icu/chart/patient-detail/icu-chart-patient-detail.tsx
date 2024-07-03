@@ -4,7 +4,7 @@ import { Separator } from '@/components/ui/separator'
 import { toast } from '@/components/ui/use-toast'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { createClient } from '@/lib/supabase/client'
-import type { IcuChartJoined, Vets } from '@/types/hospital'
+import type { IcuChartJoined, Vet } from '@/types/hospital'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import PatientDetailGroup from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-group'
@@ -19,7 +19,7 @@ export default function IcuChartPatientDetail({
   vetsData,
 }: {
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
-  vetsData: Vets[]
+  vetsData: Vet[]
 }) {
   const supabase = createClient()
   const { refresh } = useRouter()

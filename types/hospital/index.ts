@@ -64,10 +64,6 @@ export type IcuChartJoined = IcuChart & {
   icu_io_id: IcuIo
   main_vet: Users
   sub_vet: Users
-  hos_id: {
-    group_list: string[] | null
-    hos_id: string
-  }
 }
 
 export type IcuChartOrderJoined = IcuChartOrder & {
@@ -106,7 +102,7 @@ export type IcuIoPatientsJoined = IcuIo & {
   }
 }
 
-export type Vets = {
+export type Vet = {
   user_id: string
   name: string | null
   position: string | null

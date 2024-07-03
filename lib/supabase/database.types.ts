@@ -982,6 +982,18 @@ export type Database = {
         }
         Returns: string
       }
+      insert_icu_tx_data_with_icu_order: {
+        Args: {
+          order_id_input: string
+          io_id_input: string
+          result_input: string
+          comment_input: string
+          images_input: string
+          log_input: string
+          time_input: number
+        }
+        Returns: undefined
+      }
       insert_patient_with_selected_owner: {
         Args: {
           hos_id_input: string

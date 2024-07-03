@@ -7,11 +7,7 @@ import { FOOTER_CATEGORIES } from '@/constants/hospital/icu/chart/footer'
 import { useIcuSelectedChartCategoryStore } from '@/lib/store/hospital/icu/icu-selected-category'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
-import type {
-  IcuChartJoined,
-  IcuChartOrderJoined,
-  Vets,
-} from '@/types/hospital'
+import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
 import { useMemo, useState } from 'react'
 
 type OrderName =
@@ -29,7 +25,7 @@ export default function IcuChart({
 }: {
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
-  vetsData: Vets[]
+  vetsData: Vet[]
 }) {
   const [targetDateChartData, setTargetDateChartData] = useState<
     IcuChartJoined[]
