@@ -10,7 +10,7 @@ export default function IcuChartFooter() {
   const { selectedCategory, setSelectedCategory } =
     useIcuSelectedChartCategoryStore()
 
-  const handleButtonClick = (value: string) => {
+  const handleButtonClick = (value: 'overall' | 'icuChart') => {
     setSelectedCategory(value)
 
     if (value === 'overall') {
@@ -26,7 +26,8 @@ export default function IcuChartFooter() {
             <Button
               type="button"
               size="sm"
-              variant={selectedCategory === value ? 'default' : 'outline'}
+              variant="outline"
+              className={selectedCategory === value ? 'bg-muted' : ''}
               onClick={() => handleButtonClick(value)}
             >
               {label}

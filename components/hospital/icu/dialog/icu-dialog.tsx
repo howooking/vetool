@@ -85,12 +85,18 @@ export default function IcuDialog({
       <DialogContent className="flex flex-col sm:max-w-[1200px]">
         <RegisterDialogHeader step={step} />
 
-        <Tabs defaultValue="search" onValueChange={handleTabValueChange}>
-          <TabsList className="w-full">
-            <TabsTrigger value="search" className="w-1/2">
+        <Tabs
+          defaultValue="search"
+          onValueChange={handleTabValueChange}
+          value={tab}
+        >
+          <TabsList
+            className={cn('w-full', step === 'icuRegister' && 'hidden')}
+          >
+            <TabsTrigger value="search" className="w-full">
               환자 조회
             </TabsTrigger>
-            <TabsTrigger value="register" className="w-1/2">
+            <TabsTrigger value="register" className="w-full">
               신규 환자 등록
             </TabsTrigger>
           </TabsList>
@@ -114,7 +120,6 @@ export default function IcuDialog({
             {step === 'icuRegister' && (
               <IcuRegisterPatientForm
                 hosId={hosId}
-                icuIoId={icuIoId}
                 groupList={groupList}
                 vets={vets}
                 setIsDialogOpen={setIsDialogOpen}
@@ -138,7 +143,6 @@ export default function IcuDialog({
             {step === 'icuRegister' && (
               <IcuRegisterPatientForm
                 hosId={hosId}
-                icuIoId={icuIoId}
                 groupList={groupList}
                 vets={vets}
                 setIsDialogOpen={setIsDialogOpen}

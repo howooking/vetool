@@ -12,7 +12,7 @@ export default function NoResult({
   return (
     <div
       className={cn(
-        'flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center gap-4 text-2xl font-bold',
+        'flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center gap-4 text-xl font-bold',
         className,
       )}
       {...rest}

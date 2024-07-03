@@ -100,7 +100,7 @@ export default function IcuChart({
 
       {/* 입원 차트 */}
       {selectedPatientId && (
-        <div className="p-4">
+        <div className="p-2">
           {/* targeted date 차트가 존재하는 경우 / 존재하지 않는 경우 */}
           {targetDateChartData.length ? (
             targetDateChartData.map((filteredData) => (

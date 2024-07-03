@@ -161,7 +161,7 @@ export default function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  <NoResult title="검색 결과가 없습니다" className="h-40" />
+                  <NoResult title="결과가 없습니다" className="h-40" />
                 </TableCell>
               </TableRow>
             )}

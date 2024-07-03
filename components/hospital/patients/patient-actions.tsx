@@ -16,8 +16,6 @@ export default function PatientActions({
   patient: any
   isIcu: boolean
 }) {
-  console.log(isIcu)
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

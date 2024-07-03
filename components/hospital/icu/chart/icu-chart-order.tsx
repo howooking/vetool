@@ -15,7 +15,7 @@ export default function IcuChartOrder({
   const { memo_a, memo_b, memo_c, ...restChartData } = chartData
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2 pb-[48px]">
       <IcuChartPatientDetail chartData={restChartData} vetsData={vetsData} />
       <IcuChartTable chartOrderData={chartOrderData} />
       <IcuChartMemos memoA={memo_a} memoB={memo_b} memoC={memo_c} />

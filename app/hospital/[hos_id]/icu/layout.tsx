@@ -9,10 +9,10 @@ export default async function Layout({
 }) {
   return (
     <div className="flex flex-col">
-      <main className="flex">
+      <div className="flex">
         <IcuChartSidebar hosId={params.hos_id} />
         <main>{children}</main>
-      </main>
+      </div>
       <IcuChartFooter />
     </div>
   )
