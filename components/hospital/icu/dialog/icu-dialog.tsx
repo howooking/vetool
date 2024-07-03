@@ -103,18 +103,12 @@ export default function IcuDialog({
 
           <TabsContent value="search">
             {step === 'patientSearch' && (
-              <>
-                {patients.length === 0 ? (
-                  <NoResult title="환자가 없습니다" />
-                ) : (
-                  <DataTable
-                    columns={patientsColumns}
-                    data={data}
-                    searchPlaceHolder="환자번호, 환자이름, 보호자이름을 검색하세요"
-                    rowLength={8}
-                  />
-                )}
-              </>
+              <DataTable
+                columns={patientsColumns}
+                data={data}
+                searchPlaceHolder="환자번호, 환자이름, 보호자이름을 검색하세요"
+                rowLength={8}
+              />
             )}
 
             {step === 'icuRegister' && (
