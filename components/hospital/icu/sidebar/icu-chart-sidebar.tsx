@@ -1,4 +1,4 @@
-import IcuPatientList from '@/components/hospital/icu/sidebar/icu-chart-patient-list'
+import IcuChartPatientList from '@/components/hospital/icu/sidebar/icu-chart-patient-list'
 import { createClient } from '@/lib/supabase/server'
 import { IcuIoPatientsJoined } from '@/types/hospital'
 
@@ -23,9 +23,9 @@ export default async function IcuChartSidebar({ hosId }: { hosId: string }) {
   }
 
   return (
-    <aside className="w-[144px] border-r">
+    <aside className="min-w-[144px] border-r">
       <ul className="flex flex-col gap-2 p-2">
-        <IcuPatientList icuIoData={icuIoData} />
+        <IcuChartPatientList icuIoData={icuIoData} />
       </ul>
     </aside>
   )
