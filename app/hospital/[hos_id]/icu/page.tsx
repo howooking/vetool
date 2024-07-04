@@ -45,7 +45,7 @@ export default async function IcuPage({
   }
 
   return (
-    <div className="h-icu-chart w-full overflow-y-scroll">
+    <div className="h-icu-chart overflow-y-scroll">
       <IcuHeaderDateSelector />
       <IcuDialog
         hosId={params.hos_id}
