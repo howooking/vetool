@@ -49,6 +49,10 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { GroupCheckFormSchema } from './schema'
+import {
+  deleteOrder,
+  upsertOrder,
+} from '@/lib/services/hospital/icu/create-new-order'
 
 export default function IcuChartOrderForm({
   chartId,
@@ -93,15 +97,7 @@ export default function IcuChartOrderForm({
   const handleDeleteOrderClick = async () => {
     setIsSubmitting(true)
 
-    const { error: deleteChartOrderError } = await supabase
-      .from('icu_chart_order')
-      .delete()
-      .match({ icu_chart_order_id: chartOrder.icu_chart_order_id })
-
-    if (deleteChartOrderError) {
-      console.log(deleteChartOrderError)
-      throw new Error(deleteChartOrderError.message)
-    }
+    await deleteOrder(chartOrder.icu_chart_order_id)
 
     refresh()
     setIsOpen()
@@ -121,22 +117,11 @@ export default function IcuChartOrderForm({
   const handleSubmit = async (data: z.infer<typeof GroupCheckFormSchema>) => {
     setIsSubmitting(true)
 
-    const { error: createChartOrderError } = await supabase
-      .from('icu_chart_order')
-      .upsert({
-        icu_chart_id: chartId,
-        icu_io_id: ioId,
-        icu_chart_order_type: data.icu_chart_order_type,
-        icu_chart_order_name: data.icu_chart_order_name,
-        icu_chart_order_comment: data.icu_chart_order_comment,
-        icu_chart_order_time: orderTime,
-      })
-      .match({ patient_id: selectedPatientId })
-
-    if (createChartOrderError) {
-      console.log(createChartOrderError)
-      throw new Error(createChartOrderError.message)
-    }
+    await upsertOrder(chartId, ioId, chartOrder.icu_chart_order_id, orderTime, {
+      icu_chart_order_type: data.icu_chart_order_type,
+      icu_chart_order_name: data.icu_chart_order_name,
+      icu_chart_order_comment: data.icu_chart_order_comment,
+    })
 
     toast({
       title: `${data.icu_chart_order_name} 오더를 추가하였습니다`,
