@@ -12,7 +12,7 @@ export default function IcuHeader({
 }: {
   hosId: string
   patients: PatientData[]
-  groupList: string[] | null
+  groupList: string[]
   vets: Vet[]
   ownersData: Owner[]
 }) {

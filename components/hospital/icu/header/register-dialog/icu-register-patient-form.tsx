@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
   FormControl,
@@ -53,7 +54,7 @@ export default function IcuRegisterPatientForm({
   setTab,
 }: {
   hosId: string
-  groupList: string[] | null
+  groupList: string[]
   vets: Vet[]
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
   tab: string
@@ -66,9 +67,9 @@ export default function IcuRegisterPatientForm({
     to: addDays(new Date(), 1),
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { patientId, birth, setPatientId } = useSelectedPatientStore()
+  const { patientId, birth } = useSelectedPatientStore()
   const { setSelectedDate } = useIcuSelectedDateStore()
-  const { step, setStep } = usePatientRegisterStep()
+  const { setStep } = usePatientRegisterStep()
 
   const form = useForm<z.infer<typeof registerIcuPatientFormSchema>>({
     resolver: zodResolver(registerIcuPatientFormSchema),
@@ -79,67 +80,66 @@ export default function IcuRegisterPatientForm({
       out_due_date: range?.to,
       main_vet: undefined,
       sub_vet: undefined,
+      group_list: [],
     },
   })
 
   const handleSubmit = async (
     values: z.infer<typeof registerIcuPatientFormSchema>,
   ) => {
-    const { dx, cc, in_date, out_due_date, main_vet, sub_vet, group } = values
-
+    const { dx, cc, in_date, out_due_date, main_vet, sub_vet, group_list } =
+      values
     setIsSubmitting(true)
 
-    const { data: icuChartId, error: icuChartError } = await supabase.rpc(
-      'insert_icu_io_data_with_registered_patient',
+    const { data: returningValue, error: rpcError } = await supabase.rpc(
+      'insert_icu_io_and_icu_chart_when_register_icu_patient',
       {
         hos_id_input: hosId,
         dx_input: dx,
         cc_input: cc,
         in_date_input: format(in_date, 'yyyy-MM-dd'),
         out_due_date_input: format(out_due_date, 'yyyy-MM-dd'),
-        main_vet_input: main_vet,
-        sub_vet_input: sub_vet,
-        group_list_input: group,
+        group_list_input: JSON.stringify(group_list),
         age_in_days_input: getDaysSince(birth),
         patient_id_input: patientId!,
+        main_vet_input: main_vet,
+        sub_vet_input: sub_vet ?? '',
       },
     )
 
-    if (icuChartError) {
-      console.log(icuChartError.message)
-      throw new Error(icuChartError.message)
+    if (rpcError) {
+      console.log(rpcError)
+      toast({
+        variant: 'destructive',
+        title: rpcError.message,
+        description: '관리자에게 문의하세요',
+      })
+      setIsSubmitting(false)
+      return
     }
 
-    const { data: icuIoId, error: icuIoError } = await supabase
-      .from('icu_io')
-      .select('icu_io_id')
-      .match({ patient_id: patientId })
-      .order('created_at', { ascending: true })
-      .single()
+    const [icuIoId, icuChartId] = returningValue.split(',')
 
-    if (icuIoError) {
-      console.log(icuIoError)
-      throw new Error(icuIoError.message)
-    }
-
-    // 기본 차트 삽입
-    DEFAULT_ICU_ORDER_NAME.forEach(async (element) => {
+    // 기본차트 삽입
+    DEFAULT_ICU_ORDER_NAME.forEach(async (order) => {
       const { error: icuChartOrderError } = await supabase
         .from('icu_chart_order')
         .insert({
-          icu_chart_order_type: element.dataType,
+          icu_chart_order_type: order.dataType,
           icu_chart_id: icuChartId,
-          icu_io_id: icuIoId?.icu_io_id,
-          icu_chart_order_name: element.orderName,
-          icu_chart_order_comment: element.orderComment,
+          icu_io_id: icuIoId,
+          icu_chart_order_name: order.orderName,
+          icu_chart_order_comment: order.orderComment,
         })
 
       if (icuChartOrderError) {
+        console.log(icuChartOrderError)
         toast({
           variant: 'destructive',
           title: icuChartOrderError.message,
           description: '관리자에게 문의하세요',
         })
+        setIsSubmitting(false)
         return
       }
     })
@@ -174,7 +174,6 @@ export default function IcuRegisterPatientForm({
       setStep('ownerSearch')
       return
     }
-    setPatientId(null)
   }
 
   return (
@@ -183,15 +182,12 @@ export default function IcuRegisterPatientForm({
         onSubmit={form.handleSubmit(handleSubmit)}
         className="mt-4 grid grid-cols-2 gap-8"
       >
-        {/* DX */}
         <FormField
           control={form.control}
           name="dx"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
-                DX*
-              </FormLabel>
+              <FormLabel>진단명 DX*</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -204,15 +200,12 @@ export default function IcuRegisterPatientForm({
           )}
         />
 
-        {/* CC */}
         <FormField
           control={form.control}
           name="cc"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
-                CC*
-              </FormLabel>
+              <FormLabel>주증상 CC*</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -226,15 +219,12 @@ export default function IcuRegisterPatientForm({
           )}
         />
 
-        {/* 입원일 */}
         <FormField
           control={form.control}
           name="in_date"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel className="text-sm font-semibold">
-                입원일 - 퇴원 예정일 선택*
-              </FormLabel>
+            <FormItem className="flex flex-col gap-2">
+              <FormLabel>입원일 - 퇴원 예정일 선택*</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -271,39 +261,52 @@ export default function IcuRegisterPatientForm({
             </FormItem>
           )}
         />
-
-        {/* 퇴원 예정일 */}
-        {/* <FormField
+        <FormField
           control={form.control}
-          name="out_due_date"
+          name="group_list"
           render={() => (
-            <FormItem className="flex flex-col">
-              <FormLabel className="text-sm font-semibold">
-                퇴원 예정일*
-              </FormLabel>
-              <div className="flex">
-                {range && range.to ? (
-                  <Input value={`${format(range.to, 'yyyy-MM-dd')}`} disabled />
-                ) : (
-                  <span className="overflow-hidden whitespace-nowrap">
-                    퇴원일을 선택해주세요
-                  </span>
-                )}
+            <FormItem>
+              <FormLabel className="text-base">그룹</FormLabel>
+              <div className="flex flex-wrap items-center gap-4">
+                {groupList.map((item) => (
+                  <FormField
+                    key={item}
+                    control={form.control}
+                    name="group_list"
+                    render={({ field }) => {
+                      return (
+                        <FormItem key={item} className="flex items-end gap-2">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value?.includes(item)}
+                              onCheckedChange={(checked) => {
+                                return checked
+                                  ? field.onChange([...field.value, item])
+                                  : field.onChange(
+                                      field.value?.filter(
+                                        (value) => value !== item,
+                                      ),
+                                    )
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel className="font-normal">{item}</FormLabel>
+                        </FormItem>
+                      )
+                    }}
+                  />
+                ))}
               </div>
-              <FormMessage className="text-xs" />
+              <FormMessage />
             </FormItem>
           )}
-        /> */}
-
-        {/* 주치의 */}
+        />
         <FormField
           control={form.control}
           name="main_vet"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
-                주치의*
-              </FormLabel>
+              <FormLabel>주치의*</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger
@@ -332,16 +335,16 @@ export default function IcuRegisterPatientForm({
           )}
         />
 
-        {/* 부주치의 */}
         <FormField
           control={form.control}
           name="sub_vet"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
-                부주치의*
-              </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormLabel>부주치의</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value ?? undefined}
+              >
                 <FormControl>
                   <SelectTrigger
                     className={cn(
@@ -360,39 +363,6 @@ export default function IcuRegisterPatientForm({
                       className="text-xs"
                     >
                       {`${vet.name} ${vet.position ?? '미분류'}`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage className="text-xs" />
-            </FormItem>
-          )}
-        />
-
-        {/* 그룹 */}
-        <FormField
-          control={form.control}
-          name="group"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="pb-2 pt-4 text-sm font-semibold">
-                그룹*
-              </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger
-                    className={cn(
-                      'h-8 text-sm',
-                      !field.value && 'text-muted-foreground',
-                    )}
-                  >
-                    <SelectValue placeholder="그룹을 선택해주세요" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {groupList?.map((group) => (
-                    <SelectItem key={group} value={group} className="text-xs">
-                      {group ?? '미분류'}
                     </SelectItem>
                   ))}
                 </SelectContent>

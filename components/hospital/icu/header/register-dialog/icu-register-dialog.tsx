@@ -25,7 +25,7 @@ export default function IcuRegisterDialog({
 }: {
   hosId: string
   patients: PatientData[]
-  groupList: string[] | null
+  groupList: string[]
   vets: Vet[]
   ownersData: Owner[]
 }) {
@@ -64,21 +64,26 @@ export default function IcuRegisterDialog({
 
   const handleTabValueChange = (value: string) => {
     if (value === 'search') {
-      if (step !== 'patientSearch') {
-        setTab('search')
-        setStep('patientSearch')
-        return
-      }
+      setTab('search')
+      setStep('patientSearch')
+      return
     }
 
     if (value === 'register') {
-      if (step !== 'ownerSearch') {
-        setTab('register')
-        setStep('ownerSearch')
-        return
-      }
+      setTab('register')
+      setStep('ownerSearch')
+      return
     }
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (!isDialogOpen) {
+        setTab('search')
+        setStep('patientSearch')
+      }
+    }, 1000)
+  }, [setStep, isDialogOpen])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
