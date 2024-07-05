@@ -1,6 +1,5 @@
 'use client'
 
-import { useIcuMainViewStore } from '@/lib/store/hospital/icu/icu-main-view'
 import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
 import IcuChart from './chart/icu-chart'
 import IcuSummary from './summary/icu-summary'
@@ -14,7 +13,7 @@ export default function IcuMain({
   icuChartOrderData: IcuChartOrderJoined[]
   vetsData: Vet[]
 }) {
-  const { selectIcudMainView } = useIcuMainViewStore()
+  const { selectIcudMainView } = useSelectedIcuMainViewStore()
 
   return (
     <div className="w-full p-2">
@@ -29,4 +28,7 @@ export default function IcuMain({
       )}
     </div>
   )
+}
+function useSelectedIcuMainViewStore(): { selectIcudMainView: any } {
+  throw new Error('Function not implemented.')
 }

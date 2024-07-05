@@ -8,7 +8,7 @@ import { IcuIoPatientsJoined } from '@/types/hospital'
 import { Squirrel } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import IcuPatientListSkeleton from './icu-patient-list-skeleton'
-import { useIcuMainViewStore } from '@/lib/store/hospital/icu/icu-main-view'
+import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
 
 export default function IcuChartPatientList({
   icuIoData,
@@ -17,7 +17,8 @@ export default function IcuChartPatientList({
 }) {
   const { selectedPatientId, setSelectedPatientId, setSelectedPatientName } =
     useIcuSelectedPatientStore()
-  const { selectIcudMainView, setSelectedIcuMainView } = useIcuMainViewStore()
+  const { selectIcudMainView, setSelectedIcuMainView } =
+    useSelectedMainViewStore()
   const { selectedDate } = useIcuSelectedDateStore()
   const [isLoading, setIsLoading] = useState(true)
   const [activeIcuIo, setActiveIcuIo] = useState<IcuIoPatientsJoined[]>([])

@@ -1,8 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useIcuMainViewStore } from '@/lib/store/hospital/icu/icu-main-view'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
+import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
 
 export const MAIN_VIEW_MENUS = [
   {
@@ -17,7 +17,8 @@ export const MAIN_VIEW_MENUS = [
 
 export default function IcuFooter() {
   const { setSelectedPatientId } = useIcuSelectedPatientStore()
-  const { selectIcudMainView, setSelectedIcuMainView } = useIcuMainViewStore()
+  const { selectIcudMainView, setSelectedIcuMainView } =
+    useSelectedMainViewStore()
 
   const handleButtonClick = (value: 'summary' | 'chart') => {
     setSelectedIcuMainView(value)
