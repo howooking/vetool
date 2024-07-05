@@ -6,16 +6,14 @@ import {
   updateIcuChart,
   updateIcuIo,
   updateWeight,
-} from '@/lib/services/hospital/icu/updateIcuChart'
-import { createClient } from '@/lib/supabase/client'
+} from '@/lib/services/hospital/icu/update-icu-chart'
 import type { IcuChartJoined, Vet } from '@/types/hospital'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { format } from 'date-fns'
+import PatientDetailGroup from './items/patient-detail-group'
 import PatientDetailInput from './items/patient-detail-input'
 import PatientDetailItem from './items/patient-detail-item'
 import PatientDetailVetsDialog from './items/patient-detail-vets-dialog'
-import PatientDetailGroup from './items/patient-detail-group'
 
 type ChartState = {
   dx: string | null
