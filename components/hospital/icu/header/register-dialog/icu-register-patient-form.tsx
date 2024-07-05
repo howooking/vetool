@@ -1,6 +1,5 @@
 'use client'
 
-import { registerIcuPatientFormSchema } from '@/components/hospital/icu/schema'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -43,6 +42,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import { registerIcuPatientFormSchema } from './schema'
 
 export default function IcuRegisterPatientForm({
   hosId,

@@ -2,18 +2,17 @@
 
 import { Button } from '@/components/ui/button'
 import { FOOTER_CATEGORIES } from '@/constants/hospital/icu/chart/footer'
-import { useIcuSelectedChartCategoryStore } from '@/lib/store/hospital/icu/icu-selected-category'
+import { useIcuMainViewStore } from '@/lib/store/hospital/icu/icu-main-view'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 
-export default function IcuChartFooter() {
+export default function IcuFooter() {
   const { setSelectedPatientId } = useIcuSelectedPatientStore()
-  const { selectedCategory, setSelectedCategory } =
-    useIcuSelectedChartCategoryStore()
+  const { selectdMainView, setSelectedMainView } = useIcuMainViewStore()
 
-  const handleButtonClick = (value: 'overall' | 'icuChart') => {
-    setSelectedCategory(value)
+  const handleButtonClick = (value: 'summary' | 'chart') => {
+    setSelectedMainView(value)
 
-    if (value === 'overall') {
+    if (value === 'summary') {
       setSelectedPatientId(null)
     }
   }
@@ -27,7 +26,7 @@ export default function IcuChartFooter() {
               type="button"
               size="sm"
               variant="outline"
-              className={selectedCategory === value ? 'bg-muted' : ''}
+              className={selectdMainView === value ? 'bg-muted' : ''}
               onClick={() => handleButtonClick(value)}
             >
               {label}

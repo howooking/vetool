@@ -1,7 +1,8 @@
-import IcuChart from '@/components/hospital/icu/chart/icu-chart'
-import IcuDialog from '@/components/hospital/icu/dialog/icu-dialog'
-import IcuHeaderDateSelector from '@/components/hospital/icu/header/icu-header-date-selector'
+import IcuHeaderDateSelector from '@/components/hospital/icu/header/date-picker/icu-header-date-selector'
+import IcuRegisterDialog from '@/components/hospital/icu/header/register-dialog/icu-register-dialog'
 import { getAllPromises } from './actions'
+import IcuMain from '@/components/hospital/icu/main/icu-main'
+import IcuHeader from '@/components/hospital/icu/header/icu-header'
 
 export default async function IcuPage({
   params,
@@ -46,15 +47,15 @@ export default async function IcuPage({
 
   return (
     <div className="h-icu-chart overflow-y-scroll">
-      <IcuHeaderDateSelector />
-      <IcuDialog
+      <IcuHeader
         hosId={params.hos_id}
         patients={patientsData}
         vets={vetsData}
         groupList={groupListData[0].group_list}
         ownersData={ownersData}
       />
-      <IcuChart
+
+      <IcuMain
         icuChartData={icuChartData}
         icuChartOrderData={icuChartOrderData}
         vetsData={vetsData}

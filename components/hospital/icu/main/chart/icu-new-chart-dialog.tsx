@@ -21,9 +21,9 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function IcuNewChartDialog({
-  selectedPatientChartData,
+  prevSelectedChart,
 }: {
-  selectedPatientChartData?: IcuChartJoined
+  prevSelectedChart?: IcuChartJoined
 }) {
   const supabase = createClient()
   const { refresh } = useRouter()
@@ -40,14 +40,14 @@ export default function IcuNewChartDialog({
     const { data: icuChartData, error: icuChartError } = await supabase
       .from('icu_chart')
       .insert({
-        icu_io_id: selectedPatientChartData?.icu_io_id.icu_io_id,
-        hos_id: selectedPatientChartData?.hos_id.hos_id,
-        main_vet: selectedPatientChartData?.main_vet.user_id,
-        sub_vet: selectedPatientChartData?.sub_vet.user_id,
-        weight: selectedPatientChartData?.weight,
-        weight_measured_date: selectedPatientChartData?.weight_measured_date,
+        icu_io_id: prevSelectedChart?.icu_io_id.icu_io_id,
+        hos_id: prevSelectedChart?.hos_id.hos_id,
+        main_vet: prevSelectedChart?.main_vet.user_id,
+        sub_vet: prevSelectedChart?.sub_vet.user_id,
+        weight: prevSelectedChart?.weight,
+        weight_measured_date: prevSelectedChart?.weight_measured_date,
         target_date: selectedDate,
-        patient_id: selectedPatientChartData?.patient_id.patient_id!,
+        patient_id: prevSelectedChart?.patient_id.patient_id!,
       })
       .select('icu_chart_id')
       .single()
@@ -64,7 +64,7 @@ export default function IcuNewChartDialog({
         .insert({
           icu_chart_order_type: element.dataType,
           icu_chart_id: icuChartData?.icu_chart_id,
-          icu_io_id: selectedPatientChartData?.icu_io_id.icu_io_id,
+          icu_io_id: prevSelectedChart?.icu_io_id.icu_io_id,
           icu_chart_order_name: element.orderName,
           icu_chart_order_comment: element.orderComment,
           target_date: selectedDate,
@@ -92,7 +92,7 @@ export default function IcuNewChartDialog({
     // 1. 전일 차트 데이터 불러옴
     const { data: icuPrevChartData, error: icuSelectChartError } =
       await supabase.from('icu_chart').select('*').match({
-        patient_id: selectedPatientChartData?.patient_id.patient_id,
+        patient_id: prevSelectedChart?.patient_id.patient_id,
         target_date: prevDate,
       })
 
@@ -167,13 +167,13 @@ export default function IcuNewChartDialog({
       const { data: icuChartData, error: icuChartError } = await supabase
         .from('icu_chart')
         .insert({
-          icu_io_id: selectedPatientChartData?.icu_io_id.icu_io_id,
-          hos_id: selectedPatientChartData?.hos_id.hos_id,
-          main_vet: selectedPatientChartData?.main_vet.user_id,
-          sub_vet: selectedPatientChartData?.sub_vet.user_id,
-          weight: selectedPatientChartData?.weight,
-          weight_measured_date: selectedPatientChartData?.weight_measured_date,
-          patient_id: selectedPatientChartData?.patient_id.patient_id!,
+          icu_io_id: prevSelectedChart?.icu_io_id.icu_io_id,
+          hos_id: prevSelectedChart?.hos_id,
+          main_vet: prevSelectedChart?.main_vet.user_id,
+          sub_vet: prevSelectedChart?.sub_vet.user_id,
+          weight: prevSelectedChart?.weight,
+          weight_measured_date: prevSelectedChart?.weight_measured_date,
+          patient_id: prevSelectedChart?.patient_id.patient_id!,
         })
         .select('icu_chart_id')
         .single()
@@ -190,7 +190,7 @@ export default function IcuNewChartDialog({
           .insert({
             icu_chart_order_type: element.dataType,
             icu_chart_id: icuChartData?.icu_chart_id,
-            icu_io_id: selectedPatientChartData?.icu_io_id.icu_io_id,
+            icu_io_id: prevSelectedChart?.icu_io_id.icu_io_id,
             icu_chart_order_name: element.orderName,
             icu_chart_order_comment: element.orderComment,
             target_date: selectedDate,

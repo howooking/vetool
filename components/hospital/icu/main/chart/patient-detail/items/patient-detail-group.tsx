@@ -1,5 +1,5 @@
-import PatientDetailGroupBadge from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-group-badge'
-import PatientDetailGroupDialog from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-group-dialog'
+import PatientDetailGroupBadge from './patient-detail-group-badge'
+import PatientDetailGroupDialog from './patient-detail-group-dialog'
 
 export type PatientDetailGroupProps = {
   label: string

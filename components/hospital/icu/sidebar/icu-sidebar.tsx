@@ -2,7 +2,7 @@ import IcuChartPatientList from '@/components/hospital/icu/sidebar/icu-chart-pat
 import { createClient } from '@/lib/supabase/server'
 import { IcuIoPatientsJoined } from '@/types/hospital'
 
-export default async function IcuChartSidebar({ hosId }: { hosId: string }) {
+export default async function IcuSidebar({ hosId }: { hosId: string }) {
   const supabase = createClient()
 
   const { data: icuIoData, error: icuIoDataError } = await supabase

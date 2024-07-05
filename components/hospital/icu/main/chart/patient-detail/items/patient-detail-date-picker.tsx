@@ -1,4 +1,4 @@
-import IcuHeaderDatePicker from '@/components/hospital/icu/header/icu-header-date-picker'
+import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/icu-header-date-picker'
 import { format } from 'date-fns'
 
 type PatientDetailDatePickerProps = {

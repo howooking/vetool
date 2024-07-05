@@ -1,4 +1,3 @@
-import { GroupCheckFormSchema } from '@/components/hospital/icu/chart/table/schema'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
@@ -37,6 +36,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { GroupCheckFormSchema } from './schema'
 
 export default function IcuChartOrderForm({
   chartId,

@@ -7,12 +7,11 @@ import { createClient } from '@/lib/supabase/client'
 import type { IcuChartJoined, Vet } from '@/types/hospital'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import PatientDetailGroup from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-group'
-import PatientDetailDatePicker from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-date-picker'
-import PatientDetailInput from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-input'
-import PatientDetailInfoItem from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-item'
-import PatientDetailInfoVetsDialog from '@/components/hospital/icu/chart/patient-detail/items/patient-detail-vets-dialog'
 import { format } from 'date-fns'
+import PatientDetailInput from './items/patient-detail-input'
+import PatientDetailItem from './items/patient-detail-item'
+import PatientDetailVetsDialog from './items/patient-detail-vets-dialog'
+import PatientDetailGroup from './items/patient-detail-group'
 
 export default function IcuChartPatientDetail({
   chartData,
@@ -170,7 +169,7 @@ export default function IcuChartPatientDetail({
 
   return (
     <div className="w-full rounded-md border p-4">
-      <PatientDetailInfoItem
+      <PatientDetailItem
         name={name}
         breed={breed}
         gender={gender}
@@ -203,7 +202,7 @@ export default function IcuChartPatientDetail({
         <Separator orientation="vertical" />
 
         {/* 주치의 / 부주치의 */}
-        <PatientDetailInfoVetsDialog
+        <PatientDetailVetsDialog
           mainVetName={mainVetName}
           subVetName={subVetName}
           mainVetId={mainVetId}

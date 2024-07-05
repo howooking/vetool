@@ -5,7 +5,7 @@ import { calculateAge, cn } from '@/lib/utils'
 import { PatientDataTable } from '@/types/hospital/patients'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, Cat, Dog } from 'lucide-react'
-import IcuPatientSelectButton from '../icu/register/icu-patient-select-button'
+import IcuPatientSelectButton from '../icu/header/register-dialog/icu-patient-select-button'
 import PatientActions from './patient-actions'
 
 export const patientsColumns: ColumnDef<PatientDataTable>[] = [

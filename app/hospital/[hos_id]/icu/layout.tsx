@@ -1,5 +1,5 @@
-import IcuChartFooter from '@/components/hospital/icu/chart/footer/icu-chart-footer'
-import IcuChartSidebar from '@/components/hospital/icu/sidebar/icu-chart-sidebar'
+import IcuFooter from '@/components/hospital/icu/icu-footer'
+import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
 export default async function Layout({
   children,
   params,
@@ -10,10 +10,10 @@ export default async function Layout({
   return (
     <div className="flex flex-col">
       <div className="flex">
-        <IcuChartSidebar hosId={params.hos_id} />
+        <IcuSidebar hosId={params.hos_id} />
         <main className="w-full">{children}</main>
       </div>
-      <IcuChartFooter />
+      <IcuFooter />
     </div>
   )
 }

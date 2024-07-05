@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useIcuSelectedChartCategoryStore } from '@/lib/store/hospital/icu/icu-selected-category'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { cn } from '@/lib/utils'
@@ -9,6 +8,7 @@ import { IcuIoPatientsJoined } from '@/types/hospital'
 import { Squirrel } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import IcuPatientListSkeleton from './icu-patient-list-skeleton'
+import { useIcuMainViewStore } from '@/lib/store/hospital/icu/icu-main-view'
 
 export default function IcuChartPatientList({
   icuIoData,
@@ -17,8 +17,7 @@ export default function IcuChartPatientList({
 }) {
   const { selectedPatientId, setSelectedPatientId, setSelectedPatientName } =
     useIcuSelectedPatientStore()
-  const { selectedCategory, setSelectedCategory } =
-    useIcuSelectedChartCategoryStore()
+  const { selectdMainView, setSelectedMainView } = useIcuMainViewStore()
   const { selectedDate } = useIcuSelectedDateStore()
   const [isLoading, setIsLoading] = useState(true)
   const [activeIcuIo, setActiveIcuIo] = useState<IcuIoPatientsJoined[]>([])
@@ -33,7 +32,7 @@ export default function IcuChartPatientList({
 
     if (
       filteredIcuIo.length > 0 &&
-      selectedCategory === 'icuChart' &&
+      selectdMainView === 'chart' &&
       !selectedPatientId
     ) {
       setSelectedPatientId(filteredIcuIo[0].patient_id.patient_id)
@@ -42,7 +41,7 @@ export default function IcuChartPatientList({
     setIsLoading(false)
   }, [
     icuIoData,
-    selectedCategory,
+    selectdMainView,
     selectedDate,
     selectedPatientId,
     setSelectedPatientId,
@@ -51,7 +50,7 @@ export default function IcuChartPatientList({
   const handlePatientButtonClick = (data: IcuIoPatientsJoined) => {
     setSelectedPatientId(data.patient_id.patient_id)
     setSelectedPatientName(data.patient_id.name)
-    setSelectedCategory('icuChart')
+    setSelectedMainView('chart')
   }
 
   if (isLoading) return <IcuPatientListSkeleton />

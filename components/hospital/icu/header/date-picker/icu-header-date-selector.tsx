@@ -1,6 +1,6 @@
 'use client'
 
-import IcuHeaderDatePicker from '@/components/hospital/icu/header/icu-header-date-picker'
+import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/icu-header-date-picker'
 import { Button } from '@/components/ui/button'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
@@ -18,7 +18,7 @@ export default function IcuHeaderDateSelector() {
 
   return (
     // TODO BG CHANGE
-    <div className="absolute left-3 top-3 flex items-center gap-2 bg-white">
+    <div className="flex items-center gap-2 bg-white">
       <Button
         onClick={() => updateDate(-1)}
         size="icon"

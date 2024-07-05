@@ -9,14 +9,14 @@ import { cn } from '@/lib/utils'
 import type { Owner, Vet } from '@/types/hospital'
 import type { PatientData, PatientDataTable } from '@/types/hospital/patients'
 import { useEffect, useState } from 'react'
-import OwnerForm from '../../patients/owner-form'
-import OwnerSearch from '../../patients/owner-search'
-import { patientsColumns } from '../../patients/patient-columns'
-import PatientForm from '../../patients/patient-form'
-import RegisterDialogHeader from '../../patients/register-dialog-header'
-import IcuRegisterPatientForm from '../register/icu-register-patient-form'
+import OwnerForm from '../../../patients/owner-form'
+import OwnerSearch from '../../../patients/owner-search'
+import { patientsColumns } from '../../../patients/patient-columns'
+import PatientForm from '../../../patients/patient-form'
+import RegisterDialogHeader from '../../../patients/register-dialog-header'
+import IcuRegisterPatientForm from './icu-register-patient-form'
 
-export default function IcuDialog({
+export default function IcuRegisterDialog({
   hosId,
   patients,
   groupList,
@@ -82,7 +82,7 @@ export default function IcuDialog({
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger className="absolute left-[200px] top-2" asChild>
+      <DialogTrigger asChild>
         <Button size="sm">환자입원</Button>
       </DialogTrigger>
 

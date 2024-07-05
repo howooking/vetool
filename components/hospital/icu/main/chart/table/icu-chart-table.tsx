@@ -1,5 +1,3 @@
-import IcuChartTableCellInput from '@/components/hospital/icu/chart/table//icu-chat-table-cell-input'
-import IcuChartTableCellTitle from '@/components/hospital/icu/chart/table/icu-chart-table-cell-title'
 import {
   Table,
   TableBody,
@@ -10,12 +8,14 @@ import {
 } from '@/components/ui/table'
 import { TIME } from '@/constants/hospital/icu/chart/time'
 import { IcuChartOrderJoined } from '@/types/hospital'
-import IcuChartOrderDialog from '@/components/hospital/icu/chart/table/icu-chart-order-dialog'
+import IcuChartTableCellTitle from './icu-chart-table-cell-title'
+import IcuChartTableCellInput from './icu-chat-table-cell-input'
+import IcuChartOrderDialog from './icu-chart-order-dialog'
 
 export default function IcuChartTable({
-  chartOrderData,
+  selectedChartOrders,
 }: {
-  chartOrderData: IcuChartOrderJoined[]
+  selectedChartOrders: IcuChartOrderJoined[]
 }) {
   // 처치 오더가 존재하는 지에 대해 true/false 반환
   const hasOrder = (orderData: IcuChartOrderJoined, index: number) => {
@@ -44,7 +44,7 @@ export default function IcuChartTable({
 
         {/* TABLE BODY */}
         <TableBody>
-          {chartOrderData?.map((orderData) => (
+          {selectedChartOrders?.map((orderData) => (
             <TableRow
               className="divide-x border-black"
               key={orderData.icu_chart_order_id}
@@ -70,8 +70,8 @@ export default function IcuChartTable({
           <TableRow className="flex w-[240px] justify-center">
             <TableCell>
               <IcuChartOrderDialog
-                chartId={chartOrderData[0].icu_chart_id!}
-                ioId={chartOrderData[0].icu_io_id.icu_io_id!}
+                chartId={selectedChartOrders[0].icu_chart_id!}
+                ioId={selectedChartOrders[0].icu_io_id.icu_io_id!}
               />
             </TableCell>
           </TableRow>

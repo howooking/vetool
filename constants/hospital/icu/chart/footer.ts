@@ -1,10 +1,10 @@
 export const FOOTER_CATEGORIES = [
   {
     label: '종합 현황',
-    value: 'overall',
+    value: 'summary',
   },
   {
     label: '입원 차트',
-    value: 'icuChart',
+    value: 'chart',
   },
 ] as const

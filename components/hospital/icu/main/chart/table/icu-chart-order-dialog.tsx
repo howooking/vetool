@@ -1,4 +1,3 @@
-import IcuChartOrderForm from '@/components/hospital/icu/chart/table/icu-chart-order-form'
 import {
   Dialog,
   DialogContent,
@@ -12,6 +11,7 @@ import { useCreateOrderStore } from '@/lib/store/hospital/icu/chart/create-order
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { IcuChartOrderJoined } from '@/types/hospital'
 import { FilePlus } from 'lucide-react'
+import IcuChartOrderForm from './icu-chart-order-form'
 
 export default function IcuChartOrderDialog({
   chartId,
