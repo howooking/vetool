@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { usePatientRegisterStep } from '@/lib/store/hospital/patients/selected-patient'
+import { usePatientRegisterStep } from '@/lib/store/hospital/icu/icu-register'
 import { usePathname, useRouter } from 'next/navigation'
 
 export default function OwnerSelectButton({ ownerId }: { ownerId: string }) {

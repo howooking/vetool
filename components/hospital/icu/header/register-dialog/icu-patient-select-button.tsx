@@ -1,21 +1,23 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import {
+  useIcuRegisteringPatient,
   usePatientRegisterStep,
-  useSelectedPatientStore,
-} from '@/lib/store/hospital/patients/selected-patient'
+} from '@/lib/store/hospital/icu/icu-register'
 import { createClient } from '@/lib/supabase/client'
 
 export default function IcuPatientSelectButton({
   patientId,
   isIcu,
+  birth,
 }: {
   patientId: string
   isIcu: boolean
+  birth: string
 }) {
   const supabase = createClient()
   const { setStep } = usePatientRegisterStep()
-  const { setPatientId } = useSelectedPatientStore()
+  const { setRegisteringPatient } = useIcuRegisteringPatient()
 
   const handlePatientClick = async () => {
     const { data: icuIoData, error: icuIoError } = await supabase
@@ -41,7 +43,10 @@ export default function IcuPatientSelectButton({
     }
 
     setStep('icuRegister')
-    setPatientId(patientId)
+    setRegisteringPatient({
+      patientId,
+      birth,
+    })
   }
 
   return (

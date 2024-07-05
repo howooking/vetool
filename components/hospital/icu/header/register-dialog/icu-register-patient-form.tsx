@@ -29,8 +29,8 @@ import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import {
   usePatientRegisterStep,
-  useSelectedPatientStore,
-} from '@/lib/store/hospital/patients/selected-patient'
+  useIcuRegisteringPatient,
+} from '@/lib/store/hospital/icu/icu-register'
 import { createClient } from '@/lib/supabase/client'
 import { cn, getDaysSince } from '@/lib/utils'
 import type { Vet } from '@/types/hospital'
@@ -44,6 +44,8 @@ import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { registerIcuPatientFormSchema } from './schema'
+import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
+import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
 
 export default function IcuRegisterPatientForm({
   hosId,
@@ -67,8 +69,10 @@ export default function IcuRegisterPatientForm({
     to: addDays(new Date(), 1),
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { patientId, birth } = useSelectedPatientStore()
+  const { registeringPatient } = useIcuRegisteringPatient()
+  const { setSelectedPatientId } = useIcuSelectedPatientStore()
   const { setSelectedDate } = useIcuSelectedDateStore()
+  const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setStep } = usePatientRegisterStep()
 
   const form = useForm<z.infer<typeof registerIcuPatientFormSchema>>({
@@ -100,8 +104,8 @@ export default function IcuRegisterPatientForm({
         in_date_input: format(in_date, 'yyyy-MM-dd'),
         out_due_date_input: format(out_due_date, 'yyyy-MM-dd'),
         group_list_input: JSON.stringify(group_list),
-        age_in_days_input: getDaysSince(birth),
-        patient_id_input: patientId!,
+        age_in_days_input: getDaysSince(registeringPatient.birth),
+        patient_id_input: registeringPatient.patientId!,
         main_vet_input: main_vet,
         sub_vet_input: sub_vet ?? '',
       },
@@ -151,6 +155,8 @@ export default function IcuRegisterPatientForm({
     setIsDialogOpen(false)
     setIsSubmitting(false)
     setSelectedDate(format(in_date, 'yyyy-MM-dd'))
+    setSelectedPatientId(registeringPatient.patientId)
+    setSelectedIcuMainView('chart')
     refresh()
   }
 

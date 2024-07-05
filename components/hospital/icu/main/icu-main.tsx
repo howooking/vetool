@@ -17,7 +17,7 @@ export default function IcuMain({
   const { selectIcudMainView } = useSelectedMainViewStore()
 
   return (
-    <div className="w-full p-2">
+    <div className="w-full">
       {selectIcudMainView === 'summary' && <IcuSummary />}
 
       {selectIcudMainView === 'chart' && (
