@@ -68,30 +68,30 @@ export type IcuChartJoined = IcuChart & {
 
 export type IcuChartOrderJoined = IcuChartOrder & {
   icu_io_id: IcuIo
-  icu_chart_order_tx_1: IcuChartOrder | null
-  icu_chart_order_tx_2: IcuChartOrder | null
-  icu_chart_order_tx_3: IcuChartOrder | null
-  icu_chart_order_tx_4: IcuChartOrder | null
-  icu_chart_order_tx_5: IcuChartOrder | null
-  icu_chart_order_tx_6: IcuChartOrder | null
-  icu_chart_order_tx_7: IcuChartOrder | null
-  icu_chart_order_tx_8: IcuChartOrder | null
-  icu_chart_order_tx_9: IcuChartOrder | null
-  icu_chart_order_tx_10: IcuChartOrder | null
-  icu_chart_order_tx_11: IcuChartOrder | null
-  icu_chart_order_tx_12: IcuChartOrder | null
-  icu_chart_order_tx_13: IcuChartOrder | null
-  icu_chart_order_tx_14: IcuChartOrder | null
-  icu_chart_order_tx_15: IcuChartOrder | null
-  icu_chart_order_tx_16: IcuChartOrder | null
-  icu_chart_order_tx_17: IcuChartOrder | null
-  icu_chart_order_tx_18: IcuChartOrder | null
-  icu_chart_order_tx_19: IcuChartOrder | null
-  icu_chart_order_tx_20: IcuChartOrder | null
-  icu_chart_order_tx_21: IcuChartOrder | null
-  icu_chart_order_tx_22: IcuChartOrder | null
-  icu_chart_order_tx_23: IcuChartOrder | null
-  icu_chart_order_tx_24: IcuChartOrder | null
+  icu_chart_order_tx_1: IcuChartTx | null
+  icu_chart_order_tx_2: IcuChartTx | null
+  icu_chart_order_tx_3: IcuChartTx | null
+  icu_chart_order_tx_4: IcuChartTx | null
+  icu_chart_order_tx_5: IcuChartTx | null
+  icu_chart_order_tx_6: IcuChartTx | null
+  icu_chart_order_tx_7: IcuChartTx | null
+  icu_chart_order_tx_8: IcuChartTx | null
+  icu_chart_order_tx_9: IcuChartTx | null
+  icu_chart_order_tx_10: IcuChartTx | null
+  icu_chart_order_tx_11: IcuChartTx | null
+  icu_chart_order_tx_12: IcuChartTx | null
+  icu_chart_order_tx_13: IcuChartTx | null
+  icu_chart_order_tx_14: IcuChartTx | null
+  icu_chart_order_tx_15: IcuChartTx | null
+  icu_chart_order_tx_16: IcuChartTx | null
+  icu_chart_order_tx_17: IcuChartTx | null
+  icu_chart_order_tx_18: IcuChartTx | null
+  icu_chart_order_tx_19: IcuChartTx | null
+  icu_chart_order_tx_20: IcuChartTx | null
+  icu_chart_order_tx_21: IcuChartTx | null
+  icu_chart_order_tx_22: IcuChartTx | null
+  icu_chart_order_tx_23: IcuChartTx | null
+  icu_chart_order_tx_24: IcuChartTx | null
 }
 
 export type IcuIoPatientsJoined = IcuIo & {
