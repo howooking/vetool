@@ -1,3 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
@@ -45,15 +57,28 @@ export default function IcuChartOrderForm({
   chartId: string
   ioId: string
 }) {
+  const supabase = createClient()
   const { refresh } = useRouter()
-  const { setIsOpen, chartOrder } = useCreateOrderStore()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [startTime, setStartTime] = useState<string | undefined>(undefined)
-  const [timeTerm, setTimeTerm] = useState<string | undefined>(undefined)
-  const [orderTime, setOrderTime] = useState<string[]>(
-    chartOrder.icu_chart_order_time,
-  )
+  const { setIsOpen, chartOrder, isEditMode } = useCreateOrderStore()
   const { selectedPatientId: patientId } = useIcuSelectedPatientStore()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [startTime, setStartTime] = useState<string>()
+  const [timeTerm, setTimeTerm] = useState<string>()
+  const [orderTime, setOrderTime] = useState<string[]>(
+    chartOrder.icu_chart_order_time || [],
+  )
+
+  const updateOrderTime = (orderTime: string[]) => {
+    setOrderTime(orderTime)
+    orderTime.forEach((time, index) => {
+      form.setValue(
+        `icu_chart_order_tx_${index + 1}` as keyof z.infer<
+          typeof GroupCheckFormSchema
+        >,
+        time === '1',
+      )
+    })
+  }
 
   const form = useForm<z.infer<typeof GroupCheckFormSchema>>({
     resolver: zodResolver(GroupCheckFormSchema),
@@ -64,41 +89,41 @@ export default function IcuChartOrderForm({
     },
   })
 
-  const handleSelectAllClick = () => {
-    const allSelected = Array(24).fill(1)
-    setOrderTime(allSelected)
+  // 오더 삭제 핸들러
+  const handleDeleteOrderClick = async () => {
+    setIsSubmitting(true)
 
-    allSelected.forEach((time, index) => {
-      form.setValue(
-        `icu_chart_order_tx_${index + 1}` as keyof z.infer<
-          typeof GroupCheckFormSchema
-        >,
-        time ? true : false,
-      )
-    })
+    const { error: deleteChartOrderError } = await supabase
+      .from('icu_chart_order')
+      .delete()
+      .match({ icu_chart_order_id: chartOrder.icu_chart_order_id })
+
+    if (deleteChartOrderError) {
+      console.log(deleteChartOrderError)
+      throw new Error(deleteChartOrderError.message)
+    }
+
+    refresh()
+    setIsOpen()
+    setIsSubmitting(false)
   }
 
-  const handleCancelAllClick = () => {
-    const allCanceled = Array(24).fill(0)
-    setOrderTime(allCanceled)
+  // 오더 시간 전체 선택 핸들러
+  const handleSelectAllClick = () => {
+    updateOrderTime(Array(24).fill('1'))
+  }
 
-    allCanceled.forEach((time, index) => {
-      form.setValue(
-        `icu_chart_order_tx_${index + 1}` as keyof z.infer<
-          typeof GroupCheckFormSchema
-        >,
-        time ? true : false,
-      )
-    })
+  // 오더 시간 전체 취소 핸들러
+  const handleCancelAllClick = () => {
+    updateOrderTime(Array(24).fill('0'))
   }
 
   const handleSubmit = async (data: z.infer<typeof GroupCheckFormSchema>) => {
     setIsSubmitting(true)
 
-    const supabase = createClient()
-    const { error: createOrderError } = await supabase
+    const { error: createChartOrderError } = await supabase
       .from('icu_chart_order')
-      .insert({
+      .upsert({
         icu_chart_id: chartId,
         icu_io_id: ioId,
         icu_chart_order_type: data.icu_chart_order_type,
@@ -108,9 +133,9 @@ export default function IcuChartOrderForm({
       })
       .match({ patient_id: patientId })
 
-    if (createOrderError) {
-      console.log(createOrderError)
-      throw new Error(createOrderError.message)
+    if (createChartOrderError) {
+      console.log(createChartOrderError)
+      throw new Error(createChartOrderError.message)
     }
 
     toast({
@@ -123,25 +148,27 @@ export default function IcuChartOrderForm({
   }
 
   useEffect(() => {
-    const orderTime = Array(24).fill(0)
-
-    const start = Number(startTime)
-    const term = Number(timeTerm)
-
-    for (let i = start - 1; i < 24; i += term) {
-      orderTime[i] = '1'
+    if (startTime && timeTerm) {
+      const start = Number(startTime)
+      const term = Number(timeTerm)
+      const newOrderTime = Array(24).fill('0')
+      for (let i = start - 1; i < 24; i += term) {
+        newOrderTime[i] = '1'
+      }
+      updateOrderTime(newOrderTime)
     }
+  }, [form, startTime, timeTerm])
 
-    orderTime.forEach((time, index) => {
-      form.setValue(
-        `icu_chart_order_tx_${index + 1}` as keyof z.infer<
-          typeof GroupCheckFormSchema
-        >,
-        time === '1' ? true : false,
-      )
+  useEffect(() => {
+    form.reset({
+      ...Object.fromEntries(
+        orderTime.map((time, index) => [
+          `icu_chart_order_tx_${index + 1}`,
+          time === '1',
+        ]),
+      ),
     })
-    setOrderTime(orderTime)
-  }, [form, startTime, timeTerm, setOrderTime])
+  }, [chartOrder, form])
 
   return (
     <Form {...form}>
@@ -149,13 +176,13 @@ export default function IcuChartOrderForm({
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col space-y-8"
       >
-        {/* 처치 타입 */}
+        {/* 오더 타입 */}
         <FormField
           control={form.control}
           name="icu_chart_order_type"
           render={({ field }) => (
             <FormItem className="space-y-2">
-              <FormLabel className="font-semibold">처치 타입*</FormLabel>
+              <FormLabel className="font-semibold">오더 타입*</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
@@ -182,32 +209,32 @@ export default function IcuChartOrderForm({
           )}
         />
 
-        {/* 처치 이름 */}
+        {/* 오더 이름 */}
         <div className="flex gap-4">
           <FormField
             control={form.control}
             name="icu_chart_order_name"
             render={({ field }) => (
               <FormItem className="w-full space-y-2">
-                <FormLabel className="font-semibold">처치명*</FormLabel>
+                <FormLabel className="font-semibold">오더명*</FormLabel>
                 <FormControl>
-                  <Input placeholder="처치명을 입력해주세요" {...field} />
+                  <Input placeholder="오더명을 입력해주세요" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* 처치 설명 */}
+          {/* 오더 설명 */}
           <FormField
             control={form.control}
             name="icu_chart_order_comment"
             render={({ field }) => (
               <FormItem className="w-full space-y-2">
-                <FormLabel className="font-semibold">처치 설명*</FormLabel>
+                <FormLabel className="font-semibold">오더 설명*</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="처치에 대한 설명을 입력해주세요"
+                    placeholder="오더에 대한 설명을 입력해주세요"
                     {...field}
                   />
                 </FormControl>
@@ -218,9 +245,9 @@ export default function IcuChartOrderForm({
         </div>
 
         <div className="flex flex-col gap-2">
-          {/* 처치 시간 */}
-          <span className="text-sm font-semibold">처치 시간 설정</span>
-          {/* 처치 시간 - 시작 시간 */}
+          {/* 오더 시간 */}
+          <span className="text-sm font-semibold">오더 시간 설정</span>
+          {/* 오더 시간 - 시작 시간 */}
           <div className="flex justify-between">
             <div className="flex gap-2">
               <Select onValueChange={setStartTime} value={startTime}>
@@ -241,7 +268,7 @@ export default function IcuChartOrderForm({
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              {/* 처치 시간 - 시간 간격 */}
+              {/* 오더 시간 - 시간 간격 */}
               <Select onValueChange={setTimeTerm} value={timeTerm}>
                 <SelectTrigger className="h-9 w-36 text-xs">
                   <SelectValue placeholder="시간 간격" />
@@ -281,7 +308,7 @@ export default function IcuChartOrderForm({
           </div>
         </div>
 
-        {/* 처치 시간 - 타임 테이블 */}
+        {/* 오더 시간 - 타임 테이블 */}
         <div className="col-span-2 flex w-full">
           {TIME.map((element, index) => (
             <FormField
@@ -314,15 +341,58 @@ export default function IcuChartOrderForm({
           ))}
         </div>
 
-        <DialogFooter className="ml-auto">
+        <DialogFooter className="ml-auto w-full">
+          {/* 삭제 버튼 && Dialog */}
+          {isEditMode && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  type="button"
+                  className="mr-auto"
+                  variant="destructive"
+                  disabled={isSubmitting}
+                >
+                  삭제
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {chartOrder.icu_chart_order_name} 오더 삭제
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    선택하신 오더를 삭제합니다 <br /> 삭제 후에 이 작업은 되돌릴
+                    수 없습니다
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>취소</AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-destructive hover:bg-destructive/80"
+                    onClick={handleDeleteOrderClick}
+                  >
+                    삭제
+                    <LoaderCircle
+                      className={cn(
+                        isSubmitting ? 'ml-2 animate-spin' : 'hidden',
+                      )}
+                    />
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+
+          {/* 닫기 버튼 */}
           <DialogClose asChild>
             <Button type="button" variant="outline">
               닫기
             </Button>
           </DialogClose>
 
+          {/* 변경 및 추가 버튼 */}
           <Button type="submit" disabled={isSubmitting}>
-            추가
+            {isEditMode ? '변경' : '추가'}
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />

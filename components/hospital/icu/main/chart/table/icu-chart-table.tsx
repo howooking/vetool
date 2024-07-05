@@ -7,15 +7,17 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIME } from '@/constants/hospital/icu/chart/time'
-import { IcuChartOrderJoined } from '@/types/hospital'
+import { IcuChartOrderJoined, IcuChartTx, Vet } from '@/types/hospital'
 import IcuChartTableCellTitle from './icu-chart-table-cell-title'
 import IcuChartTableCellInput from './icu-chat-table-cell-input'
 import IcuChartOrderDialog from './icu-chart-order-dialog'
 
 export default function IcuChartTable({
   selectedChartOrders,
+  vetsData,
 }: {
   selectedChartOrders: IcuChartOrderJoined[]
+  vetsData: Vet[]
 }) {
   // 처치 오더가 존재하는 지에 대해 true/false 반환
   const hasOrder = (orderData: IcuChartOrderJoined, index: number) => {
@@ -51,18 +53,22 @@ export default function IcuChartTable({
             >
               {/* TABLE BODY TITLE */}
               <IcuChartTableCellTitle
-                chartOrder={orderData}
+                orderData={orderData}
                 dataType={orderData.icu_chart_order_type ?? 'manual'}
               />
 
               {/* TABLE BODY TIME */}
               {TIME.map((time, index) => (
                 <IcuChartTableCellInput
-                  hasOrder={hasOrder(orderData, index)}
                   key={time}
                   time={time}
-                  icuChartOrderId={orderData.icu_chart_order_id}
-                  icuIoId={orderData.icu_io_id.icu_io_id}
+                  vetsData={vetsData}
+                  txData={
+                    orderData[`icu_chart_order_tx_${time}`] as IcuChartTx | null
+                  }
+                  ioId={orderData.icu_io_id.icu_io_id}
+                  chartOrderId={orderData.icu_chart_order_id}
+                  hasOrder={hasOrder(orderData, index)}
                 />
               ))}
             </TableRow>

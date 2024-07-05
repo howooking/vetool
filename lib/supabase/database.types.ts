@@ -1039,6 +1039,14 @@ export type Database = {
         }
         Returns: string
       }
+      update_icu_chart_with_vitals: {
+        Args: {
+          patient_id_input: string
+          weight_input: string
+          target_date_input: string
+        }
+        Returns: undefined
+      }
       update_user_approval_and_user_hos_id_when_approved: {
         Args: {
           hos_id_input: string

@@ -2,6 +2,11 @@
 
 import { Separator } from '@/components/ui/separator'
 import { toast } from '@/components/ui/use-toast'
+import {
+  updateIcuChart,
+  updateIcuIo,
+  updateWeight,
+} from '@/lib/services/hospital/icu/updateIcuChart'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { createClient } from '@/lib/supabase/client'
 import type { IcuChartJoined, Vet } from '@/types/hospital'
@@ -13,6 +18,13 @@ import PatientDetailItem from './items/patient-detail-item'
 import PatientDetailVetsDialog from './items/patient-detail-vets-dialog'
 import PatientDetailGroup from './items/patient-detail-group'
 
+type ChartState = {
+  dx: string | null
+  cc: string | null
+  caution: string | null
+  weight: string | null
+}
+
 export default function IcuChartPatientDetail({
   chartData,
   vetsData,
@@ -20,14 +32,13 @@ export default function IcuChartPatientDetail({
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   vetsData: Vet[]
 }) {
-  const supabase = createClient()
   const { refresh } = useRouter()
   const { selectedDate } = useIcuSelectedDateStore()
   const { name, gender, breed, patient_id: patientId } = chartData.patient_id
   const {
     dx,
     cc,
-    group_list: group,
+    group_list: groupList,
     age_in_days: ageInDays,
   } = chartData.icu_io_id
   const {
@@ -37,134 +48,54 @@ export default function IcuChartPatientDetail({
   } = chartData
   const { name: mainVetName, user_id: mainVetId } = chartData.main_vet
   const { name: subVetName, user_id: subVetId } = chartData.sub_vet
-  const { group_list: groupList } = chartData.hos_id
+  const [chartState, setChartState] = useState<ChartState>({
+    dx,
+    cc,
+    caution,
+    weight,
+  })
 
-  const [dxValue, setDxValue] = useState(dx)
-  const [ccValue, setCcValue] = useState(cc)
-  const [cautionValue, setCautionValue] = useState(caution)
-  const [weightValue, setWeightValue] = useState(weight)
-
-  // DX 변경 핸들러
-  const handleDxBlur = async () => {
-    if (dx === dxValue) return
-
-    const { error } = await supabase
-      .from('icu_io')
-      .update({ dx: dxValue })
-      .match({ patient_id: patientId })
-
-    if (error) {
-      console.log(error)
-      throw new Error(error.message)
+  const handleInputChange =
+    (field: keyof ChartState) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setChartState((prev) => ({ ...prev, [field]: e.target.value }))
     }
 
-    toast({
-      title: 'DX가 변경되었습니다',
-    })
+  const handleInputBlur = async (field: keyof ChartState) => {
+    if (field === 'dx' || field === 'cc') {
+      if (chartState[field] === chartData.icu_io_id[field]) return
 
-    refresh()
-  }
-
-  // CC 변경 핸들러
-  const handleCcBlur = async () => {
-    if (cc === ccValue) return
-
-    const { error } = await supabase
-      .from('icu_io')
-      .update({ cc: ccValue })
-      .match({ patient_id: patientId })
-
-    if (error) {
-      console.log(error)
-      throw new Error(error.message)
+      await updateIcuIo(patientId, field, chartState[field])
     }
 
-    toast({
-      title: 'CC가 변경되었습니다',
-    })
+    if (field === 'caution') {
+      if (chartState[field] === chartData[field]) return
 
-    refresh()
-  }
-
-  // 주치의 변경 핸들러
-  const handleMainVetChange = async (mainVetId: string) => {
-    const { error } = await supabase
-      .from('icu_chart')
-      .update({ main_vet: mainVetId })
-      .match({ patient_id: patientId, target_date: selectedDate })
-
-    if (error) {
-      console.log(error)
-      throw new Error(error.message)
-    }
-
-    toast({
-      title: '주치의가 변경되었습니다',
-    })
-
-    refresh()
-  }
-
-  // 부치의 변경 핸들러
-  const handleSubVetChange = async (subVetId: string) => {
-    const { error } = await supabase
-      .from('icu_chart')
-      .update({ sub_vet: subVetId })
-      .match({ patient_id: patientId, target_date: selectedDate })
-
-    if (error) {
-      console.log(error)
-      throw new Error(error.message)
-    }
-
-    toast({
-      title: '부치의가 변경되었습니다',
-    })
-
-    refresh()
-  }
-
-  // 주의 사항 변경 핸들러
-  const handleCautionBlur = async () => {
-    if (caution === cautionValue) return
-
-    const { error } = await supabase
-      .from('icu_chart')
-      .update({ caution: cautionValue })
-      .match({ patient_id: patientId, target_date: selectedDate })
-
-    if (error) {
-      console.log(error)
-      throw new Error(error.message)
-    }
-
-    toast({
-      title: '주의 사항이 변경되었습니다',
-    })
-
-    refresh()
-  }
-
-  // 체중 변경 핸들러
-  const handleWeightBlur = async () => {
-    if (weight === weightValue) return
-
-    const { error } = await supabase
-      .from('icu_chart')
-      .update({
-        weight: weightValue,
-        weight_measured_date: format(new Date(), 'yyyy-MM-dd'),
+      await updateIcuChart(patientId, selectedDate, {
+        [field]: chartState[field],
       })
-      .match({ patient_id: patientId, target_date: selectedDate })
-
-    if (error) {
-      console.log(error)
-      throw new Error(error.message)
     }
 
+    if (field === 'weight') {
+      if (chartState[field] === chartData[field]) return
+
+      await updateWeight(patientId, selectedDate, chartState[field] ?? '0')
+    }
+
+    toast({ title: `${field.toUpperCase()}가 변경되었습니다` })
+    refresh()
+  }
+
+  const handleVetChange = async (
+    vetType: 'main_vet' | 'sub_vet',
+    vetId: string,
+  ) => {
+    await updateIcuChart(patientId, selectedDate, { [vetType]: vetId })
+
     toast({
-      title: '체중 측정일이 변경되었습니다',
+      title: `${vetType === 'main_vet' ? '주치의' : '부치의'}가 변경되었습니다`,
     })
+
+    refresh()
   }
 
   return (
@@ -180,13 +111,13 @@ export default function IcuChartPatientDetail({
       />
       <Separator className="my-4" />
 
-      {/* DX */}
       <div className="flex h-16 items-center space-x-4 text-sm">
+        {/* DX */}
         <PatientDetailInput
           label="DX"
-          value={dxValue}
-          onChange={(e) => setDxValue(e.target.value)}
-          onBlur={handleDxBlur}
+          value={chartState.dx}
+          onChange={handleInputChange('dx')}
+          onBlur={() => handleInputBlur('dx')}
           className="max-w-32"
         />
         <Separator orientation="vertical" />
@@ -194,9 +125,9 @@ export default function IcuChartPatientDetail({
         {/* CC */}
         <PatientDetailInput
           label="CC"
-          value={ccValue}
-          onChange={(e) => setCcValue(e.target.value)}
-          onBlur={handleCcBlur}
+          value={chartState.cc}
+          onChange={handleInputChange('cc')}
+          onBlur={() => handleInputBlur('cc')}
           className="max-w-48"
         />
         <Separator orientation="vertical" />
@@ -207,8 +138,8 @@ export default function IcuChartPatientDetail({
           subVetName={subVetName}
           mainVetId={mainVetId}
           subVetId={subVetId}
-          onMainVetChange={handleMainVetChange}
-          onSubVetChange={handleSubVetChange}
+          onMainVetChange={(id) => handleVetChange('main_vet', id)}
+          onSubVetChange={(id) => handleVetChange('sub_vet', id)}
           vetsData={vetsData}
         />
         <Separator orientation="vertical" />
@@ -216,9 +147,9 @@ export default function IcuChartPatientDetail({
         {/* 주의 사항 */}
         <PatientDetailInput
           label="주의사항"
-          value={cautionValue}
-          onChange={(e) => setCautionValue(e.target.value)}
-          onBlur={handleCautionBlur}
+          value={chartState.caution}
+          onChange={handleInputChange('caution')}
+          onBlur={() => handleInputBlur('caution')}
           className="max-w-48"
         />
         <Separator orientation="vertical" />
@@ -227,7 +158,7 @@ export default function IcuChartPatientDetail({
         <PatientDetailGroup
           label="그룹"
           groupList={groupList}
-          group={group}
+          group={groupList}
           name={name}
           patientId={patientId}
         />
@@ -236,10 +167,11 @@ export default function IcuChartPatientDetail({
         {/* 체중 */}
         <PatientDetailInput
           label="체중"
-          value={weight}
-          onChange={(e) => setWeightValue(e.target.value)}
-          onBlur={handleWeightBlur}
-          className="max-w-24"
+          value={chartState.weight}
+          onChange={handleInputChange('weight')}
+          onBlur={() => handleInputBlur('weight')}
+          className="max-w-24 text-right"
+          hasWeightUnit
         />
       </div>
     </div>

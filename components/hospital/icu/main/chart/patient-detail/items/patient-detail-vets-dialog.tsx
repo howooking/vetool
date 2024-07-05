@@ -72,7 +72,7 @@ export default function PatientDetailVetsDialog({
                   }}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a fruit" />
+                    <SelectValue placeholder="주치의 선택" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -101,7 +101,7 @@ export default function PatientDetailVetsDialog({
                   }}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a fruit" />
+                    <SelectValue placeholder="부주치의 선택" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>

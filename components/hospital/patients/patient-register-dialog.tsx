@@ -1,14 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { usePatientRegisterStep } from '@/lib/store/hospital/patients/selected-patient'
 import { Owner } from '@/types/hospital'
 import { useEffect, useState } from 'react'
@@ -18,10 +11,10 @@ import PatientForm from './patient-form'
 import RegisterDialogHeader from './register-dialog-header'
 
 export function PatientRegisterDialog({
-  ownerData,
+  ownersData,
   hosId,
 }: {
-  ownerData: Owner[]
+  ownersData: Owner[]
   hosId: string
 }) {
   const { step, setStep } = usePatientRegisterStep()
@@ -45,7 +38,7 @@ export function PatientRegisterDialog({
         <RegisterDialogHeader step={step} />
 
         {step === 'ownerSearch' && (
-          <OwnerSearch ownerData={ownerData} setStep={setStep} />
+          <OwnerSearch ownersData={ownersData} setStep={setStep} />
         )}
         {step === 'ownerRegister' && <OwnerForm setStep={setStep} />}
         {step === 'patientRegister' && (

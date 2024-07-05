@@ -30,7 +30,7 @@ export default async function HospitalPatientsPage({
     throw new Error(patientsError.message)
   }
 
-  const { data: ownerData, error: ownerDataError } = await supabase
+  const { data: ownersData, error: ownerDataError } = await supabase
     .from('owners')
     .select('*')
     .match({ hos_id: params.hos_id })
@@ -66,7 +66,7 @@ export default async function HospitalPatientsPage({
 
   return (
     <div className="p-2">
-      <PatientRegisterDialog ownerData={ownerData} hosId={params.hos_id} />
+      <PatientRegisterDialog ownersData={ownersData} hosId={params.hos_id} />
       {patientsData.length === 0 ? (
         <NoResult title="환자가 없습니다" />
       ) : (

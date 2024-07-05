@@ -9,7 +9,6 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { useCreateOrderStore } from '@/lib/store/hospital/icu/chart/create-order'
 import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
-import { IcuChartOrderJoined } from '@/types/hospital'
 import { FilePlus } from 'lucide-react'
 import IcuChartOrderForm from './icu-chart-order-form'
 
@@ -21,10 +20,11 @@ export default function IcuChartOrderDialog({
   ioId: string
 }) {
   const { selectedDate } = useIcuSelectedDateStore()
-  const { isOpen, setIsOpen, setMode, resetState } = useCreateOrderStore()
+  const { isOpen, isEditMode, setIsOpen, setIsEditMode, resetState } =
+    useCreateOrderStore()
   const handleDialogOpen = () => {
     setIsOpen()
-    setMode('create')
+    setIsEditMode(false)
     resetState()
   }
 
@@ -32,14 +32,14 @@ export default function IcuChartOrderDialog({
     <Dialog open={isOpen} onOpenChange={handleDialogOpen}>
       <DialogTrigger>
         <div className="flex w-full items-center rounded-md border border-black px-16 py-1">
-          <span>처치 추가</span>
+          <span>오더 추가</span>
           <FilePlus size="16" strokeWidth={1.5} className="ml-2" />
         </div>
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogDescription>{selectedDate}</DialogDescription>
-          <DialogTitle>처치 추가</DialogTitle>
+          <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
         </DialogHeader>
         <Separator />
 
