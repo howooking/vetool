@@ -15,7 +15,7 @@ export default function IcuChartPatientList({
 }: {
   icuIoData: IcuIoPatientsJoined[]
 }) {
-  const { selectedPatientId, setSelectedPatientId, setSelectedPatientName } =
+  const { selectedPatientId, setSelectedPatientId } =
     useIcuSelectedPatientStore()
   const { selectIcudMainView, setSelectedIcuMainView } =
     useSelectedMainViewStore()
@@ -50,7 +50,6 @@ export default function IcuChartPatientList({
 
   const handlePatientButtonClick = (data: IcuIoPatientsJoined) => {
     setSelectedPatientId(data.patient_id.patient_id)
-    setSelectedPatientName(data.patient_id.name)
     setSelectedIcuMainView('chart')
   }
 

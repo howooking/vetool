@@ -27,7 +27,7 @@ export default function IcuChart({
   icuChartOrderData: IcuChartOrderJoined[]
   vetsData: Vet[]
 }) {
-  const { selectedPatientId, setSelectedPatientId } =
+  const { selectedPatientId, } =
     useIcuSelectedPatientStore()
   const { selectedDate } = useIcuSelectedDateStore()
 
