@@ -17,7 +17,7 @@ export default function IcuHeader({
   ownersData: Owner[]
 }) {
   return (
-    <div className="absolute left-0 top-2 flex items-center gap-8 px-4">
+    <div className="absolute left-0 top-2 flex items-center gap-6 px-4">
       <IcuHeaderDateSelector />
       <IcuRegisterDialog
         hosId={hosId}

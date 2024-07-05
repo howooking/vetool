@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import useHospitalId from '@/hooks/useHospitalId'
+import useHospitalId from '@/hooks/use-hospital-id'
 import { createClient } from '@/lib/supabase/client'
 import type { Vet } from '@/types/hospital'
 import { useState } from 'react'

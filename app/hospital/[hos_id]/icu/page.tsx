@@ -1,15 +1,12 @@
-import IcuHeaderDateSelector from '@/components/hospital/icu/header/date-picker/icu-header-date-selector'
-import IcuRegisterDialog from '@/components/hospital/icu/header/register-dialog/icu-register-dialog'
-import { getAllPromises } from './actions'
-import IcuMain from '@/components/hospital/icu/main/icu-main'
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
+import IcuMain from '@/components/hospital/icu/main/icu-main'
+import { getAllPromises } from '../../../../lib/services/hospital/icu/get-all-promises'
 
 export default async function IcuPage({
   params,
 }: {
   params: { hos_id: string }
 }) {
-  // database로 부터 오는 데이터는 이름 + Data, 에러명은 data명 + Error
   const [
     { data: icuChartData, error: icuChartDataError },
     { data: icuChartOrderData, error: icuChartOrderDataError },

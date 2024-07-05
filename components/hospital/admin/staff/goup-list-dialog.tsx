@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import useHospitalId from '@/hooks/useHospitalId'
+import useHospitalId from '@/hooks/use-hospital-id'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { Edit, LoaderCircle, X } from 'lucide-react'

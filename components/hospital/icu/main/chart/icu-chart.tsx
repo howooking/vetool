@@ -92,7 +92,7 @@ export default function IcuChart({
   )
 
   return (
-    <div className="w-full p-2">
+    <div className="w-full">
       {selectedChart ? (
         // Todo 컴포넌트 이름 SelectedChart로 변경
         <IcuChartOrder
