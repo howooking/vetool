@@ -12,13 +12,13 @@ export default function NoResult({
   return (
     <div
       className={cn(
-        'flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center gap-4',
+        'flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center gap-4 text-xl font-bold',
         className,
       )}
       {...rest}
     >
-      <SearchX className="text-primary" size={80} />
-      <span className="text-2xl font-bold">{title}</span>
+      <SearchX className="text-primary" size={64} />
+      <span>{title}</span>
     </div>
   )
 }

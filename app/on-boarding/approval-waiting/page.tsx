@@ -45,7 +45,7 @@ export default async function ApprovalWaiting() {
             <span className="text-2xl font-bold">
               {userApprovalData.at(0)?.hos_id.name}{' '}
             </span>
-            에서 승인 대기중입니다.
+            에서 승인 대기중입니다
           </p>
           <div className="mt-4 flex gap-4">
             <form action={cancelApproval}>

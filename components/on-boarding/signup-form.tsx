@@ -20,14 +20,14 @@ import { logout } from '@/lib/actions/auth'
 
 const signupFormSchema = z.object({
   name: z
-    .string({ required_error: '이름을 입력해주세요.' })
-    .min(2, { message: '2자 이상 입력해주세요.' })
-    .max(10, { message: '10자 이하로 입력해주세요.' }),
+    .string({ required_error: '이름을 입력해주세요' })
+    .min(2, { message: '2자 이상 입력해주세요' })
+    .max(10, { message: '10자 이하로 입력해주세요' }),
   isVet: z.enum(['true', 'false'], {
-    required_error: '수의사 여부를 선택해주세요.',
+    required_error: '수의사 여부를 선택해주세요',
   }),
   option: z.enum(['create', 'select'], {
-    required_error: '동물병원등록 옵션을 선택해주세요.',
+    required_error: '동물병원등록 옵션을 선택해주세요',
   }),
 })
 export function SignupForm() {
@@ -72,7 +72,7 @@ export function SignupForm() {
               <FormItem>
                 <FormLabel className="text-base">
                   {' '}
-                  성함을 입력해주세요.
+                  성함을 입력해주세요
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="김벳툴" {...field} />
@@ -99,7 +99,7 @@ export function SignupForm() {
                         <RadioGroupItem value="true" />
                       </FormControl>
                       <FormLabel className="cursor-pointer">
-                        Yes, 수의사입니다.
+                        Yes, 수의사입니다
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
@@ -107,7 +107,7 @@ export function SignupForm() {
                         <RadioGroupItem value="false" />
                       </FormControl>
                       <FormLabel className="cursor-pointer">
-                        No, 수의사가 아닙니다.
+                        No, 수의사가 아닙니다
                       </FormLabel>
                     </FormItem>
                   </RadioGroup>
@@ -133,7 +133,7 @@ export function SignupForm() {
                         <RadioGroupItem value="select" />
                       </FormControl>
                       <FormLabel className="cursor-pointer">
-                        등록된 병원의 임직원으로 참여하겠습니다.
+                        등록된 병원의 임직원으로 참여하겠습니다
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
@@ -141,7 +141,7 @@ export function SignupForm() {
                         <RadioGroupItem value="create" />
                       </FormControl>
                       <FormLabel className="cursor-pointer">
-                        새로운 병원을 개설하겠습니다.
+                        새로운 병원을 개설하겠습니다
                       </FormLabel>
                     </FormItem>
                   </RadioGroup>

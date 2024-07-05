@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react'
 import OwnerForm from './owner-form'
 import OwnerSearch from './owner-search'
 import PatientForm from './patient-form'
+import RegisterDialogHeader from './register-dialog-header'
 
 export function PatientRegisterDialog({
   ownerData,
@@ -36,24 +37,12 @@ export function PatientRegisterDialog({
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild className="absolute left-2 top-1.5">
-        <Button>환자등록</Button>
+      <DialogTrigger asChild className="absolute left-2 top-2">
+        <Button size="sm">환자등록</Button>
       </DialogTrigger>
-      <DialogContent
-        className="flex flex-col sm:max-w-[1000px]"
-        style={{ minHeight: step === 'ownerSearch' ? '680px' : 'auto' }}
-      >
-        <DialogHeader>
-          <DialogTitle>
-            {step === 'ownerSearch' && '보호자 검색'}
-            {step === 'ownerRegister' && '보호자 등록'}
-            {step === 'patientRegister' && '환자 등록'}
-          </DialogTitle>
-          <DialogDescription>
-            {step === 'ownerSearch' && '환자등록 전 보호자를 선택해주세요'}
-            {step === 'ownerRegister' && '환자등록 전 보호자를 등록해주세요.'}
-          </DialogDescription>
-        </DialogHeader>
+
+      <DialogContent className="flex flex-col sm:max-w-[1000px]">
+        <RegisterDialogHeader step={step} />
 
         {step === 'ownerSearch' && (
           <OwnerSearch ownerData={ownerData} setStep={setStep} />

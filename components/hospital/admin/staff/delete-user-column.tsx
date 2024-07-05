@@ -58,7 +58,7 @@ export function DeleteUserColumn({
     }
 
     toast({
-      title: `${name}님을 스태프목록에서 삭제하였습니다.`,
+      title: `${name}님을 스태프목록에서 삭제하였습니다`,
     })
     setIsUpdating(false)
     setIsOpen(false)

@@ -3,12 +3,14 @@ import React from 'react'
 
 export default function IcuPatientListSkeleton() {
   return (
-    <div className="flex w-[120px] flex-col items-center gap-2">
-      <Skeleton className="h-8 w-28" />
-      <Skeleton className="h-8 w-28" />
-      <Skeleton className="h-8 w-28" />
-      <Skeleton className="h-8 w-28" />
-      <Skeleton className="h-8 w-28" />
+    <div className="flex flex-col items-center gap-2">
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-full" />
     </div>
   )
 }

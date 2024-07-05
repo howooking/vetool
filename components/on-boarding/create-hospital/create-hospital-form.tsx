@@ -88,7 +88,7 @@ export default function CreateHospitalForm() {
     toast({
       variant: 'default',
       title: `${name} 등록 성공`,
-      description: '잠시후 페이지가 이동됩니다.',
+      description: '잠시후 페이지가 이동됩니다',
     })
 
     setIsSubmitting(false)

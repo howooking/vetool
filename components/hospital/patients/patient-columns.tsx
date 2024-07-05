@@ -1,19 +1,12 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { calculateAge, cn } from '@/lib/utils'
 import { PatientDataTable } from '@/types/hospital/patients'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown, Cat, Dog, MoreHorizontal } from 'lucide-react'
-import IcuPatientSelectButton from '../icu/register/icu-patient-select-button'
+import { ArrowUpDown, Cat, Dog } from 'lucide-react'
+import IcuPatientSelectButton from '../icu/header/register-dialog/icu-patient-select-button'
+import PatientActions from './patient-actions'
 
 export const patientsColumns: ColumnDef<PatientDataTable>[] = [
   {
@@ -169,42 +162,22 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
       return <div>{createdAt.slice(0, 10)}</div>
     },
   },
-  // {
-  //   id: 'actions',
-  //   cell: ({ row }) => {
-  //     const patient = row.original
-
-  //     return (
-  //       <DropdownMenu>
-  //         <DropdownMenuTrigger asChild>
-  //           <Button variant="ghost" className="h-8 w-8 p-0">
-  //             <MoreHorizontal className="h-4 w-4" />
-  //           </Button>
-  //         </DropdownMenuTrigger>
-  //         <DropdownMenuContent align="end" >
-  //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-  //           <DropdownMenuItem
-  //             onClick={() => navigator.clipboard.writeText(patient.patient_id)}
-  //           >
-  //             Copy payment ID
-  //           </DropdownMenuItem>
-  //           <DropdownMenuSeparator />
-  //           <DropdownMenuItem>View customer</DropdownMenuItem>
-  //           <DropdownMenuItem>View payment details</DropdownMenuItem>
-  //         </DropdownMenuContent>
-  //       </DropdownMenu>
-  //     )
-  //   },
-  // },
-
-  // 선택
-
   {
     accessorKey: 'select_patient',
     header: undefined,
     cell: ({ row }) => {
       const patientId = row.original.patient_id
-      return <IcuPatientSelectButton patientId={patientId} />
+      const isIcu = row.original.isIcu
+      return <IcuPatientSelectButton patientId={patientId} isIcu={isIcu} />
+    },
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => {
+      const patient = row.original
+      const isIcu = row.original.isIcu
+
+      return <PatientActions patient={patient} isIcu={isIcu} />
     },
   },
 ]

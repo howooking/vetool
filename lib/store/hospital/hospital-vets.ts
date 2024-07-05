@@ -1,9 +1,9 @@
-import { Vets } from '@/types/hospital'
+import type { Vet } from '@/types/hospital'
 import { create } from 'zustand'
 
 type hospitalVets = {
-  vets: Vets[]
-  setVets: (data: Vets[]) => void
+  vets: Vet[]
+  setVets: (data: Vet[]) => void
 }
 
 export const useHospitalVetsStore = create<hospitalVets>((set) => ({

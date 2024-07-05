@@ -50,7 +50,7 @@ export default function RankColumn({
     }
 
     toast({
-      title: '순번을 변경하였습니다.',
+      title: '순번을 변경하였습니다',
     })
     refresh()
   }

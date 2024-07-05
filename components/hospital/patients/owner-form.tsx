@@ -107,8 +107,7 @@ export default function OwnerForm({
               <div className="flex flex-1 items-center gap-2">
                 <FormLabel>보호자 번호*</FormLabel>
                 <HelperTooltip>
-                  메인차트에 등록된 고유한 보호자 등록번호로 반드시 입력해주세요
-                  .
+                  메인차트에 등록된 고유한 보호자 등록번호를 입력해주세요
                 </HelperTooltip>
               </div>
               <FormControl>

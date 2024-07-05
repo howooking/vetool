@@ -28,12 +28,6 @@ export default async function AdminApprovalPage({
     throw new Error(approvalDataError.message)
   }
 
-  let noResult
-
-  if (approvalData.length === 0) {
-    noResult = true
-  }
-
   const data: ApprovalDataTable[] = approvalData.map((approval) => ({
     is_approved: approval.is_approved,
     created_at: approval.created_at,
@@ -43,10 +37,6 @@ export default async function AdminApprovalPage({
     avatar_url: approval.user_id.avatar_url,
     is_vet: approval.user_id.is_vet,
   }))
-
-  if (noResult) {
-    return <NoResult title="승인요청이 없습니다." />
-  }
 
   return <DataTable columns={columns} data={data} />
 }

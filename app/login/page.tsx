@@ -19,7 +19,7 @@ export default async function LoginPage() {
           <br /> (주)벳툴의 <span className="text-primary">
             이용약관
           </span> 및 <span className="text-primary">개인정보정책</span>에
-          동의하게됩니다.
+          동의하게됩니다
         </div>
         <div>
           구글 계정이 없으신가요?{' '}

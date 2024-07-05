@@ -74,7 +74,7 @@ const config = {
       },
       height: {
         'chart-sidebar': 'calc(100vh - 96px)',
-        'icu-chart': 'calc(100vh - 112px)',
+        'icu-chart': 'calc(100vh - 48px)',
       },
     },
   },

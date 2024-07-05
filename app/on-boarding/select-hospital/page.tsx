@@ -42,14 +42,14 @@ export default async function SelectHospitalPage() {
         <PrevButton />
 
         {noResult ? (
-          <NoResult title="등록된 병원이 없습니다." />
+          <NoResult title="등록된 병원이 없습니다" />
         ) : (
           <>
             <h2 className="text-2xl font-bold tracking-wider">병원선택</h2>
             <DataTable
               columns={columns}
               data={data}
-              searchPlaceHolder="병원을 검색해주세요."
+              searchPlaceHolder="병원을 검색해주세요"
               rowLength={5}
             />
           </>

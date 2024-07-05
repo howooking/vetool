@@ -55,8 +55,8 @@ export function ApprovalColumn({
     }
 
     toast({
-      title: `${name}님을 스태프목록에 추가하였습니다.`,
-      description: '스태프관리페이지에서 설정을 변경할 수 있습니다.',
+      title: `${name}님을 스태프목록에 추가하였습니다`,
+      description: '스태프관리페이지에서 설정을 변경할 수 있습니다',
     })
     setIsUpdating(false)
     setIsOpen(false)
