@@ -193,7 +193,11 @@ export default function IcuRegisterPatientForm({
                 DX*
               </FormLabel>
               <FormControl>
-                <Input {...field} className="h-8 text-sm" />
+                <Input
+                  {...field}
+                  value={field.value || ''}
+                  className="h-8 text-sm"
+                />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
@@ -210,7 +214,11 @@ export default function IcuRegisterPatientForm({
                 CC*
               </FormLabel>
               <FormControl>
-                <Input {...field} className="h-8 text-sm" />
+                <Input
+                  {...field}
+                  value={field.value || ''}
+                  className="h-8 text-sm"
+                />
               </FormControl>
 
               <FormMessage className="text-xs" />
@@ -237,8 +245,8 @@ export default function IcuRegisterPatientForm({
                         !field.value && 'text-muted-foreground',
                       )}
                     >
-                      {range && range.from ? (
-                        <>{format(range.from, 'yyyy-MM-dd')}</>
+                      {range && range.from && range.to ? (
+                        <>{`${format(range.from, 'yyyy-MM-dd')} - ${format(range.to, 'yyyy-MM-dd')}`}</>
                       ) : (
                         <span className="overflow-hidden whitespace-nowrap">
                           입원일을 선택해주세요
@@ -265,7 +273,7 @@ export default function IcuRegisterPatientForm({
         />
 
         {/* 퇴원 예정일 */}
-        <FormField
+        {/* <FormField
           control={form.control}
           name="out_due_date"
           render={() => (
@@ -285,7 +293,7 @@ export default function IcuRegisterPatientForm({
               <FormMessage className="text-xs" />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* 주치의 */}
         <FormField
