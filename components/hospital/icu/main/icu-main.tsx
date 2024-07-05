@@ -14,13 +14,13 @@ export default function IcuMain({
   icuChartOrderData: IcuChartOrderJoined[]
   vetsData: Vet[]
 }) {
-  const { selectdMainView } = useIcuMainViewStore()
+  const { selectIcudMainView } = useIcuMainViewStore()
 
   return (
     <div className="w-full p-2">
-      {selectdMainView === 'summary' && <IcuSummary />}
+      {selectIcudMainView === 'summary' && <IcuSummary />}
 
-      {selectdMainView === 'chart' && (
+      {selectIcudMainView === 'chart' && (
         <IcuChart
           vetsData={vetsData}
           icuChartData={icuChartData}

@@ -17,7 +17,7 @@ export default function IcuChartPatientList({
 }) {
   const { selectedPatientId, setSelectedPatientId, setSelectedPatientName } =
     useIcuSelectedPatientStore()
-  const { selectdMainView, setSelectedMainView } = useIcuMainViewStore()
+  const { selectIcudMainView, setSelectedIcuMainView } = useIcuMainViewStore()
   const { selectedDate } = useIcuSelectedDateStore()
   const [isLoading, setIsLoading] = useState(true)
   const [activeIcuIo, setActiveIcuIo] = useState<IcuIoPatientsJoined[]>([])
@@ -32,7 +32,7 @@ export default function IcuChartPatientList({
 
     if (
       filteredIcuIo.length > 0 &&
-      selectdMainView === 'chart' &&
+      selectIcudMainView === 'chart' &&
       !selectedPatientId
     ) {
       setSelectedPatientId(filteredIcuIo[0].patient_id.patient_id)
@@ -41,7 +41,7 @@ export default function IcuChartPatientList({
     setIsLoading(false)
   }, [
     icuIoData,
-    selectdMainView,
+    selectIcudMainView,
     selectedDate,
     selectedPatientId,
     setSelectedPatientId,
@@ -50,7 +50,7 @@ export default function IcuChartPatientList({
   const handlePatientButtonClick = (data: IcuIoPatientsJoined) => {
     setSelectedPatientId(data.patient_id.patient_id)
     setSelectedPatientName(data.patient_id.name)
-    setSelectedMainView('chart')
+    setSelectedIcuMainView('chart')
   }
 
   if (isLoading) return <IcuPatientListSkeleton />
@@ -58,10 +58,10 @@ export default function IcuChartPatientList({
   return (
     <>
       {activeIcuIo.length === 0 ? (
-        <div className="flex h-40 w-full flex-col items-center justify-center gap-2">
+        <li className="flex h-40 w-full flex-col items-center justify-center gap-2">
           <Squirrel size={40} className="hover:scale-x-[-1]" />
           <span className="text-xs font-bold">입원환자 없음</span>
-        </div>
+        </li>
       ) : (
         activeIcuIo.map((data) => (
           <li key={data.icu_io_id} className="w-full">

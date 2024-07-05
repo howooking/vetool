@@ -17,10 +17,10 @@ export const MAIN_VIEW_MENUS = [
 
 export default function IcuFooter() {
   const { setSelectedPatientId } = useIcuSelectedPatientStore()
-  const { selectdMainView, setSelectedMainView } = useIcuMainViewStore()
+  const { selectIcudMainView, setSelectedIcuMainView } = useIcuMainViewStore()
 
   const handleButtonClick = (value: 'summary' | 'chart') => {
-    setSelectedMainView(value)
+    setSelectedIcuMainView(value)
 
     if (value === 'summary') {
       setSelectedPatientId(null)
@@ -36,7 +36,7 @@ export default function IcuFooter() {
               type="button"
               size="sm"
               variant="outline"
-              className={selectdMainView === value ? 'bg-muted' : ''}
+              className={selectIcudMainView === value ? 'bg-muted' : ''}
               onClick={() => handleButtonClick(value)}
             >
               {label}
