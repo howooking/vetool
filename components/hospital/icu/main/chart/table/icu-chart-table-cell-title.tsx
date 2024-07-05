@@ -3,25 +3,25 @@
 import { TableCell } from '@/components/ui/table'
 import { useCreateOrderStore } from '@/lib/store/hospital/icu/chart/create-order'
 import { cn } from '@/lib/utils'
-import { IcuChartOrderJoined } from '@/types/hospital'
+import type { IcuChartOrderJoined } from '@/types/hospital'
 
 export default function IcuChartTableCellTitle({
-  chartOrder,
+  orderData,
   dataType,
 }: {
-  chartOrder: IcuChartOrderJoined
+  orderData: IcuChartOrderJoined
   dataType: string | null
 }) {
   const {
     icu_chart_order_name: orderName,
     icu_chart_order_comment: orderComment,
-  } = chartOrder
-  const { setIsOpen, setMode, setChartOrder } = useCreateOrderStore()
+  } = orderData
+  const { setIsOpen, setIsEditMode, setChartOrder } = useCreateOrderStore()
 
   const handleDialogOpen = () => {
     setIsOpen()
-    setMode('edit')
-    setChartOrder(chartOrder)
+    setIsEditMode(true)
+    setChartOrder(orderData)
   }
 
   return (
