@@ -221,51 +221,51 @@ export type Database = {
       }
       icu_chart: {
         Row: {
-          caution: string | null
+          caution: string
           created_at: string
           hos_id: string
           icu_chart_id: string
-          icu_io_id: string | null
+          icu_io_id: string
           main_vet: string
-          memo_a: string | null
-          memo_b: string | null
-          memo_c: string | null
+          memo_a: string
+          memo_b: string
+          memo_c: string
           patient_id: string
           sub_vet: string | null
-          target_date: string | null
-          weight: string | null
+          target_date: string
+          weight: string
           weight_measured_date: string | null
         }
         Insert: {
-          caution?: string | null
+          caution?: string
           created_at?: string
           hos_id: string
           icu_chart_id?: string
-          icu_io_id?: string | null
+          icu_io_id: string
           main_vet: string
-          memo_a?: string | null
-          memo_b?: string | null
-          memo_c?: string | null
+          memo_a?: string
+          memo_b?: string
+          memo_c?: string
           patient_id: string
           sub_vet?: string | null
-          target_date?: string | null
-          weight?: string | null
+          target_date: string
+          weight?: string
           weight_measured_date?: string | null
         }
         Update: {
-          caution?: string | null
+          caution?: string
           created_at?: string
           hos_id?: string
           icu_chart_id?: string
-          icu_io_id?: string | null
+          icu_io_id?: string
           main_vet?: string
-          memo_a?: string | null
-          memo_b?: string | null
-          memo_c?: string | null
+          memo_a?: string
+          memo_b?: string
+          memo_c?: string
           patient_id?: string
           sub_vet?: string | null
-          target_date?: string | null
-          weight?: string | null
+          target_date?: string
+          weight?: string
           weight_measured_date?: string | null
         }
         Relationships: [
@@ -607,7 +607,7 @@ export type Database = {
           icu_chart_tx_comment: string | null
           icu_chart_tx_id: string
           icu_chart_tx_images: string[] | null
-          icu_chart_tx_log: string[] | null
+          icu_chart_tx_log: Json[] | null
           icu_chart_tx_result: string | null
           icu_io_id: string | null
           updated_at: string | null
@@ -618,7 +618,7 @@ export type Database = {
           icu_chart_tx_comment?: string | null
           icu_chart_tx_id?: string
           icu_chart_tx_images?: string[] | null
-          icu_chart_tx_log?: string[] | null
+          icu_chart_tx_log?: Json[] | null
           icu_chart_tx_result?: string | null
           icu_io_id?: string | null
           updated_at?: string | null
@@ -629,7 +629,7 @@ export type Database = {
           icu_chart_tx_comment?: string | null
           icu_chart_tx_id?: string
           icu_chart_tx_images?: string[] | null
-          icu_chart_tx_log?: string[] | null
+          icu_chart_tx_log?: Json[] | null
           icu_chart_tx_result?: string | null
           icu_io_id?: string | null
           updated_at?: string | null
@@ -963,9 +963,43 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      copy_prev_selected_chart: {
+        Args: {
+          hos_id_input: string
+          main_vet_input: string
+          sub_vet_input: string
+          weight_input: string
+          weight_measured_date_input: string
+          target_date_input: string
+          patient_id_input: string
+          caution_input: string
+          memo_a_input: string
+          memo_b_input: string
+          memo_c_input: string
+          icu_io_id_input: string
+        }
+        Returns: string
+      }
       get_icu_patient_data_with_due: {
         Args: Record<PropertyKey, never>
         Returns: Json
+      }
+      "icu_chart_order_comment_input: preSelectedChartOrders": {
+        Args: {
+          hos_id_input: string
+          main_vet_input: string
+          sub_vet_input: string
+          weight_input: string
+          weight_measured_date_input: string
+          target_date_input: string
+          patient_id_input: string
+          caution_input: string
+          memo_a_input: string
+          memo_b_input: string
+          memo_c_input: string
+          icu_io_id_input: string
+        }
+        Returns: string
       }
       insert_icu_io_and_icu_chart_when_register_icu_patient: {
         Args: {
