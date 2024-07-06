@@ -281,7 +281,7 @@ export default function IcuRegisterPatientForm({
                     name="group_list"
                     render={({ field }) => {
                       return (
-                        <FormItem key={item} className="flex items-end gap-2">
+                        <FormItem key={item} className="flex items-end gap-1">
                           <FormControl>
                             <Checkbox
                               checked={field.value?.includes(item)}

@@ -2,12 +2,7 @@
 
 import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
 import { createClient } from '@/lib/supabase/server'
-import type {
-  IcuChart,
-  IcuChartJoined,
-  IcuChartOrderJoined,
-  IcuIo,
-} from '@/types/hospital'
+import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
 
 const supabase = createClient()
 

@@ -7,6 +7,8 @@ import { addDays, format, parseISO, subDays } from 'date-fns'
 import { useMemo } from 'react'
 import SelectedChartNotFound from './selected-chart-not-found/selected-chart-not-found'
 import SelectedChart from './selected-chart/selected-chart'
+import NoResult from '@/components/common/no-result'
+import IcuChartSkeleton from './icu-chart-skeleton'
 
 const ORDER_OF_ORDERS = [
   'checklist',
@@ -101,6 +103,16 @@ export default function IcuChart({
         ),
     [icuChartOrderData, prevSelectedChart?.icu_chart_id],
   )
+
+  console.log({ selectedPatientId, selectedChart, prevSelectedChart })
+
+  if (!selectedPatientId) {
+    return <NoResult title="환자를 선택해주세요" />
+  }
+
+  if (prevSelectedChart && !selectedChart && !prevSelectedChart) {
+    return <IcuChartSkeleton />
+  }
 
   return (
     <div className="w-full">
