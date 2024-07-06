@@ -5,7 +5,7 @@ import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
 import { addDays, format, parseISO, subDays } from 'date-fns'
 import { useMemo } from 'react'
-import SelectedChartNotFound from './selected-chart-not-found/selected-icu-chart-not-found'
+import SelectedChartNotFound from './selected-chart-not-found/selected-chart-not-found'
 import SelectedChart from './selected-chart/selected-chart'
 
 const ORDER_OF_ORDERS = [
