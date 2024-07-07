@@ -136,7 +136,7 @@ export default function IcuRegisterDialog({
             {step === 'ownerSearch' && (
               <OwnerSearch ownersData={ownersData} setStep={setStep} />
             )}
-            {step === 'ownerRegister' && <OwnerForm setStep={setStep} icu />}
+            {step === 'ownerRegister' && <OwnerForm setStep={setStep} />}
             {step === 'patientRegister' && (
               <PatientForm
                 setStep={setStep}

@@ -153,6 +153,7 @@ export default function PatientForm({
 
       toast({
         title: '환자가 등록되었습니다',
+        description: icu ? '입원을 이어서 진행합니다' : '',
       })
     }
 
@@ -194,16 +195,14 @@ export default function PatientForm({
 
       toast({
         title: '보호자 및 환자가 등록되었습니다',
+        description: icu ? '입원을 이어서 진행합니다' : '',
       })
     }
 
     setIsSubmitting(false)
-
-    icu ? push('icu') : push('patients')
     refresh()
 
-    icu && setStep('icuRegister')
-    !icu && setIsDialogOpen(false)
+    icu ? setStep('icuRegister') : setIsDialogOpen(false)
   }
 
   return (
