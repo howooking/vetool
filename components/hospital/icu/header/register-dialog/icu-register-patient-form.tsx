@@ -25,13 +25,14 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
+import { registerIcuPatient } from '@/lib/services/hospital/icu/register-icu-patient'
 import {
-  usePatientRegisterStep,
   useIcuRegisteringPatient,
+  usePatientRegisterStep,
 } from '@/lib/store/hospital/icu/icu-register'
-import { createClient } from '@/lib/supabase/client'
-import { cn, getDaysSince } from '@/lib/utils'
+import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
+import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
+import { cn } from '@/lib/utils'
 import type { Vet } from '@/types/hospital'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addDays, format } from 'date-fns'
@@ -43,8 +44,6 @@ import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { registerIcuPatientFormSchema } from './schema'
-import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
 
 export default function IcuRegisterPatientForm({
   hosId,
@@ -62,7 +61,6 @@ export default function IcuRegisterPatientForm({
   setTab: Dispatch<SetStateAction<string>>
 }) {
   const { push, refresh } = useRouter()
-  const supabase = createClient()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
     to: addDays(new Date(), 1),
@@ -86,6 +84,13 @@ export default function IcuRegisterPatientForm({
     },
   })
 
+  useEffect(() => {
+    if (range && range.from && range.to) {
+      form.setValue('in_date', range.from)
+      form.setValue('out_due_date', range.to)
+    }
+  }, [form, range])
+
   const handleSubmit = async (
     values: z.infer<typeof registerIcuPatientFormSchema>,
   ) => {
@@ -93,59 +98,17 @@ export default function IcuRegisterPatientForm({
       values
     setIsSubmitting(true)
 
-    const { data: returningValue, error: rpcError } = await supabase.rpc(
-      'insert_icu_io_and_icu_chart_when_register_icu_patient',
-      {
-        hos_id_input: hosId,
-        dx_input: dx,
-        cc_input: cc,
-        in_date_input: format(in_date, 'yyyy-MM-dd'),
-        out_due_date_input: format(out_due_date, 'yyyy-MM-dd'),
-        // ! rpc로직
-        group_list_input: JSON.stringify(group_list),
-        age_in_days_input: getDaysSince(registeringPatient.birth),
-        patient_id_input: registeringPatient.patientId!,
-        main_vet_input: main_vet,
-        sub_vet_input: sub_vet ?? '',
-      },
+    await registerIcuPatient(
+      hosId,
+      registeringPatient,
+      dx,
+      cc,
+      in_date,
+      out_due_date,
+      group_list,
+      main_vet,
+      sub_vet,
     )
-
-    if (rpcError) {
-      console.log(rpcError)
-      toast({
-        variant: 'destructive',
-        title: rpcError.message,
-        description: '관리자에게 문의하세요',
-      })
-      setIsSubmitting(false)
-      return
-    }
-
-    const [icuIoId, icuChartId] = returningValue.split(',')
-
-    // 기본차트 삽입
-    DEFAULT_ICU_ORDER_NAME.forEach(async (order) => {
-      const { error: icuChartOrderError } = await supabase
-        .from('icu_chart_order')
-        .insert({
-          icu_chart_order_type: order.dataType,
-          icu_chart_id: icuChartId,
-          icu_io_id: icuIoId,
-          icu_chart_order_name: order.orderName,
-          icu_chart_order_comment: order.orderComment,
-        })
-
-      if (icuChartOrderError) {
-        console.log(icuChartOrderError)
-        toast({
-          variant: 'destructive',
-          title: icuChartOrderError.message,
-          description: '관리자에게 문의하세요',
-        })
-        setIsSubmitting(false)
-        return
-      }
-    })
 
     toast({
       title: '입원 환자가 등록되었습니다',
@@ -159,23 +122,12 @@ export default function IcuRegisterPatientForm({
     refresh()
   }
 
-  // 입원 - 퇴원 예정일 업데이트
-  useEffect(() => {
-    if (range && range.from && range.to) {
-      form.setValue('in_date', range.from)
-      form.setValue('out_due_date', range.to)
-    }
-  }, [form, range])
-
-  // 이전 버튼 클릭 핸들러
   const handlePreviousButtonClick = () => {
     if (tab === 'search') {
-      setTab('search')
       setStep('patientSearch')
       return
     }
     if (tab === 'register') {
-      setTab('register')
       setStep('ownerSearch')
       return
     }
@@ -272,7 +224,7 @@ export default function IcuRegisterPatientForm({
           render={() => (
             <FormItem>
               <FormLabel className="text-base">그룹</FormLabel>
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-wrap items-center gap-2">
                 {groupList.map((item) => (
                   <FormField
                     key={item}
@@ -325,12 +277,11 @@ export default function IcuRegisterPatientForm({
                 </FormControl>
                 <SelectContent>
                   {vetsData.map((vet) => (
-                    <SelectItem
-                      key={vet.user_id}
-                      value={vet.user_id}
-                      className="text-xs"
-                    >
-                      {`${vet.name} ${vet.position ?? '미분류'}`}
+                    <SelectItem key={vet.user_id} value={vet.user_id}>
+                      <span>{vet.name}</span>
+                      <span className="ml-2 text-xs">
+                        {vet.position ?? '미분류'}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -361,13 +312,12 @@ export default function IcuRegisterPatientForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {vetsData.map((vet, index) => (
-                    <SelectItem
-                      key={index}
-                      value={vet.user_id}
-                      className="text-xs"
-                    >
-                      {`${vet.name} ${vet.position ?? '미분류'}`}
+                  {vetsData.map((vet) => (
+                    <SelectItem key={vet.user_id} value={vet.user_id}>
+                      <span>{vet.name}</span>
+                      <span className="ml-2 text-xs">
+                        {vet.position ?? '미분류'}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
