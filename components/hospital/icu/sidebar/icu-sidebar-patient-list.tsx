@@ -1,5 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
-import { IcuIoPatientJoined } from '@/types/hospital/icu'
+import { getIcuIoData } from '@/lib/services/hospital/icu/get-icu-io-data'
 import { Squirrel } from 'lucide-react'
 import IcuSidebarPatientButton from './icu-sidebar-patient-button'
 
@@ -10,27 +9,7 @@ export default async function IcuSidebarPatientList({
   hosId: string
   targetDate: string
 }) {
-  const supabase = createClient()
-
-  const { data: icuIoData, error: icuIoDataError } = await supabase
-    .from('icu_io')
-    .select(
-      `
-        *,
-        patient_id("name", "breed", "patient_id")
-      `,
-    )
-    .match({ hos_id: hosId })
-    .lte('in_date', targetDate)
-    // ! 클라이언트 사이드에서 필터링하던거 쿼리로 필터링, 복잡함
-    .or(`out_date.is.null, out_date.gte.${targetDate}`)
-    .order('in_date', { ascending: true })
-    .returns<IcuIoPatientJoined[]>()
-
-  if (icuIoDataError) {
-    console.log(icuIoDataError)
-    throw new Error(icuIoDataError.message)
-  }
+  const icuIoData = await getIcuIoData(hosId, targetDate)
 
   return (
     <ul className="flex flex-col gap-2">

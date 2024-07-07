@@ -1,6 +1,5 @@
 import IcuFooter from '@/components/hospital/icu/icu-footer'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
-import { Suspense } from 'react'
 export default async function Layout({
   children,
   params,

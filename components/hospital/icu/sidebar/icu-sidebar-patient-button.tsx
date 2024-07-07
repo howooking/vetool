@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import { IcuIoPatientJoined } from '@/types/hospital/icu'
+import type { IcuIoPatientJoined } from '@/types/hospital/icu'
 
 export default function IcuSidebarPatientButton({
   data,
