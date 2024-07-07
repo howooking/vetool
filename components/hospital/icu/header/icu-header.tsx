@@ -17,8 +17,7 @@ export default function IcuHeader({
   ownersData: Owner[]
 }) {
   return (
-    <div className="absolute left-0 top-2 flex items-center gap-6 px-4">
-      <IcuHeaderDateSelector />
+    <div className="absolute left-0 top-2 flex items-center gap-4 px-2">
       <IcuRegisterDialog
         hosId={hosId}
         patients={patients}
@@ -26,6 +25,7 @@ export default function IcuHeader({
         groupList={groupList}
         ownersData={ownersData}
       />
+      <IcuHeaderDateSelector />
     </div>
   )
 }

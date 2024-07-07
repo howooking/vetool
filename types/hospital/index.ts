@@ -70,7 +70,12 @@ export type IcuChartJoined = Omit<
   IcuChart,
   'main_vet' | 'sub_vet' | 'patient_id' | 'icu_io_id'
 > & {
-  patient_id: Patients
+  patient_id: {
+    name: string
+    gender: string
+    breed: string
+    patient_id: string
+  }
   icu_io_id: IcuIo
   main_vet: MainAndSubVet
   sub_vet: MainAndSubVet

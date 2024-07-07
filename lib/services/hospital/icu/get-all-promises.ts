@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
 import type { PatientData } from '@/types/hospital/patients'
 
-export const getAllPromises = async (hosId: string) => {
+export const getAllPromises = async (hosId: string, targetDate: string) => {
   const supabase = createClient()
 
   const promiseArray = Promise.all([
@@ -19,8 +19,9 @@ export const getAllPromises = async (hosId: string) => {
           sub_vet("name", "user_id", "avatar_url")
         `,
       )
-      .match({ hos_id: hosId })
+      .match({ hos_id: hosId, target_date: targetDate })
       .order('created_at', { ascending: true })
+      // 리턴 타입 쿼리문 보고 정하기
       .returns<IcuChartJoined[]>(),
 
     supabase
@@ -59,12 +60,14 @@ export const getAllPromises = async (hosId: string) => {
       .order('icu_chart_order_name', { ascending: true })
       .returns<IcuChartOrderJoined[]>(),
 
+    // 병원 그룹리스트
     supabase.from('hospitals').select('group_list').match({ hos_id: hosId }),
 
+    // 수의사
     supabase
       .from('users')
       .select('name, position, user_id')
-      .match({ hos_id: hosId }),
+      .match({ hos_id: hosId, is_vet: true }),
 
     supabase
       .from('patients')

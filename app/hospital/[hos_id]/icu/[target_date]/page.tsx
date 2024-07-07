@@ -1,11 +1,11 @@
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
 import IcuMain from '@/components/hospital/icu/main/icu-main'
-import { getAllPromises } from '../../../../lib/services/hospital/icu/get-all-promises'
+import { getAllPromises } from '@/lib/services/hospital/icu/get-all-promises'
 
 export default async function IcuPage({
   params,
 }: {
-  params: { hos_id: string }
+  params: { hos_id: string; target_date: string }
 }) {
   const [
     { data: icuChartData, error: icuChartDataError },
@@ -14,7 +14,7 @@ export default async function IcuPage({
     { data: vetsData, error: vetsDataError },
     { data: patientsData, error: patientsDataError },
     { data: ownersData, error: ownersDataError },
-  ] = await getAllPromises(params.hos_id)
+  ] = await getAllPromises(params.hos_id, params.target_date)
 
   if (
     icuChartDataError ||
