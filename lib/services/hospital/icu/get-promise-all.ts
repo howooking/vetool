@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
 import type { PatientData } from '@/types/hospital/patients'
 
-export const getAllPromises = async (hosId: string, targetDate: string) => {
+export const getPromiseAll = async (hosId: string, targetDate: string) => {
   const supabase = createClient()
 
   const promiseArray = Promise.all([
@@ -21,7 +21,7 @@ export const getAllPromises = async (hosId: string, targetDate: string) => {
       )
       .match({ hos_id: hosId, target_date: targetDate })
       .order('created_at', { ascending: true })
-      // 리턴 타입 쿼리문 보고 정하기
+      // !! 리턴 타입 쿼리문 보고 정하기
       .returns<IcuChartJoined[]>(),
 
     supabase
@@ -89,5 +89,46 @@ export const getAllPromises = async (hosId: string, targetDate: string) => {
       .order('created_at', { ascending: false }),
   ])
 
-  return promiseArray
+  const [
+    { data: icuChartData, error: icuChartDataError },
+    { data: icuChartOrderData, error: icuChartOrderDataError },
+    { data: groupListData, error: groupListDataError },
+    { data: vetsData, error: vetsDataError },
+    { data: patientsData, error: patientsDataError },
+    { data: ownersData, error: ownersDataError },
+  ] = await promiseArray
+
+  if (
+    icuChartDataError ||
+    icuChartOrderDataError ||
+    groupListDataError ||
+    vetsDataError ||
+    patientsDataError ||
+    ownersDataError
+  ) {
+    console.log({
+      icuChartDataError,
+      icuChartOrderDataError,
+      groupListDataError,
+      vetsDataError,
+      patientsDataError,
+      ownersDataError,
+    })
+    throw new Error(
+      icuChartDataError?.message ||
+        icuChartOrderDataError?.message ||
+        groupListDataError?.message ||
+        vetsDataError?.message ||
+        patientsDataError?.message ||
+        ownersDataError?.message,
+    )
+  }
+  return {
+    icuChartData,
+    icuChartOrderData,
+    groupListData,
+    vetsData,
+    patientsData,
+    ownersData,
+  }
 }

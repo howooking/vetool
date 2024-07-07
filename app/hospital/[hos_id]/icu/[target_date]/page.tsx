@@ -1,46 +1,20 @@
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
 import IcuMain from '@/components/hospital/icu/main/icu-main'
-import { getAllPromises } from '@/lib/services/hospital/icu/get-all-promises'
+import { getPromiseAll } from '@/lib/services/hospital/icu/get-promise-all'
 
 export default async function IcuPage({
   params,
 }: {
   params: { hos_id: string; target_date: string }
 }) {
-  const [
-    { data: icuChartData, error: icuChartDataError },
-    { data: icuChartOrderData, error: icuChartOrderDataError },
-    { data: groupListData, error: groupListDataError },
-    { data: vetsData, error: vetsDataError },
-    { data: patientsData, error: patientsDataError },
-    { data: ownersData, error: ownersDataError },
-  ] = await getAllPromises(params.hos_id, params.target_date)
-
-  if (
-    icuChartDataError ||
-    icuChartOrderDataError ||
-    groupListDataError ||
-    vetsDataError ||
-    patientsDataError ||
-    ownersDataError
-  ) {
-    console.log({
-      icuChartDataError,
-      icuChartOrderDataError,
-      groupListDataError,
-      vetsDataError,
-      patientsDataError,
-      ownersDataError,
-    })
-    throw new Error(
-      icuChartDataError?.message ||
-        icuChartOrderDataError?.message ||
-        groupListDataError?.message ||
-        vetsDataError?.message ||
-        patientsDataError?.message ||
-        ownersDataError?.message,
-    )
-  }
+  const {
+    icuChartData,
+    icuChartOrderData,
+    groupListData,
+    vetsData,
+    patientsData,
+    ownersData,
+  } = await getPromiseAll(params.hos_id, params.target_date)
 
   return (
     <div className="h-icu-chart overflow-y-scroll">
