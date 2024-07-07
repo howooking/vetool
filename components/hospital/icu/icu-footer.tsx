@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
 
-export const MAIN_VIEW_MENUS = [
+export const FOOTER_MAIN_VIEW_MENUS = [
   {
     label: '종합 현황',
     value: 'summary',
@@ -29,14 +29,13 @@ export default function IcuFooter() {
   }
 
   return (
-    <footer className="fixed bottom-0 h-12 w-full border-t bg-white">
-      <ul className="flex h-full items-center gap-2 pl-2">
-        {MAIN_VIEW_MENUS.map(({ label, value }) => (
+    <footer className="fixed bottom-0 h-10 w-full border-t bg-white">
+      <ul className="flex h-full items-center gap-2 pl-1">
+        {FOOTER_MAIN_VIEW_MENUS.map(({ label, value }) => (
           <li key={value}>
             <Button
-              type="button"
               size="sm"
-              variant="outline"
+              variant="ghost"
               className={selectIcudMainView === value ? 'bg-muted' : ''}
               onClick={() => handleButtonClick(value)}
             >
