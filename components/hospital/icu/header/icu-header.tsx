@@ -18,13 +18,13 @@ export default function IcuHeader({
 }) {
   return (
     <div className="absolute left-0 top-2 flex items-center gap-4 px-2">
-      <IcuRegisterDialog
+      {/* <IcuRegisterDialog
         hosId={hosId}
         patients={patients}
         vets={vets}
         groupList={groupList}
         ownersData={ownersData}
-      />
+      /> */}
       <IcuHeaderDateSelector />
     </div>
   )
