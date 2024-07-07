@@ -9,6 +9,7 @@ import {
 import useHospitalId from '@/hooks/use-hospital-id'
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
+import { format } from 'date-fns'
 import { type LucideProps } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -30,8 +31,11 @@ export default function SidebarItem({
   const pathname = usePathname()
 
   const isActive =
-    (pathname.split('/').length === 3 && path === '/') ||
-    pathname.endsWith(path)
+    pathname.split('/').at(3) === path ||
+    (!pathname.split('/').at(3) && name === '병원 홈')
+
+  const dynamicPath =
+    path === 'icu' ? `icu/${format(new Date(), 'yyyy-MM-dd')}` : path
 
   return (
     <li key={name} className="transition-all hover:bg-muted">
@@ -39,7 +43,7 @@ export default function SidebarItem({
         <Tooltip>
           <TooltipTrigger asChild> */}
       <Link
-        href={`/hospital/${hosId}${path}`}
+        href={`/hospital/${hosId}/${dynamicPath}`}
         className={cn(
           'flex h-12 items-center',
           isActive && 'bg-primary text-white',
