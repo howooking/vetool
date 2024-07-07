@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
+import { getIcuIoByPatientId } from '@/lib/services/hospital/icu/get-icu-io-by-patient-id'
 import {
   useIcuRegisteringPatient,
   usePatientRegisterStep,
 } from '@/lib/store/hospital/icu/icu-register'
-import { createClient } from '@/lib/supabase/client'
 
 export default function IcuPatientSelectButton({
   patientId,
@@ -15,24 +15,12 @@ export default function IcuPatientSelectButton({
   isIcu: boolean
   birth: string
 }) {
-  const supabase = createClient()
   const { setStep } = usePatientRegisterStep()
   const { setRegisteringPatient } = useIcuRegisteringPatient()
 
   const handlePatientClick = async () => {
-    const { data: icuIoData, error: icuIoError } = await supabase
-      .from('icu_io')
-      .select('in_date, out_date')
-      .match({ patient_id: patientId })
-      .order('created_at', { ascending: false })
-      .maybeSingle()
+    const icuIoData = await getIcuIoByPatientId(patientId)
 
-    if (icuIoError) {
-      console.log(icuIoError)
-      throw new Error(icuIoError.message)
-    }
-
-    // 입원일은 존재하나, 퇴원일이 존재하지 않을 때 (이미 입원중인 환자)
     if (icuIoData?.in_date && !icuIoData?.out_date) {
       toast({
         variant: 'destructive',

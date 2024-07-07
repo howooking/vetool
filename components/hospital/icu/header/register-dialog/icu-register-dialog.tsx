@@ -35,8 +35,11 @@ export default function IcuRegisterDialog({
 
   useEffect(() => {
     setTimeout(() => {
-      setStep('patientSearch')
-    }, 500)
+      if (!isDialogOpen) {
+        setTab('search')
+        setStep('patientSearch')
+      }
+    }, 1000)
   }, [setStep, isDialogOpen])
 
   const icuRegisterPatientsData: PatientDataTable[] = patientsData.map(
@@ -77,15 +80,6 @@ export default function IcuRegisterDialog({
       return
     }
   }
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (!isDialogOpen) {
-        setTab('search')
-        setStep('patientSearch')
-      }
-    }, 1000)
-  }, [setStep, isDialogOpen])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
