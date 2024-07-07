@@ -26,7 +26,6 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
-import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import {
   usePatientRegisterStep,
   useIcuRegisteringPatient,
@@ -50,19 +49,19 @@ import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main
 export default function IcuRegisterPatientForm({
   hosId,
   groupList,
-  vets,
+  vetsData,
   setIsDialogOpen,
   tab,
   setTab,
 }: {
   hosId: string
   groupList: string[]
-  vets: Vet[]
+  vetsData: Vet[]
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
   tab: string
   setTab: Dispatch<SetStateAction<string>>
 }) {
-  const { refresh } = useRouter()
+  const { push, refresh } = useRouter()
   const supabase = createClient()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
@@ -71,7 +70,6 @@ export default function IcuRegisterPatientForm({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { registeringPatient } = useIcuRegisteringPatient()
   const { setSelectedPatientId } = useIcuSelectedPatientStore()
-  const { setSelectedDate } = useIcuSelectedDateStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setStep } = usePatientRegisterStep()
 
@@ -103,6 +101,7 @@ export default function IcuRegisterPatientForm({
         cc_input: cc,
         in_date_input: format(in_date, 'yyyy-MM-dd'),
         out_due_date_input: format(out_due_date, 'yyyy-MM-dd'),
+        // ! rpc로직
         group_list_input: JSON.stringify(group_list),
         age_in_days_input: getDaysSince(registeringPatient.birth),
         patient_id_input: registeringPatient.patientId!,
@@ -154,9 +153,9 @@ export default function IcuRegisterPatientForm({
 
     setIsDialogOpen(false)
     setIsSubmitting(false)
-    setSelectedDate(format(in_date, 'yyyy-MM-dd'))
     setSelectedPatientId(registeringPatient.patientId)
     setSelectedIcuMainView('chart')
+    push(`${format(in_date, 'yyyy-MM-dd')}`)
     refresh()
   }
 
@@ -325,7 +324,7 @@ export default function IcuRegisterPatientForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {vets.map((vet) => (
+                  {vetsData.map((vet) => (
                     <SelectItem
                       key={vet.user_id}
                       value={vet.user_id}
@@ -362,7 +361,7 @@ export default function IcuRegisterPatientForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {vets.map((vet, index) => (
+                  {vetsData.map((vet, index) => (
                     <SelectItem
                       key={index}
                       value={vet.user_id}

@@ -46,8 +46,8 @@ export default async function IcuPage({
     <div className="h-icu-chart overflow-y-scroll">
       <IcuHeader
         hosId={params.hos_id}
-        patients={patientsData}
-        vets={vetsData}
+        patientsData={patientsData}
+        vetsData={vetsData}
         groupList={groupListData[0].group_list}
         ownersData={ownersData}
       />
