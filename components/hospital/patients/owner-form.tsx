@@ -21,7 +21,6 @@ import HelperTooltip from '@/components/common/helper-tooltip'
 
 export default function OwnerForm({
   setStep,
-  // !! icu 필요 없음
 }: {
   setStep: (step: 'ownerSearch' | 'ownerRegister' | 'patientRegister') => void
 }) {

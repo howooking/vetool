@@ -29,12 +29,10 @@ export const registerIcuPatient = async (
       cc_input: cc,
       in_date_input: format(in_date, 'yyyy-MM-dd'),
       out_due_date_input: format(out_due_date, 'yyyy-MM-dd'),
-      // !! rpc로직
       group_list_input: JSON.stringify(group_list),
       age_in_days_input: getDaysSince(registeringPatient.birth),
       patient_id_input: registeringPatient.patientId!,
       main_vet_input: main_vet,
-      // !! sub_vet nullable
       sub_vet_input: sub_vet ?? '',
     },
   )

@@ -4,9 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import type { IcuIoPatientJoined } from '@/types/hospital/icu'
 
 export const getIcuIoData = async (hosId: string, targetDate: string) => {
-  // !! 외부 스코프에서 선언시 cookie에서
   const supabase = createClient()
-
   const { data: icuIoData, error: icuIoDataError } = await supabase
     .from('icu_io')
     .select(

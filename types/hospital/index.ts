@@ -65,7 +65,6 @@ type MainAndSubVet = {
   avatar_url: string
 }
 
-// !! join 했을 때 type overriding을 하기 위해서 omit 사용
 export type IcuChartJoined = Omit<
   IcuChart,
   'main_vet' | 'sub_vet' | 'patient_id' | 'icu_io_id'

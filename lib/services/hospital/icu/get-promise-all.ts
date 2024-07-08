@@ -21,7 +21,6 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       )
       .match({ hos_id: hosId, target_date: targetDate })
       .order('created_at', { ascending: true })
-      // !! 리턴 타입 쿼리문 보고 정하기
       .returns<IcuChartJoined[]>(),
 
     supabase

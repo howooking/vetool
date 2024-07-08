@@ -17,8 +17,7 @@ export default function IcuHeaderDateSelector() {
   }
 
   return (
-    // TODO BG CHANGE
-    <div className="flex items-center gap-2 bg-white">
+    <div className="flex items-center gap-2">
       <Button
         onClick={() => handleUpdateDate(-1)}
         size="icon"

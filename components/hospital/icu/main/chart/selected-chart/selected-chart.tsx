@@ -1,7 +1,7 @@
 import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
-import IcuChartMemo from './memo/icu-chart-memo'
-import IcuChartPatientDetail from './patient-detail/icu-chart-patient-detail'
-import IcuChartTable from './table/icu-chart-table'
+import IcuChartPatientDetail from '../patient-detail/icu-chart-patient-detail'
+import IcuChartTable from '../table/icu-chart-table'
+import IcuChartMemo from '../memo/icu-chart-memo'
 
 export default function SelectedChart({
   selectedChart,
