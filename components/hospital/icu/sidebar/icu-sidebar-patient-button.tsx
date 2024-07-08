@@ -4,21 +4,31 @@ import { Button } from '@/components/ui/button'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import type { IcuIoPatientJoined } from '@/types/hospital/icu'
+import { IcuIoPatientJoined } from '@/types/hospital/icu'
+import { useEffect } from 'react'
 
 export default function IcuSidebarPatientButton({
   data,
+  firstPatientId,
 }: {
   data: IcuIoPatientJoined
+  firstPatientId: string
 }) {
   const { selectedPatientId, setSelectedPatientId } =
     useIcuSelectedPatientStore()
-  const { setSelectedIcuMainView } = useSelectedMainViewStore()
+  const { selectIcudMainView, setSelectedIcuMainView } =
+    useSelectedMainViewStore()
 
   const handlePatientButtonClick = (data: IcuIoPatientJoined) => {
     setSelectedPatientId(data.patient_id.patient_id)
     setSelectedIcuMainView('chart')
   }
+
+  useEffect(() => {
+    if (selectIcudMainView === 'chart') {
+      setSelectedPatientId(firstPatientId)
+    }
+  }, [firstPatientId, selectIcudMainView, setSelectedPatientId])
 
   return (
     <Button

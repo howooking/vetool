@@ -21,7 +21,10 @@ export default async function IcuSidebarPatientList({
       ) : (
         icuIoData.map((data) => (
           <li key={data.icu_io_id} className="w-full">
-            <IcuSidebarPatientButton data={data} />
+            <IcuSidebarPatientButton
+              data={data}
+              firstPatientId={icuIoData[0].patient_id.patient_id}
+            />
           </li>
         ))
       )}
