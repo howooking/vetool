@@ -12,10 +12,10 @@ import type { IcuChartJoined, Vet } from '@/types/hospital'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { format } from 'date-fns'
-import PatientDetailInput from './items/patient-detail-input'
-import PatientDetailItem from './items/patient-detail-item'
-import PatientDetailVetsDialog from './items/patient-detail-vets-dialog'
-import PatientDetailGroup from './items/patient-detail-group'
+import PatientDetailInput from './infos/patient-detail-input'
+import PatientDetailVetsDialog from './infos/patient-detail-vets-dialog'
+import PatientDetailGroup from './infos/patient-detail-group'
+import HeaderSignalments from './infos/header-signalment'
 
 type ChartState = {
   dx: string | null
@@ -24,7 +24,7 @@ type ChartState = {
   weight: string | null
 }
 
-export default function IcuChartPatientDetail({
+export default function ChartInfos({
   chartData,
   vetsData,
 }: {
@@ -44,6 +44,7 @@ export default function IcuChartPatientDetail({
     caution,
     weight_measured_date: weightMeasuredDate,
   } = chartData
+
   const { name: mainVetName, user_id: mainVetId } = chartData.main_vet
   // const { name: subVetName, user_id: subVetId } = chartData.sub_vet
   const [chartState, setChartState] = useState<ChartState>({
@@ -98,19 +99,17 @@ export default function IcuChartPatientDetail({
 
   return (
     <div className="w-full rounded-md border p-4">
-      {/* <PatientDetailItem
-        name={name}
-        breed={breed}
-        gender={gender}
-        ageInDays={ageInDays}
-        patientId={patientId}
-        selectedDate={selectedDate}
-        weightMeasuredDate={weightMeasuredDate}
-      /> */}
-      <Separator className="my-4" />
+      <HeaderSignalments
+        ageInDays={chartData.icu_io_id.age_in_days}
+        breed={chartData.patient_id.breed}
+        name={chartData.patient_id.name}
+        gender={chartData.patient_id.gender}
+        weightMeasuredDate={chartData.weight_measured_date}
+        weight={chartData.weight}
+        species={chartData.patient_id.species}
+      />
 
       <div className="flex h-16 items-center space-x-4 text-sm">
-        {/* DX */}
         <PatientDetailInput
           label="DX"
           value={chartState.dx}
@@ -120,7 +119,6 @@ export default function IcuChartPatientDetail({
         />
         <Separator orientation="vertical" />
 
-        {/* CC */}
         <PatientDetailInput
           label="CC"
           value={chartState.cc}
@@ -130,19 +128,15 @@ export default function IcuChartPatientDetail({
         />
         <Separator orientation="vertical" />
 
-        {/* 주치의 / 부주치의 */}
         {/* <PatientDetailVetsDialog
-          mainVetName={mainVetName}
-          subVetName={subVetName}
-          mainVetId={mainVetId}
-          subVetId={subVetId}
+          mainVet={chartData.main_vet}
+          subVet={chartData.sub_vet}
           onMainVetChange={(id) => handleVetChange('main_vet', id)}
           onSubVetChange={(id) => handleVetChange('sub_vet', id)}
           vetsData={vetsData}
         /> */}
         <Separator orientation="vertical" />
 
-        {/* 주의 사항 */}
         <PatientDetailInput
           label="주의사항"
           value={chartState.caution}
@@ -152,7 +146,6 @@ export default function IcuChartPatientDetail({
         />
         <Separator orientation="vertical" />
 
-        {/* 그룹 */}
         <PatientDetailGroup
           label="그룹"
           groupList={groupList}
@@ -162,7 +155,6 @@ export default function IcuChartPatientDetail({
         />
         <Separator orientation="vertical" />
 
-        {/* 체중 */}
         <PatientDetailInput
           label="체중"
           value={chartState.weight}

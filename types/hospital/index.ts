@@ -74,6 +74,7 @@ export type IcuChartJoined = Omit<
     gender: string
     breed: string
     patient_id: string
+    species: string
   }
   icu_io_id: IcuIo
   main_vet: MainAndSubVet

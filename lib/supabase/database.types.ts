@@ -663,7 +663,7 @@ export type Database = {
       }
       icu_io: {
         Row: {
-          age_in_days: number | null
+          age_in_days: number
           cc: string | null
           created_at: string
           dx: string | null
@@ -676,7 +676,7 @@ export type Database = {
           patient_id: string
         }
         Insert: {
-          age_in_days?: number | null
+          age_in_days: number
           cc?: string | null
           created_at?: string
           dx?: string | null
@@ -689,7 +689,7 @@ export type Database = {
           patient_id: string
         }
         Update: {
-          age_in_days?: number | null
+          age_in_days?: number
           cc?: string | null
           created_at?: string
           dx?: string | null

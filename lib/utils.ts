@@ -19,6 +19,19 @@ export function getDaysSince(dateString: string | null) {
 
   return Math.floor(dayDifference)
 }
+export function getAgeFromAgeInDays(ageInDays: number) {
+  const years = Math.floor(ageInDays / 365)
+  const remainingDays = ageInDays % 365
+  const months = Math.floor(remainingDays / 30)
+
+  if (years === 0) {
+    return `${ageInDays}일`
+  } else if (years > 0 && months === 0) {
+    return `${years}살`
+  } else {
+    return `${years}살 ${months}개월`
+  }
+}
 
 export function formatTimestamp(utcTimestamp: string) {
   const date = new Date(utcTimestamp)
