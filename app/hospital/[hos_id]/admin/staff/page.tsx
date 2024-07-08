@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import {
   type HospitalUserData,
   type HospitalUserDataTable,
-} from '@/types/hospital/adimin'
+} from '@/types/adimin'
 import { redirect } from 'next/navigation'
 
 export default async function AdminStaffPage({

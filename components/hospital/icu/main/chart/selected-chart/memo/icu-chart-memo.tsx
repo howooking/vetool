@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
-import { updateMemo } from '@/lib/services/hospital/icu/update-icu-chart'
-import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
+import { updateMemo } from '@/lib/services/icu/update-icu-chart'
+import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { useState } from 'react'
 
 type MemoState = {

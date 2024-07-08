@@ -10,10 +10,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { addDefaultChart } from '@/lib/services/hospital/icu/add-icu-chart'
+import { addDefaultChart } from '@/lib/services/icu/add-icu-chart'
 
 import { cn } from '@/lib/utils'
-import type { IcuChartJoined } from '@/types/hospital'
+import type { IcuChartJoined } from '@/types/icu'
 import { File, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'

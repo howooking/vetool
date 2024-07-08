@@ -38,8 +38,8 @@ import {
   TIME,
   TX_ORDER_TIME_INTERVAL,
 } from '@/constants/hospital/icu/chart/time'
-import { useCreateOrderStore } from '@/lib/store/hospital/icu/chart/create-order'
-import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
+import { useCreateOrderStore } from '@/lib/store/icu/create-order'
+import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -49,10 +49,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { GroupCheckFormSchema } from './schema'
-import {
-  deleteOrder,
-  upsertOrder,
-} from '@/lib/services/hospital/icu/create-new-order'
+import { deleteOrder, upsertOrder } from '@/lib/services/icu/create-new-order'
 
 export default function IcuChartOrderForm({
   chartId,

@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { getIcuIoByPatientId } from '@/lib/services/hospital/icu/get-icu-io-by-patient-id'
+import { getIcuIoByPatientId } from '@/lib/services/icu/get-icu-io-by-patient-id'
 import {
   useIcuRegisteringPatient,
   usePatientRegisterStep,
-} from '@/lib/store/hospital/icu/icu-register'
+} from '@/lib/store/icu/icu-register'
 
 export default function IcuPatientSelectButton({
   patientId,

@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { useCreateOrderStore } from '@/lib/store/hospital/icu/chart/create-order'
+import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { FilePlus } from 'lucide-react'
 import IcuChartOrderForm from './icu-chart-order-form'
 

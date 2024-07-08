@@ -21,11 +21,7 @@ export default function PatientDetailDatePicker({
         <span className="min-w-20 text-sm">
           {dateValue ?? format(new Date(), 'yyyy-MM-dd')}
         </span>
-        <IcuHeaderDatePicker
-          selectedDate={dateValue ?? format(new Date(), 'yyyy-MM-dd')}
-          setSelectedDate={setDateValue}
-          onChange={onChange}
-        />
+        <IcuHeaderDatePicker />
       </div>
     </div>
   )

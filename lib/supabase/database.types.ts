@@ -1078,6 +1078,7 @@ export type Database = {
           patient_id_input: string
           weight_input: string
           target_date_input: string
+          weight_measured_date_input: string
         }
         Returns: undefined
       }

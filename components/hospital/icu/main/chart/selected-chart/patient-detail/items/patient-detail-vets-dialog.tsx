@@ -16,14 +16,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import type { Vet } from '@/types/hospital'
+import type { Vet } from '@/types/'
 import { useState } from 'react'
 
 type PatientDetailVetsDialogProps = {
   mainVetName: string | null
   subVetName: string | null
   mainVetId: string
-  subVetId: string
+  subVetId: string | null
   onMainVetChange: (value: string) => Promise<void>
   onSubVetChange: (value: string) => Promise<void>
   vetsData: Vet[]
@@ -94,7 +94,7 @@ export default function PatientDetailVetsDialog({
               <div className="flex flex-col justify-center gap-2">
                 <span className="text-sm font-semibold">부주치의</span>
                 <Select
-                  defaultValue={subVetValue}
+                  defaultValue={subVetValue ?? ''}
                   onValueChange={(currentValue) => {
                     setSubVetValue(currentValue)
                     onSubVetChange(currentValue)

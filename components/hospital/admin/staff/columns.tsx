@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { HospitalUserDataTable } from '@/types/hospital/adimin'
+import { HospitalUserDataTable } from '@/types/adimin'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import { DeleteUserColumn } from './delete-user-column'

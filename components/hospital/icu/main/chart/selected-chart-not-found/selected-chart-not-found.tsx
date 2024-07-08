@@ -1,5 +1,5 @@
 import NoResult from '@/components/common/no-result'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
+import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 import { addDays, format, parseISO, subDays } from 'date-fns'
 import AddIcuChartDialogs from './add-icu-chart-dialogs/add-icu-chart-dialogs'
 

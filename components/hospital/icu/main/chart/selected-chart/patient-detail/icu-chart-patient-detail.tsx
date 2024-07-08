@@ -6,14 +6,16 @@ import {
   updateIcuChart,
   updateIcuIo,
   updateWeight,
-} from '@/lib/services/hospital/icu/update-icu-chart'
-import type { IcuChartJoined, Vet } from '@/types/hospital'
+} from '@/lib/services/icu/update-icu-chart'
+import type { Vet } from '@/types'
+import type { IcuChartJoined } from '@/types/icu'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import PatientDetailGroup from './items/patient-detail-group'
 import PatientDetailInput from './items/patient-detail-input'
 import PatientDetailItem from './items/patient-detail-item'
 import PatientDetailVetsDialog from './items/patient-detail-vets-dialog'
+import { format } from 'date-fns'
 
 type ChartState = {
   dx: string | null
@@ -74,7 +76,12 @@ export default function IcuChartPatientDetail({
     if (field === 'weight') {
       if (chartState[field] === chartData[field]) return
 
-      // await updateWeight(patientId, selectedDate, chartState[field] ?? '0')
+      // await updateWeight(
+      //   patientId,
+      //   selectedDate,
+      //   chartState[field] ?? '0',
+      //   format(new Date(), 'yyyy-MM-dd'),
+      // )
     }
 
     toast({ title: `${field.toUpperCase()}가 변경되었습니다` })
@@ -131,9 +138,9 @@ export default function IcuChartPatientDetail({
         {/* 주치의 / 부주치의 */}
         {/* <PatientDetailVetsDialog
           mainVetName={mainVetName}
-          subVetName={subVetName}
+          subVetName={chartData.sub_vet ? chartData.sub_vet.name : null}
           mainVetId={mainVetId}
-          subVetId={subVetId}
+          subVetId={chartData.sub_vet ? chartData.sub_vet.user_id : null}
           onMainVetChange={(id) => handleVetChange('main_vet', id)}
           onSubVetChange={(id) => handleVetChange('sub_vet', id)}
           vetsData={vetsData}

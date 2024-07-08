@@ -2,8 +2,8 @@
 
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { usePatientRegisterStep } from '@/lib/store/hospital/icu/icu-register'
-import { Owner } from '@/types/hospital'
+import { usePatientRegisterStep } from '@/lib/store/icu/icu-register'
+import { Owner } from '@/types/'
 import { useEffect, useState } from 'react'
 import OwnerForm from './owner-form'
 import OwnerSearch from './owner-search'

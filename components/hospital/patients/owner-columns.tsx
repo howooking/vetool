@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { OwnerDataTable } from '@/types/hospital/patients'
+import { OwnerDataTable } from '@/types/patients'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import OwnerSelectButton from './owner-select-button'

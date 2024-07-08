@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuIoPatientJoined } from '@/types/hospital/icu'
+import type { IcuIoPatientJoined } from '@/types/icu'
 
 export const getIcuIoData = async (hosId: string, targetDate: string) => {
   const supabase = createClient()

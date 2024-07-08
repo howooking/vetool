@@ -1,4 +1,4 @@
-import { getIcuIoData } from '@/lib/services/hospital/icu/get-icu-io-data'
+import { getIcuIoData } from '@/lib/services/icu/get-icu-io-data'
 import { Squirrel } from 'lucide-react'
 import IcuSidebarPatientButton from './icu-sidebar-patient-button'
 

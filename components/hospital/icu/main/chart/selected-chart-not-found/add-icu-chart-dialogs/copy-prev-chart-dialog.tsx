@@ -10,9 +10,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { copyPrevSelectedChart } from '@/lib/services/hospital/icu/add-icu-chart'
+import { copyPrevSelectedChart } from '@/lib/services/icu/add-icu-chart'
 import { cn } from '@/lib/utils'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
+import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 import { ClipboardPaste, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
