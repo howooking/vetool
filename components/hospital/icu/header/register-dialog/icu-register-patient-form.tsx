@@ -137,7 +137,7 @@ export default function IcuRegisterPatientForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="mt-4 grid grid-cols-2 gap-8"
+        className="mt-4 grid grid-cols-2 gap-4"
       >
         <FormField
           control={form.control}
@@ -279,9 +279,7 @@ export default function IcuRegisterPatientForm({
                   {vetsData.map((vet) => (
                     <SelectItem key={vet.user_id} value={vet.user_id}>
                       <span>{vet.name}</span>
-                      <span className="ml-2 text-xs">
-                        {vet.position ?? '미분류'}
-                      </span>
+                      <span className="ml-2 text-xs">{vet.position}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>

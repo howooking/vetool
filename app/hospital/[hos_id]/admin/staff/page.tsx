@@ -2,9 +2,9 @@ import { columns } from '@/components/hospital/admin/staff/columns'
 import DataTable from '@/components/ui/data-table'
 import { checkIsAdmin } from '@/lib/actions/auth'
 import { createClient } from '@/lib/supabase/server'
-import {
-  type HospitalUserData,
-  type HospitalUserDataTable,
+import type {
+  HospitalUserDataTable,
+  UserHospitalJoined,
 } from '@/types/hospital/adimin'
 import { redirect } from 'next/navigation'
 
@@ -30,7 +30,7 @@ export default async function AdminStaffPage({
         `,
       )
       .match({ hos_id: params.hos_id })
-      .returns<HospitalUserData[]>()
+      .returns<UserHospitalJoined[]>()
       .order('rank', { ascending: true })
 
   if (hospitalUsersDataError) {

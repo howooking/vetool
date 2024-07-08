@@ -664,9 +664,9 @@ export type Database = {
       icu_io: {
         Row: {
           age_in_days: number
-          cc: string | null
+          cc: string
           created_at: string
-          dx: string | null
+          dx: string
           group_list: string[] | null
           hos_id: string | null
           icu_io_id: string
@@ -677,9 +677,9 @@ export type Database = {
         }
         Insert: {
           age_in_days: number
-          cc?: string | null
+          cc: string
           created_at?: string
-          dx?: string | null
+          dx: string
           group_list?: string[] | null
           hos_id?: string | null
           icu_io_id?: string
@@ -690,9 +690,9 @@ export type Database = {
         }
         Update: {
           age_in_days?: number
-          cc?: string | null
+          cc?: string
           created_at?: string
-          dx?: string | null
+          dx?: string
           group_list?: string[] | null
           hos_id?: string | null
           icu_io_id?: string
@@ -877,9 +877,9 @@ export type Database = {
           is_active: boolean | null
           is_admin: boolean
           is_vet: boolean
-          name: string | null
-          position: string | null
-          rank: number | null
+          name: string
+          position: string
+          rank: number
           user_id: string
         }
         Insert: {
@@ -891,9 +891,9 @@ export type Database = {
           is_active?: boolean | null
           is_admin?: boolean
           is_vet?: boolean
-          name?: string | null
-          position?: string | null
-          rank?: number | null
+          name: string
+          position?: string
+          rank?: number
           user_id: string
         }
         Update: {
@@ -905,9 +905,9 @@ export type Database = {
           is_active?: boolean | null
           is_admin?: boolean
           is_vet?: boolean
-          name?: string | null
-          position?: string | null
-          rank?: number | null
+          name?: string
+          position?: string
+          rank?: number
           user_id?: string
         }
         Relationships: [

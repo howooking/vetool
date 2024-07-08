@@ -52,7 +52,10 @@ export const columns: ColumnDef<HospitalUserDataTable>[] = [
       return (
         <div className="flex items-center gap-2">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={avatarUrl} alt={name ?? 'user avatar image'} />
+            <AvatarImage
+              src={avatarUrl ?? ''}
+              alt={name ?? 'user avatar image'}
+            />
             <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
           </Avatar>
           <span>{name}</span>

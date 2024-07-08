@@ -1,4 +1,3 @@
-import HelperTooltip from '@/components/common/helper-tooltip'
 import { getAgeFromAgeInDays } from '@/lib/utils'
 import { Cat, Dog } from 'lucide-react'
 
@@ -31,9 +30,9 @@ export default function HeaderSignalments({
       <span className="text-sm uppercase">{gender}</span> ·
       <span className="text-sm">{getAgeFromAgeInDays(ageInDays)} </span>·
       {weightMeasuredDate ? (
-        <span className="text-sm">{`${weight}kg (${weightMeasuredDate}측정)`}</span>
+        <span className="text-sm">{`${weight}kg (${weightMeasuredDate} 측정)`}</span>
       ) : (
-        ' 체중 미측정'
+        <span className="text-sm">체중 미측정</span>
       )}
     </header>
   )

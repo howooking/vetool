@@ -1,30 +1,22 @@
-export type HospitalUserData = {
-  name: string
-  position: string | null
-  rank: number
-  group: string[] | null
-  is_admin: boolean
-  user_id: string
-  is_vet: boolean
-  avatar_url: string
+import { Users } from '..'
+
+export type UserHospitalJoined = Omit<
+  Users,
+  'email' | 'is_active' | 'created_at' | 'hos_id'
+> & {
   hos_id: {
     master_user_id: string
     group_list: string[]
   }
 }
 
-export type HospitalUserDataTable = {
-  name: string
-  position: string | null
-  rank: number
-  group: string[] | null
-  is_admin: boolean
-  user_id: string
-  is_vet: boolean
-  avatar_url: string
-  isMaster: boolean
+export type HospitalUserDataTable = Omit<
+  Users,
+  'email' | 'is_active' | 'created_at' | 'hos_id'
+> & {
   master_user_id: string
   group_list: string[]
+  isMaster: boolean
 }
 
 export type ApprovalData = {

@@ -59,7 +59,7 @@ export type User = {
   }[]
 }
 
-type MainAndSubVet = {
+export type MainAndSubVet = {
   name: string
   user_id: string
   avatar_url: string
@@ -78,7 +78,7 @@ export type IcuChartJoined = Omit<
   }
   icu_io_id: IcuIo
   main_vet: MainAndSubVet
-  sub_vet: MainAndSubVet
+  sub_vet: MainAndSubVet | null
 }
 
 export type IcuChartOrderJoined = Omit<

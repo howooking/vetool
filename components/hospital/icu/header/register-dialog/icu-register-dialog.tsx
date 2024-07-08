@@ -87,7 +87,7 @@ export default function IcuRegisterDialog({
         <Button size="sm">환자입원</Button>
       </DialogTrigger>
 
-      <DialogContent className="flex flex-col sm:max-w-[1200px]">
+      <DialogContent className="flex flex-col sm:max-w-[1040px]">
         <RegisterDialogHeader step={step} />
 
         <Tabs

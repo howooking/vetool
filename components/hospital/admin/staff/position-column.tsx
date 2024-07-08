@@ -8,7 +8,7 @@ export default function PositionColumn({
   position,
   userId,
 }: {
-  position: string | null
+  position: string
   userId: string
 }) {
   const [positionInput, setPositionInput] = useState(position)
