@@ -9,9 +9,9 @@ export const getIcuIoData = async (hosId: string, targetDate: string) => {
     .from('icu_io')
     .select(
       `
-    *,
-    patient_id("name", "breed", "patient_id")
-  `,
+        *,
+        patient_id("name", "breed", "patient_id")
+      `,
     )
     .match({ hos_id: hosId })
     .lte('in_date', targetDate)

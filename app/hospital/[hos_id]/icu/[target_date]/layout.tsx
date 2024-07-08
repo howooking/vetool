@@ -1,6 +1,6 @@
 import IcuFooter from '@/components/hospital/icu/icu-footer'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
-export default  function Layout({
+export default function Layout({
   children,
   params,
 }: {

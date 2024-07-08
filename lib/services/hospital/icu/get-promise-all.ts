@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
+import { IcuIoPatientJoined } from '@/types/hospital/icu'
 import type { PatientData } from '@/types/hospital/patients'
 
 export const getPromiseAll = async (hosId: string, targetDate: string) => {
@@ -86,6 +87,20 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       .select('*')
       .match({ hos_id: hosId })
       .order('created_at', { ascending: false }),
+
+    supabase
+      .from('icu_io')
+      .select(
+        `
+          *,
+          patient_id("name", "breed", "patient_id")
+        `,
+      )
+      .match({ hos_id: hosId })
+      .lte('in_date', targetDate)
+      .or(`out_date.is.null, out_date.gte.${targetDate}`)
+      .order('in_date', { ascending: true })
+      .returns<IcuIoPatientJoined[]>(),
   ])
 
   const [
@@ -95,6 +110,7 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
     { data: vetsData, error: vetsDataError },
     { data: patientsData, error: patientsDataError },
     { data: ownersData, error: ownersDataError },
+    { data: icuIoData, error: icuIoDataError },
   ] = await promiseArray
 
   if (
@@ -103,7 +119,8 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
     groupListDataError ||
     vetsDataError ||
     patientsDataError ||
-    ownersDataError
+    ownersDataError ||
+    icuIoDataError
   ) {
     console.log({
       icuChartDataError,
@@ -112,6 +129,7 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       vetsDataError,
       patientsDataError,
       ownersDataError,
+      icuIoDataError,
     })
     throw new Error(
       icuChartDataError?.message ||
@@ -119,7 +137,8 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
         groupListDataError?.message ||
         vetsDataError?.message ||
         patientsDataError?.message ||
-        ownersDataError?.message,
+        ownersDataError?.message ||
+        icuIoDataError?.message,
     )
   }
   return {
@@ -129,5 +148,6 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
     vetsData,
     patientsData,
     ownersData,
+    icuIoData,
   }
 }

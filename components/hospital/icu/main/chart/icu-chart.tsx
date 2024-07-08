@@ -6,6 +6,8 @@ import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
 import { useMemo } from 'react'
 import SelectedChartNotFound from './selected-chart-not-found/selected-chart-not-found'
 import SelectedChart from './selected-chart/selected-chart'
+import { IcuIoPatientJoined } from '@/types/hospital/icu'
+import { differenceInDays, format } from 'date-fns'
 
 const ORDER_OF_ORDERS = [
   'checklist',
@@ -20,10 +22,14 @@ export default function IcuChart({
   icuChartData,
   icuChartOrderData,
   vetsData,
+  targetDate,
+  icuIoData,
 }: {
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
   vetsData: Vet[]
+  targetDate: string
+  icuIoData: IcuIoPatientJoined[]
 }) {
   const { selectedPatientId } = useIcuSelectedPatientStore()
 
@@ -53,6 +59,12 @@ export default function IcuChart({
     [icuChartOrderData, selectedChart?.icu_chart_id],
   )
 
+  const isPatientIn = useMemo(
+    () =>
+      icuIoData.some((io) => io.patient_id.patient_id === selectedPatientId),
+    [icuIoData, selectedPatientId],
+  )
+
   if (!selectedPatientId) {
     return <NoResult title="환자를 선택해주세요" />
   }
@@ -66,7 +78,11 @@ export default function IcuChart({
           vetsData={vetsData}
         />
       ) : (
-        <SelectedChartNotFound />
+        <SelectedChartNotFound
+          selectedPatientId={selectedPatientId}
+          targetDate={targetDate}
+          isPatientIn={isPatientIn}
+        />
       )}
     </div>
   )

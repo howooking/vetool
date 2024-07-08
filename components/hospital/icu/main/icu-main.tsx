@@ -4,15 +4,20 @@ import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main
 import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
 import IcuChart from './chart/icu-chart'
 import IcuSummary from './summary/icu-summary'
+import { IcuIoPatientJoined } from '@/types/hospital/icu'
 
 export default function IcuMain({
   icuChartData,
   icuChartOrderData,
   vetsData,
+  targetDate,
+  icuIoData,
 }: {
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
   vetsData: Vet[]
+  targetDate: string
+  icuIoData: IcuIoPatientJoined[]
 }) {
   const { selectIcudMainView } = useSelectedMainViewStore()
 
@@ -25,6 +30,8 @@ export default function IcuMain({
           vetsData={vetsData}
           icuChartData={icuChartData}
           icuChartOrderData={icuChartOrderData}
+          targetDate={targetDate}
+          icuIoData={icuIoData}
         />
       )}
     </div>
