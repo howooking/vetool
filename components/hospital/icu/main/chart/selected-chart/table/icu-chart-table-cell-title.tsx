@@ -1,9 +1,9 @@
 'use client'
 
 import { TableCell } from '@/components/ui/table'
-import { useCreateOrderStore } from '@/lib/store/hospital/icu/chart/create-order'
+import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined } from '@/types/hospital'
+import type { IcuChartOrderJoined } from '@/types/icu'
 
 export default function IcuChartTableCellTitle({
   orderData,

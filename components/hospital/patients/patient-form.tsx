@@ -38,7 +38,7 @@ import {
   FELINE_BREEDS,
   SEX,
 } from '@/constants/hospital/register/breed'
-import { useIcuRegisteringPatient } from '@/lib/store/hospital/icu/icu-register'
+import { useIcuRegisteringPatient } from '@/lib/store/icu/icu-register'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'

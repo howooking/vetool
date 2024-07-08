@@ -10,14 +10,11 @@ import {
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarDays } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export default function IcuHeaderDatePicker({
-  targetDate,
-}: {
-  targetDate: string
-}) {
+export default function IcuHeaderDatePicker() {
+  const { target_date } = useParams()
   const [open, setOpen] = useState(false)
   const { push } = useRouter()
 
@@ -50,7 +47,7 @@ export default function IcuHeaderDatePicker({
           locale={ko}
           mode="single"
           initialFocus
-          selected={new Date(targetDate)}
+          selected={new Date(target_date as string)}
           onSelect={(date) => handleSelectDate(date)}
         />
       </PopoverContent>

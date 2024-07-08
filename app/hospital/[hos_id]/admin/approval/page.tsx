@@ -2,7 +2,7 @@ import NoResult from '@/components/common/no-result'
 import { columns } from '@/components/hospital/admin/approval/column'
 import DataTable from '@/components/ui/data-table'
 import { createClient } from '@/lib/supabase/server'
-import type { ApprovalData, ApprovalDataTable } from '@/types/hospital/adimin'
+import type { ApprovalData, ApprovalDataTable } from '@/types/adimin'
 
 export default async function AdminApprovalPage({
   params,

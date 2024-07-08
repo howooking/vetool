@@ -1,8 +1,9 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
-import type { PatientData } from '@/types/hospital/patients'
+import { Vet } from '@/types'
+import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
+import type { PatientData } from '@/types/patients'
 
 export const getPromiseAll = async (hosId: string, targetDate: string) => {
   const supabase = createClient()
@@ -66,7 +67,8 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
     supabase
       .from('users')
       .select('name, position, user_id')
-      .match({ hos_id: hosId, is_vet: true }),
+      .match({ hos_id: hosId, is_vet: true })
+      .returns<Vet[]>(),
 
     supabase
       .from('patients')

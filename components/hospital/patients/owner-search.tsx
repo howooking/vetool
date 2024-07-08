@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
-import type { Owner } from '@/types/hospital'
+import type { Owner } from '@/types/'
 import { ownerColumns } from './owner-columns'
 
 export default function OwnerSearch({

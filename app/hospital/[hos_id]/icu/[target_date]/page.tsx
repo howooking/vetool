@@ -1,6 +1,6 @@
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
 import IcuMain from '@/components/hospital/icu/main/icu-main'
-import { getPromiseAll } from '@/lib/services/hospital/icu/get-promise-all'
+import { getPromiseAll } from '@/lib/services/icu/get-promise-all'
 
 export default async function IcuPage({
   params,
@@ -30,6 +30,7 @@ export default async function IcuPage({
         icuChartData={icuChartData}
         icuChartOrderData={icuChartOrderData}
         vetsData={vetsData}
+        userName=""
       />
     </div>
   )

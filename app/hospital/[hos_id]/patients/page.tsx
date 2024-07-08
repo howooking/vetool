@@ -3,7 +3,7 @@ import { patientsColumns } from '@/components/hospital/patients/patient-columns'
 import { PatientRegisterDialog } from '@/components/hospital/patients/patient-register-dialog'
 import DataTable from '@/components/ui/data-table'
 import { createClient } from '@/lib/supabase/server'
-import { PatientData, PatientDataTable } from '@/types/hospital/patients'
+import { PatientData, PatientDataTable } from '@/types/patients'
 
 export default async function HospitalPatientsPage({
   params,

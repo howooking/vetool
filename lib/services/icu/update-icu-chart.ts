@@ -38,6 +38,7 @@ export const updateWeight = async (
   patientId: string,
   targetDate: string,
   weight: string,
+  weightMeasuredDate: string,
 ) => {
   const { error: weightError } = await supabase.rpc(
     'update_icu_chart_with_vitals',
@@ -45,6 +46,7 @@ export const updateWeight = async (
       patient_id_input: patientId,
       target_date_input: targetDate,
       weight_input: weight,
+      weight_measured_date_input: weightMeasuredDate,
     },
   )
 

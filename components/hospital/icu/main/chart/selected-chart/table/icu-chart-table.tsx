@@ -1,3 +1,6 @@
+import IcuChartOrderDialog from './icu-chart-order-dialog'
+import IcuChartTableCellTitle from './icu-chart-table-cell-title'
+import IcuChartTableCellInput from './icu-chat-table-cell-input'
 import {
   Table,
   TableBody,
@@ -7,15 +10,15 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIME } from '@/constants/hospital/icu/chart/time'
-import { IcuChartOrderJoined, IcuChartTx, Vet } from '@/types/hospital'
-import IcuChartTableCellTitle from './icu-chart-table-cell-title'
-import IcuChartTableCellInput from './icu-chat-table-cell-input'
-import IcuChartOrderDialog from './icu-chart-order-dialog'
+import { IcuChartTx, Vet } from '@/types'
+import type { IcuChartOrderJoined } from '@/types/icu'
 
 export default function IcuChartTable({
+  userName,
   selectedChartOrders,
   vetsData,
 }: {
+  userName: string
   selectedChartOrders: IcuChartOrderJoined[]
   vetsData: Vet[]
 }) {
@@ -69,6 +72,7 @@ export default function IcuChartTable({
                   ioId={orderData.icu_io_id.icu_io_id}
                   chartOrderId={orderData.icu_chart_order_id}
                   hasOrder={hasOrder(orderData, index)}
+                  userName={userName}
                 />
               ))}
             </TableRow>

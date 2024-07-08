@@ -1,3 +1,4 @@
+import type { TxLog } from '@/components/hospital/icu/main/chart/selected-chart/table/icu-chat-table-cell-input'
 import { createClient } from '@/lib/supabase/client'
 
 const supabase = createClient()
@@ -6,7 +7,7 @@ export const upsertIcuChartTx = async (
   txId: string,
   ioId: string,
   orderId: string,
-  txState: Record<string, string | string[] | null>,
+  txState: Record<string, string | string[] | TxLog[] | null>,
 ) => {
   const { data: icuChartTxData, error: icuChartTxError } = await supabase
     .from('icu_chart_tx')
