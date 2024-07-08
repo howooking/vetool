@@ -1,6 +1,6 @@
 'use client'
 
-import { useIcuMainViewStore } from '@/lib/store/hospital/icu/icu-main-view'
+import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
 import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
 import IcuChart from './chart/icu-chart'
 import IcuSummary from './summary/icu-summary'
@@ -14,13 +14,13 @@ export default function IcuMain({
   icuChartOrderData: IcuChartOrderJoined[]
   vetsData: Vet[]
 }) {
-  const { selectdMainView } = useIcuMainViewStore()
+  const { selectIcudMainView } = useSelectedMainViewStore()
 
   return (
-    <div className="w-full p-2">
-      {selectdMainView === 'summary' && <IcuSummary />}
+    <div className="w-full">
+      {selectIcudMainView === 'summary' && <IcuSummary />}
 
-      {selectdMainView === 'chart' && (
+      {selectIcudMainView === 'chart' && (
         <IcuChart
           vetsData={vetsData}
           icuChartData={icuChartData}

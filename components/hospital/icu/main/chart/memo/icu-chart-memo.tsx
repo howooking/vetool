@@ -1,7 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { updateMemo } from '@/lib/services/hospital/icu/updateIcuChart'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
-import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { useState } from 'react'
 
 type MemoState = {
@@ -13,7 +12,6 @@ type MemoState = {
 const MEMO_FIELDS = ['memoA', 'memoB', 'memoC'] as const
 
 export default function IcuChartMemo({ memoA, memoB, memoC }: MemoState) {
-  const { selectedDate } = useIcuSelectedDateStore()
   const { selectedPatientId } = useIcuSelectedPatientStore()
   const [memoState, setMemoState] = useState({
     memoA,
@@ -47,7 +45,7 @@ export default function IcuChartMemo({ memoA, memoB, memoC }: MemoState) {
       return
     }
 
-    await updateMemo(selectedPatientId, selectedDate, trimmedMemoState)
+    // await updateMemo(selectedPatientId, selectedDate, trimmedMemoState)
   }
 
   return (

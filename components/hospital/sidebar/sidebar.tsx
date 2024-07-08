@@ -17,27 +17,27 @@ import SidebarItem from './sidebar-item'
 const SIDE_BAR_ITEMS = [
   {
     name: '병원 홈',
-    path: '/',
+    path: '',
     icon: Home,
   },
   {
     name: '입원차트',
-    path: '/icu',
+    path: 'icu',
     icon: Syringe,
   },
   {
     name: '외과차트',
-    path: '/surgery',
+    path: 'surgery',
     icon: Slice,
   },
   {
     name: '심초차트',
-    path: '/echocardio',
+    path: 'echocardio',
     icon: HeartPulse,
   },
   {
     name: '건강검진차트',
-    path: '/checkup',
+    path: 'checkup',
     icon: ListChecks,
   },
 ] as const

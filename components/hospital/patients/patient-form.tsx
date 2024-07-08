@@ -38,7 +38,7 @@ import {
   FELINE_BREEDS,
   SEX,
 } from '@/constants/hospital/register/breed'
-import { useSelectedPatientStore } from '@/lib/store/hospital/patients/selected-patient'
+import { useIcuRegisteringPatient } from '@/lib/store/hospital/icu/icu-register'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -68,7 +68,7 @@ export default function PatientForm({
   const [breedOpen, setBreedOpen] = useState(false)
   const [selectedSpecies, setSelectedSpecies] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { setPatientId } = useSelectedPatientStore()
+  const { setRegisteringPatient } = useIcuRegisteringPatient()
   const { refresh, push } = useRouter()
 
   const searchParams = useSearchParams()
@@ -148,10 +148,12 @@ export default function PatientForm({
         return
       }
 
-      icu && setPatientId(patientId)
+      icu &&
+        setRegisteringPatient({ patientId, birth: format(birth, 'yyyy-MM-dd') })
 
       toast({
         title: '환자가 등록되었습니다',
+        description: icu ? '입원을 이어서 진행합니다' : '',
       })
     }
 
@@ -188,20 +190,19 @@ export default function PatientForm({
         return
       }
 
-      icu && setPatientId(patientId)
+      icu &&
+        setRegisteringPatient({ patientId, birth: format(birth, 'yyyy-MM-dd') })
 
       toast({
         title: '보호자 및 환자가 등록되었습니다',
+        description: icu ? '입원을 이어서 진행합니다' : '',
       })
     }
 
     setIsSubmitting(false)
-
-    icu ? push('icu') : push('patients')
     refresh()
 
-    icu && setStep('icuRegister')
-    !icu && setIsDialogOpen(false)
+    icu ? setStep('icuRegister') : setIsDialogOpen(false)
   }
 
   return (

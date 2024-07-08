@@ -7,7 +7,6 @@ import {
   updateIcuIo,
   updateWeight,
 } from '@/lib/services/hospital/icu/updateIcuChart'
-import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { createClient } from '@/lib/supabase/client'
 import type { IcuChartJoined, Vet } from '@/types/hospital'
 import { useRouter } from 'next/navigation'
@@ -33,7 +32,6 @@ export default function IcuChartPatientDetail({
   vetsData: Vet[]
 }) {
   const { refresh } = useRouter()
-  const { selectedDate } = useIcuSelectedDateStore()
   const { name, gender, breed, patient_id: patientId } = chartData.patient_id
   const {
     dx,
@@ -47,7 +45,7 @@ export default function IcuChartPatientDetail({
     weight_measured_date: weightMeasuredDate,
   } = chartData
   const { name: mainVetName, user_id: mainVetId } = chartData.main_vet
-  const { name: subVetName, user_id: subVetId } = chartData.sub_vet
+  // const { name: subVetName, user_id: subVetId } = chartData.sub_vet
   const [chartState, setChartState] = useState<ChartState>({
     dx,
     cc,
@@ -70,15 +68,15 @@ export default function IcuChartPatientDetail({
     if (field === 'caution') {
       if (chartState[field] === chartData[field]) return
 
-      await updateIcuChart(patientId, selectedDate, {
-        [field]: chartState[field],
-      })
+      // await updateIcuChart(patientId, selectedDate, {
+      //   [field]: chartState[field],
+      // })
     }
 
     if (field === 'weight') {
       if (chartState[field] === chartData[field]) return
 
-      await updateWeight(patientId, selectedDate, chartState[field] ?? '0')
+      // await updateWeight(patientId, selectedDate, chartState[field] ?? '0')
     }
 
     toast({ title: `${field.toUpperCase()}가 변경되었습니다` })
@@ -89,7 +87,7 @@ export default function IcuChartPatientDetail({
     vetType: 'main_vet' | 'sub_vet',
     vetId: string,
   ) => {
-    await updateIcuChart(patientId, selectedDate, { [vetType]: vetId })
+    // await updateIcuChart(patientId, selectedDate, { [vetType]: vetId })
 
     toast({
       title: `${vetType === 'main_vet' ? '주치의' : '부치의'}가 변경되었습니다`,
@@ -100,7 +98,7 @@ export default function IcuChartPatientDetail({
 
   return (
     <div className="w-full rounded-md border p-4">
-      <PatientDetailItem
+      {/* <PatientDetailItem
         name={name}
         breed={breed}
         gender={gender}
@@ -108,7 +106,7 @@ export default function IcuChartPatientDetail({
         patientId={patientId}
         selectedDate={selectedDate}
         weightMeasuredDate={weightMeasuredDate}
-      />
+      /> */}
       <Separator className="my-4" />
 
       <div className="flex h-16 items-center space-x-4 text-sm">
@@ -133,7 +131,7 @@ export default function IcuChartPatientDetail({
         <Separator orientation="vertical" />
 
         {/* 주치의 / 부주치의 */}
-        <PatientDetailVetsDialog
+        {/* <PatientDetailVetsDialog
           mainVetName={mainVetName}
           subVetName={subVetName}
           mainVetId={mainVetId}
@@ -141,7 +139,7 @@ export default function IcuChartPatientDetail({
           onMainVetChange={(id) => handleVetChange('main_vet', id)}
           onSubVetChange={(id) => handleVetChange('sub_vet', id)}
           vetsData={vetsData}
-        />
+        /> */}
         <Separator orientation="vertical" />
 
         {/* 주의 사항 */}

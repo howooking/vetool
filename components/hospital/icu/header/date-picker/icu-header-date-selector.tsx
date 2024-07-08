@@ -2,25 +2,24 @@
 
 import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/icu-header-date-picker'
 import { Button } from '@/components/ui/button'
-import { useIcuSelectedDateStore } from '@/lib/store/hospital/icu/selected-date'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
+import { useParams, useRouter } from 'next/navigation'
 
 export default function IcuHeaderDateSelector() {
-  const { selectedDate, setSelectedDate } = useIcuSelectedDateStore()
+  const { target_date } = useParams()
+  const { push } = useRouter()
 
-  const updateDate = (days: number) => {
-    const newDate = new Date(selectedDate)
-
+  const handleUpdateDate = (days: number) => {
+    const newDate = new Date(target_date as string)
     newDate.setDate(newDate.getDate() + days)
-    setSelectedDate(format(newDate, 'yyyy-MM-dd'))
+    push(`${format(newDate, 'yyyy-MM-dd')}`)
   }
 
   return (
-    // TODO BG CHANGE
-    <div className="flex items-center gap-2 bg-white">
+    <div className="flex items-center gap-2">
       <Button
-        onClick={() => updateDate(-1)}
+        onClick={() => handleUpdateDate(-1)}
         size="icon"
         variant="outline"
         className="h-6 w-6 rounded-full"
@@ -29,15 +28,12 @@ export default function IcuHeaderDateSelector() {
       </Button>
 
       <div className="flex items-center gap-1">
-        <span className="min-w-20 text-sm">{selectedDate}</span>
-        <IcuHeaderDatePicker
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-        />
+        <span className="min-w-20 text-sm">{target_date}</span>
+        <IcuHeaderDatePicker targetDate={target_date as string} />
       </div>
 
       <Button
-        onClick={() => updateDate(1)}
+        onClick={() => handleUpdateDate(1)}
         size="icon"
         variant="outline"
         className="h-6 w-6 rounded-full"

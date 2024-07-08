@@ -60,7 +60,7 @@ export default function IcuChartOrderForm({
   const supabase = createClient()
   const { refresh } = useRouter()
   const { setIsOpen, chartOrder, isEditMode } = useCreateOrderStore()
-  const { selectedPatientId: patientId } = useIcuSelectedPatientStore()
+  const { selectedPatientId } = useIcuSelectedPatientStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime, setStartTime] = useState<string>()
   const [timeTerm, setTimeTerm] = useState<string>()
@@ -131,7 +131,7 @@ export default function IcuChartOrderForm({
         icu_chart_order_comment: data.icu_chart_order_comment,
         icu_chart_order_time: orderTime,
       })
-      .match({ patient_id: patientId })
+      .match({ patient_id: selectedPatientId })
 
     if (createChartOrderError) {
       console.log(createChartOrderError)
