@@ -611,6 +611,7 @@ export type Database = {
           icu_chart_tx_result: string | null
           icu_io_id: string | null
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -622,6 +623,7 @@ export type Database = {
           icu_chart_tx_result?: string | null
           icu_io_id?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -633,6 +635,7 @@ export type Database = {
           icu_chart_tx_result?: string | null
           icu_io_id?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -648,6 +651,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "icu_io"
             referencedColumns: ["icu_io_id"]
+          },
+          {
+            foreignKeyName: "icu_chart_tx_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -963,6 +973,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      copy_prev_chart: {
+        Args: {
+          patient_id_input: string
+          target_date_input: string
+          prev_target_date_input: string
+        }
+        Returns: Json
+      }
       copy_prev_selected_chart: {
         Args: {
           hos_id_input: string
@@ -1078,6 +1096,7 @@ export type Database = {
           patient_id_input: string
           weight_input: string
           target_date_input: string
+          weight_measured_date_input: string
         }
         Returns: undefined
       }

@@ -14,9 +14,11 @@ import { Bookmark, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 export default function CopyBookmarkDialog({
-  selectedDate,
+  targetDate,
+  selectedPatientId,
 }: {
-  selectedDate: string
+  targetDate: string
+  selectedPatientId: string
 }) {
   const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -35,9 +37,9 @@ export default function CopyBookmarkDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>북마크차트복사(추가예정)</DialogTitle>
+          <DialogTitle>북마크차트복사</DialogTitle>
           <DialogDescription>
-            선택한북마크차트를 복사하여 {selectedDate} 차트가 생성됩니다
+            선택한북마크차트를 복사하여 차트가 생성됩니다
           </DialogDescription>
         </DialogHeader>
 

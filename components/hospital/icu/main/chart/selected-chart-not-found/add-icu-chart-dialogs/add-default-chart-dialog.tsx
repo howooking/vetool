@@ -11,19 +11,17 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { addDefaultChart } from '@/lib/services/hospital/icu/add-icu-chart'
-
 import { cn } from '@/lib/utils'
-import type { IcuChartJoined } from '@/types/hospital'
 import { File, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function AddDefaultChartDialog({
-  selectedDate,
-  prevSelectedChart,
+  targetDate,
+  selectedPatientId,
 }: {
-  selectedDate: string
-  prevSelectedChart: IcuChartJoined
+  targetDate: string
+  selectedPatientId: string
 }) {
   const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -32,10 +30,10 @@ export default function AddDefaultChartDialog({
   const handleAddDefaultChart = async () => {
     setIsSubmitting(true)
 
-    await addDefaultChart(prevSelectedChart, selectedDate)
+    await addDefaultChart(targetDate, selectedPatientId)
 
     toast({
-      title: `${selectedDate} 기본차트를 생성했습니다`,
+      title: '기본차트를 생성했습니다',
     })
 
     refresh()
@@ -58,7 +56,7 @@ export default function AddDefaultChartDialog({
         <DialogHeader>
           <DialogTitle>새로운 차트 생성</DialogTitle>
           <DialogDescription>
-            기본형식의 {selectedDate} 차트가 생성됩니다
+            초기화된 형식의 차트가 생성됩니다
           </DialogDescription>
         </DialogHeader>
 
