@@ -1,3 +1,4 @@
+import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -42,7 +43,7 @@ export function GroupColumnDialog({
   groupList: string[]
   name: string
 }) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { refresh } = useRouter()
 
@@ -54,10 +55,10 @@ export function GroupColumnDialog({
   })
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!isDialogOpen) {
       form.reset({ items: group || [] })
     }
-  }, [isOpen, group, form])
+  }, [isDialogOpen, group, form])
 
   const handleSubmit = async (data: z.infer<typeof GroupCheckFormSchema>) => {
     setIsSubmitting(true)
@@ -82,12 +83,12 @@ export function GroupColumnDialog({
       title: '그룹을 변경하였습니다',
     })
     refresh()
-    setIsOpen(false)
+    setIsDialogOpen(false)
     setIsSubmitting(false)
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon" className="h-6 w-6">
           <Edit size={12} />
@@ -144,12 +145,12 @@ export function GroupColumnDialog({
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmitting} className="ml-auto">
-              수정
-              <LoaderCircle
-                className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-              />
-            </Button>
+
+            <DialogFooterButtons
+              buttonName="수정"
+              isLoading={isSubmitting}
+              setIsDialogOpen={setIsDialogOpen}
+            />
           </form>
         </Form>
       </DialogContent>
