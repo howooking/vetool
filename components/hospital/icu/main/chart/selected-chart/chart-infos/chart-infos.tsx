@@ -2,6 +2,7 @@
 
 import { Separator } from '@/components/ui/separator'
 import type { IcuChartJoined, IcuVetList } from '@/types/icu'
+import Caution from './infos/caution'
 import ChiefComplaint from './infos/chief-complaint'
 import Diagnosis from './infos/diagnosis'
 import Group from './infos/group/group'
@@ -16,7 +17,7 @@ export default function ChartInfos({
   vetsData: IcuVetList[]
 }) {
   return (
-    <div className="w-full">
+    <div>
       <HeaderSignalments
         ageInDays={chartData.icu_io_id.age_in_days}
         breed={chartData.patient_id.breed}
@@ -51,19 +52,18 @@ export default function ChartInfos({
 
         <Separator orientation="vertical" className="h-8" />
 
+        <Caution
+          caution={chartData.caution}
+          icuChartId={chartData.icu_chart_id}
+        />
+
+        <Separator orientation="vertical" className="h-8" />
+
         <Group
           hosGroupList={chartData.hos_id.group_list}
           currentGroups={chartData.icu_io_id.group_list}
           icuIoId={chartData.icu_io_id.icu_io_id}
         />
-        {/* 
-        <PatientDetailInput
-          label="주의사항"
-          value={chartState.caution}
-          onChange={handleInputChange('caution')}
-          onBlur={() => handleInputBlur('caution')}
-          className="max-w-48"
-        /> */}
       </div>
     </div>
   )

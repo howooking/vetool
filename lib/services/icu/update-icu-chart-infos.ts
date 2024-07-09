@@ -32,6 +32,19 @@ export const updateChiefComplaint = async (
   }
 }
 
+export const updateCaution = async (icuChartId: string, caution: string) => {
+  const supabase = createClient()
+  const { error: updataCautionError } = await supabase
+    .from('icu_chart')
+    .update({ caution })
+    .match({ icu_chart_id: icuChartId })
+
+  if (updataCautionError) {
+    console.log(updataCautionError)
+    redirect(`/error/?message=${updataCautionError.message}`)
+  }
+}
+
 export const updateMainSubVet = async (
   icuChartId: string,
   mainVetId: string,
