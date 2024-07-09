@@ -15,6 +15,7 @@ export default function Diagnosis({
   icuIoId: string
 }) {
   const [diagnosisInput, setDiagnosisInput] = useState(diagnosis)
+  const [isUpdating, setIsUpdating] = useState(false)
   const { refresh } = useRouter()
 
   const handleUpdateDiagnosis = async () => {
@@ -26,12 +27,14 @@ export default function Diagnosis({
         return
       }
 
+      setIsUpdating(true)
       await updateDiagnosis(icuIoId, diagnosisInput.trim())
 
       toast({
         title: '진단명을 변경하였습니다',
       })
 
+      setIsUpdating(false)
       refresh()
     }
   }
@@ -41,7 +44,7 @@ export default function Diagnosis({
   }, [diagnosis])
 
   return (
-    <div className="relative flex items-center gap-2">
+    <div className="relative flex items-center">
       <Label
         className="absolute left-3 text-sm text-muted-foreground"
         htmlFor="diagnosis"
@@ -49,13 +52,14 @@ export default function Diagnosis({
         Dx
       </Label>
       <Input
+        disabled={isUpdating}
         id="diagnosis"
         value={diagnosisInput}
-        placeholder="진단명을 입력해주세요"
+        placeholder="진단명"
         onChange={(e) => setDiagnosisInput(e.target.value)}
         onBlur={handleUpdateDiagnosis}
         onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-        className="w-48 pl-10"
+        className="w-48 pl-9"
         title={diagnosis}
       />
     </div>

@@ -15,6 +15,7 @@ export default function ChiefComplaint({
   icuIoId: string
 }) {
   const [chiefComplaintInput, setChiefComplaintInput] = useState(chiefComplaint)
+  const [isUpdating, setIsUpdating] = useState(false)
   const { refresh } = useRouter()
 
   const handleUpdateDiagnosis = async () => {
@@ -26,12 +27,14 @@ export default function ChiefComplaint({
         return
       }
 
+      setIsUpdating(true)
       await updateChiefComplaint(icuIoId, chiefComplaintInput.trim())
 
       toast({
         title: '주증상을 변경하였습니다',
       })
 
+      setIsUpdating(false)
       refresh()
     }
   }
@@ -41,7 +44,7 @@ export default function ChiefComplaint({
   }, [chiefComplaint])
 
   return (
-    <div className="relative flex items-center gap-2">
+    <div className="relative flex items-center">
       <Label
         className="absolute left-3 text-sm text-muted-foreground"
         htmlFor="chiefComplaint"
@@ -49,13 +52,14 @@ export default function ChiefComplaint({
         CC
       </Label>
       <Input
+        disabled={isUpdating}
         id="chiefComplaint"
         value={chiefComplaintInput}
-        placeholder="주증상을 입력해주세요"
+        placeholder="주증상"
         onChange={(e) => setChiefComplaintInput(e.target.value)}
         onBlur={handleUpdateDiagnosis}
         onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-        className="w-48 pl-10"
+        className="w-48 pl-9"
         title={chiefComplaint}
       />
     </div>
