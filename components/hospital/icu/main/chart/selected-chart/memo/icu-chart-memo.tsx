@@ -1,5 +1,4 @@
 import { Input } from '@/components/ui/input'
-import { updateMemo } from '@/lib/services/hospital/icu/updateIcuChart'
 import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
 import { useState } from 'react'
 

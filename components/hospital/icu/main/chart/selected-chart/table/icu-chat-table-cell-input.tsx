@@ -45,66 +45,66 @@ export default function IcuChartTableCellInput({
   const { refresh } = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [txState, setTxState] = useState<TxState>({
-    icu_chart_tx_result: txData?.icu_chart_tx_result ?? '',
-    icu_chart_tx_comment: txData?.icu_chart_tx_comment ?? '',
-    icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
-    icu_chart_tx_log: txData?.icu_chart_tx_log ?? [],
-  })
+  // const [txState, setTxState] = useState<TxState>({
+  //   icu_chart_tx_result: txData?.icu_chart_tx_result ?? '',
+  //   icu_chart_tx_comment: txData?.icu_chart_tx_comment ?? '',
+  //   icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
+  //   icu_chart_tx_log: txData?.icu_chart_tx_log ?? [],
+  // })
 
-  useEffect(() => {
-    setTxState({
-      icu_chart_tx_result: txData?.icu_chart_tx_result?.trim() ?? '',
-      icu_chart_tx_comment: txData?.icu_chart_tx_comment?.trim() ?? '',
-      icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
-      icu_chart_tx_log: txData?.icu_chart_tx_log ?? [],
-    })
-  }, [txData])
+  // useEffect(() => {
+  //   setTxState({
+  //     icu_chart_tx_result: txData?.icu_chart_tx_result?.trim() ?? '',
+  //     icu_chart_tx_comment: txData?.icu_chart_tx_comment?.trim() ?? '',
+  //     icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
+  //     icu_chart_tx_log: txData?.icu_chart_tx_log ?? [],
+  //   })
+  // }, [txData])
 
-  const handleInputChange =
-    (field: keyof TxState) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setTxState((prev) => ({ ...prev, [field]: e.target.value }))
-    }
+  // const handleInputChange =
+  //   (field: keyof TxState) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     setTxState((prev) => ({ ...prev, [field]: e.target.value }))
+  //   }
 
-  const handleTxBlur = async () => {
-    setIsSubmitting(true)
+  // const handleTxBlur = async () => {
+  //   setIsSubmitting(true)
 
-    if (
-      txState.icu_chart_tx_result === (txData?.icu_chart_tx_result ?? '') &&
-      txState.icu_chart_tx_comment === (txData?.icu_chart_tx_comment ?? '')
-    ) {
-      setIsSubmitting(false)
-      return
-    }
+  //   if (
+  //     txState.icu_chart_tx_result === (txData?.icu_chart_tx_result ?? '') &&
+  //     txState.icu_chart_tx_comment === (txData?.icu_chart_tx_comment ?? '')
+  //   ) {
+  //     setIsSubmitting(false)
+  //     return
+  //   }
 
-    const fieldName = `icu_chart_order_tx_${time}`
-    const icuChartTxData = await upsertIcuChartTx(
-      txId,
-      ioId,
-      chartOrderId,
-      txState,
-    )
+  //   const fieldName = `icu_chart_order_tx_${time}`
+  //   const icuChartTxData = await upsertIcuChartTx(
+  //     txId,
+  //     ioId,
+  //     chartOrderId,
+  //     txState,
+  //   )
 
-    await updateIcuChartOrder(
-      chartOrderId,
-      fieldName,
-      icuChartTxData.icu_chart_tx_id,
-    )
+  //   await updateIcuChartOrder(
+  //     chartOrderId,
+  //     fieldName,
+  //     icuChartTxData.icu_chart_tx_id,
+  //   )
 
-    toast({
-      title: '처치 상세 내역',
-      description: '처치 상세 내역이 업데이트 되었습니다',
-    })
+  //   toast({
+  //     title: '처치 상세 내역',
+  //     description: '처치 상세 내역이 업데이트 되었습니다',
+  //   })
 
-    setIsSubmitting(false)
-    refresh()
-  }
+  //   setIsSubmitting(false)
+  //   refresh()
+  // }
 
   return (
     <TableCell className="h-2 border-black p-0 leading-4">
       <ContextMenu>
         <ContextMenuTrigger>
-          <Input
+          {/* <Input
             className={cn(
               'rounded-none px-1 text-center focus-visible:border-2 focus-visible:border-primary focus-visible:ring-0',
               hasOrder ? 'bg-red-200' : 'bg-input',
@@ -113,7 +113,7 @@ export default function IcuChartTableCellInput({
             onBlur={handleTxBlur}
             onChange={handleInputChange('icu_chart_tx_result')}
             disabled={isSubmitting}
-          />
+          /> */}
         </ContextMenuTrigger>
 
         <ContextMenuContent>
@@ -135,7 +135,7 @@ export default function IcuChartTableCellInput({
               {/* result */}
               <div className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor="result">결과</Label>
-                <Input
+                {/* <Input
                   id="result"
                   type="text"
                   value={txState.icu_chart_tx_result ?? ''}
@@ -143,19 +143,19 @@ export default function IcuChartTableCellInput({
                   onBlur={handleTxBlur}
                   onChange={handleInputChange('icu_chart_tx_result')}
                   placeholder="결과값 입력"
-                />
+                /> */}
               </div>
 
               {/* comment */}
               <div className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor="comment">코멘트</Label>
-                <Input
+                {/* <Input
                   id="comment"
                   value={txState.icu_chart_tx_comment ?? ''}
                   className="col-span-2 h-8"
                   onBlur={handleTxBlur}
                   onChange={handleInputChange('icu_chart_tx_comment')}
-                />
+                /> */}
               </div>
 
               {/* TODO */}
@@ -174,12 +174,12 @@ export default function IcuChartTableCellInput({
               {/* log */}
               <div className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor="log">처치 기록</Label>
-                <Input
+                {/* <Input
                   id="log"
                   value={txState.icu_chart_tx_comment ?? ''}
                   onChange={() => {}}
                   className="col-span-2 h-8"
-                />
+                /> */}
               </div>
             </div>
           </div>
