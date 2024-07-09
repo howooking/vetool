@@ -5,6 +5,7 @@ import type { IcuChartJoined, Vet } from '@/types/hospital'
 import Diagnosis from './infos/diagnosis'
 import HeaderSignalments from './infos/header-signalment'
 import { MainSubVet } from './infos/main-sub-vet/main-sub-vet'
+import ChiefComplaint from './infos/chief-complaint'
 
 export default function ChartInfos({
   chartData,
@@ -25,7 +26,7 @@ export default function ChartInfos({
         species={chartData.patient_id.species}
       />
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <Diagnosis
           diagnosis={chartData.icu_io_id.dx}
           icuIoId={chartData.icu_io_id.icu_io_id}
@@ -33,13 +34,12 @@ export default function ChartInfos({
 
         <Separator orientation="vertical" className="h-8" />
 
-        {/* <PatientDetailInput
-          label="CC"
-          value={chartState.cc}
-          onChange={handleInputChange('cc')}
-          onBlur={() => handleInputBlur('cc')}
-          className="max-w-48"
-        /> */}
+        <ChiefComplaint
+          chiefComplaint={chartData.icu_io_id.cc}
+          icuIoId={chartData.icu_io_id.icu_io_id}
+        />
+
+        <Separator orientation="vertical" className="h-8" />
 
         <MainSubVet
           mainVet={chartData.main_vet}

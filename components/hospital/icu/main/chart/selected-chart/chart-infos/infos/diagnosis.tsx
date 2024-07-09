@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
 import { updateDiagnosis } from '@/lib/services/hospital/icu/update-icu-chart-infos'
-import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -42,8 +41,11 @@ export default function Diagnosis({
   }, [diagnosis])
 
   return (
-    <div className="flex items-center gap-2">
-      <Label className="text-sm text-muted-foreground" htmlFor="diagnosis">
+    <div className="relative flex items-center gap-2">
+      <Label
+        className="absolute left-3 text-sm text-muted-foreground"
+        htmlFor="diagnosis"
+      >
         Dx
       </Label>
       <Input
@@ -53,6 +55,8 @@ export default function Diagnosis({
         onChange={(e) => setDiagnosisInput(e.target.value)}
         onBlur={handleUpdateDiagnosis}
         onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+        className="w-48 pl-10"
+        title={diagnosis}
       />
     </div>
   )

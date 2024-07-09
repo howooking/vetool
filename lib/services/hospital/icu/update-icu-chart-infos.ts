@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export const updateDiagnosis = async (icuIoId: string, diagnosis: string) => {
@@ -13,6 +13,22 @@ export const updateDiagnosis = async (icuIoId: string, diagnosis: string) => {
   if (updateDiagnosisError) {
     console.log(updateDiagnosisError)
     redirect(`/error/?message=${updateDiagnosisError.message}`)
+  }
+}
+
+export const updateChiefComplaint = async (
+  icuIoId: string,
+  chiefComplaint: string,
+) => {
+  const supabase = createClient()
+  const { error: updateChiefComplaintError } = await supabase
+    .from('icu_io')
+    .update({ cc: chiefComplaint })
+    .match({ icu_io_id: icuIoId })
+
+  if (updateChiefComplaintError) {
+    console.log(updateChiefComplaintError)
+    redirect(`/error/?message=${updateChiefComplaintError.message}`)
   }
 }
 
