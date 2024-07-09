@@ -606,7 +606,7 @@ export type Database = {
           icu_chart_order_id: string | null
           icu_chart_tx_comment: string | null
           icu_chart_tx_id: string
-          icu_chart_tx_images: string[] | null
+          icu_chart_tx_images: string[]
           icu_chart_tx_log: Json[] | null
           icu_chart_tx_result: string | null
           icu_io_id: string | null
@@ -618,7 +618,7 @@ export type Database = {
           icu_chart_order_id?: string | null
           icu_chart_tx_comment?: string | null
           icu_chart_tx_id?: string
-          icu_chart_tx_images?: string[] | null
+          icu_chart_tx_images: string[]
           icu_chart_tx_log?: Json[] | null
           icu_chart_tx_result?: string | null
           icu_io_id?: string | null
@@ -630,7 +630,7 @@ export type Database = {
           icu_chart_order_id?: string | null
           icu_chart_tx_comment?: string | null
           icu_chart_tx_id?: string
-          icu_chart_tx_images?: string[] | null
+          icu_chart_tx_images?: string[]
           icu_chart_tx_log?: Json[] | null
           icu_chart_tx_result?: string | null
           icu_io_id?: string | null
@@ -667,7 +667,7 @@ export type Database = {
           cc: string
           created_at: string
           dx: string
-          group_list: string[] | null
+          group_list: string[]
           hos_id: string | null
           icu_io_id: string
           in_date: string
@@ -680,7 +680,7 @@ export type Database = {
           cc: string
           created_at?: string
           dx: string
-          group_list?: string[] | null
+          group_list: string[]
           hos_id?: string | null
           icu_io_id?: string
           in_date: string
@@ -693,7 +693,7 @@ export type Database = {
           cc?: string
           created_at?: string
           dx?: string
-          group_list?: string[] | null
+          group_list?: string[]
           hos_id?: string | null
           icu_io_id?: string
           in_date?: string

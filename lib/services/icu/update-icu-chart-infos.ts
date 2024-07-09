@@ -33,7 +33,7 @@ export const updateChiefComplaint = async (
 }
 
 export const updateMainSubVet = async (
-  IcuChartId: string,
+  icuChartId: string,
   mainVetId: string,
   subVetId?: string,
 ) => {
@@ -44,10 +44,24 @@ export const updateMainSubVet = async (
       main_vet: mainVetId,
       sub_vet: subVetId === 'null' ? null : subVetId,
     })
-    .match({ icu_chart_id: IcuChartId })
+    .match({ icu_chart_id: icuChartId })
   if (updateMainSubVetError) {
     console.log(updateMainSubVetError)
     redirect(`/error/?message=${updateMainSubVetError.message}`)
+  }
+}
+
+export const updateGroup = async (icuIoId: string, groupList: string[]) => {
+  const supabase = createClient()
+  const { error: updateGroupError } = await supabase
+    .from('icu_io')
+    .update({
+      group_list: groupList,
+    })
+    .match({ icu_io_id: icuIoId })
+  if (updateGroupError) {
+    console.log(updateGroupError)
+    redirect(`/error/?message=${updateGroupError.message}`)
   }
 }
 

@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator'
 import type { IcuChartJoined, IcuVetList } from '@/types/icu'
 import ChiefComplaint from './infos/chief-complaint'
 import Diagnosis from './infos/diagnosis'
+import Group from './infos/group/group'
 import HeaderSignalments from './infos/header-signalment'
 import { MainSubVet } from './infos/main-sub-vet/main-sub-vet'
 
@@ -15,7 +16,7 @@ export default function ChartInfos({
   vetsData: IcuVetList[]
 }) {
   return (
-    <div className="w-full rounded-md border p-2">
+    <div className="w-full">
       <HeaderSignalments
         ageInDays={chartData.icu_io_id.age_in_days}
         breed={chartData.patient_id.breed}
@@ -48,7 +49,13 @@ export default function ChartInfos({
           icuChartId={chartData.icu_chart_id}
         />
 
-        <Separator orientation="vertical" />
+        <Separator orientation="vertical" className="h-8" />
+
+        <Group
+          hosGroupList={chartData.hos_id.group_list}
+          currentGroups={chartData.icu_io_id.group_list}
+          icuIoId={chartData.icu_io_id.icu_io_id}
+        />
         {/* 
         <PatientDetailInput
           label="주의사항"
@@ -56,15 +63,6 @@ export default function ChartInfos({
           onChange={handleInputChange('caution')}
           onBlur={() => handleInputBlur('caution')}
           className="max-w-48"
-        /> */}
-        <Separator orientation="vertical" />
-
-        {/* <PatientDetailGroup
-          label="그룹"
-          groupList={groupList}
-          group={groupList}
-          name={name}
-          patientId={patientId}
         /> */}
       </div>
     </div>

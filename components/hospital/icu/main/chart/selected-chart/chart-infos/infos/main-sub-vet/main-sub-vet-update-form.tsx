@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -18,12 +17,12 @@ import {
 } from '@/components/ui/select'
 import { useState } from 'react'
 
+import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
 import { toast } from '@/components/ui/use-toast'
 import { updateMainSubVet } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
 import type { IcuVetList, MainAndSubVet } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction } from 'react'
@@ -178,22 +177,11 @@ export default function MainSubVetUpdateForm({
           )}
         />
 
-        <div className="col-span-2 ml-auto font-semibold">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => setIsDialogOpen(false)}
-          >
-            취소
-          </Button>
-
-          <Button type="submit" className="ml-2" disabled={isUpdating}>
-            변경
-            <LoaderCircle
-              className={cn(isUpdating ? 'ml-2 animate-spin' : 'hidden')}
-            />
-          </Button>
-        </div>
+        <DialogFooterButtons
+          buttonName="변경"
+          isLoading={isUpdating}
+          setIsDialogOpen={setIsDialogOpen}
+        />
       </form>
     </Form>
   )

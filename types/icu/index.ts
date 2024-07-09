@@ -16,8 +16,11 @@ export type MainAndSubVet = {
 
 export type IcuChartJoined = Omit<
   IcuChart,
-  'main_vet' | 'sub_vet' | 'patient_id' | 'icu_io_id'
+  'main_vet' | 'sub_vet' | 'patient_id' | 'icu_io_id' | 'hos_id'
 > & {
+  hos_id: {
+    group_list: string[]
+  }
   patient_id: {
     name: string
     gender: string
