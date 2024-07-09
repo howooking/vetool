@@ -32,6 +32,25 @@ export const updateChiefComplaint = async (
   }
 }
 
+export const updateMainSubVet = async (
+  IcuChartId: string,
+  mainVetId: string,
+  subVetId?: string,
+) => {
+  const supabase = createClient()
+  const { error: updateMainSubVetError } = await supabase
+    .from('icu_chart')
+    .update({
+      main_vet: mainVetId,
+      sub_vet: subVetId === 'null' ? null : subVetId,
+    })
+    .match({ icu_chart_id: IcuChartId })
+  if (updateMainSubVetError) {
+    console.log(updateMainSubVetError)
+    redirect(`/error/?message=${updateMainSubVetError.message}`)
+  }
+}
+
 // export const updateIcuChart = async (
 //   patientId: string,
 //   targetDate: string,

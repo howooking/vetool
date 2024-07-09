@@ -136,8 +136,13 @@ export type IcuChartOrderJoined = Omit<
   icu_chart_order_tx_24: IcuChartTx | null
 }
 
-export type Vet = {
-  user_id: string
-  name: string | null
-  position: string | null
-}
+export type Vet = Omit<
+  Users,
+  | 'email'
+  | 'is_active'
+  | 'created_at'
+  | 'rank'
+  | 'group'
+  | 'hos_id'
+  | 'is_admin'
+>

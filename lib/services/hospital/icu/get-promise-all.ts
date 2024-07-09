@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/hospital'
+import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
 import { IcuIoPatientJoined } from '@/types/hospital/icu'
 import type { PatientData } from '@/types/hospital/patients'
 
@@ -60,14 +60,13 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       .order('icu_chart_order_name', { ascending: true })
       .returns<IcuChartOrderJoined[]>(),
 
-    // 병원 그룹리스트
     supabase.from('hospitals').select('group_list').match({ hos_id: hosId }),
 
-    // 수의사
     supabase
       .from('users')
-      .select('name, position, user_id')
-      .match({ hos_id: hosId, is_vet: true }),
+      .select('name, position, user_id, avatar_url')
+      .match({ hos_id: hosId, is_vet: true })
+      .returns<Vet[]>(),
 
     supabase
       .from('patients')
