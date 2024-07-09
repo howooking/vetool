@@ -1,5 +1,5 @@
-import type { Owner, Vet } from '@/types/hospital'
-import { PatientData } from '@/types/hospital/patients'
+import type { Owner, Vet } from '@/types'
+import { PatientData } from '@/types/patients'
 import IcuHeaderDateSelector from './date-picker/icu-header-date-selector'
 import IcuRegisterDialog from './register-dialog/icu-register-dialog'
 

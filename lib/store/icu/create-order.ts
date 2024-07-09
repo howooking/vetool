@@ -1,4 +1,4 @@
-import { IcuChartOrderJoined } from '@/types/hospital'
+import { IcuChartOrderJoined } from '@/types/icu'
 import { create } from 'zustand'
 
 type IcuCreateOrderState = {

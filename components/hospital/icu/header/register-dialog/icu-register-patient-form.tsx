@@ -25,15 +25,15 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { registerIcuPatient } from '@/lib/services/hospital/icu/register-icu-patient'
+import { registerIcuPatient } from '@/lib/services/icu/register-icu-patient'
 import {
   useIcuRegisteringPatient,
   usePatientRegisterStep,
-} from '@/lib/store/hospital/icu/icu-register'
-import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
+} from '@/lib/store/icu/icu-register'
+import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import type { Vet } from '@/types/hospital'
+import type { Vet } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addDays, format } from 'date-fns'
 import { ko } from 'date-fns/locale'

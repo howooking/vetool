@@ -1,8 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/hospital/icu/selected-main-view'
+import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {

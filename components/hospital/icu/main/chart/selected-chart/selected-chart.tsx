@@ -1,13 +1,16 @@
-import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
+import type { Vet } from '@/types'
+import ChartInfos from './chart-infos/chart-infos'
 import IcuChartMemo from './memo/icu-chart-memo'
 import IcuChartTable from './table/icu-chart-table'
-import ChartInfos from './chart-infos/chart-infos'
+import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 
 export default function SelectedChart({
+  userName,
   selectedChart,
   selectedChartOrders,
   vetsData,
 }: {
+  userName: string
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
   vetsData: Vet[]
@@ -17,6 +20,7 @@ export default function SelectedChart({
     <div className="flex flex-col gap-2 p-2 pb-[48px]">
       <ChartInfos chartData={restChartData} vetsData={vetsData} />
       <IcuChartTable
+        userName={userName}
         selectedChartOrders={selectedChartOrders}
         vetsData={vetsData}
       />

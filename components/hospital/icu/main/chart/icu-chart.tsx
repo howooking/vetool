@@ -1,8 +1,10 @@
 'use client'
 
 import NoResult from '@/components/common/no-result'
-import { useIcuSelectedPatientStore } from '@/lib/store/hospital/icu/icu-selected-patient'
-import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
+import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import type { Vet } from '@/types'
+import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
+
 import { useMemo } from 'react'
 import SelectedChartNotFound from './selected-chart-not-found/selected-chart-not-found'
 import SelectedChart from './selected-chart/selected-chart'
@@ -19,12 +21,14 @@ const ORDER_OF_ORDERS = [
 ] as const
 
 export default function IcuChart({
+  userName,
   icuChartData,
   icuChartOrderData,
   vetsData,
   targetDate,
   icuIoData,
 }: {
+  userName: string
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
   vetsData: Vet[]
@@ -72,8 +76,10 @@ export default function IcuChart({
   return (
     <div className="w-full">
       {selectedChart ? (
+        // Todo 컴포넌트 이름 SelectedChart로 변경
         <SelectedChart
-          selectedChart={selectedChart}
+          userName={userName}
+          selectedChart={selectedChart!}
           selectedChartOrders={selectedChartOrders}
           vetsData={vetsData}
         />

@@ -2,10 +2,8 @@ import { columns } from '@/components/hospital/admin/staff/columns'
 import DataTable from '@/components/ui/data-table'
 import { checkIsAdmin } from '@/lib/actions/auth'
 import { createClient } from '@/lib/supabase/server'
-import type {
-  HospitalUserDataTable,
-  UserHospitalJoined,
-} from '@/types/hospital/adimin'
+import type { HospitalUserDataTable, UserHospitalJoined } from '@/types/adimin'
+
 import { redirect } from 'next/navigation'
 
 export default async function AdminStaffPage({

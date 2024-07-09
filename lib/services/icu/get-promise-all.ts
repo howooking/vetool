@@ -1,9 +1,10 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/hospital'
-import { IcuIoPatientJoined } from '@/types/hospital/icu'
-import type { PatientData } from '@/types/hospital/patients'
+import type { IcuIoPatientJoined } from '@/types/icu'
+import type { Vet } from '@/types'
+import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
+import type { PatientData } from '@/types/patients'
 
 export const getPromiseAll = async (hosId: string, targetDate: string) => {
   const supabase = createClient()
