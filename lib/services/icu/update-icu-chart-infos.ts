@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 
 export const updateDiagnosis = async (icuIoId: string, diagnosis: string) => {
@@ -78,43 +79,25 @@ export const updateGroup = async (icuIoId: string, groupList: string[]) => {
   }
 }
 
-// export const updateIcuChart = async (
-//   patientId: string,
-//   targetDate: string,
-//   updates: Record<string, string | null>,
-// ) => {
-//   const { error: icuChartError } = await supabase
-//     .from('icu_chart')
-//     .update(updates)
-//     .match({ patient_id: patientId, target_date: targetDate })
+export const updateWeight = async (
+  patientId: string,
+  icuChartId: string,
+  weight: string,
+) => {
+  const supabase = createClient()
 
-//   if (icuChartError) {
-//     console.log(icuChartError)
-//     throw new Error(icuChartError.message)
-//   }
-// }
+  const { error: updateWeightError } = await supabase.rpc('update_weight', {
+    icu_chart_id_input: icuChartId,
+    patient_id_input: patientId,
+    weight_input: weight,
+    weight_measured_date_input: format(new Date(), 'yyyy-MM-dd'),
+  })
 
-// export const updateWeight = async (
-//   patientId: string,
-//   targetDate: string,
-//   weight: string,
-// ) => {
-//   const supabase = createClient()
-
-//   const { error: weightError } = await supabase.rpc(
-//     'update_icu_chart_with_vitals',
-//     {
-//       patient_id_input: patientId,
-//       target_date_input: targetDate,
-//       weight_input: weight,
-//     },
-//   )
-
-//   if (weightError) {
-//     console.log(weightError)
-//     throw new Error(weightError.message)
-//   }
-// }
+  if (updateWeightError) {
+    console.log(updateWeightError)
+    redirect(`/error/?message=${updateWeightError.message}`)
+  }
+}
 
 // export const updateMemo = async (
 //   patientId: string | null,

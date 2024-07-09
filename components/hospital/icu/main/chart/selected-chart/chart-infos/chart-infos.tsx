@@ -6,7 +6,7 @@ import Caution from './infos/caution'
 import ChiefComplaint from './infos/chief-complaint'
 import Diagnosis from './infos/diagnosis'
 import Group from './infos/group/group'
-import HeaderSignalments from './infos/header-signalment'
+import HeaderSignalments from './infos/header-signament/header-signalment'
 import { MainSubVet } from './infos/main-sub-vet/main-sub-vet'
 
 export default function ChartInfos({
@@ -26,6 +26,8 @@ export default function ChartInfos({
         weightMeasuredDate={chartData.weight_measured_date}
         weight={chartData.weight}
         species={chartData.patient_id.species}
+        patientId={chartData.patient_id.patient_id}
+        icuChartId={chartData.icu_chart_id}
       />
 
       <div className="flex items-center gap-2">
