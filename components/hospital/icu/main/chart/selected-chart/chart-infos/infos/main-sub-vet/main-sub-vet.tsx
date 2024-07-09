@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import type { MainAndSubVet, Vet } from '@/types/hospital'
+import type { IcuVetList, MainAndSubVet } from '@/types/icu'
 import Image from 'next/image'
 import { useState } from 'react'
 import MainSubVetUpdateForm from './main-sub-vet-update-form'
@@ -21,7 +21,7 @@ export function MainSubVet({
 }: {
   mainVet: MainAndSubVet
   subVet: MainAndSubVet | null
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
   icuChartId: string
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)

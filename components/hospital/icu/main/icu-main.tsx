@@ -1,11 +1,14 @@
 'use client'
 
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
-import type { Vet } from '@/types'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuIoPatientJoined,
+  IcuVetList,
+} from '@/types/icu'
 import IcuChart from './chart/icu-chart'
 import IcuSummary from './summary/icu-summary'
-import { IcuIoPatientJoined } from '@/types/hospital/icu'
 
 export default function IcuMain({
   userName,
@@ -18,7 +21,7 @@ export default function IcuMain({
   userName: string
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
   targetDate: string
   icuIoData: IcuIoPatientJoined[]
 }) {

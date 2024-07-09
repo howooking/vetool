@@ -33,7 +33,7 @@ import {
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import type { Vet } from '@/types'
+import type { IcuVetList } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addDays, format } from 'date-fns'
 import { ko } from 'date-fns/locale'
@@ -55,7 +55,7 @@ export default function IcuRegisterPatientForm({
 }: {
   hosId: string
   groupList: string[]
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
   tab: string
   setTab: Dispatch<SetStateAction<string>>

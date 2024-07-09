@@ -1,10 +1,4 @@
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuTrigger,
@@ -12,16 +6,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { TableCell } from '@/components/ui/table'
-import { toast } from '@/components/ui/use-toast'
-import {
-  updateIcuChartOrder,
-  upsertIcuChartTx,
-} from '@/lib/services/icu/upsert-chart-tx'
-import { cn } from '@/lib/utils'
-import { IcuChartTx, Vet } from '@/types/'
+import type { IcuChartTx } from '@/types'
+import type { IcuVetList } from '@/types/icu'
 import { format } from 'date-fns'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export type TxLog = {
   result: string | null
@@ -32,7 +21,7 @@ export type TxLog = {
 type TableCellInputProps = {
   time: number
   txData: IcuChartTx | null
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
   ioId: string
   chartOrderId: string
   hasOrder: boolean

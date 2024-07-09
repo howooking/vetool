@@ -85,7 +85,7 @@ export type IcuChartOrderJoined = Omit<
   icu_chart_order_tx_24: IcuChartTx | null
 }
 
-export type Vet = Omit<
+export type IcuVetList = Omit<
   Users,
   | 'email'
   | 'is_active'

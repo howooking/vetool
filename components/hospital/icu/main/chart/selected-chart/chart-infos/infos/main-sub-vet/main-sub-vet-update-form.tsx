@@ -16,12 +16,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import type { MainAndSubVet, Vet } from '@/types/hospital'
 import { useState } from 'react'
 
 import { toast } from '@/components/ui/use-toast'
-import { updateMainSubVet } from '@/lib/services/hospital/icu/update-icu-chart-infos'
+import { updateMainSubVet } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
+import type { IcuVetList, MainAndSubVet } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
@@ -40,7 +40,7 @@ export default function MainSubVetUpdateForm({
 }: {
   mainVet: MainAndSubVet
   subVet: MainAndSubVet | null
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
   icuChartId: string
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {

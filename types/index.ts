@@ -58,9 +58,3 @@ export type User = {
     updated_at: string
   }[]
 }
-
-export type Vet = {
-  user_id: string
-  name: string | null
-  position: string | null
-}

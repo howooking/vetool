@@ -1,4 +1,5 @@
-import type { Owner, Vet } from '@/types'
+import type { Owner } from '@/types'
+import type { IcuVetList } from '@/types/icu'
 import { PatientData } from '@/types/patients'
 import IcuHeaderDateSelector from './date-picker/icu-header-date-selector'
 import IcuRegisterDialog from './register-dialog/icu-register-dialog'
@@ -13,7 +14,7 @@ export default function IcuHeader({
   hosId: string
   patientsData: PatientData[]
   groupList: string[]
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
   ownersData: Owner[]
 }) {
   return (

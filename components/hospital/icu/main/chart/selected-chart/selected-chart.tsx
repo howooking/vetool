@@ -1,8 +1,11 @@
-import type { Vet } from '@/types'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuVetList,
+} from '@/types/icu'
 import ChartInfos from './chart-infos/chart-infos'
 import IcuChartMemo from './memo/icu-chart-memo'
 import IcuChartTable from './table/icu-chart-table'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 
 export default function SelectedChart({
   userName,
@@ -13,7 +16,7 @@ export default function SelectedChart({
   userName: string
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
 }) {
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
   return (
