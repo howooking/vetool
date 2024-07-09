@@ -2,14 +2,15 @@
 
 import NoResult from '@/components/common/no-result'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import type { Vet } from '@/types'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
-
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuIoPatientJoined,
+  IcuVetList,
+} from '@/types/icu'
 import { useMemo } from 'react'
 import SelectedChartNotFound from './selected-chart-not-found/selected-chart-not-found'
 import SelectedChart from './selected-chart/selected-chart'
-import { IcuIoPatientJoined } from '@/types/hospital/icu'
-import { differenceInDays, format } from 'date-fns'
 
 const ORDER_OF_ORDERS = [
   'checklist',
@@ -31,7 +32,7 @@ export default function IcuChart({
   userName: string
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
   targetDate: string
   icuIoData: IcuIoPatientJoined[]
 }) {
