@@ -45,7 +45,7 @@ export default function OutDueDate({
     await updateOutDueDate(icuIoId, format(date, 'yyyy-MM-dd'))
 
     toast({
-      title: '퇴원일을 변경하였습니다',
+      title: '퇴원예정일을 변경하였습니다',
     })
 
     setIsUpdating(false)
@@ -60,13 +60,15 @@ export default function OutDueDate({
           <Button
             variant={'outline'}
             className={cn(
-              'flex w-full items-center justify-start gap-2 px-2',
+              'flex w-full flex-1 items-center justify-start gap-2 px-2',
               !outDueDateInput && 'text-muted-foreground',
             )}
           >
             <span className="text-xs text-muted-foreground">퇴원예정</span>
             {outDueDateInput ? (
-              format(outDueDateInput, 'yyyy-MM-dd')
+              <span className="text-sm font-normal">
+                {format(outDueDateInput, 'yyyy-MM-dd')}
+              </span>
             ) : (
               <span>예정일 선택</span>
             )}
