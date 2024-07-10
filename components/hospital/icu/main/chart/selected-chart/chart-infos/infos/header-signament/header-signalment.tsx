@@ -34,16 +34,18 @@ export default function HeaderSignalments({
       <span className="text-sm">{breed}</span> ·
       <span className="text-sm uppercase">{gender}</span> ·
       <span className="text-sm">{getAgeFromAgeInDays(ageInDays)} </span> ·
-      {weightMeasuredDate ? (
-        <span className="text-sm">{`${weight}kg (${weightMeasuredDate} 측정)`}</span>
-      ) : (
-        <span className="text-sm">체중 미측정</span>
-      )}
-      <UpdateWeightDialog
-        weight={weight}
-        patientId={patientId}
-        icuChartId={icuChartId}
-      />
+      <div className="flex items-center">
+        {weightMeasuredDate ? (
+          <span className="text-sm">{`${weight}kg (${weightMeasuredDate} 측정)`}</span>
+        ) : (
+          <span className="text-sm">체중 미측정</span>
+        )}
+        <UpdateWeightDialog
+          weight={weight}
+          patientId={patientId}
+          icuChartId={icuChartId}
+        />
+      </div>
     </header>
   )
 }

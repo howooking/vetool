@@ -181,7 +181,7 @@ export default function IcuRegisterPatientForm({
           name="in_date"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-2">
-              <FormLabel>입원일 - 퇴원 예정일 선택*</FormLabel>
+              <FormLabel>입원일 ~ 퇴원 예정일 선택*</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -193,7 +193,7 @@ export default function IcuRegisterPatientForm({
                       )}
                     >
                       {range && range.from && range.to ? (
-                        <>{`${format(range.from, 'yyyy-MM-dd')} - ${format(range.to, 'yyyy-MM-dd')}`}</>
+                        <>{`${format(range.from, 'yyyy-MM-dd')} ~ ${format(range.to, 'yyyy-MM-dd')}`}</>
                       ) : (
                         <span className="overflow-hidden whitespace-nowrap">
                           입원일을 선택해주세요

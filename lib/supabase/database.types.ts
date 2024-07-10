@@ -672,7 +672,7 @@ export type Database = {
           icu_io_id: string
           in_date: string
           out_date: string | null
-          out_due_date: string | null
+          out_due_date: string
           patient_id: string
         }
         Insert: {
@@ -685,7 +685,7 @@ export type Database = {
           icu_io_id?: string
           in_date: string
           out_date?: string | null
-          out_due_date?: string | null
+          out_due_date: string
           patient_id: string
         }
         Update: {
@@ -698,7 +698,7 @@ export type Database = {
           icu_io_id?: string
           in_date?: string
           out_date?: string | null
-          out_due_date?: string | null
+          out_due_date?: string
           patient_id?: string
         }
         Relationships: [
