@@ -49,7 +49,7 @@ export default function Diagnosis({
         className="absolute left-2 text-xs text-muted-foreground"
         htmlFor="diagnosis"
       >
-        Dx
+        DX
       </Label>
       <Input
         disabled={isUpdating}

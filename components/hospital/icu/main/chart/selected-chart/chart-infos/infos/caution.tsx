@@ -44,12 +44,12 @@ export default function Caution({
   }, [caution])
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative">
       <Label
-        className="absolute left-2 text-xs text-muted-foreground"
+        className="absolute left-2 top-[11px] text-xs text-muted-foreground"
         htmlFor="caution"
       >
-        주의
+        주의사항
       </Label>
       <Input
         disabled={isUpdating}
@@ -58,7 +58,7 @@ export default function Caution({
         onChange={(e) => setCautionInput(e.target.value)}
         onBlur={handleUpdateDiagnosis}
         onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-        className="w-full pl-9"
+        className="w-full pl-16"
         title={caution}
       />
     </div>
