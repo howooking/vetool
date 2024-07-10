@@ -39,7 +39,7 @@ export function DeleteUserColumn({
       .from('users')
       .update({
         hos_id: null,
-        position: null,
+        position: '미분류',
         rank: 99,
         group: null,
         is_admin: false,

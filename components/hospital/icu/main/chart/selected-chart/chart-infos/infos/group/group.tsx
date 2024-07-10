@@ -1,3 +1,4 @@
+import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -16,81 +17,68 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { toast } from '@/components/ui/use-toast'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { updateGroup } from '@/lib/services/icu/update-icu-chart-infos'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Edit, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import type { PatientDetailGroupProps } from './patient-detail-group'
+import GroupBadge from './group-badge'
+import { groupCheckFormSchema } from './schema'
 
-const GroupCheckFormSchema = z.object({
-  items: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: '적어도 하나의 그룹을 선택해주세요',
-  }),
-})
-
-export default function PatientDetailGroupDialog({
-  groupList,
-  group,
-  name,
-  patientId,
-}: Omit<PatientDetailGroupProps, 'label'>) {
-  const [isOpen, setIsOpen] = useState(false)
+export default function Group({
+  hosGroupList,
+  currentGroups,
+  icuIoId,
+}: {
+  hosGroupList: string[]
+  currentGroups: string[]
+  icuIoId: string
+}) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { refresh } = useRouter()
 
-  const form = useForm<z.infer<typeof GroupCheckFormSchema>>({
-    resolver: zodResolver(GroupCheckFormSchema),
+  const form = useForm<z.infer<typeof groupCheckFormSchema>>({
+    resolver: zodResolver(groupCheckFormSchema),
     defaultValues: {
-      items: group || [],
+      groupList: currentGroups,
     },
   })
 
   useEffect(() => {
-    if (!isOpen) {
-      form.reset({ items: group || [] })
+    if (!isDialogOpen) {
+      form.reset({ groupList: currentGroups })
     }
-  }, [isOpen, group, form])
+  }, [isDialogOpen, form, currentGroups])
 
-  const handleSubmit = async (data: z.infer<typeof GroupCheckFormSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof groupCheckFormSchema>) => {
     setIsSubmitting(true)
 
-    const supabase = createClient()
-    const { error: groupUpdateError } = await supabase
-      .from('icu_io')
-      .update({ group_list: data.items })
-      .match({ patient_id: patientId })
-
-    if (groupUpdateError) {
-      console.log(groupUpdateError)
-      toast({
-        variant: 'destructive',
-        title: groupUpdateError.message,
-      })
-      return
-    }
+    await updateGroup(icuIoId, values.groupList)
 
     toast({
       title: '그룹을 변경하였습니다',
     })
+
     refresh()
     setIsSubmitting(false)
-    setIsOpen(false)
+    setIsDialogOpen(false)
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          <Edit size={12} />
+        <Button
+          variant="outline"
+          className="flex min-w-48 overflow-x-auto px-2"
+        >
+          <GroupBadge currentGroups={currentGroups} />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[400px]">
         <DialogHeader>
-          <DialogTitle>{name}님 그룹 수정</DialogTitle>
+          <DialogTitle>그룹 수정</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -99,14 +87,14 @@ export default function PatientDetailGroupDialog({
           >
             <FormField
               control={form.control}
-              name="items"
+              name="groupList"
               render={() => (
                 <FormItem>
-                  {groupList?.map((item) => (
+                  {hosGroupList.map((item) => (
                     <FormField
                       key={item}
                       control={form.control}
-                      name="items"
+                      name="groupList"
                       render={({ field }) => {
                         return (
                           <FormItem
@@ -139,16 +127,11 @@ export default function PatientDetailGroupDialog({
                 </FormItem>
               )}
             />
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="ml-auto w-20"
-            >
-              수정
-              <LoaderCircle
-                className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-              />
-            </Button>
+            <DialogFooterButtons
+              buttonName="변경"
+              isLoading={isSubmitting}
+              setIsDialogOpen={setIsDialogOpen}
+            />
           </form>
         </Form>
       </DialogContent>

@@ -1,24 +1,28 @@
+'use client'
+
 import NoResult from '@/components/common/no-result'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
-import { addDays, format, parseISO, subDays } from 'date-fns'
+import { differenceInDays, format } from 'date-fns'
 import AddIcuChartDialogs from './add-icu-chart-dialogs/add-icu-chart-dialogs'
 
-export default function SelectedChartNotFound() {
-  return (
-    <>
-      {/* <AddIcuChartDialogs
-        prevSelectedChart={prevSelectedChart}
-        preSelectedChartOrders={prevSelectedChartOrders}
-      />
+export default function SelectedChartNotFound({
+  selectedPatientId,
+  targetDate,
+  isPatientIn,
+}: {
+  selectedPatientId: string
+  targetDate: string
+  isPatientIn: boolean
+}) {
+  const today = format(new Date(), 'yyyy-MM-dd')
+  const targetDateFromToday = differenceInDays(targetDate, today)
 
-      <NoResult
-        title={`${nextSelectedChart.patient_id.name}은(는) ${format(addDays(parseISO(selectedDate), 1), 'yyyy-MM-dd')}에 입원했습니다`}
-      />
+  if (!isPatientIn) {
+    return <NoResult title="선택한 날짜 이후에 입원을 하였습니다." />
+  }
 
-      <NoResult
-        title={`${format(subDays(parseISO(selectedDate), 1), 'yyyy-MM-dd')} 차트를 먼저 생성해주세요`}
-      /> */}
-      차트 없음
-    </>
-  )
+  if (targetDateFromToday >= 2) {
+    return <NoResult title="모레 이후의 차트는 미리 생성할 수 없습니다" />
+  }
+
+  return <AddIcuChartDialogs selectedPatientId={selectedPatientId} />
 }

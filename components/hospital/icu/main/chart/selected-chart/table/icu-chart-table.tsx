@@ -1,6 +1,3 @@
-import IcuChartOrderDialog from './icu-chart-order-dialog'
-import IcuChartTableCellTitle from './icu-chart-table-cell-title'
-import IcuChartTableCellInput from './icu-chat-table-cell-input'
 import {
   Table,
   TableBody,
@@ -10,8 +7,11 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIME } from '@/constants/hospital/icu/chart/time'
-import { IcuChartTx, Vet } from '@/types'
-import type { IcuChartOrderJoined } from '@/types/icu'
+import { IcuChartTx } from '@/types'
+import type { IcuChartOrderJoined, IcuVetList } from '@/types/icu'
+import IcuChartOrderDialog from './icu-chart-order-dialog'
+import IcuChartTableCellTitle from './icu-chart-table-cell-title'
+import IcuChartTableCellInput from './icu-chat-table-cell-input'
 
 export default function IcuChartTable({
   userName,
@@ -20,7 +20,7 @@ export default function IcuChartTable({
 }: {
   userName: string
   selectedChartOrders: IcuChartOrderJoined[]
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
 }) {
   // 처치 오더가 존재하는 지에 대해 true/false 반환
   const hasOrder = (orderData: IcuChartOrderJoined, index: number) => {

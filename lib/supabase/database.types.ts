@@ -606,33 +606,36 @@ export type Database = {
           icu_chart_order_id: string | null
           icu_chart_tx_comment: string | null
           icu_chart_tx_id: string
-          icu_chart_tx_images: string[] | null
+          icu_chart_tx_images: string[]
           icu_chart_tx_log: Json[] | null
           icu_chart_tx_result: string | null
           icu_io_id: string | null
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           icu_chart_order_id?: string | null
           icu_chart_tx_comment?: string | null
           icu_chart_tx_id?: string
-          icu_chart_tx_images?: string[] | null
+          icu_chart_tx_images: string[]
           icu_chart_tx_log?: Json[] | null
           icu_chart_tx_result?: string | null
           icu_io_id?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           icu_chart_order_id?: string | null
           icu_chart_tx_comment?: string | null
           icu_chart_tx_id?: string
-          icu_chart_tx_images?: string[] | null
+          icu_chart_tx_images?: string[]
           icu_chart_tx_log?: Json[] | null
           icu_chart_tx_result?: string | null
           icu_io_id?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -649,46 +652,53 @@ export type Database = {
             referencedRelation: "icu_io"
             referencedColumns: ["icu_io_id"]
           },
+          {
+            foreignKeyName: "icu_chart_tx_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
       icu_io: {
         Row: {
-          age_in_days: number | null
-          cc: string | null
+          age_in_days: number
+          cc: string
           created_at: string
-          dx: string | null
-          group_list: string[] | null
+          dx: string
+          group_list: string[]
           hos_id: string | null
           icu_io_id: string
           in_date: string
           out_date: string | null
-          out_due_date: string | null
+          out_due_date: string
           patient_id: string
         }
         Insert: {
-          age_in_days?: number | null
-          cc?: string | null
+          age_in_days: number
+          cc: string
           created_at?: string
-          dx?: string | null
-          group_list?: string[] | null
+          dx: string
+          group_list: string[]
           hos_id?: string | null
           icu_io_id?: string
           in_date: string
           out_date?: string | null
-          out_due_date?: string | null
+          out_due_date: string
           patient_id: string
         }
         Update: {
-          age_in_days?: number | null
-          cc?: string | null
+          age_in_days?: number
+          cc?: string
           created_at?: string
-          dx?: string | null
-          group_list?: string[] | null
+          dx?: string
+          group_list?: string[]
           hos_id?: string | null
           icu_io_id?: string
           in_date?: string
           out_date?: string | null
-          out_due_date?: string | null
+          out_due_date?: string
           patient_id?: string
         }
         Relationships: [
@@ -867,9 +877,9 @@ export type Database = {
           is_active: boolean | null
           is_admin: boolean
           is_vet: boolean
-          name: string | null
-          position: string | null
-          rank: number | null
+          name: string
+          position: string
+          rank: number
           user_id: string
         }
         Insert: {
@@ -881,9 +891,9 @@ export type Database = {
           is_active?: boolean | null
           is_admin?: boolean
           is_vet?: boolean
-          name?: string | null
-          position?: string | null
-          rank?: number | null
+          name: string
+          position?: string
+          rank?: number
           user_id: string
         }
         Update: {
@@ -895,9 +905,9 @@ export type Database = {
           is_active?: boolean | null
           is_admin?: boolean
           is_vet?: boolean
-          name?: string | null
-          position?: string | null
-          rank?: number | null
+          name?: string
+          position?: string
+          rank?: number
           user_id?: string
         }
         Relationships: [
@@ -963,6 +973,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      copy_prev_chart: {
+        Args: {
+          patient_id_input: string
+          target_date_input: string
+          prev_target_date_input: string
+        }
+        Returns: Json
+      }
       copy_prev_selected_chart: {
         Args: {
           hos_id_input: string
@@ -1105,6 +1123,15 @@ export type Database = {
           name_input: string
           is_vet_input: boolean
           hos_id_input: string
+        }
+        Returns: undefined
+      }
+      update_weight: {
+        Args: {
+          patient_id_input: string
+          icu_chart_id_input: string
+          weight_input: string
+          weight_measured_date_input: string
         }
         Returns: undefined
       }

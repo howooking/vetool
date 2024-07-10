@@ -1,25 +1,28 @@
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
+import { useParams } from 'next/navigation'
 import AddDefaultChartDialog from './add-default-chart-dialog'
 import CopyBookmarkDialog from './copy-bookmark-dialog'
 import CopyPrevChartDialog from './copy-prev-chart-dialog'
 
 export default function AddIcuChartDialogs({
-  prevSelectedChart,
-  preSelectedChartOrders,
+  selectedPatientId,
 }: {
-  prevSelectedChart: IcuChartJoined
-  preSelectedChartOrders: IcuChartOrderJoined[]
+  selectedPatientId: string
 }) {
+  const { target_date } = useParams()
   return (
     <div className="flex h-icu-chart w-full items-center justify-center gap-10">
-      {/* <CopyPrevChartDialog
-        prevSelectedChart={prevSelectedChart}
-        preSelectedChartOrders={preSelectedChartOrders}
+      <CopyPrevChartDialog
+        targetDate={target_date as string}
+        selectedPatientId={selectedPatientId}
       />
-
-      <AddDefaultChartDialog prevSelectedChart={prevSelectedChart} />
-
-      <CopyBookmarkDialog /> */}
+      <AddDefaultChartDialog
+        targetDate={target_date as string}
+        selectedPatientId={selectedPatientId}
+      />
+      <CopyBookmarkDialog
+        targetDate={target_date as string}
+        selectedPatientId={selectedPatientId}
+      />
     </div>
   )
 }

@@ -1,13 +1,10 @@
-export type SelectHosptialDataTable = {
-  hos_id: string
-  name: string
-  city: string
-  district: string
-}
+import { Hospital, UserApproval } from '..'
 
-export type UserApproval = {
-  user_approval_id: string
-  hos_id: {
-    name: string
-  }
+export type SelectHosptialDataTable = Pick<
+  Hospital,
+  'hos_id' | 'name' | 'city' | 'district'
+>
+
+export type UserApprovalHosJoined = Pick<UserApproval, 'user_approval_id'> & {
+  hos_id: Pick<Hospital, 'name'>
 }

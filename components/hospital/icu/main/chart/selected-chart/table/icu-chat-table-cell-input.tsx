@@ -1,10 +1,4 @@
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuTrigger,
@@ -12,16 +6,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { TableCell } from '@/components/ui/table'
-import { toast } from '@/components/ui/use-toast'
-import {
-  updateIcuChartOrder,
-  upsertIcuChartTx,
-} from '@/lib/services/icu/upsert-chart-tx'
-import { cn } from '@/lib/utils'
-import { IcuChartTx, Vet } from '@/types/'
+import type { IcuChartTx } from '@/types'
+import type { IcuVetList } from '@/types/icu'
 import { format } from 'date-fns'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export type TxLog = {
   result: string | null
@@ -32,7 +21,7 @@ export type TxLog = {
 type TableCellInputProps = {
   time: number
   txData: IcuChartTx | null
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
   ioId: string
   chartOrderId: string
   hasOrder: boolean
@@ -59,75 +48,60 @@ export default function IcuChartTableCellInput({
   const { refresh } = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [txState, setTxState] = useState<TxState>({
-    icu_chart_tx_result: txData?.icu_chart_tx_result ?? '',
-    icu_chart_tx_comment: txData?.icu_chart_tx_comment ?? '',
-    icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
-    icu_chart_tx_log: (txData?.icu_chart_tx_log as TxLog[]) ?? [],
-  })
+  // const [txState, setTxState] = useState<TxState>({
+  //   icu_chart_tx_result: txData?.icu_chart_tx_result ?? '',
+  //   icu_chart_tx_comment: txData?.icu_chart_tx_comment ?? '',
+  //   icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
+  //   icu_chart_tx_log: txData?.icu_chart_tx_log ?? [],
+  // })
 
-  useEffect(() => {
-    setTxState({
-      icu_chart_tx_result: txData?.icu_chart_tx_result?.trim() ?? '',
-      icu_chart_tx_comment: txData?.icu_chart_tx_comment?.trim() ?? '',
-      icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
-      icu_chart_tx_log: (txData?.icu_chart_tx_log as TxLog[]) ?? [],
-    })
-  }, [txData])
+  // useEffect(() => {
+  //   setTxState({
+  //     icu_chart_tx_result: txData?.icu_chart_tx_result?.trim() ?? '',
+  //     icu_chart_tx_comment: txData?.icu_chart_tx_comment?.trim() ?? '',
+  //     icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
+  //     icu_chart_tx_log: txData?.icu_chart_tx_log ?? [],
+  //   })
+  // }, [txData])
 
-  const handleInputChange =
-    (field: keyof TxState) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setTxState((prev) => ({ ...prev, [field]: e.target.value }))
-    }
+  // const handleInputChange =
+  //   (field: keyof TxState) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     setTxState((prev) => ({ ...prev, [field]: e.target.value }))
+  //   }
 
-  const handleTxBlur = async () => {
-    setIsSubmitting(true)
+  // const handleTxBlur = async () => {
+  //   setIsSubmitting(true)
 
-    if (
-      txState.icu_chart_tx_result === (txData?.icu_chart_tx_result ?? '') &&
-      txState.icu_chart_tx_comment === (txData?.icu_chart_tx_comment ?? '')
-    ) {
-      setIsSubmitting(false)
-      return
-    }
+  //   if (
+  //     txState.icu_chart_tx_result === (txData?.icu_chart_tx_result ?? '') &&
+  //     txState.icu_chart_tx_comment === (txData?.icu_chart_tx_comment ?? '')
+  //   ) {
+  //     setIsSubmitting(false)
+  //     return
+  //   }
 
-    const fieldName = `icu_chart_order_tx_${time}`
+  //   const fieldName = `icu_chart_order_tx_${time}`
+  //   const icuChartTxData = await upsertIcuChartTx(
+  //     txId,
+  //     ioId,
+  //     chartOrderId,
+  //     txState,
+  //   )
 
-    const newLog: TxLog = {
-      result: txState.icu_chart_tx_result,
-      name: userName,
-      createdAt: date,
-    }
+  //   await updateIcuChartOrder(
+  //     chartOrderId,
+  //     fieldName,
+  //     icuChartTxData.icu_chart_tx_id,
+  //   )
 
-    const uniqueLogSet = new Set(
-      [...(txState.icu_chart_tx_log || []), newLog].map((log) =>
-        JSON.stringify(log),
-      ),
-    )
+  //   toast({
+  //     title: '처치 상세 내역',
+  //     description: '처치 상세 내역이 업데이트 되었습니다',
+  //   })
 
-    const updatedLogs: TxLog[] = Array.from(uniqueLogSet).map((log) =>
-      JSON.parse(log),
-    )
-
-    const icuChartTxData = await upsertIcuChartTx(txId, ioId, chartOrderId, {
-      ...txState,
-      icu_chart_tx_log: updatedLogs,
-    })
-
-    await updateIcuChartOrder(
-      chartOrderId,
-      fieldName,
-      icuChartTxData.icu_chart_tx_id,
-    )
-
-    toast({
-      title: '처치 상세 내역',
-      description: '처치 상세 내역이 업데이트 되었습니다',
-    })
-
-    setIsSubmitting(false)
-    refresh()
-  }
+  //   setIsSubmitting(false)
+  //   refresh()
+  // }
 
   // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const files = e.target.files
@@ -169,7 +143,7 @@ export default function IcuChartTableCellInput({
     <TableCell className="h-2 border-black p-0 leading-4">
       <ContextMenu>
         <ContextMenuTrigger>
-          <Input
+          {/* <Input
             className={cn(
               'rounded-none px-1 text-center focus-visible:border-2 focus-visible:border-primary focus-visible:ring-0',
               hasOrder ? 'bg-red-200' : 'bg-gray-200',
@@ -178,7 +152,7 @@ export default function IcuChartTableCellInput({
             onBlur={handleTxBlur}
             onChange={handleInputChange('icu_chart_tx_result')}
             disabled={isSubmitting}
-          />
+          /> */}
         </ContextMenuTrigger>
 
         <ContextMenuContent>
@@ -198,7 +172,7 @@ export default function IcuChartTableCellInput({
               {/* result */}
               <div className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor="result">결과</Label>
-                <Input
+                {/* <Input
                   id="result"
                   type="text"
                   value={txState.icu_chart_tx_result ?? ''}
@@ -206,19 +180,19 @@ export default function IcuChartTableCellInput({
                   onBlur={handleTxBlur}
                   onChange={handleInputChange('icu_chart_tx_result')}
                   placeholder="결과값 입력"
-                />
+                /> */}
               </div>
 
               {/* comment */}
               <div className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor="comment">코멘트</Label>
-                <Input
+                {/* <Input
                   id="comment"
                   value={txState.icu_chart_tx_comment ?? ''}
                   className="col-span-2 h-8"
                   onBlur={handleTxBlur}
                   onChange={handleInputChange('icu_chart_tx_comment')}
-                />
+                /> */}
               </div>
 
               {/* images */}
@@ -233,35 +207,14 @@ export default function IcuChartTableCellInput({
               </div>
 
               {/* log */}
-              <div className="flex items-center gap-4">
-                <Label htmlFor="log" className="w-1/3">
-                  처치 기록
-                </Label>
-
-                {txState.icu_chart_tx_log?.length ? (
-                  <Accordion type="single" collapsible className="w-2/3">
-                    <AccordionItem value="item-2">
-                      <AccordionTrigger>
-                        <div className="flex w-full items-center justify-between pr-2 text-sm font-bold">
-                          <span>결과</span>
-                          <span>담당자</span>
-                          <span>처치 시각</span>
-                        </div>
-                      </AccordionTrigger>
-                      {txState.icu_chart_tx_log?.map((log) => (
-                        <AccordionContent key={log.createdAt}>
-                          <div className="grid grid-cols-3 text-sm">
-                            <span>{log.result}</span>
-                            <span>{log.name}</span>
-                            <span className="text-xs">{log.createdAt}</span>
-                          </div>
-                        </AccordionContent>
-                      ))}
-                    </AccordionItem>
-                  </Accordion>
-                ) : (
-                  <span className="text-sm">없음</span>
-                )}
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="log">처치 기록</Label>
+                {/* <Input
+                  id="log"
+                  value={txState.icu_chart_tx_comment ?? ''}
+                  onChange={() => {}}
+                  className="col-span-2 h-8"
+                /> */}
               </div>
             </div>
           </div>

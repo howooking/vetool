@@ -1,50 +1,29 @@
-export type HospitalUserData = {
-  name: string
-  position: string | null
-  rank: number
-  group: string[] | null
-  is_admin: boolean
-  user_id: string
-  is_vet: boolean
-  avatar_url: string
-  hos_id: {
-    master_user_id: string
-    group_list: string[]
+import { Hospital, User, UserApproval } from '..'
+
+export type UserHospitalJoined = Omit<
+  User,
+  'email' | 'is_active' | 'created_at' | 'hos_id'
+> & {
+  hos_id: Pick<Hospital, 'master_user_id' | 'group_list'>
+}
+
+export type HospitalUserDataTable = Omit<
+  User,
+  'email' | 'is_active' | 'created_at' | 'hos_id'
+> &
+  Pick<Hospital, 'master_user_id' | 'group_list'> & {
+    isMaster: boolean
   }
+
+export type ApprovalData = Pick<
+  UserApproval,
+  'is_approved' | 'created_at' | 'updated_at'
+> & {
+  user_id: Pick<User, 'user_id' | 'name' | 'avatar_url' | 'is_vet'>
 }
 
-export type HospitalUserDataTable = {
-  name: string
-  position: string | null
-  rank: number
-  group: string[] | null
-  is_admin: boolean
-  user_id: string
-  is_vet: boolean
-  avatar_url: string
-  isMaster: boolean
-  master_user_id: string
-  group_list: string[]
-}
-
-export type ApprovalData = {
-  created_at: string
-  updated_at: string
-  is_approved: boolean
-  user_id: {
-    name: string
-    user_id: string
-    avatar_url: string
-    is_vet: boolean
-  }
-}
-
-export type ApprovalDataTable = {
-  created_at: string
-  updated_at: string
-  is_approved: boolean
-  name: string
-  user_id: string
-  avatar_url: string
-  is_vet: boolean
-}
+export type ApprovalDataTable = Omit<
+  UserApproval,
+  'user_id' | 'hos_id' | 'user_approval_id'
+> &
+  Pick<User, 'user_id' | 'name' | 'avatar_url' | 'is_vet'>

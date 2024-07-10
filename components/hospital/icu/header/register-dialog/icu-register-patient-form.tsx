@@ -33,7 +33,7 @@ import {
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import type { Vet } from '@/types'
+import type { IcuVetList } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addDays, format } from 'date-fns'
 import { ko } from 'date-fns/locale'
@@ -55,7 +55,7 @@ export default function IcuRegisterPatientForm({
 }: {
   hosId: string
   groupList: string[]
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
   tab: string
   setTab: Dispatch<SetStateAction<string>>
@@ -63,7 +63,7 @@ export default function IcuRegisterPatientForm({
   const { push, refresh } = useRouter()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
-    to: addDays(new Date(), 1),
+    to: new Date(),
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { registeringPatient } = useIcuRegisteringPatient()
@@ -137,7 +137,7 @@ export default function IcuRegisterPatientForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="mt-4 grid grid-cols-2 gap-8"
+        className="mt-4 grid grid-cols-2 gap-4"
       >
         <FormField
           control={form.control}
@@ -181,7 +181,7 @@ export default function IcuRegisterPatientForm({
           name="in_date"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-2">
-              <FormLabel>입원일 - 퇴원 예정일 선택*</FormLabel>
+              <FormLabel>입원일 ~ 퇴원 예정일 선택*</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -193,7 +193,7 @@ export default function IcuRegisterPatientForm({
                       )}
                     >
                       {range && range.from && range.to ? (
-                        <>{`${format(range.from, 'yyyy-MM-dd')} - ${format(range.to, 'yyyy-MM-dd')}`}</>
+                        <>{`${format(range.from, 'yyyy-MM-dd')} ~ ${format(range.to, 'yyyy-MM-dd')}`}</>
                       ) : (
                         <span className="overflow-hidden whitespace-nowrap">
                           입원일을 선택해주세요
@@ -279,9 +279,7 @@ export default function IcuRegisterPatientForm({
                   {vetsData.map((vet) => (
                     <SelectItem key={vet.user_id} value={vet.user_id}>
                       <span>{vet.name}</span>
-                      <span className="ml-2 text-xs">
-                        {vet.position ?? '미분류'}
-                      </span>
+                      <span className="ml-2 text-xs">{vet.position}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>

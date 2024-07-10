@@ -1,8 +1,12 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { Vet } from '@/types'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuIoPatientJoined,
+  IcuVetList,
+} from '@/types/icu'
 import type { PatientData } from '@/types/patients'
 
 export const getPromiseAll = async (hosId: string, targetDate: string) => {
@@ -15,7 +19,8 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
         `
           *,
           icu_io_id(*),
-          patient_id("name", "gender", "breed", "patient_id"),
+          hos_id("group_list"),
+          patient_id("name", "gender", "breed", "patient_id", "species"),
           main_vet("name", "user_id", "avatar_url"),
           sub_vet("name", "user_id", "avatar_url")
         `,
@@ -60,15 +65,17 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       .order('icu_chart_order_name', { ascending: true })
       .returns<IcuChartOrderJoined[]>(),
 
-    // 병원 그룹리스트
-    supabase.from('hospitals').select('group_list').match({ hos_id: hosId }),
+    supabase
+      .from('hospitals')
+      .select('group_list')
+      .match({ hos_id: hosId })
+      .single(),
 
-    // 수의사
     supabase
       .from('users')
-      .select('name, position, user_id')
+      .select('name, position, user_id, avatar_url')
       .match({ hos_id: hosId, is_vet: true })
-      .returns<Vet[]>(),
+      .returns<IcuVetList[]>(),
 
     supabase
       .from('patients')
@@ -88,6 +95,20 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       .select('*')
       .match({ hos_id: hosId })
       .order('created_at', { ascending: false }),
+
+    supabase
+      .from('icu_io')
+      .select(
+        `
+          *,
+          patient_id("name", "breed", "patient_id")
+        `,
+      )
+      .match({ hos_id: hosId })
+      .lte('in_date', targetDate)
+      .or(`out_date.is.null, out_date.gte.${targetDate}`)
+      .order('in_date', { ascending: true })
+      .returns<IcuIoPatientJoined[]>(),
   ])
 
   const [
@@ -97,6 +118,7 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
     { data: vetsData, error: vetsDataError },
     { data: patientsData, error: patientsDataError },
     { data: ownersData, error: ownersDataError },
+    { data: icuIoData, error: icuIoDataError },
   ] = await promiseArray
 
   if (
@@ -105,7 +127,8 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
     groupListDataError ||
     vetsDataError ||
     patientsDataError ||
-    ownersDataError
+    ownersDataError ||
+    icuIoDataError
   ) {
     console.log({
       icuChartDataError,
@@ -114,6 +137,7 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       vetsDataError,
       patientsDataError,
       ownersDataError,
+      icuIoDataError,
     })
     throw new Error(
       icuChartDataError?.message ||
@@ -121,7 +145,8 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
         groupListDataError?.message ||
         vetsDataError?.message ||
         patientsDataError?.message ||
-        ownersDataError?.message,
+        ownersDataError?.message ||
+        icuIoDataError?.message,
     )
   }
   return {
@@ -131,5 +156,6 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
     vetsData,
     patientsData,
     ownersData,
+    icuIoData,
   }
 }

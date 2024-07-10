@@ -10,21 +10,18 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { copyPrevSelectedChart } from '@/lib/services/icu/add-icu-chart'
+import { copyPrevChart } from '@/lib/services/icu/add-icu-chart'
 import { cn } from '@/lib/utils'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 import { ClipboardPaste, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function CopyPrevChartDialog({
-  prevSelectedChart,
-  preSelectedChartOrders,
-  selectedDate,
+  targetDate,
+  selectedPatientId,
 }: {
-  prevSelectedChart: IcuChartJoined
-  preSelectedChartOrders: IcuChartOrderJoined[]
-  selectedDate: string
+  targetDate: string
+  selectedPatientId: string
 }) {
   const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -33,14 +30,10 @@ export default function CopyPrevChartDialog({
   const handleCopyPrevSelectedChart = async () => {
     setIsSubmitting(true)
 
-    await copyPrevSelectedChart(
-      prevSelectedChart,
-      preSelectedChartOrders,
-      selectedDate,
-    )
+    await copyPrevChart(targetDate, selectedPatientId)
 
     toast({
-      title: `${selectedDate} 차트를 복사하였습니다.`,
+      title: '전날 차트를 복사하였습니다',
     })
     refresh()
     setIsDialogOpen(false)
@@ -62,7 +55,7 @@ export default function CopyPrevChartDialog({
         <DialogHeader>
           <DialogTitle>전일차트복사</DialogTitle>
           <DialogDescription>
-            전일차트를 복사하여 {selectedDate} 차트가 생성됩니다
+            전일차트를 복사하여 {targetDate} 차트가 생성됩니다
           </DialogDescription>
         </DialogHeader>
 

@@ -2,9 +2,12 @@
 
 import NoResult from '@/components/common/no-result'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import type { Vet } from '@/types'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
-
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuIoPatientJoined,
+  IcuVetList,
+} from '@/types/icu'
 import { useMemo } from 'react'
 import SelectedChartNotFound from './selected-chart-not-found/selected-chart-not-found'
 import SelectedChart from './selected-chart/selected-chart'
@@ -23,11 +26,15 @@ export default function IcuChart({
   icuChartData,
   icuChartOrderData,
   vetsData,
+  targetDate,
+  icuIoData,
 }: {
   userName: string
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
-  vetsData: Vet[]
+  vetsData: IcuVetList[]
+  targetDate: string
+  icuIoData: IcuIoPatientJoined[]
 }) {
   const { selectedPatientId } = useIcuSelectedPatientStore()
 
@@ -57,6 +64,12 @@ export default function IcuChart({
     [icuChartOrderData, selectedChart?.icu_chart_id],
   )
 
+  const isPatientIn = useMemo(
+    () =>
+      icuIoData.some((io) => io.patient_id.patient_id === selectedPatientId),
+    [icuIoData, selectedPatientId],
+  )
+
   if (!selectedPatientId) {
     return <NoResult title="환자를 선택해주세요" />
   }
@@ -72,7 +85,11 @@ export default function IcuChart({
           vetsData={vetsData}
         />
       ) : (
-        <SelectedChartNotFound />
+        <SelectedChartNotFound
+          selectedPatientId={selectedPatientId}
+          targetDate={targetDate}
+          isPatientIn={isPatientIn}
+        />
       )}
     </div>
   )
