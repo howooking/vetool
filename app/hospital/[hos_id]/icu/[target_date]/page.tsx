@@ -23,7 +23,7 @@ export default async function IcuPage({
         hosId={params.hos_id}
         patientsData={patientsData}
         vetsData={vetsData}
-        groupList={groupListData[0].group_list}
+        groupList={groupListData.group_list}
         ownersData={ownersData}
       />
 

@@ -65,7 +65,11 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       .order('icu_chart_order_name', { ascending: true })
       .returns<IcuChartOrderJoined[]>(),
 
-    supabase.from('hospitals').select('group_list').match({ hos_id: hosId }),
+    supabase
+      .from('hospitals')
+      .select('group_list')
+      .match({ hos_id: hosId })
+      .single(),
 
     supabase
       .from('users')

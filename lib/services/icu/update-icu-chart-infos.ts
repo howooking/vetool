@@ -4,8 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 
+const supabase = createClient()
 export const updateDiagnosis = async (icuIoId: string, diagnosis: string) => {
-  const supabase = createClient()
   const { error: updateDiagnosisError } = await supabase
     .from('icu_io')
     .update({ dx: diagnosis })
@@ -21,7 +21,6 @@ export const updateChiefComplaint = async (
   icuIoId: string,
   chiefComplaint: string,
 ) => {
-  const supabase = createClient()
   const { error: updateChiefComplaintError } = await supabase
     .from('icu_io')
     .update({ cc: chiefComplaint })
@@ -34,7 +33,6 @@ export const updateChiefComplaint = async (
 }
 
 export const updateCaution = async (icuChartId: string, caution: string) => {
-  const supabase = createClient()
   const { error: updataCautionError } = await supabase
     .from('icu_chart')
     .update({ caution })
@@ -51,7 +49,6 @@ export const updateMainSubVet = async (
   mainVetId: string,
   subVetId?: string,
 ) => {
-  const supabase = createClient()
   const { error: updateMainSubVetError } = await supabase
     .from('icu_chart')
     .update({
@@ -66,7 +63,6 @@ export const updateMainSubVet = async (
 }
 
 export const updateGroup = async (icuIoId: string, groupList: string[]) => {
-  const supabase = createClient()
   const { error: updateGroupError } = await supabase
     .from('icu_io')
     .update({
@@ -84,8 +80,6 @@ export const updateWeight = async (
   icuChartId: string,
   weight: string,
 ) => {
-  const supabase = createClient()
-
   const { error: updateWeightError } = await supabase.rpc('update_weight', {
     icu_chart_id_input: icuChartId,
     patient_id_input: patientId,
@@ -99,8 +93,6 @@ export const updateWeight = async (
   }
 }
 export const updateOutDueDate = async (icuIoId: string, outDueDate: string) => {
-  const supabase = createClient()
-
   const { error: updateOutDueDateError } = await supabase
     .from('icu_io')
     .update({ out_due_date: outDueDate })
