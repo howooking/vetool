@@ -44,7 +44,7 @@ export default function Diagnosis({
   }, [diagnosis])
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative col-span-2 flex items-center">
       <Label
         className="absolute left-2 text-xs text-muted-foreground"
         htmlFor="diagnosis"
@@ -59,7 +59,7 @@ export default function Diagnosis({
         onChange={(e) => setDiagnosisInput(e.target.value)}
         onBlur={handleUpdateDiagnosis}
         onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-        className="w-48 pl-8"
+        className="w-full pl-8"
         title={diagnosis}
       />
     </div>

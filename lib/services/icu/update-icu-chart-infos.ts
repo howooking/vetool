@@ -98,6 +98,19 @@ export const updateWeight = async (
     redirect(`/error/?message=${updateWeightError.message}`)
   }
 }
+export const updateOutDueDate = async (icuIoId: string, outDueDate: string) => {
+  const supabase = createClient()
+
+  const { error: updateOutDueDateError } = await supabase
+    .from('icu_io')
+    .update({ out_due_date: outDueDate })
+    .match({ icu_io_id: icuIoId })
+
+  if (updateOutDueDateError) {
+    console.log(updateOutDueDateError)
+    redirect(`/error/?message=${updateOutDueDateError.message}`)
+  }
+}
 
 // export const updateMemo = async (
 //   patientId: string | null,

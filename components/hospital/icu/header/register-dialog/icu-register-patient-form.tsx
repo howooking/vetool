@@ -63,7 +63,7 @@ export default function IcuRegisterPatientForm({
   const { push, refresh } = useRouter()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
-    to: addDays(new Date(), 1),
+    to: new Date(),
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { registeringPatient } = useIcuRegisteringPatient()

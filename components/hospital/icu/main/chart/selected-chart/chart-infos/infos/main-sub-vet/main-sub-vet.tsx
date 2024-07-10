@@ -29,7 +29,7 @@ export function MainSubVet({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex w-48 items-center gap-2">
+        <Button variant="outline" className="flex w-full items-center gap-2">
           <div className="flex items-center gap-1">
             <Image
               unoptimized
