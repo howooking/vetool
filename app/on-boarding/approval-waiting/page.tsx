@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { cancelApproval, getUser, logout } from '@/lib/actions/auth'
 import { createClient } from '@/lib/supabase/server'
 import logoWhite from '@/public/logo-white.svg'
-import { UserApproval } from '@/types/on-boarding'
+import { UserApprovalHosJoined } from '@/types/on-boarding'
 import Image from 'next/image'
 
 export default async function ApprovalWaiting() {
@@ -25,7 +25,7 @@ export default async function ApprovalWaiting() {
       .match({
         user_id: authUser?.id,
       })
-      .returns<UserApproval[]>()
+      .returns<UserApprovalHosJoined[]>()
 
   if (userApprovalDataError) {
     console.log(userApprovalDataError)

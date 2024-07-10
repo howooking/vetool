@@ -1,33 +1,28 @@
-import type { IcuChart, IcuChartOrder, IcuChartTx, IcuIo, Users } from '..'
+import type {
+  Hospital,
+  IcuChart,
+  IcuChartOrder,
+  IcuChartTx,
+  IcuIo,
+  Patients,
+  User,
+} from '..'
 
 export type IcuIoPatientJoined = Omit<IcuIo, 'patient_id'> & {
-  patient_id: {
-    name: string
-    breed: string
-    patient_id: string
-  }
+  patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
 }
 
-export type MainAndSubVet = {
-  name: string
-  user_id: string
-  avatar_url: string
-}
+export type MainAndSubVet = Pick<User, 'name' | 'avatar_url' | 'user_id'>
 
 export type IcuChartJoined = Omit<
   IcuChart,
   'main_vet' | 'sub_vet' | 'patient_id' | 'icu_io_id' | 'hos_id'
 > & {
-  hos_id: {
-    group_list: string[]
-  }
-  patient_id: {
-    name: string
-    gender: string
-    breed: string
-    patient_id: string
-    species: string
-  }
+  hos_id: Pick<Hospital, 'group_list'>
+  patient_id: Pick<
+    Patients,
+    'name' | 'gender' | 'breed' | 'patient_id' | 'species'
+  >
   icu_io_id: IcuIo
   main_vet: MainAndSubVet
   sub_vet: MainAndSubVet | null
@@ -88,13 +83,7 @@ export type IcuChartOrderJoined = Omit<
   icu_chart_order_tx_24: IcuChartTx | null
 }
 
-export type IcuVetList = Omit<
-  Users,
-  | 'email'
-  | 'is_active'
-  | 'created_at'
-  | 'rank'
-  | 'group'
-  | 'hos_id'
-  | 'is_admin'
+export type IcuVetList = Pick<
+  User,
+  'avatar_url' | 'is_vet' | 'name' | 'position' | 'user_id'
 >

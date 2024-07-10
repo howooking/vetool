@@ -33,7 +33,7 @@ export function MainSubVet({
           <div className="flex items-center gap-1">
             <Image
               unoptimized
-              src={mainVet.avatar_url}
+              src={mainVet.avatar_url ?? ''}
               alt={mainVet.name}
               width={20}
               height={20}
@@ -46,7 +46,7 @@ export function MainSubVet({
             <div className="flex items-center gap-1">
               <Image
                 unoptimized
-                src={subVet.avatar_url}
+                src={subVet.avatar_url ?? ''}
                 alt={subVet.name}
                 width={20}
                 height={20}
