@@ -104,28 +104,34 @@ export const updateOutDueDate = async (icuIoId: string, outDueDate: string) => {
   }
 }
 
-// export const updateMemo = async (
-//   patientId: string | null,
-//   targetDate: string,
-//   memoState: {
-//     memoA: string | null
-//     memoB: string | null
-//     memoC: string | null
-//   },
-// ) => {
-//   const supabase = createClient()
+export const updateMemoName = async (
+  hosId: string,
+  hosIcuMemoNamesInput: string[],
+) => {
+  const { error: updateMemoNameError } = await supabase
+    .from('hospitals')
+    .update({ icu_memo_names: hosIcuMemoNamesInput })
+    .match({ hos_id: hosId })
 
-//   const { error: memoError } = await supabase
-//     .from('icu_chart')
-//     .update({
-//       memo_a: memoState.memoA?.trim(),
-//       memo_b: memoState.memoB?.trim(),
-//       memo_c: memoState.memoC?.trim(),
-//     })
-//     .match({ patient_id: patientId, target_date: targetDate })
+  if (updateMemoNameError) {
+    console.log(updateMemoNameError)
+    redirect(`/error/?message=${updateMemoNameError.message}`)
+  }
+}
 
-//   if (memoError) {
-//     console.log(memoError)
-//     throw new Error(memoError.message)
-//   }
-// }
+export const updateMemo = async (
+  query: { [key: string]: string },
+  icuChartId: string,
+) => {
+  const supabase = createClient()
+
+  const { error: memoError } = await supabase
+    .from('icu_chart')
+    .update(query)
+    .match({ icu_chart_id: icuChartId })
+
+  if (memoError) {
+    console.log(memoError)
+    throw new Error(memoError.message)
+  }
+}

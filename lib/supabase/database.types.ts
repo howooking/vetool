@@ -177,6 +177,7 @@ export type Database = {
           district: string
           group_list: string[]
           hos_id: string
+          icu_memo_names: string[]
           is_personal: boolean
           master_user_id: string
           memo_list: string[]
@@ -190,6 +191,7 @@ export type Database = {
           district: string
           group_list?: string[]
           hos_id?: string
+          icu_memo_names?: string[]
           is_personal?: boolean
           master_user_id: string
           memo_list?: string[]
@@ -203,6 +205,7 @@ export type Database = {
           district?: string
           group_list?: string[]
           hos_id?: string
+          icu_memo_names?: string[]
           is_personal?: boolean
           master_user_id?: string
           memo_list?: string[]
@@ -980,23 +983,6 @@ export type Database = {
           prev_target_date_input: string
         }
         Returns: Json
-      }
-      copy_prev_selected_chart: {
-        Args: {
-          hos_id_input: string
-          main_vet_input: string
-          sub_vet_input: string
-          weight_input: string
-          weight_measured_date_input: string
-          target_date_input: string
-          patient_id_input: string
-          caution_input: string
-          memo_a_input: string
-          memo_b_input: string
-          memo_c_input: string
-          icu_io_id_input: string
-        }
-        Returns: string
       }
       get_icu_patient_data_with_due: {
         Args: Record<PropertyKey, never>

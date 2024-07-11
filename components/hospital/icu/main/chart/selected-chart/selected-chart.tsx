@@ -4,7 +4,7 @@ import type {
   IcuVetList,
 } from '@/types/icu'
 import ChartInfos from './chart-infos/chart-infos'
-import IcuChartMemo from './memo/icu-chart-memo'
+import ChartMemos from './chart-memos/chart-memos'
 import IcuChartTable from './table/icu-chart-table'
 
 export default function SelectedChart({
@@ -27,7 +27,13 @@ export default function SelectedChart({
         selectedChartOrders={selectedChartOrders}
         vetsData={vetsData}
       />
-      <IcuChartMemo memoA={memo_a} memoB={memo_b} memoC={memo_c} />
+      <ChartMemos
+        memoA={memo_a}
+        memoB={memo_b}
+        memoC={memo_c}
+        icuChartId={selectedChart.icu_chart_id}
+        hosIcuMemoNames={selectedChart.hos_id.icu_memo_names}
+      />
     </div>
   )
 }
