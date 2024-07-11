@@ -104,27 +104,34 @@ export const updateOutDueDate = async (icuIoId: string, outDueDate: string) => {
   }
 }
 
+export const updateMemoName = async (
+  hosId: string,
+  hosIcuMemoNamesInput: string[],
+) => {
+  const { error: updateMemoNameError } = await supabase
+    .from('hospitals')
+    .update({ icu_memo_names: hosIcuMemoNamesInput })
+    .match({ hos_id: hosId })
+
+  if (updateMemoNameError) {
+    console.log(updateMemoNameError)
+    redirect(`/error/?message=${updateMemoNameError.message}`)
+  }
+}
+
 export const updateMemo = async (
-  icuIoId: string,
-  memoState: {
-    memoA: string | null
-    memoB: string | null
-    memoC: string | null
-  },
+  query: { [key: string]: string },
+  icuChartId: string,
 ) => {
   const supabase = createClient()
 
   const { error: memoError } = await supabase
     .from('icu_chart')
-    .update({
-      memo_a: memoState.memoA?.trim(),
-      memo_b: memoState.memoB?.trim(),
-      memo_c: memoState.memoC?.trim(),
-    })
-    .match({ icu_io_id: icuIoId })
+    .update(query)
+    .match({ icu_chart_id: icuChartId })
 
   if (memoError) {
     console.log(memoError)
-    redirect(`/error/?message=${memoError.message}`)
+    throw new Error(memoError.message)
   }
 }
