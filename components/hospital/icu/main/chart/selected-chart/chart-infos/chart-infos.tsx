@@ -1,22 +1,22 @@
 'use client'
 
-import { Separator } from '@/components/ui/separator'
 import type { IcuChartJoined, IcuVetList } from '@/types/icu'
 import Caution from './infos/caution'
 import ChiefComplaint from './infos/chief-complaint'
 import Diagnosis from './infos/diagnosis'
 import Group from './infos/group/group'
 import HeaderSignalments from './infos/header-signament/header-signalment'
-import { MainSubVet } from './infos/main-sub-vet/main-sub-vet'
-import OutDueDate from './infos/in-and-out-date/out-due-date'
 import InAndOutDate from './infos/in-and-out-date/in-and-out-date'
+import { MainSubVet } from './infos/main-sub-vet/main-sub-vet'
 
 export default function ChartInfos({
   chartData,
   vetsData,
+  isPatientOut,
 }: {
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   vetsData: IcuVetList[]
+  isPatientOut: boolean
 }) {
   return (
     <div>
@@ -30,6 +30,8 @@ export default function ChartInfos({
         species={chartData.patient_id.species}
         patientId={chartData.patient_id.patient_id}
         icuChartId={chartData.icu_chart_id}
+        icuIoId={chartData.icu_io_id.icu_io_id}
+        isPatientOut={isPatientOut}
       />
 
       <div className="grid grid-cols-4 items-center gap-2">
@@ -37,6 +39,8 @@ export default function ChartInfos({
           icuIoId={chartData.icu_io_id.icu_io_id}
           inDate={chartData.icu_io_id.in_date}
           outDueDate={chartData.icu_io_id.out_due_date}
+          isPatientOut={isPatientOut}
+          outDate={chartData.icu_io_id.out_date}
         />
 
         <MainSubVet
@@ -66,8 +70,6 @@ export default function ChartInfos({
           chiefComplaint={chartData.icu_io_id.cc}
           icuIoId={chartData.icu_io_id.icu_io_id}
         />
-
-        {/* <Separator orientation="vertical" className="h-8" /> */}
       </div>
     </div>
   )

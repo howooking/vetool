@@ -1,5 +1,7 @@
 import { getAgeFromAgeInDays } from '@/lib/utils'
 import { Cat, Dog } from 'lucide-react'
+import DeleteChartDialog from './delete-chart-dialog'
+import OutPatientDialog from './out-patient-dialog'
 import UpdateWeightDialog from './update-weight-dialog'
 
 export default function HeaderSignalments({
@@ -12,6 +14,8 @@ export default function HeaderSignalments({
   species,
   patientId,
   icuChartId,
+  icuIoId,
+  isPatientOut,
 }: {
   name: string
   breed: string
@@ -22,6 +26,8 @@ export default function HeaderSignalments({
   species: string
   patientId: string
   icuChartId: string
+  icuIoId: string
+  isPatientOut: boolean
 }) {
   return (
     <header className="absolute left-0 top-0 flex h-12 w-full items-center justify-center gap-2 text-muted-foreground">
@@ -44,6 +50,16 @@ export default function HeaderSignalments({
           weight={weight}
           patientId={patientId}
           icuChartId={icuChartId}
+        />
+        <OutPatientDialog
+          icuIoId={icuIoId}
+          name={name}
+          isPatientOut={isPatientOut}
+        />
+        <DeleteChartDialog
+          icuChartId={icuChartId}
+          name={name}
+          icuIoId={icuIoId}
         />
       </div>
     </header>
