@@ -21,7 +21,7 @@ export type IcuChartJoined = Omit<
   hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names'>
   patient_id: Pick<
     Patients,
-    'name' | 'gender' | 'breed' | 'patient_id' | 'species'
+    'name' | 'gender' | 'breed' | 'patient_id' | 'species' | 'owner_name'
   >
   icu_io_id: IcuIo
   main_vet: MainAndSubVet

@@ -20,7 +20,7 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
           *,
           icu_io_id(*),
           hos_id("group_list", "icu_memo_names"),
-          patient_id("name", "gender", "breed", "patient_id", "species"),
+          patient_id("name", "gender", "breed", "patient_id", "species", "owner_name"),
           main_vet("name", "user_id", "avatar_url"),
           sub_vet("name", "user_id", "avatar_url")
         `,

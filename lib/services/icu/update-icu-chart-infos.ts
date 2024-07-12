@@ -153,3 +153,18 @@ export const toggleOutPatient = async (
     redirect(`/error/?message=${updateOutDateError.message}`)
   }
 }
+
+export const updateOwnerName = async (
+  patientId: string,
+  ownerNameInput: string,
+) => {
+  const { error: updataOwnerNameError } = await supabase
+    .from('patients')
+    .update({ owner_name: ownerNameInput })
+    .match({ patient_id: patientId })
+
+  if (updataOwnerNameError) {
+    console.log(updataOwnerNameError)
+    redirect(`/error/?message=${updataOwnerNameError.message}`)
+  }
+}

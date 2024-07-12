@@ -44,7 +44,7 @@ export default function Diagnosis({
   }, [diagnosis])
 
   return (
-    <div className="relative col-span-2 flex items-center">
+    <div className="relative flex items-center">
       <Label
         className="absolute left-2 text-xs text-muted-foreground"
         htmlFor="diagnosis"

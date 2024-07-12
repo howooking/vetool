@@ -59,7 +59,7 @@ export default function OutPatientDialog({
               ? `${name}의 퇴원을 취소하시겠습니까?`
               : `${name}을(를) ${target_date}에 퇴원시키시겠습니까?`}
           </DialogTitle>
-          <DialogDescription>해당 작업은 번복이 가능합니다</DialogDescription>
+          <DialogDescription>해당 작업은 되돌릴 수 있습니다</DialogDescription>
         </DialogHeader>
 
         <DialogFooter>

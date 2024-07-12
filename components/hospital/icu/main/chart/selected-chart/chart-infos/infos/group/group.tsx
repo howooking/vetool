@@ -71,7 +71,7 @@ export default function Group({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="flex min-w-48 overflow-x-auto px-2"
+          className="flex w-full justify-start overflow-x-auto px-2"
         >
           <GroupBadge currentGroups={currentGroups} />
         </Button>

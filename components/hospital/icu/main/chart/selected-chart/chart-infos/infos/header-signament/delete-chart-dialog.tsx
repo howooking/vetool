@@ -16,7 +16,7 @@ import {
 } from '@/lib/services/icu/delete-icu-chart'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
-import { LoaderCircle, Trash2 } from 'lucide-react'
+import { AlertCircle, LoaderCircle, Trash2 } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 export default function DeleteChartDialog({
@@ -73,9 +73,12 @@ export default function DeleteChartDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{name}의 차트를 삭제하시겠습니까?</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="flex flex-col gap-1">
             <p>선택차트삭제 : {target_date}날 차트만 삭제합니다</p>
-            <p>모든차트삭제 : {name}의 모든차트를 삭제합니다</p>
+            <p>모든차트삭제 : 입원기간동안의 차트들을 삭제합니다</p>
+            <p className="flex items-center gap-1 text-destructive">
+              <AlertCircle size={18} /> 해당 작업은 되돌릴 수 없습니다
+            </p>
           </DialogDescription>
         </DialogHeader>
 

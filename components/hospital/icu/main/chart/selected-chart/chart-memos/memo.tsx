@@ -73,7 +73,7 @@ export default function Memo({
         onChange={(e) => setMemoInput(e.target.value)}
         onBlur={handleUpdateMemo}
         onKeyDown={handleKeyDown}
-        className="w-full resize-none pt-6"
+        className="w-full resize-none pt-6 placeholder:pt-20 placeholder:text-center placeholder:text-slate-400"
         rows={10}
         title={memo}
       />
