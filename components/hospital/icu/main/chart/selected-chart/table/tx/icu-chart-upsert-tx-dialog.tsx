@@ -1,3 +1,5 @@
+import IcuChartTxImageInput from '@/components/hospital/icu/main/chart/selected-chart/table/tx/icu-chart-tx-image-input'
+import IcuChartTxLog from '@/components/hospital/icu/main/chart/selected-chart/table/tx/icu-chart-tx-log'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -30,8 +32,6 @@ import { format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { IcuChartTxImageInput } from './icu-chart-tx-image-input'
-import IcuChartTxLog from './icu-chart-tx-log'
 
 export default function IcuChartUpsertTxDialog({
   vetsData,
@@ -98,8 +98,6 @@ export default function IcuChartUpsertTxDialog({
       txState: txValue,
       step: 'selectTxUser',
     })
-
-    console.log(txValue)
   }
 
   // STEP: 2 최종 TX Data UPSERT
@@ -123,8 +121,6 @@ export default function IcuChartUpsertTxDialog({
     const updatedLogs: TxLog[] = Array.from(uniqueLogSet).map((log) =>
       JSON.parse(log),
     )
-
-    console.log(txValue)
 
     const chartTxData = await upsertIcuChartTx(
       upsertTxState.txId,
