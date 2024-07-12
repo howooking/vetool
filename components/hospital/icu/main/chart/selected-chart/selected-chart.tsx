@@ -11,15 +11,21 @@ export default function SelectedChart({
   selectedChart,
   selectedChartOrders,
   vetsData,
+  isPatientOut,
 }: {
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
   vetsData: IcuVetList[]
+  isPatientOut: boolean
 }) {
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
   return (
     <div className="flex flex-col gap-2 p-2 pb-[48px]">
-      <ChartInfos chartData={restChartData} vetsData={vetsData} />
+      <ChartInfos
+        chartData={restChartData}
+        vetsData={vetsData}
+        isPatientOut={isPatientOut}
+      />
       <IcuChartTable
         selectedChartOrders={selectedChartOrders}
         vetsData={vetsData}

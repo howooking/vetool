@@ -12,7 +12,6 @@ import { updateOutDueDate } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
 import { format, parseISO } from 'date-fns'
 import { ko } from 'date-fns/locale'
-import { CalendarIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -60,7 +59,7 @@ export default function OutDueDate({
           <Button
             variant={'outline'}
             className={cn(
-              'flex w-full flex-1 items-center justify-start gap-2 px-2',
+              'flex w-full items-center justify-start gap-2 px-2',
               !outDueDateInput && 'text-muted-foreground',
             )}
           >
