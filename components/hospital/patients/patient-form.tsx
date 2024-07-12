@@ -46,11 +46,12 @@ import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { registerPatientFormSchema } from './schema'
+import { insertPatient } from '@/lib/services/patient/insert-patient'
 
 export default function PatientForm({
   hosId,
@@ -59,9 +60,7 @@ export default function PatientForm({
   setIsDialogOpen,
 }: {
   hosId: string
-  setStep: (
-    step: 'ownerSearch' | 'ownerRegister' | 'patientRegister' | 'icuRegister',
-  ) => void
+  setStep: (step: 'patientRegister' | 'icuRegister') => void
   icu?: boolean
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
@@ -69,18 +68,9 @@ export default function PatientForm({
   const [selectedSpecies, setSelectedSpecies] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { setRegisteringPatient } = useIcuRegisteringPatient()
-  const { refresh, push } = useRouter()
-
-  const searchParams = useSearchParams()
-  const ownerId = searchParams.get('owner_id') ?? null
-  const ownerName = searchParams.get('owner_name') ?? ''
-  const hosOwnerId = searchParams.get('hos_owner_id') ?? ''
-  const ownerAddress = searchParams.get('owner_address') ?? ''
-  const ownerPhoneNumber = searchParams.get('owner_phone_number') ?? ''
-  const ownerMemo = searchParams.get('owner_memo') ?? ''
+  const { refresh } = useRouter()
 
   const BREEDS = selectedSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS
-
   const form = useForm<z.infer<typeof registerPatientFormSchema>>({
     resolver: zodResolver(registerPatientFormSchema),
     defaultValues: {
@@ -93,6 +83,7 @@ export default function PatientForm({
       microchip_no: '',
       memo: '',
       weight: '',
+      owner_name: '',
     },
   })
 
@@ -104,105 +95,27 @@ export default function PatientForm({
   const handleSubmit = async (
     values: z.infer<typeof registerPatientFormSchema>,
   ) => {
-    const {
-      name,
-      hos_patient_id,
-      species,
-      breed,
-      gender,
-      birth,
-      microchip_no,
-      memo,
-      weight,
-    } = values
-
     setIsSubmitting(true)
-    const supabase = createClient()
 
-    // 선택한 보호자가 있는 경우
-    if (ownerId) {
-      const { data: patientId, error } = await supabase.rpc(
-        'insert_patient_with_selected_owner',
-        {
-          birth_input: format(birth, 'yyyy-MM-dd'),
-          body_weight_input: weight,
-          breed_input: breed,
-          gender_input: gender,
-          hos_id_input: hosId,
-          hos_patient_id_input: hos_patient_id,
-          memo_input: memo,
-          microchip_no_input: microchip_no,
-          name_input: name,
-          species_input: species,
-          owner_id_input: ownerId,
-        },
-      )
-      if (error) {
-        console.log(error)
-        toast({
-          variant: 'destructive',
-          title: error.message,
-          description: '관리자에게 문의하세요',
-        })
-        setIsSubmitting(false)
-        return
-      }
+    const patientId = await insertPatient({ data: values, hosId })
 
-      icu &&
-        setRegisteringPatient({ patientId, birth: format(birth, 'yyyy-MM-dd') })
+    toast({
+      title: '환자가 등록되었습니다',
+      description: icu ? '입원을 이어서 진행합니다' : '',
+    })
 
-      toast({
-        title: '환자가 등록되었습니다',
-        description: icu ? '입원을 이어서 진행합니다' : '',
+    icu ? setStep('icuRegister') : setIsDialogOpen(false)
+
+    icu &&
+      setRegisteringPatient({
+        patientId,
+        birth: format(values.birth, 'yyyy-MM-dd'),
       })
-    }
-
-    // 선택한 보호자가 없는 경우 === 보호자를 생성해야하는 경우
-    if (!ownerId) {
-      const { data: patientId, error } = await supabase.rpc(
-        'insert_patient_without_selected_owner',
-        {
-          birth_input: format(birth, 'yyyy-MM-dd'),
-          body_weight_input: weight,
-          breed_input: breed,
-          gender_input: gender,
-          hos_id_input: hosId,
-          hos_patient_id_input: hos_patient_id,
-          memo_input: memo,
-          microchip_no_input: microchip_no,
-          name_input: name,
-          species_input: species,
-          owner_name_input: ownerName,
-          owner_address_input: ownerAddress,
-          hos_owner_id_input: hosOwnerId,
-          owner_phone_number_input: ownerPhoneNumber,
-          owner_memo_input: ownerMemo,
-        },
-      )
-      if (error) {
-        console.log(error)
-        toast({
-          variant: 'destructive',
-          title: error.message,
-          description: '관리자에게 문의하세요',
-        })
-        setIsSubmitting(false)
-        return
-      }
-
-      icu &&
-        setRegisteringPatient({ patientId, birth: format(birth, 'yyyy-MM-dd') })
-
-      toast({
-        title: '보호자 및 환자가 등록되었습니다',
-        description: icu ? '입원을 이어서 진행합니다' : '',
-      })
-    }
 
     setIsSubmitting(false)
     refresh()
 
-    icu ? setStep('icuRegister') : setIsDialogOpen(false)
+    return
   }
 
   return (
@@ -460,6 +373,21 @@ export default function PatientForm({
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="owner_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>보호자 이름</FormLabel>
+              <FormControl>
+                <Input {...field} className="h-8 text-sm" />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className="col-span-2">
           <FormField
             control={form.control}
@@ -481,9 +409,9 @@ export default function PatientForm({
             type="button"
             disabled={isSubmitting}
             variant="outline"
-            onClick={() => setStep(ownerId ? 'ownerSearch' : 'ownerRegister')}
+            onClick={() => setIsDialogOpen(false)}
           >
-            이전
+            닫기
           </Button>
           <Button type="submit" disabled={isSubmitting}>
             {icu ? '다음' : '등록'}

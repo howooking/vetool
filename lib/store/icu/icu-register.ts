@@ -25,23 +25,11 @@ export const useIcuRegisteringPatient = create<RegisteringPatientState>(
 )
 
 type PatientRegisterStep = {
-  step:
-    | 'ownerSearch'
-    | 'ownerRegister'
-    | 'patientRegister'
-    | 'icuRegister'
-    | 'patientSearch'
-  setStep: (
-    step:
-      | 'ownerSearch'
-      | 'ownerRegister'
-      | 'patientRegister'
-      | 'icuRegister'
-      | 'patientSearch',
-  ) => void
+  step: 'patientRegister' | 'icuRegister' | 'patientSearch'
+  setStep: (step: 'patientRegister' | 'icuRegister' | 'patientSearch') => void
 }
 
 export const usePatientRegisterStep = create<PatientRegisterStep>((set) => ({
-  step: 'ownerSearch',
+  step: 'patientSearch',
   setStep: (step) => set({ step }),
 }))
