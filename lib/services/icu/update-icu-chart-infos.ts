@@ -132,6 +132,24 @@ export const updateMemo = async (
 
   if (memoError) {
     console.log(memoError)
-    throw new Error(memoError.message)
+    redirect(`/error/?message=${memoError.message}`)
+  }
+}
+
+export const toggleOutPatient = async (
+  icuIoId: string,
+  targetDate: string,
+  isPatientOut: boolean,
+) => {
+  const supabase = createClient()
+
+  const { error: updateOutDateError } = await supabase
+    .from('icu_io')
+    .update({ out_date: isPatientOut ? null : targetDate })
+    .match({ icu_io_id: icuIoId })
+
+  if (updateOutDateError) {
+    console.log(updateOutDateError)
+    redirect(`/error/?message=${updateOutDateError.message}`)
   }
 }

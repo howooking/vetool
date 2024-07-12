@@ -70,6 +70,14 @@ export default function IcuChart({
     [icuIoData, selectedPatientId],
   )
 
+  const isPatientOut = useMemo(
+    () =>
+      icuIoData.some(
+        (io) => io.patient_id.patient_id === selectedPatientId && io.out_date,
+      ),
+    [icuIoData, selectedPatientId],
+  )
+
   if (!selectedPatientId) {
     return <NoResult title="환자를 선택해주세요" />
   }
@@ -77,12 +85,12 @@ export default function IcuChart({
   return (
     <div className="w-full">
       {selectedChart ? (
-        // Todo 컴포넌트 이름 SelectedChart로 변경
         <SelectedChart
           userName={userName}
-          selectedChart={selectedChart!}
+          selectedChart={selectedChart}
           selectedChartOrders={selectedChartOrders}
           vetsData={vetsData}
+          isPatientOut={isPatientOut}
         />
       ) : (
         <SelectedChartNotFound

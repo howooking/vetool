@@ -17,11 +17,22 @@ export default function SelectedChartNotFound({
   const targetDateFromToday = differenceInDays(targetDate, today)
 
   if (!isPatientIn) {
-    return <NoResult title="선택한 날짜 이후에 입원을 하였습니다." />
+    return (
+      <NoResult
+        title={
+          <>
+            선택한 날짜의 차트가 없습니다 <br /> 선택한 날짜에 아직 입원을 하지
+            않았거나 이미 퇴원을 하였습니다
+          </>
+        }
+      />
+    )
   }
 
   if (targetDateFromToday >= 2) {
-    return <NoResult title="모레 이후의 차트는 미리 생성할 수 없습니다" />
+    return (
+      <NoResult title="오늘 기준 모레 이후의 차트는 미리 생성할 수 없습니다" />
+    )
   }
 
   return <AddIcuChartDialogs selectedPatientId={selectedPatientId} />

@@ -6,13 +6,13 @@ export default function NoResult({
   className,
   ...rest
 }: {
-  title: string
+  title: React.ReactNode
   className?: string
 }) {
   return (
     <div
       className={cn(
-        'flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center gap-4 text-xl font-bold',
+        'flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center gap-4 text-center text-xl font-bold',
         className,
       )}
       {...rest}
