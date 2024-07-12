@@ -14,6 +14,7 @@ export default async function IcuPage({
     vetsData,
     patientsData,
     ownersData,
+    userData,
     icuIoData,
   } = await getPromiseAll(params.hos_id, params.target_date)
 
@@ -33,7 +34,7 @@ export default async function IcuPage({
         vetsData={vetsData}
         targetDate={params.target_date}
         icuIoData={icuIoData}
-        userName=""
+        userName={userData.user.user_metadata.name}
       />
     </div>
   )

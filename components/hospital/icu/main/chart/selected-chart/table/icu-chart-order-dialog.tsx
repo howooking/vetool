@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { FilePlus } from 'lucide-react'
 import IcuChartOrderForm from './icu-chart-order-form'
+import { useParams } from 'next/navigation'
 
 export default function IcuChartOrderDialog({
   chartId,
@@ -18,6 +19,7 @@ export default function IcuChartOrderDialog({
   chartId: string
   ioId: string
 }) {
+  const { target_date } = useParams()
   const { isOpen, isEditMode, setIsOpen, setIsEditMode, resetState } =
     useCreateOrderStore()
   const handleDialogOpen = () => {
@@ -36,7 +38,7 @@ export default function IcuChartOrderDialog({
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          {/* <DialogDescription>{selectedDate}</DialogDescription> */}
+          <DialogDescription>{target_date}</DialogDescription>
           <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
         </DialogHeader>
         <Separator />

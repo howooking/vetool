@@ -1,3 +1,6 @@
+import IcuChartOrderDialog from '@/components/hospital/icu/main/chart/selected-chart/table/icu-chart-order-dialog'
+import IcuChartTableCellTitle from '@/components/hospital/icu/main/chart/selected-chart/table/icu-chart-table-cell-title'
+import IcuChartTableCell from '@/components/hospital/icu/main/chart/selected-chart/table/icu-chat-table-cell'
 import {
   Table,
   TableBody,
@@ -9,9 +12,8 @@ import {
 import { TIME } from '@/constants/hospital/icu/chart/time'
 import { IcuChartTx } from '@/types'
 import type { IcuChartOrderJoined, IcuVetList } from '@/types/icu'
-import IcuChartOrderDialog from './icu-chart-order-dialog'
-import IcuChartTableCellTitle from './icu-chart-table-cell-title'
-import IcuChartTableCellInput from './icu-chat-table-cell-input'
+import IcuChartUpsertTxDialog from './tx/icu-chart-upsert-tx-dialog'
+import { useState } from 'react'
 
 export default function IcuChartTable({
   userName,
@@ -49,6 +51,8 @@ export default function IcuChartTable({
 
         {/* TABLE BODY */}
         <TableBody>
+          <IcuChartUpsertTxDialog vetsData={vetsData} />
+
           {selectedChartOrders?.map((orderData) => (
             <TableRow
               className="divide-x border-black"
@@ -62,10 +66,9 @@ export default function IcuChartTable({
 
               {/* TABLE BODY TIME */}
               {TIME.map((time, index) => (
-                <IcuChartTableCellInput
+                <IcuChartTableCell
                   key={time}
                   time={time}
-                  vetsData={vetsData}
                   txData={
                     orderData[`icu_chart_order_tx_${time}`] as IcuChartTx | null
                   }
