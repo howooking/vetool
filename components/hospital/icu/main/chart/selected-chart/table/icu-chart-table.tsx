@@ -13,14 +13,11 @@ import { TIME } from '@/constants/hospital/icu/chart/time'
 import { IcuChartTx } from '@/types'
 import type { IcuChartOrderJoined, IcuVetList } from '@/types/icu'
 import IcuChartUpsertTxDialog from './tx/icu-chart-upsert-tx-dialog'
-import { useState } from 'react'
 
 export default function IcuChartTable({
-  userName,
   selectedChartOrders,
   vetsData,
 }: {
-  userName: string
   selectedChartOrders: IcuChartOrderJoined[]
   vetsData: IcuVetList[]
 }) {
@@ -75,7 +72,6 @@ export default function IcuChartTable({
                   ioId={orderData.icu_io_id.icu_io_id}
                   chartOrderId={orderData.icu_chart_order_id}
                   hasOrder={hasOrder(orderData, index)}
-                  userName={userName}
                 />
               ))}
             </TableRow>

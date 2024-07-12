@@ -8,12 +8,10 @@ import IcuChartMemo from './memo/icu-chart-memo'
 import IcuChartTable from './table/icu-chart-table'
 
 export default function SelectedChart({
-  userName,
   selectedChart,
   selectedChartOrders,
   vetsData,
 }: {
-  userName: string
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
   vetsData: IcuVetList[]
@@ -23,11 +21,15 @@ export default function SelectedChart({
     <div className="flex flex-col gap-2 p-2 pb-[48px]">
       <ChartInfos chartData={restChartData} vetsData={vetsData} />
       <IcuChartTable
-        userName={userName}
         selectedChartOrders={selectedChartOrders}
         vetsData={vetsData}
       />
-      <IcuChartMemo memoA={memo_a} memoB={memo_b} memoC={memo_c} />
+      <IcuChartMemo
+        memoA={memo_a}
+        memoB={memo_b}
+        memoC={memo_c}
+        icuIoId={restChartData.icu_io_id.icu_io_id}
+      />
     </div>
   )
 }
