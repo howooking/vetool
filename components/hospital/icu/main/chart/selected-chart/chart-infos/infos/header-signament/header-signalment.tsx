@@ -3,8 +3,6 @@ import { Cat, Dog } from 'lucide-react'
 import DeleteChartDialog from './delete-chart-dialog'
 import OutPatientDialog from './out-patient-dialog'
 import UpdateWeightDialog from './update-weight-dialog'
-import DeleteChartDialog from './delete-chart-dialog'
-import OutPatientDialog from './out-patient-dialog'
 
 export default function HeaderSignalments({
   name,
@@ -38,11 +36,8 @@ export default function HeaderSignalments({
       ) : (
         <Cat size={20} className="text-black" />
       )}
-      <span className="text-black">
-        {name}
-        {isPatientOut ? '(퇴원)' : ''}
-      </span>{' '}
-      ·<span className="text-sm">{breed}</span> ·
+      <span className="text-black">{name}</span> ·
+      <span className="text-sm">{breed}</span> ·
       <span className="text-sm uppercase">{gender}</span> ·
       <span className="text-sm">{getAgeFromAgeInDays(ageInDays)} </span> ·
       <div className="flex items-center">
@@ -61,15 +56,11 @@ export default function HeaderSignalments({
           name={name}
           isPatientOut={isPatientOut}
         />
-<<<<<<< HEAD
         <DeleteChartDialog
           icuChartId={icuChartId}
           name={name}
           icuIoId={icuIoId}
         />
-=======
-        <DeleteChartDialog icuChartId={icuChartId} />
->>>>>>> 047b0a7 (refactor: icu 선택차트 퇴원처리)
       </div>
     </header>
   )

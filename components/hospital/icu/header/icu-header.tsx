@@ -24,7 +24,6 @@ export default function IcuHeader({
         patientsData={patientsData}
         vetsData={vetsData}
         groupList={groupList}
-        ownersData={ownersData}
       />
       <IcuHeaderDateSelector />
     </div>
