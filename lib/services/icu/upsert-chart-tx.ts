@@ -1,7 +1,8 @@
 'use server'
 
-import type { TxLog, TxState } from '@/types/icu'
 import { createClient } from '@/lib/supabase/server'
+import type { TxState } from '@/types/icu'
+import { redirect } from 'next/navigation'
 
 const supabase = createClient()
 
@@ -24,7 +25,7 @@ export const upsertIcuChartTx = async (
 
   if (icuChartTxError) {
     console.log(icuChartTxError)
-    throw new Error(icuChartTxError.message)
+    redirect(`/error?message=${icuChartTxError.message}`)
   }
 
   return icuChartTxData
@@ -42,6 +43,6 @@ export const updateIcuChartOrder = async (
 
   if (icuChartOrderError) {
     console.log(icuChartOrderError)
-    throw new Error(icuChartOrderError.message)
+    redirect(`/error?message=${icuChartOrderError.message}`)
   }
 }

@@ -3,6 +3,7 @@
 import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
 import { createClient } from '@/lib/supabase/server'
 import { format } from 'date-fns'
+import { redirect } from 'next/navigation'
 
 export const copyPrevChart = async (
   targetDate: string,
@@ -24,7 +25,7 @@ export const copyPrevChart = async (
 
   if (rpcError) {
     console.log(rpcError)
-    throw new Error(rpcError.message)
+    redirect(`/error?message=${rpcError.message}`)
   }
 
   const { newIcuChartId, prevIcuChartId, icuIoId } = returningIcuChartIds as {
@@ -58,7 +59,7 @@ export const copyPrevChart = async (
 
     if (icuChartOrderError) {
       console.log(icuChartOrderError)
-      throw new Error(icuChartOrderError.message)
+      redirect(`/error?message=${icuChartOrderError.message}`)
     }
   })
 }
@@ -83,7 +84,7 @@ export const addDefaultChart = async (
 
   if (rpcError) {
     console.log(rpcError)
-    throw new Error(rpcError.message)
+    redirect(`/error?message=${rpcError.message}`)
   }
 
   const { newIcuChartId, icuIoId } = returningIcuChartIds as {
@@ -104,7 +105,7 @@ export const addDefaultChart = async (
 
     if (icuChartOrderError) {
       console.log(icuChartOrderError)
-      throw new Error(icuChartOrderError.message)
+      redirect(`/error?message=${icuChartOrderError.message}`)
     }
   })
 }

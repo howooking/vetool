@@ -109,8 +109,6 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       .or(`out_date.is.null, out_date.gte.${targetDate}`)
       .order('in_date', { ascending: true })
       .returns<IcuIoPatientJoined[]>(),
-
-    supabase.auth.getUser(),
   ])
 
   const [
@@ -121,7 +119,6 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
     { data: patientsData, error: patientsDataError },
     { data: ownersData, error: ownersDataError },
     { data: icuIoData, error: icuIoDataError },
-    { data: userData, error: userDataError },
   ] = await promiseArray
 
   if (
@@ -131,8 +128,7 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
     vetsDataError ||
     patientsDataError ||
     ownersDataError ||
-    icuIoDataError ||
-    userDataError
+    icuIoDataError
   ) {
     console.log({
       icuChartDataError,
@@ -142,7 +138,6 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       patientsDataError,
       ownersDataError,
       icuIoDataError,
-      userDataError,
     })
     throw new Error(
       icuChartDataError?.message ||
@@ -151,8 +146,7 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
         vetsDataError?.message ||
         patientsDataError?.message ||
         ownersDataError?.message ||
-        icuIoDataError?.message ||
-        userDataError?.message,
+        icuIoDataError?.message,
     )
   }
   return {
@@ -163,6 +157,5 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
     patientsData,
     ownersData,
     icuIoData,
-    userData,
   }
 }

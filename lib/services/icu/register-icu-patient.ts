@@ -4,6 +4,7 @@ import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
 import { createClient } from '@/lib/supabase/server'
 import { getDaysSince } from '@/lib/utils'
 import { format } from 'date-fns'
+import { redirect } from 'next/navigation'
 
 export const registerIcuPatient = async (
   hosId: string,
@@ -39,7 +40,7 @@ export const registerIcuPatient = async (
 
   if (rpcError) {
     console.log(rpcError)
-    throw new Error(rpcError.message)
+    redirect(`/error?message=${rpcError.message}`)
   }
 
   const [icuIoId, icuChartId] = returningValue.split(',')
@@ -57,7 +58,7 @@ export const registerIcuPatient = async (
 
     if (icuChartOrderError) {
       console.log(icuChartOrderError)
-      throw new Error(icuChartOrderError.message)
+      redirect(`/error?message=${icuChartOrderError.message}`)
     }
   })
 }

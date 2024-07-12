@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import type { IcuIoPatientJoined } from '@/types/icu'
+import { redirect } from 'next/navigation'
 
 export const getIcuIoData = async (hosId: string, targetDate: string) => {
   const supabase = createClient()
@@ -22,7 +23,7 @@ export const getIcuIoData = async (hosId: string, targetDate: string) => {
 
   if (icuIoDataError) {
     console.log(icuIoDataError)
-    throw new Error(icuIoDataError.message)
+    redirect(`/error?message=${icuIoDataError.message}`)
   }
 
   return icuIoData

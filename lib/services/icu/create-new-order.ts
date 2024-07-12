@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 
 const supabase = createClient()
 
@@ -12,7 +13,7 @@ export const deleteOrder = async (chartOrderId: string) => {
 
   if (deleteOrderError) {
     console.log(deleteOrderError)
-    throw new Error(deleteOrderError.message)
+    redirect(`/error?message=${deleteOrderError.message}`)
   }
 }
 
@@ -35,6 +36,6 @@ export const upsertOrder = async (
 
   if (upsertOrderrError) {
     console.log(upsertOrderrError)
-    throw new Error(upsertOrderrError.message)
+    redirect(`/error?message=${upsertOrderrError.message}`)
   }
 }
