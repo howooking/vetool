@@ -23,10 +23,12 @@ export default function DeleteChartDialog({
   icuChartId,
   name,
   icuIoId,
+  patientId,
 }: {
   icuChartId: string
   name: string
   icuIoId: string
+  patientId: string
 }) {
   const { target_date } = useParams()
   const [isOpen, setIsOpen] = useState(false)
@@ -38,13 +40,19 @@ export default function DeleteChartDialog({
   const handleDeleteChart = async () => {
     setIsDeleting(true)
 
-    await deleteChart(icuChartId)
+    const isIcuIoDeleted = await deleteChart(
+      icuChartId,
+      icuIoId,
+      target_date as string,
+      patientId,
+    )
 
     toast({
       title: '차트가 삭제되었습니다',
     })
 
     setIsDeleting(false)
+    isIcuIoDeleted && setSelectedPatientId(null)
     setIsOpen(false)
     refresh()
   }
@@ -75,7 +83,7 @@ export default function DeleteChartDialog({
           <DialogTitle>{name}의 차트를 삭제하시겠습니까?</DialogTitle>
           <DialogDescription className="flex flex-col gap-1">
             <p>선택차트삭제 : {target_date}날 차트만 삭제합니다</p>
-            <p>모든차트삭제 : 입원기간동안의 차트들을 삭제합니다</p>
+            <p>모든차트삭제 : 입원기간동안의 차트들을 모두 삭제합니다</p>
             <p className="flex items-center gap-1 text-destructive">
               <AlertCircle size={18} /> 해당 작업은 되돌릴 수 없습니다
             </p>

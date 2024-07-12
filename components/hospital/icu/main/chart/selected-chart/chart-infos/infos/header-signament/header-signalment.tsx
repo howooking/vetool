@@ -60,6 +60,7 @@ export default function HeaderSignalments({
           icuChartId={icuChartId}
           name={name}
           icuIoId={icuIoId}
+          patientId={patientId}
         />
       </div>
     </header>

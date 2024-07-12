@@ -68,7 +68,7 @@ export default function Memo({
       <Textarea
         disabled={isUpdating}
         id="memo"
-        placeholder="shift + enter 를 눌러 줄을 추가할 수 있습니다"
+        placeholder="shift + enter를 눌러 줄을 추가할 수 있습니다"
         value={memoInput}
         onChange={(e) => setMemoInput(e.target.value)}
         onBlur={handleUpdateMemo}

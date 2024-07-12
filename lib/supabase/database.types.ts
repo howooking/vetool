@@ -1055,6 +1055,15 @@ export type Database = {
         }
         Returns: Json
       }
+      delete_icu_chart: {
+        Args: {
+          icu_chart_id_input: string
+          icu_io_id_input: string
+          target_date_input: string
+          patient_id_input: string
+        }
+        Returns: Json
+      }
       get_icu_patient_data_with_due: {
         Args: Record<PropertyKey, never>
         Returns: Json
