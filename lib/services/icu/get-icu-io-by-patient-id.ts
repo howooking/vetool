@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 
 export const getIcuIoByPatientId = async (patientId: string) => {
   const supabase = createClient()
@@ -13,7 +14,7 @@ export const getIcuIoByPatientId = async (patientId: string) => {
 
   if (icuIoError) {
     console.log(icuIoError)
-    throw new Error(icuIoError.message)
+    redirect(`/error?message=${icuIoError.message}`)
   }
 
   return icuIoData

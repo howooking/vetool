@@ -104,28 +104,27 @@ export const updateOutDueDate = async (icuIoId: string, outDueDate: string) => {
   }
 }
 
-// export const updateMemo = async (
-//   patientId: string | null,
-//   targetDate: string,
-//   memoState: {
-//     memoA: string | null
-//     memoB: string | null
-//     memoC: string | null
-//   },
-// ) => {
-//   const supabase = createClient()
+export const updateMemo = async (
+  icuIoId: string,
+  memoState: {
+    memoA: string | null
+    memoB: string | null
+    memoC: string | null
+  },
+) => {
+  const supabase = createClient()
 
-//   const { error: memoError } = await supabase
-//     .from('icu_chart')
-//     .update({
-//       memo_a: memoState.memoA?.trim(),
-//       memo_b: memoState.memoB?.trim(),
-//       memo_c: memoState.memoC?.trim(),
-//     })
-//     .match({ patient_id: patientId, target_date: targetDate })
+  const { error: memoError } = await supabase
+    .from('icu_chart')
+    .update({
+      memo_a: memoState.memoA?.trim(),
+      memo_b: memoState.memoB?.trim(),
+      memo_c: memoState.memoC?.trim(),
+    })
+    .match({ icu_io_id: icuIoId })
 
-//   if (memoError) {
-//     console.log(memoError)
-//     throw new Error(memoError.message)
-//   }
-// }
+  if (memoError) {
+    console.log(memoError)
+    redirect(`/error/?message=${memoError.message}`)
+  }
+}

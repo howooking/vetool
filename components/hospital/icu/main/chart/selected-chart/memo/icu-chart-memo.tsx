@@ -1,20 +1,23 @@
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { useParams } from 'next/navigation'
+import { updateMemo } from '@/lib/services/icu/update-icu-chart-infos'
 import { useState } from 'react'
 
 type MemoState = {
   memoA: string | null
   memoB: string | null
   memoC: string | null
+  icuIoId: string
 }
 
 const MEMO_FIELDS = ['memoA', 'memoB', 'memoC'] as const
 
-export default function IcuChartMemo({ memoA, memoB, memoC }: MemoState) {
-  const { target_date } = useParams()
-  const { selectedPatientId } = useIcuSelectedPatientStore()
+export default function IcuChartMemo({
+  memoA,
+  memoB,
+  memoC,
+  icuIoId,
+}: MemoState) {
   const [memoState, setMemoState] = useState({
     memoA,
     memoB,
@@ -47,7 +50,7 @@ export default function IcuChartMemo({ memoA, memoB, memoC }: MemoState) {
       return
     }
 
-    // await updateMemo(selectedPatientId, target_date as string, trimmedMemoState)
+    await updateMemo(icuIoId, trimmedMemoState)
 
     toast({
       title: '메모가 저장되었습니다',

@@ -22,14 +22,12 @@ const ORDER_OF_ORDERS = [
 ] as const
 
 export default function IcuChart({
-  userName,
   icuChartData,
   icuChartOrderData,
   vetsData,
   targetDate,
   icuIoData,
 }: {
-  userName: string
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
   vetsData: IcuVetList[]
@@ -77,9 +75,7 @@ export default function IcuChart({
   return (
     <div className="w-full">
       {selectedChart ? (
-        // Todo 컴포넌트 이름 SelectedChart로 변경
         <SelectedChart
-          userName={userName}
           selectedChart={selectedChart!}
           selectedChartOrders={selectedChartOrders}
           vetsData={vetsData}

@@ -13,7 +13,6 @@ type TableCellInputProps = {
   ioId: string
   chartOrderId: string
   hasOrder: boolean
-  userName: string
 }
 
 export default function IcuChartTableCell({
@@ -23,7 +22,6 @@ export default function IcuChartTableCell({
   chartOrderId,
   hasOrder,
 }: TableCellInputProps) {
-  const date = format(new Date(), 'yyyy-MM-dd HH:mm')
   const txId = txData?.icu_chart_tx_id!
   const { setUpsertTxState } = useUpsertTxStore()
   const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null)

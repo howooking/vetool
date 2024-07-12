@@ -5,7 +5,7 @@ import { X } from 'lucide-react'
 import Image from 'next/image'
 import { useRef } from 'react'
 
-export function IcuChartTxImageInput({
+export default function IcuChartTxImageInput({
   images,
   onImagesChange,
 }: {
@@ -46,7 +46,7 @@ export function IcuChartTxImageInput({
     <>
       {/* 이미지 INPUT */}
       <div className="grid grid-cols-3 items-center gap-4">
-        <Label htmlFor="image">이미지</Label>
+        <Label htmlFor="image">{`이미지 (${images.length}/5)`}</Label>
         <Button
           type="button"
           variant="outline"
@@ -59,6 +59,7 @@ export function IcuChartTxImageInput({
           ref={fileInputRef}
           onChange={handleImageUpload}
           className="hidden"
+          multiple
         />
       </div>
 
