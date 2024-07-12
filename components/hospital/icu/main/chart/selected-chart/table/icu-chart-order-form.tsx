@@ -38,9 +38,8 @@ import {
   TIME,
   TX_ORDER_TIME_INTERVAL,
 } from '@/constants/hospital/icu/chart/time'
+import { deleteOrder, upsertOrder } from '@/lib/services/icu/create-new-order'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
@@ -49,7 +48,6 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { GroupCheckFormSchema } from './schema'
-import { deleteOrder, upsertOrder } from '@/lib/services/icu/create-new-order'
 
 export default function IcuChartOrderForm({
   chartId,
@@ -58,10 +56,8 @@ export default function IcuChartOrderForm({
   chartId: string
   ioId: string
 }) {
-  const supabase = createClient()
   const { refresh } = useRouter()
   const { setIsOpen, chartOrder, isEditMode } = useCreateOrderStore()
-  const { selectedPatientId } = useIcuSelectedPatientStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime, setStartTime] = useState<string>()
   const [timeTerm, setTimeTerm] = useState<string>()
@@ -127,6 +123,16 @@ export default function IcuChartOrderForm({
     refresh()
     setIsSubmitting(false)
     setIsOpen()
+  }
+
+  // 오더 타임테이블 토글
+  const handleTimeToggle = (index: number) => () => {
+    setOrderTime((prevOrderTime) => {
+      const newOrderTime = [...prevOrderTime]
+      newOrderTime[index] = newOrderTime[index] === '1' ? '0' : '1'
+
+      return newOrderTime
+    })
   }
 
   useEffect(() => {
@@ -307,6 +313,7 @@ export default function IcuChartOrderForm({
                       index === TIME.length - 1 ? 'border-r-2' : 'border-r',
                       'border-b border-t border-slate-600',
                     )}
+                    onClick={handleTimeToggle(index)}
                   >
                     {element}
                   </FormLabel>

@@ -1,32 +1,34 @@
-import type { TxLog } from '@/components/hospital/icu/main/chart/selected-chart/table/icu-chat-table-cell-input'
-import { createClient } from '@/lib/supabase/client'
+'use server'
+
+import type { TxLog, TxState } from '@/types/icu'
+import { createClient } from '@/lib/supabase/server'
 
 const supabase = createClient()
 
-// export const upsertIcuChartTx = async (
-//   txId: string,
-//   ioId: string,
-//   orderId: string,
-//   txState: Record<string, string | string[] | TxLog[] | null>,
-// ) => {
-//   const { data: icuChartTxData, error: icuChartTxError } = await supabase
-//     .from('icu_chart_tx')
-//     .upsert({
-//       icu_chart_tx_id: txId,
-//       icu_io_id: ioId,
-//       icu_chart_order_id: orderId,
-//       ...txState,
-//     })
-//     .select('icu_chart_tx_id')
-//     .single()
+export const upsertIcuChartTx = async (
+  txId: string,
+  ioId: string,
+  orderId: string,
+  txState: TxState,
+) => {
+  const { data: icuChartTxData, error: icuChartTxError } = await supabase
+    .from('icu_chart_tx')
+    .upsert({
+      icu_chart_tx_id: txId,
+      icu_io_id: ioId,
+      icu_chart_order_id: orderId,
+      ...txState,
+    })
+    .select('icu_chart_tx_id')
+    .single()
 
-//   if (icuChartTxError) {
-//     console.log(icuChartTxError)
-//     throw new Error(icuChartTxError.message)
-//   }
+  if (icuChartTxError) {
+    console.log(icuChartTxError)
+    throw new Error(icuChartTxError.message)
+  }
 
-//   return icuChartTxData
-// }
+  return icuChartTxData
+}
 
 export const updateIcuChartOrder = async (
   chartOrderId: string,

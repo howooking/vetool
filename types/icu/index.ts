@@ -87,3 +87,16 @@ export type IcuVetList = Pick<
   User,
   'avatar_url' | 'is_vet' | 'name' | 'position' | 'user_id'
 >
+export type TxLog = {
+  result: string | null
+  name: string
+  createdAt: string
+}
+
+export type TxState = {
+  icu_chart_tx_result: string | null
+  icu_chart_tx_comment: string | null
+  icu_chart_tx_images: string[]
+  icu_chart_tx_log: TxLog[] | null
+  user_id: string | null
+}
