@@ -30,7 +30,18 @@ export default function AddDefaultChartDialog({
   const handleAddDefaultChart = async () => {
     setIsSubmitting(true)
 
-    await addDefaultChart(targetDate, selectedPatientId)
+    const { error } = await addDefaultChart(targetDate, selectedPatientId)
+
+    if (error) {
+      toast({
+        title: '기본차트 생성할 수 없습니다',
+        description: '전날 차트가 있는지 확인해주세요',
+        variant: 'destructive',
+      })
+      setIsSubmitting(false)
+      setIsDialogOpen(false)
+      return
+    }
 
     toast({
       title: '기본차트를 생성했습니다',
