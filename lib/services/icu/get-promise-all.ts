@@ -79,12 +79,7 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
 
     supabase
       .from('patients')
-      .select(
-        `
-          *,
-          owner_id(*)
-        `,
-      )
+      .select('*')
       .match({ hos_id: hosId })
       .match({ is_alive: true })
       .order('created_at', { ascending: false })

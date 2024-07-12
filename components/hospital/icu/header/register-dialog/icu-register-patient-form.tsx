@@ -51,14 +51,12 @@ export default function IcuRegisterPatientForm({
   vetsData,
   setIsDialogOpen,
   tab,
-  setTab,
 }: {
   hosId: string
   groupList: string[]
   vetsData: IcuVetList[]
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
   tab: string
-  setTab: Dispatch<SetStateAction<string>>
 }) {
   const { push, refresh } = useRouter()
   const [range, setRange] = useState<DateRange | undefined>({
@@ -128,7 +126,7 @@ export default function IcuRegisterPatientForm({
       return
     }
     if (tab === 'register') {
-      setStep('ownerSearch')
+      setStep('patientRegister')
       return
     }
   }

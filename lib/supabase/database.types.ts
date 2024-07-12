@@ -177,6 +177,7 @@ export type Database = {
           district: string
           group_list: string[]
           hos_id: string
+          icu_memo_names: string[]
           is_personal: boolean
           master_user_id: string
           memo_list: string[]
@@ -190,6 +191,7 @@ export type Database = {
           district: string
           group_list?: string[]
           hos_id?: string
+          icu_memo_names?: string[]
           is_personal?: boolean
           master_user_id: string
           memo_list?: string[]
@@ -203,6 +205,7 @@ export type Database = {
           district?: string
           group_list?: string[]
           hos_id?: string
+          icu_memo_names?: string[]
           is_personal?: boolean
           master_user_id?: string
           memo_list?: string[]
@@ -774,7 +777,8 @@ export type Database = {
           memo: string | null
           microchip_no: string | null
           name: string
-          owner_id: string
+          owner_id: string | null
+          owner_name: string | null
           patient_id: string
           species: Database["public"]["Enums"]["patient_species"]
         }
@@ -789,7 +793,8 @@ export type Database = {
           memo?: string | null
           microchip_no?: string | null
           name?: string
-          owner_id: string
+          owner_id?: string | null
+          owner_name?: string | null
           patient_id?: string
           species: Database["public"]["Enums"]["patient_species"]
         }
@@ -804,7 +809,8 @@ export type Database = {
           memo?: string | null
           microchip_no?: string | null
           name?: string
-          owner_id?: string
+          owner_id?: string | null
+          owner_name?: string | null
           patient_id?: string
           species?: Database["public"]["Enums"]["patient_species"]
         }
@@ -1028,6 +1034,22 @@ export type Database = {
           time_input: number
         }
         Returns: undefined
+      }
+      insert_patient_when_register: {
+        Args: {
+          hos_id_input: string
+          name_input: string
+          hos_patient_id_input: string
+          species_input: string
+          breed_input: string
+          gender_input: string
+          birth_input: string
+          microchip_no_input: string
+          body_weight_input: string
+          owner_name_input: string
+          memo_input: string
+        }
+        Returns: string
       }
       insert_patient_with_selected_owner: {
         Args: {
