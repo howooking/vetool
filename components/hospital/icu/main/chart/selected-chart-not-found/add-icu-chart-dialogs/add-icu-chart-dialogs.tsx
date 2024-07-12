@@ -1,6 +1,5 @@
 import { useParams } from 'next/navigation'
 import AddDefaultChartDialog from './add-default-chart-dialog'
-import CopyBookmarkDialog from './copy-bookmark-dialog'
 import CopyPrevChartDialog from './copy-prev-chart-dialog'
 
 export default function AddIcuChartDialogs({
@@ -16,10 +15,6 @@ export default function AddIcuChartDialogs({
         selectedPatientId={selectedPatientId}
       />
       <AddDefaultChartDialog
-        targetDate={target_date as string}
-        selectedPatientId={selectedPatientId}
-      />
-      <CopyBookmarkDialog
         targetDate={target_date as string}
         selectedPatientId={selectedPatientId}
       />
