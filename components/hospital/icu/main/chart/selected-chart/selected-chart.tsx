@@ -1,7 +1,7 @@
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
-  IcuVetList,
+  IcuUserList,
 } from '@/types/icu'
 import ChartInfos from './chart-infos/chart-infos'
 import ChartMemos from './chart-memos/chart-memos'
@@ -10,12 +10,12 @@ import IcuChartTable from './table/icu-chart-table'
 export default function SelectedChart({
   selectedChart,
   selectedChartOrders,
-  vetsData,
+  icuUsersData,
   isPatientOut,
 }: {
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
-  vetsData: IcuVetList[]
+  icuUsersData: IcuUserList[]
   isPatientOut: boolean
 }) {
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
@@ -23,12 +23,12 @@ export default function SelectedChart({
     <div className="flex flex-col gap-2 p-2 pb-[48px]">
       <ChartInfos
         chartData={restChartData}
-        vetsData={vetsData}
+        icuUsersData={icuUsersData}
         isPatientOut={isPatientOut}
       />
       <IcuChartTable
         selectedChartOrders={selectedChartOrders}
-        vetsData={vetsData}
+        icuUsersData={icuUsersData}
       />
       <ChartMemos
         memoA={memo_a}

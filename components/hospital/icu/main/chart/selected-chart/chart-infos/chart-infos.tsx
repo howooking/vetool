@@ -1,6 +1,6 @@
 'use client'
 
-import type { IcuChartJoined, IcuVetList } from '@/types/icu'
+import type { IcuChartJoined, IcuUserList } from '@/types/icu'
 import Caution from './infos/caution'
 import ChiefComplaint from './infos/chief-complaint'
 import Diagnosis from './infos/diagnosis'
@@ -12,13 +12,14 @@ import OwnerName from './infos/onwer-name'
 
 export default function ChartInfos({
   chartData,
-  vetsData,
+  icuUsersData,
   isPatientOut,
 }: {
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
-  vetsData: IcuVetList[]
+  icuUsersData: IcuUserList[]
   isPatientOut: boolean
 }) {
+  console.log(icuUsersData)
   return (
     <div>
       <HeaderSignalments
@@ -50,7 +51,7 @@ export default function ChartInfos({
           <MainSubVet
             mainVet={chartData.main_vet}
             subVet={chartData.sub_vet}
-            vetsData={vetsData}
+            vetsData={icuUsersData.filter((user) => user.is_vet)}
             icuChartId={chartData.icu_chart_id}
           />
         </div>

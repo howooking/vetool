@@ -5,11 +5,12 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoPatientJoined,
-  IcuVetList,
+  IcuUserList,
 } from '@/types/icu'
 import type { PatientData } from '@/types/patients'
+import { redirect } from 'next/navigation'
 
-export const getPromiseAll = async (hosId: string, targetDate: string) => {
+export const getIcuMainData = async (hosId: string, targetDate: string) => {
   const supabase = createClient()
 
   const promiseArray = Promise.all([
@@ -66,30 +67,10 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
       .returns<IcuChartOrderJoined[]>(),
 
     supabase
-      .from('hospitals')
-      .select('group_list')
-      .match({ hos_id: hosId })
-      .single(),
-
-    supabase
       .from('users')
-      .select('name, position, user_id, avatar_url')
-      .match({ hos_id: hosId, is_vet: true })
-      .returns<IcuVetList[]>(),
-
-    supabase
-      .from('patients')
-      .select('*')
+      .select('name, position, user_id, avatar_url, is_vet')
       .match({ hos_id: hosId })
-      .match({ is_alive: true })
-      .order('created_at', { ascending: false })
-      .returns<PatientData[]>(),
-
-    supabase
-      .from('owners')
-      .select('*')
-      .match({ hos_id: hosId })
-      .order('created_at', { ascending: false }),
+      .returns<IcuUserList[]>(),
 
     supabase
       .from('icu_io')
@@ -109,48 +90,30 @@ export const getPromiseAll = async (hosId: string, targetDate: string) => {
   const [
     { data: icuChartData, error: icuChartDataError },
     { data: icuChartOrderData, error: icuChartOrderDataError },
-    { data: groupListData, error: groupListDataError },
-    { data: vetsData, error: vetsDataError },
-    { data: patientsData, error: patientsDataError },
-    { data: ownersData, error: ownersDataError },
+    { data: icuUsersData, error: icuUsersDataError },
     { data: icuIoData, error: icuIoDataError },
   ] = await promiseArray
 
   if (
     icuChartDataError ||
     icuChartOrderDataError ||
-    groupListDataError ||
-    vetsDataError ||
-    patientsDataError ||
-    ownersDataError ||
+    icuUsersDataError ||
     icuIoDataError
   ) {
     console.log({
       icuChartDataError,
       icuChartOrderDataError,
-      groupListDataError,
-      vetsDataError,
-      patientsDataError,
-      ownersDataError,
+      IcuUsersData: icuUsersDataError,
       icuIoDataError,
     })
-    throw new Error(
-      icuChartDataError?.message ||
-        icuChartOrderDataError?.message ||
-        groupListDataError?.message ||
-        vetsDataError?.message ||
-        patientsDataError?.message ||
-        ownersDataError?.message ||
-        icuIoDataError?.message,
+    redirect(
+      `/error?message=${icuChartDataError?.message || icuIoDataError?.message || icuChartOrderDataError?.message || icuUsersDataError?.message}`,
     )
   }
   return {
     icuChartData,
     icuChartOrderData,
-    groupListData,
-    vetsData,
-    patientsData,
-    ownersData,
+    icuUsersData,
     icuIoData,
   }
 }

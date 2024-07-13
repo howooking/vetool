@@ -5,7 +5,7 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoPatientJoined,
-  IcuVetList,
+  IcuUserList,
 } from '@/types/icu'
 import IcuChart from './chart/icu-chart'
 import IcuSummary from './summary/icu-summary'
@@ -13,13 +13,13 @@ import IcuSummary from './summary/icu-summary'
 export default function IcuMain({
   icuChartData,
   icuChartOrderData,
-  vetsData,
+  icuUsersData,
   targetDate,
   icuIoData,
 }: {
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
-  vetsData: IcuVetList[]
+  icuUsersData: IcuUserList[]
   targetDate: string
   icuIoData: IcuIoPatientJoined[]
 }) {
@@ -31,7 +31,7 @@ export default function IcuMain({
 
       {selectIcudMainView === 'chart' && (
         <IcuChart
-          vetsData={vetsData}
+          icuUsersData={icuUsersData}
           icuChartData={icuChartData}
           icuChartOrderData={icuChartOrderData}
           targetDate={targetDate}

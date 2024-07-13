@@ -6,7 +6,7 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoPatientJoined,
-  IcuVetList,
+  IcuUserList,
 } from '@/types/icu'
 import { useMemo } from 'react'
 import SelectedChartNotFound from './selected-chart-not-found/selected-chart-not-found'
@@ -24,13 +24,13 @@ const ORDER_OF_ORDERS = [
 export default function IcuChart({
   icuChartData,
   icuChartOrderData,
-  vetsData,
+  icuUsersData,
   targetDate,
   icuIoData,
 }: {
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
-  vetsData: IcuVetList[]
+  icuUsersData: IcuUserList[]
   targetDate: string
   icuIoData: IcuIoPatientJoined[]
 }) {
@@ -89,7 +89,7 @@ export default function IcuChart({
           // userName={userName}
           selectedChart={selectedChart}
           selectedChartOrders={selectedChartOrders}
-          vetsData={vetsData}
+          icuUsersData={icuUsersData}
           isPatientOut={isPatientOut}
         />
       ) : (
