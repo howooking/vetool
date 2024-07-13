@@ -344,11 +344,11 @@ export type Database = {
       icu_chart_order: {
         Row: {
           created_at: string
-          icu_chart_id: string | null
+          icu_chart_id: string
           icu_chart_order_comment: string | null
           icu_chart_order_id: string
           icu_chart_order_log: string[] | null
-          icu_chart_order_name: string | null
+          icu_chart_order_name: string
           icu_chart_order_time: string[]
           icu_chart_order_tx_1: string | null
           icu_chart_order_tx_10: string | null
@@ -374,17 +374,17 @@ export type Database = {
           icu_chart_order_tx_7: string | null
           icu_chart_order_tx_8: string | null
           icu_chart_order_tx_9: string | null
-          icu_chart_order_type: string | null
-          icu_io_id: string | null
+          icu_chart_order_type: string
+          icu_io_id: string
           updated_at: string
         }
         Insert: {
           created_at?: string
-          icu_chart_id?: string | null
+          icu_chart_id: string
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
           icu_chart_order_log?: string[] | null
-          icu_chart_order_name?: string | null
+          icu_chart_order_name: string
           icu_chart_order_time?: string[]
           icu_chart_order_tx_1?: string | null
           icu_chart_order_tx_10?: string | null
@@ -410,17 +410,17 @@ export type Database = {
           icu_chart_order_tx_7?: string | null
           icu_chart_order_tx_8?: string | null
           icu_chart_order_tx_9?: string | null
-          icu_chart_order_type?: string | null
-          icu_io_id?: string | null
+          icu_chart_order_type: string
+          icu_io_id: string
           updated_at?: string
         }
         Update: {
           created_at?: string
-          icu_chart_id?: string | null
+          icu_chart_id?: string
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
           icu_chart_order_log?: string[] | null
-          icu_chart_order_name?: string | null
+          icu_chart_order_name?: string
           icu_chart_order_time?: string[]
           icu_chart_order_tx_1?: string | null
           icu_chart_order_tx_10?: string | null
@@ -446,8 +446,8 @@ export type Database = {
           icu_chart_order_tx_7?: string | null
           icu_chart_order_tx_8?: string | null
           icu_chart_order_tx_9?: string | null
-          icu_chart_order_type?: string | null
-          icu_io_id?: string | null
+          icu_chart_order_type?: string
+          icu_io_id?: string
           updated_at?: string
         }
         Relationships: [

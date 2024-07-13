@@ -9,17 +9,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { TIME } from '@/constants/hospital/icu/chart/time'
+import { HOURS } from '@/constants/hospital/icu/chart/time'
+import { cn } from '@/lib/utils'
 import { IcuChartTx } from '@/types'
-import type { IcuChartOrderJoined, IcuVetList } from '@/types/icu'
+import type { IcuChartOrderJoined, IcuUserList } from '@/types/icu'
 import IcuChartUpsertTxDialog from './tx/icu-chart-upsert-tx-dialog'
 
 export default function IcuChartTable({
   selectedChartOrders,
-  vetsData,
+  icuUsersData,
 }: {
   selectedChartOrders: IcuChartOrderJoined[]
-  vetsData: IcuVetList[]
+  icuUsersData: IcuUserList[]
 }) {
   // 처치 오더가 존재하는 지에 대해 true/false 반환
   const hasOrder = (orderData: IcuChartOrderJoined, index: number) => {

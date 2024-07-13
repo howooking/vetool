@@ -27,16 +27,16 @@ import {
 } from '@/lib/services/icu/upsert-chart-tx'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
-import type { IcuVetList, TxLog, TxState } from '@/types/icu'
+import type { IcuUserList, TxLog, TxState } from '@/types/icu'
 import { format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function IcuChartUpsertTxDialog({
-  vetsData,
+  icuUsersData,
 }: {
-  vetsData: IcuVetList[]
+  icuUsersData: IcuUserList[]
 }) {
   const { refresh } = useRouter()
   const { upsertTxState, setUpsertTxState } = useUpsertTxStore()
@@ -108,7 +108,8 @@ export default function IcuChartUpsertTxDialog({
     const newLog: TxLog = {
       result: txValue.icu_chart_tx_result,
       name:
-        vetsData.find((vet) => vet.user_id === txValue.user_id)?.name ?? '유저',
+        icuUsersData.find((vet) => vet.user_id === txValue.user_id)?.name ??
+        '유저',
       createdAt: date,
     }
 
@@ -267,7 +268,7 @@ export default function IcuChartUpsertTxDialog({
 
                 <SelectContent>
                   <SelectGroup>
-                    {vetsData.map((vet) => (
+                    {icuUsersData.map((vet) => (
                       <SelectItem key={vet.user_id} value={vet.user_id}>
                         <span>{vet.name}</span>
                         <span className="ml-2 text-xs">
