@@ -1,3 +1,4 @@
+import IcuIconButton from '@/components/common/icu-icon-button'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -12,7 +13,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { toggleOutPatient } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
-import { ExternalLink, LoaderCircle } from 'lucide-react'
+import { LoaderCircle, UserRoundMinus, UserRoundPlus } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 export default function OutPatientDialog({
@@ -48,9 +49,7 @@ export default function OutPatientDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          <ExternalLink className="h-3 w-3" />
-        </Button>
+        <IcuIconButton icon={isPatientOut ? UserRoundPlus : UserRoundMinus} />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>

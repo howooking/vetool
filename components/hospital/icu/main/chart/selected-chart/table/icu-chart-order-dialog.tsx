@@ -1,3 +1,4 @@
+import IcuIconButton from '@/components/common/icu-icon-button'
 import {
   Dialog,
   DialogContent,
@@ -9,8 +10,8 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { FilePlus } from 'lucide-react'
-import IcuChartOrderForm from './icu-chart-order-form'
 import { useParams } from 'next/navigation'
+import IcuChartOrderForm from './icu-chart-order-form'
 
 export default function IcuChartOrderDialog({
   chartId,
@@ -29,12 +30,9 @@ export default function IcuChartOrderDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleDialogOpen}>
-      <DialogTrigger>
-        <div className="flex w-full items-center rounded-md border border-black px-16 py-1">
-          <span>오더 추가</span>
-          <FilePlus size="16" strokeWidth={1.5} className="ml-2" />
-        </div>
+    <Dialog>
+      <DialogTrigger asChild>
+        <IcuIconButton icon={FilePlus} onClick={handleDialogOpen} />
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>

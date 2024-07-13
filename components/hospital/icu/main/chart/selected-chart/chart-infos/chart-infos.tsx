@@ -19,7 +19,6 @@ export default function ChartInfos({
   icuUsersData: IcuUserList[]
   isPatientOut: boolean
 }) {
-  console.log(icuUsersData)
   return (
     <div>
       <HeaderSignalments
