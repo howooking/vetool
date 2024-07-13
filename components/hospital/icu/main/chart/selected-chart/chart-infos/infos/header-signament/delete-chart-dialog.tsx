@@ -35,7 +35,7 @@ export default function DeleteChartDialog({
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeletingAllCharts, setIsDeletingAllCharts] = useState(false)
   const { refresh } = useRouter()
-  const { setSelectedPatientId } = useIcuSelectedPatientStore()
+  const { setSelectedPatient } = useIcuSelectedPatientStore()
 
   const handleDeleteChart = async () => {
     setIsDeleting(true)
@@ -52,7 +52,7 @@ export default function DeleteChartDialog({
     })
 
     setIsDeleting(false)
-    isIcuIoDeleted && setSelectedPatientId(null)
+    isIcuIoDeleted && setSelectedPatient(null)
     setIsOpen(false)
     refresh()
   }
@@ -66,7 +66,7 @@ export default function DeleteChartDialog({
     })
 
     setIsDeletingAllCharts(false)
-    setSelectedPatientId(null)
+    setSelectedPatient(null)
     setIsOpen(false)
     refresh()
   }

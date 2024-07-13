@@ -10,10 +10,12 @@ export default function IcuPatientSelectButton({
   patientId,
   isIcu,
   birth,
+  patientName,
 }: {
   patientId: string
   isIcu: boolean
   birth: string
+  patientName: string
 }) {
   const { setStep } = usePatientRegisterStep()
   const { setRegisteringPatient } = useIcuRegisteringPatient()
@@ -34,6 +36,7 @@ export default function IcuPatientSelectButton({
     setRegisteringPatient({
       patientId,
       birth,
+      patientName,
     })
   }
 

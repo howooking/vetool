@@ -169,11 +169,13 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
       const patientId = row.original.patient_id
       const isIcu = row.original.isIcu
       const birth = row.original.birth
+      const patientName = row.original.name
       return (
         <IcuPatientSelectButton
           patientId={patientId}
           isIcu={isIcu}
           birth={birth}
+          patientName={patientName}
         />
       )
     },

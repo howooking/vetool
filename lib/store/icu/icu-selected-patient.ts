@@ -1,13 +1,21 @@
 import { create } from 'zustand'
 
 type IcuSelectedPatientState = {
-  selectedPatientId: string | null
-  setSelectedPatientId: (patientId: string | null) => void
+  selectedPatient: {
+    patientName: string
+    patientId: string
+  } | null
+  setSelectedPatient: (
+    patient: {
+      patientName: string
+      patientId: string
+    } | null,
+  ) => void
 }
 
 export const useIcuSelectedPatientStore = create<IcuSelectedPatientState>(
   (set) => ({
-    selectedPatientId: null,
-    setSelectedPatientId: (patientId) => set({ selectedPatientId: patientId }),
+    selectedPatient: null,
+    setSelectedPatient: (patient) => set({ selectedPatient: patient }),
   }),
 )

@@ -18,10 +18,13 @@ import { useState } from 'react'
 
 export default function CopyPrevChartDialog({
   targetDate,
-  selectedPatientId,
+  selectedPatient,
 }: {
   targetDate: string
-  selectedPatientId: string
+  selectedPatient: {
+    patientName: string
+    patientId: string
+  }
 }) {
   const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -30,7 +33,7 @@ export default function CopyPrevChartDialog({
   const handleCopyPrevSelectedChart = async () => {
     setIsSubmitting(true)
 
-    const { error } = await copyPrevChart(targetDate, selectedPatientId)
+    const { error } = await copyPrevChart(targetDate, selectedPatient.patientId)
 
     if (error) {
       toast({

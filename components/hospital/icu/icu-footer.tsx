@@ -16,7 +16,7 @@ export const FOOTER_MAIN_VIEW_MENUS = [
 ] as const
 
 export default function IcuFooter() {
-  const { setSelectedPatientId } = useIcuSelectedPatientStore()
+  const { setSelectedPatient } = useIcuSelectedPatientStore()
   const { selectIcudMainView, setSelectedIcuMainView } =
     useSelectedMainViewStore()
 
@@ -24,7 +24,7 @@ export default function IcuFooter() {
     setSelectedIcuMainView(value)
 
     if (value === 'summary') {
-      setSelectedPatientId(null)
+      setSelectedPatient(null)
     }
   }
 

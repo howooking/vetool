@@ -35,7 +35,7 @@ import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuVetList } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { addDays, format } from 'date-fns'
+import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -64,8 +64,14 @@ export default function IcuRegisterPatientForm({
     to: new Date(),
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { registeringPatient } = useIcuRegisteringPatient()
-  const { setSelectedPatientId } = useIcuSelectedPatientStore()
+  const { registeringPatient } = useIcuRegisteringPatient() as {
+    registeringPatient: {
+      patientId: string
+      birth: string
+      patientName: string
+    }
+  }
+  const { setSelectedPatient } = useIcuSelectedPatientStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setStep } = usePatientRegisterStep()
 
@@ -114,7 +120,10 @@ export default function IcuRegisterPatientForm({
 
     setIsDialogOpen(false)
     setIsSubmitting(false)
-    setSelectedPatientId(registeringPatient.patientId)
+    setSelectedPatient({
+      patientId: registeringPatient.patientId,
+      patientName: registeringPatient.patientName,
+    })
     setSelectedIcuMainView('chart')
     push(`${format(in_date, 'yyyy-MM-dd')}`)
     refresh()

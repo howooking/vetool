@@ -34,18 +34,16 @@ export default function IcuChart({
   targetDate: string
   icuIoData: IcuIoPatientJoined[]
 }) {
-  const { selectedPatientId } = useIcuSelectedPatientStore()
+  const { selectedPatient } = useIcuSelectedPatientStore()
 
-  // 선택된 환자의 차트데이터
   const selectedChart = useMemo(
     () =>
       icuChartData.find(
-        (chart) => chart.patient_id.patient_id === selectedPatientId,
+        (chart) => chart.patient_id.patient_id === selectedPatient?.patientId,
       ),
-    [icuChartData, selectedPatientId],
+    [icuChartData, selectedPatient],
   )
 
-  // 선택된 차트의 오더들 타입 순서에 맞게 필터링
   const selectedChartOrders = useMemo(
     () =>
       icuChartOrderData
@@ -64,19 +62,23 @@ export default function IcuChart({
 
   const isPatientIn = useMemo(
     () =>
-      icuIoData.some((io) => io.patient_id.patient_id === selectedPatientId),
-    [icuIoData, selectedPatientId],
+      icuIoData.some(
+        (io) => io.patient_id.patient_id === selectedPatient?.patientId,
+      ),
+    [icuIoData, selectedPatient?.patientId],
   )
 
   const isPatientOut = useMemo(
     () =>
       icuIoData.some(
-        (io) => io.patient_id.patient_id === selectedPatientId && io.out_date,
+        (io) =>
+          io.patient_id.patient_id === selectedPatient?.patientId &&
+          io.out_date,
       ),
-    [icuIoData, selectedPatientId],
+    [icuIoData, selectedPatient],
   )
 
-  if (!selectedPatientId) {
+  if (!selectedPatient?.patientId) {
     return <NoResult title="환자를 선택해주세요" />
   }
 
@@ -92,7 +94,7 @@ export default function IcuChart({
         />
       ) : (
         <SelectedChartNotFound
-          selectedPatientId={selectedPatientId}
+          selectedPatient={selectedPatient}
           targetDate={targetDate}
           isPatientIn={isPatientIn}
         />

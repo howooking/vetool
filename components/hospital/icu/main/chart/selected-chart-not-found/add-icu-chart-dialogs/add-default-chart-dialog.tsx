@@ -18,10 +18,13 @@ import { useState } from 'react'
 
 export default function AddDefaultChartDialog({
   targetDate,
-  selectedPatientId,
+  selectedPatient,
 }: {
   targetDate: string
-  selectedPatientId: string
+  selectedPatient: {
+    patientName: string
+    patientId: string
+  }
 }) {
   const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -30,7 +33,10 @@ export default function AddDefaultChartDialog({
   const handleAddDefaultChart = async () => {
     setIsSubmitting(true)
 
-    const { error } = await addDefaultChart(targetDate, selectedPatientId)
+    const { error } = await addDefaultChart(
+      targetDate,
+      selectedPatient.patientId,
+    )
 
     if (error) {
       toast({
