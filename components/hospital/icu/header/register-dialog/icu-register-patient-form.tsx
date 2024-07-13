@@ -44,6 +44,7 @@ import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { registerIcuPatientFormSchema } from './schema'
+import Image from 'next/image'
 
 export default function IcuRegisterPatientForm({
   hosId,
@@ -285,8 +286,18 @@ export default function IcuRegisterPatientForm({
                 <SelectContent>
                   {vetsData.map((vet) => (
                     <SelectItem key={vet.user_id} value={vet.user_id}>
-                      <span>{vet.name}</span>
-                      <span className="ml-2 text-xs">{vet.position}</span>
+                      <div className="flex items-center gap-2">
+                        <Image
+                          unoptimized
+                          src={vet.avatar_url ?? ''}
+                          alt={vet.name}
+                          width={20}
+                          height={20}
+                          className="rounded-full"
+                        />
+                        <span>{vet.name}</span>
+                        <span className="text-xs">({vet.position})</span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -319,10 +330,20 @@ export default function IcuRegisterPatientForm({
                 <SelectContent>
                   {vetsData.map((vet) => (
                     <SelectItem key={vet.user_id} value={vet.user_id}>
-                      <span>{vet.name}</span>
-                      <span className="ml-2 text-xs">
-                        {vet.position ?? '미분류'}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <Image
+                          unoptimized
+                          src={vet.avatar_url ?? ''}
+                          alt={vet.name}
+                          width={20}
+                          height={20}
+                          className="rounded-full"
+                        />
+                        <span>{vet.name}</span>
+                        <span className="text-xs">
+                          ({vet.position ?? '미분류'})
+                        </span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
