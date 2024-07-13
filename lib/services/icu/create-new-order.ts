@@ -18,18 +18,22 @@ export const deleteOrder = async (chartOrderId: string) => {
 }
 
 export const upsertOrder = async (
-  chartId: string,
-  ioId: string,
-  chartOrderId: string,
+  icuChartId: string,
+  icuIoId: string,
+  icuChartOrderId: string,
   orderTime: string[],
-  order: Record<string, string | string[] | null | boolean>,
+  order: {
+    icu_chart_order_name: string
+    icu_chart_order_comment: string | null
+    icu_chart_order_type: string
+  },
 ) => {
   const { error: upsertOrderrError } = await supabase
     .from('icu_chart_order')
     .upsert({
-      icu_chart_order_id: chartOrderId,
-      icu_chart_id: chartId,
-      icu_io_id: ioId,
+      icu_chart_order_id: icuChartOrderId,
+      icu_chart_id: icuChartId,
+      icu_io_id: icuIoId,
       icu_chart_order_time: orderTime,
       ...order,
     })

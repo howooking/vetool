@@ -4,7 +4,6 @@ import IcuChartTableCell from '@/components/hospital/icu/main/chart/selected-cha
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -14,6 +13,8 @@ import { cn } from '@/lib/utils'
 import { IcuChartTx } from '@/types'
 import type { IcuChartOrderJoined, IcuUserList } from '@/types/icu'
 import IcuChartUpsertTxDialog from './tx/icu-chart-upsert-tx-dialog'
+
+export const BORDER_COLOR = 'border-slate-400'
 
 export default function IcuChartTable({
   selectedChartOrders,
@@ -27,66 +28,58 @@ export default function IcuChartTable({
     if (orderData.icu_chart_order_time) {
       return orderData.icu_chart_order_time[index] === '1'
     }
-
     return false
   }
 
   return (
-    <div className="rounded-md">
-      <Table className="border border-black">
-        {/* TABLE HEADER */}
-        <TableHeader>
-          <TableRow className="divide-x border-black">
-            <TableHead className="h-10 w-[296px] text-center">처치</TableHead>
+    <Table className={cn('border', BORDER_COLOR)}>
+      <TableHeader>
+        <TableRow className={cn(BORDER_COLOR)}>
+          <TableHead className="flex w-[296px] items-center justify-center gap-2 text-center">
+            <span>오더 목록</span>
+            <IcuChartOrderDialog
+              icuIoId={selectedChartOrders[0].icu_io_id.icu_io_id}
+              icuChartId={selectedChartOrders[0].icu_chart_id}
+            />
+          </TableHead>
 
-            {TIME.map((time) => (
-              <TableHead className="h-2 border-black text-center" key={time}>
-                {time.toString().padStart(2, '0')}
-              </TableHead>
+          {HOURS.map((time) => (
+            <TableHead
+              className={cn('border-l text-center', BORDER_COLOR)}
+              key={time}
+            >
+              {time.toString().padStart(2, '0')}
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+
+      <TableBody>
+        <IcuChartUpsertTxDialog icuUsersData={icuUsersData} />
+
+        {selectedChartOrders.map((order) => (
+          <TableRow
+            // todo divide x
+            className={cn('divide-x', BORDER_COLOR)}
+            key={order.icu_chart_order_id}
+          >
+            <IcuChartTableCellTitle order={order} />
+
+            {HOURS.map((time, index) => (
+              <IcuChartTableCell
+                key={time}
+                time={time}
+                txData={
+                  order[`icu_chart_order_tx_${time}`] as IcuChartTx | null
+                }
+                ioId={order.icu_io_id.icu_io_id}
+                chartOrderId={order.icu_chart_order_id}
+                hasOrder={hasOrder(order, index)}
+              />
             ))}
           </TableRow>
-        </TableHeader>
-
-        {/* TABLE BODY */}
-        <TableBody>
-          <IcuChartUpsertTxDialog vetsData={vetsData} />
-
-          {selectedChartOrders?.map((orderData) => (
-            <TableRow
-              className="divide-x border-black"
-              key={orderData.icu_chart_order_id}
-            >
-              {/* TABLE BODY TITLE */}
-              <IcuChartTableCellTitle
-                orderData={orderData}
-                dataType={orderData.icu_chart_order_type ?? 'manual'}
-              />
-
-              {/* TABLE BODY TIME */}
-              {TIME.map((time, index) => (
-                <IcuChartTableCell
-                  key={time}
-                  time={time}
-                  txData={
-                    orderData[`icu_chart_order_tx_${time}`] as IcuChartTx | null
-                  }
-                  ioId={orderData.icu_io_id.icu_io_id}
-                  chartOrderId={orderData.icu_chart_order_id}
-                  hasOrder={hasOrder(orderData, index)}
-                />
-              ))}
-            </TableRow>
-          ))}
-          <TableRow className="flex w-[240px] justify-center">
-            <TableCell>
-              <IcuChartOrderDialog
-                chartId={selectedChartOrders[0].icu_chart_id!}
-                ioId={selectedChartOrders[0].icu_io_id.icu_io_id!}
-              />
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
+        ))}
+      </TableBody>
+    </Table>
   )
 }

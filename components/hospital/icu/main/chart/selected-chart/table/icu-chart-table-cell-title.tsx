@@ -4,44 +4,43 @@ import { TableCell } from '@/components/ui/table'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined } from '@/types/icu'
+import { BORDER_COLOR } from './icu-chart-table'
 
 export default function IcuChartTableCellTitle({
-  orderData,
-  dataType,
+  order,
 }: {
-  orderData: IcuChartOrderJoined
-  dataType: string | null
+  order: IcuChartOrderJoined
 }) {
   const {
+    icu_chart_order_type: orderType,
     icu_chart_order_name: orderName,
     icu_chart_order_comment: orderComment,
-  } = orderData
-  const { setIsOpen, setIsEditMode, setChartOrder } = useCreateOrderStore()
+  } = order
+
+  const { toggleModal, setIsEditMode, setChartOrder } = useCreateOrderStore()
 
   const handleDialogOpen = () => {
-    setIsOpen()
+    toggleModal()
     setIsEditMode(true)
-    setChartOrder(orderData)
+    setChartOrder(order)
   }
 
   return (
     <TableCell
       className={cn(
-        'h-full border-b border-black leading-4 hover:cursor-pointer hover:bg-gray-50',
-        dataType === 'checklist' && 'bg-red-50', // checklist red-50
-        dataType === 'fluid' && 'bg-blue-50', // fluid blue
-        dataType === 'feed' && 'bg-green-50', // feed green
-        dataType === 'manual' && 'bg-purple-50', // manual green
-        dataType !== 'checklist' && // etc yellow
-          dataType !== 'feed' &&
-          dataType !== 'fluid' &&
-          dataType !== 'manual' &&
-          'bg-yellow-50',
+        'hover:cursor-pointer hover:bg-gray-50',
+        BORDER_COLOR,
+        orderType === 'checklist' && 'bg-red-50',
+        orderType === 'fluid' && 'bg-blue-50',
+        orderType === 'injection' && 'bg-yellow-50',
+        orderType === 'test' && 'bg-orange-50',
+        orderType === 'manual' && 'bg-purple-50',
+        orderType === 'feed' && 'bg-green-50',
       )}
       onClick={handleDialogOpen}
     >
-      <span className="mr-1 text-black">{orderName}</span>
-      <span className="text-[10px] text-gray-500">{orderComment}</span>
+      <span className="mr-1">{orderName}</span>
+      <span className="text-[10px] text-muted-foreground">{orderComment}</span>
     </TableCell>
   )
 }

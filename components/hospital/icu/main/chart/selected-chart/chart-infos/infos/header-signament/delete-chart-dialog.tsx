@@ -1,4 +1,5 @@
 import IcuIconButton from '@/components/common/icu-icon-button'
+import WarningMessage from '@/components/common/warning-message'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -17,7 +18,7 @@ import {
 } from '@/lib/services/icu/delete-icu-chart'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
-import { AlertCircle, LoaderCircle, Trash2 } from 'lucide-react'
+import { LoaderCircle, Trash2 } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 export default function DeleteChartDialog({
@@ -83,9 +84,7 @@ export default function DeleteChartDialog({
           <DialogDescription className="flex flex-col gap-1">
             <p>선택차트삭제 : {target_date}날 차트만 삭제합니다</p>
             <p>모든차트삭제 : 입원기간동안의 차트들을 모두 삭제합니다</p>
-            <p className="flex items-center gap-1 text-destructive">
-              <AlertCircle size={18} /> 해당 작업은 되돌릴 수 없습니다
-            </p>
+            <WarningMessage text="해당작업은 실행 후 되될릴 수 없습니다." />
           </DialogDescription>
         </DialogHeader>
 

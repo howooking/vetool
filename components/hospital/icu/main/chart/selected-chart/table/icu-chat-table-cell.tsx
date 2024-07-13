@@ -3,9 +3,9 @@ import { TableCell } from '@/components/ui/table'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
 import { IcuChartTx } from '@/types'
-import { TxLog, TxState } from '@/types/icu'
-import { format } from 'date-fns'
+import type { TxLog, TxState } from '@/types/icu'
 import { useEffect, useRef, useState } from 'react'
+import { BORDER_COLOR } from './icu-chart-table'
 
 type TableCellInputProps = {
   time: number
@@ -128,7 +128,7 @@ export default function IcuChartTableCell({
   }
 
   return (
-    <TableCell className="h-2 border-black p-0 leading-4">
+    <TableCell className={cn('h-2 p-0 leading-4', BORDER_COLOR)}>
       <Input
         className={cn(
           'rounded-none px-1 text-center focus-visible:border-2 focus-visible:border-primary focus-visible:ring-0',
