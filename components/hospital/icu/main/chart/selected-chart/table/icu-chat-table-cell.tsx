@@ -6,21 +6,21 @@ import { IcuChartTx } from '@/types'
 import type { TxLog, TxState } from '@/types/icu'
 import { useEffect, useRef, useState } from 'react'
 
-type TableCellInputProps = {
-  time: number
-  txData: IcuChartTx | null
-  ioId: string
-  chartOrderId: string
-  hasOrder: boolean
-}
-
 export default function IcuChartTableCell({
-  time,
+  hour,
   txData,
-  ioId,
-  chartOrderId,
+  icuIoId,
+  IcuChartOrderId,
   hasOrder,
-}: TableCellInputProps) {
+  isDone,
+}: {
+  hour: number
+  txData: IcuChartTx | null
+  icuIoId: string
+  IcuChartOrderId: string
+  hasOrder: boolean
+  isDone: boolean
+}) {
   const txId = txData?.icu_chart_tx_id!
   const { setUpsertTxState } = useUpsertTxStore()
   const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -59,9 +59,9 @@ export default function IcuChartTableCell({
     setUpsertTxState({
       txState: txValue,
       txId: txId,
-      ioId: ioId,
-      chartOrderId: chartOrderId,
-      time: time,
+      ioId: icuIoId,
+      chartOrderId: IcuChartOrderId,
+      time: hour,
       step: 'selectTxUser',
     })
   }
@@ -71,9 +71,9 @@ export default function IcuChartTableCell({
     e.preventDefault()
 
     setUpsertTxState({
-      ioId: ioId,
-      chartOrderId: chartOrderId,
-      time: time,
+      ioId: icuIoId,
+      chartOrderId: IcuChartOrderId,
+      time: hour,
       txId: txId,
 
       txState: {
@@ -101,9 +101,9 @@ export default function IcuChartTableCell({
 
   const handleMouseDown = () => {
     setUpsertTxState({
-      ioId: ioId,
-      chartOrderId: chartOrderId,
-      time: time,
+      ioId: icuIoId,
+      chartOrderId: IcuChartOrderId,
+      time: hour,
       txId: txId,
       txState: {
         ...txValue,
@@ -127,11 +127,12 @@ export default function IcuChartTableCell({
   }
 
   return (
-    <TableCell className={cn('p-0')}>
+    <TableCell className="p-0">
       <Input
         className={cn(
           'rounded-none border-none px-1 text-center focus-visible:ring-4 focus-visible:ring-primary',
-          hasOrder ? 'bg-rose-100' : '',
+          hasOrder && 'bg-rose-100',
+          isDone && 'bg-green-100',
         )}
         value={txValue.icu_chart_tx_result ?? ''}
         onChange={handleInputChange('icu_chart_tx_result')}

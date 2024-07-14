@@ -23,14 +23,6 @@ export default function IcuChartTable({
   selectedChartOrders: IcuChartOrderJoined[]
   icuUsersData: IcuUserList[]
 }) {
-  // 처치 오더가 존재하는 지에 대해 true/false 반환
-  const hasOrder = (orderData: IcuChartOrderJoined, index: number) => {
-    if (orderData.icu_chart_order_time) {
-      return orderData.icu_chart_order_time[index] === '1'
-    }
-    return false
-  }
-
   return (
     <Table className="border">
       <TableHeader className={cn('')}>
@@ -58,18 +50,22 @@ export default function IcuChartTable({
           <TableRow className={cn('divide-x')} key={order.icu_chart_order_id}>
             <IcuChartTableCellTitle order={order} />
 
-            {HOURS.map((time, index) => (
-              <IcuChartTableCell
-                key={time}
-                time={time}
-                txData={
-                  order[`icu_chart_order_tx_${time}`] as IcuChartTx | null
-                }
-                ioId={order.icu_io_id.icu_io_id}
-                chartOrderId={order.icu_chart_order_id}
-                hasOrder={hasOrder(order, index)}
-              />
-            ))}
+            {HOURS.map((hour, index) => {
+              const isDone =
+                order.icu_chart_order_time[index] === '1' &&
+                order[`icu_chart_order_tx_${hour}`] !== null
+              return (
+                <IcuChartTableCell
+                  key={hour}
+                  hour={hour}
+                  txData={order[`icu_chart_order_tx_${hour}`]}
+                  icuIoId={order.icu_io_id.icu_io_id}
+                  IcuChartOrderId={order.icu_chart_order_id}
+                  hasOrder={order.icu_chart_order_time[index] === '1'}
+                  isDone={isDone}
+                />
+              )
+            })}
           </TableRow>
         ))}
       </TableBody>
