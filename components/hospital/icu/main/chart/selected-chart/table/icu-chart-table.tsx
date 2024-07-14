@@ -14,7 +14,7 @@ import { IcuChartTx } from '@/types'
 import type { IcuChartOrderJoined, IcuUserList } from '@/types/icu'
 import IcuChartUpsertTxDialog from './tx/icu-chart-upsert-tx-dialog'
 
-export const BORDER_COLOR = 'border-slate-400'
+// export const BORDER_COLOR = 'border-slate-200'
 
 export default function IcuChartTable({
   selectedChartOrders,
@@ -32,9 +32,9 @@ export default function IcuChartTable({
   }
 
   return (
-    <Table className={cn('border', BORDER_COLOR)}>
-      <TableHeader>
-        <TableRow className={cn(BORDER_COLOR)}>
+    <Table className="border">
+      <TableHeader className={cn('')}>
+        <TableRow className={cn('')}>
           <TableHead className="flex w-[296px] items-center justify-center gap-2 text-center">
             <span>오더 목록</span>
             <IcuChartOrderDialog
@@ -44,10 +44,7 @@ export default function IcuChartTable({
           </TableHead>
 
           {HOURS.map((time) => (
-            <TableHead
-              className={cn('border-l text-center', BORDER_COLOR)}
-              key={time}
-            >
+            <TableHead className={cn('border text-center')} key={time}>
               {time.toString().padStart(2, '0')}
             </TableHead>
           ))}
@@ -58,11 +55,7 @@ export default function IcuChartTable({
         <IcuChartUpsertTxDialog icuUsersData={icuUsersData} />
 
         {selectedChartOrders.map((order) => (
-          <TableRow
-            // todo divide x
-            className={cn('divide-x', BORDER_COLOR)}
-            key={order.icu_chart_order_id}
-          >
+          <TableRow className={cn('divide-x')} key={order.icu_chart_order_id}>
             <IcuChartTableCellTitle order={order} />
 
             {HOURS.map((time, index) => (

@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils'
 import { IcuChartTx } from '@/types'
 import type { TxLog, TxState } from '@/types/icu'
 import { useEffect, useRef, useState } from 'react'
-import { BORDER_COLOR } from './icu-chart-table'
 
 type TableCellInputProps = {
   time: number
@@ -128,11 +127,11 @@ export default function IcuChartTableCell({
   }
 
   return (
-    <TableCell className={cn('h-2 p-0 leading-4', BORDER_COLOR)}>
+    <TableCell className={cn('p-0')}>
       <Input
         className={cn(
-          'rounded-none px-1 text-center focus-visible:border-2 focus-visible:border-primary focus-visible:ring-0',
-          hasOrder ? 'bg-red-200' : 'bg-gray-200',
+          'rounded-none border-none px-1 text-center focus-visible:ring-4 focus-visible:ring-primary',
+          hasOrder ? 'bg-rose-100' : '',
         )}
         value={txValue.icu_chart_tx_result ?? ''}
         onChange={handleInputChange('icu_chart_tx_result')}

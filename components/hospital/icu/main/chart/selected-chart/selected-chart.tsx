@@ -20,7 +20,7 @@ export default function SelectedChart({
 }) {
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
   return (
-    <div className="flex flex-col gap-2 p-2 pb-[48px]">
+    <div className="flex flex-col gap-4 p-2 pb-[48px]">
       <ChartInfos
         chartData={restChartData}
         icuUsersData={icuUsersData}

@@ -4,7 +4,6 @@ import { TableCell } from '@/components/ui/table'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined } from '@/types/icu'
-import { BORDER_COLOR } from './icu-chart-table'
 
 export default function IcuChartTableCellTitle({
   order,
@@ -28,19 +27,21 @@ export default function IcuChartTableCellTitle({
   return (
     <TableCell
       className={cn(
-        'hover:cursor-pointer hover:bg-gray-50',
-        BORDER_COLOR,
-        orderType === 'checklist' && 'bg-red-50',
-        orderType === 'fluid' && 'bg-blue-50',
-        orderType === 'injection' && 'bg-yellow-50',
-        orderType === 'test' && 'bg-orange-50',
-        orderType === 'manual' && 'bg-purple-50',
-        orderType === 'feed' && 'bg-green-50',
+        'flex w-[296px] cursor-pointer items-center justify-between gap-2 transition hover:opacity-70',
+        orderType === 'checklist' && 'bg-orange-50',
+        orderType === 'fluid' && 'bg-sky-50',
+        orderType === 'injection' && 'bg-pink-50',
+        orderType === 'test' && 'bg-amber-50',
+        orderType === 'manual' && 'bg-indigo-50',
+        orderType === 'feed' && 'bg-emerald-50',
       )}
       onClick={handleDialogOpen}
+      title={orderComment ?? ''}
     >
-      <span className="mr-1">{orderName}</span>
-      <span className="text-[10px] text-muted-foreground">{orderComment}</span>
+      <span className="whitespace-nowrap">{orderName}</span>
+      <span className="truncate text-xs text-muted-foreground">
+        {orderComment}
+      </span>
     </TableCell>
   )
 }
