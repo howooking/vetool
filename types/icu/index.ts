@@ -29,6 +29,18 @@ export type IcuChartJoined = Omit<
 }
 
 // !! overriding 오밋안써도 되는듯!
+export type IcuChartListJoined = Pick<
+  IcuChart,
+  | 'icu_chart_id'
+  | 'target_date'
+  | 'icu_chart_dx'
+  | 'icu_chart_cc'
+  | 'icu_chart_tags'
+> & {
+  patient_id: Pick<Patients, 'name'>
+  icu_io_id: string
+}
+
 export type IcuChartOrderJoined = IcuChartOrder & {
   icu_io_id: IcuIo
   icu_chart_order_tx_1: IcuChartTx | null
