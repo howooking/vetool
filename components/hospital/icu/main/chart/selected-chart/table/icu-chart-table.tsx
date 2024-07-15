@@ -8,13 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { HOURS } from '@/constants/hospital/icu/chart/time'
+import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { cn } from '@/lib/utils'
-import { IcuChartTx } from '@/types'
 import type { IcuChartOrderJoined, IcuUserList } from '@/types/icu'
 import IcuChartUpsertTxDialog from './tx/icu-chart-upsert-tx-dialog'
-
-// export const BORDER_COLOR = 'border-slate-200'
 
 export default function IcuChartTable({
   selectedChartOrders,
@@ -35,7 +32,7 @@ export default function IcuChartTable({
             />
           </TableHead>
 
-          {HOURS.map((time) => (
+          {TIMES.map((time) => (
             <TableHead className={cn('border text-center')} key={time}>
               {time.toString().padStart(2, '0')}
             </TableHead>
@@ -50,19 +47,22 @@ export default function IcuChartTable({
           <TableRow className={cn('divide-x')} key={order.icu_chart_order_id}>
             <IcuChartTableCellTitle order={order} />
 
-            {HOURS.map((hour, index) => {
+            {TIMES.map((time, index) => {
               const isDone =
                 order.icu_chart_order_time[index] === '1' &&
-                order[`icu_chart_order_tx_${hour}`] !== null
+                order[`icu_chart_order_tx_${time}`] !== null
               return (
                 <IcuChartTableCell
-                  key={hour}
-                  hour={hour}
-                  txData={order[`icu_chart_order_tx_${hour}`]}
+                  key={time}
+                  time={time}
+                  txData={order[`icu_chart_order_tx_${time}`]}
                   icuIoId={order.icu_io_id.icu_io_id}
-                  IcuChartOrderId={order.icu_chart_order_id}
+                  icuChartOrderId={order.icu_chart_order_id}
                   hasOrder={order.icu_chart_order_time[index] === '1'}
                   isDone={isDone}
+                  icuChartTxId={
+                    order[`icu_chart_order_tx_${time}`]?.icu_chart_tx_id
+                  }
                 />
               )
             })}

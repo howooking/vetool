@@ -21,8 +21,8 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/'
 import {
-  HOURS,
-  TX_ORDER_HOUR_INTERVALS,
+  TIMES,
+  TX_ORDER_TIME_INTERVALS,
 } from '@/constants/hospital/icu/chart/time'
 import { upsertOrder } from '@/lib/services/icu/create-new-order'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
@@ -218,13 +218,13 @@ export default function IcuChartOrderForm({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {['undefined', ...HOURS].map((hour) => (
+                    {['undefined', ...TIMES].map((time) => (
                       <SelectItem
-                        value={hour.toString()}
-                        key={hour}
+                        value={time.toString()}
+                        key={time}
                         className="text-xs"
                       >
-                        {hour === 'undefined' ? '시작 시간' : `${hour}시 시작`}
+                        {time === 'undefined' ? '시작 시간' : `${time}시 시작`}
                       </SelectItem>
                     ))}
                   </SelectGroup>
@@ -241,7 +241,7 @@ export default function IcuChartOrderForm({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {['undefined', ...TX_ORDER_HOUR_INTERVALS].map(
+                    {['undefined', ...TX_ORDER_TIME_INTERVALS].map(
                       (interval) => (
                         <SelectItem
                           value={interval.toString()}
@@ -278,19 +278,19 @@ export default function IcuChartOrderForm({
         </div>
 
         <div className="col-span-2 flex w-full justify-between">
-          {HOURS.map((hour, index) => (
+          {TIMES.map((time, index) => (
             <Button
               tabIndex={-1}
               type="button"
               variant="outline"
-              key={hour}
+              key={time}
               className={cn(
                 orderTime[index] === '1' && 'bg-rose-100 hover:bg-rose-200',
                 'h-6 w-7 px-3 py-2 text-xs',
               )}
               onClick={handleTimeToggle(index)}
             >
-              {hour}
+              {time}
             </Button>
           ))}
         </div>

@@ -227,7 +227,10 @@ export type Database = {
           caution: string
           created_at: string
           hos_id: string
+          icu_chart_cc: string | null
+          icu_chart_dx: string | null
           icu_chart_id: string
+          icu_chart_tags: string
           icu_io_id: string
           main_vet: string
           memo_a: string
@@ -243,7 +246,10 @@ export type Database = {
           caution?: string
           created_at?: string
           hos_id: string
+          icu_chart_cc?: string | null
+          icu_chart_dx?: string | null
           icu_chart_id?: string
+          icu_chart_tags?: string
           icu_io_id: string
           main_vet: string
           memo_a?: string
@@ -259,7 +265,10 @@ export type Database = {
           caution?: string
           created_at?: string
           hos_id?: string
+          icu_chart_cc?: string | null
+          icu_chart_dx?: string | null
           icu_chart_id?: string
+          icu_chart_tags?: string
           icu_io_id?: string
           main_vet?: string
           memo_a?: string
@@ -641,7 +650,7 @@ export type Database = {
           icu_chart_order_id: string | null
           icu_chart_tx_comment: string | null
           icu_chart_tx_id: string
-          icu_chart_tx_images: string[]
+          icu_chart_tx_images: string[] | null
           icu_chart_tx_log: Json[] | null
           icu_chart_tx_result: string | null
           icu_io_id: string | null
@@ -653,7 +662,7 @@ export type Database = {
           icu_chart_order_id?: string | null
           icu_chart_tx_comment?: string | null
           icu_chart_tx_id?: string
-          icu_chart_tx_images: string[]
+          icu_chart_tx_images?: string[] | null
           icu_chart_tx_log?: Json[] | null
           icu_chart_tx_result?: string | null
           icu_io_id?: string | null
@@ -665,7 +674,7 @@ export type Database = {
           icu_chart_order_id?: string | null
           icu_chart_tx_comment?: string | null
           icu_chart_tx_id?: string
-          icu_chart_tx_images?: string[]
+          icu_chart_tx_images?: string[] | null
           icu_chart_tx_log?: Json[] | null
           icu_chart_tx_result?: string | null
           icu_io_id?: string | null
