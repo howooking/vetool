@@ -16,6 +16,7 @@ export default function IcuChartTableCell({
   hasOrder,
   isDone,
   icuChartTxId,
+  isPreview,
 }: {
   time: number
   txData: IcuChartTx | null
@@ -24,6 +25,7 @@ export default function IcuChartTableCell({
   hasOrder: boolean
   isDone: boolean
   icuChartTxId?: string
+  isPreview?: boolean
 }) {
   const { refresh } = useRouter()
   const [isDeleting, setIsDeleting] = useState(false)
@@ -104,7 +106,7 @@ export default function IcuChartTableCell({
           hasOrder && 'bg-rose-50',
           isDone && 'bg-green-50',
         )}
-        disabled={isDeleting}
+        disabled={isDeleting || isPreview}
         value={briefTxResultInput}
         onChange={(e) => setBriefTxResultInput(e.target.value)}
         onBlur={handleUpsertBriefTxResultInput}

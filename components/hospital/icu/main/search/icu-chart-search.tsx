@@ -7,9 +7,10 @@ import type { IcuChartListJoined } from '@/types/icu'
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
-export default function IcuChartSearch() {
+export default function IcuChartSearch({ register }: { register?: boolean }) {
   const [chartList, setChartList] = useState<IcuChartListJoined[][]>([])
 
+  // Icu_Io_Id로 그룹화
   const groupByIcuIoId = (data: IcuChartListJoined[]) => {
     const groupedMap = new Map<string, IcuChartListJoined[]>()
 
@@ -31,7 +32,7 @@ export default function IcuChartSearch() {
         setChartList(groupByIcuIoId(selectedChartList))
       }
     },
-    300,
+    500,
   )
 
   return (
@@ -40,7 +41,7 @@ export default function IcuChartSearch() {
         placeholder="환자명, DX, CC를 통해 차트를 검색하세요"
         onChange={handleSearch}
       />
-      <IcuChartDataTable data={chartList} />
+      <IcuChartDataTable data={chartList} register={register} />
     </div>
   )
 }

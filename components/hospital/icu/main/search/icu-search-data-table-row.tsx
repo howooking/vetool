@@ -1,6 +1,11 @@
 import { Button } from '@/components/ui/button'
+import { toast } from '@/components/ui/use-toast'
+import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart'
+import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
+import { useIcuSelectedChartStore } from '@/lib/store/icu/icu-selected-chart'
+import { IcuChartOrderJoined } from '@/types/icu'
 import { ChevronDown } from 'lucide-react'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 export default function IcuSearchDataTableRow({
   name,
@@ -9,8 +14,8 @@ export default function IcuSearchDataTableRow({
   targetDate,
   chartId,
   setIsDialogOpen,
-  setChartId,
   onRefClick,
+  register,
 }: {
   name: string
   dx: string | null
@@ -18,15 +23,56 @@ export default function IcuSearchDataTableRow({
   targetDate: string
   chartId: string
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
-  setChartId: Dispatch<SetStateAction<string>>
   onRefClick?: () => void
+  register?: boolean
 }) {
   const rowData = [name, dx, cc, targetDate]
-  const handleButtonClick = () => {
+  const [selectedChartOrders, setSelectedChartOrders] = useState<
+    IcuChartOrderJoined[]
+  >([])
+
+  const { setSelectedTargetDate, setSelectedIcuChartId, setCopiedChartOrder } =
+    useIcuSelectedChartStore()
+
+  useEffect(() => {
+    const fetchChartOrderList = async () => {
+      const fetchedChartOrders = await selectedChartOrderList(chartId)
+
+      const selectedChartOrders = fetchedChartOrders.sort(
+        (prev, next) =>
+          ORDER_OF_ORDERS.findIndex(
+            (itme) => itme === prev.icu_chart_order_type,
+          ) -
+          ORDER_OF_ORDERS.findIndex(
+            (itme) => itme === next.icu_chart_order_type,
+          ),
+      )
+
+      setSelectedChartOrders(selectedChartOrders)
+    }
+
+    fetchChartOrderList()
+  }, [])
+
+  const handleOpenChartPreviewModal = () => {
     if (setIsDialogOpen) {
       setIsDialogOpen(true)
-      setChartId(chartId)
+      setSelectedIcuChartId(chartId)
+      setSelectedTargetDate(targetDate)
     }
+  }
+
+  const handleCopyButtonClick = () => {
+    if (register) {
+      return
+    }
+    setCopiedChartOrder(selectedChartOrders)
+    setSelectedIcuChartId(chartId)
+
+    toast({
+      title: '차트 복사 완료',
+      description: '해당 차트가 클립보드에 복사되었습니다',
+    })
   }
 
   return (
@@ -41,8 +87,14 @@ export default function IcuSearchDataTableRow({
       ))}
 
       <div className="flex w-full justify-center">
-        <Button onClick={handleButtonClick} className="h-6">
-          차트보기
+        <Button onClick={handleCopyButtonClick} className="h-6">
+          {register ? '선택' : '복사'}
+        </Button>
+      </div>
+
+      <div className="flex w-full justify-center">
+        <Button onClick={handleOpenChartPreviewModal} className="h-6">
+          오더 보기
         </Button>
       </div>
 

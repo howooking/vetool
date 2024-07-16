@@ -1,5 +1,11 @@
 'use client'
 
+import IcuChartTypeSelector from '@/components/hospital/icu/header/register-dialog/icu-chart-type-selector'
+import IcuRegisterPatientForm from '@/components/hospital/icu/header/register-dialog/icu-register-patient-form'
+import IcuChartSearch from '@/components/hospital/icu/main/search/icu-chart-search'
+import { patientsColumns } from '@/components/hospital/patients/patient-columns'
+import PatientForm from '@/components/hospital/patients/patient-form'
+import RegisterDialogHeader from '@/components/hospital/patients/register-dialog-header'
 import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -9,11 +15,6 @@ import { cn } from '@/lib/utils'
 import type { IcuUserList } from '@/types/icu'
 import type { PatientData, PatientDataTable } from '@/types/patients'
 import { useEffect, useState } from 'react'
-import { patientsColumns } from '../../../patients/patient-columns'
-import PatientForm from '../../../patients/patient-form'
-import RegisterDialogHeader from '../../../patients/register-dialog-header'
-import IcuRegisterPatientForm from './icu-register-patient-form'
-import IcuChartTypeSelector from './icu-chart-type-selector'
 
 export default function IcuRegisterDialog({
   hosId,
@@ -116,6 +117,8 @@ export default function IcuRegisterDialog({
               />
             )}
             {step === 'selectChartType' && <IcuChartTypeSelector />}
+
+            {step === 'chartSearch' && <IcuChartSearch register />}
           </TabsContent>
 
           <TabsContent value="register">
