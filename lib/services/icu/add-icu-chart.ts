@@ -25,7 +25,7 @@ export const copyPrevChart = async (
 
   if (rpcError) {
     console.log(rpcError)
-    redirect(`/error?message=${rpcError.message}`)
+    return { error: rpcError }
   }
 
   const { newIcuChartId, prevIcuChartId, icuIoId } = returningIcuChartIds as {
@@ -43,7 +43,7 @@ export const copyPrevChart = async (
 
   if (preSelectedChartOrdersDataError) {
     console.log(preSelectedChartOrdersDataError)
-    throw new Error(preSelectedChartOrdersDataError.message)
+    return { error: preSelectedChartOrdersDataError }
   }
 
   preSelectedChartOrdersData.forEach(async (order) => {
@@ -59,9 +59,10 @@ export const copyPrevChart = async (
 
     if (icuChartOrderError) {
       console.log(icuChartOrderError)
-      redirect(`/error?message=${icuChartOrderError.message}`)
+      return { error: icuChartOrderError }
     }
   })
+  return { error: null }
 }
 
 export const addDefaultChart = async (
@@ -84,7 +85,7 @@ export const addDefaultChart = async (
 
   if (rpcError) {
     console.log(rpcError)
-    redirect(`/error?message=${rpcError.message}`)
+    return { error: rpcError }
   }
 
   const { newIcuChartId, icuIoId } = returningIcuChartIds as {
@@ -105,7 +106,9 @@ export const addDefaultChart = async (
 
     if (icuChartOrderError) {
       console.log(icuChartOrderError)
-      redirect(`/error?message=${icuChartOrderError.message}`)
+      return { error: icuChartOrderError }
     }
   })
+
+  return { error: null }
 }

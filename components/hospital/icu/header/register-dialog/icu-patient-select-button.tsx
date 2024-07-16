@@ -5,20 +5,27 @@ import {
   useIcuRegisteringPatient,
   usePatientRegisterStep,
 } from '@/lib/store/icu/icu-register'
+import { cn } from '@/lib/utils'
+import { LoaderCircle } from 'lucide-react'
+import { useState } from 'react'
 
 export default function IcuPatientSelectButton({
   patientId,
   isIcu,
   birth,
+  patientName,
 }: {
   patientId: string
   isIcu: boolean
   birth: string
+  patientName: string
 }) {
   const { setStep } = usePatientRegisterStep()
   const { setRegisteringPatient } = useIcuRegisteringPatient()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handlePatientClick = async () => {
+    setIsLoading(true)
     const icuIoData = await getIcuIoByPatientId(patientId)
 
     if (icuIoData?.in_date && !icuIoData?.out_date) {
@@ -27,13 +34,16 @@ export default function IcuPatientSelectButton({
         title: '입원중인 환자',
         description: '이미 입원중인 환자입니다',
       })
+      setIsLoading(false)
       return
     }
 
+    setIsLoading(false)
     setStep('icuRegister')
     setRegisteringPatient({
       patientId,
       birth,
+      patientName,
     })
   }
 
@@ -43,9 +53,14 @@ export default function IcuPatientSelectButton({
       variant="outline"
       size="sm"
       onClick={handlePatientClick}
-      className={isIcu ? 'block' : 'hidden'}
+      className={cn(isIcu ? 'block' : 'hidden', 'flex w-12')}
+      disabled={isLoading}
     >
-      선택
+      {isLoading ? (
+        <LoaderCircle size={12} className={cn('ml-1 animate-spin')} />
+      ) : (
+        '선택'
+      )}
     </Button>
   )
 }

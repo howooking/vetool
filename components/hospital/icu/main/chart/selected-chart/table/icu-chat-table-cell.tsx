@@ -1,148 +1,120 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
+import { deleteIcuChartTx } from '@/lib/services/icu/upsert-chart-tx'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
-import { IcuChartTx } from '@/types'
-import { TxLog, TxState } from '@/types/icu'
-import { format } from 'date-fns'
+import type { IcuChartTx } from '@/types'
+import type { TxLog } from '@/types/icu'
+import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-
-type TableCellInputProps = {
-  time: number
-  txData: IcuChartTx | null
-  ioId: string
-  chartOrderId: string
-  hasOrder: boolean
-}
 
 export default function IcuChartTableCell({
   time,
   txData,
-  ioId,
-  chartOrderId,
+  icuIoId,
+  icuChartOrderId,
   hasOrder,
-}: TableCellInputProps) {
-  const txId = txData?.icu_chart_tx_id!
-  const { setUpsertTxState } = useUpsertTxStore()
-  const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  const [txValue, setTxValue] = useState<TxState>({
-    icu_chart_tx_result: txData?.icu_chart_tx_result ?? '',
-    icu_chart_tx_comment: txData?.icu_chart_tx_comment ?? '',
-    icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
-    icu_chart_tx_log: (txData?.icu_chart_tx_log as TxLog[])?.slice(0, 5) ?? [],
-    user_id: null,
-  })
+  isDone,
+  icuChartTxId,
+}: {
+  time: number
+  txData: IcuChartTx | null
+  icuIoId: string
+  icuChartOrderId: string
+  hasOrder: boolean
+  isDone: boolean
+  icuChartTxId?: string
+}) {
+  const { refresh } = useRouter()
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [briefTxResultInput, setBriefTxResultInput] = useState(
+    txData?.icu_chart_tx_result ?? '',
+  )
+  const { setStep, setTxLocalState, step } = useUpsertTxStore()
 
   useEffect(() => {
-    setTxValue({
-      icu_chart_tx_result: txData?.icu_chart_tx_result?.trim() ?? '',
-      icu_chart_tx_comment: txData?.icu_chart_tx_comment?.trim() ?? '',
-      icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
-      icu_chart_tx_log: (txData?.icu_chart_tx_log as TxLog[]) ?? [],
-      user_id: null,
-    })
-  }, [txData])
+    if (step === 'closed') {
+      setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
+    }
+  }, [txData?.icu_chart_tx_result, step])
 
-  const handleInputChange =
-    (field: keyof TxState) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setTxValue((prev) => ({ ...prev, [field]: e.target.value }))
+  const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  const handleUpsertBriefTxResultInput = async () => {
+    if (icuChartTxId && briefTxResultInput.trim() === '') {
+      if (confirm('처치결과를 삭제하시겠습니까?')) {
+        setIsDeleting(true)
+
+        await deleteIcuChartTx(icuChartTxId, icuChartOrderId, time)
+
+        setIsDeleting(false)
+        refresh()
+        return
+      } else {
+        setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
+        return
+      }
     }
 
-  const handleTxBlur = async () => {
-    if (
-      txValue.icu_chart_tx_result === (txData?.icu_chart_tx_result ?? '') &&
-      txValue.icu_chart_tx_comment === (txData?.icu_chart_tx_comment ?? '')
-    ) {
+    if ((txData?.icu_chart_tx_result ?? '') === briefTxResultInput.trim()) {
+      setBriefTxResultInput(briefTxResultInput.trim())
       return
     }
 
-    setUpsertTxState({
-      txState: txValue,
-      txId: txId,
-      ioId: ioId,
-      chartOrderId: chartOrderId,
-      time: time,
-      step: 'selectTxUser',
+    setTxLocalState({
+      time,
+      txResult: briefTxResultInput.trim(),
+      icuChartOrderId,
+      icuIoId,
+      txId: icuChartTxId,
     })
+    setStep('seletctUser')
   }
 
-  // 0.3초 이상 Mouse Down시 step 1
-  const handleTouchStart = (e: React.TouchEvent) => {
-    e.preventDefault()
-
-    setUpsertTxState({
-      ioId: ioId,
-      chartOrderId: chartOrderId,
-      time: time,
-      txId: txId,
-
-      txState: {
-        ...txValue,
-        user_id: null,
-        icu_chart_tx_result: txData?.icu_chart_tx_result ?? '',
-        icu_chart_tx_comment: txData?.icu_chart_tx_comment ?? '',
-        icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
-        icu_chart_tx_log: (txData?.icu_chart_tx_log as TxLog[]) ?? [],
-      },
+  const handleLongClickStart = () => {
+    setTxLocalState({
+      icuChartOrderId,
+      icuIoId,
+      txResult: txData?.icu_chart_tx_result,
+      txComment: txData?.icu_chart_tx_comment,
+      txImages: txData?.icu_chart_tx_images,
+      txId: icuChartTxId,
+      time,
+      txLog: txData?.icu_chart_tx_log as TxLog[] | null,
+      txUserId: txData?.user_id,
     })
 
     longPressTimeoutRef.current = setTimeout(() => {
-      setUpsertTxState({ step: 'insertTxData' })
+      setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
+      setStep('detailInsert')
     }, 300)
   }
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    e.preventDefault()
-
-    if (longPressTimeoutRef.current) {
-      clearTimeout(longPressTimeoutRef.current)
-    }
-  }
-
-  const handleMouseDown = () => {
-    setUpsertTxState({
-      ioId: ioId,
-      chartOrderId: chartOrderId,
-      time: time,
-      txId: txId,
-      txState: {
-        ...txValue,
-        user_id: null,
-        icu_chart_tx_result: txData?.icu_chart_tx_result ?? '',
-        icu_chart_tx_comment: txData?.icu_chart_tx_comment ?? '',
-        icu_chart_tx_images: txData?.icu_chart_tx_images ?? [],
-        icu_chart_tx_log: (txData?.icu_chart_tx_log as TxLog[]) ?? [],
-      },
-    })
-
-    longPressTimeoutRef.current = setTimeout(() => {
-      setUpsertTxState({ step: 'insertTxData' })
-    }, 300)
-  }
-
-  const handleMouseUp = () => {
+  const handleLongClickEnd = () => {
     if (longPressTimeoutRef.current) {
       clearTimeout(longPressTimeoutRef.current)
     }
   }
 
   return (
-    <TableCell className="h-2 border-black p-0 leading-4">
+    <TableCell className="p-0">
       <Input
         className={cn(
-          'rounded-none px-1 text-center focus-visible:border-2 focus-visible:border-primary focus-visible:ring-0',
-          hasOrder ? 'bg-red-200' : 'bg-gray-200',
+          'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
+          hasOrder && 'bg-rose-50',
+          isDone && 'bg-green-50',
         )}
-        value={txValue.icu_chart_tx_result ?? ''}
-        onChange={handleInputChange('icu_chart_tx_result')}
-        onBlur={handleTxBlur}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchEnd}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        disabled={isDeleting}
+        value={briefTxResultInput}
+        onChange={(e) => setBriefTxResultInput(e.target.value)}
+        onBlur={handleUpsertBriefTxResultInput}
+        onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+        onTouchStart={handleLongClickStart}
+        onTouchEnd={handleLongClickEnd}
+        onTouchCancel={handleLongClickEnd}
+        onMouseDown={handleLongClickStart}
+        onMouseUp={handleLongClickEnd}
+        onMouseLeave={handleLongClickEnd}
       />
     </TableCell>
   )

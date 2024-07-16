@@ -38,8 +38,8 @@ import {
   FELINE_BREEDS,
   SEX,
 } from '@/constants/hospital/register/breed'
+import { insertPatient } from '@/lib/services/patient/insert-patient'
 import { useIcuRegisteringPatient } from '@/lib/store/icu/icu-register'
-import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
@@ -51,7 +51,6 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { registerPatientFormSchema } from './schema'
-import { insertPatient } from '@/lib/services/patient/insert-patient'
 
 export default function PatientForm({
   hosId,
@@ -110,6 +109,7 @@ export default function PatientForm({
       setRegisteringPatient({
         patientId,
         birth: format(values.birth, 'yyyy-MM-dd'),
+        patientName: values.name,
       })
 
     setIsSubmitting(false)

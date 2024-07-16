@@ -1,3 +1,5 @@
+import IcuIconButton from '@/components/common/icu-icon-button'
+import WarningMessage from '@/components/common/warning-message'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -23,28 +25,36 @@ export default function DeleteChartDialog({
   icuChartId,
   name,
   icuIoId,
+  patientId,
 }: {
   icuChartId: string
   name: string
   icuIoId: string
+  patientId: string
 }) {
   const { target_date } = useParams()
   const [isOpen, setIsOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeletingAllCharts, setIsDeletingAllCharts] = useState(false)
   const { refresh } = useRouter()
-  const { setSelectedPatientId } = useIcuSelectedPatientStore()
+  const { setSelectedPatient } = useIcuSelectedPatientStore()
 
   const handleDeleteChart = async () => {
     setIsDeleting(true)
 
-    await deleteChart(icuChartId)
+    const isIcuIoDeleted = await deleteChart(
+      icuChartId,
+      icuIoId,
+      target_date as string,
+      patientId,
+    )
 
     toast({
       title: '차트가 삭제되었습니다',
     })
 
     setIsDeleting(false)
+    isIcuIoDeleted && setSelectedPatient(null)
     setIsOpen(false)
     refresh()
   }
@@ -58,7 +68,7 @@ export default function DeleteChartDialog({
     })
 
     setIsDeletingAllCharts(false)
-    setSelectedPatientId(null)
+    setSelectedPatient(null)
     setIsOpen(false)
     refresh()
   }
@@ -66,16 +76,15 @@ export default function DeleteChartDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          <Trash2 className="h-3 w-3" />
-        </Button>
+        <IcuIconButton icon={Trash2} />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{name}의 차트를 삭제하시겠습니까?</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="flex flex-col gap-1">
             <p>선택차트삭제 : {target_date}날 차트만 삭제합니다</p>
-            <p>모든차트삭제 : {name}의 모든차트를 삭제합니다</p>
+            <p>모든차트삭제 : 입원기간동안의 차트들을 모두 삭제합니다</p>
+            <WarningMessage text="해당작업은 실행 후 되될릴 수 없습니다." />
           </DialogDescription>
         </DialogHeader>
 

@@ -5,11 +5,14 @@ import { differenceInDays, format } from 'date-fns'
 import AddIcuChartDialogs from './add-icu-chart-dialogs/add-icu-chart-dialogs'
 
 export default function SelectedChartNotFound({
-  selectedPatientId,
+  selectedPatient,
   targetDate,
   isPatientIn,
 }: {
-  selectedPatientId: string
+  selectedPatient: {
+    patientName: string
+    patientId: string
+  }
   targetDate: string
   isPatientIn: boolean
 }) {
@@ -21,8 +24,9 @@ export default function SelectedChartNotFound({
       <NoResult
         title={
           <>
-            선택한 날짜의 차트가 없습니다 <br /> 선택한 날짜에 아직 입원을 하지
-            않았거나 이미 퇴원을 하였습니다
+            {selectedPatient.patientName}은(는) 선택한 날짜의 차트가 없습니다{' '}
+            <br /> 선택한 날짜에 아직 입원을 하지 않았거나 이미 퇴원을
+            하였습니다
           </>
         }
       />
@@ -35,5 +39,5 @@ export default function SelectedChartNotFound({
     )
   }
 
-  return <AddIcuChartDialogs selectedPatientId={selectedPatientId} />
+  return <AddIcuChartDialogs selectedPatient={selectedPatient} />
 }

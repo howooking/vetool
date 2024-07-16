@@ -58,7 +58,7 @@ export default function Caution({
         onChange={(e) => setCautionInput(e.target.value)}
         onBlur={handleUpdateDiagnosis}
         onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-        className="w-full pl-16"
+        className="w-full pl-14"
         title={caution}
       />
     </div>

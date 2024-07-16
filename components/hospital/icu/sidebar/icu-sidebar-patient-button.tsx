@@ -11,12 +11,14 @@ export default function IcuSidebarPatientButton({
 }: {
   data: IcuIoPatientJoined
 }) {
-  const { selectedPatientId, setSelectedPatientId } =
-    useIcuSelectedPatientStore()
+  const { selectedPatient, setSelectedPatient } = useIcuSelectedPatientStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
 
   const handlePatientButtonClick = (data: IcuIoPatientJoined) => {
-    setSelectedPatientId(data.patient_id.patient_id)
+    setSelectedPatient({
+      patientId: data.patient_id.patient_id,
+      patientName: data.patient_id.name,
+    })
     setSelectedIcuMainView('chart')
   }
 
@@ -26,7 +28,7 @@ export default function IcuSidebarPatientButton({
       size="sm"
       className={cn(
         'flex w-full justify-between gap-2',
-        selectedPatientId === data.patient_id.patient_id && 'bg-muted',
+        selectedPatient?.patientId === data.patient_id.patient_id && 'bg-muted',
       )}
       onClick={() => handlePatientButtonClick(data)}
     >

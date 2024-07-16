@@ -1,3 +1,4 @@
+import IcuIconButton from '@/components/common/icu-icon-button'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -12,7 +13,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { toggleOutPatient } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
-import { ExternalLink, LoaderCircle } from 'lucide-react'
+import { LoaderCircle, UserRoundMinus, UserRoundPlus } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 export default function OutPatientDialog({
@@ -48,9 +49,7 @@ export default function OutPatientDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          <ExternalLink className="h-3 w-3" />
-        </Button>
+        <IcuIconButton icon={isPatientOut ? UserRoundPlus : UserRoundMinus} />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
@@ -59,7 +58,7 @@ export default function OutPatientDialog({
               ? `${name}의 퇴원을 취소하시겠습니까?`
               : `${name}을(를) ${target_date}에 퇴원시키시겠습니까?`}
           </DialogTitle>
-          <DialogDescription>해당 작업은 번복이 가능합니다</DialogDescription>
+          <DialogDescription>해당 작업은 되돌릴 수 있습니다</DialogDescription>
         </DialogHeader>
 
         <DialogFooter>

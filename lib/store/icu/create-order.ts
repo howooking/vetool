@@ -2,28 +2,22 @@ import { IcuChartOrderJoined } from '@/types/icu'
 import { create } from 'zustand'
 
 type IcuCreateOrderState = {
-  isOpen: boolean
+  isModalOpen: boolean
   isEditMode?: boolean
-  chartOrder: IcuChartOrderJoined
-  setIsOpen: () => void
+  selectedChartOrder: IcuChartOrderJoined
+  toggleModal: () => void
   setIsEditMode: (isEditMode: boolean) => void
   setChartOrder: (chartOrder: IcuChartOrderJoined) => void
   resetState: () => void
 }
 
-const initialState: {
-  isEditMode: boolean
-  chartOrder: IcuChartOrderJoined
-} = {
-  isEditMode: false,
-  chartOrder: {} as IcuChartOrderJoined,
-}
-
 export const useCreateOrderStore = create<IcuCreateOrderState>((set) => ({
-  ...initialState,
-  isOpen: false,
-  setIsOpen: () => set((state) => ({ isOpen: !state.isOpen })),
+  isModalOpen: false,
+  isEditMode: false,
+  selectedChartOrder: {} as IcuChartOrderJoined,
+  toggleModal: () => set((state) => ({ isModalOpen: !state.isModalOpen })),
   setIsEditMode: (isEditMode) => set({ isEditMode }),
-  setChartOrder: (chartOrder) => set({ chartOrder }),
-  resetState: () => set(initialState),
+  setChartOrder: (selectedChartOrder) => set({ selectedChartOrder }),
+  resetState: () =>
+    set({ isEditMode: false, selectedChartOrder: {} as IcuChartOrderJoined }),
 }))

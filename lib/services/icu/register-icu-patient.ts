@@ -9,8 +9,9 @@ import { redirect } from 'next/navigation'
 export const registerIcuPatient = async (
   hosId: string,
   registeringPatient: {
-    patientId: string | null
-    birth: string | null
+    patientId: string
+    birth: string
+    patientName: string
   },
   dx: string,
   cc: string,

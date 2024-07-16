@@ -33,9 +33,9 @@ import {
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import type { IcuVetList } from '@/types/icu'
+import type { IcuUserList } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { addDays, format } from 'date-fns'
+import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -44,6 +44,7 @@ import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { registerIcuPatientFormSchema } from './schema'
+import Image from 'next/image'
 
 export default function IcuRegisterPatientForm({
   hosId,
@@ -54,7 +55,7 @@ export default function IcuRegisterPatientForm({
 }: {
   hosId: string
   groupList: string[]
-  vetsData: IcuVetList[]
+  vetsData: IcuUserList[]
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
   tab: string
 }) {
@@ -64,8 +65,14 @@ export default function IcuRegisterPatientForm({
     to: new Date(),
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { registeringPatient } = useIcuRegisteringPatient()
-  const { setSelectedPatientId } = useIcuSelectedPatientStore()
+  const { registeringPatient } = useIcuRegisteringPatient() as {
+    registeringPatient: {
+      patientId: string
+      birth: string
+      patientName: string
+    }
+  }
+  const { setSelectedPatient } = useIcuSelectedPatientStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setStep } = usePatientRegisterStep()
 
@@ -114,7 +121,10 @@ export default function IcuRegisterPatientForm({
 
     setIsDialogOpen(false)
     setIsSubmitting(false)
-    setSelectedPatientId(registeringPatient.patientId)
+    setSelectedPatient({
+      patientId: registeringPatient.patientId,
+      patientName: registeringPatient.patientName,
+    })
     setSelectedIcuMainView('chart')
     push(`${format(in_date, 'yyyy-MM-dd')}`)
     refresh()
@@ -276,8 +286,18 @@ export default function IcuRegisterPatientForm({
                 <SelectContent>
                   {vetsData.map((vet) => (
                     <SelectItem key={vet.user_id} value={vet.user_id}>
-                      <span>{vet.name}</span>
-                      <span className="ml-2 text-xs">{vet.position}</span>
+                      <div className="flex items-center gap-2">
+                        <Image
+                          unoptimized
+                          src={vet.avatar_url ?? ''}
+                          alt={vet.name}
+                          width={20}
+                          height={20}
+                          className="rounded-full"
+                        />
+                        <span>{vet.name}</span>
+                        <span className="text-xs">({vet.position})</span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -310,10 +330,20 @@ export default function IcuRegisterPatientForm({
                 <SelectContent>
                   {vetsData.map((vet) => (
                     <SelectItem key={vet.user_id} value={vet.user_id}>
-                      <span>{vet.name}</span>
-                      <span className="ml-2 text-xs">
-                        {vet.position ?? '미분류'}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <Image
+                          unoptimized
+                          src={vet.avatar_url ?? ''}
+                          alt={vet.name}
+                          width={20}
+                          height={20}
+                          className="rounded-full"
+                        />
+                        <span>{vet.name}</span>
+                        <span className="text-xs">
+                          ({vet.position ?? '미분류'})
+                        </span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>

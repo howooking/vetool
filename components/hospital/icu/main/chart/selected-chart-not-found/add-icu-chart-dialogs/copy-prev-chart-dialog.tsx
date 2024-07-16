@@ -18,10 +18,13 @@ import { useState } from 'react'
 
 export default function CopyPrevChartDialog({
   targetDate,
-  selectedPatientId,
+  selectedPatient,
 }: {
   targetDate: string
-  selectedPatientId: string
+  selectedPatient: {
+    patientName: string
+    patientId: string
+  }
 }) {
   const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -30,7 +33,18 @@ export default function CopyPrevChartDialog({
   const handleCopyPrevSelectedChart = async () => {
     setIsSubmitting(true)
 
-    await copyPrevChart(targetDate, selectedPatientId)
+    const { error } = await copyPrevChart(targetDate, selectedPatient.patientId)
+
+    if (error) {
+      toast({
+        title: '전날 차트를 복사할 수 없습니다',
+        description: '전날 차트가 있는지 확인해주세요',
+        variant: 'destructive',
+      })
+      setIsSubmitting(false)
+      setIsDialogOpen(false)
+      return
+    }
 
     toast({
       title: '전날 차트를 복사하였습니다',

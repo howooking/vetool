@@ -6,8 +6,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { usePatientRegisterStep } from '@/lib/store/icu/icu-register'
 import { cn } from '@/lib/utils'
-import type { Owner } from '@/types'
-import type { IcuVetList } from '@/types/icu'
+import type { IcuUserList } from '@/types/icu'
 import type { PatientData, PatientDataTable } from '@/types/patients'
 import { useEffect, useState } from 'react'
 import { patientsColumns } from '../../../patients/patient-columns'
@@ -24,7 +23,7 @@ export default function IcuRegisterDialog({
   hosId: string
   patientsData: PatientData[]
   groupList: string[]
-  vetsData: IcuVetList[]
+  vetsData: IcuUserList[]
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { step, setStep } = usePatientRegisterStep()
@@ -119,10 +118,6 @@ export default function IcuRegisterDialog({
           </TabsContent>
 
           <TabsContent value="register">
-            {/* {step === 'ownerSearch' && (
-              <OwnerSearch ownersData={ownersData} setStep={setStep} />
-            )}
-            {step === 'ownerRegister' && <OwnerForm setStep={setStep} />} */}
             {step === 'patientRegister' && (
               <PatientForm
                 setStep={setStep}

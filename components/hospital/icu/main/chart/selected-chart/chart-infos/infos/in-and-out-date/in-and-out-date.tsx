@@ -16,7 +16,7 @@ export default function InAndOutDate({
   outDate: string | null
 }) {
   return (
-    <div className="flex gap-2">
+    <div className="flex w-full gap-2">
       <Indate inDate={inDate} />
 
       {isPatientOut ? (

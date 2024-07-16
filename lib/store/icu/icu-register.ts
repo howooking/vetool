@@ -2,23 +2,26 @@ import { create } from 'zustand'
 
 type RegisteringPatientState = {
   registeringPatient: {
-    patientId: string | null
-    birth: string | null
-  }
-  setRegisteringPatient: (patient: { patientId: string; birth: string }) => void
+    patientId: string
+    birth: string
+    patientName: string
+  } | null
+  setRegisteringPatient: (patient: {
+    patientId: string
+    birth: string
+    patientName: string
+  }) => void
 }
 
 export const useIcuRegisteringPatient = create<RegisteringPatientState>(
   (set) => ({
-    registeringPatient: {
-      patientId: null,
-      birth: null,
-    },
+    registeringPatient: null,
     setRegisteringPatient: (patient) =>
       set({
         registeringPatient: {
           patientId: patient.patientId,
           birth: patient.birth,
+          patientName: patient.patientName,
         },
       }),
   }),

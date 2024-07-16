@@ -6,7 +6,7 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoPatientJoined,
-  IcuVetList,
+  IcuUserList,
 } from '@/types/icu'
 import { useMemo } from 'react'
 import SelectedChartNotFound from './selected-chart-not-found/selected-chart-not-found'
@@ -24,28 +24,26 @@ const ORDER_OF_ORDERS = [
 export default function IcuChart({
   icuChartData,
   icuChartOrderData,
-  vetsData,
+  icuUsersData,
   targetDate,
   icuIoData,
 }: {
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
-  vetsData: IcuVetList[]
+  icuUsersData: IcuUserList[]
   targetDate: string
   icuIoData: IcuIoPatientJoined[]
 }) {
-  const { selectedPatientId } = useIcuSelectedPatientStore()
+  const { selectedPatient } = useIcuSelectedPatientStore()
 
-  // 선택된 환자의 차트데이터
   const selectedChart = useMemo(
     () =>
       icuChartData.find(
-        (chart) => chart.patient_id.patient_id === selectedPatientId,
+        (chart) => chart.patient_id.patient_id === selectedPatient?.patientId,
       ),
-    [icuChartData, selectedPatientId],
+    [icuChartData, selectedPatient],
   )
 
-  // 선택된 차트의 오더들 타입 순서에 맞게 필터링
   const selectedChartOrders = useMemo(
     () =>
       icuChartOrderData
@@ -64,19 +62,23 @@ export default function IcuChart({
 
   const isPatientIn = useMemo(
     () =>
-      icuIoData.some((io) => io.patient_id.patient_id === selectedPatientId),
-    [icuIoData, selectedPatientId],
+      icuIoData.some(
+        (io) => io.patient_id.patient_id === selectedPatient?.patientId,
+      ),
+    [icuIoData, selectedPatient?.patientId],
   )
 
   const isPatientOut = useMemo(
     () =>
       icuIoData.some(
-        (io) => io.patient_id.patient_id === selectedPatientId && io.out_date,
+        (io) =>
+          io.patient_id.patient_id === selectedPatient?.patientId &&
+          io.out_date,
       ),
-    [icuIoData, selectedPatientId],
+    [icuIoData, selectedPatient],
   )
 
-  if (!selectedPatientId) {
+  if (!selectedPatient?.patientId) {
     return <NoResult title="환자를 선택해주세요" />
   }
 
@@ -87,12 +89,12 @@ export default function IcuChart({
           // userName={userName}
           selectedChart={selectedChart}
           selectedChartOrders={selectedChartOrders}
-          vetsData={vetsData}
+          icuUsersData={icuUsersData}
           isPatientOut={isPatientOut}
         />
       ) : (
         <SelectedChartNotFound
-          selectedPatientId={selectedPatientId}
+          selectedPatient={selectedPatient}
           targetDate={targetDate}
           isPatientIn={isPatientIn}
         />

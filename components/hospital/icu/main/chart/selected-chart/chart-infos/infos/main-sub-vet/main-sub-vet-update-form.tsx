@@ -21,7 +21,7 @@ import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
 import { toast } from '@/components/ui/use-toast'
 import { updateMainSubVet } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
-import type { IcuVetList, MainAndSubVet } from '@/types/icu'
+import type { IcuUserList, MainAndSubVet } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -39,7 +39,7 @@ export default function MainSubVetUpdateForm({
 }: {
   mainVet: MainAndSubVet
   subVet: MainAndSubVet | null
-  vetsData: IcuVetList[]
+  vetsData: IcuUserList[]
   icuChartId: string
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
