@@ -14,15 +14,8 @@ import { useEffect, useState } from 'react'
 import { IcuChartPreviewSkeleton } from './icu-chart-preview-skeleton'
 import { toast } from '@/components/ui/use-toast'
 import { useCopiedChartOrderStore } from '@/lib/store/icu/copied-chart-order'
-
-const ORDER_OF_ORDERS = [
-  'checklist',
-  'fluid',
-  'injection',
-  'test',
-  'manual',
-  'feed',
-] as const
+import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart'
+import { useIcuSelectedChartStore } from '@/lib/store/icu/icu-selected-chart'
 
 export default function IcuChartPreviewDialog({
   open,
@@ -34,6 +27,7 @@ export default function IcuChartPreviewDialog({
   chartId: string
 }) {
   const { setCopiedChartOrder } = useCopiedChartOrderStore()
+  const { setIcuChartId, setSelectedTargetDate } = useIcuSelectedChartStore()
   const [isLoading, setIsLoading] = useState(false)
   const [selectedChartOrders, setSelectedChartOrders] = useState<
     IcuChartOrderJoined[]
@@ -64,6 +58,7 @@ export default function IcuChartPreviewDialog({
 
   const handleCopyButtonClick = () => {
     setCopiedChartOrder(selectedChartOrders)
+    setIcuChartId(chartId)
     onOpenChange(false)
 
     toast({
