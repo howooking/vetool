@@ -1,10 +1,10 @@
 'use client'
 
+import SelectColumn from '@/components/on-boarding/select-hospital/select-column'
 import { Button } from '@/components/ui/button'
 import { SelectHosptialDataTable } from '@/types/on-boarding'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
-import SelectColumn from './select-column'
 
 export const columns: ColumnDef<SelectHosptialDataTable>[] = [
   {

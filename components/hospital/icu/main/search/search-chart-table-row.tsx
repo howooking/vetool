@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart'
+import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart/order'
 import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
 import { useIcuSelectedChartStore } from '@/lib/store/icu/icu-selected-chart'
 import { IcuChartOrderJoined } from '@/types/icu'
 import { ChevronDown } from 'lucide-react'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
-export default function IcuSearchDataTableRow({
+export default function SearchChartTableRow({
   name,
   dx,
   cc,

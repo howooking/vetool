@@ -1,18 +1,17 @@
 'use client'
 
+import SidebarItem from '@/components/hospital/sidebar/sidebar-item'
+import { Button } from '@/components/ui/button'
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
 import {
   ArrowLeft,
-  Contact,
   HeartPulse,
   Home,
   ListChecks,
   Slice,
   Syringe,
 } from 'lucide-react'
-import { Button } from '../../ui/button'
-import SidebarItem from './sidebar-item'
 
 const SIDE_BAR_ITEMS = [
   {

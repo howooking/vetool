@@ -1,3 +1,5 @@
+import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/table/delete-order-alert-dialog'
+import { GroupCheckFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/schema'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import {
@@ -19,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/'
+import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import {
   TIMES,
   TX_ORDER_TIME_INTERVALS,
@@ -33,10 +35,8 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import DeleteOrderAlertDialog from './delete-order-alert-dialog'
-import { GroupCheckFormSchema } from './schema'
 
-export default function IcuChartOrderForm({
+export default function OrderForm({
   icuIoId,
   icuChartId,
 }: {

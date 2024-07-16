@@ -1,9 +1,9 @@
+import AddDefaultChartDialog from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/add-default-chart-dialog'
+import CopyPrevChartDialog from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/copy-prev-chart-dialog'
+import PasteChartDialog from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/paste-chart-dialog'
 import { useParams } from 'next/navigation'
-import AddDefaultChartDialog from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-icu-chart-dialogs/add-default-chart-dialog'
-import PasteIcuChartDialog from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-icu-chart-dialogs/paste-icu-chart-dialog'
-import CopyPrevChartDialog from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-icu-chart-dialogs/copy-prev-chart-dialog'
 
-export default function AddIcuChartDialogs({
+export default function AddChartDialogs({
   selectedPatient,
 }: {
   selectedPatient: {
@@ -22,7 +22,7 @@ export default function AddIcuChartDialogs({
         targetDate={target_date as string}
         selectedPatient={selectedPatient}
       />
-      <PasteIcuChartDialog
+      <PasteChartDialog
         targetDate={target_date as string}
         selectedPatient={selectedPatient}
       />

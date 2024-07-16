@@ -1,10 +1,10 @@
+import UpdateMemoModal from '@/components/hospital/icu/main/chart/selected-chart/chart-memos/update-memo-name-modal'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
 import { updateMemo } from '@/lib/services/icu/update-icu-chart-infos'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import UpdateMemoModal from './update-memo-name-modal'
 
 export default function Memo({
   memo,

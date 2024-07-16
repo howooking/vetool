@@ -1,6 +1,7 @@
-import IcuChartOrderDialog from '@/components/hospital/icu/main/chart/selected-chart/table/icu-chart-order-dialog'
-import IcuChartTableCellTitle from '@/components/hospital/icu/main/chart/selected-chart/table/icu-chart-table-cell-title'
-import IcuChartTableCell from '@/components/hospital/icu/main/chart/selected-chart/table/icu-chat-table-cell'
+import IcuChartTableCell from '@/components/hospital/icu/main/chart/selected-chart/table/chart-table-cell'
+import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/table/order-dialog'
+import OrderTitle from '@/components/hospital/icu/main/chart/selected-chart/table/order-title'
+import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/table/tx/tx-upsert-dialog'
 import {
   Table,
   TableBody,
@@ -11,9 +12,8 @@ import {
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined, IcuUserList } from '@/types/icu'
-import TxUpsertDialog from './tx/tx-upsert-dialog'
 
-export default function IcuChartTable({
+export default function ChartTable({
   selectedChartOrders,
   icuUsersData,
 }: {
@@ -26,7 +26,7 @@ export default function IcuChartTable({
         <TableRow className={cn('')}>
           <TableHead className="flex w-[296px] items-center justify-center gap-2 text-center">
             <span>오더 목록</span>
-            <IcuChartOrderDialog
+            <OrderDialog
               icuIoId={selectedChartOrders[0].icu_io_id.icu_io_id}
               icuChartId={selectedChartOrders[0].icu_chart_id}
             />
@@ -45,7 +45,7 @@ export default function IcuChartTable({
 
         {selectedChartOrders.map((order) => (
           <TableRow className={cn('divide-x')} key={order.icu_chart_order_id}>
-            <IcuChartTableCellTitle order={order} />
+            <OrderTitle order={order} />
 
             {TIMES.map((time, index) => {
               const isDone =

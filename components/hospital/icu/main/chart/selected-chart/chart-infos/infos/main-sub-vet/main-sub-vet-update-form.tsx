@@ -1,5 +1,7 @@
 'use client'
 
+import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
+import { mainSubVetFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/main-sub-vet/schema'
 import {
   Form,
   FormControl,
@@ -15,9 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useState } from 'react'
-
-import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
 import { toast } from '@/components/ui/use-toast'
 import { updateMainSubVet } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
@@ -25,10 +24,9 @@ import type { IcuUserList, MainAndSubVet } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { mainSubVetFormSchema } from './schema'
 
 export default function MainSubVetUpdateForm({
   mainVet,

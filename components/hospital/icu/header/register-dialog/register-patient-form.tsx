@@ -1,5 +1,6 @@
 'use client'
 
+import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/schema'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -38,15 +39,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { registerIcuPatientFormSchema } from './schema'
-import Image from 'next/image'
 
-export default function IcuRegisterPatientForm({
+export default function RegisterPatientForm({
   hosId,
   groupList,
   vetsData,

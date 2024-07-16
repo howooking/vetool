@@ -1,6 +1,6 @@
 import NoResult from '@/components/common/no-result'
-import IcuChartOrderPreviewDialog from '@/components/hospital/icu/main/search/icu-chart-order-preview-dialog'
-import IcuSearchDataTableRow from '@/components/hospital/icu/main/search/icu-search-data-table-row'
+import OrderPreviewDialog from '@/components/hospital/icu/main/search/order-preview-dialog'
+import SearchChartTableRow from '@/components/hospital/icu/main/search/search-chart-table-row'
 import {
   Accordion,
   AccordionContent,
@@ -19,7 +19,7 @@ const TABLE_TITLES = [
   '오더 미리보기',
 ] as const
 
-export default function IcuSearchDataTable({
+export default function SearchChartTable({
   data,
   register,
 }: {
@@ -58,7 +58,7 @@ export default function IcuSearchDataTable({
                   className="hidden"
                   ref={triggerRef}
                 ></AccordionTrigger>
-                <IcuSearchDataTableRow
+                <SearchChartTableRow
                   name={chartList[0].patient_id.name}
                   dx={chartList[0].icu_chart_dx}
                   cc={chartList[0].icu_chart_cc}
@@ -74,7 +74,7 @@ export default function IcuSearchDataTable({
                     key={chart.icu_chart_id}
                     className="flex py-0"
                   >
-                    <IcuSearchDataTableRow
+                    <SearchChartTableRow
                       name={chart.patient_id.name}
                       dx={chart.icu_chart_dx}
                       cc={chart.icu_chart_cc}
@@ -90,7 +90,7 @@ export default function IcuSearchDataTable({
           ) : (
             // CASE 2: 하나의 io_id, 하나의 chart_id
             <div key={chartList[0].icu_io_id} className="flex">
-              <IcuSearchDataTableRow
+              <SearchChartTableRow
                 name={chartList[0].patient_id.name}
                 dx={chartList[0].icu_chart_dx}
                 cc={chartList[0].icu_chart_cc}
@@ -108,7 +108,7 @@ export default function IcuSearchDataTable({
       )}
 
       {isDialogOpen && (
-        <IcuChartOrderPreviewDialog
+        <OrderPreviewDialog
           open={isDialogOpen}
           onOpenChange={setIsDialogOpen}
           register={register}

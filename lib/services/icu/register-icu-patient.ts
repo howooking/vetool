@@ -1,6 +1,6 @@
 'use server'
 
-import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
+import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart/order'
 import { createClient } from '@/lib/supabase/server'
 import { getDaysSince } from '@/lib/utils'
 import { format } from 'date-fns'

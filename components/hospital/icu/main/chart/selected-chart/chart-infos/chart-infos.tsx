@@ -1,14 +1,14 @@
 'use client'
 
+import Caution from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/caution'
+import ChiefComplaint from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/chief-complaint'
+import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/diagnosis'
+import Group from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/group/group'
+import HeaderSignalments from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/header-signalment'
+import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/in-and-out-date/in-and-out-date'
+import { MainSubVet } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/main-sub-vet/main-sub-vet'
+import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/onwer-name'
 import type { IcuChartJoined, IcuUserList } from '@/types/icu'
-import Caution from './infos/caution'
-import ChiefComplaint from './infos/chief-complaint'
-import Diagnosis from './infos/diagnosis'
-import Group from './infos/group/group'
-import HeaderSignalments from './infos/header-signament/header-signalment'
-import InAndOutDate from './infos/in-and-out-date/in-and-out-date'
-import { MainSubVet } from './infos/main-sub-vet/main-sub-vet'
-import OwnerName from './infos/onwer-name'
 
 export default function ChartInfos({
   chartData,

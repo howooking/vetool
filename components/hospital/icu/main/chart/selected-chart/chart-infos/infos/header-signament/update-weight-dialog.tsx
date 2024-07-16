@@ -1,5 +1,6 @@
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
 import IcuIconButton from '@/components/common/icu-icon-button'
+import { weightFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/schema'
 import {
   Dialog,
   DialogContent,
@@ -24,7 +25,6 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { weightFormSchema } from './schema'
 
 export default function UpdateWeightDialog({
   weight,

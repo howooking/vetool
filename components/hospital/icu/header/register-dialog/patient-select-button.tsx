@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 
-export default function IcuPatientSelectButton({
+export default function PatientSelectButton({
   patientId,
   isIcu,
   birth,

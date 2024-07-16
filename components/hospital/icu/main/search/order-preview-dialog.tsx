@@ -1,4 +1,5 @@
-import IcuChartPreviewTable from '@/components/hospital/icu/main/search/icu-chart-preview-table'
+import OrderPreviewSkeleton from '@/components/hospital/icu/main/search/order-preview-skeleton'
+import OrderPreviewTable from '@/components/hospital/icu/main/search/order-preview-table'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -9,14 +10,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart'
+import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart/order'
 import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
 import { useIcuSelectedChartStore } from '@/lib/store/icu/icu-selected-chart'
 import type { IcuChartOrderJoined } from '@/types/icu'
 import { useEffect, useState } from 'react'
-import { IcuChartPreviewSkeleton } from './icu-chart-preview-skeleton'
 
-export default function IcuChartOrderPreviewDialog({
+export default function OrderPreviewDialog({
   open,
   onOpenChange,
   register,
@@ -73,9 +73,9 @@ export default function IcuChartOrderPreviewDialog({
         </DialogHeader>
 
         {isLoading ? (
-          <IcuChartPreviewSkeleton />
+          <OrderPreviewSkeleton />
         ) : (
-          <IcuChartPreviewTable selectedChartOrders={selectedChartOrders} />
+          <OrderPreviewTable selectedChartOrders={selectedChartOrders} />
         )}
 
         <DialogFooter>

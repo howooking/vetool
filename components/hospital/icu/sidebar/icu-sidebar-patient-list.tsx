@@ -1,6 +1,6 @@
+import IcuSidebarPatientButton from '@/components/hospital/icu/sidebar/icu-sidebar-patient-button'
 import { getIcuIoData } from '@/lib/services/icu/get-icu-io-data'
 import { Squirrel } from 'lucide-react'
-import IcuSidebarPatientButton from './icu-sidebar-patient-button'
 
 export default async function IcuSidebarPatientList({
   hosId,

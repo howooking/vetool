@@ -1,5 +1,6 @@
 'use client'
 
+import { registerPatientFormSchema } from '@/components/hospital/patients/schema'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -50,7 +51,6 @@ import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { registerPatientFormSchema } from './schema'
 
 export default function PatientForm({
   hosId,

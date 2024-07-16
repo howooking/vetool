@@ -1,11 +1,11 @@
+import ChartInfos from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/chart-infos'
+import ChartMemos from '@/components/hospital/icu/main/chart/selected-chart/chart-memos/chart-memos'
+import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/table/chart-table'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuUserList,
 } from '@/types/icu'
-import ChartInfos from './chart-infos/chart-infos'
-import ChartMemos from './chart-memos/chart-memos'
-import IcuChartTable from './table/icu-chart-table'
 
 export default function SelectedChart({
   selectedChart,
@@ -26,7 +26,7 @@ export default function SelectedChart({
         icuUsersData={icuUsersData}
         isPatientOut={isPatientOut}
       />
-      <IcuChartTable
+      <ChartTable
         selectedChartOrders={selectedChartOrders}
         icuUsersData={icuUsersData}
       />

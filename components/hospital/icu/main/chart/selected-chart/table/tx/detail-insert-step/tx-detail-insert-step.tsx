@@ -1,3 +1,5 @@
+import { txDetailRegisterFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/tx/detail-insert-step/schema'
+import TxLog from '@/components/hospital/icu/main/chart/selected-chart/table/tx/detail-insert-step/tx-log'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import {
@@ -19,8 +21,6 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { txDetailRegisterFormSchema } from './schema'
-import TxLog from './tx-log'
 
 export default function TxDetailInsertStep() {
   const [isDeleting, setIsDeleting] = useState(false)

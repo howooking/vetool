@@ -1,6 +1,6 @@
-import Indate from './in-date'
-import OutDate from './out-date'
-import OutDueDate from './out-due-date'
+import Indate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/in-and-out-date/in-date'
+import OutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/in-and-out-date/out-date'
+import OutDueDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/in-and-out-date/out-due-date'
 
 export default function InAndOutDate({
   icuIoId,
