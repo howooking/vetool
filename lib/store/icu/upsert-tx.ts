@@ -1,12 +1,11 @@
-import type { TxLog, TxState } from '@/types/icu'
+import type { TxLog } from '@/types/icu'
 import { create } from 'zustand'
 
-// 관련도 적은 데이터 예를 들어서 모달 오픈하고 tx데이터는 관련도가 적기때문에 객체에 묶어서하지말고 분리
 export type TxLocalState = {
   txUserId?: string | null
   txResult?: string | null
   txComment?: string | null
-  txImages?: string[]
+  txImages?: string[] | null
   txLog?: TxLog[] | null
   time?: number
   txId?: string
@@ -15,8 +14,8 @@ export type TxLocalState = {
 }
 
 type IcuUpsertTxState = {
-  step: 'closed' | 'insertTxData' | 'seletctUser'
-  setStep: (step: 'closed' | 'insertTxData' | 'seletctUser') => void
+  step: 'closed' | 'detailInsert' | 'seletctUser'
+  setStep: (step: 'closed' | 'detailInsert' | 'seletctUser') => void
   isImageDialogOpen: boolean
 
   txLocalState?: TxLocalState
@@ -32,6 +31,7 @@ export const useUpsertTxStore = create<IcuUpsertTxState>((set) => ({
   txLocalState: undefined,
   setTxLocalState: (updates) =>
     set((state) => ({ txLocalState: { ...state.txLocalState, ...updates } })),
+
   reset: () =>
     set({
       isImageDialogOpen: false,

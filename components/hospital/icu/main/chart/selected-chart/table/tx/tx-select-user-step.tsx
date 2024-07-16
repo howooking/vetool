@@ -12,19 +12,20 @@ import { toast } from '@/components/ui/use-toast'
 import { upsertIcuChartTxAndUpdateIcuChartOrder } from '@/lib/services/icu/upsert-chart-tx'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
-import type { IcuUserList } from '@/types/icu'
+import type { IcuUserList, TxLog } from '@/types/icu'
+import { format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export default function IcuChartTxSelectUserStep({
+export default function TxSelectUserStep({
   icuUsersData,
 }: {
   icuUsersData: IcuUserList[]
 }) {
   const { refresh } = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { setStep, txLocalState, setTxLocalState, reset } = useUpsertTxStore()
+  const { txLocalState, setTxLocalState, reset } = useUpsertTxStore()
 
   const handleSelectUserId = (userId: string) => {
     setTxLocalState({ txUserId: userId })
@@ -33,32 +34,17 @@ export default function IcuChartTxSelectUserStep({
   const handleUpsertTx = async () => {
     setIsSubmitting(true)
 
-    // // LOG 가공
-    // const newLog: TxLog = {
-    //   result: txValue.icu_chart_tx_result,
-    //   name:
-    //     icuUsersData.find((vet) => vet.user_id === txValue.user_id)?.name ??
-    //     '유저',
-    //   createdAt: date,
-    // }
+    const newLog: TxLog = {
+      result: txLocalState?.txResult ?? '',
+      name:
+        icuUsersData.find((vet) => vet.user_id === txLocalState?.txUserId)
+          ?.name ?? '미선택',
+      createdAt: format(new Date(), 'yyyy-MM-dd HH:mm'),
+    }
 
-    // const uniqueLogSet = new Set(
-    //   [...(txValue.icu_chart_tx_log || []), newLog].map((log) =>
-    //     JSON.stringify(log),
-    //   ),
-    // )
+    const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
-    // const updatedLogs: TxLog[] = Array.from(uniqueLogSet).map((log) =>
-    //   JSON.parse(log),
-    // )
-
-    await upsertIcuChartTxAndUpdateIcuChartOrder(
-      txLocalState?.txId,
-      txLocalState?.icuIoId,
-      txLocalState?.icuChartOrderId,
-      txLocalState,
-      txLocalState?.time!,
-    )
+    await upsertIcuChartTxAndUpdateIcuChartOrder(txLocalState, updatedLogs)
 
     toast({
       title: '처치 내역이 업데이트 되었습니다',
@@ -69,15 +55,6 @@ export default function IcuChartTxSelectUserStep({
     refresh()
   }
 
-  // const handleInputChange =
-  //   (field: keyof TxState) => (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     setTxValue((prev) => ({ ...prev, [field]: e.target.value }))
-  //   }
-
-  // const handlePrevButtonClick = () => {
-  //   setUpsertTxState({ step: 'insertTxData' })
-  // }
-
   return (
     <>
       <DialogHeader>
@@ -85,7 +62,10 @@ export default function IcuChartTxSelectUserStep({
       </DialogHeader>
 
       <div className="grid gap-4 py-4">
-        <Select onValueChange={handleSelectUserId}>
+        <Select
+          onValueChange={handleSelectUserId}
+          defaultValue={txLocalState?.txUserId || 'none'}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="담당자 선택" />
           </SelectTrigger>
@@ -108,14 +88,6 @@ export default function IcuChartTxSelectUserStep({
       </div>
 
       <DialogFooter>
-        <Button
-          type="button"
-          variant="outline"
-          tabIndex={-1}
-          // onClick={handlePrevButtonClick}
-        >
-          이전
-        </Button>
         <Button type="button" onClick={handleUpsertTx} disabled={isSubmitting}>
           확인
           <LoaderCircle

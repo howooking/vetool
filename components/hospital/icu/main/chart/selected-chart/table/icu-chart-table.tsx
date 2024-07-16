@@ -11,7 +11,7 @@ import {
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined, IcuUserList } from '@/types/icu'
-import IcuChartUpsertTxDialog from './tx/icu-chart-upsert-tx-dialog'
+import TxUpsertDialog from './tx/tx-upsert-dialog'
 
 export default function IcuChartTable({
   selectedChartOrders,
@@ -41,7 +41,7 @@ export default function IcuChartTable({
       </TableHeader>
 
       <TableBody>
-        <IcuChartUpsertTxDialog icuUsersData={icuUsersData} />
+        <TxUpsertDialog icuUsersData={icuUsersData} />
 
         {selectedChartOrders.map((order) => (
           <TableRow className={cn('divide-x')} key={order.icu_chart_order_id}>
