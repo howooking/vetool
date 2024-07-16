@@ -132,7 +132,7 @@ export default function IcuRegisterPatientForm({
 
   const handlePreviousButtonClick = () => {
     if (tab === 'search') {
-      setStep('patientSearch')
+      setStep('selectChartType')
       return
     }
     if (tab === 'register') {

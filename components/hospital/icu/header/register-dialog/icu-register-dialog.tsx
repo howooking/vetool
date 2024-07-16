@@ -13,6 +13,7 @@ import { patientsColumns } from '../../../patients/patient-columns'
 import PatientForm from '../../../patients/patient-form'
 import RegisterDialogHeader from '../../../patients/register-dialog-header'
 import IcuRegisterPatientForm from './icu-register-patient-form'
+import IcuChartTypeSelector from './icu-chart-type-selector'
 
 export default function IcuRegisterDialog({
   hosId,
@@ -105,7 +106,6 @@ export default function IcuRegisterDialog({
                 rowLength={8}
               />
             )}
-
             {step === 'icuRegister' && (
               <IcuRegisterPatientForm
                 hosId={hosId}
@@ -115,6 +115,7 @@ export default function IcuRegisterDialog({
                 tab={tab}
               />
             )}
+            {step === 'selectChartType' && <IcuChartTypeSelector />}
           </TabsContent>
 
           <TabsContent value="register">

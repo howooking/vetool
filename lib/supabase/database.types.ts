@@ -1146,6 +1146,13 @@ export type Database = {
         }
         Returns: string
       }
+      paste_icu_chart: {
+        Args: {
+          patient_id_input: string
+          target_date_input: string
+        }
+        Returns: Json
+      }
       update_icu_chart_with_vitals: {
         Args: {
           patient_id_input: string

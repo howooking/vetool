@@ -77,3 +77,12 @@ export const DEFAULT_ICU_ORDER_TYPE = [
     value: 'feed',
   },
 ] as const
+
+export const ORDER_OF_ORDERS = [
+  'checklist',
+  'fluid',
+  'injection',
+  'test',
+  'manual',
+  'feed',
+] as const

@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
 type IcuSelectedMainViewState = {
-  selectIcudMainView: 'summary' | 'chart'
-  setSelectedIcuMainView: (category: 'summary' | 'chart') => void
+  selectIcudMainView: 'summary' | 'chart' | 'search'
+  setSelectedIcuMainView: (category: 'summary' | 'chart' | 'search') => void
 }
 
 export const useSelectedMainViewStore = create<IcuSelectedMainViewState>(
