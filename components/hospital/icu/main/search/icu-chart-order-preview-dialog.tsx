@@ -8,26 +8,24 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { toast } from '@/components/ui/use-toast'
+import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart'
 import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
+import { useIcuSelectedChartStore } from '@/lib/store/icu/icu-selected-chart'
 import type { IcuChartOrderJoined } from '@/types/icu'
 import { useEffect, useState } from 'react'
 import { IcuChartPreviewSkeleton } from './icu-chart-preview-skeleton'
-import { toast } from '@/components/ui/use-toast'
-import { useCopiedChartOrderStore } from '@/lib/store/icu/copied-chart-order'
-import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart'
-import { useIcuSelectedChartStore } from '@/lib/store/icu/icu-selected-chart'
 
-export default function IcuChartPreviewDialog({
+export default function IcuChartOrderPreviewDialog({
   open,
   onOpenChange,
-  chartId,
+  register,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  chartId: string
+  register?: boolean
 }) {
-  const { setCopiedChartOrder } = useCopiedChartOrderStore()
-  const { setIcuChartId, setSelectedTargetDate } = useIcuSelectedChartStore()
+  const { selectedIcuChartId, setCopiedChartOrder } = useIcuSelectedChartStore()
   const [isLoading, setIsLoading] = useState(false)
   const [selectedChartOrders, setSelectedChartOrders] = useState<
     IcuChartOrderJoined[]
@@ -37,7 +35,9 @@ export default function IcuChartPreviewDialog({
     setIsLoading(true)
 
     const fetchChartOrderList = async () => {
-      const fetchedChartOrders = await selectedChartOrderList(chartId)
+      const fetchedChartOrders =
+        await selectedChartOrderList(selectedIcuChartId)
+
       const selectedChartOrders = fetchedChartOrders.sort(
         (prev, next) =>
           ORDER_OF_ORDERS.findIndex(
@@ -47,7 +47,6 @@ export default function IcuChartPreviewDialog({
             (itme) => itme === next.icu_chart_order_type,
           ),
       )
-
       setSelectedChartOrders(selectedChartOrders)
 
       setIsLoading(false)
@@ -58,7 +57,6 @@ export default function IcuChartPreviewDialog({
 
   const handleCopyButtonClick = () => {
     setCopiedChartOrder(selectedChartOrders)
-    setIcuChartId(chartId)
     onOpenChange(false)
 
     toast({
@@ -71,7 +69,7 @@ export default function IcuChartPreviewDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:min-w-[1200px]">
         <DialogHeader>
-          <DialogTitle>차트 미리보기</DialogTitle>
+          <DialogTitle>오더 미리보기</DialogTitle>
         </DialogHeader>
 
         {isLoading ? (
@@ -87,7 +85,7 @@ export default function IcuChartPreviewDialog({
             </Button>
           </DialogClose>
           <Button type="submit" onClick={handleCopyButtonClick}>
-            차트 복사
+            {register ? '차트 선택' : '차트 복사'}
           </Button>
         </DialogFooter>
       </DialogContent>

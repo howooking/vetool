@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { pasteIcuChart } from '@/lib/services/icu/paste-icu-chart'
-import { useCopiedChartOrderStore } from '@/lib/store/icu/copied-chart-order'
 import { useIcuSelectedChartStore } from '@/lib/store/icu/icu-selected-chart'
 import { cn } from '@/lib/utils'
 import { Bookmark, LoaderCircle } from 'lucide-react'
@@ -30,16 +29,15 @@ export default function PasteIcuChartDialog({
   const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { selectedTargetDate } = useIcuSelectedChartStore()
-  const { copiedChartOrder } = useCopiedChartOrderStore()
+  const { selectedIcuChartId, copiedChartOrder } = useIcuSelectedChartStore()
 
   const handlePasteSelectedChart = async () => {
     setIsSubmitting(true)
 
     await pasteIcuChart(
       targetDate,
-      selectedPatient,
-      selectedTargetDate,
+      selectedPatient.patientId,
+      selectedIcuChartId,
       copiedChartOrder,
     )
 

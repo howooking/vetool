@@ -1148,6 +1148,7 @@ export type Database = {
       }
       paste_icu_chart: {
         Args: {
+          icu_chart_id_input: string
           patient_id_input: string
           target_date_input: string
         }

@@ -7,7 +7,12 @@ import {
 export default function RegisterDialogHeader({
   step,
 }: {
-  step: 'patientRegister' | 'icuRegister' | 'patientSearch' | 'selectChartType'
+  step:
+    | 'patientRegister'
+    | 'icuRegister'
+    | 'patientSearch'
+    | 'selectChartType'
+    | 'chartSearch'
 }) {
   return (
     <DialogHeader>
@@ -16,6 +21,7 @@ export default function RegisterDialogHeader({
         {step === 'patientRegister' && '환자 등록'}
         {step === 'icuRegister' && '입원 등록'}
         {step === 'selectChartType' && '차트 유형 선택'}
+        {step === 'chartSearch' && '차트 조회'}
       </DialogTitle>
       <DialogDescription>
         {step === 'patientSearch' && '환자를 선택해주세요'}

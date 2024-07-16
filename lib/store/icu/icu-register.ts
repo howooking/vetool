@@ -28,13 +28,19 @@ export const useIcuRegisteringPatient = create<RegisteringPatientState>(
 )
 
 type PatientRegisterStep = {
-  step: 'patientRegister' | 'icuRegister' | 'patientSearch' | 'selectChartType'
+  step:
+    | 'patientRegister'
+    | 'icuRegister'
+    | 'patientSearch'
+    | 'selectChartType'
+    | 'chartSearch'
   setStep: (
     step:
       | 'patientRegister'
       | 'icuRegister'
       | 'patientSearch'
-      | 'selectChartType',
+      | 'selectChartType'
+      | 'chartSearch',
   ) => void
 }
 

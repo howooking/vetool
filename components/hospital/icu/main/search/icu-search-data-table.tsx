@@ -1,5 +1,5 @@
 import NoResult from '@/components/common/no-result'
-import IcuChartPreviewDialog from '@/components/hospital/icu/main/search/icu-chart-preview-dialog'
+import IcuChartOrderPreviewDialog from '@/components/hospital/icu/main/search/icu-chart-order-preview-dialog'
 import IcuSearchDataTableRow from '@/components/hospital/icu/main/search/icu-search-data-table-row'
 import {
   Accordion,
@@ -10,16 +10,24 @@ import {
 import type { IcuChartListJoined } from '@/types/icu'
 import { useRef, useState } from 'react'
 
-const TABLE_TITLES = ['환자명', 'DX', 'CC', '입원일', '차트 미리보기'] as const
+const TABLE_TITLES = [
+  '환자명',
+  'DX',
+  'CC',
+  '차트 생성일',
+  '복사',
+  '오더 미리보기',
+] as const
 
 export default function IcuSearchDataTable({
   data,
+  register,
 }: {
   data: IcuChartListJoined[][]
+  register?: boolean
 }) {
   const triggerRef = useRef<HTMLButtonElement>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [chartId, setChartId] = useState('')
 
   return (
     <div className="w-full rounded-md border">
@@ -38,7 +46,7 @@ export default function IcuSearchDataTable({
       {data.length > 0 ? (
         data.map((chartList) =>
           chartList.length > 1 ? (
-            // CASE 1: 하나의 io_id, 다수의 chart_id
+            // CASE 1: 하나의 io_id, 다수의 chart_id -> Accordion화
             <Accordion
               key={chartList[0].icu_io_id}
               type="single"
@@ -58,7 +66,7 @@ export default function IcuSearchDataTable({
                   chartId={chartList[0].icu_chart_id}
                   onRefClick={() => triggerRef.current?.click()}
                   setIsDialogOpen={setIsDialogOpen}
-                  setChartId={setChartId}
+                  register={register}
                 />
 
                 {chartList.slice(1).map((chart) => (
@@ -73,7 +81,7 @@ export default function IcuSearchDataTable({
                       targetDate={chart.target_date}
                       chartId={chart.icu_chart_id}
                       setIsDialogOpen={setIsDialogOpen}
-                      setChartId={setChartId}
+                      register={register}
                     />
                   </AccordionContent>
                 ))}
@@ -89,7 +97,7 @@ export default function IcuSearchDataTable({
                 targetDate={chartList[0].target_date}
                 chartId={chartList[0].icu_chart_id}
                 setIsDialogOpen={setIsDialogOpen}
-                setChartId={setChartId}
+                register={register}
               />
             </div>
           ),
@@ -100,10 +108,10 @@ export default function IcuSearchDataTable({
       )}
 
       {isDialogOpen && (
-        <IcuChartPreviewDialog
+        <IcuChartOrderPreviewDialog
           open={isDialogOpen}
           onOpenChange={setIsDialogOpen}
-          chartId={chartId}
+          register={register}
         />
       )}
     </div>

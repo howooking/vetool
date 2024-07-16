@@ -17,14 +17,16 @@ export default function IcuChartPreviewTable({
 }) {
   return (
     <div className="rounded-md">
-      <Table className="border border-black">
+      <Table className="border">
         {/* TABLE HEADER */}
         <TableHeader>
-          <TableRow className="divide-x border-black">
-            <TableHead className="h-10 w-[296px] text-center">처치</TableHead>
+          <TableRow>
+            <TableHead className="flex w-[296px] items-center justify-center gap-2 text-center">
+              오더 목록
+            </TableHead>
 
             {TIMES.map((time) => (
-              <TableHead className="h-2 border-black text-center" key={time}>
+              <TableHead className="border text-center" key={time}>
                 {time.toString().padStart(2, '0')}
               </TableHead>
             ))}
@@ -34,10 +36,7 @@ export default function IcuChartPreviewTable({
         {/* TABLE BODY */}
         <TableBody>
           {selectedChartOrders?.map((order) => (
-            <TableRow
-              className="divide-x border-black"
-              key={order.icu_chart_order_id}
-            >
+            <TableRow key={order.icu_chart_order_id} className="divide-x">
               {/* TABLE BODY TITLE */}
               <IcuChartTableCellTitle order={order} />
 
@@ -58,6 +57,7 @@ export default function IcuChartPreviewTable({
                     icuChartTxId={
                       order[`icu_chart_order_tx_${time}`]?.icu_chart_tx_id
                     }
+                    isPreview
                   />
                 )
               })}
