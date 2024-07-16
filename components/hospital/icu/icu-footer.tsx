@@ -13,6 +13,10 @@ export const FOOTER_MAIN_VIEW_MENUS = [
     label: '입원 차트',
     value: 'chart',
   },
+  {
+    label: '차트 검색',
+    value: 'search',
+  },
 ] as const
 
 export default function IcuFooter() {
@@ -20,7 +24,7 @@ export default function IcuFooter() {
   const { selectIcudMainView, setSelectedIcuMainView } =
     useSelectedMainViewStore()
 
-  const handleButtonClick = (value: 'summary' | 'chart') => {
+  const handleButtonClick = (value: 'summary' | 'chart' | 'search') => {
     setSelectedIcuMainView(value)
 
     if (value === 'summary') {
