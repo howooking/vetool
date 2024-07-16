@@ -38,8 +38,7 @@ export default function IcuPatientSelectButton({
       return
     }
 
-    setIsLoading(false)
-    setStep('icuRegister')
+    setStep('selectChartType')
     setRegisteringPatient({
       patientId,
       birth,
