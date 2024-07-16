@@ -19,15 +19,18 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 export default function PasteIcuChartDialog({
   targetDate,
-  selectedPatientId,
+  selectedPatient,
 }: {
   targetDate: string
-  selectedPatientId: string
+  selectedPatient: {
+    patientName: string
+    patientId: string
+  }
 }) {
   const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { icuChartId } = useIcuSelectedChartStore()
+  const { selectedTargetDate } = useIcuSelectedChartStore()
   const { copiedChartOrder } = useCopiedChartOrderStore()
 
   const handlePasteSelectedChart = async () => {
@@ -35,8 +38,8 @@ export default function PasteIcuChartDialog({
 
     await pasteIcuChart(
       targetDate,
-      selectedPatientId,
-      icuChartId,
+      selectedPatient,
+      selectedTargetDate,
       copiedChartOrder,
     )
 

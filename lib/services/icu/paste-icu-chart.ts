@@ -8,7 +8,10 @@ import { redirect } from 'next/navigation'
 
 export const pasteIcuChart = async (
   targetDate: string,
-  selectedPatientId: string,
+  selectedPatient: {
+    patientName: string
+    patientId: string
+  },
   copiedTargetDate: string,
   copiedChartOrder: IcuChartOrderJoined[],
 ) => {
@@ -17,9 +20,9 @@ export const pasteIcuChart = async (
   const { data: returningIcuChartIds, error: rpcError } = await supabase.rpc(
     'paste_icu_chart',
     {
-      patient_id_input: selectedPatientId,
+      patient_id_input: selectedPatient.patientId,
       target_date_input: targetDate,
-      copied_target_date_input: copiedTargetDate,
+      // copied_target_date_input: copiedTargetDate,
     },
   )
 

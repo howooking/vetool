@@ -20,11 +20,11 @@ export default function AddIcuChartDialogs({
       />
       <AddDefaultChartDialog
         targetDate={target_date as string}
-        selectedPatientId={selectedPatientId}
+        selectedPatient={selectedPatient}
       />
       <PasteIcuChartDialog
         targetDate={target_date as string}
-        selectedPatientId={selectedPatientId}
+        selectedPatient={selectedPatient}
       />
     </div>
   )

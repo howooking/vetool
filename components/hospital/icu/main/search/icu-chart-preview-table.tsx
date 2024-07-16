@@ -7,8 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { TIME } from '@/constants/hospital/icu/chart/time'
-import { IcuChartTx } from '@/types'
+import { TIMES } from '@/constants/hospital/icu/chart/time'
 import type { IcuChartOrderJoined } from '@/types/icu'
 
 export default function IcuChartPreviewTable({
@@ -16,14 +15,6 @@ export default function IcuChartPreviewTable({
 }: {
   selectedChartOrders: IcuChartOrderJoined[]
 }) {
-  const hasOrder = (orderData: IcuChartOrderJoined, index: number) => {
-    if (orderData.icu_chart_order_time) {
-      return orderData.icu_chart_order_time[index] === '1'
-    }
-
-    return false
-  }
-
   return (
     <div className="rounded-md">
       <Table className="border border-black">
@@ -32,7 +23,7 @@ export default function IcuChartPreviewTable({
           <TableRow className="divide-x border-black">
             <TableHead className="h-10 w-[296px] text-center">처치</TableHead>
 
-            {TIME.map((time) => (
+            {TIMES.map((time) => (
               <TableHead className="h-2 border-black text-center" key={time}>
                 {time.toString().padStart(2, '0')}
               </TableHead>
@@ -42,30 +33,34 @@ export default function IcuChartPreviewTable({
 
         {/* TABLE BODY */}
         <TableBody>
-          {selectedChartOrders?.map((orderData) => (
+          {selectedChartOrders?.map((order) => (
             <TableRow
               className="divide-x border-black"
-              key={orderData.icu_chart_order_id}
+              key={order.icu_chart_order_id}
             >
               {/* TABLE BODY TITLE */}
-              <IcuChartTableCellTitle
-                orderData={orderData}
-                dataType={orderData.icu_chart_order_type ?? 'manual'}
-              />
+              <IcuChartTableCellTitle order={order} />
 
               {/* TABLE BODY TIME */}
-              {TIME.map((time, index) => (
-                <IcuChartTableCell
-                  key={time}
-                  time={time}
-                  txData={
-                    orderData[`icu_chart_order_tx_${time}`] as IcuChartTx | null
-                  }
-                  ioId={orderData.icu_io_id.icu_io_id}
-                  chartOrderId={orderData.icu_chart_order_id}
-                  hasOrder={hasOrder(orderData, index)}
-                />
-              ))}
+              {TIMES.map((time, index) => {
+                const isDone =
+                  order.icu_chart_order_time[index] === '1' &&
+                  order[`icu_chart_order_tx_${time}`] !== null
+                return (
+                  <IcuChartTableCell
+                    key={time}
+                    time={time}
+                    txData={order[`icu_chart_order_tx_${time}`]}
+                    icuIoId={order.icu_io_id.icu_io_id}
+                    icuChartOrderId={order.icu_chart_order_id}
+                    hasOrder={order.icu_chart_order_time[index] === '1'}
+                    isDone={isDone}
+                    icuChartTxId={
+                      order[`icu_chart_order_tx_${time}`]?.icu_chart_tx_id
+                    }
+                  />
+                )
+              })}
             </TableRow>
           ))}
         </TableBody>
