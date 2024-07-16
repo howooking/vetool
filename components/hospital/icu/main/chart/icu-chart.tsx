@@ -11,15 +11,7 @@ import type {
 import { useMemo } from 'react'
 import SelectedChartNotFound from './selected-chart-not-found/selected-chart-not-found'
 import SelectedChart from './selected-chart/selected-chart'
-
-const ORDER_OF_ORDERS = [
-  'checklist',
-  'fluid',
-  'injection',
-  'test',
-  'manual',
-  'feed',
-] as const
+import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart'
 
 export default function IcuChart({
   icuChartData,
