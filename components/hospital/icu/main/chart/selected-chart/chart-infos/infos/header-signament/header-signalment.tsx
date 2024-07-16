@@ -29,6 +29,7 @@ export default function HeaderSignalments({
   icuIoId: string
   isPatientOut: boolean
 }) {
+  console.log(isPatientOut)
   return (
     <header className="absolute left-0 top-0 flex h-12 w-full items-center justify-center gap-2 text-muted-foreground">
       {species === 'canine' ? (
@@ -36,8 +37,10 @@ export default function HeaderSignalments({
       ) : (
         <Cat size={20} className="text-black" />
       )}
-      <span className="text-black">{name}</span> ·
-      <span className="text-sm">{breed}</span> ·
+      <span className="text-black">
+        {name} {isPatientOut && '(퇴원)'}
+      </span>{' '}
+      ·<span className="text-sm">{breed}</span> ·
       <span className="text-sm uppercase">{gender}</span> ·
       <span className="text-sm">{getAgeFromAgeInDays(ageInDays)} </span> ·
       <div className="flex items-center">
