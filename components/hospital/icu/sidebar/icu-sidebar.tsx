@@ -1,6 +1,6 @@
+import IcuSidebarPatientList from '@/components/hospital/icu/sidebar/icu-sidebar-patient-list'
+import IcuSidebarSkeleton from '@/components/hospital/icu/sidebar/icu-sidebar-skeleton'
 import { Suspense } from 'react'
-import IcuSidebarPatientList from './icu-sidebar-patient-list'
-import IcuSidebarSkeleton from './icu-sidebar-skeleton'
 
 export default async function IcuSidebar({
   hosId,

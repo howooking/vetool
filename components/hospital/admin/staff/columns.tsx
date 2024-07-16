@@ -1,17 +1,17 @@
 'use client'
 
+import { DeleteUserColumn } from '@/components/hospital/admin/staff/delete-user-column'
+import { GroupListDialog } from '@/components/hospital/admin/staff/goup-list-dialog'
+import GroupColumn from '@/components/hospital/admin/staff/group-column'
+import IsAdminColumn from '@/components/hospital/admin/staff/is-admin-column'
+import IsVetColumn from '@/components/hospital/admin/staff/is-vet-column'
+import PositionColumn from '@/components/hospital/admin/staff/position-column'
+import RankColumn from '@/components/hospital/admin/staff/rank-column'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { HospitalUserDataTable } from '@/types/adimin'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
-import { DeleteUserColumn } from './delete-user-column'
-import { GroupListDialog } from './goup-list-dialog'
-import GroupColumn from './group-column'
-import IsAdminColumn from './is-admin-column'
-import IsVetColumn from './is-vet-column'
-import PositionColumn from './position-column'
-import RankColumn from './rank-column'
 
 export const columns: ColumnDef<HospitalUserDataTable>[] = [
   {

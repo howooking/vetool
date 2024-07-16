@@ -1,11 +1,11 @@
 'use client'
 
+import PatientForm from '@/components/hospital/patients/patient-form'
+import RegisterDialogHeader from '@/components/hospital/patients/register-dialog-header'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { usePatientRegisterStep } from '@/lib/store/icu/icu-register'
 import { useState } from 'react'
-import PatientForm from './patient-form'
-import RegisterDialogHeader from './register-dialog-header'
 
 export function PatientRegisterDialog({ hosId }: { hosId: string }) {
   const { setStep } = usePatientRegisterStep()

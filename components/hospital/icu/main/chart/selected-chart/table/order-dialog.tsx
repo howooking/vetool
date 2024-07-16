@@ -1,4 +1,5 @@
 import IcuIconButton from '@/components/common/icu-icon-button'
+import OrderForm from '@/components/hospital/icu/main/chart/selected-chart/table/order-form'
 import {
   Dialog,
   DialogContent,
@@ -8,9 +9,8 @@ import {
 } from '@/components/ui/dialog'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { FilePlus } from 'lucide-react'
-import IcuChartOrderForm from './icu-chart-order-form'
 
-export default function IcuChartOrderDialog({
+export default function OrderDialog({
   icuIoId,
   icuChartId,
 }: {
@@ -33,7 +33,7 @@ export default function IcuChartOrderDialog({
         <DialogHeader>
           <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
         </DialogHeader>
-        <IcuChartOrderForm icuIoId={icuIoId} icuChartId={icuChartId} />
+        <OrderForm icuIoId={icuIoId} icuChartId={icuChartId} />
       </DialogContent>
     </Dialog>
   )

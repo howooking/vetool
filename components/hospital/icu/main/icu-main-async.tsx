@@ -1,5 +1,5 @@
+import IcuMain from '@/components/hospital/icu/main/icu-main'
 import { getIcuMainData } from '@/lib/services/icu/get-icu-main-data'
-import IcuMain from './icu-main'
 
 export default async function IcuMainAsync({
   hosId,

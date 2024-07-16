@@ -1,8 +1,8 @@
+import MaxWidthContainer from '@/components/common/max-width-container'
+import { Button } from '@/components/ui/button'
 import logo from '@/public/logo.svg'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '../ui/button'
-import MaxWidthContainer from './max-width-container'
 
 const NAV_MENUS = [
   { label: '벳툴소개', href: '/company' },

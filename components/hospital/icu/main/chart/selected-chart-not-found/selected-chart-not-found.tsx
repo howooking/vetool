@@ -1,8 +1,8 @@
 'use client'
 
 import NoResult from '@/components/common/no-result'
+import AddChartDialogs from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/add-chart-dialogs'
 import { differenceInDays, format } from 'date-fns'
-import AddIcuChartDialogs from './add-icu-chart-dialogs/add-icu-chart-dialogs'
 
 export default function SelectedChartNotFound({
   selectedPatient,
@@ -39,5 +39,5 @@ export default function SelectedChartNotFound({
     )
   }
 
-  return <AddIcuChartDialogs selectedPatient={selectedPatient} />
+  return <AddChartDialogs selectedPatient={selectedPatient} />
 }

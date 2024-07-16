@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge'
-import { GroupColumnDialog } from './group-column-dialog'
+import { GroupColumnDialog } from '@/components/hospital/admin/staff/group-column-dialog'
 
 export default function GroupColumn({
   userId,

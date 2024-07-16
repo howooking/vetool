@@ -10,13 +10,12 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { logout } from '@/lib/actions/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { logout } from '@/lib/actions/auth'
 
 const signupFormSchema = z.object({
   name: z

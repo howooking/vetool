@@ -1,6 +1,9 @@
 'use client'
 
 import NoResult from '@/components/common/no-result'
+import SelectedChartNotFound from '@/components/hospital/icu/main/chart/selected-chart-not-found/selected-chart-not-found'
+import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/selected-chart'
+import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import type {
   IcuChartJoined,
@@ -9,9 +12,6 @@ import type {
   IcuUserList,
 } from '@/types/icu'
 import { useMemo } from 'react'
-import SelectedChartNotFound from './selected-chart-not-found/selected-chart-not-found'
-import SelectedChart from './selected-chart/selected-chart'
-import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart'
 
 export default function IcuChart({
   icuChartData,

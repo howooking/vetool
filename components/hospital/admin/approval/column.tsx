@@ -1,12 +1,12 @@
 'use client'
 
+import { ApprovalColumn } from '@/components/hospital/admin/approval/approval-column'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { formatTimestamp } from '@/lib/utils'
 import type { ApprovalDataTable } from '@/types/adimin'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
-import { ApprovalColumn } from './approval-column'
 
 export const columns: ColumnDef<ApprovalDataTable>[] = [
   {

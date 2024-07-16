@@ -1,13 +1,13 @@
 'use client'
 
-import IcuChartDataTable from '@/components/hospital/icu/main/search/icu-search-data-table'
+import SearchChartTable from '@/components/hospital/icu/main/search/search-chart-table'
 import { Input } from '@/components/ui/input'
 import { selectChartList } from '@/lib/services/icu/select-chart-list'
 import type { IcuChartListJoined } from '@/types/icu'
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
-export default function IcuChartSearch({ register }: { register?: boolean }) {
+export default function IcuSearchChart({ register }: { register?: boolean }) {
   const [chartList, setChartList] = useState<IcuChartListJoined[][]>([])
 
   // Icu_Io_Id로 그룹화
@@ -41,7 +41,7 @@ export default function IcuChartSearch({ register }: { register?: boolean }) {
         placeholder="환자명, DX, CC를 통해 차트를 검색하세요"
         onChange={handleSearch}
       />
-      <IcuChartDataTable data={chartList} register={register} />
+      <SearchChartTable data={chartList} register={register} />
     </div>
   )
 }

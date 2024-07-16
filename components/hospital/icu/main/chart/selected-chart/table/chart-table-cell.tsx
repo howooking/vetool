@@ -8,7 +8,7 @@ import type { TxLog } from '@/types/icu'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
-export default function IcuChartTableCell({
+export default function ChartTableCell({
   time,
   txData,
   icuIoId,

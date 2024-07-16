@@ -1,12 +1,12 @@
 'use client'
 
-import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/icu-header-date-picker'
+import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/header-date-picker'
 import { Button } from '@/components/ui/button'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { useParams, useRouter } from 'next/navigation'
 
-export default function IcuHeaderDateSelector() {
+export default function HeaderDateSelector() {
   const { target_date } = useParams()
   const { push } = useRouter()
 

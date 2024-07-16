@@ -1,8 +1,8 @@
 'use client'
 
-import IcuChartTypeSelector from '@/components/hospital/icu/header/register-dialog/icu-chart-type-selector'
-import IcuRegisterPatientForm from '@/components/hospital/icu/header/register-dialog/icu-register-patient-form'
-import IcuChartSearch from '@/components/hospital/icu/main/search/icu-chart-search'
+import RegisterPatientForm from '@/components/hospital/icu/header/register-dialog/register-patient-form'
+import RegisterTypeSelector from '@/components/hospital/icu/header/register-dialog/register-type-selector'
+import IcuSearchChart from '@/components/hospital/icu/main/search/icu-chart-search'
 import { patientsColumns } from '@/components/hospital/patients/patient-columns'
 import PatientForm from '@/components/hospital/patients/patient-form'
 import RegisterDialogHeader from '@/components/hospital/patients/register-dialog-header'
@@ -16,7 +16,7 @@ import type { IcuUserList } from '@/types/icu'
 import type { PatientData, PatientDataTable } from '@/types/patients'
 import { useEffect, useState } from 'react'
 
-export default function IcuRegisterDialog({
+export default function RegisterDialog({
   hosId,
   patientsData,
   groupList,
@@ -108,7 +108,7 @@ export default function IcuRegisterDialog({
               />
             )}
             {step === 'icuRegister' && (
-              <IcuRegisterPatientForm
+              <RegisterPatientForm
                 hosId={hosId}
                 groupList={groupList}
                 vetsData={vetsData}
@@ -116,9 +116,9 @@ export default function IcuRegisterDialog({
                 tab={tab}
               />
             )}
-            {step === 'selectChartType' && <IcuChartTypeSelector />}
+            {step === 'selectChartType' && <RegisterTypeSelector />}
 
-            {step === 'chartSearch' && <IcuChartSearch register />}
+            {step === 'chartSearch' && <IcuSearchChart register />}
           </TabsContent>
 
           <TabsContent value="register">
@@ -131,7 +131,7 @@ export default function IcuRegisterDialog({
               />
             )}
             {step === 'icuRegister' && (
-              <IcuRegisterPatientForm
+              <RegisterPatientForm
                 hosId={hosId}
                 groupList={groupList}
                 vetsData={vetsData}

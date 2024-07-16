@@ -1,8 +1,8 @@
+import DeleteChartDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/delete-chart-dialog'
+import OutPatientDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/out-patient-dialog'
+import UpdateWeightDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/update-weight-dialog'
 import { getAgeFromAgeInDays } from '@/lib/utils'
 import { Cat, Dog } from 'lucide-react'
-import DeleteChartDialog from './delete-chart-dialog'
-import OutPatientDialog from './out-patient-dialog'
-import UpdateWeightDialog from './update-weight-dialog'
 
 export default function HeaderSignalments({
   name,

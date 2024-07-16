@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils'
 import { Bookmark, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-export default function PasteIcuChartDialog({
+export default function PasteChartDialog({
   targetDate,
   selectedPatient,
 }: {

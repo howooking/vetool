@@ -1,5 +1,5 @@
-import IcuChartTableCellTitle from '@/components/hospital/icu/main/chart/selected-chart/table/icu-chart-table-cell-title'
-import IcuChartTableCell from '@/components/hospital/icu/main/chart/selected-chart/table/icu-chat-table-cell'
+import ChartTableCell from '@/components/hospital/icu/main/chart/selected-chart/table/chart-table-cell'
+import OrderTitle from '@/components/hospital/icu/main/chart/selected-chart/table/order-title'
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import type { IcuChartOrderJoined } from '@/types/icu'
 
-export default function IcuChartPreviewTable({
+export default function OrderPreviewTable({
   selectedChartOrders,
 }: {
   selectedChartOrders: IcuChartOrderJoined[]
@@ -38,7 +38,7 @@ export default function IcuChartPreviewTable({
           {selectedChartOrders?.map((order) => (
             <TableRow key={order.icu_chart_order_id} className="divide-x">
               {/* TABLE BODY TITLE */}
-              <IcuChartTableCellTitle order={order} />
+              <OrderTitle order={order} />
 
               {/* TABLE BODY TIME */}
               {TIMES.map((time, index) => {
@@ -46,7 +46,7 @@ export default function IcuChartPreviewTable({
                   order.icu_chart_order_time[index] === '1' &&
                   order[`icu_chart_order_tx_${time}`] !== null
                 return (
-                  <IcuChartTableCell
+                  <ChartTableCell
                     key={time}
                     time={time}
                     txData={order[`icu_chart_order_tx_${time}`]}

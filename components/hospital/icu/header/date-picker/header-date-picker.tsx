@@ -13,7 +13,7 @@ import { CalendarDays } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export default function IcuHeaderDatePicker() {
+export default function HeaderDatePicker() {
   const { target_date } = useParams()
   const [open, setOpen] = useState(false)
   const { push } = useRouter()

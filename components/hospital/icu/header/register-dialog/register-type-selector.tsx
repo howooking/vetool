@@ -9,7 +9,7 @@ const CHART_TYPES = [
   { type: 'bookmark', icon: Bookmark, label: '북마크 차트 불러오기' },
 ] as const
 
-export default function IcuChartTypeSelector() {
+export default function RegisterTypeSelector() {
   const { setStep } = usePatientRegisterStep()
   const [chartType, setChartType] = useState('')
 

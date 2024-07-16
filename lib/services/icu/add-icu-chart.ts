@@ -1,9 +1,8 @@
 'use server'
 
-import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart'
+import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart/order'
 import { createClient } from '@/lib/supabase/server'
 import { format } from 'date-fns'
-import { redirect } from 'next/navigation'
 
 export const copyPrevChart = async (
   targetDate: string,

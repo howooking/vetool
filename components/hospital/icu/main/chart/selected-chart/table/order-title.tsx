@@ -5,11 +5,7 @@ import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined } from '@/types/icu'
 
-export default function IcuChartTableCellTitle({
-  order,
-}: {
-  order: IcuChartOrderJoined
-}) {
+export default function OrderTitle({ order }: { order: IcuChartOrderJoined }) {
   const {
     icu_chart_order_type: orderType,
     icu_chart_order_name: orderName,

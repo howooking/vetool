@@ -1,4 +1,4 @@
-import Memo from './memo'
+import Memo from '@/components/hospital/icu/main/chart/selected-chart/chart-memos/memo'
 
 export default function ChartMemos({
   memoA,

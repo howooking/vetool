@@ -1,5 +1,6 @@
 'use client'
 
+import AdminSidebarItem from '@/components/hospital/admin/admin-sidebar-item'
 import {
   BarChart3,
   Pill,
@@ -8,7 +9,6 @@ import {
   Users,
   Utensils,
 } from 'lucide-react'
-import AdminSidebarItem from './admin-sidebar-item'
 
 const ADMIN_SIDE_BAR_ITEMS = [
   {
