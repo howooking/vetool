@@ -57,8 +57,8 @@ export default function ChartInfos({
 
         <div className="col-span-4">
           <Diagnosis
-            diagnosis={chartData.icu_io_id.dx}
-            icuIoId={chartData.icu_io_id.icu_io_id}
+            diagnosis={chartData.icu_chart_dx}
+            icuChartId={chartData.icu_chart_id}
           />
         </div>
 
@@ -86,8 +86,8 @@ export default function ChartInfos({
 
         <div className="col-span-4">
           <ChiefComplaint
-            chiefComplaint={chartData.icu_io_id.cc}
-            icuIoId={chartData.icu_io_id.icu_io_id}
+            chiefComplaint={chartData.icu_chart_cc}
+            icuChartId={chartData.icu_chart_id}
           />
         </div>
       </div>

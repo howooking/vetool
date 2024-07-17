@@ -227,8 +227,8 @@ export type Database = {
           caution: string
           created_at: string
           hos_id: string
-          icu_chart_cc: string | null
-          icu_chart_dx: string | null
+          icu_chart_cc: string
+          icu_chart_dx: string
           icu_chart_id: string
           icu_chart_tags: string
           icu_io_id: string
@@ -246,8 +246,8 @@ export type Database = {
           caution?: string
           created_at?: string
           hos_id: string
-          icu_chart_cc?: string | null
-          icu_chart_dx?: string | null
+          icu_chart_cc: string
+          icu_chart_dx: string
           icu_chart_id?: string
           icu_chart_tags?: string
           icu_io_id: string
@@ -265,8 +265,8 @@ export type Database = {
           caution?: string
           created_at?: string
           hos_id?: string
-          icu_chart_cc?: string | null
-          icu_chart_dx?: string | null
+          icu_chart_cc?: string
+          icu_chart_dx?: string
           icu_chart_id?: string
           icu_chart_tags?: string
           icu_io_id?: string
@@ -708,9 +708,7 @@ export type Database = {
       icu_io: {
         Row: {
           age_in_days: number
-          cc: string
           created_at: string
-          dx: string
           group_list: string[]
           hos_id: string | null
           icu_io_id: string
@@ -721,9 +719,7 @@ export type Database = {
         }
         Insert: {
           age_in_days: number
-          cc: string
           created_at?: string
-          dx: string
           group_list: string[]
           hos_id?: string | null
           icu_io_id?: string
@@ -734,9 +730,7 @@ export type Database = {
         }
         Update: {
           age_in_days?: number
-          cc?: string
           created_at?: string
-          dx?: string
           group_list?: string[]
           hos_id?: string | null
           icu_io_id?: string
@@ -1151,6 +1145,29 @@ export type Database = {
           icu_chart_id_input: string
           patient_id_input: string
           target_date_input: string
+        }
+        Returns: Json
+      }
+      paste_icu_chart_when_register_patient: {
+        Args: {
+          icu_chart_id_input: string
+          patient_id_input: string
+          target_date_input: string
+        }
+        Returns: Json
+      }
+      register_icu_patient: {
+        Args: {
+          hos_id_input: string
+          patient_id_input: string
+          icu_chart_dx_input: string
+          icu_chart_cc_input: string
+          in_date_input: string
+          out_due_date_input: string
+          main_vet_input: string
+          sub_vet_input: string
+          group_list_input: Json
+          age_in_days_input: number
         }
         Returns: Json
       }
