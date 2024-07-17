@@ -26,7 +26,6 @@ export default function SearchChartTable({
   data: IcuChartListJoined[][]
   register?: boolean
 }) {
-  const triggerRef = useRef<HTMLButtonElement>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   return (
@@ -53,21 +52,18 @@ export default function SearchChartTable({
               collapsible
               className="w-full"
             >
-              <AccordionItem value="item-1">
-                <AccordionTrigger
-                  className="hidden"
-                  ref={triggerRef}
-                ></AccordionTrigger>
-                <SearchChartTableRow
-                  name={chartList[0].patient_id.name}
-                  dx={chartList[0].icu_chart_dx}
-                  cc={chartList[0].icu_chart_cc}
-                  targetDate={chartList[0].target_date}
-                  chartId={chartList[0].icu_chart_id}
-                  onRefClick={() => triggerRef.current?.click()}
-                  setIsDialogOpen={setIsDialogOpen}
-                  register={register}
-                />
+              <AccordionItem value={chartList[0].icu_io_id}>
+                <AccordionTrigger className="p-0" noIcon>
+                  <SearchChartTableRow
+                    name={chartList[0].patient_id.name}
+                    dx={chartList[0].icu_chart_dx}
+                    cc={chartList[0].icu_chart_cc}
+                    targetDate={chartList[0].target_date}
+                    chartId={chartList[0].icu_chart_id}
+                    setIsDialogOpen={setIsDialogOpen}
+                    register={register}
+                  />
+                </AccordionTrigger>
 
                 {chartList.slice(1).map((chart) => (
                   <AccordionContent

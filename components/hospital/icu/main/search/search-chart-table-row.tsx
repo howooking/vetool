@@ -2,10 +2,9 @@ import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart/order'
 import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
-import { useIcuSelectedChartStore } from '@/lib/store/icu/icu-selected-chart'
+import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { IcuChartOrderJoined } from '@/types/icu'
-import { ChevronDown } from 'lucide-react'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 export default function SearchChartTableRow({
   name,
@@ -14,7 +13,6 @@ export default function SearchChartTableRow({
   targetDate,
   chartId,
   setIsDialogOpen,
-  onRefClick,
   register,
 }: {
   name: string
@@ -23,7 +21,6 @@ export default function SearchChartTableRow({
   targetDate: string
   chartId: string
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
-  onRefClick?: () => void
   register?: boolean
 }) {
   const rowData = [name, dx, cc, targetDate]
@@ -31,43 +28,50 @@ export default function SearchChartTableRow({
     IcuChartOrderJoined[]
   >([])
 
-  const { setSelectedTargetDate, setSelectedIcuChartId, setCopiedChartOrder } =
-    useIcuSelectedChartStore()
+  const {
+    setSelectedTargetDate,
+    setCopiedChartId,
+    setCopiedChartOrder,
+    setIsCopyDialogOpen,
+  } = useCopiedChartStore()
 
-  useEffect(() => {
-    const fetchChartOrderList = async () => {
-      const fetchedChartOrders = await selectedChartOrderList(chartId)
+  const fetchChartOrderList = async () => {
+    const fetchedChartOrders = await selectedChartOrderList(chartId)
 
-      const selectedChartOrders = fetchedChartOrders.sort(
-        (prev, next) =>
-          ORDER_OF_ORDERS.findIndex(
-            (itme) => itme === prev.icu_chart_order_type,
-          ) -
-          ORDER_OF_ORDERS.findIndex(
-            (itme) => itme === next.icu_chart_order_type,
-          ),
-      )
+    const selectedChartOrders = fetchedChartOrders.sort(
+      (prev, next) =>
+        ORDER_OF_ORDERS.findIndex(
+          (itme) => itme === prev.icu_chart_order_type,
+        ) -
+        ORDER_OF_ORDERS.findIndex((itme) => itme === next.icu_chart_order_type),
+    )
 
-      setSelectedChartOrders(selectedChartOrders)
-    }
+    setSelectedChartOrders(selectedChartOrders)
+  }
 
-    fetchChartOrderList()
-  }, [])
+  const handleOpenChartPreviewModal = (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.stopPropagation()
 
-  const handleOpenChartPreviewModal = () => {
     if (setIsDialogOpen) {
       setIsDialogOpen(true)
-      setSelectedIcuChartId(chartId)
+      setCopiedChartId(chartId)
       setSelectedTargetDate(targetDate)
+      fetchChartOrderList()
     }
   }
 
-  const handleCopyButtonClick = () => {
+  const handleCopyButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+
     if (register) {
+      setIsCopyDialogOpen(true)
       return
     }
+
     setCopiedChartOrder(selectedChartOrders)
-    setSelectedIcuChartId(chartId)
+    setCopiedChartId(chartId)
 
     toast({
       title: '차트 복사 완료',
@@ -97,15 +101,6 @@ export default function SearchChartTableRow({
           오더 보기
         </Button>
       </div>
-
-      {/* Accordion Trigger */}
-      {onRefClick && (
-        <ChevronDown
-          className="absolute right-4 top-2 shrink-0 text-muted-foreground transition-transform duration-200 hover:cursor-pointer"
-          size={24}
-          onClick={onRefClick}
-        />
-      )}
     </div>
   )
 }

@@ -118,7 +118,12 @@ export default function RegisterDialog({
             )}
             {step === 'selectChartType' && <RegisterTypeSelector />}
 
-            {step === 'chartSearch' && <IcuSearchChart register />}
+            {step === 'chartSearch' && (
+              <IcuSearchChart
+                setIsRegisterDialogOpen={setIsDialogOpen}
+                register
+              />
+            )}
           </TabsContent>
 
           <TabsContent value="register">
