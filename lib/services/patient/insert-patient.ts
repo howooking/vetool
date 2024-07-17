@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { PatientData } from '@/types/patients'
 import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 

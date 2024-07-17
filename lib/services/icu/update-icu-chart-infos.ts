@@ -5,11 +5,14 @@ import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
-export const updateDiagnosis = async (icuIoId: string, diagnosis: string) => {
+export const updateDiagnosis = async (
+  icuChartId: string,
+  diagnosis: string,
+) => {
   const { error: updateDiagnosisError } = await supabase
-    .from('icu_io')
-    .update({ dx: diagnosis })
-    .match({ icu_io_id: icuIoId })
+    .from('icu_chart')
+    .update({ icu_chart_dx: diagnosis })
+    .match({ icu_chart_id: icuChartId })
 
   if (updateDiagnosisError) {
     console.log(updateDiagnosisError)
@@ -18,13 +21,13 @@ export const updateDiagnosis = async (icuIoId: string, diagnosis: string) => {
 }
 
 export const updateChiefComplaint = async (
-  icuIoId: string,
+  icuChartId: string,
   chiefComplaint: string,
 ) => {
   const { error: updateChiefComplaintError } = await supabase
-    .from('icu_io')
-    .update({ cc: chiefComplaint })
-    .match({ icu_io_id: icuIoId })
+    .from('icu_chart')
+    .update({ icu_chart_cc: chiefComplaint })
+    .match({ icu_io_id: icuChartId })
 
   if (updateChiefComplaintError) {
     console.log(updateChiefComplaintError)

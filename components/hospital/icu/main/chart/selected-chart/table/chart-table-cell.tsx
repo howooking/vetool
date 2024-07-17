@@ -5,6 +5,7 @@ import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
+import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
@@ -100,24 +101,28 @@ export default function ChartTableCell({
 
   return (
     <TableCell className="p-0">
-      <Input
-        className={cn(
-          'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
-          hasOrder && 'bg-rose-50',
-          isDone && 'bg-green-50',
-        )}
-        disabled={isDeleting || isPreview}
-        value={briefTxResultInput}
-        onChange={(e) => setBriefTxResultInput(e.target.value)}
-        onBlur={handleUpsertBriefTxResultInput}
-        onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-        onTouchStart={handleLongClickStart}
-        onTouchEnd={handleLongClickEnd}
-        onTouchCancel={handleLongClickEnd}
-        onMouseDown={handleLongClickStart}
-        onMouseUp={handleLongClickEnd}
-        onMouseLeave={handleLongClickEnd}
-      />
+      {isDeleting ? (
+        <LoaderCircle className="mx-auto animate-spin text-muted-foreground opacity-50" />
+      ) : (
+        <Input
+          className={cn(
+            'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
+            hasOrder && 'bg-rose-50/60',
+            isDone && 'bg-green-50/60',
+          )}
+          disabled={isDeleting || isPreview}
+          value={briefTxResultInput}
+          onChange={(e) => setBriefTxResultInput(e.target.value)}
+          onBlur={handleUpsertBriefTxResultInput}
+          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+          onTouchStart={handleLongClickStart}
+          onTouchEnd={handleLongClickEnd}
+          onTouchCancel={handleLongClickEnd}
+          onMouseDown={handleLongClickStart}
+          onMouseUp={handleLongClickEnd}
+          onMouseLeave={handleLongClickEnd}
+        />
+      )}
     </TableCell>
   )
 }

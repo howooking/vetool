@@ -1,6 +1,6 @@
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
-import IcuIconButton from '@/components/common/icu-icon-button'
 import { weightFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/schema'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -71,7 +71,9 @@ export default function UpdateWeightDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <IcuIconButton icon={Gauge} />
+        <Button variant="ghost" size="icon" className="h-6 w-6">
+          <Gauge className="h-3 w-3" />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[320px]">
         <DialogHeader>

@@ -1,5 +1,5 @@
-import IcuIconButton from '@/components/common/icu-icon-button'
 import OrderForm from '@/components/hospital/icu/main/chart/selected-chart/table/order-form'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -27,7 +27,14 @@ export default function OrderDialog({
   return (
     <Dialog open={isModalOpen} onOpenChange={toggleModal}>
       <DialogTrigger asChild>
-        <IcuIconButton icon={FilePlus} onClick={handleDialogOpen} />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-6 w-6"
+          onClick={handleDialogOpen}
+        >
+          <FilePlus className="h-3 w-3" />
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>

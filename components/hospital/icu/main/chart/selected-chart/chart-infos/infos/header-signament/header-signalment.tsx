@@ -29,7 +29,6 @@ export default function HeaderSignalments({
   icuIoId: string
   isPatientOut: boolean
 }) {
-  console.log(isPatientOut)
   return (
     <header className="absolute left-0 top-0 flex h-12 w-full items-center justify-center gap-2 text-muted-foreground">
       {species === 'canine' ? (

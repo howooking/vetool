@@ -24,11 +24,11 @@ export const registerIcuPatient = async (
   const supabase = createClient()
 
   const { data: returningValue, error: rpcError } = await supabase.rpc(
-    'insert_icu_io_and_icu_chart_when_register_icu_patient',
+    'register_icu_patient',
     {
       hos_id_input: hosId,
-      dx_input: dx,
-      cc_input: cc,
+      icu_chart_dx_input: dx,
+      icu_chart_cc_input: cc,
       in_date_input: format(in_date, 'yyyy-MM-dd'),
       out_due_date_input: format(out_due_date, 'yyyy-MM-dd'),
       group_list_input: JSON.stringify(group_list),
@@ -44,15 +44,18 @@ export const registerIcuPatient = async (
     redirect(`/error?message=${rpcError.message}`)
   }
 
-  const [icuIoId, icuChartId] = returningValue.split(',')
+  const { newIcuChartId, newIcuIoId } = returningValue as {
+    newIcuChartId: string
+    newIcuIoId: string
+  }
 
   DEFAULT_ICU_ORDER_NAME.forEach(async (order) => {
     const { error: icuChartOrderError } = await supabase
       .from('icu_chart_order')
       .insert({
         icu_chart_order_type: order.dataType,
-        icu_chart_id: icuChartId,
-        icu_io_id: icuIoId,
+        icu_chart_id: newIcuChartId,
+        icu_io_id: newIcuIoId,
         icu_chart_order_name: order.orderName,
         icu_chart_order_comment: order.orderComment,
       })
