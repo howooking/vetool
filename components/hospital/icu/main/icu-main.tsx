@@ -40,7 +40,7 @@ export default function IcuMain({
         />
       )}
 
-      {selectIcudMainView === 'search' && <IcuChartSearch />}
+      {selectIcudMainView === 'search' && <IcuChartSearch register />}
     </div>
   )
 }

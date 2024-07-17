@@ -1,14 +1,23 @@
 'use client'
 
+import PasteOrderDialog from '@/components/hospital/icu/header/register-dialog/paste-order-dialog'
 import SearchChartTable from '@/components/hospital/icu/main/search/search-chart-table'
 import { Input } from '@/components/ui/input'
 import { selectChartList } from '@/lib/services/icu/select-chart-list'
+import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import type { IcuChartListJoined } from '@/types/icu'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
-export default function IcuSearchChart({ register }: { register?: boolean }) {
+export default function IcuSearchChart({
+  setIsRegisterDialogOpen,
+  register,
+}: {
+  setIsRegisterDialogOpen?: Dispatch<SetStateAction<boolean>>
+  register?: boolean
+}) {
   const [chartList, setChartList] = useState<IcuChartListJoined[][]>([])
+  const { isCopyDialogOpen, setIsCopyDialogOpen } = useCopiedChartStore()
 
   // Icu_Io_Id로 그룹화
   const groupByIcuIoId = (data: IcuChartListJoined[]) => {
@@ -42,6 +51,14 @@ export default function IcuSearchChart({ register }: { register?: boolean }) {
         onChange={handleSearch}
       />
       <SearchChartTable data={chartList} register={register} />
+
+      {isCopyDialogOpen && (
+        <PasteOrderDialog
+          isCopyDialogOpen={isCopyDialogOpen}
+          setIsCopyDialogOpen={setIsCopyDialogOpen}
+          setIsRegisterDialogOpen={setIsRegisterDialogOpen}
+        />
+      )}
     </div>
   )
 }

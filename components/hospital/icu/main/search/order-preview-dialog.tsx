@@ -12,7 +12,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart/order'
 import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
-import { useIcuSelectedChartStore } from '@/lib/store/icu/icu-selected-chart'
+import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import type { IcuChartOrderJoined } from '@/types/icu'
 import { useEffect, useState } from 'react'
 
@@ -25,7 +25,7 @@ export default function OrderPreviewDialog({
   onOpenChange: (open: boolean) => void
   register?: boolean
 }) {
-  const { selectedIcuChartId, setCopiedChartOrder } = useIcuSelectedChartStore()
+  const { copiedChartId, setCopiedChartOrder } = useCopiedChartStore()
   const [isLoading, setIsLoading] = useState(false)
   const [selectedChartOrders, setSelectedChartOrders] = useState<
     IcuChartOrderJoined[]
@@ -35,8 +35,7 @@ export default function OrderPreviewDialog({
     setIsLoading(true)
 
     const fetchChartOrderList = async () => {
-      const fetchedChartOrders =
-        await selectedChartOrderList(selectedIcuChartId)
+      const fetchedChartOrders = await selectedChartOrderList(copiedChartId)
 
       const selectedChartOrders = fetchedChartOrders.sort(
         (prev, next) =>
