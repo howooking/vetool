@@ -1,4 +1,3 @@
-import IcuIconButton from '@/components/common/icu-icon-button'
 import WarningMessage from '@/components/common/warning-message'
 import { Button } from '@/components/ui/button'
 import {
@@ -76,7 +75,9 @@ export default function DeleteChartDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <IcuIconButton icon={Trash2} />
+        <Button variant="ghost" size="icon" className="h-6 w-6">
+          <Trash2 className="h-3 w-3" />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

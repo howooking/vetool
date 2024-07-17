@@ -1,4 +1,3 @@
-import IcuIconButton from '@/components/common/icu-icon-button'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -49,7 +48,13 @@ export default function OutPatientDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <IcuIconButton icon={isPatientOut ? UserRoundPlus : UserRoundMinus} />
+        <Button variant="ghost" size="icon" className="h-6 w-6">
+          {isPatientOut ? (
+            <UserRoundMinus className="h-3 w-3" />
+          ) : (
+            <UserRoundPlus className="h-3 w-3" />
+          )}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
