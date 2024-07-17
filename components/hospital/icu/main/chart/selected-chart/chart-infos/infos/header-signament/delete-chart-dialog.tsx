@@ -83,8 +83,8 @@ export default function DeleteChartDialog({
         <DialogHeader>
           <DialogTitle>{name}의 차트를 삭제하시겠습니까?</DialogTitle>
           <DialogDescription className="flex flex-col gap-1">
-            <p>선택차트삭제 : {target_date}날 차트만 삭제합니다</p>
-            <p>모든차트삭제 : 입원기간동안의 차트들을 모두 삭제합니다</p>
+            <span>선택차트삭제 : {target_date}날 차트만 삭제합니다</span>
+            <span>모든차트삭제 : 입원기간동안의 차트들을 모두 삭제합니다</span>
             <WarningMessage text="해당작업은 실행 후 되될릴 수 없습니다." />
           </DialogDescription>
         </DialogHeader>
