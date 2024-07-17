@@ -14,6 +14,7 @@ import { pasteChartOrderWithRegisterPatient } from '@/lib/services/icu/paste-ord
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useIcuRegisteringPatient } from '@/lib/store/icu/icu-register'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
@@ -30,10 +31,10 @@ export default function PasteOrderDialog({
   setIsRegisterDialogOpen?: Dispatch<SetStateAction<boolean>>
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { refresh } = useRouter()
-  const { push } = useRouter()
+  const { push, refresh } = useRouter()
   const { setSelectedPatient } = useIcuSelectedPatientStore()
   const { copiedChartId } = useCopiedChartStore()
+  const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { registeringPatient } = useIcuRegisteringPatient() as {
     registeringPatient: {
       patientId: string
@@ -58,12 +59,22 @@ export default function PasteOrderDialog({
     push(`${format(new Date(), 'yyyy-MM-dd')}`)
 
     toast({
-      title: '선택한 차트를 붙여넣었습니다',
+      title: '선택하신 입원 차트를 생성하였습니다',
+      description: '입원일과 퇴원 예정일을 선택해주세요',
     })
 
+    // Alert Dialog Close
     setIsCopyDialogOpen
+
+    // isSubmitting false
     setIsSubmitting(false)
+
+    // Set MainView
+    setSelectedIcuMainView('chart')
+
+    // Register Dialog Close
     if (setIsRegisterDialogOpen) setIsRegisterDialogOpen(false)
+
     refresh()
   }
 

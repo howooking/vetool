@@ -55,6 +55,7 @@ export default function SearchChartTableRow({
     e.stopPropagation()
 
     if (setIsDialogOpen) {
+      console.log(chartId)
       setIsDialogOpen(true)
       setCopiedChartId(chartId)
       setSelectedTargetDate(targetDate)
@@ -65,13 +66,13 @@ export default function SearchChartTableRow({
   const handleCopyButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
 
+    setCopiedChartOrder(selectedChartOrders)
+    setCopiedChartId(chartId)
+
     if (register) {
       setIsCopyDialogOpen(true)
       return
     }
-
-    setCopiedChartOrder(selectedChartOrders)
-    setCopiedChartId(chartId)
 
     toast({
       title: '차트 복사 완료',
