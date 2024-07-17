@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import type { IcuChartListJoined } from '@/types/icu'
-import { useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 const TABLE_TITLES = [
   '환자명',
@@ -22,9 +22,11 @@ const TABLE_TITLES = [
 export default function SearchChartTable({
   data,
   register,
+  setIsRegisterDialogOpen,
 }: {
   data: IcuChartListJoined[][]
   register?: boolean
+  setIsRegisterDialogOpen?: Dispatch<SetStateAction<boolean>>
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -108,6 +110,7 @@ export default function SearchChartTable({
           open={isDialogOpen}
           onOpenChange={setIsDialogOpen}
           register={register}
+          setIsRegisterDialogOpen={setIsRegisterDialogOpen}
         />
       )}
     </div>

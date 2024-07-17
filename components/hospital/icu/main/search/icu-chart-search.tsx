@@ -2,9 +2,11 @@
 
 import PasteOrderDialog from '@/components/hospital/icu/header/register-dialog/paste-order-dialog'
 import SearchChartTable from '@/components/hospital/icu/main/search/search-chart-table'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { selectChartList } from '@/lib/services/icu/select-chart-list'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
+import { usePatientRegisterStep } from '@/lib/store/icu/icu-register'
 import type { IcuChartListJoined } from '@/types/icu'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
@@ -18,6 +20,7 @@ export default function IcuSearchChart({
 }) {
   const [chartList, setChartList] = useState<IcuChartListJoined[][]>([])
   const { isCopyDialogOpen, setIsCopyDialogOpen } = useCopiedChartStore()
+  const { setStep } = usePatientRegisterStep()
 
   // Icu_Io_Id로 그룹화
   const groupByIcuIoId = (data: IcuChartListJoined[]) => {
@@ -50,7 +53,11 @@ export default function IcuSearchChart({
         placeholder="환자명, DX, CC를 통해 차트를 검색하세요"
         onChange={handleSearch}
       />
-      <SearchChartTable data={chartList} register={register} />
+      <SearchChartTable
+        data={chartList}
+        register={register}
+        setIsRegisterDialogOpen={setIsRegisterDialogOpen}
+      />
 
       {isCopyDialogOpen && (
         <PasteOrderDialog
@@ -58,6 +65,18 @@ export default function IcuSearchChart({
           setIsCopyDialogOpen={setIsCopyDialogOpen}
           setIsRegisterDialogOpen={setIsRegisterDialogOpen}
         />
+      )}
+
+      {register && (
+        <Button
+          onClick={() => {
+            setStep('selectChartType')
+          }}
+          variant="outline"
+          className="ml-auto"
+        >
+          이전
+        </Button>
       )}
     </div>
   )
