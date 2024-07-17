@@ -1,19 +1,28 @@
+'use client'
+
 import IcuSidebarPatientList from '@/components/hospital/icu/sidebar/icu-sidebar-patient-list'
 import IcuSidebarSkeleton from '@/components/hospital/icu/sidebar/icu-sidebar-skeleton'
-import { Suspense } from 'react'
+import useRealTimeIcuIoData from '@/hooks/use-realtime-Icu-io-data'
 
-export default async function IcuSidebar({
+export default function IcuSidebar({
   hosId,
   targetDate,
 }: {
   hosId: string
   targetDate: string
 }) {
+  const { isFetching, realTimeIcuIoData } = useRealTimeIcuIoData(
+    hosId,
+    targetDate,
+  )
+
   return (
     <aside className="min-w-[144px] border-r p-2">
-      <Suspense fallback={<IcuSidebarSkeleton />}>
-        <IcuSidebarPatientList hosId={hosId} targetDate={targetDate} />
-      </Suspense>
+      {isFetching ? (
+        <IcuSidebarSkeleton />
+      ) : (
+        <IcuSidebarPatientList icuIoData={realTimeIcuIoData} />
+      )}
     </aside>
   )
 }

@@ -1,16 +1,12 @@
 import IcuSidebarPatientButton from '@/components/hospital/icu/sidebar/icu-sidebar-patient-button'
-import { getIcuIoData } from '@/lib/services/icu/get-icu-io-data'
+import type { IcuIoPatientJoined } from '@/types/icu'
 import { Squirrel } from 'lucide-react'
 
-export default async function IcuSidebarPatientList({
-  hosId,
-  targetDate,
+export default function IcuSidebarPatientList({
+  icuIoData,
 }: {
-  hosId: string
-  targetDate: string
+  icuIoData: IcuIoPatientJoined[]
 }) {
-  const icuIoData = await getIcuIoData(hosId, targetDate)
-
   return (
     <ul className="flex flex-col gap-2">
       {icuIoData.length === 0 ? (

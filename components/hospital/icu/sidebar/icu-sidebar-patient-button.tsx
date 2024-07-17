@@ -1,5 +1,3 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'

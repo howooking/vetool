@@ -7,7 +7,6 @@ import type {
   IcuIoPatientJoined,
   IcuUserList,
 } from '@/types/icu'
-import type { PatientData } from '@/types/patients'
 import { redirect } from 'next/navigation'
 
 export const getIcuMainData = async (hosId: string, targetDate: string) => {
