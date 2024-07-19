@@ -62,7 +62,7 @@ export default function Sidebar() {
         isExpanded ? 'w-48' : 'w-14',
       )}
     >
-      <ul className="sidebar-list-style">
+      <ul>
         {SIDE_BAR_ITEMS.map((item) => (
           <li key={item.name}>
             <TooltipProvider delayDuration={70}>

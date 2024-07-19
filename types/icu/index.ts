@@ -8,7 +8,7 @@ import type {
   User,
 } from '..'
 
-export type IcuIoPatientJoined = IcuIo & {
+export type IcuIoPatientJoined = Omit<IcuIo, 'patient_id'> & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
 }
 
@@ -23,12 +23,10 @@ export type IcuChartJoined = Omit<
     Patients,
     'name' | 'gender' | 'breed' | 'patient_id' | 'species' | 'owner_name'
   >
-  icu_io_id: IcuIo
   main_vet: MainAndSubVet
   sub_vet: MainAndSubVet | null
 }
 
-// !! overriding 오밋안써도 되는듯!
 export type IcuChartListJoined = Pick<
   IcuChart,
   | 'icu_chart_id'
