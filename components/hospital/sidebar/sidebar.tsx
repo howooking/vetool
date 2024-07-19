@@ -48,7 +48,7 @@ export default function Sidebar() {
     <aside
       data-state={isExpanded ? 'expanded' : 'collapse'}
       className={cn(
-        'flex h-screen flex-col border-r transition-all duration-200',
+        'flex h-screen shrink-0 flex-col border-r transition-all duration-200',
         isExpanded ? 'w-48' : 'w-14',
       )}
     >
