@@ -29,7 +29,7 @@ export default function HeaderDateSelector() {
 
       <div className="flex items-center gap-1">
         <span className="min-w-20 text-sm">{target_date}</span>
-        <IcuHeaderDatePicker />
+        <IcuHeaderDatePicker targetDate={target_date as string} />
       </div>
 
       <Button
