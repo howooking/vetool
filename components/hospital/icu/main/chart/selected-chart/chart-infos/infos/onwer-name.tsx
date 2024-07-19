@@ -14,18 +14,18 @@ export default function OwnerName({
   ownerName: string
   patientId: string
 }) {
-  const [ownnerNameInput, setOwnerNameInput] = useState(ownerName)
+  const [ownerNameInput, setOwnerNameInput] = useState(ownerName)
   const [isUpdating, setIsUpdating] = useState(false)
   const { refresh } = useRouter()
 
-  const handleUpdateDiagnosis = async () => {
-    if (ownerName === ownnerNameInput.trim()) {
-      setOwnerNameInput(ownnerNameInput.trim())
+  const handleUpdateOwnerName = async () => {
+    if (ownerName === ownerNameInput.trim()) {
+      setOwnerNameInput(ownerNameInput.trim())
       return
     }
 
     setIsUpdating(true)
-    await updateOwnerName(patientId, ownnerNameInput.trim())
+    await updateOwnerName(patientId, ownerNameInput.trim())
 
     toast({
       title: '보호자명을 변경하였습니다',
@@ -50,9 +50,9 @@ export default function OwnerName({
       <Input
         disabled={isUpdating}
         id="diagnosis"
-        value={ownnerNameInput}
+        value={ownerNameInput}
         onChange={(e) => setOwnerNameInput(e.target.value)}
-        onBlur={handleUpdateDiagnosis}
+        onBlur={handleUpdateOwnerName}
         onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
         className="w-full pl-11"
         title={ownerName ?? ''}
