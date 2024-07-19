@@ -7,28 +7,29 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import type { IcuChartListJoined } from '@/types/icu'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 const TABLE_TITLES = [
   '환자명',
   'DX',
   'CC',
   '차트 생성일',
-  '복사',
   '오더 미리보기',
+  '복사',
 ] as const
 
 export default function SearchChartTable({
   data,
-  register,
+  type,
   setIsRegisterDialogOpen,
 }: {
   data: IcuChartListJoined[][]
-  register?: boolean
+  type: 'search' | 'register' | 'bookmark'
   setIsRegisterDialogOpen?: Dispatch<SetStateAction<boolean>>
 }) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { isPreviewModalOpen } = useOrderPreviewStore()
 
   return (
     <div className="w-full rounded-md border">
@@ -62,8 +63,7 @@ export default function SearchChartTable({
                     cc={chartList[0].icu_chart_cc}
                     targetDate={chartList[0].target_date}
                     chartId={chartList[0].icu_chart_id}
-                    setIsDialogOpen={setIsDialogOpen}
-                    register={register}
+                    type={type}
                   />
                 </AccordionTrigger>
 
@@ -78,8 +78,7 @@ export default function SearchChartTable({
                       cc={chart.icu_chart_cc}
                       targetDate={chart.target_date}
                       chartId={chart.icu_chart_id}
-                      setIsDialogOpen={setIsDialogOpen}
-                      register={register}
+                      type={type}
                     />
                   </AccordionContent>
                 ))}
@@ -94,8 +93,7 @@ export default function SearchChartTable({
                 cc={chartList[0].icu_chart_cc}
                 targetDate={chartList[0].target_date}
                 chartId={chartList[0].icu_chart_id}
-                setIsDialogOpen={setIsDialogOpen}
-                register={register}
+                type={type}
               />
             </div>
           ),
@@ -105,11 +103,9 @@ export default function SearchChartTable({
         <NoResult title="결과가 없습니다" className="h-40" />
       )}
 
-      {isDialogOpen && (
+      {isPreviewModalOpen && (
         <OrderPreviewDialog
-          open={isDialogOpen}
-          onOpenChange={setIsDialogOpen}
-          register={register}
+          type={type}
           setIsRegisterDialogOpen={setIsRegisterDialogOpen}
         />
       )}

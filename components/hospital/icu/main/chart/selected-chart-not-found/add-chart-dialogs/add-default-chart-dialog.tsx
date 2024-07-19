@@ -13,7 +13,7 @@ import { toast } from '@/components/ui/use-toast'
 import { addDefaultChart } from '@/lib/services/icu/add-icu-chart'
 import { cn } from '@/lib/utils'
 import { File, LoaderCircle } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function AddDefaultChartDialog({
@@ -26,6 +26,7 @@ export default function AddDefaultChartDialog({
     patientId: string
   }
 }) {
+  const { refresh } = useRouter()
   const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)

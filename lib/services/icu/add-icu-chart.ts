@@ -3,6 +3,7 @@
 import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart/order'
 import { createClient } from '@/lib/supabase/server'
 import { format } from 'date-fns'
+import { redirect } from 'next/navigation'
 
 export const copyPrevChart = async (
   targetDate: string,
@@ -24,7 +25,7 @@ export const copyPrevChart = async (
 
   if (rpcError) {
     console.log(rpcError)
-    return { error: rpcError }
+    redirect(`/error?message=${rpcError.message}`)
   }
 
   const { newIcuChartId, prevIcuChartId, icuIoId } = returningIcuChartIds as {
@@ -42,7 +43,7 @@ export const copyPrevChart = async (
 
   if (preSelectedChartOrdersDataError) {
     console.log(preSelectedChartOrdersDataError)
-    return { error: preSelectedChartOrdersDataError }
+    redirect(`/error?message=${preSelectedChartOrdersDataError.message}`)
   }
 
   preSelectedChartOrdersData.forEach(async (order) => {
@@ -53,8 +54,10 @@ export const copyPrevChart = async (
         icu_chart_order_type: order.icu_chart_order_type,
         icu_chart_id: newIcuChartId,
         icu_io_id: icuIoId,
+        hos_id: order.hos_id,
         icu_chart_order_name: order.icu_chart_order_name,
         icu_chart_order_comment: order.icu_chart_order_comment,
+        icu_chart_order_time: order.icu_chart_order_time,
       })
 
     if (icuChartOrderError) {
@@ -102,6 +105,7 @@ export const addDefaultChart = async (
         icu_chart_order_type: order.dataType,
         icu_chart_id: newIcuChartId,
         icu_io_id: icuIoId,
+        hos_id: hosId,
         icu_chart_order_name: order.orderName,
         icu_chart_order_comment: order.orderComment,
       })

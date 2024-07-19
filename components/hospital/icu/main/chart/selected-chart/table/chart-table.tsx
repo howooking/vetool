@@ -22,8 +22,8 @@ export default function ChartTable({
 }) {
   return (
     <Table className="border">
-      <TableHeader className={cn('')}>
-        <TableRow className={cn('')}>
+      <TableHeader>
+        <TableRow>
           <TableHead className="flex w-[296px] items-center justify-center gap-2 text-center">
             <span>오더 목록</span>
             <OrderDialog

@@ -10,6 +10,8 @@ export type Hospital = Database['public']['Tables']['hospitals']['Row']
 export type IcuChartOrder =
   Database['public']['Tables']['icu_chart_order']['Row']
 export type UserApproval = Database['public']['Tables']['user_approvals']['Row']
+export type IcuChartBookmark =
+  Database['public']['Tables']['icu_chart_bookmark']['Row']
 
 // supabase.auth.getUser() 시 return되는 유져타입
 export type AuthUser = {

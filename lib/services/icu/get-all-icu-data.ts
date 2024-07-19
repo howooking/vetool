@@ -35,7 +35,8 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
           hos_id("group_list", "icu_memo_names"),
           patient_id("name", "gender", "breed", "patient_id", "species", "owner_name"),
           main_vet("name", "user_id", "avatar_url"),
-          sub_vet("name", "user_id", "avatar_url")
+          sub_vet("name", "user_id", "avatar_url"),
+          bookmark_id("bookmark_name", "bookmark_comment", "bookmark_id")
         `,
       )
       .match({ hos_id: hosId, target_date: targetDate })

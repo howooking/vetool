@@ -57,6 +57,7 @@ export const registerIcuPatient = async (
         icu_chart_order_type: order.dataType,
         icu_chart_id: newIcuChartId,
         icu_io_id: newIcuIoId,
+        hos_id: hosId,
         icu_chart_order_name: order.orderName,
         icu_chart_order_comment: order.orderComment,
       })
