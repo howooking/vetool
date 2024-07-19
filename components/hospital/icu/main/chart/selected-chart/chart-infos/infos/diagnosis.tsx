@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
 import { updateDiagnosis } from '@/lib/services/icu/update-icu-chart-infos'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Diagnosis({
@@ -16,7 +15,6 @@ export default function Diagnosis({
 }) {
   const [diagnosisInput, setDiagnosisInput] = useState(diagnosis)
   const [isUpdating, setIsUpdating] = useState(false)
-  const { refresh } = useRouter()
 
   const handleUpdateDiagnosis = async () => {
     if (diagnosisInput.trim() === '') {
@@ -35,7 +33,6 @@ export default function Diagnosis({
       })
 
       setIsUpdating(false)
-      refresh()
     }
   }
 

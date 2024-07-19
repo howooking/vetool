@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils'
 import type { IcuUserList, TxLog } from '@/types/icu'
 import { format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function TxSelectUserStep({
@@ -23,9 +23,9 @@ export default function TxSelectUserStep({
 }: {
   icuUsersData: IcuUserList[]
 }) {
-  const { refresh } = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { txLocalState, setTxLocalState, reset } = useUpsertTxStore()
+  const { hos_id } = useParams()
 
   const handleSelectUserId = (userId: string) => {
     setTxLocalState({ txUserId: userId })
@@ -44,7 +44,11 @@ export default function TxSelectUserStep({
 
     const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
-    await upsertIcuChartTxAndUpdateIcuChartOrder(txLocalState, updatedLogs)
+    await upsertIcuChartTxAndUpdateIcuChartOrder(
+      txLocalState,
+      updatedLogs,
+      hos_id as string,
+    )
 
     toast({
       title: '처치 내역이 업데이트 되었습니다',
@@ -52,7 +56,6 @@ export default function TxSelectUserStep({
 
     reset()
     setIsSubmitting(false)
-    refresh()
   }
 
   return (

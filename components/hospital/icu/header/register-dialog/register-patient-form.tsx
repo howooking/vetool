@@ -59,7 +59,7 @@ export default function RegisterPatientForm({
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
   tab: string
 }) {
-  const { push, refresh } = useRouter()
+  const { push } = useRouter()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
     to: new Date(),
@@ -127,7 +127,6 @@ export default function RegisterPatientForm({
     })
     setSelectedIcuMainView('chart')
     push(`${format(in_date, 'yyyy-MM-dd')}`)
-    refresh()
   }
 
   const handlePreviousButtonClick = () => {

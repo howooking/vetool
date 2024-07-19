@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
 export default function ChartTableCell({
@@ -28,7 +27,6 @@ export default function ChartTableCell({
   icuChartTxId?: string
   isPreview?: boolean
 }) {
-  const { refresh } = useRouter()
   const [isDeleting, setIsDeleting] = useState(false)
   const [briefTxResultInput, setBriefTxResultInput] = useState(
     txData?.icu_chart_tx_result ?? '',
@@ -51,7 +49,6 @@ export default function ChartTableCell({
         await deleteIcuChartTx(icuChartTxId, icuChartOrderId, time)
 
         setIsDeleting(false)
-        refresh()
         return
       } else {
         setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')

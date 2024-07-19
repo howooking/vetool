@@ -18,7 +18,7 @@ import {
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
 import { LoaderCircle, Trash2 } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 export default function DeleteChartDialog({
   icuChartId,
@@ -35,7 +35,6 @@ export default function DeleteChartDialog({
   const [isOpen, setIsOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeletingAllCharts, setIsDeletingAllCharts] = useState(false)
-  const { refresh } = useRouter()
   const { setSelectedPatient } = useIcuSelectedPatientStore()
 
   const handleDeleteChart = async () => {
@@ -55,7 +54,6 @@ export default function DeleteChartDialog({
     setIsDeleting(false)
     isIcuIoDeleted && setSelectedPatient(null)
     setIsOpen(false)
-    refresh()
   }
   const handleDeleteAllCharts = async () => {
     setIsDeletingAllCharts(true)
@@ -69,7 +67,6 @@ export default function DeleteChartDialog({
     setIsDeletingAllCharts(false)
     setSelectedPatient(null)
     setIsOpen(false)
-    refresh()
   }
 
   return (

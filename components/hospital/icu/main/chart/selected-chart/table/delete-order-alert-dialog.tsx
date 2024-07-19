@@ -15,7 +15,6 @@ import { deleteOrder } from '@/lib/services/icu/create-new-order'
 import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined } from '@/types/icu'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function DeleteOrderAlertDialog({
@@ -27,14 +26,11 @@ export default function DeleteOrderAlertDialog({
 }) {
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const { refresh } = useRouter()
-
   const handleDeleteOrderClick = async () => {
     setIsDeleting(true)
 
     await deleteOrder(selectedChartOrder.icu_chart_order_id)
 
-    refresh()
     toggleModal()
     setIsDeleting(false)
   }
