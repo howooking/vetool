@@ -10,10 +10,12 @@ const supabase = createClient()
 export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
   txLocalState?: TxLocalState,
   updatedLogs?: TxLog[],
+  hosId?: string,
 ) => {
   const { data: returningData, error: upsertIcuChartTxError } = await supabase
     .from('icu_chart_tx')
     .upsert({
+      hos_id: hosId!,
       icu_chart_tx_id: txLocalState?.txId,
       icu_io_id: txLocalState?.icuIoId,
       icu_chart_order_id: txLocalState?.icuChartOrderId,

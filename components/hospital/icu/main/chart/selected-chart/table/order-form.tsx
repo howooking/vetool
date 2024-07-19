@@ -31,7 +31,7 @@ import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -43,7 +43,7 @@ export default function OrderForm({
   icuIoId: string
   icuChartId: string
 }) {
-  const { refresh } = useRouter()
+  const { hos_id } = useParams()
   const { toggleModal, selectedChartOrder, isEditMode } = useCreateOrderStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
   // 왜 undefined로 안하고 "undefined"로 했냐면, 값을 undefined로 만들었을 때 ui가 초기화되지 않음
@@ -53,23 +53,9 @@ export default function OrderForm({
     selectedChartOrder.icu_chart_order_time || new Array(24).fill('0'),
   )
 
-  // !! 어차피 orderTime은 form으로 관리 못하기 때문에 form에서 제외
-  // const updateOrderTime = (orderTime: string[]) => {
-  //   setOrderTime(orderTime)
-  //   orderTime.forEach((time, index) => {
-  //     form.setValue(
-  //       `icu_chart_order_tx_${index + 1}` as keyof z.infer<
-  //         typeof GroupCheckFormSchema
-  //       >,
-  //       time === '1',
-  //     )
-  //   })
-  // }
-
   const form = useForm<z.infer<typeof GroupCheckFormSchema>>({
     resolver: zodResolver(GroupCheckFormSchema),
     defaultValues: {
-      // !! 기본값을 undefined로 해야 새로운 오더추가시 폼 validation에 걸림
       icu_chart_order_type:
         selectedChartOrder.icu_chart_order_type ?? undefined,
       icu_chart_order_name:
@@ -99,6 +85,7 @@ export default function OrderForm({
       icuIoId,
       selectedChartOrder.icu_chart_order_id,
       orderTime,
+      hos_id as string,
       {
         icu_chart_order_type: values.icu_chart_order_type,
         icu_chart_order_name: values.icu_chart_order_name,
@@ -110,7 +97,6 @@ export default function OrderForm({
       title: `${values.icu_chart_order_name} 오더를 추가하였습니다`,
     })
 
-    refresh()
     setIsSubmitting(false)
     toggleModal()
   }
