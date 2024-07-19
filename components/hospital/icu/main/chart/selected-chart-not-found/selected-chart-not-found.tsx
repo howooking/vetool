@@ -3,21 +3,21 @@
 import NoResult from '@/components/common/no-result'
 import AddChartDialogs from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/add-chart-dialogs'
 import { differenceInDays, format } from 'date-fns'
+import { useParams } from 'next/navigation'
 
 export default function SelectedChartNotFound({
   selectedPatient,
-  targetDate,
   isPatientIn,
 }: {
   selectedPatient: {
     patientName: string
     patientId: string
   }
-  targetDate: string
   isPatientIn: boolean
 }) {
   const today = format(new Date(), 'yyyy-MM-dd')
-  const targetDateFromToday = differenceInDays(targetDate, today)
+  const { target_data } = useParams()
+  const targetDateFromToday = differenceInDays(target_data as string, today)
 
   if (!isPatientIn) {
     return (

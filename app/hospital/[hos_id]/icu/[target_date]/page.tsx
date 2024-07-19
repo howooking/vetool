@@ -1,20 +1,11 @@
-import IcuHeader from '@/components/hospital/icu/header/icu-header'
-import IcuMainAsync from '@/components/hospital/icu/main/icu-main-async'
-import IcuMainSkeleton from '@/components/hospital/icu/main/icu-main-skeleton'
-import { Suspense } from 'react'
+import IcuEntry from '@/components/hospital/icu/icu-entry'
+import { getAllIcuData } from '@/lib/services/icu/get-all-icu-data'
 
-export default function IcuPage({
+export default async function IcuPage({
   params,
 }: {
   params: { hos_id: string; target_date: string }
 }) {
-  return (
-    <div className="h-icu-chart overflow-y-scroll">
-      <IcuHeader hosId={params.hos_id} />
-
-      <Suspense fallback={<IcuMainSkeleton />}>
-        <IcuMainAsync hosId={params.hos_id} targetDate={params.target_date} />
-      </Suspense>
-    </div>
-  )
+  const icuData = await getAllIcuData(params.hos_id, params.target_date)
+  return <IcuEntry hosId={params.hos_id} icuData={icuData} />
 }

@@ -10,11 +10,14 @@ import {
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarDays } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export default function HeaderDatePicker() {
-  const { target_date } = useParams()
+export default function HeaderDatePicker({
+  targetDate,
+}: {
+  targetDate: string
+}) {
   const [open, setOpen] = useState(false)
   const { push } = useRouter()
 
@@ -47,7 +50,7 @@ export default function HeaderDatePicker() {
           locale={ko}
           mode="single"
           initialFocus
-          selected={new Date(target_date as string)}
+          selected={new Date(targetDate)}
           onSelect={(date) => handleSelectDate(date)}
         />
       </PopoverContent>

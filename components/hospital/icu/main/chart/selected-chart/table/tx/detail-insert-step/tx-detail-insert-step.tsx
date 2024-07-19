@@ -25,7 +25,6 @@ import { z } from 'zod'
 export default function TxDetailInsertStep() {
   const [isDeleting, setIsDeleting] = useState(false)
   const { reset, setStep, txLocalState, setTxLocalState } = useUpsertTxStore()
-  const { refresh } = useRouter()
 
   const form = useForm<z.infer<typeof txDetailRegisterFormSchema>>({
     resolver: zodResolver(txDetailRegisterFormSchema),
@@ -59,7 +58,6 @@ export default function TxDetailInsertStep() {
     )
 
     setIsDeleting(false)
-    refresh()
     reset()
   }
 

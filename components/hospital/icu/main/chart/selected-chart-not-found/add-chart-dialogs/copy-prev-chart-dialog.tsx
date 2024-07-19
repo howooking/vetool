@@ -13,7 +13,6 @@ import { toast } from '@/components/ui/use-toast'
 import { copyPrevChart } from '@/lib/services/icu/add-icu-chart'
 import { cn } from '@/lib/utils'
 import { ClipboardPaste, LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function CopyPrevChartDialog({
@@ -26,7 +25,6 @@ export default function CopyPrevChartDialog({
     patientId: string
   }
 }) {
-  const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -49,7 +47,6 @@ export default function CopyPrevChartDialog({
     toast({
       title: '전날 차트를 복사하였습니다',
     })
-    refresh()
     setIsDialogOpen(false)
     setIsSubmitting(false)
   }

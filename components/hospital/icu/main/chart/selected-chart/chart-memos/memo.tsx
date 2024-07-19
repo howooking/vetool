@@ -3,7 +3,6 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
 import { updateMemo } from '@/lib/services/icu/update-icu-chart-infos'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Memo({
@@ -19,7 +18,6 @@ export default function Memo({
 }) {
   const [memoInput, setMemoInput] = useState(memo)
   const [isUpdating, setIsUpdating] = useState(false)
-  const { refresh } = useRouter()
 
   const handleUpdateMemo = async () => {
     if (memo === memoInput.trim()) {
@@ -43,7 +41,6 @@ export default function Memo({
     })
 
     setIsUpdating(false)
-    refresh()
   }
 
   useEffect(() => {

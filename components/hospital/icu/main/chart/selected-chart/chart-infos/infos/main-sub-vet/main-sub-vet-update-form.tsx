@@ -23,7 +23,6 @@ import { cn } from '@/lib/utils'
 import type { IcuUserList, MainAndSubVet } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -42,7 +41,6 @@ export default function MainSubVetUpdateForm({
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
-  const { refresh } = useRouter()
 
   const handleUpdateMainAndSubVet = async (
     values: z.infer<typeof mainSubVetFormSchema>,
@@ -54,7 +52,6 @@ export default function MainSubVetUpdateForm({
       title: '주치의 / 부주치의를 변경하였습니다',
     })
 
-    refresh()
     setIsUpdating(false)
     setIsDialogOpen(false)
   }

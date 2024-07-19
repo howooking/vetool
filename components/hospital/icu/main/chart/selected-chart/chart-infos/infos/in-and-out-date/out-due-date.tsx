@@ -12,8 +12,7 @@ import { updateOutDueDate } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
 import { format, parseISO } from 'date-fns'
 import { ko } from 'date-fns/locale'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function OutDueDate({
   inDate,
@@ -29,8 +28,11 @@ export default function OutDueDate({
   )
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-  const { refresh } = useRouter()
   const [isUpdating, setIsUpdating] = useState(false)
+
+  useEffect(() => {
+    setOutDueDateInput(new Date(outDueDate))
+  }, [outDueDate])
 
   const handleUpdateOutDueDate = async (date: Date | undefined) => {
     if (!date) {
@@ -49,7 +51,6 @@ export default function OutDueDate({
 
     setIsUpdating(false)
     setIsPopoverOpen(false)
-    refresh()
   }
 
   return (

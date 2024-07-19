@@ -49,6 +49,7 @@ export const copyPrevChart = async (
     const { error: icuChartOrderError } = await supabase
       .from('icu_chart_order')
       .insert({
+        hos_id: order.hos_id,
         icu_chart_order_type: order.icu_chart_order_type,
         icu_chart_id: newIcuChartId,
         icu_io_id: icuIoId,
@@ -65,6 +66,7 @@ export const copyPrevChart = async (
 }
 
 export const addDefaultChart = async (
+  hosId: string,
   targetDate: string,
   selectedPatientId: string,
 ) => {
@@ -96,6 +98,7 @@ export const addDefaultChart = async (
     const { error: icuChartOrderError } = await supabase
       .from('icu_chart_order')
       .insert({
+        hos_id: hosId,
         icu_chart_order_type: order.dataType,
         icu_chart_id: newIcuChartId,
         icu_io_id: icuIoId,

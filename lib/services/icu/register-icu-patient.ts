@@ -53,6 +53,7 @@ export const registerIcuPatient = async (
     const { error: icuChartOrderError } = await supabase
       .from('icu_chart_order')
       .insert({
+        hos_id: hosId,
         icu_chart_order_type: order.dataType,
         icu_chart_id: newIcuChartId,
         icu_io_id: newIcuIoId,

@@ -13,7 +13,7 @@ import { toast } from '@/components/ui/use-toast'
 import { toggleOutPatient } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
 import { LoaderCircle, UserRoundMinus, UserRoundPlus } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 export default function OutPatientDialog({
   icuIoId,
@@ -26,7 +26,6 @@ export default function OutPatientDialog({
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { refresh } = useRouter()
   const { target_date } = useParams()
 
   const handleOutPatient = async () => {
@@ -42,7 +41,6 @@ export default function OutPatientDialog({
 
     setIsSubmitting(false)
     setIsDialogOpen(false)
-    refresh()
   }
 
   return (
@@ -50,9 +48,9 @@ export default function OutPatientDialog({
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon" className="h-6 w-6">
           {isPatientOut ? (
-            <UserRoundMinus className="h-3 w-3" />
-          ) : (
             <UserRoundPlus className="h-3 w-3" />
+          ) : (
+            <UserRoundMinus className="h-3 w-3" />
           )}
         </Button>
       </DialogTrigger>

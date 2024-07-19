@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
 import { updateCaution } from '@/lib/services/icu/update-icu-chart-infos'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Caution({
@@ -16,7 +15,6 @@ export default function Caution({
 }) {
   const [cautionInput, setCautionInput] = useState(caution)
   const [isUpdating, setIsUpdating] = useState(false)
-  const { refresh } = useRouter()
 
   const handleUpdateDiagnosis = async () => {
     if (cautionInput.trim() === '') {
@@ -35,7 +33,6 @@ export default function Caution({
       })
 
       setIsUpdating(false)
-      refresh()
     }
   }
 

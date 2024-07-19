@@ -1,19 +1,19 @@
-import IcuSidebarPatientList from '@/components/hospital/icu/sidebar/icu-sidebar-patient-list'
-import IcuSidebarSkeleton from '@/components/hospital/icu/sidebar/icu-sidebar-skeleton'
-import { Suspense } from 'react'
+'use client'
 
-export default async function IcuSidebar({
-  hosId,
-  targetDate,
+import IcuSidebarPatientList from '@/components/hospital/icu/sidebar/icu-sidebar-patient-list'
+import { IcuIoPatientJoined } from '@/types/icu'
+
+export default function IcuSidebar({
+  icuIoData,
 }: {
-  hosId: string
-  targetDate: string
+  icuIoData: IcuIoPatientJoined[]
 }) {
   return (
-    <aside className="min-w-[144px] border-r p-2">
-      <Suspense fallback={<IcuSidebarSkeleton />}>
-        <IcuSidebarPatientList hosId={hosId} targetDate={targetDate} />
-      </Suspense>
+    <aside className="h-icu-chart w-[144px] border-r p-2">
+      {/* {isFetching ? (
+        <IcuSidebarSkeleton />
+      ) : ( */}
+      <IcuSidebarPatientList icuIoData={icuIoData} />
     </aside>
   )
 }

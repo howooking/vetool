@@ -4,15 +4,18 @@ import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/tabl
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
+  IcuIoPatientJoined,
   IcuUserList,
 } from '@/types/icu'
 
 export default function SelectedChart({
+  selectedChartIoData,
   selectedChart,
   selectedChartOrders,
   icuUsersData,
   isPatientOut,
 }: {
+  selectedChartIoData: IcuIoPatientJoined
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
   icuUsersData: IcuUserList[]
@@ -22,6 +25,7 @@ export default function SelectedChart({
   return (
     <div className="flex flex-col gap-4 p-2 pb-[48px]">
       <ChartInfos
+        selectedChartIoData={selectedChartIoData}
         chartData={restChartData}
         icuUsersData={icuUsersData}
         isPatientOut={isPatientOut}

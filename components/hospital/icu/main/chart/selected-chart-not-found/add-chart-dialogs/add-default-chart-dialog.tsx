@@ -13,7 +13,7 @@ import { toast } from '@/components/ui/use-toast'
 import { addDefaultChart } from '@/lib/services/icu/add-icu-chart'
 import { cn } from '@/lib/utils'
 import { File, LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function AddDefaultChartDialog({
@@ -26,7 +26,7 @@ export default function AddDefaultChartDialog({
     patientId: string
   }
 }) {
-  const { refresh } = useRouter()
+  const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -34,6 +34,7 @@ export default function AddDefaultChartDialog({
     setIsSubmitting(true)
 
     const { error } = await addDefaultChart(
+      hos_id as string,
       targetDate,
       selectedPatient.patientId,
     )
@@ -53,7 +54,6 @@ export default function AddDefaultChartDialog({
       title: '기본차트를 생성했습니다',
     })
 
-    refresh()
     setIsDialogOpen(false)
     setIsSubmitting(false)
   }

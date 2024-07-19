@@ -21,7 +21,6 @@ import { toast } from '@/components/ui/use-toast'
 import { updateWeight } from '@/lib/services/icu/update-icu-chart-infos'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Gauge } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -35,7 +34,6 @@ export default function UpdateWeightDialog({
   icuChartId: string
   weight: string
 }) {
-  const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -63,7 +61,6 @@ export default function UpdateWeightDialog({
       title: '체중을 입력하였습니다',
     })
 
-    refresh()
     setIsSubmitting(false)
     setIsDialogOpen(false)
   }
