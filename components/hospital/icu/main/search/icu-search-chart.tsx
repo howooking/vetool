@@ -13,10 +13,10 @@ import { useDebouncedCallback } from 'use-debounce'
 
 export default function IcuSearchChart({
   setIsRegisterDialogOpen,
-  register,
+  type,
 }: {
   setIsRegisterDialogOpen?: Dispatch<SetStateAction<boolean>>
-  register?: boolean
+  type: 'search' | 'register' | 'bookmark'
 }) {
   const [chartList, setChartList] = useState<IcuChartListJoined[][]>([])
   const { isCopyDialogOpen, setIsCopyDialogOpen } = useCopiedChartStore()
@@ -55,8 +55,8 @@ export default function IcuSearchChart({
       />
       <SearchChartTable
         data={chartList}
-        register={register}
         setIsRegisterDialogOpen={setIsRegisterDialogOpen}
+        type={type}
       />
 
       {isCopyDialogOpen && (
@@ -67,7 +67,7 @@ export default function IcuSearchChart({
         />
       )}
 
-      {register && (
+      {type === 'register' && (
         <Button
           onClick={() => {
             setStep('selectChartType')

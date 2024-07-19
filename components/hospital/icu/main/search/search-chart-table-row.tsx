@@ -3,8 +3,7 @@ import { toast } from '@/components/ui/use-toast'
 import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart/order'
 import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { IcuChartOrderJoined } from '@/types/icu'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 
 export default function SearchChartTableRow({
   name,
@@ -12,22 +11,17 @@ export default function SearchChartTableRow({
   cc,
   targetDate,
   chartId,
-  setIsDialogOpen,
-  register,
+  type,
 }: {
   name: string
   dx: string | null
   cc: string | null
   targetDate: string
   chartId: string
-  setIsDialogOpen: Dispatch<SetStateAction<boolean>>
-  register?: boolean
+  type: 'search' | 'register' | 'bookmark'
 }) {
   const rowData = [name, dx, cc, targetDate]
-  const [selectedChartOrders, setSelectedChartOrders] = useState<
-    IcuChartOrderJoined[]
-  >([])
-
+  const { onOpenChange } = useOrderPreviewStore()
   const {
     setSelectedTargetDate,
     setCopiedChartId,
@@ -46,7 +40,8 @@ export default function SearchChartTableRow({
         ORDER_OF_ORDERS.findIndex((itme) => itme === next.icu_chart_order_type),
     )
 
-    setSelectedChartOrders(selectedChartOrders)
+    setCopiedChartOrder(selectedChartOrders)
+    setCopiedChartId(chartId)
   }
 
   const handleOpenChartPreviewModal = (
@@ -54,22 +49,22 @@ export default function SearchChartTableRow({
   ) => {
     e.stopPropagation()
 
-    if (setIsDialogOpen) {
-      console.log(chartId)
-      setIsDialogOpen(true)
+    if (onOpenChange) {
+      onOpenChange(true)
       setCopiedChartId(chartId)
       setSelectedTargetDate(targetDate)
       fetchChartOrderList()
     }
   }
 
-  const handleCopyButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCopyButtonClick = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     e.stopPropagation()
 
-    setCopiedChartOrder(selectedChartOrders)
-    setCopiedChartId(chartId)
+    await fetchChartOrderList()
 
-    if (register) {
+    if (type === 'register') {
       setIsCopyDialogOpen(true)
       return
     }
@@ -92,14 +87,14 @@ export default function SearchChartTableRow({
       ))}
 
       <div className="flex w-full justify-center">
-        <Button onClick={handleCopyButtonClick} className="h-6">
-          {register ? '선택' : '복사'}
+        <Button onClick={handleOpenChartPreviewModal} className="h-6">
+          미리보기
         </Button>
       </div>
 
       <div className="flex w-full justify-center">
-        <Button onClick={handleOpenChartPreviewModal} className="h-6">
-          오더 보기
+        <Button onClick={handleCopyButtonClick} className="h-6">
+          {type === 'register' ? '선택' : '복사'}
         </Button>
       </div>
     </div>

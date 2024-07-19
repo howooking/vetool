@@ -94,6 +94,7 @@ export default function IcuChart({
         <SelectedChartNotFound
           selectedPatient={selectedPatient}
           isPatientIn={isPatientIn}
+          icuChartData={icuChartData}
         />
       )}
     </div>

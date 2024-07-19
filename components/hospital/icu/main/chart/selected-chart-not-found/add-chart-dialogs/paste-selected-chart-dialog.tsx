@@ -10,13 +10,13 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { pasteChartOrder } from '@/lib/services/icu/paste-order'
+import { pasteRegisteredPatientChartOrder } from '@/lib/services/icu/paste-order'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { cn } from '@/lib/utils'
-import { Bookmark, LoaderCircle } from 'lucide-react'
+import { CopyCheck, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-export default function PasteChartDialog({
+export default function PasteSelectedChartDialog({
   targetDate,
   selectedPatient,
 }: {
@@ -32,9 +32,21 @@ export default function PasteChartDialog({
   const { copiedChartId, copiedChartOrder } = useCopiedChartStore()
 
   const handlePasteSelectedChart = async () => {
+    if (!copiedChartId || !copiedChartOrder) {
+      setIsDialogOpen(false)
+
+      toast({
+        title: '차트 생성 실패',
+        description: '차트 검색을 통해 복사하고자 하는 차트를 선택해주세요',
+        variant: 'destructive',
+      })
+
+      return
+    }
+
     setIsSubmitting(true)
 
-    await pasteChartOrder(
+    await pasteRegisteredPatientChartOrder(
       targetDate,
       selectedPatient.patientId,
       copiedChartId,
@@ -57,15 +69,15 @@ export default function PasteChartDialog({
           variant="outline"
           className="flex h-1/3 w-1/4 items-center justify-center gap-2"
         >
-          <Bookmark />
+          <CopyCheck />
           <span>복사한 차트 붙여넣기</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>복사한 차트 붙여넣기</DialogTitle>
+          <DialogTitle>복사한 차트 생성</DialogTitle>
           <DialogDescription>
-            복사한 차트를 붙여넣어 차트가 생성됩니다
+            클립보드에 복사한 차트를 붙여넣어 차트가 생성됩니다
           </DialogDescription>
         </DialogHeader>
 
@@ -76,7 +88,7 @@ export default function PasteChartDialog({
             </Button>
           </DialogClose>
           <Button disabled={isSubmitting} onClick={handlePasteSelectedChart}>
-            불러오기
+            붙여넣기
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />

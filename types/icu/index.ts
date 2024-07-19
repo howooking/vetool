@@ -4,9 +4,10 @@ import type {
   IcuChartOrder,
   IcuChartTx,
   IcuIo,
+  IcuChartBookmark,
   Patients,
   User,
-} from '..'
+} from '@/types'
 
 export type IcuIoPatientJoined = Omit<IcuIo, 'patient_id'> & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
@@ -25,6 +26,10 @@ export type IcuChartJoined = Omit<
   >
   main_vet: MainAndSubVet
   sub_vet: MainAndSubVet | null
+  bookmark_id: Pick<
+    IcuChartBookmark,
+    'bookmark_name' | 'bookmark_comment' | 'bookmark_id'
+  >
 }
 
 export type IcuChartListJoined = Pick<
@@ -84,3 +89,10 @@ export type TxState = {
   icu_chart_tx_log: TxLog[] | null
   user_id: string | null
 }
+
+export type IcuChartBookmarkJoined = {
+  icu_chart_id: {
+    icu_chart_id: string
+    patient_id: Pick<Patients, 'name'>
+  }
+} & IcuChartBookmark

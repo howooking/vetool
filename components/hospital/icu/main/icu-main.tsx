@@ -1,7 +1,7 @@
 'use client'
 
 import IcuChart from '@/components/hospital/icu/main/chart/icu-chart'
-import IcuChartSearch from '@/components/hospital/icu/main/search/icu-chart-search'
+import IcuChartSearch from '@/components/hospital/icu/main/search/icu-search-chart'
 import IcuSummary from '@/components/hospital/icu/main/summary/icu-summary'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import type {
@@ -37,7 +37,7 @@ export default function IcuMain({
         />
       )}
 
-      {selectIcudMainView === 'search' && <IcuChartSearch register />}
+      {selectIcudMainView === 'search' && <IcuChartSearch type="search" />}
     </div>
   )
 }

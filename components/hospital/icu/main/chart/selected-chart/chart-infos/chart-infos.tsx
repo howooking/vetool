@@ -28,17 +28,10 @@ export default function ChartInfos({
   return (
     <div>
       <HeaderSignalments
-        ageInDays={selectedChartIoData.age_in_days}
-        breed={chartData.patient_id.breed}
-        name={chartData.patient_id.name}
-        gender={chartData.patient_id.gender}
-        weightMeasuredDate={chartData.weight_measured_date}
-        weight={chartData.weight}
-        species={chartData.patient_id.species}
-        patientId={chartData.patient_id.patient_id}
-        icuChartId={chartData.icu_chart_id}
-        icuIoId={selectedChartIoData.icu_io_id}
         isPatientOut={isPatientOut}
+        chartData={chartData}
+        icuIoId={selectedChartIoData.icu_io_id}
+        ageInDays={selectedChartIoData.age_in_days}
       />
 
       <div className="grid grid-cols-8 gap-2">

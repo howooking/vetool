@@ -7,14 +7,14 @@ import { selectedChartOrderList } from './select-chart-list'
 
 const supabase = createClient()
 
-export const pasteChartOrder = async (
+export const pasteRegisteredPatientChartOrder = async (
   targetDate: string,
   patientId: string,
   selectedIcuChartId: string,
   copiedChartOrder: IcuChartOrderJoined[],
 ) => {
   const { data: returningIcuChartIds, error: rpcError } = await supabase.rpc(
-    'paste_icu_chart',
+    'paste_icu_chart_after_search_chart',
     {
       target_date_input: targetDate,
       patient_id_input: patientId,
@@ -39,6 +39,7 @@ export const pasteChartOrder = async (
         icu_chart_order_type: order.icu_chart_order_type,
         icu_chart_id: newIcuChartId,
         icu_io_id: icuIoId,
+        hos_id: order.hos_id,
         icu_chart_order_name: order.icu_chart_order_name,
         icu_chart_order_comment: order.icu_chart_order_comment,
         icu_chart_order_time: order.icu_chart_order_time,
@@ -52,9 +53,9 @@ export const pasteChartOrder = async (
 }
 
 export const pasteChartOrderWithRegisterPatient = async (
-  selectedIcuChartId: string,
-  patientId: string,
   targetDate: string,
+  patientId: string,
+  selectedIcuChartId: string,
   ageInDays: number,
 ) => {
   const { data: returningIcuChartIds, error: rpcError } = await supabase.rpc(
@@ -86,6 +87,7 @@ export const pasteChartOrderWithRegisterPatient = async (
         icu_chart_order_type: order.icu_chart_order_type,
         icu_chart_id: newIcuChartId,
         icu_io_id: icuIoId,
+        hos_id: order.hos_id,
         icu_chart_order_name: order.icu_chart_order_name,
         icu_chart_order_comment: order.icu_chart_order_comment,
         icu_chart_order_time: order.icu_chart_order_time,

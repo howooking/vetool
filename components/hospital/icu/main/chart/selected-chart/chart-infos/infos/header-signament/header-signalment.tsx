@@ -1,36 +1,28 @@
+import BookmarkDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/bookmark-dialog'
 import DeleteChartDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/delete-chart-dialog'
 import OutPatientDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/out-patient-dialog'
 import UpdateWeightDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/update-weight-dialog'
 import { getAgeFromAgeInDays } from '@/lib/utils'
+import { IcuChartJoined } from '@/types/icu'
 import { Cat, Dog } from 'lucide-react'
 
 export default function HeaderSignalments({
-  name,
-  breed,
-  gender,
-  ageInDays,
-  weightMeasuredDate,
-  weight,
-  species,
-  patientId,
-  icuChartId,
-  icuIoId,
   isPatientOut,
+  ageInDays,
+  icuIoId,
+  chartData,
 }: {
-  name: string
-  breed: string
-  gender: string
-  ageInDays: number
-  weightMeasuredDate: string | null
-  weight: string
-  species: string
-  patientId: string
-  icuChartId: string
-  icuIoId: string
   isPatientOut: boolean
+  ageInDays: number
+  icuIoId: string
+  chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
 }) {
+  const { breed, name, gender, species, patient_id } = chartData.patient_id
+  const { weight, weight_measured_date, icu_chart_id, bookmark_id } = chartData
+
   return (
     <header className="absolute left-0 top-0 flex h-12 w-full items-center justify-center gap-2 text-muted-foreground">
+      <BookmarkDialog icuChartId={icu_chart_id} bookmarkData={bookmark_id} />
       {species === 'canine' ? (
         <Dog size={20} className="text-black" />
       ) : (
@@ -43,15 +35,15 @@ export default function HeaderSignalments({
       <span className="text-sm uppercase">{gender}</span> ·
       <span className="text-sm">{getAgeFromAgeInDays(ageInDays)} </span> ·
       <div className="flex items-center">
-        {weightMeasuredDate ? (
-          <span className="text-sm">{`${weight}kg (${weightMeasuredDate} 측정)`}</span>
+        {weight_measured_date ? (
+          <span className="text-sm">{`${weight}kg (${weight_measured_date} 측정)`}</span>
         ) : (
           <span className="text-sm">체중 미측정</span>
         )}
         <UpdateWeightDialog
           weight={weight}
-          patientId={patientId}
-          icuChartId={icuChartId}
+          patientId={patient_id}
+          icuChartId={icu_chart_id}
         />
         <OutPatientDialog
           icuIoId={icuIoId}
@@ -59,10 +51,10 @@ export default function HeaderSignalments({
           isPatientOut={isPatientOut}
         />
         <DeleteChartDialog
-          icuChartId={icuChartId}
+          icuChartId={icu_chart_id}
           name={name}
           icuIoId={icuIoId}
-          patientId={patientId}
+          patientId={patient_id}
         />
       </div>
     </header>

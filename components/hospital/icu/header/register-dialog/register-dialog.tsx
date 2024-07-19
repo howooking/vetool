@@ -2,7 +2,7 @@
 
 import RegisterPatientForm from '@/components/hospital/icu/header/register-dialog/register-patient-form'
 import RegisterTypeSelector from '@/components/hospital/icu/header/register-dialog/register-type-selector'
-import IcuSearchChart from '@/components/hospital/icu/main/search/icu-chart-search'
+import IcuSearchChart from '@/components/hospital/icu/main/search/icu-search-chart'
 import { patientsColumns } from '@/components/hospital/patients/patient-columns'
 import PatientForm from '@/components/hospital/patients/patient-form'
 import RegisterDialogHeader from '@/components/hospital/patients/register-dialog-header'
@@ -121,7 +121,7 @@ export default function RegisterDialog({
             {step === 'chartSearch' && (
               <IcuSearchChart
                 setIsRegisterDialogOpen={setIsDialogOpen}
-                register
+                type="register"
               />
             )}
           </TabsContent>
