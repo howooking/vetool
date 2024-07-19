@@ -12,40 +12,41 @@ export const pasteIcuChart = async (
 ) => {
   const supabase = createClient()
 
-  const { data: returningIcuChartIds, error: rpcError } = await supabase.rpc(
-    'paste_icu_chart',
-    {
-      target_date_input: targetDate,
-      patient_id_input: patientId,
-      icu_chart_id_input: selectedIcuChartId,
-    },
-  )
+  // const { data: returningIcuChartIds, error: rpcError } = await supabase.rpc(
+  //   'paste_icu_chart',
+  //   {
+  //     target_date_input: targetDate,
+  //     patient_id_input: patientId,
+  //     icu_chart_id_input: selectedIcuChartId,
+  //   },
+  // )
 
-  if (rpcError) {
-    console.log(rpcError)
-    redirect(`/error?message=${rpcError.message}`)
-  }
+  // if (rpcError) {
+  //   console.log(rpcError)
+  //   redirect(`/error?message=${rpcError.message}`)
+  // }
 
-  const { newIcuChartId, icuIoId } = returningIcuChartIds as {
-    newIcuChartId: string
-    icuIoId: string
-  }
+  // const { newIcuChartId, icuIoId } = returningIcuChartIds as {
+  //   newIcuChartId: string
+  //   icuIoId: string
+  // }
 
-  copiedChartOrder.forEach(async (order) => {
-    const { error: icuChartOrderError } = await supabase
-      .from('icu_chart_order')
-      .insert({
-        icu_chart_order_type: order.icu_chart_order_type,
-        icu_chart_id: newIcuChartId,
-        icu_io_id: icuIoId,
-        icu_chart_order_name: order.icu_chart_order_name,
-        icu_chart_order_comment: order.icu_chart_order_comment,
-        icu_chart_order_time: order.icu_chart_order_time,
-      })
+  // copiedChartOrder.forEach(async (order) => {
+  //   const { error: icuChartOrderError } = await supabase
+  //     .from('icu_chart_order')
+  //     .insert({
+  //       hos_id: order.hos_id,
+  //       icu_chart_order_type: order.icu_chart_order_type,
+  //       icu_chart_id: newIcuChartId,
+  //       icu_io_id: icuIoId,
+  //       icu_chart_order_name: order.icu_chart_order_name,
+  //       icu_chart_order_comment: order.icu_chart_order_comment,
+  //       icu_chart_order_time: order.icu_chart_order_time,
+  //     })
 
-    if (icuChartOrderError) {
-      console.log(icuChartOrderError)
-      redirect(`/error?message=${icuChartOrderError.message}`)
-    }
-  })
+  //   if (icuChartOrderError) {
+  //     console.log(icuChartOrderError)
+  //     redirect(`/error?message=${icuChartOrderError.message}`)
+  //   }
+  // })
 }

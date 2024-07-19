@@ -13,16 +13,14 @@ import type {
 
 export default function IcuMain({
   icuChartData,
+  icuIoData,
   icuChartOrderData,
   icuUsersData,
-  targetDate,
-  icuIoData,
 }: {
   icuChartData: IcuChartJoined[]
+  icuIoData: IcuIoPatientJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
   icuUsersData: IcuUserList[]
-  targetDate: string
-  icuIoData: IcuIoPatientJoined[]
 }) {
   const { selectIcudMainView } = useSelectedMainViewStore()
 
@@ -32,11 +30,10 @@ export default function IcuMain({
 
       {selectIcudMainView === 'chart' && (
         <IcuChart
-          icuUsersData={icuUsersData}
           icuChartData={icuChartData}
           icuChartOrderData={icuChartOrderData}
-          targetDate={targetDate}
           icuIoData={icuIoData}
+          icuUsersData={icuUsersData}
         />
       )}
 

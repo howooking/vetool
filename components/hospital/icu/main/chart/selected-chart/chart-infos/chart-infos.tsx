@@ -8,21 +8,27 @@ import HeaderSignalments from '@/components/hospital/icu/main/chart/selected-cha
 import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/in-and-out-date/in-and-out-date'
 import { MainSubVet } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/main-sub-vet/main-sub-vet'
 import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/onwer-name'
-import type { IcuChartJoined, IcuUserList } from '@/types/icu'
+import type {
+  IcuChartJoined,
+  IcuIoPatientJoined,
+  IcuUserList,
+} from '@/types/icu'
 
 export default function ChartInfos({
   chartData,
   icuUsersData,
   isPatientOut,
+  selectedChartIoData,
 }: {
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   icuUsersData: IcuUserList[]
   isPatientOut: boolean
+  selectedChartIoData: IcuIoPatientJoined
 }) {
   return (
     <div>
       <HeaderSignalments
-        ageInDays={chartData.icu_io_id.age_in_days}
+        ageInDays={selectedChartIoData.age_in_days}
         breed={chartData.patient_id.breed}
         name={chartData.patient_id.name}
         gender={chartData.patient_id.gender}
@@ -31,18 +37,18 @@ export default function ChartInfos({
         species={chartData.patient_id.species}
         patientId={chartData.patient_id.patient_id}
         icuChartId={chartData.icu_chart_id}
-        icuIoId={chartData.icu_io_id.icu_io_id}
+        icuIoId={selectedChartIoData.icu_io_id}
         isPatientOut={isPatientOut}
       />
 
       <div className="grid grid-cols-8 gap-2">
         <div className="col-span-2">
           <InAndOutDate
-            icuIoId={chartData.icu_io_id.icu_io_id}
-            inDate={chartData.icu_io_id.in_date}
-            outDueDate={chartData.icu_io_id.out_due_date}
+            icuIoId={selectedChartIoData.icu_io_id}
+            inDate={selectedChartIoData.in_date}
+            outDueDate={selectedChartIoData.out_due_date}
             isPatientOut={isPatientOut}
-            outDate={chartData.icu_io_id.out_date}
+            outDate={selectedChartIoData.out_date}
           />
         </div>
 
@@ -65,8 +71,8 @@ export default function ChartInfos({
         <div className="col-span-1">
           <Group
             hosGroupList={chartData.hos_id.group_list}
-            currentGroups={chartData.icu_io_id.group_list}
-            icuIoId={chartData.icu_io_id.icu_io_id}
+            currentGroups={selectedChartIoData.group_list}
+            icuIoId={selectedChartIoData.icu_io_id}
           />
         </div>
 

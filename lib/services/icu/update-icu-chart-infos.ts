@@ -27,7 +27,7 @@ export const updateChiefComplaint = async (
   const { error: updateChiefComplaintError } = await supabase
     .from('icu_chart')
     .update({ icu_chart_cc: chiefComplaint })
-    .match({ icu_io_id: icuChartId })
+    .match({ icu_chart_id: icuChartId })
 
   if (updateChiefComplaintError) {
     console.log(updateChiefComplaintError)

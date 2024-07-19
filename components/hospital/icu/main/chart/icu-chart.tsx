@@ -14,19 +14,25 @@ import type {
 import { useMemo } from 'react'
 
 export default function IcuChart({
+  icuIoData,
   icuChartData,
   icuChartOrderData,
   icuUsersData,
-  targetDate,
-  icuIoData,
 }: {
   icuChartData: IcuChartJoined[]
+  icuIoData: IcuIoPatientJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
   icuUsersData: IcuUserList[]
-  targetDate: string
-  icuIoData: IcuIoPatientJoined[]
 }) {
   const { selectedPatient } = useIcuSelectedPatientStore()
+
+  const selectedChartIoData = useMemo(
+    () =>
+      icuIoData.find(
+        (io) => io.patient_id.patient_id === selectedPatient?.patientId,
+      ),
+    [icuIoData, selectedPatient],
+  )
 
   const selectedChart = useMemo(
     () =>
@@ -76,9 +82,9 @@ export default function IcuChart({
 
   return (
     <div className="w-full">
-      {selectedChart ? (
+      {selectedChart && selectedChartIoData ? (
         <SelectedChart
-          // userName={userName}
+          selectedChartIoData={selectedChartIoData}
           selectedChart={selectedChart}
           selectedChartOrders={selectedChartOrders}
           icuUsersData={icuUsersData}
@@ -87,7 +93,6 @@ export default function IcuChart({
       ) : (
         <SelectedChartNotFound
           selectedPatient={selectedPatient}
-          targetDate={targetDate}
           isPatientIn={isPatientIn}
         />
       )}
