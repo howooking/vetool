@@ -59,7 +59,7 @@ export default function CopyPrevChartDialog({
           className="flex h-1/3 w-1/4 items-center justify-center gap-2"
         >
           <ClipboardPaste />
-          <span>전일차트복사</span>
+          <span>전일 차트복사</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
