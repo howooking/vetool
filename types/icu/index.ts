@@ -7,7 +7,7 @@ import type {
   IcuChartBookmark,
   Patients,
   User,
-} from '..'
+} from '@/types'
 
 export type IcuIoPatientJoined = Omit<IcuIo, 'patient_id'> & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>

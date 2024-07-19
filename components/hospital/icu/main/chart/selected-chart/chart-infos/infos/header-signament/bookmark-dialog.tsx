@@ -24,12 +24,12 @@ import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { COLORS } from '@/constants/common/colors'
 import {
-  deleteBookmarkChart,
-  upsertBookmarkChart,
+  deleteChartBookmark,
+  upsertChartBookmark,
 } from '@/lib/services/icu/bookmark'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
-import { IcuChartBookmark } from '@/types'
+import { IcuBookmark } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Bookmark, LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -43,7 +43,7 @@ export default function BookmarkDialog({
 }: {
   icuChartId: string
   bookmarkData: Pick<
-    IcuChartBookmark,
+    IcuBookmark,
     'bookmark_id' | 'bookmark_name' | 'bookmark_comment'
   > | null
 }) {
@@ -66,9 +66,9 @@ export default function BookmarkDialog({
   const handleSubmit = async (values: z.infer<typeof bookmarkFormSchema>) => {
     setIsSubmitting(true)
 
-    await upsertBookmarkChart(
+    await upsertChartBookmark(
       values.bookmark_name,
-      values.bookmark_comment ?? '',
+      values.bookmark_comment,
       icuChartId,
     )
 
@@ -85,7 +85,7 @@ export default function BookmarkDialog({
   const handleDeleteButtonClick = async () => {
     setIsDeleting(true)
 
-    if (bookmark_id) await deleteBookmarkChart(bookmark_id)
+    if (bookmark_id) await deleteChartBookmark(bookmark_id)
 
     setIsBookmarked(false)
     setIsDeleting(false)

@@ -27,19 +27,7 @@ export default function ChartInfos({
 }) {
   return (
     <div>
-      <HeaderSignalments
-        ageInDays={selectedChartIoData.age_in_days}
-        breed={chartData.patient_id.breed}
-        name={chartData.patient_id.name}
-        gender={chartData.patient_id.gender}
-        weightMeasuredDate={chartData.weight_measured_date}
-        weight={chartData.weight}
-        species={chartData.patient_id.species}
-        patientId={chartData.patient_id.patient_id}
-        icuChartId={chartData.icu_chart_id}
-        icuIoId={selectedChartIoData.icu_io_id}
-        isPatientOut={isPatientOut}
-      />
+      <HeaderSignalments isPatientOut={isPatientOut} chartData={chartData} />
 
       <div className="grid grid-cols-8 gap-2">
         <div className="col-span-2">
