@@ -9,16 +9,29 @@ import type {
 } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
-export const getIcuMainData = async (hosId: string, targetDate: string) => {
+export const getAllIcuData = async (hosId: string, targetDate: string) => {
   const supabase = createClient()
 
   const promiseArray = Promise.all([
+    supabase
+      .from('icu_io')
+      .select(
+        `
+          *,
+          patient_id("name", "breed", "patient_id")
+        `,
+      )
+      .match({ hos_id: hosId })
+      .lte('in_date', targetDate)
+      .or(`out_date.is.null, out_date.gte.${targetDate}`)
+      .order('in_date', { ascending: true })
+      .returns<IcuIoPatientJoined[]>(),
+
     supabase
       .from('icu_chart')
       .select(
         `
           *,
-          icu_io_id(*),
           hos_id("group_list", "icu_memo_names"),
           patient_id("name", "gender", "breed", "patient_id", "species", "owner_name"),
           main_vet("name", "user_id", "avatar_url"),
@@ -61,7 +74,7 @@ export const getIcuMainData = async (hosId: string, targetDate: string) => {
           icu_chart_order_tx_24(*)
         `,
       )
-      .match({ 'icu_io_id.hos_id': hosId })
+      .match({ hos_id: hosId })
       .order('icu_chart_order_name', { ascending: true })
       .returns<IcuChartOrderJoined[]>(),
 
@@ -70,49 +83,40 @@ export const getIcuMainData = async (hosId: string, targetDate: string) => {
       .select('name, position, user_id, avatar_url, is_vet')
       .match({ hos_id: hosId })
       .returns<IcuUserList[]>(),
-
-    supabase
-      .from('icu_io')
-      .select(
-        `
-          *,
-          patient_id("name", "breed", "patient_id")
-        `,
-      )
-      .match({ hos_id: hosId })
-      .lte('in_date', targetDate)
-      .or(`out_date.is.null, out_date.gte.${targetDate}`)
-      .order('in_date', { ascending: true })
-      .returns<IcuIoPatientJoined[]>(),
   ])
 
   const [
+    { data: icuIoData, error: icuIoDataError },
     { data: icuChartData, error: icuChartDataError },
     { data: icuChartOrderData, error: icuChartOrderDataError },
     { data: icuUsersData, error: icuUsersDataError },
-    { data: icuIoData, error: icuIoDataError },
   ] = await promiseArray
 
   if (
+    icuIoDataError ||
     icuChartDataError ||
     icuChartOrderDataError ||
-    icuUsersDataError ||
-    icuIoDataError
+    icuUsersDataError
   ) {
     console.log({
+      icuIoDataError,
       icuChartDataError,
       icuChartOrderDataError,
-      IcuUsersData: icuUsersDataError,
-      icuIoDataError,
+      icuUsersDataError,
     })
     redirect(
-      `/error?message=${icuChartDataError?.message || icuIoDataError?.message || icuChartOrderDataError?.message || icuUsersDataError?.message}`,
+      `/error?message=${
+        icuIoDataError?.message ||
+        icuChartDataError?.message ||
+        icuChartOrderDataError?.message ||
+        icuUsersDataError?.message
+      }`,
     )
   }
   return {
+    icuIoData,
     icuChartData,
     icuChartOrderData,
     icuUsersData,
-    icuIoData,
   }
 }
