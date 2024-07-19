@@ -8,12 +8,15 @@ import { Cat, Dog } from 'lucide-react'
 
 export default function HeaderSignalments({
   isPatientOut,
+  ageInDays,
+  icuIoId,
   chartData,
 }: {
   isPatientOut: boolean
+  ageInDays: number
+  icuIoId: string
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
 }) {
-  const { age_in_days, icu_io_id } = chartData.icu_io_id
   const { breed, name, gender, species, patient_id } = chartData.patient_id
   const { weight, weight_measured_date, icu_chart_id, bookmark_id } = chartData
 
@@ -30,7 +33,7 @@ export default function HeaderSignalments({
       </span>{' '}
       ·<span className="text-sm">{breed}</span> ·
       <span className="text-sm uppercase">{gender}</span> ·
-      <span className="text-sm">{getAgeFromAgeInDays(age_in_days)} </span> ·
+      <span className="text-sm">{getAgeFromAgeInDays(ageInDays)} </span> ·
       <div className="flex items-center">
         {weight_measured_date ? (
           <span className="text-sm">{`${weight}kg (${weight_measured_date} 측정)`}</span>
@@ -43,14 +46,14 @@ export default function HeaderSignalments({
           icuChartId={icu_chart_id}
         />
         <OutPatientDialog
-          icuIoId={icu_io_id}
+          icuIoId={icuIoId}
           name={name}
           isPatientOut={isPatientOut}
         />
         <DeleteChartDialog
           icuChartId={icu_chart_id}
           name={name}
-          icuIoId={icu_io_id}
+          icuIoId={icuIoId}
           patientId={patient_id}
         />
       </div>

@@ -54,7 +54,6 @@ export const copyPrevChart = async (
         icu_chart_order_type: order.icu_chart_order_type,
         icu_chart_id: newIcuChartId,
         icu_io_id: icuIoId,
-        hos_id: order.hos_id,
         icu_chart_order_name: order.icu_chart_order_name,
         icu_chart_order_comment: order.icu_chart_order_comment,
         icu_chart_order_time: order.icu_chart_order_time,
@@ -105,7 +104,6 @@ export const addDefaultChart = async (
         icu_chart_order_type: order.dataType,
         icu_chart_id: newIcuChartId,
         icu_io_id: icuIoId,
-        hos_id: hosId,
         icu_chart_order_name: order.orderName,
         icu_chart_order_comment: order.orderComment,
       })

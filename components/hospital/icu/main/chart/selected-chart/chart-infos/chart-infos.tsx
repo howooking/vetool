@@ -27,7 +27,12 @@ export default function ChartInfos({
 }) {
   return (
     <div>
-      <HeaderSignalments isPatientOut={isPatientOut} chartData={chartData} />
+      <HeaderSignalments
+        isPatientOut={isPatientOut}
+        chartData={chartData}
+        icuIoId={selectedChartIoData.icu_io_id}
+        ageInDays={selectedChartIoData.age_in_days}
+      />
 
       <div className="grid grid-cols-8 gap-2">
         <div className="col-span-2">
