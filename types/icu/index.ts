@@ -9,7 +9,10 @@ import type {
   User,
 } from '@/types'
 
-export type IcuIoPatientJoined = Omit<IcuIo, 'patient_id'> & {
+export type IcuIoPatientJoined = Pick<
+  IcuIo,
+  'in_date' | 'out_date' | 'out_due_date' | 'group_list' | 'icu_io_id'
+> & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
 }
 

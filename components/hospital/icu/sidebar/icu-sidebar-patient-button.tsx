@@ -25,13 +25,20 @@ export default function IcuSidebarPatientButton({
       variant="outline"
       size="sm"
       className={cn(
-        'flex w-full justify-between gap-2',
+        'w-full',
         selectedPatient?.patientId === data.patient_id.patient_id && 'bg-muted',
       )}
       onClick={() => handlePatientButtonClick(data)}
     >
-      <span>{data.patient_id.name}</span>
-      <span className="truncate text-[10px]">{data.patient_id.breed}</span>
+      <div
+        className={cn(
+          'flex w-full justify-between gap-2',
+          data.out_date && 'line-through',
+        )}
+      >
+        <span>{data.patient_id.name}</span>
+        <span className="truncate text-[10px]">{data.patient_id.breed}</span>
+      </div>
     </Button>
   )
 }

@@ -17,14 +17,14 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .from('icu_io')
       .select(
         `
-          *,
+          "icu_io_id", "in_date", "out_date", "out_due_date", "group_list",
           patient_id("name", "breed", "patient_id")
         `,
       )
       .match({ hos_id: hosId })
       .lte('in_date', targetDate)
       .or(`out_date.is.null, out_date.gte.${targetDate}`)
-      .order('in_date', { ascending: true })
+      .order('in_date, created_at', { ascending: true })
       .returns<IcuIoPatientJoined[]>(),
 
     supabase
