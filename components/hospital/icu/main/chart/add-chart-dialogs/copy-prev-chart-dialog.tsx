@@ -10,54 +10,48 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { pasteRegisteredPatientChartOrder } from '@/lib/services/icu/paste-order'
-import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
+import { copyPrevChart } from '@/lib/services/icu/add-icu-chart'
+import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
 import { cn } from '@/lib/utils'
-import { CopyCheck, LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { ClipboardPaste, LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
-export default function PasteSelectedChartDialog({
+
+export default function CopyPrevChartDialog({
   targetDate,
   selectedPatient,
+  setIsCreatingChart,
 }: {
   targetDate: string
   selectedPatient: {
     patientName: string
     patientId: string
   }
+  setIsCreatingChart: (isCreatingChart: boolean) => void
 }) {
-  const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { copiedChartId, copiedChartOrder } = useCopiedChartStore()
 
-  const handlePasteSelectedChart = async () => {
-    if (!copiedChartId || !copiedChartOrder) {
-      setIsDialogOpen(false)
+  const handleCopyPrevSelectedChart = async () => {
+    setIsSubmitting(true)
+    setIsCreatingChart(true)
 
+    const { error } = await copyPrevChart(targetDate, selectedPatient.patientId)
+
+    if (error) {
       toast({
-        title: '차트 생성 실패',
-        description: '차트 검색을 통해 복사하고자 하는 차트를 선택해주세요',
+        title: '전날 차트를 복사할 수 없습니다',
+        description: '전날 차트가 있는지 확인해주세요',
         variant: 'destructive',
       })
-
+      setIsCreatingChart(false)
+      setIsSubmitting(false)
+      setIsDialogOpen(false)
       return
     }
 
-    setIsSubmitting(true)
-
-    await pasteRegisteredPatientChartOrder(
-      targetDate,
-      selectedPatient.patientId,
-      copiedChartId,
-      copiedChartOrder,
-    )
-
     toast({
-      title: '복사한 차트를 붙여넣었습니다',
+      title: '전날 차트를 복사하였습니다',
     })
-
-    refresh()
     setIsDialogOpen(false)
     setIsSubmitting(false)
   }
@@ -69,15 +63,15 @@ export default function PasteSelectedChartDialog({
           variant="outline"
           className="flex h-1/3 w-1/4 items-center justify-center gap-2"
         >
-          <CopyCheck />
-          <span>복사한 차트 붙여넣기</span>
+          <ClipboardPaste />
+          <span>전일 차트복사</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>복사한 차트 생성</DialogTitle>
+          <DialogTitle>전일차트복사</DialogTitle>
           <DialogDescription>
-            클립보드에 복사한 차트를 붙여넣어 차트가 생성됩니다
+            전일차트를 복사하여 {targetDate} 차트가 생성됩니다
           </DialogDescription>
         </DialogHeader>
 
@@ -87,8 +81,8 @@ export default function PasteSelectedChartDialog({
               취소
             </Button>
           </DialogClose>
-          <Button disabled={isSubmitting} onClick={handlePasteSelectedChart}>
-            붙여넣기
+          <Button onClick={handleCopyPrevSelectedChart} disabled={isSubmitting}>
+            복사
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />

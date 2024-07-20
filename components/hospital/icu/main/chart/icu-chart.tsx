@@ -1,7 +1,6 @@
 'use client'
 
 import NoResult from '@/components/common/no-result'
-import SelectedChartNotFound from '@/components/hospital/icu/main/chart/selected-chart-not-found/selected-chart-not-found'
 import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/selected-chart'
 import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
@@ -11,7 +10,10 @@ import type {
   IcuIoPatientJoined,
   IcuUserList,
 } from '@/types/icu'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import IcuChartSkeleton from './icu-chart-skeleton'
+import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
+import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
 
 export default function IcuChart({
   icuIoData,
@@ -25,6 +27,7 @@ export default function IcuChart({
   icuUsersData: IcuUserList[]
 }) {
   const { selectedPatient } = useIcuSelectedPatientStore()
+  const { isCreatingChart, setIsCreatingChart } = useIsCreatingChartStore()
 
   const selectedIo = useMemo(
     () =>
@@ -76,13 +79,53 @@ export default function IcuChart({
     [icuIoData, selectedPatient],
   )
 
-  if (!selectedPatient?.patientId) {
+  useEffect(() => {
+    if (isCreatingChart && selectedChart) {
+      console.log('iscreateing to false')
+      setIsCreatingChart(false)
+    }
+  }, [isCreatingChart, selectedChart, setIsCreatingChart])
+
+  // console.log('f=================irst')
+  // console.log('환자인:', isPatientIn)
+  // console.log('iscrating:', isCreatingChart)
+  // console.log(selectedChart)
+  // console.log(selectedIo)
+
+  if (!selectedPatient) {
     return <NoResult title="환자를 선택해주세요" />
   }
 
-  return (
-    <div className="w-full">
-      {selectedChart && selectedChartIoData ? (
+  if (isCreatingChart) {
+    return <IcuChartSkeleton />
+  }
+
+  if (!selectedChart && selectedIo && isPatientIn) {
+    return (
+      <AddChartDialogs
+        selectedPatient={selectedPatient}
+        icuChartData={icuChartData}
+      />
+    )
+  }
+
+  if (!selectedChart && !selectedIo && !isPatientIn) {
+    return (
+      <NoResult
+        title={
+          <>
+            {selectedPatient.patientName}은(는) 선택한 날짜의 차트가 없습니다{' '}
+            <br /> 선택한 날짜에 아직 입원을 하지 않았거나 이미 퇴원을
+            하였습니다
+          </>
+        }
+      />
+    )
+  }
+
+  if (selectedChart && selectedIo) {
+    return (
+      <div className="w-full">
         <SelectedChart
           selectedIo={selectedIo}
           selectedChart={selectedChart}
@@ -90,13 +133,7 @@ export default function IcuChart({
           icuUsersData={icuUsersData}
           isPatientOut={isPatientOut}
         />
-      ) : (
-        <SelectedChartNotFound
-          selectedPatient={selectedPatient}
-          isPatientIn={isPatientIn}
-          icuChartData={icuChartData}
-        />
-      )}
-    </div>
-  )
+      </div>
+    )
+  }
 }

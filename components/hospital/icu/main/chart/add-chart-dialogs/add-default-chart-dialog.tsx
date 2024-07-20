@@ -19,12 +19,14 @@ import { useState } from 'react'
 export default function AddDefaultChartDialog({
   targetDate,
   selectedPatient,
+  setIsCreatingChart,
 }: {
   targetDate: string
   selectedPatient: {
     patientName: string
     patientId: string
   }
+  setIsCreatingChart: (isCreatingChart: boolean) => void
 }) {
   const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -32,6 +34,7 @@ export default function AddDefaultChartDialog({
 
   const handleAddDefaultChart = async () => {
     setIsSubmitting(true)
+    setIsCreatingChart(true)
 
     const { error } = await addDefaultChart(
       hos_id as string,
@@ -45,6 +48,7 @@ export default function AddDefaultChartDialog({
         description: '전날 차트가 있는지 확인해주세요',
         variant: 'destructive',
       })
+      setIsCreatingChart(false)
       setIsSubmitting(false)
       setIsDialogOpen(false)
       return
