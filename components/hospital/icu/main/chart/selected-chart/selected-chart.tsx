@@ -9,13 +9,13 @@ import type {
 } from '@/types/icu'
 
 export default function SelectedChart({
-  selectedChartIoData,
+  selectedIo,
   selectedChart,
   selectedChartOrders,
   icuUsersData,
   isPatientOut,
 }: {
-  selectedChartIoData: IcuIoPatientJoined
+  selectedIo: IcuIoPatientJoined
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
   icuUsersData: IcuUserList[]
@@ -23,9 +23,9 @@ export default function SelectedChart({
 }) {
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
   return (
-    <div className="flex flex-col gap-4 p-2 pb-[48px]">
+    <div className="flex flex-col gap-2 p-2 pb-[48px]">
       <ChartInfos
-        selectedChartIoData={selectedChartIoData}
+        selectedIo={selectedIo}
         chartData={restChartData}
         icuUsersData={icuUsersData}
         isPatientOut={isPatientOut}
@@ -34,6 +34,7 @@ export default function SelectedChart({
         selectedChartOrders={selectedChartOrders}
         icuUsersData={icuUsersData}
       />
+
       <ChartMemos
         memoA={memo_a}
         memoB={memo_b}

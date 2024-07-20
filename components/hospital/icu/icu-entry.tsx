@@ -29,7 +29,7 @@ export default function IcuEntry({
     <div className="flex">
       <IcuSidebar icuIoData={icuData.icuIoData} />
 
-      <div className="w-full">
+      <div className="h-icu-chart w-full overflow-y-auto">
         <IcuMain
           icuChartData={icuData.icuChartData}
           icuIoData={icuData.icuIoData}

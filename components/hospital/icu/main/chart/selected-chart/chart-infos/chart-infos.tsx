@@ -18,30 +18,30 @@ export default function ChartInfos({
   chartData,
   icuUsersData,
   isPatientOut,
-  selectedChartIoData,
+  selectedIo: selectedIo,
 }: {
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   icuUsersData: IcuUserList[]
   isPatientOut: boolean
-  selectedChartIoData: IcuIoPatientJoined
+  selectedIo: IcuIoPatientJoined
 }) {
   return (
     <div>
       <HeaderSignalments
         isPatientOut={isPatientOut}
         chartData={chartData}
-        icuIoId={selectedChartIoData.icu_io_id}
-        ageInDays={selectedChartIoData.age_in_days}
+        icuIoId={selectedIo.icu_io_id}
+        ageInDays={selectedIo.age_in_days}
       />
 
       <div className="grid grid-cols-8 gap-2">
         <div className="col-span-2">
           <InAndOutDate
-            icuIoId={selectedChartIoData.icu_io_id}
-            inDate={selectedChartIoData.in_date}
-            outDueDate={selectedChartIoData.out_due_date}
+            icuIoId={selectedIo.icu_io_id}
+            inDate={selectedIo.in_date}
+            outDueDate={selectedIo.out_due_date}
             isPatientOut={isPatientOut}
-            outDate={selectedChartIoData.out_date}
+            outDate={selectedIo.out_date}
           />
         </div>
 
@@ -64,8 +64,8 @@ export default function ChartInfos({
         <div className="col-span-1">
           <Group
             hosGroupList={chartData.hos_id.group_list}
-            currentGroups={selectedChartIoData.group_list}
-            icuIoId={selectedChartIoData.icu_io_id}
+            currentGroups={selectedIo.group_list}
+            icuIoId={selectedIo.icu_io_id}
           />
         </div>
 

@@ -26,7 +26,7 @@ export default function IcuChart({
 }) {
   const { selectedPatient } = useIcuSelectedPatientStore()
 
-  const selectedChartIoData = useMemo(
+  const selectedIo = useMemo(
     () =>
       icuIoData.find(
         (io) => io.patient_id.patient_id === selectedPatient?.patientId,
@@ -84,7 +84,7 @@ export default function IcuChart({
     <div className="w-full">
       {selectedChart && selectedChartIoData ? (
         <SelectedChart
-          selectedChartIoData={selectedChartIoData}
+          selectedIo={selectedIo}
           selectedChart={selectedChart}
           selectedChartOrders={selectedChartOrders}
           icuUsersData={icuUsersData}

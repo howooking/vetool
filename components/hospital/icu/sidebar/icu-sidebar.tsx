@@ -10,7 +10,7 @@ export default function IcuSidebar({
   icuIoData: IcuIoPatientJoined[]
 }) {
   return (
-    <aside className="h-icu-chart w-[144px] shrink-0 border-r p-2">
+    <aside className="h-icu-chart w-[144px] shrink-0 overflow-y-auto border-r p-2">
       <ul className="flex flex-col gap-2">
         {icuIoData.length === 0 ? (
           <li className="flex w-full flex-col items-center justify-center gap-2 pt-10">
