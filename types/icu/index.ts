@@ -11,7 +11,12 @@ import type {
 
 export type IcuIoPatientJoined = Pick<
   IcuIo,
-  'in_date' | 'out_date' | 'out_due_date' | 'group_list' | 'icu_io_id'
+  | 'in_date'
+  | 'out_date'
+  | 'out_due_date'
+  | 'group_list'
+  | 'icu_io_id'
+  | 'age_in_days'
 > & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
 }
