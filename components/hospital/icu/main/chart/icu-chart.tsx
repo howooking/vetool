@@ -2,18 +2,18 @@
 
 import NoResult from '@/components/common/no-result'
 import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/selected-chart'
-import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart/order'
+import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoPatientJoined,
   IcuUserList,
 } from '@/types/icu'
-import { useEffect, useMemo, useState } from 'react'
-import IcuChartSkeleton from './icu-chart-skeleton'
+import { useEffect, useMemo } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
-import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
+import IcuChartSkeleton from './icu-chart-skeleton'
 
 export default function IcuChart({
   icuIoData,
@@ -51,11 +51,11 @@ export default function IcuChart({
         .filter((order) => order.icu_chart_id === selectedChart?.icu_chart_id)
         .sort(
           (prev, next) =>
-            ORDER_OF_ORDERS.findIndex(
-              (itme) => itme === prev.icu_chart_order_type,
+            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+              (order) => order === prev.icu_chart_order_type,
             ) -
-            ORDER_OF_ORDERS.findIndex(
-              (itme) => itme === next.icu_chart_order_type,
+            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+              (order) => order === next.icu_chart_order_type,
             ),
         ),
     [icuChartOrderData, selectedChart?.icu_chart_id],
