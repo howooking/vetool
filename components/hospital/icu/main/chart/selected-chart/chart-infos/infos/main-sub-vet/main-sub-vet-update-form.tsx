@@ -30,13 +30,13 @@ import * as z from 'zod'
 export default function MainSubVetUpdateForm({
   mainVet,
   subVet,
-  vetsData,
+  vetsList,
   icuChartId,
   setIsDialogOpen,
 }: {
   mainVet: MainAndSubVet
   subVet: MainAndSubVet | null
-  vetsData: IcuUserList[]
+  vetsList: IcuUserList[]
   icuChartId: string
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
@@ -88,7 +88,7 @@ export default function MainSubVetUpdateForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {vetsData.map((vet) => (
+                  {vetsList.map((vet) => (
                     <SelectItem key={vet.user_id} value={vet.user_id}>
                       <div className="flex items-center gap-2">
                         <Image
@@ -133,7 +133,7 @@ export default function MainSubVetUpdateForm({
                 </FormControl>
                 <SelectContent>
                   {[
-                    ...vetsData,
+                    ...vetsList,
                     {
                       user_id: 'null',
                       name: '미선택',

@@ -5,7 +5,6 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoPatientJoined,
-  IcuUserList,
 } from '@/types/icu'
 import IcuFooter from './icu-footer'
 import IcuMain from './main/icu-main'
@@ -20,7 +19,6 @@ export default function IcuEntry({
     icuIoData: IcuIoPatientJoined[]
     icuChartData: IcuChartJoined[]
     icuChartOrderData: IcuChartOrderJoined[]
-    icuUsersData: IcuUserList[]
   }
 }) {
   useRealtimeSubscription(hosId)
@@ -30,12 +28,7 @@ export default function IcuEntry({
       <IcuSidebar icuIoData={icuData.icuIoData} />
 
       <div className="h-icu-chart w-full overflow-y-auto">
-        <IcuMain
-          icuChartData={icuData.icuChartData}
-          icuIoData={icuData.icuIoData}
-          icuChartOrderData={icuData.icuChartOrderData}
-          icuUsersData={icuData.icuUsersData}
-        />
+        <IcuMain icuData={icuData} />
         <IcuFooter />
       </div>
     </div>

@@ -9,23 +9,22 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoPatientJoined,
-  IcuUserList,
 } from '@/types/icu'
 import { useEffect, useMemo } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 import IcuChartSkeleton from './icu-chart-skeleton'
 
 export default function IcuChart({
-  icuIoData,
-  icuChartData,
-  icuChartOrderData,
-  icuUsersData,
+  icuData,
 }: {
-  icuChartData: IcuChartJoined[]
-  icuIoData: IcuIoPatientJoined[]
-  icuChartOrderData: IcuChartOrderJoined[]
-  icuUsersData: IcuUserList[]
+  icuData: {
+    icuIoData: IcuIoPatientJoined[]
+    icuChartData: IcuChartJoined[]
+    icuChartOrderData: IcuChartOrderJoined[]
+  }
 }) {
+  const { icuChartData, icuChartOrderData, icuIoData } = icuData
+
   const { selectedPatient } = useIcuSelectedPatientStore()
   const { isCreatingChart, setIsCreatingChart } = useIsCreatingChartStore()
 
@@ -130,7 +129,6 @@ export default function IcuChart({
           selectedIo={selectedIo}
           selectedChart={selectedChart}
           selectedChartOrders={selectedChartOrders}
-          icuUsersData={icuUsersData}
           isPatientOut={isPatientOut}
         />
       </div>

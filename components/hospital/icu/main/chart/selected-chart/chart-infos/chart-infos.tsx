@@ -8,20 +8,14 @@ import HeaderSignalments from '@/components/hospital/icu/main/chart/selected-cha
 import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/in-and-out-date/in-and-out-date'
 import { MainSubVet } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/main-sub-vet/main-sub-vet'
 import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/onwer-name'
-import type {
-  IcuChartJoined,
-  IcuIoPatientJoined,
-  IcuUserList,
-} from '@/types/icu'
+import type { IcuChartJoined, IcuIoPatientJoined } from '@/types/icu'
 
 export default function ChartInfos({
   chartData,
-  icuUsersData,
   isPatientOut,
-  selectedIo: selectedIo,
+  selectedIo,
 }: {
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
-  icuUsersData: IcuUserList[]
   isPatientOut: boolean
   selectedIo: IcuIoPatientJoined
 }) {
@@ -49,7 +43,6 @@ export default function ChartInfos({
           <MainSubVet
             mainVet={chartData.main_vet}
             subVet={chartData.sub_vet}
-            vetsData={icuUsersData.filter((user) => user.is_vet)}
             icuChartId={chartData.icu_chart_id}
           />
         </div>

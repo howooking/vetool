@@ -8,34 +8,24 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoPatientJoined,
-  IcuUserList,
 } from '@/types/icu'
 
 export default function IcuMain({
-  icuChartData,
-  icuIoData,
-  icuChartOrderData,
-  icuUsersData,
+  icuData,
 }: {
-  icuChartData: IcuChartJoined[]
-  icuIoData: IcuIoPatientJoined[]
-  icuChartOrderData: IcuChartOrderJoined[]
-  icuUsersData: IcuUserList[]
+  icuData: {
+    icuIoData: IcuIoPatientJoined[]
+    icuChartData: IcuChartJoined[]
+    icuChartOrderData: IcuChartOrderJoined[]
+  }
 }) {
   const { selectIcudMainView } = useSelectedMainViewStore()
 
   return (
     <div className="w-full">
-      {selectIcudMainView === 'summary' && <IcuSummary />}
+      {selectIcudMainView === 'summary' && <IcuSummary icuData={icuData} />}
 
-      {selectIcudMainView === 'chart' && (
-        <IcuChart
-          icuChartData={icuChartData}
-          icuChartOrderData={icuChartOrderData}
-          icuIoData={icuIoData}
-          icuUsersData={icuUsersData}
-        />
-      )}
+      {selectIcudMainView === 'chart' && <IcuChart icuData={icuData} />}
 
       {selectIcudMainView === 'search' && <IcuChartSearch type="search" />}
     </div>

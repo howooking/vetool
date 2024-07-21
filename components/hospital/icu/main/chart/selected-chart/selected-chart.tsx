@@ -5,20 +5,17 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoPatientJoined,
-  IcuUserList,
 } from '@/types/icu'
 
 export default function SelectedChart({
   selectedIo,
   selectedChart,
   selectedChartOrders,
-  icuUsersData,
   isPatientOut,
 }: {
   selectedIo: IcuIoPatientJoined
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
-  icuUsersData: IcuUserList[]
   isPatientOut: boolean
 }) {
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
@@ -27,13 +24,9 @@ export default function SelectedChart({
       <ChartInfos
         selectedIo={selectedIo}
         chartData={restChartData}
-        icuUsersData={icuUsersData}
         isPatientOut={isPatientOut}
       />
-      <ChartTable
-        selectedChartOrders={selectedChartOrders}
-        icuUsersData={icuUsersData}
-      />
+      <ChartTable selectedChartOrders={selectedChartOrders} />
 
       <ChartMemos
         memoA={memo_a}

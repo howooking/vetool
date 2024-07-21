@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
+import { getStaffList } from '@/lib/services/icu/get-staffs'
 import { upsertIcuChartTxAndUpdateIcuChartOrder } from '@/lib/services/icu/upsert-chart-tx'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
@@ -16,16 +17,19 @@ import type { IcuUserList, TxLog } from '@/types/icu'
 import { format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-export default function TxSelectUserStep({
-  icuUsersData,
-}: {
-  icuUsersData: IcuUserList[]
-}) {
+export default function TxSelectUserStep() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { txLocalState, setTxLocalState, reset } = useUpsertTxStore()
   const { hos_id } = useParams()
+  const [staffList, setStaffList] = useState<IcuUserList[]>([])
+
+  useEffect(() => {
+    getStaffList(hos_id as string).then((res) => {
+      setStaffList(res)
+    })
+  }, [hos_id])
 
   const handleSelectUserId = (userId: string) => {
     setTxLocalState({ txUserId: userId })
@@ -37,7 +41,7 @@ export default function TxSelectUserStep({
     const newLog: TxLog = {
       result: txLocalState?.txResult ?? '',
       name:
-        icuUsersData.find((vet) => vet.user_id === txLocalState?.txUserId)
+        staffList.find((staff) => staff.user_id === txLocalState?.txUserId)
           ?.name ?? '미선택',
       createdAt: format(new Date(), 'yyyy-MM-dd HH:mm'),
     }
@@ -75,10 +79,10 @@ export default function TxSelectUserStep({
 
           <SelectContent>
             <SelectGroup>
-              {icuUsersData.map((user) => (
-                <SelectItem key={user.user_id} value={user.user_id}>
-                  <span>{user.name}</span>
-                  <span className="ml-2 text-xs">{user.position}</span>
+              {staffList.map((staff) => (
+                <SelectItem key={staff.user_id} value={staff.user_id}>
+                  <span>{staff.name}</span>
+                  <span className="ml-2 text-xs">{staff.position}</span>
                 </SelectItem>
               ))}
 
