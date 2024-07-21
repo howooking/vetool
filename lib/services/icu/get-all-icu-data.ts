@@ -24,6 +24,7 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .match({ hos_id: hosId })
       .lte('in_date', targetDate)
       .or(`out_date.is.null, out_date.gte.${targetDate}`)
+      .order('out_date', { ascending: false })
       .order('in_date, created_at', { ascending: true })
       .returns<IcuIoPatientJoined[]>(),
 
