@@ -33,7 +33,7 @@ export default function IcuSidebarPatientButton({
       <div
         className={cn(
           'flex w-full justify-between gap-2',
-          data.out_date && 'line-through',
+          data.out_date && 'text-muted-foreground line-through',
         )}
       >
         <span>{data.patient_id.name}</span>
