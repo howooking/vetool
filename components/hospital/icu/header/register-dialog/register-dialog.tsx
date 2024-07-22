@@ -1,5 +1,6 @@
 'use client'
 
+import BookmarkChartTable from '@/components/hospital/icu/header/register-dialog/bookmark-chart-table'
 import RegisterPatientForm from '@/components/hospital/icu/header/register-dialog/register-patient-form'
 import RegisterTypeSelector from '@/components/hospital/icu/header/register-dialog/register-type-selector'
 import IcuSearchChart from '@/components/hospital/icu/main/search/icu-search-chart'
@@ -10,9 +11,13 @@ import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { usePatientRegisterStep } from '@/lib/store/icu/icu-register'
+import { getBookmarkChart } from '@/lib/services/icu/bookmark'
+import {
+  usePatientRegisterDialog,
+  usePatientRegisterStep,
+} from '@/lib/store/icu/icu-register'
 import { cn } from '@/lib/utils'
-import type { IcuUserList } from '@/types/icu'
+import type { IcuChartBookmarkJoined, IcuUserList } from '@/types/icu'
 import type { PatientData, PatientDataTable } from '@/types/patients'
 import { useEffect, useState } from 'react'
 
@@ -27,18 +32,30 @@ export default function RegisterDialog({
   groupList: string[]
   vetsData: IcuUserList[]
 }) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [bookmarkCharts, setBookmarkCharts] = useState<
+    IcuChartBookmarkJoined[]
+  >([])
+  const { isRegisterDialogOpen, setIsRegisterDialogOpen } =
+    usePatientRegisterDialog()
   const { step, setStep } = usePatientRegisterStep()
   const [tab, setTab] = useState('search')
 
   useEffect(() => {
     setTimeout(() => {
-      if (!isDialogOpen) {
+      if (!isRegisterDialogOpen) {
         setTab('search')
         setStep('patientSearch')
       }
     }, 1000)
-  }, [setStep, isDialogOpen])
+
+    const fetchBookmarkData = async () => {
+      const bookmarkData = await getBookmarkChart()
+
+      setBookmarkCharts(bookmarkData)
+    }
+
+    if (step === 'bookmarkSearch') fetchBookmarkData()
+  }, [setStep, step, isRegisterDialogOpen])
 
   const icuRegisterPatientsData: PatientDataTable[] = patientsData.map(
     (patient) => ({
@@ -74,7 +91,7 @@ export default function RegisterDialog({
   }
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog open={isRegisterDialogOpen} onOpenChange={setIsRegisterDialogOpen}>
       <DialogTrigger asChild>
         <Button size="sm">환자입원</Button>
       </DialogTrigger>
@@ -112,35 +129,31 @@ export default function RegisterDialog({
                 hosId={hosId}
                 groupList={groupList}
                 vetsData={vetsData}
-                setIsDialogOpen={setIsDialogOpen}
                 tab={tab}
               />
             )}
             {step === 'selectChartType' && <RegisterTypeSelector />}
 
-            {step === 'chartSearch' && (
-              <IcuSearchChart
-                setIsRegisterDialogOpen={setIsDialogOpen}
-                type="register"
+            {step === 'chartSearch' && <IcuSearchChart type="register" />}
+
+            {step === 'bookmarkSearch' && (
+              <BookmarkChartTable
+                setStep={setStep}
+                bookmarkCharts={bookmarkCharts}
+                isRegisterDialogOpen={isRegisterDialogOpen}
               />
             )}
           </TabsContent>
 
           <TabsContent value="register">
             {step === 'patientRegister' && (
-              <PatientForm
-                setStep={setStep}
-                hosId={hosId}
-                icu
-                setIsDialogOpen={setIsDialogOpen}
-              />
+              <PatientForm setStep={setStep} hosId={hosId} icu />
             )}
             {step === 'icuRegister' && (
               <RegisterPatientForm
                 hosId={hosId}
                 groupList={groupList}
                 vetsData={vetsData}
-                setIsDialogOpen={setIsDialogOpen}
                 tab={tab}
               />
             )}
