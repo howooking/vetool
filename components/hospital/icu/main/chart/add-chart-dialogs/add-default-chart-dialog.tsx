@@ -13,26 +13,28 @@ import { toast } from '@/components/ui/use-toast'
 import { addDefaultChart } from '@/lib/services/icu/add-icu-chart'
 import { cn } from '@/lib/utils'
 import { File, LoaderCircle } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function AddDefaultChartDialog({
   targetDate,
   selectedPatient,
+  setIsCreatingChart,
 }: {
   targetDate: string
   selectedPatient: {
     patientName: string
     patientId: string
   }
+  setIsCreatingChart: (isCreatingChart: boolean) => void
 }) {
-  const { refresh } = useRouter()
   const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleAddDefaultChart = async () => {
     setIsSubmitting(true)
+    setIsCreatingChart(true)
 
     const { error } = await addDefaultChart(
       hos_id as string,
@@ -46,6 +48,7 @@ export default function AddDefaultChartDialog({
         description: '전날 차트가 있는지 확인해주세요',
         variant: 'destructive',
       })
+      setIsCreatingChart(false)
       setIsSubmitting(false)
       setIsDialogOpen(false)
       return

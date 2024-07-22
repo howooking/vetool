@@ -23,7 +23,6 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
       icu_chart_tx_result: txLocalState?.txResult,
       icu_chart_tx_images: txLocalState?.txImages,
       icu_chart_tx_log: updatedLogs,
-      user_id: txLocalState?.txUserId,
     })
     .select('icu_chart_tx_id')
     .single()

@@ -1,4 +1,3 @@
-import { txDetailRegisterFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/tx/detail-insert-step/schema'
 import TxLog from '@/components/hospital/icu/main/chart/selected-chart/table/tx/detail-insert-step/tx-log'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -17,10 +16,10 @@ import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { txDetailRegisterFormSchema } from '../schema'
 
 export default function TxDetailInsertStep() {
   const [isDeleting, setIsDeleting] = useState(false)

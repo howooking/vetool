@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart/order'
+import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
@@ -34,10 +34,12 @@ export default function SearchChartTableRow({
 
     const selectedChartOrders = fetchedChartOrders.sort(
       (prev, next) =>
-        ORDER_OF_ORDERS.findIndex(
-          (itme) => itme === prev.icu_chart_order_type,
+        DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+          (order) => order === prev.icu_chart_order_type,
         ) -
-        ORDER_OF_ORDERS.findIndex((itme) => itme === next.icu_chart_order_type),
+        DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+          (order) => order === next.icu_chart_order_type,
+        ),
     )
 
     setCopiedChartOrder(selectedChartOrders)

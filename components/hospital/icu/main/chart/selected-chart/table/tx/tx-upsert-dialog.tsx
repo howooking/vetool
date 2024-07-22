@@ -2,13 +2,8 @@ import TxDetailInsertStep from '@/components/hospital/icu/main/chart/selected-ch
 import TxSelectUserStep from '@/components/hospital/icu/main/chart/selected-chart/table/tx/tx-select-user-step'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
-import type { IcuUserList } from '@/types/icu'
 
-export default function TxUpsertDialog({
-  icuUsersData,
-}: {
-  icuUsersData: IcuUserList[]
-}) {
+export default function TxUpsertDialog() {
   const { step, setStep } = useUpsertTxStore()
 
   return (
@@ -16,9 +11,7 @@ export default function TxUpsertDialog({
       <DialogContent>
         {step === 'detailInsert' && <TxDetailInsertStep />}
 
-        {step === 'seletctUser' && (
-          <TxSelectUserStep icuUsersData={icuUsersData} />
-        )}
+        {step === 'seletctUser' && <TxSelectUserStep />}
       </DialogContent>
     </Dialog>
   )

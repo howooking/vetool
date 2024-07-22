@@ -9,22 +9,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { getVetList } from '@/lib/services/icu/get-staffs'
 import type { IcuUserList, MainAndSubVet } from '@/types/icu'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export function MainSubVet({
   mainVet,
   subVet,
-  vetsData,
   icuChartId,
 }: {
   mainVet: MainAndSubVet
   subVet: MainAndSubVet | null
-  vetsData: IcuUserList[]
   icuChartId: string
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { hos_id } = useParams()
+  const [vetsList, setVetsList] = useState<IcuUserList[]>([])
+
+  useEffect(() => {
+    getVetList(hos_id as string).then((res) => {
+      setVetsList(res)
+    })
+  }, [hos_id])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -67,7 +75,7 @@ export function MainSubVet({
           setIsDialogOpen={setIsDialogOpen}
           mainVet={mainVet}
           subVet={subVet}
-          vetsData={vetsData}
+          vetsList={vetsList}
           icuChartId={icuChartId}
         />
       </DialogContent>

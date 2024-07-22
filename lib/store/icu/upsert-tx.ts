@@ -2,7 +2,6 @@ import type { TxLog } from '@/types/icu'
 import { create } from 'zustand'
 
 export type TxLocalState = {
-  txUserId?: string | null
   txResult?: string | null
   txComment?: string | null
   txImages?: string[] | null

@@ -17,14 +17,15 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .from('icu_io')
       .select(
         `
-          *,
-          patient_id("name", "breed", "patient_id")
+          icu_io_id, in_date, out_date, out_due_date, group_list, age_in_days,
+          patient_id(name, breed, patient_id)
         `,
       )
       .match({ hos_id: hosId })
       .lte('in_date', targetDate)
       .or(`out_date.is.null, out_date.gte.${targetDate}`)
-      .order('in_date', { ascending: true })
+      .order('out_date', { ascending: false })
+      .order('in_date, created_at', { ascending: true })
       .returns<IcuIoPatientJoined[]>(),
 
     supabase
@@ -32,15 +33,17 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .select(
         `
           *,
-          hos_id("group_list", "icu_memo_names"),
-          patient_id("name", "gender", "breed", "patient_id", "species", "owner_name"),
-          main_vet("name", "user_id", "avatar_url"),
-          sub_vet("name", "user_id", "avatar_url"),
-          bookmark_id("bookmark_name", "bookmark_comment", "bookmark_id")
+          icu_io_id!inner(out_date, in_date, created_at),
+          hos_id(group_list, icu_memo_names),
+          patient_id(name, gender, breed, patient_id, species, owner_name),
+          main_vet(name, user_id, avatar_url),
+          sub_vet(name, user_id, avatar_url),
+          bookmark_id(bookmark_name, bookmark_comment, bookmark_id)
         `,
       )
       .match({ hos_id: hosId, target_date: targetDate })
-      .order('created_at', { ascending: true })
+      .order('icu_io_id(out_date)', { ascending: false })
+      .order('icu_io_id(in_date), icu_io_id(created_at)', { ascending: true })
       .returns<IcuChartJoined[]>(),
 
     supabase
@@ -48,7 +51,8 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .select(
         `
           *,
-          icu_io_id!inner(*),
+          icu_io_id(*),
+          icu_chart_id!inner(target_date, icu_chart_id),
           icu_chart_order_tx_1(*),
           icu_chart_order_tx_2(*),
           icu_chart_order_tx_3(*),
@@ -76,41 +80,28 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
         `,
       )
       .match({ hos_id: hosId })
+      .eq('icu_chart_id.target_date', targetDate)
       .order('icu_chart_order_name', { ascending: true })
       .returns<IcuChartOrderJoined[]>(),
-
-    supabase
-      .from('users')
-      .select('name, position, user_id, avatar_url, is_vet')
-      .match({ hos_id: hosId })
-      .returns<IcuUserList[]>(),
   ])
 
   const [
     { data: icuIoData, error: icuIoDataError },
     { data: icuChartData, error: icuChartDataError },
     { data: icuChartOrderData, error: icuChartOrderDataError },
-    { data: icuUsersData, error: icuUsersDataError },
   ] = await promiseArray
 
-  if (
-    icuIoDataError ||
-    icuChartDataError ||
-    icuChartOrderDataError ||
-    icuUsersDataError
-  ) {
+  if (icuIoDataError || icuChartDataError || icuChartOrderDataError) {
     console.log({
       icuIoDataError,
       icuChartDataError,
       icuChartOrderDataError,
-      icuUsersDataError,
     })
     redirect(
       `/error?message=${
         icuIoDataError?.message ||
         icuChartDataError?.message ||
-        icuChartOrderDataError?.message ||
-        icuUsersDataError?.message
+        icuChartOrderDataError?.message
       }`,
     )
   }
@@ -118,6 +109,5 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
     icuIoData,
     icuChartData,
     icuChartOrderData,
-    icuUsersData,
   }
 }

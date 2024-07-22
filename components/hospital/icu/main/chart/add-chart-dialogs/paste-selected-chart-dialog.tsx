@@ -19,12 +19,14 @@ import { useState } from 'react'
 export default function PasteSelectedChartDialog({
   targetDate,
   selectedPatient,
+  setIsCreatingChart,
 }: {
   targetDate: string
   selectedPatient: {
     patientName: string
     patientId: string
   }
+  setIsCreatingChart: (isCreatingChart: boolean) => void
 }) {
   const { refresh } = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -45,6 +47,7 @@ export default function PasteSelectedChartDialog({
     }
 
     setIsSubmitting(true)
+    setIsCreatingChart(true)
 
     await pasteRegisteredPatientChartOrder(
       targetDate,
@@ -58,6 +61,7 @@ export default function PasteSelectedChartDialog({
     })
 
     refresh()
+
     setIsDialogOpen(false)
     setIsSubmitting(false)
   }

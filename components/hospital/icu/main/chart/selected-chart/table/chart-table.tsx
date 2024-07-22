@@ -11,14 +11,12 @@ import {
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined, IcuUserList } from '@/types/icu'
+import type { IcuChartOrderJoined } from '@/types/icu'
 
 export default function ChartTable({
   selectedChartOrders,
-  icuUsersData,
 }: {
   selectedChartOrders: IcuChartOrderJoined[]
-  icuUsersData: IcuUserList[]
 }) {
   return (
     <Table className="border">
@@ -28,7 +26,7 @@ export default function ChartTable({
             <span>오더 목록</span>
             <OrderDialog
               icuIoId={selectedChartOrders[0].icu_io_id.icu_io_id}
-              icuChartId={selectedChartOrders[0].icu_chart_id}
+              icuChartId={selectedChartOrders[0].icu_chart_id.icu_chart_id}
             />
           </TableHead>
 
@@ -41,7 +39,7 @@ export default function ChartTable({
       </TableHeader>
 
       <TableBody>
-        <TxUpsertDialog icuUsersData={icuUsersData} />
+        <TxUpsertDialog />
 
         {selectedChartOrders.map((order) => (
           <TableRow className={cn('divide-x')} key={order.icu_chart_order_id}>

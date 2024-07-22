@@ -1,5 +1,5 @@
-import { bookmarkColumns } from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/bookmark/bookmark-columns'
-import SelectBookmarkSkeleton from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/bookmark/select-bookmark-skeleton'
+import { bookmarkColumns } from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/bookmark-columns'
+import SelectBookmarkSkeleton from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/select-bookmark-skeleton'
 import OrderPreviewDialog from '@/components/hospital/icu/main/search/order-preview-dialog'
 import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'

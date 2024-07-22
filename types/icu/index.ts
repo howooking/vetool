@@ -1,15 +1,28 @@
 import type {
   Hospital,
   IcuChart,
+  IcuChartBookmark,
   IcuChartOrder,
   IcuChartTx,
   IcuIo,
-  IcuChartBookmark,
   Patients,
   User,
 } from '@/types'
 
-export type IcuIoPatientJoined = Omit<IcuIo, 'patient_id'> & {
+export type IcuData = {
+  icuIoData: IcuIoPatientJoined[]
+  icuChartData: IcuChartJoined[]
+  icuChartOrderData: IcuChartOrderJoined[]
+}
+export type IcuIoPatientJoined = Pick<
+  IcuIo,
+  | 'in_date'
+  | 'out_date'
+  | 'out_due_date'
+  | 'group_list'
+  | 'icu_io_id'
+  | 'age_in_days'
+> & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
 }
 
@@ -17,8 +30,9 @@ export type MainAndSubVet = Pick<User, 'name' | 'avatar_url' | 'user_id'>
 
 export type IcuChartJoined = Omit<
   IcuChart,
-  'main_vet' | 'sub_vet' | 'patient_id' | 'icu_io_id' | 'hos_id'
+  'main_vet' | 'sub_vet' | 'patient_id' | 'hos_id' | 'icu_io_id'
 > & {
+  icu_io_id: Pick<IcuIo, 'out_date'>
   hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names'>
   patient_id: Pick<
     Patients,
@@ -46,6 +60,7 @@ export type IcuChartListJoined = Pick<
 
 export type IcuChartOrderJoined = IcuChartOrder & {
   icu_io_id: IcuIo
+  icu_chart_id: Pick<IcuChart, 'target_date' | 'icu_chart_id'>
   icu_chart_order_tx_1: IcuChartTx | null
   icu_chart_order_tx_2: IcuChartTx | null
   icu_chart_order_tx_3: IcuChartTx | null

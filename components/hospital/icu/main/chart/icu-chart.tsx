@@ -1,32 +1,22 @@
 'use client'
 
 import NoResult from '@/components/common/no-result'
-import SelectedChartNotFound from '@/components/hospital/icu/main/chart/selected-chart-not-found/selected-chart-not-found'
 import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/selected-chart'
-import { ORDER_OF_ORDERS } from '@/constants/hospital/icu/chart/order'
+import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import type {
-  IcuChartJoined,
-  IcuChartOrderJoined,
-  IcuIoPatientJoined,
-  IcuUserList,
-} from '@/types/icu'
-import { useMemo } from 'react'
+import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
+import type { IcuData } from '@/types/icu'
+import { useEffect, useMemo } from 'react'
+import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
+import IcuChartSkeleton from './icu-chart-skeleton'
 
-export default function IcuChart({
-  icuIoData,
-  icuChartData,
-  icuChartOrderData,
-  icuUsersData,
-}: {
-  icuChartData: IcuChartJoined[]
-  icuIoData: IcuIoPatientJoined[]
-  icuChartOrderData: IcuChartOrderJoined[]
-  icuUsersData: IcuUserList[]
-}) {
+export default function IcuChart({ icuData }: { icuData: IcuData }) {
+  const { icuChartData, icuChartOrderData, icuIoData } = icuData
+
   const { selectedPatient } = useIcuSelectedPatientStore()
+  const { isCreatingChart, setIsCreatingChart } = useIsCreatingChartStore()
 
-  const selectedChartIoData = useMemo(
+  const selectedIo = useMemo(
     () =>
       icuIoData.find(
         (io) => io.patient_id.patient_id === selectedPatient?.patientId,
@@ -45,14 +35,17 @@ export default function IcuChart({
   const selectedChartOrders = useMemo(
     () =>
       icuChartOrderData
-        .filter((order) => order.icu_chart_id === selectedChart?.icu_chart_id)
+        .filter(
+          (order) =>
+            order.icu_chart_id.icu_chart_id === selectedChart?.icu_chart_id,
+        )
         .sort(
           (prev, next) =>
-            ORDER_OF_ORDERS.findIndex(
-              (itme) => itme === prev.icu_chart_order_type,
+            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+              (order) => order === prev.icu_chart_order_type,
             ) -
-            ORDER_OF_ORDERS.findIndex(
-              (itme) => itme === next.icu_chart_order_type,
+            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+              (order) => order === next.icu_chart_order_type,
             ),
         ),
     [icuChartOrderData, selectedChart?.icu_chart_id],
@@ -76,27 +69,54 @@ export default function IcuChart({
     [icuIoData, selectedPatient],
   )
 
-  if (!selectedPatient?.patientId) {
+  useEffect(() => {
+    if (isCreatingChart && selectedChart) {
+      console.log('iscreateing to false')
+      setIsCreatingChart(false)
+    }
+  }, [isCreatingChart, selectedChart, setIsCreatingChart])
+
+  if (!selectedPatient) {
     return <NoResult title="환자를 선택해주세요" />
   }
 
-  return (
-    <div className="w-full">
-      {selectedChart && selectedChartIoData ? (
+  if (isCreatingChart) {
+    return <IcuChartSkeleton />
+  }
+
+  if (!selectedChart && selectedIo && isPatientIn) {
+    return (
+      <AddChartDialogs
+        selectedPatient={selectedPatient}
+        icuChartData={icuChartData}
+      />
+    )
+  }
+
+  if (!selectedChart && !selectedIo && !isPatientIn) {
+    return (
+      <NoResult
+        title={
+          <>
+            {selectedPatient.patientName}은(는) 선택한 날짜의 차트가 없습니다{' '}
+            <br /> 선택한 날짜에 아직 입원을 하지 않았거나 이미 퇴원을
+            하였습니다
+          </>
+        }
+      />
+    )
+  }
+
+  if (selectedChart && selectedIo) {
+    return (
+      <div className="w-full">
         <SelectedChart
-          selectedChartIoData={selectedChartIoData}
+          selectedIo={selectedIo}
           selectedChart={selectedChart}
           selectedChartOrders={selectedChartOrders}
-          icuUsersData={icuUsersData}
           isPatientOut={isPatientOut}
         />
-      ) : (
-        <SelectedChartNotFound
-          selectedPatient={selectedPatient}
-          isPatientIn={isPatientIn}
-          icuChartData={icuChartData}
-        />
-      )}
-    </div>
-  )
+      </div>
+    )
+  }
 }

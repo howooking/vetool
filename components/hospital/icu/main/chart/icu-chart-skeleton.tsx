@@ -1,10 +1,15 @@
 import { Skeleton } from '@/components/ui/skeleton'
+import React from 'react'
 
-export default function IcuMainSkeleton() {
+export default function IcuChartSkeleton() {
   return (
-    <div className="flex flex-col items-center gap-4 p-2">
+    <div className="flex w-full flex-col items-center gap-2 p-2">
+      {/* infos skeleton */}
       <Skeleton className="h-20 w-full" />
-      <Skeleton className="h-[400px] w-full" />
+      {/* table skeleton */}
+      <Skeleton className="h-[408px] w-full rounded-none" />
+
+      {/* memos skeleton */}
       <div className="flex h-[234px] w-full gap-2">
         <Skeleton className="h-[234px] w-1/3" />
         <Skeleton className="h-[234px] w-1/3" />

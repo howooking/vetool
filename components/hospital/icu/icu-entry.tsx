@@ -1,12 +1,7 @@
 'use client'
 
 import { useRealtimeSubscription } from '@/hooks/use-realtime-subscription'
-import type {
-  IcuChartJoined,
-  IcuChartOrderJoined,
-  IcuIoPatientJoined,
-  IcuUserList,
-} from '@/types/icu'
+import type { IcuData } from '@/types/icu'
 import IcuFooter from './icu-footer'
 import IcuMain from './main/icu-main'
 import IcuSidebar from './sidebar/icu-sidebar'
@@ -16,12 +11,7 @@ export default function IcuEntry({
   icuData,
 }: {
   hosId: string
-  icuData: {
-    icuIoData: IcuIoPatientJoined[]
-    icuChartData: IcuChartJoined[]
-    icuChartOrderData: IcuChartOrderJoined[]
-    icuUsersData: IcuUserList[]
-  }
+  icuData: IcuData
 }) {
   useRealtimeSubscription(hosId)
 
@@ -29,13 +19,8 @@ export default function IcuEntry({
     <div className="flex">
       <IcuSidebar icuIoData={icuData.icuIoData} />
 
-      <div className="w-full">
-        <IcuMain
-          icuChartData={icuData.icuChartData}
-          icuIoData={icuData.icuIoData}
-          icuChartOrderData={icuData.icuChartOrderData}
-          icuUsersData={icuData.icuUsersData}
-        />
+      <div className="h-icu-chart w-full">
+        <IcuMain icuData={icuData} />
         <IcuFooter />
       </div>
     </div>

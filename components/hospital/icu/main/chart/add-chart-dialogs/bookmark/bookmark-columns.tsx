@@ -1,6 +1,6 @@
 'use client'
 
-import OpenPreviewModalButton from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/bookmark/open-preview-modal-button'
+import OpenPreviewModalButton from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/open-preview-modal-button'
 import { Button } from '@/components/ui/button'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { ColumnDef } from '@tanstack/react-table'

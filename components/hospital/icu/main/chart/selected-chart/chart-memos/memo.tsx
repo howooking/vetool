@@ -55,7 +55,7 @@ export default function Memo({
   }
 
   return (
-    <div className="relative col-span-2 flex w-full items-center">
+    <div className="relative flex w-full items-center">
       <div className="absolute top-1 flex w-full items-center justify-between px-2">
         <Label className="text-xs text-muted-foreground" htmlFor="memo">
           {hosIcuMemoNames[index]}
