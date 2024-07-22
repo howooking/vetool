@@ -80,3 +80,31 @@ export function calculateAge(dateString: string) {
     return `${ageYears}년 ${ageMonths}개월`
   }
 }
+
+export const updateIcuTags = (
+  tags: string,
+  value: string,
+  part: 'dx' | 'cc',
+) => {
+  // '#'로 문자열을 분할
+  const parts = tags.split('#')
+
+  // 각 부분을 추출
+  const [, breed, species, name, bod, dx, cc] = parts
+
+  // 변경할 위치에 따라 새 값을 적용
+  let newDx = dx
+  let newCc = cc
+
+  if (part === 'dx') {
+    newDx = value
+  }
+  if (part === 'cc') {
+    newCc = value
+  }
+
+  // 새로운 문자열 구성
+  const updatedTags = `#${breed}#${species}#${name}#${bod}#${newDx}#${newCc}`
+
+  return updatedTags
+}

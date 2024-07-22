@@ -172,13 +172,12 @@ export default function OrderPreviewDialog({
         description: '퇴원 예정일을 선택해주세요',
       })
 
+      setSelectedPatient({
+        patientId: registeringPatient.patientId,
+        patientName: registeringPatient.patientName,
+      })
       setSelectedIcuMainView('chart')
     }
-
-    setSelectedPatient({
-      patientId: registeringPatient.patientId,
-      patientName: registeringPatient.patientName,
-    })
 
     setPreviewModalOpen(false)
     setIsRegisterDialogOpen(false)

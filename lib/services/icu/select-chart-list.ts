@@ -7,6 +7,8 @@ import { redirect } from 'next/navigation'
 const supabase = createClient()
 
 export const selectChartList = async (query: string) => {
+  const safeQuery = query.replace(/[,;'"\\%_\[\]{}|&]/g, ' ')
+
   const { data: icuChartData, error: icuChartDataError } = await supabase
     .from('icu_chart')
     .select(
@@ -19,7 +21,7 @@ export const selectChartList = async (query: string) => {
       patient_id(name)
       `,
     )
-    .or(`icu_chart_tags.ilike.%${query}%`)
+    .or(`icu_chart_tags.ilike.%${safeQuery}%`)
     .order('target_date')
     .order('icu_io_id')
     .returns<IcuChartListJoined[]>()
