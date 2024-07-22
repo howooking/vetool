@@ -81,7 +81,6 @@ export default function ChartTableCell({
       txId: icuChartTxId,
       time,
       txLog: txData?.icu_chart_tx_log as TxLog[] | null,
-      txUserId: txData?.user_id,
     })
 
     longPressTimeoutRef.current = setTimeout(() => {
@@ -111,7 +110,16 @@ export default function ChartTableCell({
           value={briefTxResultInput}
           onChange={(e) => setBriefTxResultInput(e.target.value)}
           onBlur={handleUpsertBriefTxResultInput}
-          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              const target = e.currentTarget
+              setTimeout(() => {
+                if (target) {
+                  target.blur()
+                }
+              }, 0)
+            }
+          }}
           onTouchStart={handleLongClickStart}
           onTouchEnd={handleLongClickEnd}
           onTouchCancel={handleLongClickEnd}
