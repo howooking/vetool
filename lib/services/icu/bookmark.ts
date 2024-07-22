@@ -36,24 +36,26 @@ export const deleteBookmarkChart = async (bookmarkId: string) => {
 }
 
 export const getBookmarkChart = async () => {
-  const { data: selectBookmarkData, error: selectBookmarkError } =
+  const { data: selectedBookmarkChart, error: selectedBookmarkChartError } =
     await supabase
       .from('icu_chart_bookmark')
       .select(
         `
           *,
           icu_chart_id("icu_chart_id", "patient_id"("name"))
-      `,
+        `,
       )
       .order('updated_at', {
         ascending: false,
       })
       .returns<IcuChartBookmarkJoined[]>()
 
-  if (selectBookmarkError) {
-    console.log(selectBookmarkError)
-    redirect(`/error/?message=${selectBookmarkError.message}`)
+  if (selectedBookmarkChartError) {
+    console.log(selectedBookmarkChartError)
+    redirect(`/error/?message=${selectedBookmarkChartError.message}`)
   }
 
-  return selectBookmarkData
+  console.log(selectedBookmarkChart)
+
+  return selectedBookmarkChart
 }

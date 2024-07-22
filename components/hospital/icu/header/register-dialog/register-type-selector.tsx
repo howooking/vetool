@@ -1,31 +1,31 @@
 import { Button } from '@/components/ui/button'
 import { usePatientRegisterStep } from '@/lib/store/icu/icu-register'
 import { Bookmark, File, Search } from 'lucide-react'
-import { useState } from 'react'
 
 const CHART_TYPES = [
   { type: 'search', icon: Search, label: '기존 차트 검색' },
   { type: 'create', icon: File, label: '새로운 차트 만들기' },
-  { type: 'bookmark', icon: Bookmark, label: '북마크 차트 불러오기' },
+  { type: 'bookmark', icon: Bookmark, label: '즐겨찾기 차트 불러오기' },
 ] as const
 
 export default function RegisterTypeSelector() {
   const { setStep } = usePatientRegisterStep()
-  const [chartType, setChartType] = useState('')
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const value = event.currentTarget.value
-    setChartType(value)
 
     if (value === 'create') {
       setStep('icuRegister')
-
       return
     }
 
     if (value === 'search') {
       setStep('chartSearch')
+      return
+    }
 
+    if (value === 'bookmark') {
+      setStep('bookmarkSearch')
       return
     }
   }
@@ -52,8 +52,6 @@ export default function RegisterTypeSelector() {
           </Button>
         ))}
       </div>
-
-      {chartType === 'bookmark' && <h1>bookmark</h1>}
 
       <Button
         type="button"

@@ -14,34 +14,20 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { getBookmarkChart } from '@/lib/services/icu/bookmark'
-import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
+import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
-import type { IcuChartBookmarkJoined, IcuChartJoined } from '@/types/icu'
+import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { Bookmark } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-export default function AddBookmarkChartDialog({
-  targetDate,
-  selectedPatient,
-  icuChartData,
-}: {
-  targetDate: string
-  icuChartData: IcuChartJoined[]
-  selectedPatient: {
-    patientName: string
-    patientId: string
-  }
-}) {
-  const { target_date } = useParams()
-  const { refresh } = useRouter()
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const { setCopiedChartId, copiedChartOrder } = useCopiedChartStore()
-  const { isPreviewModalOpen, onOpenChange } = useOrderPreviewStore()
+export default function AddBookmarkChartDialog() {
+  const { isPreviewModalOpen } = useOrderPreviewStore()
+  const { isBookmarkModalOpen, setBookmarkModalOpen } = useIcuBookmarkStore()
+
+  const [isFetching, setIsFetching] = useState(false)
   const [bookmarkCharts, setBookmarkCharts] = useState<
     IcuChartBookmarkJoined[]
   >([])
-  const [isFetching, setIsFetching] = useState(false)
 
   const fetchBookmarkData = async () => {
     setIsFetching(true)
@@ -53,12 +39,12 @@ export default function AddBookmarkChartDialog({
   }
 
   const handleDialogOpen = () => {
-    setIsDialogOpen(true)
+    setBookmarkModalOpen(true)
     fetchBookmarkData()
   }
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog open={isBookmarkModalOpen} onOpenChange={setBookmarkModalOpen}>
       <DialogTrigger asChild>
         <Button
           variant="outline"
@@ -66,14 +52,14 @@ export default function AddBookmarkChartDialog({
           onClick={handleDialogOpen}
         >
           <Bookmark />
-          <span>북마크 차트 선택</span>
+          <span>즐겨찾기 차트 선택</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[1040px]">
         <DialogHeader>
-          <DialogTitle>북마크 차트 붙여넣기</DialogTitle>
+          <DialogTitle>즐겨찾기 차트 붙여넣기</DialogTitle>
           <DialogDescription>
-            북마크한 차트를 붙여넣어 차트가 생성됩니다
+            저장한 차트를 붙여넣어 차트가 생성됩니다
           </DialogDescription>
         </DialogHeader>
         {isFetching ? (
@@ -83,6 +69,7 @@ export default function AddBookmarkChartDialog({
             columns={bookmarkColumns}
             data={bookmarkCharts}
             rowLength={10}
+            searchPlaceHolder="즐겨찾기 이름 · 즐겨찾기 설명 · 환자명으로 조회하세요"
           />
         )}
         {isPreviewModalOpen && <OrderPreviewDialog type="bookmark" />}

@@ -73,7 +73,7 @@ export default function BookmarkDialog({
     )
 
     toast({
-      title: '해당 차트가 북마크 되었습니다',
+      title: '해당 차트가 저장되었습니다',
     })
 
     setIsBookmarked(true)
@@ -113,8 +113,8 @@ export default function BookmarkDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>차트 북마크</DialogTitle>
-          <DialogDescription>해당 차트를 북마크합니다</DialogDescription>
+          <DialogTitle>차트 즐겨찾기</DialogTitle>
+          <DialogDescription>해당 차트를 저장합니다</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
@@ -128,7 +128,7 @@ export default function BookmarkDialog({
                 name="bookmark_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>북마크 제목*</FormLabel>
+                    <FormLabel>즐겨찾기 제목*</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -146,7 +146,7 @@ export default function BookmarkDialog({
                 name="bookmark_comment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>북마크 설명</FormLabel>
+                    <FormLabel>즐겨찾기 설명</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -168,7 +168,7 @@ export default function BookmarkDialog({
                     disabled={isDeleting}
                     onClick={handleDeleteButtonClick}
                   >
-                    북마크 해제
+                    즐겨찾기 해제
                   </Button>
                 )}
                 <DialogClose asChild>
