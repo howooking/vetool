@@ -1,5 +1,5 @@
-import IcuChartSkeleton from '@/components/hospital/icu/main/chart/icu-chart-skeleton'
 import { Skeleton } from '@/components/ui/skeleton'
+import { LoaderCircle } from 'lucide-react'
 
 export default function IcuSkeleton() {
   return (
@@ -19,7 +19,9 @@ export default function IcuSkeleton() {
         <Skeleton className="h-8 w-[127px]" />
       </div>
 
-      <IcuChartSkeleton />
+      <div className="flex w-full items-center justify-center">
+        <LoaderCircle className="h-20 w-20 animate-spin text-primary" />
+      </div>
     </div>
   )
 }
