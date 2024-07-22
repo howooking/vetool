@@ -29,7 +29,7 @@ export default function PasteOrderDialog() {
   const { setSelectedPatient } = useIcuSelectedPatientStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
-  const { copiedChartId, isCopyDialogOpen, setIsCopyDialogOpen } =
+  const { copiedChartId, isCopyDialogOpen, setIsCopyDialogOpen, reset } =
     useCopiedChartStore()
   const { registeringPatient } = useIcuRegisteringPatient() as {
     registeringPatient: {
@@ -68,6 +68,7 @@ export default function PasteOrderDialog() {
     setSelectedIcuMainView('chart')
     setIsSubmitting(false)
     push(target_date as string)
+    reset()
     refresh()
   }
 

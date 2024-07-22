@@ -11,14 +11,19 @@ type CopiedChartState = {
   setSelectedTargetDate: (selectedTargetDate: string) => void
   setCopiedChartOrder: (copiedChartOrder: IcuChartOrderJoined[]) => void
   setIsCopyDialogOpen: (isCopyDialogOpen: boolean) => void
+  reset: () => void
 }
 
-// 특정 차트의 Chart Id를 저장하는 Store
-export const useCopiedChartStore = create<CopiedChartState>((set) => ({
+const initialState = {
   copiedChartId: '',
   selectedTargetDate: '',
   copiedChartOrder: [],
   isCopyDialogOpen: false,
+}
+
+// 특정 차트의 Chart Id를 저장하는 Store
+export const useCopiedChartStore = create<CopiedChartState>((set) => ({
+  ...initialState,
 
   setCopiedChartId: (icuChartId: string) => set({ copiedChartId: icuChartId }),
   setSelectedTargetDate: (selectedTargetDate: string) =>
@@ -27,4 +32,5 @@ export const useCopiedChartStore = create<CopiedChartState>((set) => ({
     set({ copiedChartOrder: selectedChartOrder })
   },
   setIsCopyDialogOpen: (isCopyDialogOpen: boolean) => set({ isCopyDialogOpen }),
+  reset: () => set(initialState),
 }))

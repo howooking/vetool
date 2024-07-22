@@ -25,7 +25,7 @@ export const copyPrevChart = async (
 
   if (rpcError) {
     console.log(rpcError)
-    redirect(`/error?message=${rpcError.message}`)
+    return { error: rpcError }
   }
 
   const { newIcuChartId, prevIcuChartId, icuIoId } = returningIcuChartIds as {

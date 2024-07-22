@@ -51,7 +51,7 @@ export default function OrderPreviewDialog({
   const { push, refresh } = useRouter()
   const { target_date } = useParams()
   const { selectedPatient, setSelectedPatient } = useIcuSelectedPatientStore()
-  const { copiedChartId, setCopiedChartOrder } = useCopiedChartStore()
+  const { copiedChartId, setCopiedChartOrder, reset } = useCopiedChartStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setBookmarkModalOpen } = useIcuBookmarkStore()
   const { isPreviewModalOpen, setPreviewModalOpen } = useOrderPreviewStore()
@@ -131,6 +131,7 @@ export default function OrderPreviewDialog({
     setPreviewModalOpen(false)
     setSelectedIcuMainView('chart')
     setIsRegisterDialogOpen(false)
+    reset()
     refresh()
   }
 
@@ -186,6 +187,7 @@ export default function OrderPreviewDialog({
     setIsRegisterDialogOpen(false)
     setBookmarkModalOpen(false)
     setIsSubmitting(false)
+    reset()
     refresh()
   }
 
