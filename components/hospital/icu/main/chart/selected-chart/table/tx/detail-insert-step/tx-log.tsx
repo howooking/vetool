@@ -30,7 +30,7 @@ export default function TxLog({ logs }: { logs: TxLog[] }) {
                     key={index}
                   >
                     <TableCell
-                      className="w-2/5 truncate"
+                      className="w-2/5 truncate text-center"
                       title={log.result ?? ''}
                     >
                       {log.result}
