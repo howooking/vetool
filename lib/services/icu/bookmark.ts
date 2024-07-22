@@ -55,7 +55,5 @@ export const getBookmarkChart = async () => {
     redirect(`/error/?message=${selectedBookmarkChartError.message}`)
   }
 
-  console.log(selectedBookmarkChart)
-
   return selectedBookmarkChart
 }
