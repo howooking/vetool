@@ -11,7 +11,10 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
-import { pasteChartOrderWithRegisterPatient } from '@/lib/services/icu/paste-order'
+import {
+  pasteChartOrderWithRegisterPatient,
+  pasteRegisteredPatientChartOrder,
+} from '@/lib/services/icu/paste-order'
 import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'

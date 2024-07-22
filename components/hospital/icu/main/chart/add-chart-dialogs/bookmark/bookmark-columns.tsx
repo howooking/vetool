@@ -1,7 +1,7 @@
 'use client'
 
-import OpenPreviewDialogButton from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/bookmark/open-preview-dialog-button'
-import PasteBookmarkDialog from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/bookmark/paste-bookmark-dialog'
+import OpenPreviewDialogButton from './open-preview-dialog-button'
+import PasteBookmarkDialog from './paste-bookmark-dialog'
 import { Button } from '@/components/ui/button'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { ColumnDef } from '@tanstack/react-table'

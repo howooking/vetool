@@ -59,10 +59,10 @@ export default function PasteBookmarkDialog({ chartId }: { chartId: string }) {
 
       const selectedChartOrders = fetchedChartOrders.sort(
         (prev, next) =>
-          DEFAULT_ICU_ORDER_TYPE.findIndex(
+          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
             (itme) => itme === prev.icu_chart_order_type,
           ) -
-          DEFAULT_ICU_ORDER_TYPE.findIndex(
+          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
             (itme) => itme === next.icu_chart_order_type,
           ),
       )

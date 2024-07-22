@@ -1,10 +1,9 @@
-import { bookmarkColumns } from '@/components/hospital/icu/main/chart/selected-chart-not-found/add-chart-dialogs/bookmark/bookmark-columns'
+import { bookmarkColumns } from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/bookmark-columns'
 import OrderPreviewDialog from '@/components/hospital/icu/main/search/order-preview-dialog'
 import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import { IcuChartBookmarkJoined } from '@/types/icu'
-import { Dispatch, SetStateAction } from 'react'
 
 export default function BookmarkChartTable({
   setStep,
