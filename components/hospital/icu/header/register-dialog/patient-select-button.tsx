@@ -5,7 +5,7 @@ import {
   useIcuRegisteringPatient,
   usePatientRegisterStep,
 } from '@/lib/store/icu/icu-register'
-import { cn } from '@/lib/utils'
+import { cn, getDaysSince } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 
@@ -43,6 +43,7 @@ export default function PatientSelectButton({
       patientId,
       birth,
       patientName,
+      ageInDays: icuIoData?.age_in_days || getDaysSince(birth),
     })
   }
 
