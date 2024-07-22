@@ -85,12 +85,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
   }
 
   if (!selectedChart && selectedIo && isPatientIn) {
-    return (
-      <AddChartDialogs
-        selectedPatient={selectedPatient}
-        icuChartData={icuChartData}
-      />
-    )
+    return <AddChartDialogs selectedPatient={selectedPatient} />
   }
 
   if (!selectedChart && !selectedIo && !isPatientIn) {

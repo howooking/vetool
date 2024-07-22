@@ -1,20 +1,18 @@
+import AddBookmarkChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-bookmark-chart-dialog'
 import AddDefaultChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-default-chart-dialog'
 import CopyPrevChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/copy-prev-chart-dialog'
 import PasteSelectedChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/paste-selected-chart-dialog'
-import AddBookmarkChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-bookmark-chart-dialog'
+import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
 import type { IcuChartJoined } from '@/types/icu'
 import { useParams } from 'next/navigation'
-import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
 
 export default function AddChartDialogs({
   selectedPatient,
-  icuChartData,
 }: {
   selectedPatient: {
     patientName: string
     patientId: string
   }
-  icuChartData: IcuChartJoined[]
 }) {
   const { target_date } = useParams()
   const { setIsCreatingChart } = useIsCreatingChartStore()
@@ -36,11 +34,7 @@ export default function AddChartDialogs({
         selectedPatient={selectedPatient}
         setIsCreatingChart={setIsCreatingChart}
       />
-      <AddBookmarkChartDialog
-        targetDate={target_date as string}
-        selectedPatient={selectedPatient}
-        icuChartData={icuChartData}
-      />
+      <AddBookmarkChartDialog />
     </div>
   )
 }

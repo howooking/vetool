@@ -1,6 +1,7 @@
 'use client'
 
-import OpenPreviewModalButton from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/open-preview-modal-button'
+import OpenPreviewDialogButton from './open-preview-dialog-button'
+import PasteBookmarkDialog from './paste-bookmark-dialog'
 import { Button } from '@/components/ui/button'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { ColumnDef } from '@tanstack/react-table'
@@ -15,7 +16,7 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          북마크 이름
+          즐겨찾기 이름
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -29,7 +30,7 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          북마크 상세
+          즐겨찾기 상세
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -81,7 +82,7 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
     },
     cell: ({ row }) => {
       return (
-        <OpenPreviewModalButton
+        <OpenPreviewDialogButton
           chartId={row.original.icu_chart_id.icu_chart_id}
         />
       )
@@ -91,7 +92,9 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
     accessorKey: 'action',
     header: undefined,
     cell: ({ row }) => {
-      return <Button className="h-6">선택</Button>
+      return (
+        <PasteBookmarkDialog chartId={row.original.icu_chart_id.icu_chart_id} />
+      )
     },
   },
 ]

@@ -11,26 +11,36 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
-import { pasteChartOrderWithRegisterPatient } from '@/lib/services/icu/paste-order'
+import {
+  pasteChartOrderWithRegisterPatient,
+  pasteRegisteredPatientChartOrder,
+} from '@/lib/services/icu/paste-order'
 import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
+import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { useIcuRegisteringPatient } from '@/lib/store/icu/icu-register'
+import {
+  useIcuRegisteringPatient,
+  usePatientRegisterDialog,
+} from '@/lib/store/icu/icu-register'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined } from '@/types/icu'
-import { format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+
+const BUTTON_TEXT = {
+  register: '해당 차트로 입원 진행',
+  search: '차트 복사',
+  bookmark: '차트 생성',
+}
 
 export default function OrderPreviewDialog({
   type,
-  setIsRegisterDialogOpen,
 }: {
   type: 'search' | 'register' | 'bookmark'
-  setIsRegisterDialogOpen?: Dispatch<SetStateAction<boolean>>
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -40,15 +50,19 @@ export default function OrderPreviewDialog({
 
   const { push, refresh } = useRouter()
   const { target_date } = useParams()
-  const { setSelectedPatient } = useIcuSelectedPatientStore()
+  const { selectedPatient, setSelectedPatient } = useIcuSelectedPatientStore()
   const { copiedChartId, setCopiedChartOrder } = useCopiedChartStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { isPreviewModalOpen, onOpenChange } = useOrderPreviewStore()
+  const { setBookmarkModalOpen } = useIcuBookmarkStore()
+  const { isPreviewModalOpen, setPreviewModalOpen } = useOrderPreviewStore()
+  const { isRegisterDialogOpen, setIsRegisterDialogOpen } =
+    usePatientRegisterDialog()
   const { registeringPatient } = useIcuRegisteringPatient() as {
     registeringPatient: {
       patientId: string
       birth: string
       patientName: string
+      ageInDays: number
     }
   }
 
@@ -73,12 +87,14 @@ export default function OrderPreviewDialog({
     }
 
     fetchChartOrderList()
-  }, [])
+  }, [copiedChartId])
 
   // 복사 버튼 클릭 핸들러
   const handleCopyChartOrder = () => {
+    // 복사한 오더 저장
     setCopiedChartOrder(selectedChartOrders)
-    onOpenChange(false)
+    // 미리보기 모달 Close
+    setPreviewModalOpen(false)
 
     toast({
       title: '차트 복사 완료',
@@ -86,48 +102,109 @@ export default function OrderPreviewDialog({
     })
   }
 
-  // 입원 시 특정 차트 선택 핸들러
-  const handleRegisterPatientAndChartOrder = async () => {
+  // 입원 시 검색된 차트 선택 핸들러
+  const handleRegisterSearchedChart = async () => {
     setIsSubmitting(true)
 
+    // 복사한 차트 삽입
+    await pasteChartOrderWithRegisterPatient(
+      target_date as string,
+      registeringPatient.patientId,
+      copiedChartId,
+      registeringPatient.ageInDays,
+    )
+
+    // 환자 정보 저장
     setSelectedPatient({
       patientId: registeringPatient.patientId,
       patientName: registeringPatient.patientName,
     })
 
-    await pasteChartOrderWithRegisterPatient(
-      format(new Date(), 'yyyy-MM-dd'),
-      registeringPatient.patientId,
-      copiedChartId,
-      0,
-    )
-
-    push(`${format(new Date(), 'yyyy-MM-dd')}`)
+    push(target_date as string)
 
     toast({
       title: '선택하신 입원 차트를 생성하였습니다',
-      description: '입원일과 퇴원 예정일을 선택해주세요',
+      description: '퇴원 예정일을 선택해주세요',
     })
 
-    // 오더 미리보기 Dialog Close
-    onOpenChange(false)
-
-    // isSubmitting = false
     setIsSubmitting(false)
-
-    // Set MainView
+    setPreviewModalOpen(false)
     setSelectedIcuMainView('chart')
-
-    // Register Dialog Close
-    if (setIsRegisterDialogOpen) setIsRegisterDialogOpen(false)
-
+    setIsRegisterDialogOpen(false)
     refresh()
   }
 
-  const handlePasteBookmarkChartOrder = async () => {}
+  // 북마크 오더 copy & paste 핸들러
+  const handlePasteBookmarkChart = async () => {
+    // EdgeCase: 입원 진행 중인 환자 정보가 없을 경우
+    if (isRegisterDialogOpen && !registeringPatient) {
+      toast({
+        title: '차트를 생성할 환자를 먼저 선택해주세요',
+        variant: 'destructive',
+      })
+      setPreviewModalOpen(false)
+      setBookmarkModalOpen(false)
+      return
+    }
+
+    setIsSubmitting(true)
+
+    // 입원중인 환자가 새로운 차트 생성 시 북마크된 차트를 붙여넣는 경우
+    if (selectedPatient && !isRegisterDialogOpen) {
+      await pasteRegisteredPatientChartOrder(
+        target_date as string,
+        selectedPatient.patientId,
+        copiedChartId,
+        selectedChartOrders,
+      )
+
+      toast({
+        title: '선택하신 차트를 생성하였습니다',
+      })
+      // 환자 입원 시 북마크 오더를 붙여넣기 하는 경우
+    } else {
+      await pasteChartOrderWithRegisterPatient(
+        target_date as string,
+        registeringPatient.patientId,
+        copiedChartId,
+        registeringPatient.ageInDays,
+      )
+
+      toast({
+        title: '선택하신 차트를 생성하였습니다',
+        description: '퇴원 예정일을 선택해주세요',
+      })
+
+      setSelectedPatient({
+        patientId: registeringPatient.patientId,
+        patientName: registeringPatient.patientName,
+      })
+      setSelectedIcuMainView('chart')
+    }
+
+    setPreviewModalOpen(false)
+    setIsRegisterDialogOpen(false)
+    setBookmarkModalOpen(false)
+    setIsSubmitting(false)
+    refresh()
+  }
+
+  const actions = {
+    search: handleCopyChartOrder,
+    register: handleRegisterSearchedChart,
+    bookmark: handlePasteBookmarkChart,
+  }[type]
+
+  const handleClick = async () => {
+    setIsSubmitting(true)
+
+    await actions()
+
+    setIsSubmitting(false)
+  }
 
   return (
-    <Dialog open={isPreviewModalOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isPreviewModalOpen} onOpenChange={setPreviewModalOpen}>
       <DialogContent className="sm:min-w-[1200px]">
         <DialogHeader>
           <DialogTitle>오더 미리보기</DialogTitle>
@@ -145,22 +222,8 @@ export default function OrderPreviewDialog({
               닫기
             </Button>
           </DialogClose>
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            onClick={
-              type === 'register'
-                ? handleRegisterPatientAndChartOrder
-                : type === 'search'
-                  ? handleCopyChartOrder
-                  : handlePasteBookmarkChartOrder
-            }
-          >
-            {type === 'register'
-              ? '해당 차트로 입원 진행'
-              : type === 'search'
-                ? '차트 복사'
-                : '차트 생성'}
+          <Button type="submit" disabled={isSubmitting} onClick={handleClick}>
+            {BUTTON_TEXT[type]}
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />

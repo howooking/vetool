@@ -26,6 +26,5 @@ export const useCopiedChartStore = create<CopiedChartState>((set) => ({
   setCopiedChartOrder: (selectedChartOrder) => {
     set({ copiedChartOrder: selectedChartOrder })
   },
-  setIsCopyDialogOpen: () =>
-    set((state) => ({ isCopyDialogOpen: !state.isCopyDialogOpen })),
+  setIsCopyDialogOpen: (isCopyDialogOpen: boolean) => set({ isCopyDialogOpen }),
 }))

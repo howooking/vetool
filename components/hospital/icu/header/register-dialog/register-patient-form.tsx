@@ -29,6 +29,7 @@ import { toast } from '@/components/ui/use-toast'
 import { registerIcuPatient } from '@/lib/services/icu/register-icu-patient'
 import {
   useIcuRegisteringPatient,
+  usePatientRegisterDialog,
   usePatientRegisterStep,
 } from '@/lib/store/icu/icu-register'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
@@ -41,7 +42,7 @@ import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -50,15 +51,14 @@ export default function RegisterPatientForm({
   hosId,
   groupList,
   vetsData,
-  setIsDialogOpen,
   tab,
 }: {
   hosId: string
   groupList: string[]
   vetsData: IcuUserList[]
-  setIsDialogOpen: Dispatch<SetStateAction<boolean>>
   tab: string
 }) {
+  const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
   const { push } = useRouter()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
@@ -119,7 +119,7 @@ export default function RegisterPatientForm({
       title: '입원 환자가 등록되었습니다',
     })
 
-    setIsDialogOpen(false)
+    setIsRegisterDialogOpen(false)
     setIsSubmitting(false)
     setSelectedPatient({
       patientId: registeringPatient.patientId,

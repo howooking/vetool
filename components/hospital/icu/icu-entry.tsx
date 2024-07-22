@@ -1,10 +1,10 @@
 'use client'
 
+import IcuFooter from '@/components/hospital/icu/icu-footer'
+import IcuMain from '@/components/hospital/icu/main/icu-main'
+import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
 import { useRealtimeSubscription } from '@/hooks/use-realtime-subscription'
 import type { IcuData } from '@/types/icu'
-import IcuFooter from './icu-footer'
-import IcuMain from './main/icu-main'
-import IcuSidebar from './sidebar/icu-sidebar'
 
 export default function IcuEntry({
   hosId,

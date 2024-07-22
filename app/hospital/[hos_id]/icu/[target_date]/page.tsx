@@ -7,5 +7,6 @@ export default async function IcuPage({
   params: { hos_id: string; target_date: string }
 }) {
   const icuData = await getAllIcuData(params.hos_id, params.target_date)
+
   return <IcuEntry hosId={params.hos_id} icuData={icuData} />
 }

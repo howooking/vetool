@@ -1,26 +1,22 @@
 'use client'
 
-import PasteOrderDialog from '@/components/hospital/icu/header/register-dialog/paste-order-dialog'
 import SearchChartTable from '@/components/hospital/icu/main/search/search-chart-table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { selectChartList } from '@/lib/services/icu/select-chart-list'
-import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { usePatientRegisterStep } from '@/lib/store/icu/icu-register'
 import type { IcuChartListJoined } from '@/types/icu'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 export default function IcuSearchChart({
-  setIsRegisterDialogOpen,
   type,
 }: {
-  setIsRegisterDialogOpen?: Dispatch<SetStateAction<boolean>>
   type: 'search' | 'register' | 'bookmark'
 }) {
-  const [chartList, setChartList] = useState<IcuChartListJoined[][]>([])
-  const { isCopyDialogOpen, setIsCopyDialogOpen } = useCopiedChartStore()
   const { setStep } = usePatientRegisterStep()
+
+  const [chartList, setChartList] = useState<IcuChartListJoined[][]>([])
 
   // Icu_Io_Id로 그룹화
   const groupByIcuIoId = (data: IcuChartListJoined[]) => {
@@ -47,31 +43,18 @@ export default function IcuSearchChart({
     500,
   )
 
+  const handlePrevButtonClick = () => setStep('selectChartType')
+
   return (
     <div className="flex flex-col gap-4 p-4">
       <Input
         placeholder="환자명, DX, CC를 통해 차트를 검색하세요"
         onChange={handleSearch}
       />
-      <SearchChartTable
-        data={chartList}
-        setIsRegisterDialogOpen={setIsRegisterDialogOpen}
-        type={type}
-      />
-
-      {isCopyDialogOpen && (
-        <PasteOrderDialog
-          isCopyDialogOpen={isCopyDialogOpen}
-          setIsCopyDialogOpen={setIsCopyDialogOpen}
-          setIsRegisterDialogOpen={setIsRegisterDialogOpen}
-        />
-      )}
-
+      <SearchChartTable data={chartList} type={type} />
       {type === 'register' && (
         <Button
-          onClick={() => {
-            setStep('selectChartType')
-          }}
+          onClick={handlePrevButtonClick}
           variant="outline"
           className="ml-auto"
         >

@@ -7,7 +7,7 @@ export const getIcuIoByPatientId = async (patientId: string) => {
   const supabase = createClient()
   const { data: icuIoData, error: icuIoError } = await supabase
     .from('icu_io')
-    .select('in_date, out_date')
+    .select('in_date, out_date, age_in_days')
     .match({ patient_id: patientId })
     .order('created_at', { ascending: false })
     .maybeSingle()

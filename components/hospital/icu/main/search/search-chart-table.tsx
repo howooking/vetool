@@ -1,4 +1,5 @@
 import NoResult from '@/components/common/no-result'
+import PasteOrderDialog from '@/components/hospital/icu/header/register-dialog/paste-order-dialog'
 import OrderPreviewDialog from '@/components/hospital/icu/main/search/order-preview-dialog'
 import SearchChartTableRow from '@/components/hospital/icu/main/search/search-chart-table-row'
 import {
@@ -7,9 +8,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import type { IcuChartListJoined } from '@/types/icu'
-import { Dispatch, SetStateAction } from 'react'
 
 const TABLE_TITLES = [
   '환자명',
@@ -23,13 +24,12 @@ const TABLE_TITLES = [
 export default function SearchChartTable({
   data,
   type,
-  setIsRegisterDialogOpen,
 }: {
   data: IcuChartListJoined[][]
   type: 'search' | 'register' | 'bookmark'
-  setIsRegisterDialogOpen?: Dispatch<SetStateAction<boolean>>
 }) {
   const { isPreviewModalOpen } = useOrderPreviewStore()
+  const { isCopyDialogOpen } = useCopiedChartStore()
 
   return (
     <div className="w-full rounded-md border">
@@ -103,12 +103,8 @@ export default function SearchChartTable({
         <NoResult title="결과가 없습니다" className="h-40" />
       )}
 
-      {isPreviewModalOpen && (
-        <OrderPreviewDialog
-          type={type}
-          setIsRegisterDialogOpen={setIsRegisterDialogOpen}
-        />
-      )}
+      {isPreviewModalOpen && <OrderPreviewDialog type={type} />}
+      {isCopyDialogOpen && <PasteOrderDialog />}
     </div>
   )
 }
