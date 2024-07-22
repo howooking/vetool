@@ -12,9 +12,9 @@ export const weightFormSchema = z.object({
 
 export const bookmarkFormSchema = z.object({
   bookmark_name: z
-    .string({ required_error: '북마크 이름을 입력해주세요' })
+    .string({ required_error: '즐겨찾기 이름을 입력해주세요' })
     .min(1, {
-      message: '북마크 이름을 입력해주세요',
+      message: '즐겨찾기 이름을 입력해주세요',
     }),
 
   bookmark_comment: z
