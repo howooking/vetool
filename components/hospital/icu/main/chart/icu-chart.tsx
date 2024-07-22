@@ -5,24 +5,12 @@ import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/s
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
-import type {
-  IcuChartJoined,
-  IcuChartOrderJoined,
-  IcuIoPatientJoined,
-} from '@/types/icu'
+import type { IcuData } from '@/types/icu'
 import { useEffect, useMemo } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 import IcuChartSkeleton from './icu-chart-skeleton'
 
-export default function IcuChart({
-  icuData,
-}: {
-  icuData: {
-    icuIoData: IcuIoPatientJoined[]
-    icuChartData: IcuChartJoined[]
-    icuChartOrderData: IcuChartOrderJoined[]
-  }
-}) {
+export default function IcuChart({ icuData }: { icuData: IcuData }) {
   const { icuChartData, icuChartOrderData, icuIoData } = icuData
 
   const { selectedPatient } = useIcuSelectedPatientStore()
@@ -47,7 +35,10 @@ export default function IcuChart({
   const selectedChartOrders = useMemo(
     () =>
       icuChartOrderData
-        .filter((order) => order.icu_chart_id === selectedChart?.icu_chart_id)
+        .filter(
+          (order) =>
+            order.icu_chart_id.icu_chart_id === selectedChart?.icu_chart_id,
+        )
         .sort(
           (prev, next) =>
             DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
@@ -84,12 +75,6 @@ export default function IcuChart({
       setIsCreatingChart(false)
     }
   }, [isCreatingChart, selectedChart, setIsCreatingChart])
-
-  // console.log('f=================irst')
-  // console.log('환자인:', isPatientIn)
-  // console.log('iscrating:', isCreatingChart)
-  // console.log(selectedChart)
-  // console.log(selectedIo)
 
   if (!selectedPatient) {
     return <NoResult title="환자를 선택해주세요" />

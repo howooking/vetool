@@ -26,7 +26,7 @@ export default function ChartTable({
             <span>오더 목록</span>
             <OrderDialog
               icuIoId={selectedChartOrders[0].icu_io_id.icu_io_id}
-              icuChartId={selectedChartOrders[0].icu_chart_id}
+              icuChartId={selectedChartOrders[0].icu_chart_id.icu_chart_id}
             />
           </TableHead>
 

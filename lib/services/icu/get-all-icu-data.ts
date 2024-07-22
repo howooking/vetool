@@ -17,8 +17,8 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .from('icu_io')
       .select(
         `
-          "icu_io_id", "in_date", "out_date", "out_due_date", "group_list", "age_in_days",
-          patient_id("name", "breed", "patient_id")
+          icu_io_id, in_date, out_date, out_due_date, group_list, age_in_days,
+          patient_id(name, breed, patient_id)
         `,
       )
       .match({ hos_id: hosId })
@@ -33,15 +33,17 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .select(
         `
           *,
-          hos_id("group_list", "icu_memo_names"),
-          patient_id("name", "gender", "breed", "patient_id", "species", "owner_name"),
-          main_vet("name", "user_id", "avatar_url"),
-          sub_vet("name", "user_id", "avatar_url"),
-          bookmark_id("bookmark_name", "bookmark_comment", "bookmark_id")
+          icu_io_id!inner(out_date, in_date, created_at),
+          hos_id(group_list, icu_memo_names),
+          patient_id(name, gender, breed, patient_id, species, owner_name),
+          main_vet(name, user_id, avatar_url),
+          sub_vet(name, user_id, avatar_url),
+          bookmark_id(bookmark_name, bookmark_comment, bookmark_id)
         `,
       )
       .match({ hos_id: hosId, target_date: targetDate })
-      .order('created_at', { ascending: true })
+      .order('icu_io_id(out_date)', { ascending: false })
+      .order('icu_io_id(in_date), icu_io_id(created_at)', { ascending: true })
       .returns<IcuChartJoined[]>(),
 
     supabase
@@ -49,7 +51,8 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .select(
         `
           *,
-          icu_io_id!inner(*),
+          icu_io_id(*),
+          icu_chart_id!inner(target_date, icu_chart_id),
           icu_chart_order_tx_1(*),
           icu_chart_order_tx_2(*),
           icu_chart_order_tx_3(*),
@@ -77,6 +80,7 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
         `,
       )
       .match({ hos_id: hosId })
+      .eq('icu_chart_id.target_date', targetDate)
       .order('icu_chart_order_name', { ascending: true })
       .returns<IcuChartOrderJoined[]>(),
   ])

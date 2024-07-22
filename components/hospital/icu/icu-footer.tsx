@@ -2,12 +2,19 @@
 
 import { Button } from '@/components/ui/button'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
+import {
+  IcuMainViewEnum,
+  useSelectedMainViewStore,
+} from '@/lib/store/icu/selected-main-view'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
     label: '종합 현황',
     value: 'summary',
+  },
+  {
+    label: '처치표',
+    value: 'todo',
   },
   {
     label: '입원 차트',
@@ -24,10 +31,10 @@ export default function IcuFooter() {
   const { selectIcudMainView, setSelectedIcuMainView } =
     useSelectedMainViewStore()
 
-  const handleButtonClick = (value: 'summary' | 'chart' | 'search') => {
+  const handleButtonClick = (value: IcuMainViewEnum) => {
     setSelectedIcuMainView(value)
 
-    if (value === 'summary') {
+    if (value !== 'chart') {
       setSelectedPatient(null)
     }
   }

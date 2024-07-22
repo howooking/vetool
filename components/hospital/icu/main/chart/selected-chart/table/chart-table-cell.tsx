@@ -103,8 +103,8 @@ export default function ChartTableCell({
         <Input
           className={cn(
             'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
-            hasOrder && 'bg-rose-50/60',
-            isDone && 'bg-green-50/60',
+            hasOrder && 'bg-rose-100/60',
+            isDone && 'bg-green-100/60',
           )}
           disabled={isDeleting || isPreview}
           value={briefTxResultInput}
