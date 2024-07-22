@@ -64,7 +64,7 @@ export const pasteChartOrderWithRegisterPatient = async (
       icu_chart_id_input: selectedIcuChartId,
       patient_id_input: patientId,
       target_date_input: targetDate,
-      age_in_days_input: 14,
+      age_in_days_input: ageInDays,
     },
   )
 
