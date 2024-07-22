@@ -49,6 +49,8 @@ export default function PasteSelectedChartDialog({
     setIsSubmitting(true)
     setIsCreatingChart(true)
 
+    console.log(selectedPatient)
+
     await pasteRegisteredPatientChartOrder(
       targetDate,
       selectedPatient.patientId,
