@@ -4,6 +4,9 @@ import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { selectedChartOrderList } from '@/lib/services/icu/select-chart-list'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
+import { cn } from '@/lib/utils'
+import { LoaderCircle } from 'lucide-react'
+import { useState } from 'react'
 
 export default function SearchChartTableRow({
   name,
@@ -20,14 +23,16 @@ export default function SearchChartTableRow({
   chartId: string
   type: 'search' | 'register' | 'bookmark'
 }) {
-  const rowData = [name, dx, cc, targetDate]
-  const { onOpenChange } = useOrderPreviewStore()
+  const { setPreviewModalOpen } = useOrderPreviewStore()
   const {
     setSelectedTargetDate,
     setCopiedChartId,
     setCopiedChartOrder,
     setIsCopyDialogOpen,
   } = useCopiedChartStore()
+
+  const rowData = [name, dx, cc, targetDate]
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const fetchChartOrderList = async () => {
     const fetchedChartOrders = await selectedChartOrderList(chartId)
@@ -46,35 +51,36 @@ export default function SearchChartTableRow({
     setCopiedChartId(chartId)
   }
 
-  const handleOpenChartPreviewModal = (
+  const handleOpenChartPreviewDialog = (
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     e.stopPropagation()
 
-    if (onOpenChange) {
-      onOpenChange(true)
-      setCopiedChartId(chartId)
-      setSelectedTargetDate(targetDate)
-      fetchChartOrderList()
-    }
+    setPreviewModalOpen(true)
+    setCopiedChartId(chartId)
+    setSelectedTargetDate(targetDate)
+    fetchChartOrderList()
   }
 
-  const handleCopyButtonClick = async (
+  const handleCopyChartOrder = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     e.stopPropagation()
+
+    setIsSubmitting(true)
 
     await fetchChartOrderList()
 
     if (type === 'register') {
       setIsCopyDialogOpen(true)
-      return
+    } else {
+      toast({
+        title: '차트 복사 완료',
+        description: '해당 차트가 클립보드에 복사되었습니다',
+      })
     }
 
-    toast({
-      title: '차트 복사 완료',
-      description: '해당 차트가 클립보드에 복사되었습니다',
-    })
+    setIsSubmitting(false)
   }
 
   return (
@@ -89,14 +95,21 @@ export default function SearchChartTableRow({
       ))}
 
       <div className="flex w-full justify-center">
-        <Button onClick={handleOpenChartPreviewModal} className="h-6">
+        <Button onClick={handleOpenChartPreviewDialog} className="h-6">
           미리보기
         </Button>
       </div>
 
       <div className="flex w-full justify-center">
-        <Button onClick={handleCopyButtonClick} className="h-6">
+        <Button
+          onClick={handleCopyChartOrder}
+          className="h-6"
+          disabled={isSubmitting}
+        >
           {type === 'register' ? '선택' : '복사'}
+          <LoaderCircle
+            className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
+          />
         </Button>
       </div>
     </div>

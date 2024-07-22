@@ -40,15 +40,18 @@ import {
   SEX,
 } from '@/constants/hospital/register/breed'
 import { insertPatient } from '@/lib/services/patient/insert-patient'
-import { useIcuRegisteringPatient } from '@/lib/store/icu/icu-register'
-import { cn } from '@/lib/utils'
+import {
+  useIcuRegisteringPatient,
+  usePatientRegisterDialog,
+} from '@/lib/store/icu/icu-register'
+import { cn, getDaysSince } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -56,17 +59,16 @@ export default function PatientForm({
   hosId,
   setStep,
   icu,
-  setIsDialogOpen,
 }: {
   hosId: string
   setStep: (step: 'patientRegister' | 'icuRegister') => void
   icu?: boolean
-  setIsDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
   const [breedOpen, setBreedOpen] = useState(false)
   const [selectedSpecies, setSelectedSpecies] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { setRegisteringPatient } = useIcuRegisteringPatient()
+  const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
   const { refresh } = useRouter()
 
   const BREEDS = selectedSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS
@@ -97,19 +99,21 @@ export default function PatientForm({
     setIsSubmitting(true)
 
     const patientId = await insertPatient({ data: values, hosId })
+    const formattedBirth = format(values.birth, 'yyyy-MM-dd')
 
     toast({
       title: '환자가 등록되었습니다',
       description: icu ? '입원을 이어서 진행합니다' : '',
     })
 
-    icu ? setStep('icuRegister') : setIsDialogOpen(false)
+    icu ? setStep('icuRegister') : setIsRegisterDialogOpen(false)
 
     icu &&
       setRegisteringPatient({
         patientId,
-        birth: format(values.birth, 'yyyy-MM-dd'),
+        birth: formattedBirth,
         patientName: values.name,
+        ageInDays: getDaysSince(formattedBirth),
       })
 
     setIsSubmitting(false)
@@ -409,7 +413,7 @@ export default function PatientForm({
             type="button"
             disabled={isSubmitting}
             variant="outline"
-            onClick={() => setIsDialogOpen(false)}
+            onClick={() => setIsRegisterDialogOpen(false)}
           >
             닫기
           </Button>

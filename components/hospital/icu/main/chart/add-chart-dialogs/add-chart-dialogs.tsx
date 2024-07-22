@@ -8,13 +8,11 @@ import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
 
 export default function AddChartDialogs({
   selectedPatient,
-  icuChartData,
 }: {
   selectedPatient: {
     patientName: string
     patientId: string
   }
-  icuChartData: IcuChartJoined[]
 }) {
   const { target_date } = useParams()
   const { setIsCreatingChart } = useIsCreatingChartStore()
@@ -36,11 +34,7 @@ export default function AddChartDialogs({
         selectedPatient={selectedPatient}
         setIsCreatingChart={setIsCreatingChart}
       />
-      <AddBookmarkChartDialog
-        targetDate={target_date as string}
-        selectedPatient={selectedPatient}
-        icuChartData={icuChartData}
-      />
+      <AddBookmarkChartDialog />
     </div>
   )
 }
