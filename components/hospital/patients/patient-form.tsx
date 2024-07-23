@@ -25,6 +25,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Select,
   SelectContent,
@@ -197,7 +198,11 @@ export default function PatientForm({
           render={({ field }) => (
             <FormItem className="flex flex-col justify-end">
               <FormLabel>품종*</FormLabel>
-              <Popover open={breedOpen} onOpenChange={setBreedOpen}>
+              <Popover
+                open={breedOpen}
+                onOpenChange={setBreedOpen}
+                modal={true}
+              >
                 <PopoverTrigger asChild disabled={!selectedSpecies}>
                   <FormControl>
                     <Button
@@ -218,37 +223,39 @@ export default function PatientForm({
                   </FormControl>
                 </PopoverTrigger>
 
-                <PopoverContent className="w-[352px] p-0">
+                <PopoverContent className="p-0 sm:w-[488px]">
                   <Command>
                     <CommandInput
                       placeholder="품종 검색, 잡종시 'Mongrel' 선택"
                       className="h-8 text-xs"
                     />
                     <CommandList>
-                      <CommandEmpty>해당 품종 검색 결과 없음.</CommandEmpty>
-                      <CommandGroup>
-                        {BREEDS.map((breed) => (
-                          <CommandItem
-                            value={breed}
-                            key={breed}
-                            onSelect={() => {
-                              form.setValue('breed', breed)
-                              setBreedOpen(false)
-                            }}
-                            className="text-xs"
-                          >
-                            {breed}
-                            <CheckIcon
-                              className={cn(
-                                'ml-auto h-4 w-4',
-                                breed === field.value
-                                  ? 'opacity-100'
-                                  : 'opacity-0',
-                              )}
-                            />
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
+                      <ScrollArea>
+                        <CommandEmpty>해당 품종 검색 결과 없음.</CommandEmpty>
+                        <CommandGroup>
+                          {BREEDS.map((breed) => (
+                            <CommandItem
+                              value={breed}
+                              key={breed}
+                              onSelect={() => {
+                                form.setValue('breed', breed)
+                                setBreedOpen(false)
+                              }}
+                              className="text-xs"
+                            >
+                              {breed}
+                              <CheckIcon
+                                className={cn(
+                                  'ml-auto h-4 w-4',
+                                  breed === field.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0',
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </ScrollArea>
                     </CommandList>
                   </Command>
                 </PopoverContent>
