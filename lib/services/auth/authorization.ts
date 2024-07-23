@@ -15,7 +15,7 @@ export async function getUser() {
     redirect('/login')
   }
 
-  return { authUser }
+  return authUser
 }
 
 // 현재 로그인 된 사용자가 admin인지를 boolean으로 반환
@@ -38,10 +38,10 @@ export async function checkIsAdmin() {
 
   if (userAdminDataError) {
     console.log(userAdminDataError)
-    throw new Error(userAdminDataError.message)
+    redirect(`/error?message=${userAdminDataError.message}`)
   }
 
-  const isAdmin = userAdminData.at(0)?.is_admin ?? false
+  const isAdmin = userAdminData[0].is_admin ?? false
 
   return isAdmin
 }

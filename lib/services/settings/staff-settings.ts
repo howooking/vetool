@@ -1,14 +1,14 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import type { UserHospitalJoined } from '@/types/adimin'
 import { redirect } from 'next/navigation'
-
-const supabase = createClient()
 
 export const updateHosGroupList = async (
   hosId: string,
   groupList: string[],
 ) => {
+  const supabase = createClient()
   const { error: groupListUpdateError } = await supabase
     .from('hospitals')
     .update({ group_list: groupList })
@@ -18,4 +18,27 @@ export const updateHosGroupList = async (
     console.log(groupListUpdateError)
     redirect(`/error/?message=${groupListUpdateError.message}`)
   }
+}
+
+export const getStaffs = async (hosId: string) => {
+  const supabase = createClient()
+  const { data: hospitalUsersData, error: hospitalUsersDataError } =
+    await supabase
+      .from('users')
+      .select(
+        `
+      name, position, rank, group, is_admin, user_id, is_vet, avatar_url,
+      hos_id(master_user_id, group_list)
+    `,
+      )
+      .match({ hos_id: hosId })
+      .returns<UserHospitalJoined[]>()
+      .order('rank', { ascending: true })
+
+  if (hospitalUsersDataError) {
+    console.log(hospitalUsersDataError)
+    redirect(`/error/?message=${hospitalUsersDataError.message}`)
+  }
+
+  return hospitalUsersData
 }

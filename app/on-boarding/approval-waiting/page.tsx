@@ -10,7 +10,7 @@ import Image from 'next/image'
 export default async function ApprovalWaiting() {
   const supabase = createClient()
 
-  const { authUser } = await getUser()
+  const authUser = await getUser()
 
   const { data: userApprovalData, error: userApprovalDataError } =
     await supabase

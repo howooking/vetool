@@ -1,8 +1,8 @@
 import { columns } from '@/components/hospital/admin/staff/columns'
 import DataTable from '@/components/ui/data-table'
-import { checkIsAdmin } from '@/lib/services/auth/authorization'
-import { createClient } from '@/lib/supabase/server'
-import type { HospitalUserDataTable, UserHospitalJoined } from '@/types/adimin'
+import { checkIsAdmin, getUser } from '@/lib/services/auth/authorization'
+import { getStaffs } from '@/lib/services/settings/staff-settings'
+import type { HospitalUserDataTable } from '@/types/adimin'
 
 import { redirect } from 'next/navigation'
 
@@ -17,39 +17,13 @@ export default async function AdminStaffPage({
     redirect(`/hospital/${params.hos_id}`)
   }
 
-  const supabase = createClient()
-  const { data: hospitalUsersData, error: hospitalUsersDataError } =
-    await supabase
-      .from('users')
-      .select(
-        `
-          name, position, rank, group, is_admin, user_id, is_vet, avatar_url,
-          hos_id(master_user_id, group_list)
-        `,
-      )
-      .match({ hos_id: params.hos_id })
-      .returns<UserHospitalJoined[]>()
-      .order('rank', { ascending: true })
+  const staffs = await getStaffs(params.hos_id)
 
-  if (hospitalUsersDataError) {
-    console.log(hospitalUsersDataError)
-    throw new Error(hospitalUsersDataError.message)
-  }
+  const authUser = await getUser()
 
-  const {
-    data: { user: authUser },
-    error: authUserError,
-  } = await supabase.auth.getUser()
+  const isMaster = staffs[0].hos_id.master_user_id === authUser?.id
 
-  if (authUserError) {
-    console.log(authUserError)
-    throw new Error(authUserError.message)
-  }
-
-  const isMaster =
-    hospitalUsersData.at(0)?.hos_id.master_user_id === authUser?.id
-
-  const data: HospitalUserDataTable[] = hospitalUsersData!.map((user) => ({
+  const data: HospitalUserDataTable[] = staffs!.map((user) => ({
     group: user.group,
     name: user.name,
     position: user.position,
