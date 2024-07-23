@@ -121,3 +121,22 @@ export const updateStaffIsAdmin = async (
     redirect(`/error/?message=${isAdminUpdateError.message}`)
   }
 }
+
+export const deleteStaff = async (userId: string) => {
+  const supabase = createClient()
+  const { error: deleteStaffError } = await supabase
+    .from('users')
+    .update({
+      hos_id: null,
+      position: '미분류',
+      rank: 99,
+      group: null,
+      is_admin: false,
+    })
+    .match({ user_id: userId })
+
+  if (deleteStaffError) {
+    console.log(deleteStaffError)
+    redirect(`/error/?message=${deleteStaffError.message}`)
+  }
+}
