@@ -73,3 +73,20 @@ export const updateStaffPosition = async (
     redirect(`/error/?message=${positionUpdateError.message}`)
   }
 }
+
+export const updateStaffGroup = async (
+  userId: string,
+  groupInput: string[],
+) => {
+  const supabase = createClient()
+
+  const { error: groupUpdateError } = await supabase
+    .from('users')
+    .update({ group: groupInput })
+    .match({ user_id: userId })
+
+  if (groupUpdateError) {
+    console.log(groupUpdateError)
+    redirect(`/error/?message=${groupUpdateError.message}`)
+  }
+}

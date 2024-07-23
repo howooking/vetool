@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -52,6 +53,9 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>그룹 설정</DialogTitle>
+          <DialogDescription>
+            Enter를 눌러 목록에 추가 후 수정을 눌러주세요
+          </DialogDescription>
         </DialogHeader>
         <ul className="flex flex-wrap items-center gap-1">
           {tempGroupList.map((item) => (
