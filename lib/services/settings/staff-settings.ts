@@ -104,3 +104,20 @@ export const updateStaffIsVet = async (userId: string, isVetInput: boolean) => {
     redirect(`/error/?message=${isVetUpdateError.message}`)
   }
 }
+
+export const updateStaffIsAdmin = async (
+  userId: string,
+  isAdminInput: boolean,
+) => {
+  const supabase = createClient()
+
+  const { error: isAdminUpdateError } = await supabase
+    .from('users')
+    .update({ is_admin: isAdminInput })
+    .match({ user_id: userId })
+
+  if (isAdminUpdateError) {
+    console.log(isAdminUpdateError)
+    redirect(`/error/?message=${isAdminUpdateError.message}`)
+  }
+}

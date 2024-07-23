@@ -7,7 +7,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { createClient } from '@/lib/supabase/client'
+import { updateStaffIsAdmin } from '@/lib/services/settings/staff-settings'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function IsAdminColumn({
@@ -20,31 +21,26 @@ export default function IsAdminColumn({
   masterUserId: string
 }) {
   const [isAdminInput, setIsAdminInput] = useState(isAdmin ? 'true' : 'false')
+  const [isUpdating, setIsUpdating] = useState(false)
+  const { refresh } = useRouter()
+
   useEffect(() => {
     setIsAdminInput(isAdmin ? 'true' : 'false')
   }, [isAdmin])
 
   const handleUpdateIsAdmin = async (value: string) => {
-    const supabase = createClient()
     const parsedIsAdmin = value === 'true'
 
-    const { error: isAdminUpdateError } = await supabase
-      .from('users')
-      .update({ is_admin: parsedIsAdmin })
-      .match({ user_id: userId })
+    setIsUpdating(true)
 
-    if (isAdminUpdateError) {
-      toast({
-        variant: 'destructive',
-        title: isAdminUpdateError.message,
-        description: '관리자에게 문의하세요',
-      })
-      return
-    }
+    await updateStaffIsAdmin(userId, parsedIsAdmin)
 
     toast({
       title: '관리자여부를 변경하였습니다',
     })
+
+    setIsUpdating(false)
+    refresh()
   }
 
   return (
@@ -57,7 +53,7 @@ export default function IsAdminColumn({
       }}
       disabled={userId === masterUserId}
     >
-      <SelectTrigger className="mx-auto w-[128px]">
+      <SelectTrigger className="mx-auto w-[128px]" disabled={isUpdating}>
         <SelectValue placeholder="관리자" />
       </SelectTrigger>
       <SelectContent>
