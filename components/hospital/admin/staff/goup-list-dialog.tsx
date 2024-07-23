@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { createClient } from '@/lib/supabase/client'
+import { updateHosGroupList } from '@/lib/services/settings/staff-settings'
 import { cn } from '@/lib/utils'
 import { Edit, LoaderCircle, X } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -24,29 +24,15 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
   const { refresh } = useRouter()
 
   useEffect(() => {
-    if (!isOpen && isSubmitting) {
+    if (!isOpen) {
       setTempGroupList(groupList)
     }
-  }, [groupList, isOpen, isSubmitting])
+  }, [groupList, isOpen])
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-    const supabase = createClient()
 
-    const { error: groupListUpdateError } = await supabase
-      .from('hospitals')
-      .update({ group_list: tempGroupList })
-      .match({ hos_id: hosId })
-
-    if (groupListUpdateError) {
-      console.log(groupListUpdateError)
-      toast({
-        variant: 'destructive',
-        title: groupListUpdateError.message,
-      })
-      setIsSubmitting(false)
-      return
-    }
+    await updateHosGroupList(hos_id as string, tempGroupList)
 
     toast({
       title: '병원 그룹목록을 변경하였습니다',
@@ -91,8 +77,11 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
           onChange={(e) => setGroupInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              setTempGroupList([...tempGroupList, groupInput])
-              setGroupInput('')
+              const target = e.currentTarget
+              setTimeout(() => {
+                setTempGroupList([...tempGroupList, groupInput])
+                setGroupInput('')
+              }, 0)
             }
           }}
           value={groupInput}
