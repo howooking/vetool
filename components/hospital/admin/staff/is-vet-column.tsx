@@ -7,7 +7,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { createClient } from '@/lib/supabase/client'
+import { updateStaffIsVet } from '@/lib/services/settings/staff-settings'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function IsVetColumn({
@@ -18,31 +19,25 @@ export default function IsVetColumn({
   userId: string
 }) {
   const [isVetIput, setIsVetIput] = useState(isVet ? 'true' : 'false')
+  const [isUpdating, setIsUpdating] = useState(false)
+  const { refresh } = useRouter()
+
   useEffect(() => {
     setIsVetIput(isVet ? 'true' : 'false')
   }, [isVet])
 
   const handleUpdateIsVet = async (value: string) => {
-    const supabase = createClient()
     const parsedIsVet = value === 'true'
 
-    const { error: isVetUpdateError } = await supabase
-      .from('users')
-      .update({ is_vet: parsedIsVet })
-      .match({ user_id: userId })
-
-    if (isVetUpdateError) {
-      toast({
-        variant: 'destructive',
-        title: isVetUpdateError.message,
-        description: '관리자에게 문의하세요',
-      })
-      return
-    }
+    setIsUpdating(true)
+    await updateStaffIsVet(userId, parsedIsVet)
 
     toast({
       title: '수의사여부를 변경하였습니다',
     })
+
+    setIsUpdating(false)
+    refresh()
   }
 
   return (
@@ -54,7 +49,7 @@ export default function IsVetColumn({
         handleUpdateIsVet(value)
       }}
     >
-      <SelectTrigger className="mx-auto w-[128px]">
+      <SelectTrigger disabled={isUpdating} className="mx-auto w-[128px]">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

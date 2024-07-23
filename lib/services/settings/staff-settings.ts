@@ -90,3 +90,17 @@ export const updateStaffGroup = async (
     redirect(`/error/?message=${groupUpdateError.message}`)
   }
 }
+
+export const updateStaffIsVet = async (userId: string, isVetInput: boolean) => {
+  const supabase = createClient()
+
+  const { error: isVetUpdateError } = await supabase
+    .from('users')
+    .update({ is_vet: isVetInput })
+    .match({ user_id: userId })
+
+  if (isVetUpdateError) {
+    console.log(isVetUpdateError)
+    redirect(`/error/?message=${isVetUpdateError.message}`)
+  }
+}
