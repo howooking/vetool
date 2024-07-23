@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { UserHospitalJoined } from '@/types/adimin'
+import type { ApprovalData, UserHospitalJoined } from '@/types/adimin'
 import { redirect } from 'next/navigation'
 
 export const updateHosGroupList = async (
@@ -138,5 +138,44 @@ export const deleteStaff = async (userId: string) => {
   if (deleteStaffError) {
     console.log(deleteStaffError)
     redirect(`/error/?message=${deleteStaffError.message}`)
+  }
+}
+
+export const getStaffApprovals = async (hosId: string) => {
+  const supabase = createClient()
+
+  const { data: approvalData, error: approvalDataError } = await supabase
+    .from('user_approvals')
+    .select(
+      `
+        is_approved, created_at, updated_at,
+        user_id(user_id, name, avatar_url, is_vet)
+      `,
+    )
+    .match({ hos_id: hosId })
+    .order('is_approved')
+    .returns<ApprovalData[]>()
+
+  if (approvalDataError) {
+    console.log(approvalDataError)
+    redirect(`/error/?message=${approvalDataError.message}`)
+  }
+
+  return approvalData
+}
+
+export const approveStaff = async (hosId: string, userId: string) => {
+  const supabase = createClient()
+  const { error: rpcError } = await supabase.rpc(
+    'update_user_approval_and_user_hos_id_when_approved',
+    {
+      hos_id_input: hosId,
+      user_id_input: userId,
+    },
+  )
+
+  if (rpcError) {
+    console.log(rpcError)
+    redirect(`/error/?message=${rpcError.message}`)
   }
 }

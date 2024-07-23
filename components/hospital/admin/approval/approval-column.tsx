@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { createClient } from '@/lib/supabase/client'
+import { approveStaff } from '@/lib/services/settings/staff-settings'
 import { cn } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -26,44 +26,27 @@ export function ApprovalColumn({
   isApproved: boolean
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
-  const { refresh } = useRouter()
+  const [isDialogOpen, setIsOpen] = useState(false)
   const { hos_id } = useParams()
+  const { refresh } = useRouter()
 
   const handleApproval = async () => {
     setIsUpdating(true)
-    const supabase = createClient()
 
-    const { error } = await supabase.rpc(
-      'update_user_approval_and_user_hos_id_when_approved',
-      {
-        hos_id_input: hos_id as string,
-        user_id_input: userId,
-      },
-    )
-
-    if (error) {
-      console.log(error)
-      toast({
-        variant: 'destructive',
-        title: error.message,
-        description: '관리자에게 문의하세요',
-      })
-      setIsUpdating(false)
-      return
-    }
+    await approveStaff(hos_id as string, userId)
 
     toast({
       title: `${name}님을 스태프목록에 추가하였습니다`,
-      description: '스태프관리페이지에서 설정을 변경할 수 있습니다',
+      description: '스태프관리에서 스테프설정을 변경할 수 있습니다',
     })
+
     setIsUpdating(false)
     setIsOpen(false)
     refresh()
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           disabled={isApproved}
@@ -81,17 +64,17 @@ export function ApprovalColumn({
         </DialogHeader>
 
         <DialogFooter className="ml-auto">
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              아니오
+            </Button>
+          </DialogClose>
           <Button type="button" onClick={handleApproval} disabled={isUpdating}>
             추가
             <LoaderCircle
               className={cn(isUpdating ? 'ml-2 animate-spin' : 'hidden')}
             />
           </Button>
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              아니오
-            </Button>
-          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
