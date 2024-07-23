@@ -1,5 +1,5 @@
+import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import { Skeleton } from '@/components/ui/skeleton'
-import { LoaderCircle } from 'lucide-react'
 
 export default function IcuSkeleton() {
   return (
@@ -20,7 +20,7 @@ export default function IcuSkeleton() {
       </div>
 
       <div className="flex w-full items-center justify-center">
-        <LoaderCircle className="h-20 w-20 animate-spin text-primary" />
+        <LargeLoaderCircle />
       </div>
     </div>
   )
