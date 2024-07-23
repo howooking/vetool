@@ -42,3 +42,17 @@ export const getStaffs = async (hosId: string) => {
 
   return hospitalUsersData
 }
+
+export const updateStaffRank = async (userId: string, rankInput: string) => {
+  const supabase = createClient()
+
+  const { error: rankUpdateError } = await supabase
+    .from('users')
+    .update({ rank: Number(rankInput) })
+    .match({ user_id: userId })
+
+  if (rankUpdateError) {
+    console.log(rankUpdateError)
+    redirect(`/error/?message=${rankUpdateError.message}`)
+  }
+}
