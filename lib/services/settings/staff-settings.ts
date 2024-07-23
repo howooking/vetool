@@ -56,3 +56,20 @@ export const updateStaffRank = async (userId: string, rankInput: string) => {
     redirect(`/error/?message=${rankUpdateError.message}`)
   }
 }
+
+export const updateStaffPosition = async (
+  userId: string,
+  positionInput: string,
+) => {
+  const supabase = createClient()
+
+  const { error: positionUpdateError } = await supabase
+    .from('users')
+    .update({ position: positionInput })
+    .match({ user_id: userId })
+
+  if (positionUpdateError) {
+    console.log(positionUpdateError)
+    redirect(`/error/?message=${positionUpdateError.message}`)
+  }
+}

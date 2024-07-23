@@ -12,6 +12,7 @@ export default function RankColumn({
   userId: string
 }) {
   const [rankInput, setRankInput] = useState(rank.toString())
+  const [isUpdating, setIsUpdating] = useState(false)
   const { refresh } = useRouter()
 
   useEffect(() => {
@@ -34,17 +35,21 @@ export default function RankColumn({
       return
     }
 
+    setIsUpdating(true)
+
     await updateStaffRank(userId, rankInput)
 
     toast({
       title: '순번을 변경하였습니다',
     })
+    setIsUpdating(false)
     refresh()
   }
 
   return (
     <Input
       className="mx-auto w-14"
+      disabled={isUpdating}
       value={rankInput}
       onChange={(e) => setRankInput(e.target.value)}
       onBlur={handleUpdateRank}
