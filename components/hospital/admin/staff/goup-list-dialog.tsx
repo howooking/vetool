@@ -9,11 +9,10 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import useHospitalId from '@/hooks/use-hospital-id'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { Edit, LoaderCircle, X } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export function GroupListDialog({ groupList }: { groupList: string[] }) {
@@ -21,7 +20,7 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [tempGroupList, setTempGroupList] = useState(groupList)
   const [groupInput, setGroupInput] = useState('')
-  const hosId = useHospitalId()
+  const { hos_id } = useParams()
   const { refresh } = useRouter()
 
   useEffect(() => {

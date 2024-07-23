@@ -10,11 +10,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import useHospitalId from '@/hooks/use-hospital-id'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export function ApprovalColumn({
@@ -29,7 +28,7 @@ export function ApprovalColumn({
   const [isUpdating, setIsUpdating] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const { refresh } = useRouter()
-  const hosId = useHospitalId()
+  const { hos_id } = useParams()
 
   const handleApproval = async () => {
     setIsUpdating(true)
@@ -38,7 +37,7 @@ export function ApprovalColumn({
     const { error } = await supabase.rpc(
       'update_user_approval_and_user_hos_id_when_approved',
       {
-        hos_id_input: hosId!,
+        hos_id_input: hos_id as string,
         user_id_input: userId,
       },
     )
