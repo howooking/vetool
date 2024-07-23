@@ -30,7 +30,6 @@ export function DeleteUserColumn({
   masterUserId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
   const { refresh } = useRouter()
 
   const handleDeleteStaff = async () => {
@@ -42,7 +41,6 @@ export function DeleteUserColumn({
       title: `${name}님을 스태프목록에서 삭제하였습니다`,
     })
     setIsUpdating(false)
-    setIsOpen(false)
     refresh()
   }
 

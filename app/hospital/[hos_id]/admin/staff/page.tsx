@@ -4,18 +4,12 @@ import { checkIsAdmin, getUser } from '@/lib/services/auth/authorization'
 import { getStaffs } from '@/lib/services/settings/staff-settings'
 import type { HospitalUserDataTable } from '@/types/adimin'
 
-import { redirect } from 'next/navigation'
-
 export default async function AdminStaffPage({
   params,
 }: {
   params: { hos_id: string }
 }) {
-  const isAdmin = await checkIsAdmin()
-
-  if (!isAdmin) {
-    redirect(`/hospital/${params.hos_id}`)
-  }
+  await checkIsAdmin(params.hos_id)
 
   const staffs = await getStaffs(params.hos_id)
 

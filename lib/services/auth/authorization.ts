@@ -18,8 +18,7 @@ export async function getUser() {
   return authUser
 }
 
-// 현재 로그인 된 사용자가 admin인지를 boolean으로 반환
-export async function checkIsAdmin() {
+export async function checkIsAdmin(hosId: string) {
   const supabase = createClient()
   const {
     data: { user: authUser },
@@ -43,7 +42,9 @@ export async function checkIsAdmin() {
 
   const isAdmin = userAdminData[0].is_admin ?? false
 
-  return isAdmin
+  if (!isAdmin) {
+    redirect(`/hospital/${hosId}`)
+  }
 }
 
 export const cancelApproval = async (formData: FormData) => {
