@@ -1,6 +1,6 @@
 import { SignupForm } from '@/components/on-boarding/signup-form'
 import { Button } from '@/components/ui/button'
-import { logout } from '@/lib/actions/auth'
+import { logout } from '@/lib/services/auth/authentication'
 import logoWhite from '@/public/logo-white.svg'
 import { ChevronLeft } from 'lucide-react'
 import Image from 'next/image'

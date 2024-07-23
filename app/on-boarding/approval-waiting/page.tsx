@@ -1,6 +1,7 @@
 import DotLottie from '@/components/common/dot-lottie'
 import { Button } from '@/components/ui/button'
-import { cancelApproval, getUser, logout } from '@/lib/actions/auth'
+import { logout } from '@/lib/services/auth/authentication'
+import { cancelApproval, getUser } from '@/lib/services/auth/authorization'
 import { createClient } from '@/lib/supabase/server'
 import logoWhite from '@/public/logo-white.svg'
 import { UserApprovalHosJoined } from '@/types/on-boarding'
