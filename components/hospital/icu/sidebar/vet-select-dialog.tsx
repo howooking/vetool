@@ -36,7 +36,7 @@ export default function VetSelectDialog({
       onValueChange={handleValueChange}
       value={selectedVet}
     >
-      <SelectTrigger className="mb-2 h-8 w-full justify-center" noIcon>
+      <SelectTrigger className="mb-2 h-8 w-full justify-center">
         <SelectValue placeholder="수의사 선택" />
       </SelectTrigger>
       <SelectContent className="w-32 p-0">
