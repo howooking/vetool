@@ -48,6 +48,20 @@ export default function Todo({ icuData }: { icuData: IcuData }) {
             0,
           ) > 0,
       )
+      .filter((order) => {
+        let hasOrderLeft = false
+        order.icu_chart_order_time.forEach((time, index) => {
+          if (
+            time === '1' &&
+            order[`icu_chart_order_tx_${index + 1}` as keyof typeof order] ===
+              null
+          ) {
+            hasOrderLeft = true
+            return
+          }
+        })
+        return hasOrderLeft
+      })
       .sort((a, b) =>
         b.icu_chart_id.icu_chart_id.localeCompare(a.icu_chart_id.icu_chart_id),
       )
