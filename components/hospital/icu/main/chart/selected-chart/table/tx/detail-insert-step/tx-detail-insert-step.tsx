@@ -1,6 +1,11 @@
 import TxLog from '@/components/hospital/icu/main/chart/selected-chart/table/tx/detail-insert-step/tx-log'
 import { Button } from '@/components/ui/button'
-import { DialogClose, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  DialogClose,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -64,6 +69,7 @@ export default function TxDetailInsertStep() {
     <>
       <DialogHeader>
         <DialogTitle>처치 상세 입력</DialogTitle>
+        <DialogDescription></DialogDescription>
       </DialogHeader>
       <Form {...form}>
         <form
