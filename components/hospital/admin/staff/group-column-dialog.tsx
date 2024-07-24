@@ -75,6 +75,7 @@ export function GroupColumnDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
+        {!group && <Badge variant="destructive">미분류</Badge>}
         <ul className="flex items-center gap-1">
           {group?.map((item) => (
             <li key={item}>

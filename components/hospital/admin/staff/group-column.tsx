@@ -1,5 +1,4 @@
 import { GroupColumnDialog } from '@/components/hospital/admin/staff/group-column-dialog'
-import { Badge } from '@/components/ui/badge'
 
 export default function GroupColumn({
   userId,
@@ -13,14 +12,11 @@ export default function GroupColumn({
   name: string
 }) {
   return (
-    <>
-      {!group && <Badge variant="destructive">미분류</Badge>}
-      <GroupColumnDialog
-        groupList={groupList}
-        userId={userId}
-        group={group}
-        name={name}
-      />
-    </>
+    <GroupColumnDialog
+      groupList={groupList}
+      userId={userId}
+      group={group}
+      name={name}
+    />
   )
 }
