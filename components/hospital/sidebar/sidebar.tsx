@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-import { UserInfoSkeleton } from '../header/user-info-skeleton'
 import SidebarItem from './sidebar-item'
 import SidebarUserInfo from './sidebar-user-info'
 
@@ -45,9 +43,7 @@ export default async function Sidebar({ hosId }: { hosId: string }) {
         ))}
       </ul>
 
-      <Suspense fallback={<UserInfoSkeleton />}>
-        <SidebarUserInfo hosId={hosId} />
-      </Suspense>
+      <SidebarUserInfo hosId={hosId} />
     </>
   )
 }

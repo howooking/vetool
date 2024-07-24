@@ -21,7 +21,7 @@ export default async function SidebarUserInfo({ hosId }: { hosId: string }) {
   const userData = await getUserData(hosId)
 
   return (
-    <div className="mb-4 ml-2 mt-auto flex items-center gap-2">
+    <div className="absolute bottom-12 left-2">
       <DropdownMenu>
         <DropdownMenuTrigger>
           <div className="flex items-center">

@@ -22,7 +22,7 @@ export default function SidebarWrapper({
     >
       {children}
 
-      <div className="mb-4 ml-2">
+      <div className="absolute bottom-2 left-2.5">
         <Button
           size="icon"
           onClick={toggleSidebar}
