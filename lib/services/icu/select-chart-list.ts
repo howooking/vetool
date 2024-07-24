@@ -7,21 +7,28 @@ import { redirect } from 'next/navigation'
 const supabase = createClient()
 
 export const selectChartList = async (query: string) => {
-  const safeQuery = query.replace(/[,;'"\\%_\[\]{}|&]/g, ' ')
+  // 특수문자 제거 및 공백으로 단어 분리
+  const safeWords = query
+    .replace(/[,;'"\\%_\[\]{}|&]/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word.length > 0)
 
-  const { data: icuChartData, error: icuChartDataError } = await supabase
-    .from('icu_chart')
-    .select(
-      `
+  let queryBuilder = supabase.from('icu_chart').select(`
       icu_chart_id,
       target_date,
       icu_chart_dx,
       icu_chart_cc,
       icu_io_id,
       patient_id(name)
-      `,
-    )
-    .or(`icu_chart_tags.ilike.%${safeQuery}%`)
+    `)
+
+  // 각 단어에 대해 개별적인 ilike 조건 추가 (AND 방식)
+  safeWords.forEach((word) => {
+    queryBuilder = queryBuilder.ilike('icu_chart_tags', `%${word}%`)
+  })
+
+  const { data: icuChartData, error: icuChartDataError } = await queryBuilder
     .order('target_date')
     .order('icu_io_id')
     .returns<IcuChartListJoined[]>()

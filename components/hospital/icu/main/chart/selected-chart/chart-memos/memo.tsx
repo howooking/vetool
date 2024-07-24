@@ -1,4 +1,3 @@
-import UpdateMemoModal from '@/components/hospital/icu/main/chart/selected-chart/chart-memos/update-memo-name-modal'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
@@ -60,7 +59,6 @@ export default function Memo({
         <Label className="text-xs text-muted-foreground" htmlFor="memo">
           {hosIcuMemoNames[index]}
         </Label>
-        <UpdateMemoModal hosIcuMemoNames={hosIcuMemoNames} index={index} />
       </div>
       <Textarea
         disabled={isUpdating}

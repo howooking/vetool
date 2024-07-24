@@ -18,7 +18,8 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .select(
         `
           icu_io_id, in_date, out_date, out_due_date, group_list, age_in_days,
-          patient_id(name, breed, patient_id)
+          patient_id(name, breed, patient_id),
+          hos_id(group_list)
         `,
       )
       .match({ hos_id: hosId })
@@ -33,7 +34,7 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .select(
         `
           *,
-          icu_io_id!inner(out_date, in_date, created_at),
+          icu_io_id!inner(out_date, in_date, created_at, icu_io_id),
           hos_id(group_list, icu_memo_names),
           patient_id(name, gender, breed, patient_id, species, owner_name),
           main_vet(name, user_id, avatar_url),
@@ -83,25 +84,39 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .eq('icu_chart_id.target_date', targetDate)
       .order('icu_chart_order_name', { ascending: true })
       .returns<IcuChartOrderJoined[]>(),
+
+    supabase
+      .from('users')
+      .select('name, position, user_id, avatar_url')
+      .match({ hos_id: hosId, is_vet: true })
+      .returns<IcuUserList[]>(),
   ])
 
   const [
     { data: icuIoData, error: icuIoDataError },
     { data: icuChartData, error: icuChartDataError },
     { data: icuChartOrderData, error: icuChartOrderDataError },
+    { data: vetsListData, error: vetsListDataError },
   ] = await promiseArray
 
-  if (icuIoDataError || icuChartDataError || icuChartOrderDataError) {
+  if (
+    icuIoDataError ||
+    icuChartDataError ||
+    icuChartOrderDataError ||
+    vetsListDataError
+  ) {
     console.log({
       icuIoDataError,
       icuChartDataError,
       icuChartOrderDataError,
+      vetsListDataError,
     })
     redirect(
       `/error?message=${
         icuIoDataError?.message ||
         icuChartDataError?.message ||
-        icuChartOrderDataError?.message
+        icuChartOrderDataError?.message ||
+        vetsListDataError?.message
       }`,
     )
   }
@@ -109,5 +124,6 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
     icuIoData,
     icuChartData,
     icuChartOrderData,
+    vetsListData,
   }
 }

@@ -4,11 +4,7 @@ import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuIoPatientJoined } from '@/types/icu'
 
-export default function IcuSidebarPatientButton({
-  data,
-}: {
-  data: IcuIoPatientJoined
-}) {
+export default function PatientButton({ data }: { data: IcuIoPatientJoined }) {
   const { selectedPatient, setSelectedPatient } = useIcuSelectedPatientStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
 

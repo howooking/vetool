@@ -8,6 +8,7 @@ import {
   UserCheck,
   Users,
   Utensils,
+  Syringe,
 } from 'lucide-react'
 
 const ADMIN_SIDE_BAR_ITEMS = [
@@ -40,6 +41,11 @@ const ADMIN_SIDE_BAR_ITEMS = [
     name: '검사설정',
     path: 'test-settings',
     icon: TestTubeDiagonal,
+  },
+  {
+    name: 'ICU 관리',
+    path: 'icu-settings',
+    icon: Syringe,
   },
 ]
 

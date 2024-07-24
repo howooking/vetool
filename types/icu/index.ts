@@ -13,6 +13,7 @@ export type IcuData = {
   icuIoData: IcuIoPatientJoined[]
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
+  vetsListData: IcuUserList[]
 }
 export type IcuIoPatientJoined = Pick<
   IcuIo,
@@ -24,15 +25,16 @@ export type IcuIoPatientJoined = Pick<
   | 'age_in_days'
 > & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
+  hos_id: Pick<Hospital, 'group_list'>
 }
 
 export type MainAndSubVet = Pick<User, 'name' | 'avatar_url' | 'user_id'>
 
 export type IcuChartJoined = Omit<
   IcuChart,
-  'main_vet' | 'sub_vet' | 'patient_id' | 'hos_id' | 'icu_io_id'
+  'main_vet' | 'sub_vet' | 'patient_id' | 'hos_id' | 'icu_io_id' | 'bookmark_id'
 > & {
-  icu_io_id: Pick<IcuIo, 'out_date'>
+  icu_io_id: Pick<IcuIo, 'out_date' | 'icu_io_id'>
   hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names'>
   patient_id: Pick<
     Patients,
@@ -91,6 +93,7 @@ export type IcuUserList = Pick<
   User,
   'avatar_url' | 'is_vet' | 'name' | 'position' | 'user_id'
 >
+
 export type TxLog = {
   result: string | null
   name: string

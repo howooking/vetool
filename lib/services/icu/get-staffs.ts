@@ -17,6 +17,7 @@ export const getVetList = async (hosId: string) => {
   }
   return vetsData
 }
+
 export const getStaffList = async (hosId: string) => {
   const { data: vetsData, error: vetsDataError } = await supabase
     .from('users')

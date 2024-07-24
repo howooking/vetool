@@ -17,7 +17,11 @@ export default function IcuEntry({
 
   return (
     <div className="flex">
-      <IcuSidebar icuIoData={icuData.icuIoData} />
+      <IcuSidebar
+        icuIoData={icuData.icuIoData}
+        icuChartData={icuData.icuChartData}
+        vetsListData={icuData.vetsListData}
+      />
 
       <div className="h-icu-chart w-full">
         <IcuMain icuData={icuData} />
