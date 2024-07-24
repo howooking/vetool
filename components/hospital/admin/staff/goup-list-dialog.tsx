@@ -3,17 +3,17 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import useHospitalId from '@/hooks/use-hospital-id'
-import { createClient } from '@/lib/supabase/client'
+import { updateHosGroupList } from '@/lib/services/settings/staff-settings'
 import { cn } from '@/lib/utils'
 import { Edit, LoaderCircle, X } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export function GroupListDialog({ groupList }: { groupList: string[] }) {
@@ -21,33 +21,19 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [tempGroupList, setTempGroupList] = useState(groupList)
   const [groupInput, setGroupInput] = useState('')
-  const hosId = useHospitalId()
+  const { hos_id } = useParams()
   const { refresh } = useRouter()
 
   useEffect(() => {
-    if (!isOpen && isSubmitting) {
+    if (!isOpen) {
       setTempGroupList(groupList)
     }
-  }, [groupList, isOpen, isSubmitting])
+  }, [groupList, isOpen])
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-    const supabase = createClient()
 
-    const { error: groupListUpdateError } = await supabase
-      .from('hospitals')
-      .update({ group_list: tempGroupList })
-      .match({ hos_id: hosId })
-
-    if (groupListUpdateError) {
-      console.log(groupListUpdateError)
-      toast({
-        variant: 'destructive',
-        title: groupListUpdateError.message,
-      })
-      setIsSubmitting(false)
-      return
-    }
+    await updateHosGroupList(hos_id as string, tempGroupList)
 
     toast({
       title: '병원 그룹목록을 변경하였습니다',
@@ -67,6 +53,9 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>그룹 설정</DialogTitle>
+          <DialogDescription>
+            Enter를 눌러 목록에 추가 후 수정을 눌러주세요
+          </DialogDescription>
         </DialogHeader>
         <ul className="flex flex-wrap items-center gap-1">
           {tempGroupList.map((item) => (
@@ -92,8 +81,11 @@ export function GroupListDialog({ groupList }: { groupList: string[] }) {
           onChange={(e) => setGroupInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              setTempGroupList([...tempGroupList, groupInput])
-              setGroupInput('')
+              const target = e.currentTarget
+              setTimeout(() => {
+                setTempGroupList([...tempGroupList, groupInput])
+                setGroupInput('')
+              }, 0)
             }
           }}
           value={groupInput}

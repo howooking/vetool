@@ -1,16 +1,9 @@
-import { Skeleton } from '@/components/ui/skeleton'
+import LargeLoaderCircle from '@/components/common/large-loader-circle'
 
 export default function loading() {
   return (
-    <div className="flex w-full flex-col gap-4">
-      <Skeleton className="h-9 w-full" />
-      <Skeleton className="h-9 w-full" />
-      <Skeleton className="h-9 w-full" />
-      <Skeleton className="h-9 w-full" />
-      <Skeleton className="h-9 w-full" />
-      <Skeleton className="h-9 w-full" />
-      <Skeleton className="h-9 w-full" />
-      <Skeleton className="h-9 w-full" />
+    <div className="flex h-icu-chart items-center justify-center">
+      <LargeLoaderCircle />
     </div>
   )
 }

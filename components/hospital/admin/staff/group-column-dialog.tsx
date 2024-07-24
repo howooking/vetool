@@ -1,5 +1,5 @@
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
-import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
@@ -17,9 +17,9 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { toast } from '@/components/ui/use-toast'
-import { createClient } from '@/lib/supabase/client'
+import { updateStaffGroup } from '@/lib/services/settings/staff-settings'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Edit } from 'lucide-react'
+import { DialogDescription } from '@radix-ui/react-dialog'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -43,7 +43,7 @@ export function GroupColumnDialog({
   name: string
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
   const { refresh } = useRouter()
 
   const form = useForm<z.infer<typeof GroupCheckFormSchema>>({
@@ -59,43 +59,37 @@ export function GroupColumnDialog({
     }
   }, [isDialogOpen, group, form])
 
-  const handleSubmit = async (data: z.infer<typeof GroupCheckFormSchema>) => {
-    setIsSubmitting(true)
-    const supabase = createClient()
+  const handleSubmit = async (values: z.infer<typeof GroupCheckFormSchema>) => {
+    setIsUpdating(true)
 
-    const { error: groupUpdateError } = await supabase
-      .from('users')
-      .update({ group: data.items })
-      .match({ user_id: userId })
-
-    if (groupUpdateError) {
-      console.log(groupUpdateError)
-      toast({
-        variant: 'destructive',
-        title: groupUpdateError.message,
-      })
-      setIsSubmitting(false)
-      return
-    }
+    await updateStaffGroup(userId, values.items)
 
     toast({
       title: '그룹을 변경하였습니다',
     })
     refresh()
     setIsDialogOpen(false)
-    setIsSubmitting(false)
+    setIsUpdating(false)
   }
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          <Edit size={12} />
-        </Button>
+      <DialogTrigger>
+        {!group && <Badge variant="destructive">미분류</Badge>}
+        <ul className="flex items-center gap-1">
+          {group?.map((item) => (
+            <li key={item}>
+              <Badge>{item}</Badge>
+            </li>
+          ))}
+        </ul>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{name}님 그룹 수정</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
+            하나 이상의 그룹을 설정해주세요
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -147,7 +141,7 @@ export function GroupColumnDialog({
 
             <DialogFooterButtons
               buttonName="수정"
-              isLoading={isSubmitting}
+              isLoading={isUpdating}
               setIsDialogOpen={setIsDialogOpen}
             />
           </form>

@@ -1,4 +1,4 @@
-import IcuChartSkeleton from '@/components/hospital/icu/main/chart/icu-chart-skeleton'
+import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function IcuSkeleton() {
@@ -19,7 +19,9 @@ export default function IcuSkeleton() {
         <Skeleton className="h-8 w-[127px]" />
       </div>
 
-      <IcuChartSkeleton />
+      <div className="flex w-full items-center justify-center">
+        <LargeLoaderCircle />
+      </div>
     </div>
   )
 }

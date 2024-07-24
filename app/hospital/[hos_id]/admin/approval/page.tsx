@@ -1,32 +1,14 @@
-import NoResult from '@/components/common/no-result'
 import { columns } from '@/components/hospital/admin/approval/column'
 import DataTable from '@/components/ui/data-table'
-import { createClient } from '@/lib/supabase/server'
-import type { ApprovalData, ApprovalDataTable } from '@/types/adimin'
+import { getStaffApprovals } from '@/lib/services/settings/staff-settings'
+import type { ApprovalDataTable } from '@/types/adimin'
 
 export default async function AdminApprovalPage({
   params,
 }: {
   params: { hos_id: string }
 }) {
-  const supabase = createClient()
-
-  const { data: approvalData, error: approvalDataError } = await supabase
-    .from('user_approvals')
-    .select(
-      `
-        is_approved, created_at, updated_at,
-        user_id(user_id, name, avatar_url, is_vet)
-      `,
-    )
-    .match({ hos_id: params.hos_id })
-    .order('is_approved')
-    .returns<ApprovalData[]>()
-
-  if (approvalDataError) {
-    console.log(approvalDataError)
-    throw new Error(approvalDataError.message)
-  }
+  const approvalData = await getStaffApprovals(params.hos_id)
 
   const data: ApprovalDataTable[] = approvalData.map((approval) => ({
     is_approved: approval.is_approved,

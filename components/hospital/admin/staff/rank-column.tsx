@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { createClient } from '@/lib/supabase/client'
+import { updateStaffRank } from '@/lib/services/settings/staff-settings'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -12,6 +12,7 @@ export default function RankColumn({
   userId: string
 }) {
   const [rankInput, setRankInput] = useState(rank.toString())
+  const [isUpdating, setIsUpdating] = useState(false)
   const { refresh } = useRouter()
 
   useEffect(() => {
@@ -19,7 +20,6 @@ export default function RankColumn({
   }, [rank])
 
   const handleUpdateRank = async () => {
-    const supabase = createClient()
     const parsedRank = Number(rankInput)
 
     if (parsedRank === rank) {
@@ -35,29 +35,21 @@ export default function RankColumn({
       return
     }
 
-    const { error: rankUpdateError } = await supabase
-      .from('users')
-      .update({ rank: Number(rankInput) })
-      .match({ user_id: userId })
+    setIsUpdating(true)
 
-    if (rankUpdateError) {
-      toast({
-        variant: 'destructive',
-        title: rankUpdateError.message,
-        description: '관리자에게 문의하세요',
-      })
-      return
-    }
+    await updateStaffRank(userId, rankInput)
 
     toast({
       title: '순번을 변경하였습니다',
     })
+    setIsUpdating(false)
     refresh()
   }
 
   return (
     <Input
       className="mx-auto w-14"
+      disabled={isUpdating}
       value={rankInput}
       onChange={(e) => setRankInput(e.target.value)}
       onBlur={handleUpdateRank}

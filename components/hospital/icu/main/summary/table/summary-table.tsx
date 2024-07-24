@@ -7,15 +7,14 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined, IcuData } from '@/types/icu'
-import SummaryTableCell, { countPendingOrders } from './summary-table-cell'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { useCallback } from 'react'
+import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
+import { cn } from '@/lib/utils'
+import type { IcuData } from '@/types/icu'
+import SummaryTableCell from './summary-table-cell'
 
 export default function SummaryTable({ icuData }: { icuData: IcuData }) {
-  const { icuChartData, icuChartOrderData, icuIoData } = icuData
+  const { icuChartData, icuChartOrderData } = icuData
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setSelectedPatient } = useIcuSelectedPatientStore()
   const handleClickRow = (patientId: string, patientName: string) => {

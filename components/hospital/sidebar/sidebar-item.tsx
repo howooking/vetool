@@ -1,12 +1,11 @@
 'use client'
 
-import useHospitalId from '@/hooks/use-hospital-id'
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { type LucideProps } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import type { ForwardRefExoticComponent, RefAttributes } from 'react'
 
 export default function SidebarItem({
@@ -21,8 +20,8 @@ export default function SidebarItem({
   >
 }) {
   const { isExpanded } = useSidebarStore()
-  const hosId = useHospitalId()
   const pathname = usePathname()
+  const { hos_id } = useParams()
 
   const isActive =
     pathname.split('/').at(3) === path ||
@@ -37,7 +36,7 @@ export default function SidebarItem({
         <Tooltip>
           <TooltipTrigger asChild> */}
       <Link
-        href={`/hospital/${hosId}/${dynamicPath}`}
+        href={`/hospital/${hos_id}/${dynamicPath}`}
         className={cn(
           'flex h-12 items-center',
           isActive && 'bg-primary text-white',

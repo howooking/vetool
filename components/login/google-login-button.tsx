@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { googleLogin } from '@/lib/actions/auth'
+import { googleLogin } from '@/lib/services/auth/authentication'
 import { cn } from '@/lib/utils'
 import googleLogo from '@/public/google-logo.svg'
 import { LoaderCircle } from 'lucide-react'

@@ -1,16 +1,18 @@
-import { Button } from '@/components/ui/button'
+import WarningMessage from '@/components/common/warning-message'
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { createClient } from '@/lib/supabase/client'
+import { deleteStaff } from '@/lib/services/settings/staff-settings'
 import { cn } from '@/lib/utils'
 import { LoaderCircle, UserRoundMinus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -28,46 +30,23 @@ export function DeleteUserColumn({
   masterUserId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
   const { refresh } = useRouter()
 
-  const handleUpdateUser = async () => {
+  const handleDeleteStaff = async () => {
     setIsUpdating(true)
-    const supabase = createClient()
 
-    const { error: updateUserError } = await supabase
-      .from('users')
-      .update({
-        hos_id: null,
-        position: '미분류',
-        rank: 99,
-        group: null,
-        is_admin: false,
-      })
-      .match({ user_id: userId })
-
-    if (updateUserError) {
-      console.log(updateUserError)
-      toast({
-        variant: 'destructive',
-        title: updateUserError.message,
-        description: '관리자에게 문의하세요',
-      })
-      setIsUpdating(false)
-      return
-    }
+    await deleteStaff(userId)
 
     toast({
       title: `${name}님을 스태프목록에서 삭제하였습니다`,
     })
     setIsUpdating(false)
-    setIsOpen(false)
     refresh()
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
         <Button
           variant="ghost"
           size="icon"
@@ -75,34 +54,29 @@ export function DeleteUserColumn({
         >
           <UserRoundMinus size={14} />
         </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>스태프 삭제</DialogTitle>
-          <DialogDescription>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>스태프 삭제</AlertDialogTitle>
+          <AlertDialogDescription>
             {name}님을 스태프목록에서 삭제하시겠습니까?
-          </DialogDescription>
-        </DialogHeader>
-
-        <DialogFooter className="ml-auto">
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={handleUpdateUser}
-            disabled={!isMaster || isUpdating}
+            <WarningMessage text="해당 작업은 되돌릴 수 없습니다" />
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>취소</AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-destructive hover:bg-destructive/80"
+            disabled={isUpdating}
+            onClick={handleDeleteStaff}
           >
             삭제
             <LoaderCircle
               className={cn(isUpdating ? 'ml-2 animate-spin' : 'hidden')}
             />
-          </Button>
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              아니오
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }

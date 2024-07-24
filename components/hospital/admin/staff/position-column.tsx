@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { createClient } from '@/lib/supabase/client'
+import { updateStaffPosition } from '@/lib/services/settings/staff-settings'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -12,6 +12,7 @@ export default function PositionColumn({
   userId: string
 }) {
   const [positionInput, setPositionInput] = useState(position)
+  const [isUpdating, setIsUpdating] = useState(false)
   const { refresh } = useRouter()
 
   useEffect(() => {
@@ -19,8 +20,6 @@ export default function PositionColumn({
   }, [position])
 
   const handleUpdatePosition = async () => {
-    const supabase = createClient()
-
     if (position === positionInput) {
       return
     }
@@ -34,23 +33,14 @@ export default function PositionColumn({
       return
     }
 
-    const { error: positionUpdateError } = await supabase
-      .from('users')
-      .update({ position: positionInput })
-      .match({ user_id: userId })
+    setIsUpdating(true)
 
-    if (positionUpdateError) {
-      toast({
-        variant: 'destructive',
-        title: positionUpdateError.message,
-        description: '관리자에게 문의하세요',
-      })
-      return
-    }
+    await updateStaffPosition(userId, positionInput)
 
     toast({
       title: '직책을을 변경하였습니다',
     })
+    setIsUpdating(false)
     refresh()
   }
 
@@ -60,7 +50,17 @@ export default function PositionColumn({
       value={positionInput ?? ''}
       onChange={(e) => setPositionInput(e.target.value)}
       onBlur={handleUpdatePosition}
-      onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+      disabled={isUpdating}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          const target = e.currentTarget
+          setTimeout(() => {
+            if (target) {
+              target.blur()
+            }
+          }, 0)
+        }
+      }}
     />
   )
 }

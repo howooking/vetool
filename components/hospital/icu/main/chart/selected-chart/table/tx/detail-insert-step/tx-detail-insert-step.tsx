@@ -132,7 +132,7 @@ export default function TxDetailInsertStep() {
                 />
               </Button>
             )}
-            <div className="flex gap-2">
+            <div className="ml-auto flex gap-2">
               <DialogClose asChild>
                 <Button
                   type="button"
