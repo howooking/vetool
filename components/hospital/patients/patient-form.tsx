@@ -230,7 +230,7 @@ export default function PatientForm({
                       className="h-8 text-xs"
                     />
                     <CommandList>
-                      <ScrollArea>
+                      <ScrollArea className="h-64">
                         <CommandEmpty>해당 품종 검색 결과 없음.</CommandEmpty>
                         <CommandGroup>
                           {BREEDS.map((breed) => (

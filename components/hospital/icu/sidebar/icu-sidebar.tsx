@@ -10,12 +10,10 @@ import { useMemo, useState } from 'react'
 export default function IcuSidebar({
   icuIoData,
   icuChartData,
-  hosGroupListData,
   vetsListData,
 }: {
   icuIoData: IcuIoPatientJoined[]
   icuChartData: IcuChartJoined[]
-  hosGroupListData: string[]
   vetsListData: IcuUserList[]
 }) {
   const [selectedGroup, setSelectedGroup] = useState<string[]>([])
@@ -53,7 +51,7 @@ export default function IcuSidebar({
   return (
     <aside className="h-icu-chart w-[144px] shrink-0 overflow-y-auto border-r p-2">
       <GroupSelectDialog
-        hosGroupList={hosGroupListData}
+        hosGroupList={icuIoData[0].hos_id.group_list}
         selectedGroup={selectedGroup}
         setSelectedGroup={setSelectedGroup}
       />

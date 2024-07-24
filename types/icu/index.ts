@@ -25,6 +25,7 @@ export type IcuIoPatientJoined = Pick<
   | 'age_in_days'
 > & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
+  hos_id: Pick<Hospital, 'group_list'>
 }
 
 export type MainAndSubVet = Pick<User, 'name' | 'avatar_url' | 'user_id'>

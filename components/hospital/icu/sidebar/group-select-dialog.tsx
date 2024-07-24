@@ -22,6 +22,7 @@ export default function GroupSelectDialog({
   setSelectedGroup: Dispatch<SetStateAction<string[]>>
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+
   const handleCheckboxChange = (group: string) => {
     setSelectedGroup((prevGroups) =>
       prevGroups.includes(group)
@@ -37,7 +38,7 @@ export default function GroupSelectDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="mb-2 h-auto w-full p-2">
+        <Button variant="outline" className="mb-2 h-8 w-full p-2">
           {selectedGroup.length ? (
             <GroupBadge currentGroups={selectedGroup} />
           ) : (

@@ -20,7 +20,6 @@ export default function IcuEntry({
       <IcuSidebar
         icuIoData={icuData.icuIoData}
         icuChartData={icuData.icuChartData}
-        hosGroupListData={icuData.icuChartData[0].hos_id.group_list}
         vetsListData={icuData.vetsListData}
       />
 
