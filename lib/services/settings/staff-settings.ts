@@ -2,9 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import type { ApprovalData, UserHospitalJoined } from '@/types/adimin'
-import { UserApprovalHosJoined } from '@/types/on-boarding'
 import { redirect } from 'next/navigation'
-import { getUser } from '../auth/authorization'
 
 export const updateHosGroupList = async (
   hosId: string,
@@ -180,49 +178,4 @@ export const approveStaff = async (hosId: string, userId: string) => {
     console.log(rpcError)
     redirect(`/error/?message=${rpcError.message}`)
   }
-}
-
-export const getUserAppoval = async () => {
-  const supabase = createClient()
-
-  const authUser = await getUser()
-
-  const { data: userApprovalData, error: userApprovalDataError } =
-    await supabase
-      .from('user_approvals')
-      .select(
-        `
-      user_approval_id,
-      hos_id (
-        name
-      )
-    `,
-      )
-      .match({
-        user_id: authUser?.id,
-      })
-      .returns<UserApprovalHosJoined[]>()
-
-  if (userApprovalDataError) {
-    console.log(userApprovalDataError)
-    redirect(`/error/?message=${userApprovalDataError.message}`)
-  }
-
-  return userApprovalData
-}
-
-export const cancelApproval = async (formData: FormData) => {
-  const supabase = createClient()
-  const userApprovalId = formData.get('user_approval_id') as string
-
-  const { error } = await supabase.from('user_approvals').delete().match({
-    user_approval_id: userApprovalId,
-  })
-
-  if (error) {
-    console.log(error)
-    throw new Error(error.message)
-  }
-
-  redirect('/on-boarding')
 }

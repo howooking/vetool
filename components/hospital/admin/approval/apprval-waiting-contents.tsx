@@ -1,10 +1,9 @@
-import DotLottie from '@/components/common/dot-lottie'
 import { Button } from '@/components/ui/button'
 import { logout } from '@/lib/services/auth/authentication'
 import {
   cancelApproval,
   getUserAppoval,
-} from '@/lib/services/settings/staff-settings'
+} from '@/lib/services/on-boarding/on-boarding'
 
 export default async function ApprovalWaitingContents() {
   const userApprovalData = await getUserAppoval()

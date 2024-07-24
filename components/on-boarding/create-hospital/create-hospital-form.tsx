@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { ADDRESS } from '@/constants/hospital/create/address'
-import { createClient } from '@/lib/supabase/client'
+import { createHospital } from '@/lib/services/on-boarding/on-boarding'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
@@ -30,7 +30,7 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 export default function CreateHospitalForm() {
-  const [districts, setDistricts] = useState([''])
+  const [districts, setDistricts] = useState<string[]>()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { push } = useRouter()
 
@@ -47,7 +47,6 @@ export default function CreateHospitalForm() {
       businessNumber: undefined,
     },
   })
-  const supabase = createClient()
   const city = form.watch('city')
 
   useEffect(() => {
@@ -60,39 +59,25 @@ export default function CreateHospitalForm() {
   const handleSubmit = async (
     values: z.infer<typeof newHospitalFormSchema>,
   ) => {
-    setIsSubmitting(true)
-
     const { city, district, name, businessNumber } = values
-    const { data: hosId, error } = await supabase.rpc(
-      'update_user_info_when_creating_new_hospital',
-      {
-        hos_name_input: name,
-        user_name_input: username!,
-        is_vet_input: isVet === 'true',
-        city_input: city,
-        district_input: district,
-        business_number_input: businessNumber,
-      },
+
+    setIsSubmitting(true)
+    const returningHosId = await createHospital(
+      name,
+      username!,
+      isVet === 'true',
+      city,
+      district,
+      businessNumber,
     )
 
-    if (error) {
-      toast({
-        variant: 'destructive',
-        title: error.message,
-        description: '관리자에게 문의하세요',
-      })
-      setIsSubmitting(false)
-      return
-    }
-
     toast({
-      variant: 'default',
       title: `${name} 등록 성공`,
       description: '잠시후 페이지가 이동됩니다',
     })
 
     setIsSubmitting(false)
-    push(`/hospital/${hosId}`)
+    push(`/hospital/${returningHosId}`)
   }
 
   return (
@@ -166,7 +151,7 @@ export default function CreateHospitalForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {districts.map((district) => (
+                    {districts?.map((district) => (
                       <SelectItem key={district} value={district}>
                         {district}
                       </SelectItem>
