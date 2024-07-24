@@ -40,41 +40,47 @@ export default function Todo({ icuData }: { icuData: IcuData }) {
   const { setSelectedPatient } = useIcuSelectedPatientStore()
 
   const filteredAndSortedOrder = useMemo(() => {
-    return icuChartOrderData
-      .filter(
-        (order) =>
-          order.icu_chart_order_time.reduce(
-            (acc, time) => Number(acc) + Number(time),
-            0,
-          ) > 0,
-      )
-      .filter((order) => {
-        let hasOrderLeft = false
-        order.icu_chart_order_time.forEach((time, index) => {
-          if (
-            time === '1' &&
-            order[`icu_chart_order_tx_${index + 1}` as keyof typeof order] ===
-              null
-          ) {
-            hasOrderLeft = true
-            return
-          }
+    return (
+      icuChartOrderData
+        // 퇴원완료 제거
+        .filter((order) => !order.icu_io_id.out_date)
+        // 시간 지정하지 않은 오더 제거 (예: 구토, 배변, 배뇨)
+        .filter(
+          (order) =>
+            order.icu_chart_order_time.reduce(
+              (acc, time) => Number(acc) + Number(time),
+              0,
+            ) > 0,
+        )
+        // 모든 처치를 완료한 오더 제거
+        .filter((order) => {
+          let hasOrderLeft = false
+          order.icu_chart_order_time.forEach((time, index) => {
+            if (
+              time === '1' &&
+              order[`icu_chart_order_tx_${index + 1}` as keyof typeof order] ===
+                null
+            ) {
+              hasOrderLeft = true
+              return
+            }
+          })
+          return hasOrderLeft
         })
-        return hasOrderLeft
-      })
-      .sort((a, b) =>
-        b.icu_chart_id.icu_chart_id.localeCompare(a.icu_chart_id.icu_chart_id),
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.icu_io_id.in_date).getTime() -
-          new Date(b.icu_io_id.in_date).getTime(),
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.icu_io_id.created_at).getTime() -
-          new Date(b.icu_io_id.created_at).getTime(),
-      )
+
+        // 입원일 기준 정렬
+        .sort(
+          (a, b) =>
+            new Date(a.icu_io_id.in_date).getTime() -
+            new Date(b.icu_io_id.in_date).getTime(),
+        )
+        // 입원일이 같은 경우도 있으므로 생성일 순으로 정렬
+        .sort(
+          (a, b) =>
+            new Date(a.icu_io_id.created_at).getTime() -
+            new Date(b.icu_io_id.created_at).getTime(),
+        )
+    )
   }, [icuChartOrderData])
 
   const handleClickRow = useCallback(
