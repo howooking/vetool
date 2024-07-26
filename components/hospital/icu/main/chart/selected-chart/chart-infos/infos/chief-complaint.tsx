@@ -41,7 +41,7 @@ export default function ChiefComplaint({
   }, [chiefComplaint])
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative flex w-full items-center">
       <Label
         className="absolute left-2 text-xs text-muted-foreground"
         htmlFor="chiefComplaint"
