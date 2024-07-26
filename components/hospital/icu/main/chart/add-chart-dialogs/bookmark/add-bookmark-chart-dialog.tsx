@@ -1,6 +1,5 @@
 import { bookmarkColumns } from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/bookmark-columns'
-import SelectBookmarkSkeleton from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/select-bookmark-skeleton'
-import OrderPreviewDialog from '@/components/hospital/icu/main/search/order-preview-dialog'
+import OrderPreviewDialog from '@/components/hospital/icu/main/search/table/preview/order-preview-dialog'
 import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
 import {
@@ -11,68 +10,66 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import { getBookmarkChart } from '@/lib/services/icu/bookmark'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
+import { cn } from '@/lib/utils'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
-import { Bookmark } from 'lucide-react'
+import { LoaderCircle, Star } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function AddBookmarkChartDialog() {
+  const [isFetching, setIsFetching] = useState(false)
+  const { hos_id } = useParams()
   const { isPreviewModalOpen } = useOrderPreviewStore()
   const { isBookmarkModalOpen, setBookmarkModalOpen } = useIcuBookmarkStore()
 
-  const [isFetching, setIsFetching] = useState(false)
   const [bookmarkCharts, setBookmarkCharts] = useState<
     IcuChartBookmarkJoined[]
   >([])
 
-  const fetchBookmarkData = async () => {
+  const handleOpenBookmarkDialog = async () => {
     setIsFetching(true)
-
-    const bookmarkData = await getBookmarkChart()
-    setBookmarkCharts(bookmarkData)
-
-    setIsFetching(false)
-  }
-
-  const handleDialogOpen = () => {
-    setBookmarkModalOpen(true)
-    fetchBookmarkData()
+    getBookmarkChart(hos_id as string)
+      .then((res) => setBookmarkCharts(res))
+      .then(() => setBookmarkModalOpen(true))
+      .then(() => setIsFetching(false))
   }
 
   return (
     <Dialog open={isBookmarkModalOpen} onOpenChange={setBookmarkModalOpen}>
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="flex h-1/3 w-1/4 items-center justify-center gap-2"
-          onClick={handleDialogOpen}
-        >
-          <Bookmark />
-          <span>즐겨찾기 차트 선택</span>
-        </Button>
-      </DialogTrigger>
+      <Button
+        variant="outline"
+        className="flex h-1/3 w-1/4 items-center justify-center gap-2"
+        onClick={handleOpenBookmarkDialog}
+        disabled={isFetching}
+      >
+        <Star />
+        <span>즐겨찾기 차트 선택</span>
+        <LoaderCircle
+          className={cn(
+            'h-5 w-5',
+            isFetching ? 'block animate-spin' : 'hidden',
+          )}
+        />
+      </Button>
+
       <DialogContent className="sm:max-w-[1040px]">
         <DialogHeader>
           <DialogTitle>즐겨찾기 차트 붙여넣기</DialogTitle>
-          <DialogDescription>
-            저장한 차트를 붙여넣어 차트가 생성됩니다
-          </DialogDescription>
+          <DialogDescription>복사할 차트를 선택해주세요</DialogDescription>
         </DialogHeader>
-        {isFetching ? (
-          <SelectBookmarkSkeleton />
-        ) : (
-          <DataTable
-            columns={bookmarkColumns}
-            data={bookmarkCharts}
-            rowLength={10}
-            searchPlaceHolder="즐겨찾기 이름 · 즐겨찾기 설명 · 환자명으로 조회하세요"
-          />
-        )}
-        {isPreviewModalOpen && <OrderPreviewDialog type="bookmark" />}
+
+        <DataTable
+          columns={bookmarkColumns}
+          data={bookmarkCharts}
+          rowLength={10}
+          searchPlaceHolder="즐겨찾기 이름 · 즐겨찾기 설명 · 환자명 검색"
+        />
+
+        {isPreviewModalOpen && <OrderPreviewDialog />}
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" variant="outline">
