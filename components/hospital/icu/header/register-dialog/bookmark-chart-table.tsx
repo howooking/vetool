@@ -1,5 +1,5 @@
 import { bookmarkColumns } from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/bookmark-columns'
-import OrderPreviewDialog from '@/components/hospital/icu/main/search/order-preview-dialog'
+import OrderPreviewDialog from '@/components/hospital/icu/main/search/table/preview/order-preview-dialog'
 import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
@@ -39,7 +39,7 @@ export default function BookmarkChartTable({
         이전
       </Button>
 
-      {isPreviewModalOpen && <OrderPreviewDialog type="bookmark" />}
+      {isPreviewModalOpen && <OrderPreviewDialog />}
     </div>
   )
 }
