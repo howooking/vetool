@@ -66,10 +66,7 @@ export default function Group({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="flex w-full justify-start overflow-x-auto px-2"
-        >
+        <Button variant="outline" className="flex w-full overflow-x-auto px-2">
           <GroupBadge currentGroups={currentGroups} />
         </Button>
       </DialogTrigger>
