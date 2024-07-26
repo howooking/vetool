@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -70,6 +71,7 @@ export function MainSubVet({
       <DialogContent className="sm:max-w-[640px]">
         <DialogHeader>
           <DialogTitle>주치의 / 부주치의 변경</DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
         <MainSubVetUpdateForm
           setIsDialogOpen={setIsDialogOpen}
