@@ -15,8 +15,10 @@ import type { IcuChartOrderJoined } from '@/types/icu'
 
 export default function ChartTable({
   selectedChartOrders,
+  preview,
 }: {
   selectedChartOrders: IcuChartOrderJoined[]
+  preview?: boolean
 }) {
   return (
     <Table className="border">
@@ -24,10 +26,12 @@ export default function ChartTable({
         <TableRow>
           <TableHead className="flex w-[296px] items-center justify-center gap-2 text-center">
             <span>오더 목록</span>
-            <OrderDialog
-              icuIoId={selectedChartOrders[0].icu_io_id.icu_io_id}
-              icuChartId={selectedChartOrders[0].icu_chart_id.icu_chart_id}
-            />
+            {!preview && (
+              <OrderDialog
+                icuIoId={selectedChartOrders[0].icu_io_id.icu_io_id}
+                icuChartId={selectedChartOrders[0].icu_chart_id.icu_chart_id}
+              />
+            )}
           </TableHead>
 
           {TIMES.map((time) => (
@@ -39,18 +43,20 @@ export default function ChartTable({
       </TableHeader>
 
       <TableBody>
-        <TxUpsertDialog />
+        {!preview && <TxUpsertDialog />}
 
         {selectedChartOrders.map((order) => (
           <TableRow className={cn('divide-x')} key={order.icu_chart_order_id}>
-            <OrderTitle order={order} />
+            <OrderTitle order={order} preview={preview} />
 
             {TIMES.map((time, index) => {
               const isDone =
+                !preview &&
                 order.icu_chart_order_time[index] === '1' &&
                 order[`icu_chart_order_tx_${time}`] !== null
               return (
                 <IcuChartTableCell
+                  preview={preview}
                   key={time}
                   time={time}
                   txData={order[`icu_chart_order_tx_${time}`]}

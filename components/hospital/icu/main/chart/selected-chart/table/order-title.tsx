@@ -6,7 +6,13 @@ import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined } from '@/types/icu'
 
-export default function OrderTitle({ order }: { order: IcuChartOrderJoined }) {
+export default function OrderTitle({
+  order,
+  preview,
+}: {
+  order: IcuChartOrderJoined
+  preview?: boolean
+}) {
   const {
     icu_chart_order_type: orderType,
     icu_chart_order_name: orderName,
@@ -24,9 +30,10 @@ export default function OrderTitle({ order }: { order: IcuChartOrderJoined }) {
   return (
     <TableCell
       className={cn(
-        'flex w-[296px] cursor-pointer items-center justify-between gap-2 transition hover:opacity-70',
+        preview ? 'cursor-default' : 'cursor-pointer',
+        'flex w-[296px] items-center justify-between gap-2 transition hover:opacity-70',
       )}
-      onClick={handleDialogOpen}
+      onClick={!preview ? handleDialogOpen : undefined}
       title={orderComment ?? ''}
       style={{
         background: DEFAULT_ICU_ORDER_TYPE.find(
