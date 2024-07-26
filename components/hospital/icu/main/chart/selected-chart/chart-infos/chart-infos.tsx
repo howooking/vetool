@@ -1,6 +1,5 @@
 'use client'
 
-import Caution from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/caution'
 import ChiefComplaint from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/chief-complaint'
 import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/diagnosis'
 import Group from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/group/group'
@@ -8,16 +7,26 @@ import HeaderSignalments from '@/components/hospital/icu/main/chart/selected-cha
 import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/in-and-out-date/in-and-out-date'
 import { MainSubVet } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/main-sub-vet/main-sub-vet'
 import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/onwer-name'
-import type { IcuChartJoined, IcuIoPatientJoined } from '@/types/icu'
+import SaveChartButton from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/save-chart-button'
+import SearchTag from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/search-tag'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuIoPatientJoined,
+} from '@/types/icu'
 
 export default function ChartInfos({
   chartData,
   isPatientOut,
   selectedIo,
+  selectedChartOrders,
+  handleSaveChart,
 }: {
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   isPatientOut: boolean
   selectedIo: IcuIoPatientJoined
+  selectedChartOrders: IcuChartOrderJoined[]
+  handleSaveChart: () => Promise<void>
 }) {
   return (
     <div>
@@ -26,6 +35,7 @@ export default function ChartInfos({
         chartData={chartData}
         icuIoId={selectedIo.icu_io_id}
         ageInDays={selectedIo.age_in_days}
+        selectedChartOrders={selectedChartOrders}
       />
 
       <div className="grid grid-cols-8 gap-2">
@@ -70,17 +80,18 @@ export default function ChartInfos({
         </div>
 
         <div className="col-span-2">
-          <Caution
-            caution={chartData.caution}
+          <SearchTag
+            searchTags={chartData.search_tags}
             icuChartId={chartData.icu_chart_id}
           />
         </div>
 
-        <div className="col-span-4">
+        <div className="col-span-4 flex gap-2">
           <ChiefComplaint
             chiefComplaint={chartData.icu_chart_cc}
             icuChartId={chartData.icu_chart_id}
           />
+          <SaveChartButton handleSaveChart={handleSaveChart} />
         </div>
       </div>
     </div>

@@ -1,9 +1,8 @@
-import GroupBadge from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/group/group-badge'
+import GroupBadge from '@/components/hospital/icu/sidebar/group-badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -11,7 +10,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useEffect, useState } from 'react'
+
 export default function GroupSelectDialog({
   hosGroupList,
   selectedGroup,
@@ -19,12 +19,17 @@ export default function GroupSelectDialog({
 }: {
   hosGroupList: string[]
   selectedGroup: string[]
-  setSelectedGroup: Dispatch<SetStateAction<string[]>>
+  setSelectedGroup: (group: string[]) => void
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [tempSelectedGroup, setTempSelectedGroup] = useState<string[]>([])
+
+  useEffect(() => {
+    setTempSelectedGroup(selectedGroup)
+  }, [selectedGroup])
 
   const handleCheckboxChange = (group: string) => {
-    setSelectedGroup((prevGroups) =>
+    setTempSelectedGroup((prevGroups) =>
       prevGroups.includes(group)
         ? prevGroups.filter((value) => value !== group)
         : [...prevGroups, group],
@@ -32,13 +37,18 @@ export default function GroupSelectDialog({
   }
 
   const handleResetClick = () => {
-    setSelectedGroup([])
+    setTempSelectedGroup([])
+  }
+
+  const handleOkButtonClick = () => {
+    setSelectedGroup(tempSelectedGroup)
+    setIsDialogOpen(false)
   }
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="mb-2 h-8 w-full p-2">
+        <Button variant="outline" className="mb-2 flex h-auto w-full px-2 py-1">
           {selectedGroup.length ? (
             <GroupBadge currentGroups={selectedGroup} />
           ) : (
@@ -60,7 +70,7 @@ export default function GroupSelectDialog({
               <Checkbox
                 id={group}
                 onCheckedChange={() => handleCheckboxChange(group)}
-                checked={selectedGroup.includes(group)}
+                checked={tempSelectedGroup.includes(group)}
               />
               <label
                 htmlFor={group}
@@ -80,9 +90,9 @@ export default function GroupSelectDialog({
           >
             초기화
           </Button>
-          <DialogClose asChild>
-            <Button type="button">확인</Button>
-          </DialogClose>
+          <Button type="button" onClick={handleOkButtonClick}>
+            확인
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

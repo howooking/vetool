@@ -133,9 +133,7 @@ export default function RegisterDialog({
               />
             )}
             {step === 'selectChartType' && <RegisterTypeSelector />}
-
             {step === 'chartSearch' && <IcuSearchChart type="register" />}
-
             {step === 'bookmarkSearch' && (
               <BookmarkChartTable
                 setStep={setStep}
@@ -155,6 +153,17 @@ export default function RegisterDialog({
                 groupList={groupList}
                 vetsData={vetsData}
                 tab={tab}
+              />
+            )}
+            {step === 'selectChartType' && (
+              <RegisterTypeSelector setTab={setTab} />
+            )}
+            {step === 'chartSearch' && <IcuSearchChart type="register" />}
+            {step === 'bookmarkSearch' && (
+              <BookmarkChartTable
+                setStep={setStep}
+                bookmarkCharts={bookmarkCharts}
+                isRegisterDialogOpen={isRegisterDialogOpen}
               />
             )}
           </TabsContent>

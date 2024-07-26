@@ -58,10 +58,13 @@ export const updateChiefComplaint = async (
   }
 }
 
-export const updateCaution = async (icuChartId: string, caution: string) => {
+export const updateSearchTags = async (
+  icuChartId: string,
+  searchTags: string,
+) => {
   const { error: updataCautionError } = await supabase
     .from('icu_chart')
-    .update({ caution })
+    .update({ search_tags: searchTags })
     .match({ icu_chart_id: icuChartId })
 
   if (updataCautionError) {
@@ -164,15 +167,20 @@ export const updateMemo = async (
 
 export const toggleOutPatient = async (
   icuIoId: string,
-  targetDate: string,
+  icuChartId: string,
   isPatientOut: boolean,
+  targetDate: string,
+  chartOrders: string,
 ) => {
   const supabase = createClient()
 
-  const { error: updateOutDateError } = await supabase
-    .from('icu_io')
-    .update({ out_date: isPatientOut ? null : targetDate })
-    .match({ icu_io_id: icuIoId })
+  const { error: updateOutDateError } = await supabase.rpc('icu_out_patient', {
+    icu_io_id_input: icuIoId,
+    icu_chart_id_input: icuChartId,
+    is_patient_out_input: isPatientOut,
+    target_date_input: targetDate,
+    chart_orders_input: chartOrders,
+  })
 
   if (updateOutDateError) {
     console.log(updateOutDateError)

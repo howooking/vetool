@@ -62,7 +62,7 @@ export default function PatientForm({
   icu,
 }: {
   hosId: string
-  setStep: (step: 'patientRegister' | 'icuRegister') => void
+  setStep: (step: 'patientRegister' | 'selectChartType') => void
   icu?: boolean
 }) {
   const [breedOpen, setBreedOpen] = useState(false)
@@ -107,7 +107,7 @@ export default function PatientForm({
       description: icu ? '입원을 이어서 진행합니다' : '',
     })
 
-    icu ? setStep('icuRegister') : setIsRegisterDialogOpen(false)
+    icu ? setStep('selectChartType') : setIsRegisterDialogOpen(false)
 
     icu &&
       setRegisteringPatient({
