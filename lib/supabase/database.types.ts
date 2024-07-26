@@ -225,7 +225,6 @@ export type Database = {
       icu_chart: {
         Row: {
           bookmark_id: string | null
-          caution: string
           created_at: string
           hos_id: string
           icu_chart_cc: string
@@ -238,6 +237,7 @@ export type Database = {
           memo_b: string
           memo_c: string
           patient_id: string
+          search_tags: string
           sub_vet: string | null
           target_date: string
           weight: string
@@ -245,7 +245,6 @@ export type Database = {
         }
         Insert: {
           bookmark_id?: string | null
-          caution?: string
           created_at?: string
           hos_id: string
           icu_chart_cc: string
@@ -258,6 +257,7 @@ export type Database = {
           memo_b?: string
           memo_c?: string
           patient_id: string
+          search_tags?: string
           sub_vet?: string | null
           target_date: string
           weight?: string
@@ -265,7 +265,6 @@ export type Database = {
         }
         Update: {
           bookmark_id?: string | null
-          caution?: string
           created_at?: string
           hos_id?: string
           icu_chart_cc?: string
@@ -278,6 +277,7 @@ export type Database = {
           memo_b?: string
           memo_c?: string
           patient_id?: string
+          search_tags?: string
           sub_vet?: string | null
           target_date?: string
           weight?: string
@@ -334,6 +334,7 @@ export type Database = {
           bookmark_id: string
           bookmark_name: string
           created_at: string
+          hos_id: string
           icu_chart_id: string
           updated_at: string | null
         }
@@ -342,6 +343,7 @@ export type Database = {
           bookmark_id?: string
           bookmark_name?: string
           created_at?: string
+          hos_id: string
           icu_chart_id: string
           updated_at?: string | null
         }
@@ -350,10 +352,18 @@ export type Database = {
           bookmark_id?: string
           bookmark_name?: string
           created_at?: string
+          hos_id?: string
           icu_chart_id?: string
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "icu_chart_bookmark_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
           {
             foreignKeyName: "icu_chart_bookmark_icu_chart_id_fkey"
             columns: ["icu_chart_id"]
@@ -1104,6 +1114,16 @@ export type Database = {
         }
         Returns: string
       }
+      icu_out_patient: {
+        Args: {
+          icu_io_id_input: string
+          icu_chart_id_input: string
+          is_patient_out_input: boolean
+          target_date_input: string
+          chart_orders_input: string
+        }
+        Returns: undefined
+      }
       insert_icu_tx_data_with_icu_order: {
         Args: {
           order_id_input: string
@@ -1222,6 +1242,7 @@ export type Database = {
           icu_chart_id_input: string
           bookmark_name_input: string
           bookmark_comment_input: string
+          hos_id_input: string
         }
         Returns: undefined
       }
