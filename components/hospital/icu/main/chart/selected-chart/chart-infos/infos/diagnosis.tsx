@@ -1,9 +1,8 @@
 'use client'
 
-import { Input } from '@/components/ui/input'
+import AutoComplete from '@/components/hospital/common/auto-complete'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
-import { updateDiagnosis } from '@/lib/services/icu/update-icu-chart-infos'
 import { useEffect, useState } from 'react'
 
 export default function Diagnosis({
@@ -26,7 +25,7 @@ export default function Diagnosis({
       }
 
       setIsUpdating(true)
-      await updateDiagnosis(icuChartId, diagnosisInput.trim())
+      // await updateDiagnosis(icuChartId, diagnosisInput.trim())
 
       toast({
         title: '진단명을 변경하였습니다',
@@ -43,21 +42,17 @@ export default function Diagnosis({
   return (
     <div className="relative flex items-center">
       <Label
-        className="absolute left-2 text-xs text-muted-foreground"
+        className="absolute left-2 top-[10px] z-10 text-xs text-muted-foreground"
         htmlFor="diagnosis"
       >
         DX
       </Label>
-      <Input
-        disabled={isUpdating}
-        id="diagnosis"
-        value={diagnosisInput}
-        placeholder="진단명"
-        onChange={(e) => setDiagnosisInput(e.target.value)}
-        onBlur={handleUpdateDiagnosis}
-        onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-        className="w-full pl-8"
-        title={diagnosis}
+      <AutoComplete
+        inputValue={diagnosisInput}
+        setInputValue={setDiagnosisInput}
+        isUpdating={isUpdating}
+        handleUpdateDiagnosis={handleUpdateDiagnosis}
+        diagnosis={diagnosis}
       />
     </div>
   )
