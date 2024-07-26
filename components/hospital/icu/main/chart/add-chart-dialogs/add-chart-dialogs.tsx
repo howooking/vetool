@@ -1,10 +1,9 @@
-import AddBookmarkChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-bookmark-chart-dialog'
 import AddDefaultChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-default-chart-dialog'
 import CopyPrevChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/copy-prev-chart-dialog'
-import PasteSelectedChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/paste-selected-chart-dialog'
 import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
-import type { IcuChartJoined } from '@/types/icu'
 import { useParams } from 'next/navigation'
+import AddBookmarkChartDialog from './bookmark/add-bookmark-chart-dialog'
+import PasteCopiedChartDialog from './paste-selected-chart-dialog'
 
 export default function AddChartDialogs({
   selectedPatient,
@@ -29,7 +28,7 @@ export default function AddChartDialogs({
         selectedPatient={selectedPatient}
         setIsCreatingChart={setIsCreatingChart}
       />
-      <PasteSelectedChartDialog
+      <PasteCopiedChartDialog
         targetDate={target_date as string}
         selectedPatient={selectedPatient}
         setIsCreatingChart={setIsCreatingChart}
