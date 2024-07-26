@@ -88,7 +88,7 @@ export default function OrderForm({
       hos_id as string,
       {
         icu_chart_order_type: values.icu_chart_order_type,
-        icu_chart_order_name: values.icu_chart_order_name,
+        icu_chart_order_name: values.icu_chart_order_name.trim(),
         icu_chart_order_comment: values.icu_chart_order_comment ?? null,
       },
     )
