@@ -49,13 +49,13 @@ export default function RegisterDialog({
     }, 1000)
 
     const fetchBookmarkData = async () => {
-      const bookmarkData = await getBookmarkChart()
+      const bookmarkData = await getBookmarkChart(hosId)
 
       setBookmarkCharts(bookmarkData)
     }
 
     if (step === 'bookmarkSearch') fetchBookmarkData()
-  }, [setStep, step, isRegisterDialogOpen])
+  }, [setStep, step, isRegisterDialogOpen, hosId])
 
   const icuRegisterPatientsData: PatientDataTable[] = patientsData.map(
     (patient) => ({
@@ -96,7 +96,7 @@ export default function RegisterDialog({
         <Button size="sm">환자입원</Button>
       </DialogTrigger>
 
-      <DialogContent className="flex flex-col sm:max-w-[1040px]">
+      <DialogContent className="flex flex-col sm:max-w-[1200px]">
         <RegisterDialogHeader step={step} />
 
         <Tabs
