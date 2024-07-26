@@ -3,7 +3,7 @@ import { usePatientRegisterStep } from '@/lib/store/icu/icu-register'
 import { Bookmark, File, Search } from 'lucide-react'
 
 const CHART_TYPES = [
-  { type: 'search', icon: Search, label: '기존 차트 검색' },
+  { type: 'search', icon: Search, label: '차트 검색' },
   { type: 'create', icon: File, label: '새로운 차트 만들기' },
   { type: 'bookmark', icon: Bookmark, label: '즐겨찾기 차트 불러오기' },
 ] as const
