@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/select'
 import type { IcuUserList } from '@/types/icu'
 import Image from 'next/image'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 
 export default function VetSelectDialog({
   vetsListData,
@@ -18,7 +18,7 @@ export default function VetSelectDialog({
 }: {
   vetsListData: IcuUserList[]
   selectedVet: string
-  setSelectedVet: Dispatch<SetStateAction<string>>
+  setSelectedVet: (vet: string) => void
 }) {
   const [isSelectorOpen, setIsSelectorOpen] = useState(false)
   const handleValueChange = (value: string) => {

@@ -12,6 +12,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { toggleOutPatient } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
+import type { IcuChartOrderJoined } from '@/types/icu'
 import { LoaderCircle, UserRoundMinus, UserRoundPlus } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
@@ -19,19 +20,32 @@ export default function OutPatientDialog({
   icuIoId,
   name,
   isPatientOut,
+  selectedChartOrders,
 }: {
   icuIoId: string
   name: string
   isPatientOut: boolean
+  selectedChartOrders: IcuChartOrderJoined[]
 }) {
+  const chartId = selectedChartOrders[0].icu_chart_id.icu_chart_id
+  const { target_date } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { target_date } = useParams()
 
   const handleOutPatient = async () => {
     setIsSubmitting(true)
+    const filteredSelectedChartOrderNames = selectedChartOrders
+      .filter((order) => order.icu_chart_order_type !== 'checklist')
+      .map((order) => order.icu_chart_order_name)
+      .join(', ')
 
-    await toggleOutPatient(icuIoId, target_date as string, isPatientOut)
+    await toggleOutPatient(
+      icuIoId,
+      chartId,
+      isPatientOut,
+      target_date as string,
+      filteredSelectedChartOrderNames,
+    )
 
     toast({
       title: isPatientOut

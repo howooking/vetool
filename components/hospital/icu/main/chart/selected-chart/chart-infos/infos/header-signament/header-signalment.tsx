@@ -3,7 +3,7 @@ import DeleteChartDialog from '@/components/hospital/icu/main/chart/selected-cha
 import OutPatientDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/out-patient-dialog'
 import UpdateWeightDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/update-weight-dialog'
 import { getAgeFromAgeInDays } from '@/lib/utils'
-import { IcuChartJoined } from '@/types/icu'
+import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 import { Cat, Dog } from 'lucide-react'
 
 export default function HeaderSignalments({
@@ -11,11 +11,13 @@ export default function HeaderSignalments({
   ageInDays,
   icuIoId,
   chartData,
+  selectedChartOrders,
 }: {
   isPatientOut: boolean
   ageInDays: number
   icuIoId: string
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
+  selectedChartOrders: IcuChartOrderJoined[]
 }) {
   const { breed, name, gender, species, patient_id } = chartData.patient_id
   const { weight, weight_measured_date, icu_chart_id, bookmark_id } = chartData
@@ -49,6 +51,7 @@ export default function HeaderSignalments({
           icuIoId={icuIoId}
           name={name}
           isPatientOut={isPatientOut}
+          selectedChartOrders={selectedChartOrders}
         />
         <DeleteChartDialog
           icuChartId={icu_chart_id}

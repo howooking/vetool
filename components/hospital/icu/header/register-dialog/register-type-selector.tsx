@@ -8,7 +8,11 @@ const CHART_TYPES = [
   { type: 'bookmark', icon: Bookmark, label: '즐겨찾기 차트 불러오기' },
 ] as const
 
-export default function RegisterTypeSelector() {
+export default function RegisterTypeSelector({
+  setTab,
+}: {
+  setTab?: React.Dispatch<React.SetStateAction<string>>
+}) {
   const { setStep } = usePatientRegisterStep()
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -31,6 +35,8 @@ export default function RegisterTypeSelector() {
   }
 
   const handlePreviousButtonClick = () => {
+    if (setTab) setTab('search')
+
     setStep('patientSearch')
     return
   }
