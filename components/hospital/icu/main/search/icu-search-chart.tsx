@@ -1,24 +1,19 @@
+// TODO : 삭제
+
 'use client'
 
 import HelperTooltip from '@/components/common/helper-tooltip'
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import SearchChartTable from '@/components/hospital/icu/main/search/table/search-chart-table'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { searchIcuChart } from '@/lib/services/icu/search-charts'
-import { usePatientRegisterStep } from '@/lib/store/icu/icu-register'
 import type { SearchedChart } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
-export default function IcuSearchChart({
-  type,
-}: {
-  type: 'search' | 'register' | 'bookmark'
-}) {
+export default function IcuSearchChart() {
   const { hos_id } = useParams()
-  const { setStep } = usePatientRegisterStep()
   const [isSearching, setIsSearching] = useState(false)
 
   const [groupedCharts, setGroupedCharts] = useState<SearchedChart[][]>([])
@@ -42,7 +37,6 @@ export default function IcuSearchChart({
       if (searchInput) {
         setIsSearching(true)
 
-        // !! hosId
         const searchedCharts = await searchIcuChart(
           searchInput,
           hos_id as string,
@@ -77,17 +71,7 @@ export default function IcuSearchChart({
           <LargeLoaderCircle />
         </div>
       ) : (
-        <SearchChartTable groupedCharts={groupedCharts} type={type} />
-      )}
-
-      {type === 'register' && (
-        <Button
-          onClick={() => setStep('selectChartType')}
-          variant="outline"
-          className="ml-auto"
-        >
-          이전
-        </Button>
+        <SearchChartTable groupedCharts={groupedCharts} />
       )}
     </div>
   )

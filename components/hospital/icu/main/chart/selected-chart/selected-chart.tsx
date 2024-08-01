@@ -1,5 +1,4 @@
 import ChartInfos from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/chart-infos'
-import HeaderSignalments from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/header-signalment'
 import ChartMemos from '@/components/hospital/icu/main/chart/selected-chart/chart-memos/chart-memos'
 import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/table/chart-table'
 import { toast } from '@/components/ui/use-toast'
@@ -11,6 +10,7 @@ import type {
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import { useRef, useState } from 'react'
+import HeaderSignalments from './chart-infos/infos/header-signament/header-signalment'
 
 export default function SelectedChart({
   selectedIo,

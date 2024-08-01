@@ -7,11 +7,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import { cn } from '@/lib/utils'
 import type { SearchedChart } from '@/types/icu'
+import { ConfirmCopyDialog } from '../../../common-dialogs/confirm-copy/confirm-copy-dilalog'
+import PreviewDialog from '../../../common-dialogs/preview/preview-dialog'
 import GroupedChart from './grouped-chart'
-import OrderPreviewDialog from './preview/order-preview-dialog'
 
 export const COLUMN_WIDTH = {
   name: 'w-[200px]',
@@ -24,12 +26,11 @@ export const COLUMN_WIDTH = {
 
 export default function SearchChartTable({
   groupedCharts,
-  type,
 }: {
   groupedCharts: SearchedChart[][]
-  type: 'search' | 'register' | 'bookmark'
 }) {
   const { isPreviewModalOpen } = useOrderPreviewStore()
+  const { isConfirmCopyDialogOpen } = useCopiedChartStore()
 
   if (groupedCharts.length === 0) {
     return <NoResult title="결과가 없습니다" className="h-[400px]" />
@@ -72,7 +73,6 @@ export default function SearchChartTable({
             groupedCharts.map((charts) => {
               return (
                 <GroupedChart
-                  type={type}
                   key={charts[0].icu_io_id.icu_io_id}
                   charts={charts}
                 />
@@ -81,7 +81,8 @@ export default function SearchChartTable({
         </TableBody>
       </Table>
 
-      {isPreviewModalOpen && <OrderPreviewDialog />}
+      {isPreviewModalOpen && <PreviewDialog />}
+      {isConfirmCopyDialogOpen && <ConfirmCopyDialog />}
     </>
   )
 }

@@ -1,12 +1,12 @@
 'use client'
 
-import PatientSelectButton from '@/components/hospital/icu/header/register-dialog/patient-select-button'
 import PatientActions from '@/components/hospital/patients/patient-actions'
 import { Button } from '@/components/ui/button'
 import { calculateAge, cn } from '@/lib/utils'
 import { PatientDataTable } from '@/types/patients'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, Cat, Dog } from 'lucide-react'
+import PatientSelectButton from '../icu/header/register-dialog/patient-search/patient-select-button'
 
 export const patientsColumns: ColumnDef<PatientDataTable>[] = [
   {
@@ -164,19 +164,21 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
   },
   {
     accessorKey: 'select_patient',
-    header: undefined,
+    header: '선택',
     cell: ({ row }) => {
       const patientId = row.original.patient_id
       const isIcu = row.original.isIcu
       const birth = row.original.birth
       const patientName = row.original.name
       return (
-        <PatientSelectButton
-          patientId={patientId}
-          isIcu={isIcu}
-          birth={birth}
-          patientName={patientName}
-        />
+        <div className="flex justify-center">
+          <PatientSelectButton
+            patientId={patientId}
+            isIcu={isIcu}
+            birth={birth}
+            patientName={patientName}
+          />
+        </div>
       )
     },
   },

@@ -1,7 +1,12 @@
 import { getAgeFromAgeInDays } from '@/lib/utils'
 import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 import { Cat, Dog } from 'lucide-react'
+import BookmarkDialog from './bookmark-dialog'
 import CopyChartButton from './copy-chart-button'
+import DeleteChartDialog from './delete-chart-dialog'
+import OutPatientDialog from './out-patient-dialog'
+import PasteChartDialog from './paste-chart-dialog'
+import UpdateWeightDialog from './update-weight-dialog'
 
 export default function HeaderSignalments({
   isPatientOut,
@@ -44,8 +49,23 @@ export default function HeaderSignalments({
           patientId={patient_id}
           icuChartId={icu_chart_id}
         />
+
         <div className="absolute right-2 flex gap-1">
           <CopyChartButton chartId={icu_chart_id} />
+          <PasteChartDialog patientId={chartData.patient_id.patient_id} />
+
+          <OutPatientDialog
+            icuIoId={icuIoId}
+            name={name}
+            isPatientOut={isPatientOut}
+            selectedChartOrders={selectedChartOrders}
+          />
+          <DeleteChartDialog
+            icuChartId={icu_chart_id}
+            name={name}
+            icuIoId={icuIoId}
+            patientId={patient_id}
+          />
         </div>
       </div>
     </header>

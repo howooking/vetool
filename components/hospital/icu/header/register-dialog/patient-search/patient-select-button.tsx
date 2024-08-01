@@ -38,7 +38,7 @@ export default function PatientSelectButton({
       return
     }
 
-    setStep('selectChartType')
+    setStep('icuRegister')
     setRegisteringPatient({
       patientId,
       birth,

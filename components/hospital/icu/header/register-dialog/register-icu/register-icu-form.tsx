@@ -1,6 +1,6 @@
 'use client'
 
-import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/schema'
+import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/register-icu/schema'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -33,6 +33,7 @@ import {
   usePatientRegisterStep,
 } from '@/lib/store/icu/icu-register'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuUserList } from '@/types/icu'
@@ -47,7 +48,7 @@ import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-export default function RegisterPatientForm({
+export default function RegisterIcuForm({
   hosId,
   groupList,
   vetsData,
@@ -59,6 +60,7 @@ export default function RegisterPatientForm({
   tab: string
 }) {
   const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
+  const { setIsCreatingChart } = useIsCreatingChartStore()
   const { push } = useRouter()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
@@ -102,10 +104,12 @@ export default function RegisterPatientForm({
     const { dx, cc, in_date, out_due_date, main_vet, sub_vet, group_list } =
       values
     setIsSubmitting(true)
+    setIsCreatingChart(true)
 
     await registerIcuPatient(
       hosId,
-      registeringPatient,
+      registeringPatient.patientId,
+      registeringPatient.birth,
       dx,
       cc,
       in_date,
@@ -131,7 +135,7 @@ export default function RegisterPatientForm({
 
   const handlePreviousButtonClick = () => {
     if (tab === 'search') {
-      setStep('selectChartType')
+      setStep('patientSearch')
       return
     }
     if (tab === 'register') {

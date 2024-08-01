@@ -16,15 +16,9 @@ import {
 import { cn, getAgeFromAgeInDays } from '@/lib/utils'
 import { SearchedChart } from '@/types/icu'
 import { Cat, Dog } from 'lucide-react'
-import GroupedChartRow from './grouped-chart-row'
 import { COLUMN_WIDTH } from './search-chart-table'
-export default function GroupedChart({
-  charts,
-  type,
-}: {
-  charts: SearchedChart[]
-  type: 'search' | 'register' | 'bookmark'
-}) {
+import SingleRow from './single-row/single-row'
+export default function GroupedChart({ charts }: { charts: SearchedChart[] }) {
   const {
     icu_chart_id,
     icu_chart_cc,
@@ -76,16 +70,12 @@ export default function GroupedChart({
                     <TableHead className="text-center">입원일차</TableHead>
                     <TableHead className="text-center">입원일</TableHead>
                     <TableHead className="text-center">미리보기</TableHead>
-                    <TableHead className="text-center">
-                      {type === 'search' && '복사'}
-                      {type === 'register' && '선택'}
-                    </TableHead>
+                    <TableHead className="text-center">복사</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {charts.map((chart, index) => (
-                    <GroupedChartRow
-                      type={type}
+                    <SingleRow
                       chart={chart}
                       index={index}
                       key={chart.icu_chart_id}

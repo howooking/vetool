@@ -60,12 +60,8 @@ export default function OutPatientDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          {isPatientOut ? (
-            <UserRoundPlus className="h-3 w-3" />
-          ) : (
-            <UserRoundMinus className="h-3 w-3" />
-          )}
+        <Button variant="ghost" size="icon">
+          {isPatientOut ? <UserRoundPlus /> : <UserRoundMinus />}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
