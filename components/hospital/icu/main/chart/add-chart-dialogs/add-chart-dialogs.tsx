@@ -7,11 +7,9 @@ import CopyPrevChartDialog from './copy-prev-chart-dialog'
 import PasteCopiedChartDialog from './paste-selected-chart-dialog'
 
 export default function AddChartDialogs({
-  firstChart,
   selectedPatient,
   selectedChart,
 }: {
-  firstChart?: boolean
   selectedPatient: {
     patientName: string
     patientId: string
@@ -23,13 +21,11 @@ export default function AddChartDialogs({
 
   return (
     <div className="flex h-icu-chart w-full items-center justify-center gap-10 p-10">
-      {!firstChart && (
-        <CopyPrevChartDialog
-          targetDate={target_date as string}
-          selectedPatient={selectedPatient}
-          setIsCreatingChart={setIsCreatingChart}
-        />
-      )}
+      <CopyPrevChartDialog
+        targetDate={target_date as string}
+        selectedPatient={selectedPatient}
+        setIsCreatingChart={setIsCreatingChart}
+      />
 
       <AddDefaultChartDialog
         selectedChart={selectedChart}

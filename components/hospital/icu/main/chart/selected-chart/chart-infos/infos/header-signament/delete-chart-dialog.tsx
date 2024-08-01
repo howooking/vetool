@@ -24,15 +24,13 @@ export default function DeleteChartDialog({
   icuChartId,
   name,
   icuIoId,
-  patientId,
 }: {
   icuChartId: string
   name: string
   icuIoId: string
-  patientId: string
 }) {
   const { target_date } = useParams()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeletingAllCharts, setIsDeletingAllCharts] = useState(false)
   const { setSelectedPatient } = useIcuSelectedPatientStore()
@@ -40,20 +38,14 @@ export default function DeleteChartDialog({
   const handleDeleteChart = async () => {
     setIsDeleting(true)
 
-    const isIcuIoDeleted = await deleteChart(
-      icuChartId,
-      icuIoId,
-      target_date as string,
-      patientId,
-    )
+    await deleteChart(icuChartId)
 
     toast({
       title: '차트가 삭제되었습니다',
     })
 
     setIsDeleting(false)
-    isIcuIoDeleted && setSelectedPatient(null)
-    setIsOpen(false)
+    setIsDialogOpen(false)
   }
   const handleDeleteAllCharts = async () => {
     setIsDeletingAllCharts(true)
@@ -66,14 +58,14 @@ export default function DeleteChartDialog({
 
     setIsDeletingAllCharts(false)
     setSelectedPatient(null)
-    setIsOpen(false)
+    setIsDialogOpen(false)
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          <Trash2 className="h-3 w-3" />
+        <Button variant="ghost" size="icon">
+          <Trash2 />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

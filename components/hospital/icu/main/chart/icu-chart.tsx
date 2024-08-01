@@ -91,19 +91,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     )
   }
 
-  // 첫 차트 생성
-  if (!selectedChartOrders.length && selectedChart) {
-    return (
-      <AddChartDialogs
-        firstChart
-        selectedPatient={selectedPatient}
-        selectedChart={selectedChart}
-      />
-    )
-  }
-
-  // 이후 차트 생성 todo
-  if (!selectedChartOrders.length && !selectedChart) {
+  if (!selectedChartOrders.length) {
     return (
       <AddChartDialogs
         selectedPatient={selectedPatient}

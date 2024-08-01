@@ -4,28 +4,18 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
-export const deleteChart = async (
-  icuChartId: string,
-  icuIoId: string,
-  targetDate: string,
-  patientId: string,
-) => {
-  const { data: returningResult, error: deleteChartError } = await supabase.rpc(
-    'delete_icu_chart',
-    {
-      icu_chart_id_input: icuChartId,
-      icu_io_id_input: icuIoId,
-      target_date_input: targetDate,
-      patient_id_input: patientId,
-    },
-  )
+export const deleteChart = async (icuChartId: string) => {
+  const { error: deleteChartError } = await supabase
+    .from('icu_chart')
+    .delete()
+    .match({
+      icu_chart_id: icuChartId,
+    })
 
   if (deleteChartError) {
     console.log(deleteChartError)
     redirect(`/error/?message=${deleteChartError.message}`)
   }
-  const { isIcuIoDeleted } = returningResult as { isIcuIoDeleted: boolean }
-  return isIcuIoDeleted
 }
 
 export const deleteAllCharts = async (icuIoId: string) => {
