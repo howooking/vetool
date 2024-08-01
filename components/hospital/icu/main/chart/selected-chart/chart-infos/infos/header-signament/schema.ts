@@ -20,6 +20,7 @@ export const bookmarkFormSchema = z.object({
 
   bookmark_comment: z
     .string({ message: '텍스트로 입력해주세요' })
+    .trim()
     .optional()
     .nullable(),
 })

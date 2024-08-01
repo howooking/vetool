@@ -1,6 +1,5 @@
 'use client'
 
-import { bookmarkFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/schema'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -35,6 +34,7 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { bookmarkFormSchema } from './schema'
 
 export default function BookmarkDialog({
   icuChartId,
@@ -78,7 +78,7 @@ export default function BookmarkDialog({
     setIsDialogOpen(false)
   }
 
-  const handleDeleteButtonClick = async () => {
+  const handleDelete = async () => {
     setIsDeleting(true)
 
     await deleteBookmarkChart(bookmarkData?.bookmark_id!)
@@ -122,77 +122,76 @@ export default function BookmarkDialog({
           <DialogDescription></DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSubmit)}
-              className="space-y-4"
-            >
-              <FormField
-                control={form.control}
-                name="bookmark_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>즐겨찾기 이름*</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        value={field.value || ''}
-                        placeholder="식별할 제목을 입력해주세요"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
+            <FormField
+              control={form.control}
+              name="bookmark_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>즐겨찾기 이름*</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      value={field.value || ''}
+                      placeholder="즐겨찾기 이름을 입력해주세요"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="bookmark_comment"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>설명</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        value={field.value || ''}
-                        placeholder="설명을 입력해주세요"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="bookmark_comment"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>설명</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      value={field.value || ''}
+                      placeholder="설명을 입력해주세요"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <DialogFooter>
-                {bookmarkData?.bookmark_id!! && (
-                  <Button
-                    type="button"
-                    className="mr-auto"
-                    variant="destructive"
-                    disabled={isDeleting}
-                    onClick={handleDeleteButtonClick}
-                  >
-                    삭제
-                  </Button>
-                )}
-                <DialogClose asChild>
-                  <Button type="button" variant="outline" tabIndex={-1}>
-                    닫기
-                  </Button>
-                </DialogClose>
-                <Button type="submit" disabled={isSubmitting}>
-                  저장
+            <DialogFooter>
+              {bookmarkData?.bookmark_id!! && (
+                <Button
+                  type="button"
+                  className="mr-auto"
+                  variant="destructive"
+                  disabled={isDeleting}
+                  onClick={handleDelete}
+                >
+                  삭제
                   <LoaderCircle
-                    className={cn(
-                      isSubmitting ? 'ml-2 animate-spin' : 'hidden',
-                    )}
+                    className={cn(isDeleting ? 'ml-2 animate-spin' : 'hidden')}
                   />
                 </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </div>
+              )}
+              <DialogClose asChild>
+                <Button type="button" variant="outline" tabIndex={-1}>
+                  닫기
+                </Button>
+              </DialogClose>
+              <Button type="submit" disabled={isSubmitting}>
+                저장
+                <LoaderCircle
+                  className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
+                />
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )
