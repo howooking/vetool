@@ -10,18 +10,20 @@ import type {
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import { useRef, useState } from 'react'
-import HeaderSignalments from './chart-infos/infos/header-signament/header-signalment'
+import SelectedChartHeader from './selected-chart-header/selected-chart-header'
 
 export default function SelectedChart({
   selectedIo,
   selectedChart,
   selectedChartOrders,
   isPatientOut,
+  isFirstChart,
 }: {
   selectedIo: IcuIoPatientJoined
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
   isPatientOut: boolean
+  isFirstChart: boolean
 }) {
   const contentRef = useRef<HTMLDivElement>(null)
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
@@ -68,7 +70,7 @@ export default function SelectedChart({
 
   return (
     <div className="flex flex-col gap-2 p-2 pb-[48px]" ref={contentRef}>
-      {showPatientInfo && (
+      {/* {showPatientInfo && (
         <div className="relative mb-12">
           <HeaderSignalments
             isPatientOut={isPatientOut}
@@ -78,15 +80,26 @@ export default function SelectedChart({
             selectedChartOrders={selectedChartOrders}
           />
         </div>
-      )}
+      )} */}
+
+      <SelectedChartHeader
+        isPatientOut={isPatientOut}
+        chartData={restChartData}
+        icuIoId={selectedIo.icu_io_id}
+        ageInDays={selectedIo.age_in_days}
+        selectedChartOrders={selectedChartOrders}
+        isFirstChart={isFirstChart}
+      />
+
       <ChartInfos
         selectedIo={selectedIo}
         chartData={restChartData}
         isPatientOut={isPatientOut}
-        selectedChartOrders={selectedChartOrders}
         handleSaveChart={handleSaveChartAsPdf}
       />
+
       <ChartTable selectedChartOrders={selectedChartOrders} />
+
       <ChartMemos
         memoA={memo_a}
         memoB={memo_b}

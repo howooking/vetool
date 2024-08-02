@@ -1,5 +1,4 @@
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
-import { weightFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/header-signament/schema'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -24,6 +23,7 @@ import { Gauge } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { weightFormSchema } from './schema'
 
 export default function UpdateWeightDialog({
   weight,
@@ -68,8 +68,8 @@ export default function UpdateWeightDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          <Gauge className="h-3 w-3" />
+        <Button variant="ghost" size="icon">
+          <Gauge />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[320px]">

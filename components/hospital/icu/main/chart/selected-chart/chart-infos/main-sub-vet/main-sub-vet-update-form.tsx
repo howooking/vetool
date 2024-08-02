@@ -1,7 +1,6 @@
 'use client'
 
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
-import { mainSubVetFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/main-sub-vet/schema'
 import {
   Form,
   FormControl,
@@ -26,6 +25,7 @@ import Image from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import { mainSubVetFormSchema } from './schema'
 
 export default function MainSubVetUpdateForm({
   mainVet,

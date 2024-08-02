@@ -69,6 +69,11 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     [selectedIo?.out_date],
   )
 
+  const isFirstChart = useMemo(
+    () => selectedChart?.target_date === selectedIo?.in_date,
+    [selectedChart?.target_date, selectedIo?.in_date],
+  )
+
   if (!selectedPatient) {
     return <NoResult title="환자를 선택해주세요" />
   }
@@ -94,6 +99,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
   if (!selectedChartOrders.length) {
     return (
       <AddChartDialogs
+        isFirstChart={isFirstChart}
         selectedPatient={selectedPatient}
         selectedChart={selectedChart}
       />
@@ -104,6 +110,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     return (
       <div className="w-full">
         <SelectedChart
+          isFirstChart={isFirstChart}
           selectedIo={selectedIo}
           selectedChart={selectedChart}
           selectedChartOrders={selectedChartOrders}

@@ -1,6 +1,4 @@
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
-import GroupBadge from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/group/group-badge'
-import { groupCheckFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/group/schema'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -24,6 +22,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import GroupBadge from './group-badge'
+import { groupCheckFormSchema } from './schema'
 
 export default function Group({
   hosGroupList,

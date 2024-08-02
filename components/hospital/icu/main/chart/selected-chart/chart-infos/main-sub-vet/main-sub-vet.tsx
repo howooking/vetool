@@ -1,6 +1,5 @@
 'use client'
 
-import MainSubVetUpdateForm from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/infos/main-sub-vet/main-sub-vet-update-form'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -15,6 +14,7 @@ import type { IcuUserList, MainAndSubVet } from '@/types/icu'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import MainSubVetUpdateForm from './main-sub-vet-update-form'
 
 export function MainSubVet({
   mainVet,

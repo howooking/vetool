@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { copyPrevChart } from '@/lib/services/icu/add-icu-chart'
-import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
 import { cn } from '@/lib/utils'
 import { ClipboardPaste, LoaderCircle } from 'lucide-react'
 import { useState } from 'react'

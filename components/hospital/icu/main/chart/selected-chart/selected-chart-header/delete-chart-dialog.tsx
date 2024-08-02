@@ -14,6 +14,7 @@ import { toast } from '@/components/ui/use-toast'
 import {
   deleteAllCharts,
   deleteChart,
+  deleteOrders,
 } from '@/lib/services/icu/delete-icu-chart'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
@@ -24,10 +25,12 @@ export default function DeleteChartDialog({
   icuChartId,
   name,
   icuIoId,
+  isFirstChart,
 }: {
   icuChartId: string
   name: string
   icuIoId: string
+  isFirstChart: boolean
 }) {
   const { target_date } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -38,7 +41,12 @@ export default function DeleteChartDialog({
   const handleDeleteChart = async () => {
     setIsDeleting(true)
 
-    await deleteChart(icuChartId)
+    // 첫 차트인 경우 오더만 삭제, 2일차이상의 경우 차트 전체 삭제
+    if (isFirstChart) {
+      await deleteOrders(icuChartId)
+    } else {
+      await deleteChart(icuChartId)
+    }
 
     toast({
       title: '차트가 삭제되었습니다',

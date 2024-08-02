@@ -67,34 +67,12 @@ export const copyPrevChart = async (
   return { error: null }
 }
 
-export const addDefaultChart = async (
+export const registerDefaultChart = async (
   hosId: string,
-  targetDate: string,
-  selectedPatientId: string,
+  chartId: string,
+  ioId: string,
 ) => {
   const supabase = createClient()
-
-  const newDate = new Date(targetDate)
-  const prevDate = format(newDate.setDate(newDate.getDate() - 1), 'yyyy-MM-dd')
-
-  const { data: returningIcuChartIds, error: rpcError } = await supabase.rpc(
-    'copy_prev_chart',
-    {
-      patient_id_input: selectedPatientId,
-      prev_target_date_input: prevDate,
-      target_date_input: targetDate,
-    },
-  )
-
-  if (rpcError) {
-    console.log(rpcError)
-    return { error: rpcError }
-  }
-
-  const { newIcuChartId, icuIoId } = returningIcuChartIds as {
-    newIcuChartId: string
-    icuIoId: string
-  }
 
   DEFAULT_ICU_ORDER_NAME.forEach(async (order) => {
     const { error: icuChartOrderError } = await supabase
@@ -102,17 +80,15 @@ export const addDefaultChart = async (
       .insert({
         hos_id: hosId,
         icu_chart_order_type: order.dataType,
-        icu_chart_id: newIcuChartId,
-        icu_io_id: icuIoId,
+        icu_chart_id: chartId,
+        icu_io_id: ioId,
         icu_chart_order_name: order.orderName,
         icu_chart_order_comment: order.orderComment,
       })
 
     if (icuChartOrderError) {
       console.log(icuChartOrderError)
-      return { error: icuChartOrderError }
+      redirect(`/error?message=${icuChartOrderError.message}`)
     }
   })
-
-  return { error: null }
 }

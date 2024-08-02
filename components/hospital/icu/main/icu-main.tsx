@@ -18,7 +18,7 @@ export default function IcuMain({ icuData }: { icuData: IcuData }) {
 
       {selectIcudMainView === 'chart' && <IcuChart icuData={icuData} />}
 
-      {selectIcudMainView === 'search' && <IcuChartSearch type="search" />}
+      {selectIcudMainView === 'search' && <IcuChartSearch />}
     </>
   )
 }

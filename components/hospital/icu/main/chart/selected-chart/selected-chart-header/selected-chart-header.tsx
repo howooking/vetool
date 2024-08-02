@@ -8,18 +8,20 @@ import OutPatientDialog from './out-patient-dialog'
 import PasteChartDialog from './paste-chart-dialog'
 import UpdateWeightDialog from './update-weight-dialog'
 
-export default function HeaderSignalments({
+export default function SelectedChartHeader({
   isPatientOut,
   ageInDays,
   icuIoId,
   chartData,
   selectedChartOrders,
+  isFirstChart,
 }: {
   isPatientOut: boolean
   ageInDays: number
   icuIoId: string
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   selectedChartOrders: IcuChartOrderJoined[]
+  isFirstChart: boolean
 }) {
   const { breed, name, gender, species, patient_id } = chartData.patient_id
   const { weight, weight_measured_date, icu_chart_id, bookmark_id } = chartData
@@ -64,6 +66,7 @@ export default function HeaderSignalments({
             icuChartId={icu_chart_id}
             name={name}
             icuIoId={icuIoId}
+            isFirstChart={isFirstChart}
           />
         </div>
       </div>

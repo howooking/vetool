@@ -9,28 +9,35 @@ import PasteCopiedChartDialog from './paste-selected-chart-dialog'
 export default function AddChartDialogs({
   selectedPatient,
   selectedChart,
+  isFirstChart,
 }: {
   selectedPatient: {
     patientName: string
     patientId: string
   }
   selectedChart?: IcuChartJoined
+  isFirstChart: boolean
 }) {
   const { target_date } = useParams()
   const { setIsCreatingChart } = useIsCreatingChartStore()
 
   return (
     <div className="flex h-icu-chart w-full items-center justify-center gap-10 p-10">
-      <CopyPrevChartDialog
-        targetDate={target_date as string}
-        selectedPatient={selectedPatient}
-        setIsCreatingChart={setIsCreatingChart}
-      />
+      {!isFirstChart && (
+        <CopyPrevChartDialog
+          targetDate={target_date as string}
+          selectedPatient={selectedPatient}
+          setIsCreatingChart={setIsCreatingChart}
+        />
+      )}
 
-      <AddDefaultChartDialog
-        selectedChart={selectedChart}
-        setIsCreatingChart={setIsCreatingChart}
-      />
+      {selectedChart && (
+        <AddDefaultChartDialog
+          selectedChart={selectedChart}
+          setIsCreatingChart={setIsCreatingChart}
+        />
+      )}
+
       <PasteCopiedChartDialog
         targetDate={target_date as string}
         selectedPatient={selectedPatient}
