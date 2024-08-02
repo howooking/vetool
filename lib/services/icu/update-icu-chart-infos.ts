@@ -62,14 +62,14 @@ export const updateSearchTags = async (
   icuChartId: string,
   searchTags: string,
 ) => {
-  const { error: updataCautionError } = await supabase
+  const { error: updateSearchTagsError } = await supabase
     .from('icu_chart')
     .update({ search_tags: searchTags })
     .match({ icu_chart_id: icuChartId })
 
-  if (updataCautionError) {
-    console.log(updataCautionError)
-    redirect(`/error/?message=${updataCautionError.message}`)
+  if (updateSearchTagsError) {
+    console.log(updateSearchTagsError)
+    redirect(`/error/?message=${updateSearchTagsError.message}`)
   }
 }
 
