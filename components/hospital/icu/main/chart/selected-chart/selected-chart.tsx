@@ -10,7 +10,7 @@ import type {
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import { useRef, useState } from 'react'
-import SelectedChartHeader from './selected-chart-header/selected-chart-header'
+import ChartHeader from './chart-header/chart-header'
 
 export default function SelectedChart({
   selectedIo,
@@ -82,7 +82,7 @@ export default function SelectedChart({
         </div>
       )} */}
 
-      <SelectedChartHeader
+      <ChartHeader
         isPatientOut={isPatientOut}
         chartData={restChartData}
         icuIoId={selectedIo.icu_io_id}

@@ -7,7 +7,7 @@ import DeleteChartDialog from './delete-chart-dialog'
 import OutPatientDialog from './out-patient-dialog'
 import UpdateWeightDialog from './update-weight-dialog'
 
-export default function SelectedChartHeader({
+export default function ChartHeader({
   isPatientOut,
   ageInDays,
   icuIoId,
