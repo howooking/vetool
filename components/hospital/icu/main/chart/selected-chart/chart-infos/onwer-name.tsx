@@ -49,7 +49,7 @@ export default function OwnerName({
       </Label>
       <Input
         disabled={isUpdating}
-        id="diagnosis"
+        id="ownerName"
         value={ownerNameInput}
         onChange={(e) => setOwnerNameInput(e.target.value)}
         onBlur={handleUpdateOwnerName}
