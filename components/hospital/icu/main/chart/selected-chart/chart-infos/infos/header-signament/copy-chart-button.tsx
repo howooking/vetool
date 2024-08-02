@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react'
 
 export default function CopyChartButton({ chartId }: { chartId: string }) {
   const [isCopying, setIsCopying] = useState(false)
-  const { copiedChartId, setCopiedChartId, setCopiedChartOrders } =
+  const { copiedChartId, setCopiedChartId, setCopiedOrders } =
     useCopiedChartStore()
 
   const handleCopy = async () => {
@@ -16,7 +16,7 @@ export default function CopyChartButton({ chartId }: { chartId: string }) {
     setCopiedChartId(chartId)
 
     const selectedChartOrders = await getSelectedChartOrders(chartId)
-    setCopiedChartOrders(selectedChartOrders)
+    setCopiedOrders(selectedChartOrders)
 
     toast({
       title: '차트 복사 완료',

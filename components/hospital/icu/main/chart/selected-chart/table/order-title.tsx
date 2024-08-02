@@ -4,13 +4,13 @@ import { TableCell } from '@/components/ui/table'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined } from '@/types/icu'
+import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
 
 export default function OrderTitle({
   order,
   preview,
 }: {
-  order: IcuChartOrderJoined
+  order: CopiedOrder | IcuChartOrderJoined
   preview?: boolean
 }) {
   const {
@@ -22,9 +22,11 @@ export default function OrderTitle({
   const { toggleModal, setIsEditMode, setChartOrder } = useCreateOrderStore()
 
   const handleDialogOpen = () => {
+    if (preview) return
+
     toggleModal()
     setIsEditMode(true)
-    setChartOrder(order)
+    setChartOrder(order as IcuChartOrderJoined)
   }
 
   return (
@@ -33,7 +35,7 @@ export default function OrderTitle({
         preview ? 'cursor-default' : 'cursor-pointer',
         'flex w-[296px] items-center justify-between gap-2 transition hover:opacity-70',
       )}
-      onClick={!preview ? handleDialogOpen : undefined}
+      onClick={handleDialogOpen}
       title={orderComment ?? ''}
       style={{
         background: DEFAULT_ICU_ORDER_TYPE.find(

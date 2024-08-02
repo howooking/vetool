@@ -5,7 +5,7 @@ import { LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 
 export default function ConfirmCopyButton({ chartId }: { chartId: string }) {
-  const { setCopiedChartId, setCopiedChartOrders, setIsConfirmCopyDialogOpen } =
+  const { setCopiedChartId, setCopiedOrders, setIsConfirmCopyDialogOpen } =
     useCopiedChartStore()
   const [isCopying, setIsCopying] = useState(false)
 
@@ -14,7 +14,7 @@ export default function ConfirmCopyButton({ chartId }: { chartId: string }) {
 
     setIsCopying(true)
     const sortedChartOrders = await getSelectedChartOrders(chartId)
-    setCopiedChartOrders(sortedChartOrders)
+    setCopiedOrders(sortedChartOrders)
     setIsCopying(false)
 
     setIsConfirmCopyDialogOpen(true)

@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 export default function PasteBookmarkButton({ chartId }: { chartId: string }) {
   const [isFetching, setIsFetching] = useState(false)
-  const { setIsConfirmCopyDialogOpen, setCopiedChartId, setCopiedChartOrders } =
+  const { setIsConfirmCopyDialogOpen, setCopiedChartId, setCopiedOrders } =
     useCopiedChartStore()
 
   const handleSelect = async () => {
@@ -14,7 +14,7 @@ export default function PasteBookmarkButton({ chartId }: { chartId: string }) {
 
     setIsFetching(true)
     const sortedChartOrders = await getSelectedChartOrders(chartId)
-    setCopiedChartOrders(sortedChartOrders)
+    setCopiedOrders(sortedChartOrders)
     setIsFetching(false)
 
     setIsConfirmCopyDialogOpen(true)

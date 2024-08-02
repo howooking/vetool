@@ -3,11 +3,11 @@ import { create } from 'zustand'
 
 type CopiedChartState = {
   copiedChartId?: string
-  copiedChartOrders?: CopiedOrder[]
+  copiedOrders?: CopiedOrder[]
   isConfirmCopyDialogOpen: boolean
   setIsConfirmCopyDialogOpen: (isCopyDialogOpen: boolean) => void
   setCopiedChartId: (icuChartId?: string) => void
-  setCopiedChartOrders: (copiedChartOrder: CopiedOrder[]) => void
+  setCopiedOrders: (copiedOrders: CopiedOrder[]) => void
   reset: () => void
 }
 
@@ -20,12 +20,12 @@ const initialState = {
 export const useCopiedChartStore = create<CopiedChartState>((set) => ({
   copiedChartId: undefined,
   isConfirmCopyDialogOpen: false,
-  copiedChartOrders: undefined,
+  copiedOrders: undefined,
   setIsConfirmCopyDialogOpen: (isCopyDialogOpen) =>
     set({ isConfirmCopyDialogOpen: isCopyDialogOpen }),
   setCopiedChartId: (icuChartId?: string) => set({ copiedChartId: icuChartId }),
-  setCopiedChartOrders: (selectedChartOrders) => {
-    set({ copiedChartOrders: selectedChartOrders })
+  setCopiedOrders: (selectedOrders) => {
+    set({ copiedOrders: selectedOrders })
   },
   reset: () => set(initialState),
 }))

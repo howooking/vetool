@@ -24,11 +24,8 @@ export function ConfirmCopyDialog() {
   const { setBookmarkModalOpen } = useIcuBookmarkStore()
   const { setIsCreatingChart } = useIsCreatingChartStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const {
-    isConfirmCopyDialogOpen,
-    setIsConfirmCopyDialogOpen,
-    copiedChartOrders,
-  } = useCopiedChartStore()
+  const { isConfirmCopyDialogOpen, setIsConfirmCopyDialogOpen, copiedOrders } =
+    useCopiedChartStore()
 
   const handleConfirmCopy = async () => {
     setIsSubmitting(true)
@@ -36,7 +33,7 @@ export function ConfirmCopyDialog() {
 
     await pasteChart(
       selectedPatient?.patientId!,
-      copiedChartOrders!,
+      copiedOrders!,
       target_date as string,
     )
 

@@ -6,8 +6,7 @@ import { LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 
 export default function CopyButton({ chartId }: { chartId: string }) {
-  const { setCopiedChartId, setCopiedChartOrders, copiedChartOrders } =
-    useCopiedChartStore()
+  const { setCopiedChartId, setCopiedOrders } = useCopiedChartStore()
   const [isCopying, setIsCopying] = useState(false)
 
   const handleCopy = async () => {
@@ -16,7 +15,7 @@ export default function CopyButton({ chartId }: { chartId: string }) {
     setCopiedChartId(chartId)
 
     const sortedChartOrders = await getSelectedChartOrders(chartId)
-    setCopiedChartOrders(sortedChartOrders)
+    setCopiedOrders(sortedChartOrders)
 
     toast({
       title: '차트 복사 완료',

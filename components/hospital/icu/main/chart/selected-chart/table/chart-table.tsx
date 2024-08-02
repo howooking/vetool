@@ -11,15 +11,25 @@ import {
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined } from '@/types/icu'
+import type { IcuChartTx } from '@/types'
+import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
+
+type ChartTablePropsPreview = {
+  selectedChartOrders: CopiedOrder[]
+  preview: true
+}
+
+type ChartTablePropsNonPreview = {
+  selectedChartOrders: IcuChartOrderJoined[]
+  preview?: false
+}
+
+type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview
 
 export default function ChartTable({
   selectedChartOrders,
   preview,
-}: {
-  selectedChartOrders: IcuChartOrderJoined[]
-  preview?: boolean
-}) {
+}: ChartTableProps) {
   return (
     <Table className="border">
       <TableHeader>
@@ -59,13 +69,14 @@ export default function ChartTable({
                   preview={preview}
                   key={time}
                   time={time}
-                  txData={order[`icu_chart_order_tx_${time}`]}
+                  txData={order[`icu_chart_order_tx_${time}`] as IcuChartTx}
                   icuIoId={order.icu_io_id.icu_io_id}
                   icuChartOrderId={order.icu_chart_order_id}
                   hasOrder={order.icu_chart_order_time[index] === '1'}
                   isDone={isDone}
                   icuChartTxId={
-                    order[`icu_chart_order_tx_${time}`]?.icu_chart_tx_id
+                    (order[`icu_chart_order_tx_${time}`] as IcuChartTx)
+                      ?.icu_chart_tx_id
                   }
                 />
               )
