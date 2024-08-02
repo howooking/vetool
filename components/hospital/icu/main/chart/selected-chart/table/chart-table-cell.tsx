@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
-import { deleteIcuChartTx } from '@/lib/services/icu/upsert-chart-tx'
+import { toast } from '@/components/ui/use-toast'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
@@ -27,7 +27,6 @@ export default function ChartTableCell({
   icuChartTxId?: string
   preview?: boolean
 }) {
-  const [isDeleting, setIsDeleting] = useState(false)
   const [briefTxResultInput, setBriefTxResultInput] = useState(
     txData?.icu_chart_tx_result ?? '',
   )
@@ -42,22 +41,17 @@ export default function ChartTableCell({
   const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleUpsertBriefTxResultInput = async () => {
-    if (icuChartTxId && briefTxResultInput.trim() === '') {
-      if (confirm('처치결과를 삭제하시겠습니까?')) {
-        setIsDeleting(true)
-
-        await deleteIcuChartTx(icuChartTxId, icuChartOrderId, time)
-
-        setIsDeleting(false)
-        return
-      } else {
-        setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
-        return
-      }
-    }
-
     if ((txData?.icu_chart_tx_result ?? '') === briefTxResultInput.trim()) {
       setBriefTxResultInput(briefTxResultInput.trim())
+      return
+    }
+
+    if (icuChartTxId && briefTxResultInput.trim() === '') {
+      toast({
+        title: '결과값을 입력해주세요',
+        variant: 'destructive',
+      })
+      setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
       return
     }
 
@@ -68,6 +62,7 @@ export default function ChartTableCell({
       icuIoId,
       txId: icuChartTxId,
     })
+
     setStep('seletctUser')
   }
 
@@ -97,37 +92,34 @@ export default function ChartTableCell({
 
   return (
     <TableCell className="p-0">
-      {isDeleting ? (
-        <LoaderCircle className="mx-auto animate-spin text-muted-foreground opacity-50" />
-      ) : (
-        <Input
-          className={cn(
-            'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
-            hasOrder && 'bg-rose-100/60',
-            isDone && 'bg-green-100/60',
-          )}
-          disabled={isDeleting || preview}
-          value={briefTxResultInput}
-          onChange={(e) => setBriefTxResultInput(e.target.value)}
-          onBlur={handleUpsertBriefTxResultInput}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              const target = e.currentTarget
-              setTimeout(() => {
-                if (target) {
-                  target.blur()
-                }
-              }, 0)
-            }
-          }}
-          onTouchStart={handleLongClickStart}
-          onTouchEnd={handleLongClickEnd}
-          onTouchCancel={handleLongClickEnd}
-          onMouseDown={handleLongClickStart}
-          onMouseUp={handleLongClickEnd}
-          onMouseLeave={handleLongClickEnd}
-        />
-      )}
+      <Input
+        id={`${icuChartOrderId}-tx-result-${time}`}
+        className={cn(
+          'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
+          hasOrder && 'bg-rose-100/60',
+          isDone && 'bg-green-100/60',
+        )}
+        disabled={preview}
+        value={briefTxResultInput}
+        onChange={(e) => setBriefTxResultInput(e.target.value)}
+        onBlur={handleUpsertBriefTxResultInput}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            const target = e.currentTarget
+            setTimeout(() => {
+              if (target) {
+                target.blur()
+              }
+            }, 0)
+          }
+        }}
+        onTouchStart={handleLongClickStart}
+        onTouchEnd={handleLongClickEnd}
+        onTouchCancel={handleLongClickEnd}
+        onMouseDown={handleLongClickStart}
+        onMouseUp={handleLongClickEnd}
+        onMouseLeave={handleLongClickEnd}
+      />
     </TableCell>
   )
 }
