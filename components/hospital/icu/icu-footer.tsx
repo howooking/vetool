@@ -1,11 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import {
-  IcuMainViewEnum,
-  useSelectedMainViewStore,
-} from '@/lib/store/icu/selected-main-view'
+import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
@@ -27,17 +23,8 @@ export const FOOTER_MAIN_VIEW_MENUS = [
 ] as const
 
 export default function IcuFooter() {
-  const { setSelectedPatient } = useIcuSelectedPatientStore()
   const { selectIcudMainView, setSelectedIcuMainView } =
     useSelectedMainViewStore()
-
-  const handleButtonClick = (value: IcuMainViewEnum) => {
-    setSelectedIcuMainView(value)
-
-    if (value !== 'chart') {
-      setSelectedPatient(null)
-    }
-  }
 
   return (
     <footer className="fixed bottom-0 h-10 w-full border-t bg-white">
@@ -48,7 +35,7 @@ export default function IcuFooter() {
               size="sm"
               variant="ghost"
               className={selectIcudMainView === value ? 'bg-muted' : ''}
-              onClick={() => handleButtonClick(value)}
+              onClick={() => setSelectedIcuMainView(value)}
             >
               {label}
             </Button>
