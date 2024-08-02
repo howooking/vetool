@@ -1,5 +1,5 @@
+import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
 import { bookmarkColumns } from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/bookmark-columns'
-import OrderPreviewDialog from '@/components/hospital/icu/main/search/table/preview/order-preview-dialog'
 import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
 import {
@@ -11,20 +11,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { getBookmarkChart } from '@/lib/services/icu/bookmark'
+import { getBookmarkCharts } from '@/lib/services/icu/bookmark'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
+import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import { cn } from '@/lib/utils'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { LoaderCircle, Star } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
+import { ConfirmCopyDialog } from '../../../../common-dialogs/confirm-copy/confirm-copy-dilalog'
 
-export default function AddBookmarkChartDialog() {
+export default function AddBookmarkChartDialog({}: {}) {
   const [isFetching, setIsFetching] = useState(false)
   const { hos_id } = useParams()
   const { isPreviewModalOpen } = useOrderPreviewStore()
   const { isBookmarkModalOpen, setBookmarkModalOpen } = useIcuBookmarkStore()
+  const { isConfirmCopyDialogOpen } = useCopiedChartStore()
 
   const [bookmarkCharts, setBookmarkCharts] = useState<
     IcuChartBookmarkJoined[]
@@ -32,8 +35,8 @@ export default function AddBookmarkChartDialog() {
 
   const handleOpenBookmarkDialog = async () => {
     setIsFetching(true)
-    getBookmarkChart(hos_id as string)
-      .then((res) => setBookmarkCharts(res))
+    getBookmarkCharts(hos_id as string)
+      .then(setBookmarkCharts)
       .then(() => setBookmarkModalOpen(true))
       .then(() => setIsFetching(false))
   }
@@ -69,7 +72,9 @@ export default function AddBookmarkChartDialog() {
           searchPlaceHolder="즐겨찾기 이름 · 즐겨찾기 설명 · 환자명 검색"
         />
 
-        {isPreviewModalOpen && <OrderPreviewDialog />}
+        {isPreviewModalOpen && <PreviewDialog />}
+        {isConfirmCopyDialogOpen && <ConfirmCopyDialog />}
+
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" variant="outline">

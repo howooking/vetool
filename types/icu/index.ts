@@ -112,5 +112,10 @@ export type IcuChartBookmarkJoined = {
   icu_chart_id: {
     icu_chart_id: string
     patient_id: Pick<Patients, 'name'>
+    icu_io_id: Pick<IcuIo, 'icu_io_id'>
   }
 } & IcuChartBookmark
+
+export type CopiedOrder = IcuChartOrder & {
+  icu_io_id: IcuIo
+}

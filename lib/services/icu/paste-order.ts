@@ -1,44 +1,23 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuChartOrderJoined } from '@/types/icu'
+import type { CopiedOrder } from '@/types/icu'
 import { redirect } from 'next/navigation'
-import { selectedChartOrderList } from './select-chart-list'
 
 const supabase = createClient()
 
-export const pasteRegisteredPatientChartOrder = async (
-  targetDate: string,
-  patientId: string,
-  selectedIcuChartId: string,
-  copiedChartOrder: IcuChartOrderJoined[],
+const pasteOrders = async (
+  copiedOrders: CopiedOrder[],
+  icu_chart_id: string,
+  icu_io_id: string,
 ) => {
-  const { data: returningIcuChartIds, error: rpcError } = await supabase.rpc(
-    'paste_icu_chart_after_search_chart',
-    {
-      target_date_input: targetDate,
-      patient_id_input: patientId,
-      icu_chart_id_input: selectedIcuChartId,
-    },
-  )
-
-  if (rpcError) {
-    console.log(rpcError)
-    redirect(`/error?message=${rpcError.message}`)
-  }
-
-  const { newIcuChartId, icuIoId } = returningIcuChartIds as {
-    newIcuChartId: string
-    icuIoId: string
-  }
-
-  copiedChartOrder.forEach(async (order) => {
+  copiedOrders.forEach(async (order) => {
     const { error: icuChartOrderError } = await supabase
       .from('icu_chart_order')
       .insert({
         icu_chart_order_type: order.icu_chart_order_type,
-        icu_chart_id: newIcuChartId,
-        icu_io_id: icuIoId,
+        icu_chart_id,
+        icu_io_id,
         hos_id: order.hos_id,
         icu_chart_order_name: order.icu_chart_order_name,
         icu_chart_order_comment: order.icu_chart_order_comment,
@@ -51,51 +30,85 @@ export const pasteRegisteredPatientChartOrder = async (
     }
   })
 }
-
-export const pasteChartOrderWithRegisterPatient = async (
-  targetDate: string,
+export const pasteChart = async (
   patientId: string,
-  selectedIcuChartId: string,
-  ageInDays: number,
+  copiedChartOrder: CopiedOrder[],
+  targetDate: string,
 ) => {
-  const { data: returningIcuChartIds, error: rpcError } = await supabase.rpc(
-    'paste_icu_chart_when_register_patient',
-    {
-      icu_chart_id_input: selectedIcuChartId,
-      patient_id_input: patientId,
-      target_date_input: targetDate,
-      age_in_days_input: ageInDays,
-    },
-  )
+  const { data: returningData, error: returningDataError } = await supabase
+    .from('icu_chart')
+    .select('*')
+    .match({ patient_id: patientId })
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single()
 
-  if (rpcError) {
-    console.log(rpcError)
-    redirect(`/error?message=${rpcError.message}`)
+  if (returningDataError) {
+    console.log(returningDataError)
+    redirect(`/error?message=${returningDataError.message}`)
   }
 
-  const { newIcuChartId, icuIoId } = returningIcuChartIds as {
-    newIcuChartId: string
-    icuIoId: string
+  const {
+    icu_chart_id,
+    icu_io_id,
+    hos_id,
+    patient_id,
+    main_vet,
+    sub_vet,
+    target_date,
+    search_tags,
+    memo_a,
+    memo_b,
+    memo_c,
+    weight_measured_date,
+    weight,
+    icu_chart_dx,
+    icu_chart_cc,
+    icu_chart_tags,
+  } = returningData
+
+  // 첫 차트인 경우 : chart 복사할 필요가 없고 order만 복사
+  if (target_date === targetDate) {
+    await pasteOrders(copiedChartOrder, icu_chart_id, icu_io_id)
   }
 
-  const copiedChartOrder = await selectedChartOrderList(selectedIcuChartId)
+  // 첫차트가 아닌 경우 : chart와 order모두 복사해야함
+  if (target_date !== targetDate) {
+    console.log('first')
+    const { data: returningIcuChartId, error: insertingNewChartError } =
+      await supabase
+        .from('icu_chart')
+        .insert({
+          hos_id,
+          patient_id,
+          main_vet,
+          sub_vet,
+          target_date: targetDate,
+          search_tags,
+          memo_a,
+          memo_b,
+          memo_c,
+          weight_measured_date,
+          weight,
+          icu_chart_dx,
+          icu_chart_cc,
+          icu_chart_tags,
+          icu_io_id,
+        })
+        .select('icu_chart_id')
+        .single()
 
-  copiedChartOrder.forEach(async (order) => {
-    const { error: icuChartOrderError } = await supabase
-      .from('icu_chart_order')
-      .insert({
-        icu_chart_order_type: order.icu_chart_order_type,
-        icu_chart_id: newIcuChartId,
-        icu_io_id: icuIoId,
-        hos_id: order.hos_id,
-        icu_chart_order_name: order.icu_chart_order_name,
-        icu_chart_order_comment: order.icu_chart_order_comment,
-        icu_chart_order_time: order.icu_chart_order_time,
-      })
+    console.log(returningIcuChartId)
 
-    if (icuChartOrderError) {
-      console.log(icuChartOrderError)
-      redirect(`/error?message=${icuChartOrderError.message}`)
+    if (insertingNewChartError) {
+      console.log(insertingNewChartError)
+      redirect(`/error?message=${insertingNewChartError.message}`)
     }
-  })
+
+    await pasteOrders(
+      copiedChartOrder,
+      returningIcuChartId.icu_chart_id,
+      icu_io_id,
+    )
+  }
 }

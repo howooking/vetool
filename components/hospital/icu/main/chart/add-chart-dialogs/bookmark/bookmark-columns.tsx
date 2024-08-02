@@ -1,11 +1,11 @@
 'use client'
 
-import OpenPreviewDialogButton from './open-preview-dialog-button'
-import PasteBookmarkDialog from './paste-bookmark-dialog'
 import { Button } from '@/components/ui/button'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
+import PreviewButton from '../../../../common-dialogs/preview/preview-button'
+import PasteBookmarkButton from './paste-bookmark-button'
 
 export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
   {
@@ -30,7 +30,7 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          즐겨찾기 상세
+          설명
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -67,6 +67,7 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           환자명
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
@@ -77,24 +78,17 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
   },
   {
     accessorKey: 'preview',
-    header: ({ column }) => {
-      return <Button variant="ghost">오더 미리보기</Button>
-    },
+    header: '미리보기',
     cell: ({ row }) => {
-      return (
-        <OpenPreviewDialogButton
-          chartId={row.original.icu_chart_id.icu_chart_id}
-        />
-      )
+      return <PreviewButton chartId={row.original.icu_chart_id.icu_chart_id} />
     },
   },
   {
     accessorKey: 'action',
-    header: undefined,
+    header: '선택',
     cell: ({ row }) => {
-      return (
-        <PasteBookmarkDialog chartId={row.original.icu_chart_id.icu_chart_id} />
-      )
+      const chartId = row.original.icu_chart_id.icu_chart_id
+      return <PasteBookmarkButton chartId={chartId} />
     },
   },
 ]

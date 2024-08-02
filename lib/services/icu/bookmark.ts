@@ -37,7 +37,7 @@ export const deleteBookmarkChart = async (bookmarkId: string) => {
   }
 }
 
-export const getBookmarkChart = async (hosId: string) => {
+export const getBookmarkCharts = async (hosId: string) => {
   const { data: selectedBookmarkChart, error: selectedBookmarkChartError } =
     await supabase
       .from('icu_chart_bookmark')
