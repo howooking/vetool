@@ -18,7 +18,7 @@ export default function PreviewDialog() {
       <DialogContent className="sm:min-w-[1200px]">
         <DialogHeader>
           <DialogTitle>차트 미리보기</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription />
         </DialogHeader>
 
         <PreviewTable copiedOrders={copiedOrders!} />

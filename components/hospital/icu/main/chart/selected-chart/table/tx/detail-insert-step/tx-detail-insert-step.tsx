@@ -69,7 +69,7 @@ export default function TxDetailInsertStep() {
     <>
       <DialogHeader>
         <DialogTitle>처치 상세 입력</DialogTitle>
-        <DialogDescription></DialogDescription>
+        <DialogDescription />
       </DialogHeader>
       <Form {...form}>
         <form

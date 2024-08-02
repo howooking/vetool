@@ -58,7 +58,7 @@ export function ConfirmCopyDialog() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>차트를 생성하시겠습니까?</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription />
           <DialogFooter>
             <Button
               variant="outline"

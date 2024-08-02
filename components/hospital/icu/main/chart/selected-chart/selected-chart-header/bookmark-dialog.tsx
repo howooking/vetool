@@ -119,7 +119,7 @@ export default function BookmarkDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>차트 즐겨찾기</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription />
         </DialogHeader>
 
         <Form {...form}>

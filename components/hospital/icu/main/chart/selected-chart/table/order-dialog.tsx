@@ -3,12 +3,13 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import { FilePlus } from 'lucide-react'
+import { ClipboardPlus } from 'lucide-react'
 
 export default function OrderDialog({
   icuIoId,
@@ -27,18 +28,14 @@ export default function OrderDialog({
   return (
     <Dialog open={isModalOpen} onOpenChange={toggleModal}>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-6 w-6"
-          onClick={handleDialogOpen}
-        >
-          <FilePlus className="h-3 w-3" />
+        <Button variant="ghost" size="icon" onClick={handleDialogOpen}>
+          <ClipboardPlus size={18} />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
+          <DialogDescription />
         </DialogHeader>
         <OrderForm icuIoId={icuIoId} icuChartId={icuChartId} />
       </DialogContent>

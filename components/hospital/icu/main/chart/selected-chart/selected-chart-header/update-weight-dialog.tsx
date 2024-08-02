@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -69,12 +70,13 @@ export default function UpdateWeightDialog({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
-          <Gauge />
+          <Gauge size={18} />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[320px]">
         <DialogHeader>
           <DialogTitle>체중 입력</DialogTitle>
+          <DialogDescription />
         </DialogHeader>
         <Form {...form}>
           <form

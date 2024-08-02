@@ -73,7 +73,7 @@ export default function DeleteChartDialog({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
-          <Trash2 />
+          <Trash2 size={18} />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

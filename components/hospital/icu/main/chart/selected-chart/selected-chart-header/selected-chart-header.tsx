@@ -39,7 +39,7 @@ export default function SelectedChartHeader({
       ·<span className="text-sm">{breed}</span> ·
       <span className="text-sm uppercase">{gender}</span> ·
       <span className="text-sm">{getAgeFromAgeInDays(ageInDays)} </span> ·
-      <div className="flex items-center">
+      <div className="flex items-center gap-1">
         {weight_measured_date ? (
           <span className="text-sm">{`${weight}kg (${weight_measured_date} 측정)`}</span>
         ) : (
@@ -50,23 +50,22 @@ export default function SelectedChartHeader({
           patientId={patient_id}
           icuChartId={icu_chart_id}
         />
+      </div>
+      <div className="absolute right-2 flex gap-1">
+        <CopyChartButton chartId={icu_chart_id} />
 
-        <div className="absolute right-2 flex gap-1">
-          <CopyChartButton chartId={icu_chart_id} />
-
-          <OutPatientDialog
-            icuIoId={icuIoId}
-            name={name}
-            isPatientOut={isPatientOut}
-            selectedChartOrders={selectedChartOrders}
-          />
-          <DeleteChartDialog
-            icuChartId={icu_chart_id}
-            name={name}
-            icuIoId={icuIoId}
-            isFirstChart={isFirstChart}
-          />
-        </div>
+        <OutPatientDialog
+          icuIoId={icuIoId}
+          name={name}
+          isPatientOut={isPatientOut}
+          selectedChartOrders={selectedChartOrders}
+        />
+        <DeleteChartDialog
+          icuChartId={icu_chart_id}
+          name={name}
+          icuIoId={icuIoId}
+          isFirstChart={isFirstChart}
+        />
       </div>
     </header>
   )

@@ -71,7 +71,7 @@ export function MainSubVet({
       <DialogContent className="sm:max-w-[640px]">
         <DialogHeader>
           <DialogTitle>주치의 / 부주치의 변경</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription />
         </DialogHeader>
         <MainSubVetUpdateForm
           setIsDialogOpen={setIsDialogOpen}
