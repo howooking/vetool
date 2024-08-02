@@ -72,7 +72,7 @@ export const pasteChart = async (
     await pasteOrders(copiedChartOrder, icu_chart_id, icu_io_id)
   }
 
-  // 첫차트가 아닌 경우 : chart와 order모두 복사해야함
+  // 첫차트가 아닌 경우 : 첫차트의 chart data와 order 모두 복사
   if (target_date !== targetDate) {
     const { data: returningIcuChartId, error: insertingNewChartError } =
       await supabase
@@ -96,8 +96,6 @@ export const pasteChart = async (
         })
         .select('icu_chart_id')
         .single()
-
-    console.log(returningIcuChartId)
 
     if (insertingNewChartError) {
       console.log(insertingNewChartError)

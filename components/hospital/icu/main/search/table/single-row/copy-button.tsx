@@ -21,6 +21,7 @@ export default function CopyButton({ chartId }: { chartId: string }) {
       title: '차트 복사 완료',
       description: '해당 차트가 클립보드에 복사되었습니다',
     })
+
     setIsCopying(false)
   }
 

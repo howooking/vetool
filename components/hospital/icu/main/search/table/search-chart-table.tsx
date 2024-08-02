@@ -1,5 +1,4 @@
 import NoResult from '@/components/common/no-result'
-
 import {
   Table,
   TableBody,
@@ -11,7 +10,7 @@ import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import { cn } from '@/lib/utils'
 import type { SearchedChart } from '@/types/icu'
-import { ConfirmCopyDialog } from '../../../common-dialogs/confirm-copy/confirm-copy-dilalog'
+import { ConfirmCopyDialog } from '../../../common-dialogs/confirm-copy-dilalog'
 import PreviewDialog from '../../../common-dialogs/preview/preview-dialog'
 import GroupedChart from './grouped-chart'
 

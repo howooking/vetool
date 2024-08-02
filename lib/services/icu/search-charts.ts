@@ -2,8 +2,9 @@
 
 const SPECIAL_CHAR_REGEX = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]+/g
 
+import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { createClient } from '@/lib/supabase/server'
-import { SearchedChart, IcuChartOrderJoined } from '@/types/icu'
+import { CopiedOrder, SearchedChart } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
@@ -42,7 +43,6 @@ export const searchIcuChart = async (searchInput: string, hosId: string) => {
   })
 
   const { data: icuChartData, error: icuChartDataError } = await queryBuilder
-    // !! 병원 별, 퇴원한 환자만
     .match({ hos_id: hosId })
     .not('icu_io_id.out_date', 'is', null)
     .order('target_date')
@@ -57,11 +57,10 @@ export const searchIcuChart = async (searchInput: string, hosId: string) => {
   return icuChartData
 }
 
-export const selectedChartOrderList = async (chartId: string) => {
+export const getSelectedChartOrders = async (chartId: string) => {
   const { data: icuChartOrderData, error: icuChartOrderDataError } =
     await supabase
       .from('icu_chart_order')
-      // !! 필요한 데이터만 가져오기
       .select(
         `
           *,
@@ -70,12 +69,22 @@ export const selectedChartOrderList = async (chartId: string) => {
       )
       .match({ icu_chart_id: chartId })
       .order('icu_chart_order_name', { ascending: true })
-      .returns<IcuChartOrderJoined[]>()
+      .returns<CopiedOrder[]>()
 
   if (icuChartOrderDataError) {
     console.log(icuChartOrderDataError)
     redirect(`/error?message=${icuChartOrderDataError.message}`)
   }
 
-  return icuChartOrderData
+  const sortedChartOrders = icuChartOrderData.sort(
+    (prev, next) =>
+      DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+        (order) => order === prev.icu_chart_order_type,
+      ) -
+      DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+        (order) => order === next.icu_chart_order_type,
+      ),
+  )
+
+  return sortedChartOrders
 }
