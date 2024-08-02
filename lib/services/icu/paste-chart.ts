@@ -74,7 +74,6 @@ export const pasteChart = async (
 
   // 첫차트가 아닌 경우 : chart와 order모두 복사해야함
   if (target_date !== targetDate) {
-    console.log('first')
     const { data: returningIcuChartId, error: insertingNewChartError } =
       await supabase
         .from('icu_chart')

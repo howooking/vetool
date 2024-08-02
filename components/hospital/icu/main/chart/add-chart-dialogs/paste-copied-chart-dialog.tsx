@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { pasteChartAfterSearching } from '@/lib/services/icu/paste-order'
+import { pasteChart } from '@/lib/services/icu/paste-chart'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { cn } from '@/lib/utils'
 import { CopyCheck, LoaderCircle } from 'lucide-react'
@@ -29,30 +29,28 @@ export default function PasteCopiedChartDialog({
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { copiedChartId, copiedChartOrder, reset } = useCopiedChartStore()
+  const {
+    copiedChartId,
+    copiedOrders: copiedChartOrder,
+    reset,
+  } = useCopiedChartStore()
 
-  const handlePasteSelectedChart = async () => {
+  const handlePasteCopiedChart = async () => {
     if (!copiedChartId || !copiedChartOrder) {
       setIsDialogOpen(false)
 
       toast({
         title: '차트 생성 실패',
-        description: '차트 검색을 통해 복사하고자 하는 차트를 선택해주세요',
+        description: '차트 검색을 통해 먼저 차트를 복사해주세요',
         variant: 'destructive',
       })
-
       return
     }
 
     setIsSubmitting(true)
     setIsCreatingChart(true)
 
-    await pasteChartAfterSearching(
-      targetDate,
-      selectedPatient.patientId,
-      copiedChartId,
-      copiedChartOrder,
-    )
+    await pasteChart(selectedPatient.patientId, copiedChartOrder, targetDate)
 
     toast({
       title: '차트를 붙여넣었습니다',
@@ -89,7 +87,7 @@ export default function PasteCopiedChartDialog({
               취소
             </Button>
           </DialogClose>
-          <Button disabled={isSubmitting} onClick={handlePasteSelectedChart}>
+          <Button disabled={isSubmitting} onClick={handlePasteCopiedChart}>
             붙여넣기
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}

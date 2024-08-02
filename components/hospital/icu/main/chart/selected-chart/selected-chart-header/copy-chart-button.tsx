@@ -32,13 +32,18 @@ export default function CopyChartButton({ chartId }: { chartId: string }) {
   )
 
   return (
-    <Button variant="ghost" size="icon">
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={handleCopy}
+      disabled={isCopying}
+    >
       {isCopying ? (
         <LoaderCircle className="h-4 w-4 animate-spin" />
       ) : isCopied ? (
         <CopyCheck />
       ) : (
-        <Copy onClick={handleCopy} />
+        <Copy />
       )}
     </Button>
   )

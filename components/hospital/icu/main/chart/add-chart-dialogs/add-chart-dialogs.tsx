@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation'
 import AddDefaultChartDialog from './add-default-chart-dialog'
 import AddBookmarkChartDialog from './bookmark/add-bookmark-chart-dialog'
 import CopyPrevChartDialog from './copy-prev-chart-dialog'
-import PasteCopiedChartDialog from './paste-selected-chart-dialog'
+import PasteCopiedChartDialog from './paste-copied-chart-dialog'
 
 export default function AddChartDialogs({
   selectedPatient,

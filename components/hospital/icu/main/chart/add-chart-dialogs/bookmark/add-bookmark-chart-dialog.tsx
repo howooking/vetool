@@ -1,3 +1,4 @@
+import { ConfirmCopyDialog } from '@/components/hospital/icu/common-dialogs/confirm-copy-dilalog'
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
 import { bookmarkColumns } from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/bookmark-columns'
 import { Button } from '@/components/ui/button'
@@ -20,7 +21,6 @@ import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { LoaderCircle, Star } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
-import { ConfirmCopyDialog } from '../../../../common-dialogs/confirm-copy/confirm-copy-dilalog'
 
 export default function AddBookmarkChartDialog({}: {}) {
   const [isFetching, setIsFetching] = useState(false)

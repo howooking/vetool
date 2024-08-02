@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { pasteChart } from '@/lib/services/icu/paste-order'
+import { pasteChart } from '@/lib/services/icu/paste-chart'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
@@ -24,8 +24,12 @@ export function ConfirmCopyDialog() {
   const { setBookmarkModalOpen } = useIcuBookmarkStore()
   const { setIsCreatingChart } = useIsCreatingChartStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { isConfirmCopyDialogOpen, setIsConfirmCopyDialogOpen, copiedOrders } =
-    useCopiedChartStore()
+  const {
+    isConfirmCopyDialogOpen,
+    setIsConfirmCopyDialogOpen,
+    copiedOrders,
+    reset,
+  } = useCopiedChartStore()
 
   const handleConfirmCopy = async () => {
     setIsSubmitting(true)
@@ -41,6 +45,7 @@ export function ConfirmCopyDialog() {
       title: '차트를 생성하였습니다',
     })
 
+    reset()
     setIsSubmitting(false)
     setBookmarkModalOpen(false)
     setIsConfirmCopyDialogOpen(false)
