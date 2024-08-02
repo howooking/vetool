@@ -64,7 +64,12 @@ export default function ChartHeader({
           selectedChartOrders={selectedChartOrders}
         />
 
-        <ExportDioalog name={name} pdfRef={pdfRef} chartData={chartData} />
+        <ExportDioalog
+          name={name}
+          pdfRef={pdfRef}
+          chartData={chartData}
+          selectedChartOrders={selectedChartOrders}
+        />
 
         <DeleteChartDialog
           icuChartId={icu_chart_id}

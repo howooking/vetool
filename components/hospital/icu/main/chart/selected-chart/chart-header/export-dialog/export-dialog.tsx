@@ -8,19 +8,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { IcuChartJoined } from '@/types/icu'
+import { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 import { Share } from 'lucide-react'
 import { useState } from 'react'
 import ExportPdfButton from './export-pdf-button'
+import ExportTextButton from './export-text-button'
 
 export default function ExportDioalog({
   name,
   pdfRef,
   chartData,
+  selectedChartOrders,
 }: {
   name: string
   pdfRef: React.RefObject<HTMLDivElement>
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
+  selectedChartOrders: IcuChartOrderJoined[]
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -49,18 +52,11 @@ export default function ExportDioalog({
             setIsDialogOpen={setIsDialogOpen}
           />
 
-          <Button
-          // onClick={handleDeleteAllCharts}
-          // disabled={isDeletingAllCharts}
-          >
-            텍스트로 복사
-            {/* <LoaderCircle
-              className={
-                cn()
-                isDeletingAllCharts ? 'ml-2 animate-spin' : 'hidden',
-              }
-            /> */}
-          </Button>
+          <ExportTextButton
+            chartData={chartData}
+            selectedChartOrders={selectedChartOrders}
+            setIsDialogOpen={setIsDialogOpen}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>
