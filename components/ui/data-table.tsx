@@ -63,7 +63,7 @@ export default function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
-      globalFilter: globalFilter,
+      globalFilter,
       sorting,
       columnVisibility,
       rowSelection,
