@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils'
 import { LoaderCircle, Trash2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
+
 export default function DeleteChartDialog({
   icuChartId,
   name,

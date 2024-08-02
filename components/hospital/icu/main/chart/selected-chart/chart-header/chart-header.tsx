@@ -4,6 +4,7 @@ import { Cat, Dog } from 'lucide-react'
 import BookmarkDialog from './bookmark-dialog'
 import CopyChartButton from './copy-chart-button'
 import DeleteChartDialog from './delete-chart-dialog'
+import ExportDioalog from './export-dialog/export-dialog'
 import OutPatientDialog from './out-patient-dialog'
 import UpdateWeightDialog from './update-weight-dialog'
 
@@ -14,6 +15,7 @@ export default function ChartHeader({
   chartData,
   selectedChartOrders,
   isFirstChart,
+  pdfRef,
 }: {
   isPatientOut: boolean
   ageInDays: number
@@ -21,6 +23,7 @@ export default function ChartHeader({
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   selectedChartOrders: IcuChartOrderJoined[]
   isFirstChart: boolean
+  pdfRef: React.RefObject<HTMLDivElement>
 }) {
   const { breed, name, gender, species, patient_id } = chartData.patient_id
   const { weight, weight_measured_date, icu_chart_id, bookmark_id } = chartData
@@ -60,6 +63,9 @@ export default function ChartHeader({
           isPatientOut={isPatientOut}
           selectedChartOrders={selectedChartOrders}
         />
+
+        <ExportDioalog name={name} pdfRef={pdfRef} chartData={chartData} />
+
         <DeleteChartDialog
           icuChartId={icu_chart_id}
           name={name}

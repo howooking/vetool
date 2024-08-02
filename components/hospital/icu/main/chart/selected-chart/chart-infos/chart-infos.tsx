@@ -13,12 +13,10 @@ export default function ChartInfos({
   chartData,
   isPatientOut,
   selectedIo,
-  handleSaveChart,
 }: {
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   isPatientOut: boolean
   selectedIo: IcuIoPatientJoined
-  handleSaveChart: () => Promise<void>
 }) {
   return (
     <div className="grid grid-cols-8 gap-2">
@@ -74,7 +72,6 @@ export default function ChartInfos({
           chiefComplaint={chartData.icu_chart_cc}
           icuChartId={chartData.icu_chart_id}
         />
-        {/* <SaveChartButton handleSaveChart={handleSaveChart} /> */}
       </div>
     </div>
   )
