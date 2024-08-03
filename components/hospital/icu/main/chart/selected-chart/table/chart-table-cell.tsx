@@ -117,7 +117,7 @@ export default function ChartTableCell({
             hasOrder && 'bg-rose-100/60',
             isDone && 'bg-green-100/60',
           )}
-          disabled={preview || targetedIsUpserting}
+          disabled={preview || isTxUpserting}
           value={briefTxResultInput}
           onChange={(e) => setBriefTxResultInput(e.target.value)}
           onBlur={handleUpsertBriefTxResultInput}
