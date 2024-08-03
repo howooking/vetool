@@ -1,10 +1,11 @@
 'use client'
 
+import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import NoResult from '@/components/common/no-result'
 import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/selected-chart'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
+import { useIsChartLoadingStore } from '@/lib/store/icu/is-creating-chart'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
@@ -13,11 +14,10 @@ import type {
 } from '@/types/icu'
 import { useEffect, useMemo, useState } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
-import IcuChartSkeleton from './icu-chart-skeleton'
 
 export default function IcuChart({ icuData }: { icuData: IcuData }) {
   const { selectedPatient } = useIcuSelectedPatientStore()
-  const { isCreatingChart, setIsCreatingChart } = useIsCreatingChartStore()
+  const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
 
   const { icuChartData, icuChartOrderData, icuIoData } = icuData
   const [selectedChartOrders, setSelectedChartOrders] = useState<
@@ -33,16 +33,16 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
       (io) => io.patient_id.patient_id === selectedPatient?.patientId,
     )
     setSeletedIo(selectedIo)
-    setIsCreatingChart(false)
-  }, [icuIoData, selectedPatient?.patientId, setIsCreatingChart])
+    setIsChartLoading(false)
+  }, [icuIoData, selectedPatient?.patientId, setIsChartLoading])
 
   useEffect(() => {
     const selectedChart = icuChartData.find(
       (chart) => chart.patient_id.patient_id === selectedPatient?.patientId,
     )
     setSelectedChart(selectedChart)
-    setIsCreatingChart(false)
-  }, [icuChartData, selectedPatient?.patientId, setIsCreatingChart])
+    setIsChartLoading(false)
+  }, [icuChartData, selectedPatient?.patientId, setIsChartLoading])
 
   useEffect(() => {
     const selectedChartOrders = icuChartOrderData
@@ -60,8 +60,8 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
           ),
       )
     setSelectedChartOrders(selectedChartOrders)
-    setIsCreatingChart(false)
-  }, [icuChartOrderData, selectedChart?.icu_chart_id, setIsCreatingChart])
+    setIsChartLoading(false)
+  }, [icuChartOrderData, selectedChart?.icu_chart_id, setIsChartLoading])
 
   const isPatientOut = useMemo(
     () => selectedIo?.out_date !== null,
@@ -78,8 +78,12 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     return <NoResult title="환자를 선택해주세요" />
   }
 
-  if (isCreatingChart) {
-    return <IcuChartSkeleton />
+  if (isChartLoading) {
+    return (
+      <div className="flex h-icu-chart items-center justify-center">
+        <LargeLoaderCircle />
+      </div>
+    )
   }
 
   if (!selectedIo) {

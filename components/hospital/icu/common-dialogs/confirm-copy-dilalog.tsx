@@ -12,7 +12,7 @@ import { pasteChart } from '@/lib/services/icu/paste-chart'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
+import { useIsChartLoadingStore } from '@/lib/store/icu/is-creating-chart'
 import { cn } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
@@ -22,7 +22,7 @@ export function ConfirmCopyDialog() {
   const { target_date } = useParams()
   const { selectedPatient } = useIcuSelectedPatientStore()
   const { setBookmarkModalOpen } = useIcuBookmarkStore()
-  const { setIsCreatingChart } = useIsCreatingChartStore()
+  const { setIsChartLoading } = useIsChartLoadingStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const {
     isConfirmCopyDialogOpen,
@@ -33,7 +33,7 @@ export function ConfirmCopyDialog() {
 
   const handleConfirmCopy = async () => {
     setIsSubmitting(true)
-    setIsCreatingChart(true)
+    setIsChartLoading(true)
 
     await pasteChart(
       selectedPatient?.patientId!,

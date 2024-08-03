@@ -17,6 +17,7 @@ import {
   deleteOrders,
 } from '@/lib/services/icu/delete-icu-chart'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIsChartLoadingStore } from '@/lib/store/icu/is-creating-chart'
 import { cn } from '@/lib/utils'
 import { LoaderCircle, Trash2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
@@ -38,9 +39,11 @@ export default function DeleteChartDialog({
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeletingAllCharts, setIsDeletingAllCharts] = useState(false)
   const { setSelectedPatient } = useIcuSelectedPatientStore()
+  const { setIsChartLoading } = useIsChartLoadingStore()
 
   const handleDeleteChart = async () => {
     setIsDeleting(true)
+    setIsChartLoading(true)
 
     // 첫 차트인 경우 오더만 삭제, 2일차이상의 경우 차트 전체 삭제
     if (isFirstChart) {

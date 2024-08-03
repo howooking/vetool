@@ -1,4 +1,4 @@
-import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
+import { useIsChartLoadingStore } from '@/lib/store/icu/is-creating-chart'
 import { IcuChartJoined } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import AddDefaultChartDialog from './add-default-chart-dialog'
@@ -19,7 +19,7 @@ export default function AddChartDialogs({
   isFirstChart: boolean
 }) {
   const { target_date } = useParams()
-  const { setIsCreatingChart } = useIsCreatingChartStore()
+  const { setIsChartLoading } = useIsChartLoadingStore()
 
   return (
     <div className="flex h-icu-chart w-full items-center justify-center gap-10 p-10">
@@ -27,21 +27,21 @@ export default function AddChartDialogs({
         <CopyPrevChartDialog
           targetDate={target_date as string}
           selectedPatient={selectedPatient}
-          setIsCreatingChart={setIsCreatingChart}
+          setIsCreatingChart={setIsChartLoading}
         />
       )}
 
       {selectedChart && (
         <AddDefaultChartDialog
           selectedChart={selectedChart}
-          setIsCreatingChart={setIsCreatingChart}
+          setIsCreatingChart={setIsChartLoading}
         />
       )}
 
       <PasteCopiedChartDialog
         targetDate={target_date as string}
         selectedPatient={selectedPatient}
-        setIsCreatingChart={setIsCreatingChart}
+        setIsCreatingChart={setIsChartLoading}
       />
       <AddBookmarkChartDialog />
     </div>

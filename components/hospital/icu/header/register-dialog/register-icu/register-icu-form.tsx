@@ -33,7 +33,7 @@ import {
   usePatientRegisterStep,
 } from '@/lib/store/icu/icu-register'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { useIsCreatingChartStore } from '@/lib/store/icu/is-creating-chart'
+import { useIsChartLoadingStore } from '@/lib/store/icu/is-creating-chart'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuUserList } from '@/types/icu'
@@ -60,7 +60,7 @@ export default function RegisterIcuForm({
   tab: string
 }) {
   const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
-  const { setIsCreatingChart } = useIsCreatingChartStore()
+  const { setIsChartLoading } = useIsChartLoadingStore()
   const { push } = useRouter()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
@@ -104,7 +104,7 @@ export default function RegisterIcuForm({
     const { dx, cc, in_date, out_due_date, main_vet, sub_vet, group_list } =
       values
     setIsSubmitting(true)
-    setIsCreatingChart(true)
+    setIsChartLoading(true)
 
     await registerIcuPatient(
       hosId,
