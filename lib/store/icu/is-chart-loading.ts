@@ -1,11 +1,11 @@
 import { create } from 'zustand'
 
-type IsCreatingChartState = {
+type IsChartLoadingState = {
   isChartLoading: boolean
   setIsChartLoading: (isChartLoading: boolean) => void
 }
 
-export const useIsChartLoadingStore = create<IsCreatingChartState>((set) => ({
+export const useIsChartLoadingStore = create<IsChartLoadingState>((set) => ({
   isChartLoading: false,
   setIsChartLoading: (isChartLoading) => set({ isChartLoading }),
 }))
