@@ -33,7 +33,7 @@ import {
   usePatientRegisterStep,
 } from '@/lib/store/icu/icu-register'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { useIsChartLoadingStore } from '@/lib/store/icu/is-creating-chart'
+import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuUserList } from '@/types/icu'

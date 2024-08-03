@@ -1,4 +1,4 @@
-import { useIsChartLoadingStore } from '@/lib/store/icu/is-creating-chart'
+import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { IcuChartJoined } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import AddDefaultChartDialog from './add-default-chart-dialog'

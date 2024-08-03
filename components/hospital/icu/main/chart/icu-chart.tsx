@@ -5,7 +5,7 @@ import NoResult from '@/components/common/no-result'
 import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/selected-chart'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { useIsChartLoadingStore } from '@/lib/store/icu/is-creating-chart'
+import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
