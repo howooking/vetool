@@ -15,9 +15,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
 import { updateSearchTags } from '@/lib/services/icu/update-icu-chart-infos'
+import { cn } from '@/lib/utils'
 import { DialogClose } from '@radix-ui/react-dialog'
-import { X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { LoaderCircle, X } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 
 export default function SearchTag({
   searchTags,
@@ -31,20 +32,29 @@ export default function SearchTag({
   const [tagInput, setTagInput] = useState('')
   const [searchTagsList, setSearchTagsList] = useState<string[]>([])
 
+  const parseSearchTags = useCallback(
+    (tags: string) => tags.split(/[#,]/).filter((tag) => tag.trim() !== ''),
+    [],
+  )
+
   useEffect(() => {
     setSearchTagsList(parseSearchTags(searchTags))
-  }, [searchTags, isDialogOpen])
+  }, [parseSearchTags, searchTags])
 
-  const parseSearchTags = (tags: string) =>
-    tags.split(/[#,]/).filter((tag) => tag.trim() !== '')
+  useEffect(() => {
+    if (!isDialogOpen) {
+      setTagInput('')
+    }
+    setSearchTagsList(parseSearchTags(searchTags))
+  }, [isDialogOpen, parseSearchTags, searchTags])
 
   const handleUpdateSearchTags = async () => {
     setIsSubmitting(true)
     const updatedSearchTags = '#' + searchTagsList.join('#')
 
     await updateSearchTags(icuChartId, updatedSearchTags)
-    toast({ title: '검색 태그를 변경하였습니다' })
 
+    toast({ title: '검색 태그를 변경하였습니다' })
     setIsSubmitting(false)
     setIsDialogOpen(false)
   }
@@ -66,12 +76,9 @@ export default function SearchTag({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="relative w-full justify-start">
-          <Label
-            className="absolute left-2 text-xs text-muted-foreground"
-            htmlFor="searchTags"
-          >
+          <div className="absolute left-2 text-xs text-muted-foreground">
             검색 태그
-          </Label>
+          </div>
           <ul className="ml-11 flex gap-1 overflow-hidden">
             {parseSearchTags(searchTags).map((tag, index) => (
               <li key={tag + index}>
@@ -81,6 +88,7 @@ export default function SearchTag({
           </ul>
         </Button>
       </DialogTrigger>
+
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>검색 태그 설정</DialogTitle>
@@ -88,16 +96,17 @@ export default function SearchTag({
             Enter를 눌러 목록에 추가 후 수정을 눌러주세요
           </DialogDescription>
         </DialogHeader>
-        <ul className="flex gap-1 overflow-hidden">
+
+        <ul className="flex flex-wrap gap-1">
           {searchTagsList.map((tag, index) => (
-            <li key={tag + index}>
+            <li
+              key={tag + index}
+              onClick={() => handleDeleteTag(index)}
+              className="cursor-pointer"
+            >
               <Badge className="flex gap-1">
                 {tag}
-                <X
-                  size={14}
-                  className="cursor-pointer"
-                  onClick={() => handleDeleteTag(index)}
-                />
+                <X size={14} />
               </Badge>
             </li>
           ))}
@@ -122,7 +131,12 @@ export default function SearchTag({
           <DialogClose asChild>
             <Button variant="outline">닫기</Button>
           </DialogClose>
-          <Button onClick={handleUpdateSearchTags}>수정</Button>
+          <Button onClick={handleUpdateSearchTags} disabled={isSubmitting}>
+            수정
+            <LoaderCircle
+              className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
+            />
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
