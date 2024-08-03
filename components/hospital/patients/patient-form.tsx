@@ -132,9 +132,14 @@ export default function PatientForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>환자 이름*</FormLabel>
+              <FormLabel htmlFor="name">환자 이름*</FormLabel>
               <FormControl>
-                <Input {...field} className="h-8 text-sm" />
+                <Input
+                  {...field}
+                  className="h-8 text-sm"
+                  autoCapitalize="none"
+                  id="name"
+                />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
@@ -165,6 +170,7 @@ export default function PatientForm({
               <Select
                 onValueChange={handleSpeciesChange}
                 defaultValue={field.value}
+                name="species"
               >
                 <FormControl>
                   <SelectTrigger
@@ -226,6 +232,7 @@ export default function PatientForm({
                     <CommandInput
                       placeholder="품종 검색, 잡종시 'Mongrel' 선택"
                       className="h-8 text-xs"
+                      name="breed"
                     />
                     <CommandList>
                       <ScrollArea className="h-64">
@@ -283,6 +290,7 @@ export default function PatientForm({
                 <SelectContent>
                   {SEX.map((sex) => (
                     <SelectItem
+                      id={sex.value}
                       key={sex.value}
                       value={sex.value}
                       className="text-xs"

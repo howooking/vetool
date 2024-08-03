@@ -4,6 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -73,6 +74,7 @@ export default function Group({
       <DialogContent className="sm:max-w-[400px]">
         <DialogHeader>
           <DialogTitle>그룹 수정</DialogTitle>
+          <DialogDescription />
         </DialogHeader>
         <Form {...form}>
           <form
@@ -93,10 +95,11 @@ export default function Group({
                         return (
                           <FormItem
                             key={item}
-                            className="flex flex-row items-start space-x-3 space-y-0"
+                            className="flex flex-row items-center gap-2 space-y-0"
                           >
                             <FormControl>
                               <Checkbox
+                                id={item}
                                 checked={field.value?.includes(item)}
                                 onCheckedChange={(checked) => {
                                   return checked
@@ -109,7 +112,10 @@ export default function Group({
                                 }}
                               />
                             </FormControl>
-                            <FormLabel className="text-sm font-normal">
+                            <FormLabel
+                              className="text-sm font-normal"
+                              htmlFor={item}
+                            >
                               {item}
                             </FormLabel>
                           </FormItem>

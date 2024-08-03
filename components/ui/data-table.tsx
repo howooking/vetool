@@ -82,6 +82,7 @@ export default function DataTable<TData, TValue>({
         <div className="flex items-center pb-2">
           <Input
             type="text"
+            name="global search"
             placeholder={searchPlaceHolder}
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value ?? '')}

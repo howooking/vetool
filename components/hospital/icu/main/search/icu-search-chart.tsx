@@ -58,6 +58,7 @@ export default function IcuSearchChart() {
         <Input
           placeholder="환자명, 종(canine, feline), 품종(영어), DX, CC, 상위 수의학 키워드 검색"
           onChange={handleSearch}
+          id="search-chart"
         />
 
         <HelperTooltip className="absolute right-2 top-2">
