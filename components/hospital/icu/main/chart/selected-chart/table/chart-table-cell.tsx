@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
 import { LoaderCircle } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 export default function ChartTableCell({
   time,
@@ -30,7 +30,8 @@ export default function ChartTableCell({
   const [briefTxResultInput, setBriefTxResultInput] = useState(
     txData?.icu_chart_tx_result ?? '',
   )
-  const { setStep, setTxLocalState, step } = useUpsertTxStore()
+  const { txLocalState, setStep, setTxLocalState, step, isTxUpserting } =
+    useUpsertTxStore()
 
   useEffect(() => {
     if (step === 'closed') {
@@ -90,36 +91,54 @@ export default function ChartTableCell({
     }
   }
 
+  const targetedIsUpserting = useMemo(
+    () =>
+      isTxUpserting &&
+      time === txLocalState?.time &&
+      txLocalState.icuChartOrderId === icuChartOrderId,
+    [
+      icuChartOrderId,
+      isTxUpserting,
+      time,
+      txLocalState?.icuChartOrderId,
+      txLocalState?.time,
+    ],
+  )
+
   return (
     <TableCell className="p-0">
-      <Input
-        id={`${icuChartOrderId}-tx-result-${time}`}
-        className={cn(
-          'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
-          hasOrder && 'bg-rose-100/60',
-          isDone && 'bg-green-100/60',
-        )}
-        disabled={preview}
-        value={briefTxResultInput}
-        onChange={(e) => setBriefTxResultInput(e.target.value)}
-        onBlur={handleUpsertBriefTxResultInput}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            const target = e.currentTarget
-            setTimeout(() => {
-              if (target) {
-                target.blur()
-              }
-            }, 0)
-          }
-        }}
-        onTouchStart={handleLongClickStart}
-        onTouchEnd={handleLongClickEnd}
-        onTouchCancel={handleLongClickEnd}
-        onMouseDown={handleLongClickStart}
-        onMouseUp={handleLongClickEnd}
-        onMouseLeave={handleLongClickEnd}
-      />
+      {targetedIsUpserting ? (
+        <LoaderCircle size={18} className="mx-auto animate-spin" />
+      ) : (
+        <Input
+          id={`${icuChartOrderId}-tx-result-${time}`}
+          className={cn(
+            'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
+            hasOrder && 'bg-rose-100/60',
+            isDone && 'bg-green-100/60',
+          )}
+          disabled={preview || targetedIsUpserting}
+          value={briefTxResultInput}
+          onChange={(e) => setBriefTxResultInput(e.target.value)}
+          onBlur={handleUpsertBriefTxResultInput}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              const target = e.currentTarget
+              setTimeout(() => {
+                if (target) {
+                  target.blur()
+                }
+              }, 0)
+            }
+          }}
+          onTouchStart={handleLongClickStart}
+          onTouchEnd={handleLongClickEnd}
+          onTouchCancel={handleLongClickEnd}
+          onMouseDown={handleLongClickStart}
+          onMouseUp={handleLongClickEnd}
+          onMouseLeave={handleLongClickEnd}
+        />
+      )}
     </TableCell>
   )
 }
