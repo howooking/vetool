@@ -40,7 +40,7 @@ import {
   FELINE_BREEDS,
   SEX,
 } from '@/constants/hospital/register/breed'
-import { insertPatient } from '@/lib/services/patient/insert-patient'
+import { insertPatient, updatePatient } from '@/lib/services/patient/patient'
 import {
   useIcuRegisteringPatient,
   usePatientRegisterDialog,
@@ -59,11 +59,15 @@ import * as z from 'zod'
 export default function PatientForm({
   hosId,
   setStep,
-  icu,
+  mode,
+  patientId,
+  defaultValues,
 }: {
   hosId: string
   setStep: (step: 'patientRegister' | 'selectChartType') => void
-  icu?: boolean
+  mode: 'create' | 'edit' | 'icu'
+  patientId?: string
+  defaultValues?: z.infer<typeof registerPatientFormSchema>
 }) {
   const [breedOpen, setBreedOpen] = useState(false)
   const [selectedSpecies, setSelectedSpecies] = useState<string>('')
@@ -75,7 +79,7 @@ export default function PatientForm({
   const BREEDS = selectedSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS
   const form = useForm<z.infer<typeof registerPatientFormSchema>>({
     resolver: zodResolver(registerPatientFormSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       name: undefined,
       hos_patient_id: undefined,
       species: undefined,
@@ -99,28 +103,42 @@ export default function PatientForm({
   ) => {
     setIsSubmitting(true)
 
-    const patientId = await insertPatient({ data: values, hosId })
-    const formattedBirth = format(values.birth, 'yyyy-MM-dd')
-
-    toast({
-      title: '환자가 등록되었습니다',
-      description: icu ? '입원을 이어서 진행합니다' : '',
-    })
-
-    icu ? setStep('selectChartType') : setIsRegisterDialogOpen(false)
-
-    icu &&
-      setRegisteringPatient({
+    if (mode === 'edit' && defaultValues && patientId) {
+      await updatePatient({
+        data: values,
+        hosId,
         patientId,
-        birth: formattedBirth,
-        patientName: values.name,
-        ageInDays: getDaysSince(formattedBirth),
       })
+
+      toast({
+        title: '환자 정보가 수정되었습니다',
+      })
+
+      setIsRegisterDialogOpen(false)
+    } else {
+      const patientId = await insertPatient({ data: values, hosId })
+      const formattedBirth = format(values.birth, 'yyyy-MM-dd')
+
+      toast({
+        title: '환자가 등록되었습니다',
+        description: mode === 'icu' ? '입원을 이어서 진행합니다' : '',
+      })
+
+      if (mode === 'icu') {
+        setStep('selectChartType')
+        setRegisteringPatient({
+          patientId,
+          birth: formattedBirth,
+          patientName: values.name,
+          ageInDays: getDaysSince(formattedBirth),
+        })
+      } else {
+        setIsRegisterDialogOpen(false)
+      }
+    }
 
     setIsSubmitting(false)
     refresh()
-
-    return
   }
 
   return (
@@ -420,12 +438,16 @@ export default function PatientForm({
             type="button"
             disabled={isSubmitting}
             variant="outline"
-            onClick={() => setIsRegisterDialogOpen(false)}
+            onClick={() =>
+              mode === 'icu'
+                ? setStep('patientRegister')
+                : setIsRegisterDialogOpen(false)
+            }
           >
-            닫기
+            {mode === 'edit' ? '취소' : '닫기'}
           </Button>
           <Button type="submit" disabled={isSubmitting}>
-            {icu ? '다음' : '등록'}
+            {mode === 'icu' ? '다음' : mode === 'edit' ? '수정' : '등록'}
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />
