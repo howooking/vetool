@@ -30,60 +30,62 @@ export default function IcuSidebar({
     selectedVet: '',
   })
 
-  const filterIoByGroup = (IoData: IcuIoPatientJoined[]) =>
-    // 특정 그룹 선택없음이면 모든 data 반환, 특정 그룹 선택 시 해당되는 그룹 반환
-    filters.selectedGroup.length === 0
-      ? IoData
-      : IoData.filter((item) =>
-          filters.selectedGroup.some((group) =>
-            item.group_list.includes(group),
-          ),
-        )
+  const filteredData = useMemo(() => {
+    const filterByGroup = (data: IcuIoPatientJoined[]) =>
+      filters.selectedGroup.length === 0
+        ? data
+        : data.filter((item) =>
+            filters.selectedGroup.some((group) =>
+              item.group_list.includes(group),
+            ),
+          )
 
-  const filterIoByVet = (IoData: IcuIoPatientJoined[]) => {
-    // 특정 수의사 선택 없음이면 모든 data 반환
-    if (filters.selectedVet === '') return IoData
-
-    const vetFilteredIds = icuChartData
-      .filter(
-        (chart) =>
-          chart.main_vet.user_id === filters.selectedVet ||
-          chart.sub_vet?.user_id === filters.selectedVet,
+    const filterByVet = (data: IcuIoPatientJoined[]) => {
+      if (filters.selectedVet === '') return data
+      const vetFilteredIds = new Set(
+        icuChartData
+          .filter(
+            (chart) =>
+              chart.main_vet.user_id === filters.selectedVet ||
+              chart.sub_vet?.user_id === filters.selectedVet,
+          )
+          .map((chart) => chart.icu_io_id.icu_io_id),
       )
-      .map((chart) => chart.icu_io_id.icu_io_id)
 
-    return IoData.filter((item) => vetFilteredIds.includes(item.icu_io_id))
+      return data.filter((item) => vetFilteredIds.has(item.icu_io_id))
+    }
+
+    const filteredIcuIoData = filterByVet(filterByGroup(icuIoData))
+    const excludedIcuIoData = icuIoData.filter(
+      (item) => !filteredIcuIoData.includes(item),
+    )
+
+    return { filteredIcuIoData, excludedIcuIoData }
+  }, [icuIoData, icuChartData, filters])
+
+  if (icuIoData.length === 0) {
+    return (
+      <aside className="flex h-icu-chart w-[144px] shrink-0 flex-col gap-3 overflow-y-auto border-r p-2">
+        <NoPatients />
+      </aside>
+    )
   }
-
-  const { filteredIcuIoData, excludedIcuIoData } = (() => {
-    const groupFiltered = filterIoByGroup(icuIoData)
-    const filtered = filterIoByVet(groupFiltered)
-    const excluded = icuIoData.filter((item) => !filtered.includes(item))
-
-    return { filteredIcuIoData: filtered, excludedIcuIoData: excluded }
-  })()
 
   return (
     <aside className="flex h-icu-chart w-[144px] shrink-0 flex-col gap-3 overflow-y-auto border-r p-2">
-      {icuIoData.length === 0 ? (
-        <NoPatients />
-      ) : (
-        <>
-          <Filters
-            setFilters={setFilters}
-            filters={filters}
-            icuIoData={icuIoData}
-            vetsListData={vetsListData}
-          />
+      <Filters
+        setFilters={setFilters}
+        filters={filters}
+        icuIoData={icuIoData}
+        vetsListData={vetsListData}
+      />
 
-          <Separator />
+      <Separator />
 
-          <PatientList
-            filteredIcuIoData={filteredIcuIoData}
-            excludedIcuIoData={excludedIcuIoData}
-          />
-        </>
-      )}
+      <PatientList
+        filteredIcuIoData={filteredData.filteredIcuIoData}
+        excludedIcuIoData={filteredData.excludedIcuIoData}
+      />
     </aside>
   )
 }
