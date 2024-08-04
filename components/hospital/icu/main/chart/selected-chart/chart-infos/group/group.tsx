@@ -99,6 +99,7 @@ export default function Group({
                           >
                             <FormControl>
                               <Checkbox
+                                name={item}
                                 id={item}
                                 checked={field.value?.includes(item)}
                                 onCheckedChange={(checked) => {
@@ -113,7 +114,7 @@ export default function Group({
                               />
                             </FormControl>
                             <FormLabel
-                              className="text-sm font-normal"
+                              className="cursor-pointer text-sm"
                               htmlFor={item}
                             >
                               {item}

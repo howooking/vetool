@@ -1,13 +1,20 @@
 'use client'
 
-import GroupSelectDialog from '@/components/hospital/icu/sidebar/group-select-dialog'
 import NoPatients from '@/components/hospital/icu/sidebar/no-patients'
 import PatientList from '@/components/hospital/icu/sidebar/patient-list'
-import VetSelectDialog from '@/components/hospital/icu/sidebar/vet-select-dialog'
-import { Button } from '@/components/ui/button'
-import { IcuChartJoined, IcuIoPatientJoined, IcuUserList } from '@/types/icu'
-import { RotateCcw } from 'lucide-react'
-import { useState } from 'react'
+import type {
+  IcuChartJoined,
+  IcuIoPatientJoined,
+  IcuUserList,
+} from '@/types/icu'
+import { useMemo, useState } from 'react'
+import Filters from './filters/filters'
+import { Separator } from '@/components/ui/separator'
+
+export type Filters = {
+  selectedGroup: string[]
+  selectedVet: string
+}
 
 export default function IcuSidebar({
   icuIoData,
@@ -18,28 +25,24 @@ export default function IcuSidebar({
   icuChartData: IcuChartJoined[]
   vetsListData: IcuUserList[]
 }) {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     selectedGroup: [] as string[],
     selectedVet: '',
   })
 
-  const resetFilters = () => {
-    setFilters({ selectedGroup: [], selectedVet: '' })
-  }
-
-  const filterByGroup = (data: IcuIoPatientJoined[]) =>
+  const filterIoByGroup = (IoData: IcuIoPatientJoined[]) =>
     // 특정 그룹 선택없음이면 모든 data 반환, 특정 그룹 선택 시 해당되는 그룹 반환
     filters.selectedGroup.length === 0
-      ? data
-      : data.filter((item) =>
+      ? IoData
+      : IoData.filter((item) =>
           filters.selectedGroup.some((group) =>
             item.group_list.includes(group),
           ),
         )
 
-  const filterByVet = (data: IcuIoPatientJoined[]) => {
+  const filterIoByVet = (IoData: IcuIoPatientJoined[]) => {
     // 특정 수의사 선택 없음이면 모든 data 반환
-    if (filters.selectedVet === '') return data
+    if (filters.selectedVet === '') return IoData
 
     const vetFilteredIds = icuChartData
       .filter(
@@ -49,50 +52,37 @@ export default function IcuSidebar({
       )
       .map((chart) => chart.icu_io_id.icu_io_id)
 
-    return data.filter((item) => vetFilteredIds.includes(item.icu_io_id))
+    return IoData.filter((item) => vetFilteredIds.includes(item.icu_io_id))
   }
 
   const { filteredIcuIoData, excludedIcuIoData } = (() => {
-    const groupFiltered = filterByGroup(icuIoData)
-    const filtered = filterByVet(groupFiltered)
+    const groupFiltered = filterIoByGroup(icuIoData)
+    const filtered = filterIoByVet(groupFiltered)
     const excluded = icuIoData.filter((item) => !filtered.includes(item))
 
     return { filteredIcuIoData: filtered, excludedIcuIoData: excluded }
   })()
 
   return (
-    <aside className="h-icu-chart w-[144px] shrink-0 overflow-y-auto border-r p-2">
-      <Button
-        variant="outline"
-        onClick={resetFilters}
-        className="mb-2 flex h-8 w-full gap-2"
-      >
-        필터 초기화
-        <RotateCcw size={12} />
-      </Button>
-
-      <GroupSelectDialog
-        hosGroupList={icuIoData[0]?.hos_id.group_list || []}
-        selectedGroup={filters.selectedGroup}
-        setSelectedGroup={(group) =>
-          setFilters({ ...filters, selectedGroup: group })
-        }
-      />
-
-      <VetSelectDialog
-        vetsListData={vetsListData}
-        selectedVet={filters.selectedVet}
-        setSelectedVet={(vet) => setFilters({ ...filters, selectedVet: vet })}
-      />
-
+    <aside className="flex h-icu-chart w-[144px] shrink-0 flex-col gap-3 overflow-y-auto border-r p-2">
       {icuIoData.length === 0 ? (
         <NoPatients />
       ) : (
-        <PatientList
-          filteredIcuIoData={filteredIcuIoData}
-          excludedIcuIoData={excludedIcuIoData}
-          selectedGroup={filters.selectedGroup}
-        />
+        <>
+          <Filters
+            setFilters={setFilters}
+            filters={filters}
+            icuIoData={icuIoData}
+            vetsListData={vetsListData}
+          />
+
+          <Separator />
+
+          <PatientList
+            filteredIcuIoData={filteredIcuIoData}
+            excludedIcuIoData={excludedIcuIoData}
+          />
+        </>
       )}
     </aside>
   )

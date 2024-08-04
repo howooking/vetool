@@ -11,7 +11,7 @@ import type { IcuUserList } from '@/types/icu'
 import Image from 'next/image'
 import { useState } from 'react'
 
-export default function VetSelectDialog({
+export default function VetFilter({
   vetsListData,
   selectedVet,
   setSelectedVet,
@@ -36,15 +36,15 @@ export default function VetSelectDialog({
       onValueChange={handleValueChange}
       value={selectedVet}
     >
-      <SelectTrigger className="mb-2 h-8 w-full justify-center">
-        <SelectValue placeholder="수의사 선택" />
+      <SelectTrigger className="flex h-8 w-full justify-center gap-1">
+        <SelectValue placeholder="수의사" />
       </SelectTrigger>
       <SelectContent className="w-32 p-0">
         <Command>
           <SelectGroup>
             {vetsListData.map((vet) => (
               <SelectItem key={vet.user_id} value={vet.user_id}>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1">
                   <Image
                     unoptimized
                     src={vet.avatar_url ?? ''}

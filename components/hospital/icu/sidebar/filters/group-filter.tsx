@@ -1,4 +1,4 @@
-import GroupBadge from '@/components/hospital/icu/sidebar/group-badge'
+import GroupBadge from '@/components/hospital/icu/sidebar/filters/group-badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dialog'
 import { useEffect, useState } from 'react'
 
-export default function GroupSelectDialog({
+export default function GroupFilter({
   hosGroupList,
   selectedGroup,
   setSelectedGroup,
@@ -48,11 +48,11 @@ export default function GroupSelectDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="mb-2 flex h-auto w-full px-2 py-1">
+        <Button variant="outline" className="flex h-auto w-full px-1 py-1">
           {selectedGroup.length ? (
             <GroupBadge currentGroups={selectedGroup} />
           ) : (
-            '그룹 선택'
+            '그룹선택'
           )}
         </Button>
       </DialogTrigger>
@@ -60,22 +60,17 @@ export default function GroupSelectDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>그룹 선택</DialogTitle>
-          <DialogDescription>
-            필터링할 특정 그룹을 선택해주세요
-          </DialogDescription>
+          <DialogDescription>또는 조건으로 필터링됩니다</DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-2">
           {hosGroupList.map((group) => (
-            <div key={group} className="flex items-center space-x-2">
+            <div key={group} className="flex items-center gap-2">
               <Checkbox
                 id={group}
                 onCheckedChange={() => handleCheckboxChange(group)}
                 checked={tempSelectedGroup.includes(group)}
               />
-              <label
-                htmlFor={group}
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
+              <label htmlFor={group} className="cursor-pointer text-sm">
                 {group}
               </label>
             </div>
