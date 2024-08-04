@@ -81,11 +81,7 @@ export function calculateAge(dateString: string) {
   }
 }
 
-export const updateIcuTags = (
-  tags: string,
-  value: string,
-  part: 'dx' | 'cc',
-) => {
+export const updateTags = (tags: string, value: string, part: 'dx' | 'cc') => {
   // '#'로 문자열을 분할
   const parts = tags.split('#')
 
@@ -104,7 +100,23 @@ export const updateIcuTags = (
   }
 
   // 새로운 문자열 구성
-  const updatedTags = `#${breed}#${species}#${name}#${bod}#${newDx}#${newCc}`
+  const updatedIcuTags = `#${breed}#${species}#${name}#${bod}#${newDx}#${newCc}`
+  const updatedSearchTags = `#${newDx}#${newCc}`
 
-  return updatedTags
+  return { updatedIcuTags, updatedSearchTags }
+}
+
+// YYYY-MM-DD string을 받아 현재와 입력받은 날짜 간의 차이를 반환
+export const getDaysDifference = (dateString: string) => {
+  // 날짜 문자열을 Date 객체로 변환
+  const targetDate = new Date(dateString)
+  const today = new Date()
+
+  // 두 날짜의 차이를 밀리초 단위로 계산
+  const diffTime = today.getTime() - targetDate.getTime()
+
+  // 밀리초를 일 단위로 변환
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+  return diffDays
 }
