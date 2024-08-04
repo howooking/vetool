@@ -41,7 +41,7 @@ export default function ExportDioalog({
           </DialogTitle>
           <DialogDescription className="flex flex-col gap-1">
             <span>PDF 저장 : PDF파일을 저장합니다</span>
-            <span>텍스트로 복사 : 텍스트형식이 클립보드에 저장됩니다</span>
+            <span>텍스트로 복사 : 텍스트형식으로 클립보드에 저장됩니다</span>
           </DialogDescription>
         </DialogHeader>
 
