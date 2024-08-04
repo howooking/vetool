@@ -171,6 +171,10 @@ export default function DataTable<TData, TValue>({
       </div>
 
       <div className="flex items-center justify-end space-x-2 py-4">
+        <span className="text-sm text-gray-700">
+          {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}{' '}
+          페이지
+        </span>
         <Button
           variant="outline"
           size="sm"
