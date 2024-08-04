@@ -23,7 +23,7 @@ export function PatientRegisterDialog({ hosId }: { hosId: string }) {
       <DialogContent className="flex flex-col sm:max-w-[1000px]">
         <RegisterDialogHeader step="patientRegister" />
 
-        <PatientForm setStep={setStep} hosId={hosId} />
+        <PatientForm setStep={setStep} hosId={hosId} mode="create" />
       </DialogContent>
     </Dialog>
   )

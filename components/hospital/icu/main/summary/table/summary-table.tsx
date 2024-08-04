@@ -1,7 +1,7 @@
+import SummaryTableRow from '@/components/hospital/icu/main/summary/table/summary-table-row'
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -11,7 +11,6 @@ import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuData } from '@/types/icu'
-import SummaryTableCell from './summary-table-cell'
 
 export default function SummaryTable({ icuData }: { icuData: IcuData }) {
   const { icuChartData, icuChartOrderData } = icuData
@@ -21,6 +20,10 @@ export default function SummaryTable({ icuData }: { icuData: IcuData }) {
     setSelectedIcuMainView('chart')
     setSelectedPatient({ patientId, patientName })
   }
+
+  const filteredOrders = icuChartOrderData.filter(
+    (orderData) => !orderData.icu_io_id.out_date,
+  )
 
   return (
     <Table className="border">
@@ -40,52 +43,14 @@ export default function SummaryTable({ icuData }: { icuData: IcuData }) {
 
       <TableBody>
         {icuChartData.map((chart) => (
-          <TableRow
-            className={cn(
-              'cursor-pointer divide-x',
-              chart.icu_io_id.out_date
-                ? 'text-muted-foreground line-through'
-                : '',
+          <SummaryTableRow
+            key={chart.patient_id.patient_id}
+            chart={chart}
+            handleClickRow={handleClickRow}
+            orders={filteredOrders.filter(
+              (el) => el.icu_chart_id.icu_chart_id === chart.icu_chart_id,
             )}
-            key={chart.icu_chart_id}
-            onClick={() =>
-              handleClickRow(chart.patient_id.patient_id, chart.patient_id.name)
-            }
-          >
-            <TableCell
-              className={cn(
-                'flex w-[200px] items-center justify-between gap-2',
-              )}
-            >
-              <div
-                className={cn(
-                  chart.icu_io_id.out_date
-                    ? 'text-muted-foreground line-through'
-                    : '',
-                )}
-              >
-                {chart.patient_id.name}
-                <span className="text-xs text-muted-foreground">
-                  {' '}
-                  ({chart.patient_id.breed})
-                </span>
-              </div>
-              <span className="text-xs text-muted-foreground"></span>
-              <span className="text-xs text-muted-foreground">
-                {chart.weight ? `${chart.weight}kg` : ''}
-              </span>
-            </TableCell>
-
-            {TIMES.map((time, index) => {
-              const orders = icuChartOrderData.filter(
-                (el) =>
-                  el.icu_chart_id.icu_chart_id === chart.icu_chart_id &&
-                  !el.icu_io_id.out_date,
-              )
-
-              return <SummaryTableCell key={time} time={time} orders={orders} />
-            })}
-          </TableRow>
+          />
         ))}
       </TableBody>
     </Table>

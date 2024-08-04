@@ -1,7 +1,6 @@
 'use client'
 
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import AutoComplete from '@/components/hospital/common/auto-complete/auto-complete'
 import { toast } from '@/components/ui/use-toast'
 import { updateDiagnosis } from '@/lib/services/icu/update-icu-chart-infos'
 import { useEffect, useState } from 'react'
@@ -16,48 +15,31 @@ export default function Diagnosis({
   const [diagnosisInput, setDiagnosisInput] = useState(diagnosis)
   const [isUpdating, setIsUpdating] = useState(false)
 
-  const handleUpdateDiagnosis = async () => {
-    if (diagnosisInput.trim() === '') {
-      setDiagnosisInput(diagnosis)
-    } else {
-      if (diagnosis === diagnosisInput.trim()) {
-        setDiagnosisInput(diagnosisInput.trim())
-        return
-      }
+  const handleUpdateDiagnosis = async (value: string) => {
+    const trimmedValue = value.trim()
 
-      setIsUpdating(true)
-      await updateDiagnosis(icuChartId, diagnosisInput.trim())
-
-      toast({
-        title: '진단명을 변경하였습니다',
-      })
-
-      setIsUpdating(false)
+    if (!trimmedValue || diagnosis === trimmedValue) {
+      return
     }
-  }
 
-  useEffect(() => {
-    setDiagnosisInput(diagnosis)
-  }, [diagnosis])
+    setIsUpdating(true)
+
+    await updateDiagnosis(icuChartId, value)
+
+    toast({
+      title: '진단명을 변경하였습니다',
+    })
+
+    setIsUpdating(false)
+  }
 
   return (
     <div className="relative flex items-center">
-      <Label
-        className="absolute left-2 text-xs text-muted-foreground"
-        htmlFor="diagnosis"
-      >
-        DX
-      </Label>
-      <Input
-        disabled={isUpdating}
-        id="diagnosis"
-        value={diagnosisInput}
-        placeholder="진단명"
-        onChange={(e) => setDiagnosisInput(e.target.value)}
-        onBlur={handleUpdateDiagnosis}
-        onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-        className="w-full pl-8"
-        title={diagnosis}
+      <AutoComplete
+        label="DX"
+        defaultValue={diagnosis}
+        handleChange={handleUpdateDiagnosis}
+        isUpdating={isUpdating}
       />
     </div>
   )

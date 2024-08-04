@@ -4,8 +4,8 @@ import BookmarkChartTable from '@/components/hospital/icu/header/register-dialog
 import RegisterPatientForm from '@/components/hospital/icu/header/register-dialog/register-patient-form'
 import RegisterTypeSelector from '@/components/hospital/icu/header/register-dialog/register-type-selector'
 import IcuSearchChart from '@/components/hospital/icu/main/search/icu-search-chart'
-import { patientsColumns } from '@/components/hospital/patients/patient-columns'
 import PatientForm from '@/components/hospital/patients/patient-form'
+import { patientsRegisterColumns } from '@/components/hospital/patients/patient-register-columns'
 import RegisterDialogHeader from '@/components/hospital/patients/register-dialog-header'
 import { Button } from '@/components/ui/button'
 import DataTable from '@/components/ui/data-table'
@@ -118,7 +118,7 @@ export default function RegisterDialog({
           <TabsContent value="search">
             {step === 'patientSearch' && (
               <DataTable
-                columns={patientsColumns}
+                columns={patientsRegisterColumns}
                 data={icuRegisterPatientsData}
                 searchPlaceHolder="환자번호, 환자이름, 보호자이름을 검색하세요"
                 rowLength={8}
@@ -145,7 +145,7 @@ export default function RegisterDialog({
 
           <TabsContent value="register">
             {step === 'patientRegister' && (
-              <PatientForm setStep={setStep} hosId={hosId} icu />
+              <PatientForm setStep={setStep} hosId={hosId} mode="create" />
             )}
             {step === 'icuRegister' && (
               <RegisterPatientForm
