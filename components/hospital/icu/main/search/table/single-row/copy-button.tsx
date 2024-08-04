@@ -32,7 +32,7 @@ export default function CopyButton({ chartId }: { chartId: string }) {
       size="sm"
       className="w-[45px]"
     >
-      {isCopying ? <LoaderCircle className="h-4 w-4 animate-spin" /> : '복사'}
+      {isCopying ? <LoaderCircle size={16} className="animate-spin" /> : '복사'}
     </Button>
   )
 }

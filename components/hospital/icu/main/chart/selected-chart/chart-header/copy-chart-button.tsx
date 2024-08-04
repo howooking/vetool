@@ -39,7 +39,7 @@ export default function CopyChartButton({ chartId }: { chartId: string }) {
       disabled={isCopying}
     >
       {isCopying ? (
-        <LoaderCircle className="h-4 w-4 animate-spin" />
+        <LoaderCircle size={16} className="animate-spin" />
       ) : isCopied ? (
         <CopyCheck size={18} />
       ) : (

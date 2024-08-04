@@ -108,7 +108,7 @@ export default function ChartTableCell({
   return (
     <TableCell className="p-0">
       {targetedIsUpserting ? (
-        <LoaderCircle size={18} className="mx-auto animate-spin" />
+        <LoaderCircle className="mx-auto animate-spin text-muted-foreground" />
       ) : (
         <Input
           id={`${icuChartOrderId}-tx-result-${time}`}

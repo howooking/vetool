@@ -55,7 +55,7 @@ export default function PatientSelectButton({
       className={cn(isIcu ? 'block' : 'hidden', 'flex w-12')}
       disabled={isLoading}
     >
-      {isLoading ? <LoaderCircle size={12} className="animate-spin" /> : '선택'}
+      {isLoading ? <LoaderCircle size={16} className="animate-spin" /> : '선택'}
     </Button>
   )
 }

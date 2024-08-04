@@ -52,10 +52,7 @@ export default function AddBookmarkChartDialog({}: {}) {
         <Star />
         <span>즐겨찾기 차트 선택</span>
         <LoaderCircle
-          className={cn(
-            'h-5 w-5',
-            isFetching ? 'block animate-spin' : 'hidden',
-          )}
+          className={cn(isFetching ? 'block animate-spin' : 'hidden')}
         />
       </Button>
 

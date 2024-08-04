@@ -29,7 +29,7 @@ export default function PreviewButton({ chartId }: { chartId: string }) {
       className="w-[68px]"
     >
       {isPreviwing ? (
-        <LoaderCircle className="h-4 w-4 animate-spin" />
+        <LoaderCircle size={16} className="animate-spin" />
       ) : (
         '미리보기'
       )}

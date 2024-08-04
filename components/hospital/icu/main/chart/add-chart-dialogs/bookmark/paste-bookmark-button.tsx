@@ -27,7 +27,11 @@ export default function PasteBookmarkButton({ chartId }: { chartId: string }) {
       disabled={isFetching}
       className="w-[45px]"
     >
-      {isFetching ? <LoaderCircle className="h-4 w-4 animate-spin" /> : '선택'}
+      {isFetching ? (
+        <LoaderCircle size={16} className="animate-spin" />
+      ) : (
+        '선택'
+      )}
     </Button>
   )
 }
