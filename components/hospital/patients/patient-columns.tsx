@@ -190,7 +190,11 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
     cell: ({ row }) => {
       const patient = row.original
       const isIcu = row.original.isIcu
-      return <PatientActions patient={patient} isIcu={isIcu} />
+      return (
+        <div className={cn('flex justify-center', isIcu && 'hidden')}>
+          <PatientActions patient={patient} />
+        </div>
+      )
     },
   },
 ]

@@ -1,29 +1,39 @@
 'use client'
 
 import PatientForm from '@/components/hospital/patients/patient-form'
-import RegisterDialogHeader from '@/components/hospital/patients/register-dialog-header'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import {
-  usePatientRegisterDialog,
-  usePatientRegisterStep,
-} from '@/lib/store/icu/icu-register'
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { useState } from 'react'
 
 export function PatientRegisterDialog({ hosId }: { hosId: string }) {
-  const { setStep } = usePatientRegisterStep()
-  const { isRegisterDialogOpen, setIsRegisterDialogOpen } =
-    usePatientRegisterDialog()
-
+  const [isPatientRegisterDialogOpen, setIsPatientRegisterDialogOpen] =
+    useState(false)
   return (
-    <Dialog open={isRegisterDialogOpen} onOpenChange={setIsRegisterDialogOpen}>
+    <Dialog
+      open={isPatientRegisterDialogOpen}
+      onOpenChange={setIsPatientRegisterDialogOpen}
+    >
       <DialogTrigger asChild className="absolute left-2 top-2">
         <Button size="sm">환자등록</Button>
       </DialogTrigger>
 
       <DialogContent className="flex flex-col sm:max-w-[1000px]">
-        <RegisterDialogHeader step="patientRegister" />
+        <DialogHeader>
+          <DialogTitle>환자등록</DialogTitle>
+          <DialogDescription>신규 환자를 등록합니다</DialogDescription>
+        </DialogHeader>
 
-        <PatientForm setStep={setStep} hosId={hosId} />
+        <PatientForm
+          hosId={hosId}
+          setIsPatientRegisterDialogOpen={setIsPatientRegisterDialogOpen}
+        />
       </DialogContent>
     </Dialog>
   )

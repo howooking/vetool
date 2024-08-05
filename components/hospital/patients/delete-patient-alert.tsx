@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { deletePatient } from '@/lib/services/patient/patient'
 import { cn } from '@/lib/utils'
@@ -21,11 +21,9 @@ import { useState } from 'react'
 export default function DeletePatientAlert({
   patientName,
   patientId,
-  setIsDropDownMenuOpen,
 }: {
   patientName: string
   patientId: string
-  setIsDropDownMenuOpen: (isOpen: boolean) => void
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const { refresh } = useRouter()
@@ -40,22 +38,15 @@ export default function DeletePatientAlert({
     })
 
     setIsLoading(false)
-    setIsDropDownMenuOpen(false)
     refresh()
   }
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <DropdownMenuItem
-          className="flex w-full items-center gap-2"
-          onSelect={(event) => {
-            event.preventDefault()
-          }}
-        >
+        <Button size="icon" variant="ghost">
           <Trash2 size={16} />
-          삭제
-        </DropdownMenuItem>
+        </Button>
       </AlertDialogTrigger>
 
       <AlertDialogContent>
@@ -71,9 +62,7 @@ export default function DeletePatientAlert({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setIsDropDownMenuOpen(false)}>
-            취소
-          </AlertDialogCancel>
+          <AlertDialogCancel>취소</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => handleDeletePatient(patientId)}
             className="bg-destructive hover:bg-destructive/90"

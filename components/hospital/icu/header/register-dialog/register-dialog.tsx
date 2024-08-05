@@ -1,8 +1,8 @@
 'use client'
 
+import RegisterDialogHeader from '@/components/hospital/icu/header/register-dialog/register-dialog-header'
 import RegisterIcuForm from '@/components/hospital/icu/header/register-dialog/register-icu/register-icu-form'
 import PatientForm from '@/components/hospital/patients/patient-form'
-import RegisterDialogHeader from '@/components/hospital/patients/register-dialog-header'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'

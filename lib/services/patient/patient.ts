@@ -96,12 +96,8 @@ export const deletePatient = async (patientId: string) => {
   }
 }
 
-export const updatePatient = async ({
-  data,
-  hosId,
-  patientId,
-}: {
-  data: {
+export const updatePatient = async (
+  updatePatient: {
     species: string
     name: string
     weight: string
@@ -112,26 +108,26 @@ export const updatePatient = async ({
     hos_patient_id: string
     memo: string
     microchip_no: string
-  }
-  hosId: string
-  patientId: string
-}) => {
+  },
+  hosId: string,
+  patientId: string,
+) => {
   const supabase = createClient()
 
   const { error: updatePatientError } = await supabase
     .from('patients')
     .update({
-      birth: format(data.birth, 'yyyy-MM-dd'),
-      breed: data.breed,
-      gender: data.gender as 'cm' | 'sf' | 'im' | 'if' | 'un',
+      birth: format(updatePatient.birth, 'yyyy-MM-dd'),
+      breed: updatePatient.breed,
+      gender: updatePatient.gender as 'cm' | 'sf' | 'im' | 'if' | 'un',
       hos_id: hosId,
-      hos_patient_id: data.hos_patient_id,
-      memo: data.memo,
-      microchip_no: data.microchip_no,
-      name: data.name,
+      hos_patient_id: updatePatient.hos_patient_id,
+      memo: updatePatient.memo,
+      microchip_no: updatePatient.microchip_no,
+      name: updatePatient.name,
       patient_id: patientId,
-      species: data.species as 'canine' | 'feline',
-      owner_name: data.owner_name,
+      species: updatePatient.species as 'canine' | 'feline',
+      owner_name: updatePatient.owner_name,
     })
     .match({ patient_id: patientId })
 

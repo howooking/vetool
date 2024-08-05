@@ -41,54 +41,98 @@ import {
   SEX,
 } from '@/constants/hospital/register/breed'
 import { insertPatient, updatePatient } from '@/lib/services/patient/patient'
-import {
-  useIcuRegisteringPatient,
-  usePatientRegisterDialog,
-} from '@/lib/store/icu/icu-register'
+import { useIcuRegisteringPatient } from '@/lib/store/icu/icu-register'
 import { cn, getDaysSince } from '@/lib/utils'
+import type { PatientDataTable } from '@/types/patients'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+
+type PatientFormRegisterProps = {
+  hosId: string
+  edit?: false
+  icu?: false
+  setStep?: null
+  editingPatient?: null
+  setIsPatientRegisterDialogOpen: Dispatch<SetStateAction<boolean>>
+  setIsPatientUpdateDialogOpen?: null
+}
+type PatientFormIcuRegisterProps = {
+  hosId: string
+  edit?: false
+  icu?: true
+  setStep?: (step: 'patientRegister' | 'icuRegister' | 'patientSearch') => void
+  editingPatient?: null
+  setIsPatientRegisterDialogOpen?: null
+  setIsPatientUpdateDialogOpen?: null
+}
+type PatientFormEditProps = {
+  hosId: string
+  edit: true
+  icu?: false
+  setStep?: null
+  editingPatient: PatientDataTable
+  setIsPatientRegisterDialogOpen?: null
+  setIsPatientUpdateDialogOpen: Dispatch<SetStateAction<boolean>>
+}
+
+type PatientFormProps =
+  | PatientFormEditProps
+  | PatientFormRegisterProps
+  | PatientFormIcuRegisterProps
 
 export default function PatientForm({
   hosId,
   setStep,
   edit,
   icu,
-}: {
-  hosId: string
-  edit?: boolean
-  setStep: (step: 'patientRegister' | 'icuRegister' | 'patientSearch') => void
-  icu?: boolean
-}) {
+  editingPatient,
+  setIsPatientRegisterDialogOpen,
+  setIsPatientUpdateDialogOpen,
+}: PatientFormProps) {
   const [breedOpen, setBreedOpen] = useState(false)
-  const [selectedSpecies, setSelectedSpecies] = useState<string>('')
+  const [selectedSpecies, setSelectedSpecies] = useState<string>(
+    edit ? editingPatient?.species! : '',
+  )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { setRegisteringPatient } = useIcuRegisteringPatient()
-  const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
   const { refresh } = useRouter()
 
   const BREEDS = selectedSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS
+
   const form = useForm<z.infer<typeof registerPatientFormSchema>>({
     resolver: zodResolver(registerPatientFormSchema),
-    defaultValues: {
-      name: undefined,
-      hos_patient_id: undefined,
-      species: undefined,
-      breed: undefined,
-      gender: undefined,
-      birth: undefined,
-      microchip_no: '',
-      memo: '',
-      weight: '',
-      owner_name: '',
-    },
+    defaultValues: edit
+      ? {
+          name: editingPatient?.name,
+          hos_patient_id: editingPatient?.hos_patient_id,
+          species: editingPatient?.species,
+          breed: editingPatient?.breed,
+          gender: editingPatient?.gender,
+          birth: new Date(editingPatient?.birth!),
+          microchip_no: editingPatient?.microchip_no ?? '',
+          memo: editingPatient?.memo ?? '',
+          weight: '',
+          owner_name: editingPatient?.owner_name,
+        }
+      : {
+          name: undefined,
+          hos_patient_id: undefined,
+          species: undefined,
+          breed: undefined,
+          gender: undefined,
+          birth: undefined,
+          microchip_no: '',
+          memo: '',
+          weight: '',
+          owner_name: '',
+        },
   })
 
   const handleSpeciesChange = (selected: string) => {
@@ -96,7 +140,7 @@ export default function PatientForm({
     setSelectedSpecies(selected)
   }
 
-  const handleSubmit = async (
+  const handleRegister = async (
     values: z.infer<typeof registerPatientFormSchema>,
   ) => {
     setIsSubmitting(true)
@@ -109,7 +153,7 @@ export default function PatientForm({
       description: icu ? '입원을 이어서 진행합니다' : '',
     })
 
-    icu ? setStep('icuRegister') : setIsRegisterDialogOpen(false)
+    icu ? setStep!('icuRegister') : setIsPatientRegisterDialogOpen!(false)
 
     icu &&
       setRegisteringPatient({
@@ -119,48 +163,30 @@ export default function PatientForm({
         ageInDays: getDaysSince(formattedBirth),
       })
 
-    // if (mode === 'edit' && defaultValues && patientId) {
-    //   await updatePatient({
-    //     data: values,
-    //     hosId,
-    //     patientId,
-    //   })
+    setIsSubmitting(false)
 
-    //   toast({
-    //     title: '환자 정보가 수정되었습니다',
-    //   })
+    refresh()
+  }
 
-    //   setIsRegisterDialogOpen(false)
-    // } else {
-    //   const patientId = await insertPatient({ data: values, hosId })
-    //   const formattedBirth = format(values.birth, 'yyyy-MM-dd')
+  const handleUpdate = async (
+    values: z.infer<typeof registerPatientFormSchema>,
+  ) => {
+    setIsSubmitting(true)
 
-    //   toast({
-    //     title: '환자가 등록되었습니다',
-    //     description: mode === 'icu' ? '입원을 이어서 진행합니다' : '',
-    //   })
-
-    //   if (mode === 'icu') {
-    //     setStep('selectChartType')
-    //     setRegisteringPatient({
-    //       patientId,
-    //       birth: formattedBirth,
-    //       patientName: values.name,
-    //       ageInDays: getDaysSince(formattedBirth),
-    //     })
-    //   } else {
-    //     setIsRegisterDialogOpen(false)
-    //   }
-    // }
+    await updatePatient(values, hosId, editingPatient?.patient_id!)
+    toast({
+      title: '환자 정보가 수정되었습니다',
+    })
 
     setIsSubmitting(false)
+    setIsPatientUpdateDialogOpen!(false)
     refresh()
   }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={form.handleSubmit(edit ? handleUpdate : handleRegister)}
         className="grid grid-cols-2 gap-4"
       >
         <FormField
@@ -411,20 +437,22 @@ export default function PatientForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="weight"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>몸무게</FormLabel>
-              <FormControl>
-                <Input {...field} className="h-8 text-sm" />
-              </FormControl>
+        {!edit && (
+          <FormField
+            control={form.control}
+            name="weight"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>몸무게</FormLabel>
+                <FormControl>
+                  <Input {...field} className="h-8 text-sm" />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         <FormField
           control={form.control}
@@ -462,12 +490,17 @@ export default function PatientForm({
             type="button"
             disabled={isSubmitting}
             variant="outline"
-            onClick={() =>
-              icu ? setStep('patientRegister') : setIsRegisterDialogOpen(false)
-            }
+            onClick={() => {
+              icu
+                ? setStep!('patientRegister')
+                : edit
+                  ? setIsPatientUpdateDialogOpen(false)
+                  : setIsPatientRegisterDialogOpen!(false)
+            }}
           >
             {edit ? '취소' : '닫기'}
           </Button>
+
           <Button type="submit" disabled={isSubmitting}>
             {icu ? '다음' : edit ? '수정' : '등록'}
             <LoaderCircle
