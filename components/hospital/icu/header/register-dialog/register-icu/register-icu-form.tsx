@@ -1,6 +1,7 @@
 'use client'
 
 import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/register-icu/schema'
+import AutoComplete from '@/components/hospital/common/auto-complete/auto-complete'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -154,13 +155,14 @@ export default function RegisterIcuForm({
           control={form.control}
           name="dx"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="relative">
               <FormLabel>진단명 DX*</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  value={field.value || ''}
-                  className="h-8 text-sm"
+              <FormControl className="w-full">
+                <AutoComplete
+                  defaultValue={field.value || ''}
+                  handleChange={(value) => field.onChange(value)}
+                  label="진단명"
+                  isUpdating={isSubmitting}
                 />
               </FormControl>
               <FormMessage className="text-xs" />
@@ -172,13 +174,14 @@ export default function RegisterIcuForm({
           control={form.control}
           name="cc"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="relative">
               <FormLabel>주증상 CC*</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  value={field.value || ''}
-                  className="h-8 text-sm"
+                <AutoComplete
+                  defaultValue={field.value || ''}
+                  handleChange={(value) => field.onChange(value)}
+                  label="주증상"
+                  isUpdating={isSubmitting}
                 />
               </FormControl>
 

@@ -1,16 +1,16 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { updateIcuTags } from '@/lib/utils'
+import { updateTags } from '@/lib/utils'
 import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
 
-const getTag = async (icuChartId: string) => {
+const getTags = async (icuChartId: string) => {
   const { data: tagData, error: tagDataError } = await supabase
     .from('icu_chart')
-    .select('icu_chart_tags')
+    .select('search_tags , icu_chart_tags')
     .match({ icu_chart_id: icuChartId })
     .single()
 
@@ -26,12 +26,20 @@ export const updateDiagnosis = async (
   icuChartId: string,
   diagnosis: string,
 ) => {
-  const tags = await getTag(icuChartId)
-  const newTags = updateIcuTags(tags.icu_chart_tags, diagnosis, 'dx')
+  const tags = await getTags(icuChartId)
+  const { updatedIcuTags, updatedSearchTags } = updateTags(
+    tags.icu_chart_tags,
+    diagnosis,
+    'dx',
+  )
 
   const { error: updateDiagnosisError } = await supabase
     .from('icu_chart')
-    .update({ icu_chart_dx: diagnosis, icu_chart_tags: newTags })
+    .update({
+      icu_chart_dx: diagnosis,
+      icu_chart_tags: updatedIcuTags,
+      search_tags: updatedSearchTags,
+    })
     .match({ icu_chart_id: icuChartId })
 
   if (updateDiagnosisError) {
@@ -44,12 +52,20 @@ export const updateChiefComplaint = async (
   icuChartId: string,
   chiefComplaint: string,
 ) => {
-  const tags = await getTag(icuChartId)
-  const newTags = updateIcuTags(tags.icu_chart_tags, chiefComplaint, 'cc')
+  const tags = await getTags(icuChartId)
+  const { updatedIcuTags, updatedSearchTags } = updateTags(
+    tags.icu_chart_tags,
+    chiefComplaint,
+    'cc',
+  )
 
   const { error: updateChiefComplaintError } = await supabase
     .from('icu_chart')
-    .update({ icu_chart_cc: chiefComplaint, icu_chart_tags: newTags })
+    .update({
+      icu_chart_cc: chiefComplaint,
+      icu_chart_tags: updatedIcuTags,
+      search_tags: updatedSearchTags,
+    })
     .match({ icu_chart_id: icuChartId })
 
   if (updateChiefComplaintError) {
