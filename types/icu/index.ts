@@ -34,7 +34,7 @@ export type IcuChartJoined = Omit<
   IcuChart,
   'main_vet' | 'sub_vet' | 'patient_id' | 'hos_id' | 'icu_io_id' | 'bookmark_id'
 > & {
-  icu_io_id: Pick<IcuIo, 'out_date' | 'icu_io_id'>
+  icu_io_id: Pick<IcuIo, 'out_date' | 'in_date' | 'icu_io_id'>
   hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names'>
   patient_id: Pick<
     Patients,

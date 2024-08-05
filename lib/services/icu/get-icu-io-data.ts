@@ -11,7 +11,7 @@ export const getIcuIoData = async (hosId: string, targetDate: string) => {
     .select(
       `
         *,
-        patient_id("name", "breed", "patient_id")
+        patient_id(name, breed, patient_id)
       `,
     )
     .match({ hos_id: hosId })
