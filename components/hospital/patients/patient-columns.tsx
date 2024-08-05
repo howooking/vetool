@@ -46,9 +46,7 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
     },
     cell: ({ row }) => {
       const hosPatientId = row.original.hos_patient_id
-
-      // TODO slice 없에야함
-      return <>{hosPatientId.slice(0, 8)}</>
+      return <>{hosPatientId}</>
     },
   },
   {
@@ -67,7 +65,6 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
     cell: ({ row }) => {
       const name = row.original.name
       const isAlive = row.original.is_alive
-
       return (
         <div className={cn(!isAlive && 'text-destructive')}>
           {name} {!isAlive && '(사망)'}
@@ -75,7 +72,6 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
       )
     },
   },
-
   {
     accessorKey: 'breed',
     header: ({ column }) => {
@@ -164,14 +160,21 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
   },
   {
     accessorKey: 'select_patient',
-    header: '선택',
+    header: ({ table }) => {
+      const isIcu = table.getRow('0').original.isIcu
+      return (
+        <div className={cn('flex justify-center', !isIcu && 'hidden')}>
+          선택
+        </div>
+      )
+    },
     cell: ({ row }) => {
       const patientId = row.original.patient_id
       const isIcu = row.original.isIcu
       const birth = row.original.birth
       const patientName = row.original.name
       return (
-        <div className="flex justify-center">
+        <div className={cn('flex justify-center', !isIcu && 'hidden')}>
           <PatientSelectButton
             patientId={patientId}
             isIcu={isIcu}
@@ -187,7 +190,6 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
     cell: ({ row }) => {
       const patient = row.original
       const isIcu = row.original.isIcu
-
       return <PatientActions patient={patient} isIcu={isIcu} />
     },
   },
