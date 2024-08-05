@@ -8,7 +8,7 @@ export default function DialogFooterButtons({
   setIsDialogOpen,
   buttonName,
 }: {
-  isLoading: boolean
+  isLoading?: boolean
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
   buttonName: string
 }) {

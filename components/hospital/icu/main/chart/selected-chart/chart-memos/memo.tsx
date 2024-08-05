@@ -56,13 +56,16 @@ export default function Memo({
   return (
     <div className="relative flex w-full items-center">
       <div className="absolute top-1 flex w-full items-center justify-between px-2">
-        <Label className="text-xs text-muted-foreground" htmlFor="memo">
+        <Label
+          className="text-xs text-muted-foreground"
+          htmlFor={`memo-${index}`}
+        >
           {hosIcuMemoNames[index]}
         </Label>
       </div>
       <Textarea
         disabled={isUpdating}
-        id="memo"
+        id={`memo-${index}`}
         placeholder="shift + enter를 눌러 줄을 추가할 수 있습니다"
         value={memoInput}
         onChange={(e) => setMemoInput(e.target.value)}

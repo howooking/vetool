@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils'
 import { IcuData } from '@/types/icu'
 import { useCallback, useMemo } from 'react'
 import TodoTableCell from './todo-table-cell'
+import NoResult from '@/components/common/no-result'
 
 const TODO_BACKGROUD_COLORS = [
   '#fef2f2',
@@ -67,7 +68,6 @@ export default function Todo({ icuData }: { icuData: IcuData }) {
           })
           return hasOrderLeft
         })
-
         // 입원일 기준 정렬
         .sort(
           (a, b) =>
@@ -112,6 +112,10 @@ export default function Todo({ icuData }: { icuData: IcuData }) {
     },
     [icuChartData],
   )
+
+  if (!filteredAndSortedOrder.length) {
+    return <NoResult title="입원환자가 없습니다" />
+  }
 
   return (
     <div className="h-icu-chart overflow-auto p-2 pb-[48px]">
@@ -163,7 +167,7 @@ export default function Todo({ icuData }: { icuData: IcuData }) {
                   </span>
                 </TableCell>
 
-                {TIMES.map((time, index) => {
+                {TIMES.map((time) => {
                   return <TodoTableCell key={time} time={time} order={order} />
                 })}
               </TableRow>

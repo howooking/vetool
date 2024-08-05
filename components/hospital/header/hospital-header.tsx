@@ -1,28 +1,8 @@
-import UserInfo from '@/components/hospital/header/user-info'
-import { UserInfoSkeleton } from '@/components/hospital/header/user-info-skeleton'
-import { Button } from '@/components/ui/button'
-import { Bell, Dog, Search } from 'lucide-react'
-import Link from 'next/link'
-import { Suspense } from 'react'
-
 export default async function HospitalHeader({ hosId }: { hosId: string }) {
   return (
     <header className="flex h-12 items-center justify-end gap-4 border-b px-2">
-      <div className="z-20 flex items-center gap-4">
-        <Suspense fallback={<UserInfoSkeleton />}>
-          <UserInfo hosId={hosId} />
-        </Suspense>
+      {/* <div className="z-20 flex items-center gap-4">
         <ul className="flex gap-2">
-          <li>
-            <Button size="icon" variant="secondary">
-              <Search size={16} />
-            </Button>
-          </li>
-          <li>
-            <Button size="icon" variant="secondary">
-              <Bell size={16} />
-            </Button>
-          </li>
           <li>
             <Button size="icon" variant="secondary" asChild>
               <Link href={`/hospital/${hosId}/patients`}>
@@ -31,7 +11,7 @@ export default async function HospitalHeader({ hosId }: { hosId: string }) {
             </Button>
           </li>
         </ul>
-      </div>
+      </div> */}
     </header>
   )
 }

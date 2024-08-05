@@ -334,6 +334,7 @@ export type Database = {
           bookmark_id: string
           bookmark_name: string
           created_at: string
+          hos_id: string
           icu_chart_id: string
           updated_at: string | null
         }
@@ -342,6 +343,7 @@ export type Database = {
           bookmark_id?: string
           bookmark_name?: string
           created_at?: string
+          hos_id: string
           icu_chart_id: string
           updated_at?: string | null
         }
@@ -350,10 +352,18 @@ export type Database = {
           bookmark_id?: string
           bookmark_name?: string
           created_at?: string
+          hos_id?: string
           icu_chart_id?: string
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "icu_chart_bookmark_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
           {
             foreignKeyName: "icu_chart_bookmark_icu_chart_id_fkey"
             columns: ["icu_chart_id"]
@@ -1083,6 +1093,12 @@ export type Database = {
         }
         Returns: Json
       }
+      delete_icu_chart2: {
+        Args: {
+          icu_chart_id_input: string
+        }
+        Returns: undefined
+      }
       get_icu_patient_data_with_due: {
         Args: Record<PropertyKey, never>
         Returns: Json
@@ -1183,6 +1199,21 @@ export type Database = {
         }
         Returns: Json
       }
+      register_icu_patient2: {
+        Args: {
+          hos_id_input: string
+          patient_id_input: string
+          icu_chart_dx_input: string
+          icu_chart_cc_input: string
+          in_date_input: string
+          out_due_date_input: string
+          main_vet_input: string
+          sub_vet_input: string
+          group_list_input: Json
+          age_in_days_input: number
+        }
+        Returns: undefined
+      }
       update_icu_chart_with_vitals: {
         Args: {
           patient_id_input: string
@@ -1232,6 +1263,7 @@ export type Database = {
           icu_chart_id_input: string
           bookmark_name_input: string
           bookmark_comment_input: string
+          hos_id_input: string
         }
         Returns: undefined
       }

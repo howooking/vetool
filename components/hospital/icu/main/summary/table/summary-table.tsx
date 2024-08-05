@@ -1,4 +1,3 @@
-import SummaryTableRow from '@/components/hospital/icu/main/summary/table/summary-table-row'
 import {
   Table,
   TableBody,
@@ -11,6 +10,7 @@ import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuData } from '@/types/icu'
+import SummaryTableRow from '../summary-table-row'
 
 export default function SummaryTable({ icuData }: { icuData: IcuData }) {
   const { icuChartData, icuChartOrderData } = icuData

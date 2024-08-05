@@ -8,13 +8,15 @@ const supabase = createClient()
 
 export const upsertBookmarkChart = async (
   name: string,
-  comment: string | null,
+  comment: string,
   icuChartId: string,
+  hosId: string,
 ) => {
   const { error: rpcError } = await supabase.rpc('upsert_chart_bookmark', {
     bookmark_name_input: name,
-    bookmark_comment_input: comment ?? '',
+    bookmark_comment_input: comment,
     icu_chart_id_input: icuChartId,
+    hos_id_input: hosId,
   })
 
   if (rpcError) {
@@ -35,16 +37,17 @@ export const deleteBookmarkChart = async (bookmarkId: string) => {
   }
 }
 
-export const getBookmarkChart = async () => {
+export const getBookmarkCharts = async (hosId: string) => {
   const { data: selectedBookmarkChart, error: selectedBookmarkChartError } =
     await supabase
       .from('icu_chart_bookmark')
       .select(
         `
           *,
-          icu_chart_id("icu_chart_id", "patient_id"("name"))
+          icu_chart_id(icu_chart_id, patient_id(name))
         `,
       )
+      .match({ hos_id: hosId })
       .order('updated_at', {
         ascending: false,
       })

@@ -10,22 +10,18 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { addDefaultChart } from '@/lib/services/icu/add-icu-chart'
+import { registerDefaultChart } from '@/lib/services/icu/add-icu-chart'
 import { cn } from '@/lib/utils'
+import type { IcuChartJoined } from '@/types/icu'
 import { File, LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function AddDefaultChartDialog({
-  targetDate,
-  selectedPatient,
+  selectedChart,
   setIsCreatingChart,
 }: {
-  targetDate: string
-  selectedPatient: {
-    patientName: string
-    patientId: string
-  }
+  selectedChart?: IcuChartJoined
   setIsCreatingChart: (isCreatingChart: boolean) => void
 }) {
   const { hos_id } = useParams()
@@ -36,26 +32,14 @@ export default function AddDefaultChartDialog({
     setIsSubmitting(true)
     setIsCreatingChart(true)
 
-    const { error } = await addDefaultChart(
+    await registerDefaultChart(
       hos_id as string,
-      targetDate,
-      selectedPatient.patientId,
+      selectedChart?.icu_chart_id!,
+      selectedChart?.icu_io_id.icu_io_id!,
     )
 
-    if (error) {
-      toast({
-        title: '기본차트 생성할 수 없습니다',
-        description: '전날 차트가 있는지 확인해주세요',
-        variant: 'destructive',
-      })
-      setIsCreatingChart(false)
-      setIsSubmitting(false)
-      setIsDialogOpen(false)
-      return
-    }
-
     toast({
-      title: '기본차트를 생성했습니다',
+      title: '기본형식의 차트를 생성했습니다',
     })
 
     setIsDialogOpen(false)
@@ -70,15 +54,13 @@ export default function AddDefaultChartDialog({
           className="flex h-1/3 w-1/4 items-center justify-center gap-2"
         >
           <File />
-          <span>새로운 차트생성</span>
+          <span>기본형식 차트생성</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>새로운 차트 생성</DialogTitle>
-          <DialogDescription>
-            초기화된 형식의 차트가 생성됩니다
-          </DialogDescription>
+          <DialogTitle>기본형식 차트 생성</DialogTitle>
+          <DialogDescription>기본 형식의 차트가 생성됩니다</DialogDescription>
         </DialogHeader>
 
         <DialogFooter>

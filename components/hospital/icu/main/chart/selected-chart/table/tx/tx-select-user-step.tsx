@@ -16,14 +16,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { format } from 'date-fns'
 import { useParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { userLogFormSchema } from './schema'
 
 export default function TxSelectUserStep() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { txLocalState, reset, setStep } = useUpsertTxStore()
+  const { txLocalState, setStep, setIsTxUpserting } = useUpsertTxStore()
   const { hos_id } = useParams()
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -40,8 +39,6 @@ export default function TxSelectUserStep() {
     },
   })
   const handleUpsertTx = async (values: z.infer<typeof userLogFormSchema>) => {
-    setIsSubmitting(true)
-
     const newLog: TxLog = {
       result: txLocalState?.txResult ?? '',
       name: values.userLog,
@@ -50,6 +47,8 @@ export default function TxSelectUserStep() {
 
     const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
+    setIsTxUpserting(true)
+    setStep('closed')
     await upsertIcuChartTxAndUpdateIcuChartOrder(
       txLocalState,
       updatedLogs,
@@ -59,9 +58,6 @@ export default function TxSelectUserStep() {
     toast({
       title: '처치 내역이 업데이트 되었습니다',
     })
-
-    reset()
-    setIsSubmitting(false)
   }
 
   return (
@@ -97,7 +93,6 @@ export default function TxSelectUserStep() {
           />
           <DialogFooterButtons
             buttonName="확인"
-            isLoading={isSubmitting}
             setIsDialogOpen={() => setStep('closed')}
           />
         </form>

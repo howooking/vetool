@@ -63,7 +63,7 @@ export default function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
-      globalFilter: globalFilter,
+      globalFilter,
       sorting,
       columnVisibility,
       rowSelection,
@@ -82,6 +82,7 @@ export default function DataTable<TData, TValue>({
         <div className="flex items-center pb-2">
           <Input
             type="text"
+            name="global search"
             placeholder={searchPlaceHolder}
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value ?? '')}
@@ -170,6 +171,10 @@ export default function DataTable<TData, TValue>({
       </div>
 
       <div className="flex items-center justify-end space-x-2 py-4">
+        <span className="text-sm text-gray-700">
+          {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}{' '}
+          페이지
+        </span>
         <Button
           variant="outline"
           size="sm"

@@ -46,3 +46,29 @@ export async function checkIsAdmin(hosId: string) {
     redirect(`/hospital/${hosId}`)
   }
 }
+
+export const getUserData = async (userId: string) => {
+  const supabase = createClient()
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
+
+  if (userError) {
+    console.log(userError)
+    redirect(`/error?message=${userError.message}`)
+  }
+
+  const { data: userData, error: userDataError } = await supabase
+    .from('users')
+    .select('email, name, avatar_url, position, is_admin')
+    .match({ user_id: user?.id })
+    .single()
+
+  if (userDataError) {
+    console.log(userDataError)
+    redirect(`/error?message=${userDataError.message}`)
+  }
+
+  return userData
+}

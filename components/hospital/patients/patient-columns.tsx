@@ -6,6 +6,7 @@ import { calculateAge, cn } from '@/lib/utils'
 import { PatientDataTable } from '@/types/patients'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, Cat, Dog } from 'lucide-react'
+import PatientSelectButton from '../icu/header/register-dialog/patient-search/patient-select-button'
 
 export const patientsColumns: ColumnDef<PatientDataTable>[] = [
   {
@@ -45,7 +46,7 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
     },
     cell: ({ row }) => {
       const hosPatientId = row.original.hos_patient_id
-      return <>{hosPatientId.slice(0, 8)}</>
+      return <>{hosPatientId}</>
     },
   },
   {
@@ -157,12 +158,43 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
       return <div>{createdAt.slice(0, 10)}</div>
     },
   },
-
+  {
+    accessorKey: 'select_patient',
+    header: ({ table }) => {
+      const isIcu = table.getRow('0').original.isIcu
+      return (
+        <div className={cn('flex justify-center', !isIcu && 'hidden')}>
+          선택
+        </div>
+      )
+    },
+    cell: ({ row }) => {
+      const patientId = row.original.patient_id
+      const isIcu = row.original.isIcu
+      const birth = row.original.birth
+      const patientName = row.original.name
+      return (
+        <div className={cn('flex justify-center', !isIcu && 'hidden')}>
+          <PatientSelectButton
+            patientId={patientId}
+            isIcu={isIcu}
+            birth={birth}
+            patientName={patientName}
+          />
+        </div>
+      )
+    },
+  },
   {
     id: 'actions',
     cell: ({ row }) => {
       const patient = row.original
-      return <PatientActions patient={patient} />
+      const isIcu = row.original.isIcu
+      return (
+        <div className={cn('flex justify-center', isIcu && 'hidden')}>
+          <PatientActions patient={patient} />
+        </div>
+      )
     },
   },
 ]

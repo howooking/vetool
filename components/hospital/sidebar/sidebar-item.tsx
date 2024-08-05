@@ -3,21 +3,27 @@
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
-import { type LucideProps } from 'lucide-react'
+import { HeartPulse, Home, ListChecks, Slice, Syringe } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
-import type { ForwardRefExoticComponent, RefAttributes } from 'react'
+
+// server component에서 props로 전달이 안됨
+const ICON_MAPPER = {
+  Home: <Home size={18} className="ml-[17px]" />,
+  Syringe: <Syringe size={18} className="ml-[17px]" />,
+  Slice: <Slice size={18} className="ml-[17px]" />,
+  HeartPulse: <HeartPulse size={18} className="ml-[17px]" />,
+  ListChecks: <ListChecks size={18} className="ml-[17px]" />,
+}
 
 export default function SidebarItem({
   name,
   path,
-  icon: Icon,
+  iconName,
 }: {
   name: string
   path: string
-  icon: ForwardRefExoticComponent<
-    Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
-  >
+  iconName: string
 }) {
   const { isExpanded } = useSidebarStore()
   const pathname = usePathname()
@@ -32,9 +38,6 @@ export default function SidebarItem({
 
   return (
     <li key={name} className="transition-all hover:bg-muted">
-      {/* <TooltipProvider delayDuration={70}>
-        <Tooltip>
-          <TooltipTrigger asChild> */}
       <Link
         href={`/hospital/${hos_id}/${dynamicPath}`}
         className={cn(
@@ -42,19 +45,14 @@ export default function SidebarItem({
           isActive && 'bg-primary text-white',
         )}
       >
-        <Icon size={18} className="ml-[17px]" />
+        {ICON_MAPPER[iconName as keyof typeof ICON_MAPPER]}
+
         <span
           className={cn('absolute left-12', isExpanded ? 'block' : 'hidden')}
         >
           {name}
         </span>
       </Link>
-      {/* </TooltipTrigger>
-          <TooltipContent side="right">
-            <p>{name}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider> */}
     </li>
   )
 }

@@ -45,10 +45,10 @@ export type IcuChartJoined = Omit<
   bookmark_id: Pick<
     IcuChartBookmark,
     'bookmark_name' | 'bookmark_comment' | 'bookmark_id'
-  >
+  > | null
 }
 
-export type IcuChartListJoined = Pick<
+export type SearchedChart = Pick<
   IcuChart,
   | 'icu_chart_id'
   | 'target_date'
@@ -56,8 +56,8 @@ export type IcuChartListJoined = Pick<
   | 'icu_chart_cc'
   | 'icu_chart_tags'
 > & {
-  patient_id: Pick<Patients, 'name'>
-  icu_io_id: string
+  patient_id: Pick<Patients, 'name' | 'owner_name' | 'species' | 'breed'>
+  icu_io_id: Pick<IcuIo, 'icu_io_id' | 'out_date' | 'in_date' | 'age_in_days'>
 }
 
 export type IcuChartOrderJoined = IcuChartOrder & {
@@ -112,5 +112,10 @@ export type IcuChartBookmarkJoined = {
   icu_chart_id: {
     icu_chart_id: string
     patient_id: Pick<Patients, 'name'>
+    icu_io_id: Pick<IcuIo, 'icu_io_id'>
   }
 } & IcuChartBookmark
+
+export type CopiedOrder = IcuChartOrder & {
+  icu_io_id: IcuIo
+}

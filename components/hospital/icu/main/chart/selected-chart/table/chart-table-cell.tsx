@@ -1,12 +1,12 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
-import { deleteIcuChartTx } from '@/lib/services/icu/upsert-chart-tx'
+import { toast } from '@/components/ui/use-toast'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
 import { LoaderCircle } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 export default function ChartTableCell({
   time,
@@ -16,7 +16,7 @@ export default function ChartTableCell({
   hasOrder,
   isDone,
   icuChartTxId,
-  isPreview,
+  preview,
 }: {
   time: number
   txData: IcuChartTx | null
@@ -25,13 +25,13 @@ export default function ChartTableCell({
   hasOrder: boolean
   isDone: boolean
   icuChartTxId?: string
-  isPreview?: boolean
+  preview?: boolean
 }) {
-  const [isDeleting, setIsDeleting] = useState(false)
   const [briefTxResultInput, setBriefTxResultInput] = useState(
     txData?.icu_chart_tx_result ?? '',
   )
-  const { setStep, setTxLocalState, step } = useUpsertTxStore()
+  const { txLocalState, setStep, setTxLocalState, step, isTxUpserting } =
+    useUpsertTxStore()
 
   useEffect(() => {
     if (step === 'closed') {
@@ -42,22 +42,17 @@ export default function ChartTableCell({
   const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleUpsertBriefTxResultInput = async () => {
-    if (icuChartTxId && briefTxResultInput.trim() === '') {
-      if (confirm('처치결과를 삭제하시겠습니까?')) {
-        setIsDeleting(true)
-
-        await deleteIcuChartTx(icuChartTxId, icuChartOrderId, time)
-
-        setIsDeleting(false)
-        return
-      } else {
-        setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
-        return
-      }
-    }
-
     if ((txData?.icu_chart_tx_result ?? '') === briefTxResultInput.trim()) {
       setBriefTxResultInput(briefTxResultInput.trim())
+      return
+    }
+
+    if (icuChartTxId && briefTxResultInput.trim() === '') {
+      toast({
+        title: '결과값을 입력해주세요',
+        variant: 'destructive',
+      })
+      setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
       return
     }
 
@@ -68,6 +63,7 @@ export default function ChartTableCell({
       icuIoId,
       txId: icuChartTxId,
     })
+
     setStep('seletctUser')
   }
 
@@ -95,18 +91,33 @@ export default function ChartTableCell({
     }
   }
 
+  const targetedIsUpserting = useMemo(
+    () =>
+      isTxUpserting &&
+      time === txLocalState?.time &&
+      txLocalState.icuChartOrderId === icuChartOrderId,
+    [
+      icuChartOrderId,
+      isTxUpserting,
+      time,
+      txLocalState?.icuChartOrderId,
+      txLocalState?.time,
+    ],
+  )
+
   return (
     <TableCell className="p-0">
-      {isDeleting ? (
-        <LoaderCircle className="mx-auto animate-spin text-muted-foreground opacity-50" />
+      {targetedIsUpserting ? (
+        <LoaderCircle className="mx-auto animate-spin text-muted-foreground" />
       ) : (
         <Input
+          id={`${icuChartOrderId}-tx-result-${time}`}
           className={cn(
             'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
             hasOrder && 'bg-rose-100/60',
             isDone && 'bg-green-100/60',
           )}
-          disabled={isDeleting || isPreview}
+          disabled={preview || isTxUpserting}
           value={briefTxResultInput}
           onChange={(e) => setBriefTxResultInput(e.target.value)}
           onBlur={handleUpsertBriefTxResultInput}
