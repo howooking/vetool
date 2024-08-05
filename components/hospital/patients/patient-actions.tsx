@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
-import { PatientDataTable } from '@/types/patients'
+import type { PatientDataTable } from '@/types/patients'
 import { MoreHorizontal } from 'lucide-react'
 import { useState } from 'react'
 import DeletePatientAlert from './delete-patient-alert'

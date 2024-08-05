@@ -40,7 +40,7 @@ import {
   FELINE_BREEDS,
   SEX,
 } from '@/constants/hospital/register/breed'
-import { insertPatient } from '@/lib/services/patient/insert-patient'
+import { insertPatient, updatePatient } from '@/lib/services/patient/patient'
 import {
   useIcuRegisteringPatient,
   usePatientRegisterDialog,
@@ -59,9 +59,11 @@ import * as z from 'zod'
 export default function PatientForm({
   hosId,
   setStep,
+  edit,
   icu,
 }: {
   hosId: string
+  edit?: boolean
   setStep: (step: 'patientRegister' | 'icuRegister' | 'patientSearch') => void
   icu?: boolean
 }) {
@@ -99,7 +101,7 @@ export default function PatientForm({
   ) => {
     setIsSubmitting(true)
 
-    const patientId = await insertPatient({ data: values, hosId })
+    const patientId = await insertPatient(values, hosId)
     const formattedBirth = format(values.birth, 'yyyy-MM-dd')
 
     toast({
@@ -116,6 +118,40 @@ export default function PatientForm({
         patientName: values.name,
         ageInDays: getDaysSince(formattedBirth),
       })
+
+    // if (mode === 'edit' && defaultValues && patientId) {
+    //   await updatePatient({
+    //     data: values,
+    //     hosId,
+    //     patientId,
+    //   })
+
+    //   toast({
+    //     title: '환자 정보가 수정되었습니다',
+    //   })
+
+    //   setIsRegisterDialogOpen(false)
+    // } else {
+    //   const patientId = await insertPatient({ data: values, hosId })
+    //   const formattedBirth = format(values.birth, 'yyyy-MM-dd')
+
+    //   toast({
+    //     title: '환자가 등록되었습니다',
+    //     description: mode === 'icu' ? '입원을 이어서 진행합니다' : '',
+    //   })
+
+    //   if (mode === 'icu') {
+    //     setStep('selectChartType')
+    //     setRegisteringPatient({
+    //       patientId,
+    //       birth: formattedBirth,
+    //       patientName: values.name,
+    //       ageInDays: getDaysSince(formattedBirth),
+    //     })
+    //   } else {
+    //     setIsRegisterDialogOpen(false)
+    //   }
+    // }
 
     setIsSubmitting(false)
     refresh()
@@ -426,12 +462,14 @@ export default function PatientForm({
             type="button"
             disabled={isSubmitting}
             variant="outline"
-            onClick={() => setIsRegisterDialogOpen(false)}
+            onClick={() =>
+              icu ? setStep('patientRegister') : setIsRegisterDialogOpen(false)
+            }
           >
-            닫기
+            {edit ? '취소' : '닫기'}
           </Button>
           <Button type="submit" disabled={isSubmitting}>
-            {icu ? '다음' : '등록'}
+            {icu ? '다음' : edit ? '수정' : '등록'}
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />
