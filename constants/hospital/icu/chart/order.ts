@@ -46,7 +46,7 @@ export const DEFAULT_ICU_ORDER_NAME = [
   },
   {
     orderName: '사료',
-    orderComment: '',
+    orderComment: '①자발 ②핸드피딩 ③강제급여',
     dataType: 'feed',
   },
 ] as const
