@@ -4,7 +4,8 @@ export const registerPatientFormSchema = z.object({
   name: z
     .string({ required_error: '환자 이름을 입력해주세요' })
     .trim()
-    .min(1, { message: '환자 이름을 입력해주세요' }),
+    .min(1, { message: '환자 이름을 입력해주세요' })
+    .max(15, { message: '환자 이름을 15자 이내로 입력해주세요' }),
   hos_patient_id: z
     .string({ required_error: '환자 번호를 입력해주세요' })
     .trim()
