@@ -65,13 +65,13 @@ export default function Memo({
       </div>
       <Textarea
         disabled={isUpdating}
-        id={`memo-${index}`}
         placeholder="shift + enter를 눌러 줄을 추가할 수 있습니다"
+        id={`memo-${index}`}
         value={memoInput}
         onChange={(e) => setMemoInput(e.target.value)}
         onBlur={handleUpdateMemo}
         onKeyDown={handleKeyDown}
-        className="w-full resize-none pt-6 placeholder:pt-20 placeholder:text-center placeholder:text-slate-400"
+        className="mt-6 w-full resize-none"
         rows={10}
         title={memo}
       />
