@@ -64,10 +64,7 @@ export default function GroupedChart({ charts }: { charts: SearchedChart }) {
           onValueChange={(value) => setIsAccordionOpen(!!value)}
         >
           <AccordionItem value={icu_io_id} className="border-b-0">
-            <AccordionTrigger
-              className="h-10 w-full hover:bg-muted/50 [&[data-state=open]]:bg-muted"
-              noIcon
-            >
+            <AccordionTrigger className="h-10 w-full hover:bg-muted/50 [&[data-state=open]]:bg-muted">
               <div className="flex w-full items-center">
                 <div
                   className={cn(
