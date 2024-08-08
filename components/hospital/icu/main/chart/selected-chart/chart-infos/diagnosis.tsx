@@ -8,11 +8,12 @@ import { useEffect, useState } from 'react'
 export default function Diagnosis({
   diagnosis,
   icuChartId,
+  icuIoId,
 }: {
   diagnosis: string
   icuChartId: string
+  icuIoId: string
 }) {
-  const [diagnosisInput, setDiagnosisInput] = useState(diagnosis)
   const [isUpdating, setIsUpdating] = useState(false)
 
   const handleUpdateDiagnosis = async (value: string) => {
@@ -24,7 +25,7 @@ export default function Diagnosis({
 
     setIsUpdating(true)
 
-    await updateDiagnosis(icuChartId, value)
+    await updateDiagnosis(icuChartId, icuIoId, trimmedValue)
 
     toast({
       title: '진단명을 변경하였습니다',
