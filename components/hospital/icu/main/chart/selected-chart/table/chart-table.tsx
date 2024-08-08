@@ -31,7 +31,7 @@ export default function ChartTable({
   preview,
 }: ChartTableProps) {
   return (
-    <Table className="border">
+    <Table className="h-full border">
       <TableHeader>
         <TableRow>
           <TableHead className="flex w-[296px] items-center justify-center gap-2 text-center">

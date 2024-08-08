@@ -120,15 +120,13 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
 
   if (selectedChart && selectedIo && selectedChartOrders) {
     return (
-      <div className="w-full">
-        <SelectedChart
-          isFirstChart={isFirstChart}
-          selectedIo={selectedIo}
-          selectedChart={selectedChart}
-          selectedChartOrders={selectedChartOrders}
-          isPatientOut={isPatientOut}
-        />
-      </div>
+      <SelectedChart
+        isFirstChart={isFirstChart}
+        selectedIo={selectedIo}
+        selectedChart={selectedChart}
+        selectedChartOrders={selectedChartOrders}
+        isPatientOut={isPatientOut}
+      />
     )
   }
 }

@@ -289,7 +289,7 @@ export default function PatientForm({
                   </FormControl>
                 </PopoverTrigger>
 
-                <PopoverContent className="p-0 sm:w-[488px]">
+                <PopoverContent className="p-0 sm:w-[568px]">
                   <Command>
                     <CommandInput
                       placeholder="품종 검색, 잡종시 'Mongrel' 선택"
@@ -444,9 +444,12 @@ export default function PatientForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>몸무게</FormLabel>
-                <FormControl>
-                  <Input {...field} className="h-8 text-sm" />
-                </FormControl>
+                <div className="relative flex">
+                  <FormControl>
+                    <Input {...field} className="h-8 text-sm" />
+                  </FormControl>
+                  <span className="absolute right-2 top-2 text-xs">kg</span>
+                </div>
 
                 <FormMessage />
               </FormItem>
