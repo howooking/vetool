@@ -161,38 +161,36 @@ export default function OrderForm({
           )}
         />
 
-        <div className="flex gap-4">
-          <FormField
-            control={form.control}
-            name="icu_chart_order_name"
-            render={({ field }) => (
-              <FormItem className="w-full space-y-2">
-                <FormLabel className="font-semibold">오더명*</FormLabel>
-                <FormControl>
-                  <Input placeholder="오더명을 입력해주세요" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={form.control}
+          name="icu_chart_order_name"
+          render={({ field }) => (
+            <FormItem className="w-full space-y-2">
+              <FormLabel className="font-semibold">오더명*</FormLabel>
+              <FormControl>
+                <Input placeholder="오더명을 입력해주세요" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={form.control}
-            name="icu_chart_order_comment"
-            render={({ field }) => (
-              <FormItem className="w-full space-y-2">
-                <FormLabel className="font-semibold">오더 설명</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="오더에 대한 설명을 입력해주세요"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="icu_chart_order_comment"
+          render={({ field }) => (
+            <FormItem className="w-full space-y-2">
+              <FormLabel className="font-semibold">오더 설명</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="오더에 대한 설명을 입력해주세요"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="flex flex-col gap-2">
           <span className="text-sm font-semibold">오더 시간 설정</span>

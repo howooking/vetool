@@ -1,12 +1,12 @@
 import PreviewButton from '@/components/hospital/icu/common-dialogs/preview/preview-button'
 import { TableCell, TableRow } from '@/components/ui/table'
-import type { SearchedChart } from '@/types/icu'
+import type { SelectedSearchedChart } from '@/types/icu'
 import CopyButton from './copy-button'
 export default function SingleRow({
   chart,
   index,
 }: {
-  chart: SearchedChart
+  chart: SelectedSearchedChart
   index: number
 }) {
   return (

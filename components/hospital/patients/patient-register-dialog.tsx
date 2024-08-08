@@ -21,10 +21,10 @@ export function PatientRegisterDialog({ hosId }: { hosId: string }) {
       onOpenChange={setIsPatientRegisterDialogOpen}
     >
       <DialogTrigger asChild className="absolute left-2 top-2">
-        <Button size="sm">환자등록</Button>
+        <Button size="sm">환자 등록</Button>
       </DialogTrigger>
 
-      <DialogContent className="flex flex-col sm:max-w-[1000px]">
+      <DialogContent className="flex flex-col sm:max-w-[1200px]">
         <DialogHeader>
           <DialogTitle>환자등록</DialogTitle>
           <DialogDescription>신규 환자를 등록합니다</DialogDescription>
