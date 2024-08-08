@@ -11,50 +11,62 @@ const supabase = createClient()
 
 export const searchIcuChart = async (searchInput: string, hosId: string) => {
   const safeWords = searchInput
+    .trim()
     .replace(SPECIAL_CHAR_REGEX, ' ')
     .split(' ')
     .filter((word) => word)
 
-  let queryBuilder = supabase.from('icu_chart').select(
+  let queryBuilder = supabase.from('icu_io').select(
     `
-      icu_io_id!inner(
-        age_in_days,
-        icu_io_id,
-        in_date,
-        out_date
-      ),
-      icu_chart_id,
-      target_date,
-      icu_chart_dx,
-      icu_chart_cc,
+      age_in_days,
+      icu_io_id,
+      in_date,
+      out_date,
+      icu_io_tags,
+      search_tags,
       patient_id(
         name,
         owner_name,
         species,
         breed
       )
-
     `,
   )
 
   // 각 단어에 대해 개별적인 ilike 조건 추가 (AND 방식)
   safeWords.forEach((word) => {
-    queryBuilder = queryBuilder.ilike('icu_chart_tags', `%${word}%`)
+    queryBuilder = queryBuilder.ilike('icu_io_tags', `%${word}%`)
   })
 
-  const { data: icuChartData, error: icuChartDataError } = await queryBuilder
-    .match({ hos_id: hosId })
-    .not('icu_io_id.out_date', 'is', null)
-    .order('target_date')
-    .order('icu_io_id')
-    .returns<SearchedChart[]>()
+  const { data: searchedIcuIoData, error: searchedIcuIoDataError } =
+    await queryBuilder
+      .match({ hos_id: hosId })
+      .not('out_date', 'is', null)
+      .order('created_at', { ascending: false })
+      .returns<SearchedChart[]>()
 
-  if (icuChartDataError) {
-    console.log(icuChartDataError)
-    redirect(`/error?message=${icuChartDataError.message}`)
+  if (searchedIcuIoDataError) {
+    console.log(searchedIcuIoDataError)
+    redirect(`/error?message=${searchedIcuIoDataError.message}`)
   }
 
-  return icuChartData
+  return searchedIcuIoData
+}
+
+export const getSelectedCharts = async (icuIoId: string) => {
+  const { data: selectedIcuChartData, error: selectedIcuChartDataError } =
+    await supabase
+      .from('icu_chart')
+      .select('icu_chart_id, target_date')
+      .order('created_at', { ascending: true })
+      .match({ icu_io_id: icuIoId })
+
+  if (selectedIcuChartDataError) {
+    console.log(selectedIcuChartDataError)
+    redirect(`/error?message=${selectedIcuChartDataError.message}`)
+  }
+
+  return selectedIcuChartData
 }
 
 export const getSelectedChartOrders = async (chartId: string) => {

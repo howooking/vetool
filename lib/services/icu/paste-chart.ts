@@ -56,7 +56,6 @@ export const pasteChart = async (
     main_vet,
     sub_vet,
     target_date,
-    search_tags,
     memo_a,
     memo_b,
     memo_c,
@@ -64,7 +63,6 @@ export const pasteChart = async (
     weight,
     icu_chart_dx,
     icu_chart_cc,
-    icu_chart_tags,
   } = returningData
 
   // 첫 차트인 경우 : chart 복사할 필요가 없고 order만 복사
@@ -83,7 +81,6 @@ export const pasteChart = async (
           main_vet,
           sub_vet,
           target_date: targetDate,
-          search_tags,
           memo_a,
           memo_b,
           memo_c,
@@ -91,7 +88,6 @@ export const pasteChart = async (
           weight,
           icu_chart_dx,
           icu_chart_cc,
-          icu_chart_tags,
           icu_io_id,
         })
         .select('icu_chart_id')

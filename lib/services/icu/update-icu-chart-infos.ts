@@ -7,11 +7,11 @@ import { redirect } from 'next/navigation'
 
 const supabase = createClient()
 
-const getTags = async (icuChartId: string) => {
+const getTags = async (icuIoId: string) => {
   const { data: tagData, error: tagDataError } = await supabase
-    .from('icu_chart')
-    .select('search_tags , icu_chart_tags')
-    .match({ icu_chart_id: icuChartId })
+    .from('icu_io')
+    .select('search_tags , icu_io_tags')
+    .match({ icu_io_id: icuIoId })
     .single()
 
   if (tagDataError) {
@@ -24,11 +24,12 @@ const getTags = async (icuChartId: string) => {
 
 export const updateDiagnosis = async (
   icuChartId: string,
+  icuIoId: string,
   diagnosis: string,
 ) => {
-  const tags = await getTags(icuChartId)
+  const tags = await getTags(icuIoId)
   const { updatedIcuTags, updatedSearchTags } = updateTags(
-    tags.icu_chart_tags,
+    tags.icu_io_tags,
     diagnosis,
     'dx',
   )
@@ -37,24 +38,36 @@ export const updateDiagnosis = async (
     .from('icu_chart')
     .update({
       icu_chart_dx: diagnosis,
-      icu_chart_tags: updatedIcuTags,
-      search_tags: updatedSearchTags,
     })
     .match({ icu_chart_id: icuChartId })
+
+  const { error: updateIcuIoError } = await supabase
+    .from('icu_io')
+    .update({
+      icu_io_tags: updatedIcuTags,
+      search_tags: updatedSearchTags,
+    })
+    .match({ icu_io_id: icuIoId })
 
   if (updateDiagnosisError) {
     console.log(updateDiagnosisError)
     redirect(`/error/?message=${updateDiagnosisError.message}`)
   }
+
+  if (updateIcuIoError) {
+    console.log(updateIcuIoError)
+    redirect(`/error/?message=${updateIcuIoError.message}`)
+  }
 }
 
 export const updateChiefComplaint = async (
   icuChartId: string,
+  icuIoId: string,
   chiefComplaint: string,
 ) => {
-  const tags = await getTags(icuChartId)
+  const tags = await getTags(icuIoId)
   const { updatedIcuTags, updatedSearchTags } = updateTags(
-    tags.icu_chart_tags,
+    tags.icu_io_tags,
     chiefComplaint,
     'cc',
   )
@@ -63,14 +76,25 @@ export const updateChiefComplaint = async (
     .from('icu_chart')
     .update({
       icu_chart_cc: chiefComplaint,
-      icu_chart_tags: updatedIcuTags,
-      search_tags: updatedSearchTags,
     })
     .match({ icu_chart_id: icuChartId })
+
+  const { error: updateIcuIoError } = await supabase
+    .from('icu_io')
+    .update({
+      icu_io_tags: updatedIcuTags,
+      search_tags: updatedSearchTags,
+    })
+    .match({ icu_io_id: icuIoId })
 
   if (updateChiefComplaintError) {
     console.log(updateChiefComplaintError)
     redirect(`/error/?message=${updateChiefComplaintError.message}`)
+  }
+
+  if (updateIcuIoError) {
+    console.log(updateIcuIoError)
+    redirect(`/error/?message=${updateIcuIoError.message}`)
   }
 }
 
@@ -79,7 +103,7 @@ export const updateSearchTags = async (
   searchTags: string,
 ) => {
   const { error: updateSearchTagsError } = await supabase
-    .from('icu_chart')
+    .from('icu_io')
     .update({ search_tags: searchTags })
     .match({ icu_chart_id: icuChartId })
 

@@ -13,27 +13,61 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { cn, getAgeFromAgeInDays } from '@/lib/utils'
-import { SearchedChart } from '@/types/icu'
+import { cn, getAgeFromAgeInDays, getPatientSymptoms } from '@/lib/utils'
+import type { SearchedChart, SelectedSearchedChart } from '@/types/icu'
 import { Cat, Dog } from 'lucide-react'
-import { COLUMN_WIDTH } from './search-chart-table'
+import { COLUMN_WIDTH } from '@/components/hospital/icu/main/search/table/search-chart-table'
 import SingleRow from './single-row/single-row'
-export default function GroupedChart({ charts }: { charts: SearchedChart[] }) {
+import { useEffect, useState } from 'react'
+import { getSelectedCharts } from '@/lib/services/icu/search-charts'
+export default function GroupedChart({ charts }: { charts: SearchedChart }) {
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
+  const [singleRowCharts, setSingleRowCharts] = useState<
+    SelectedSearchedChart[]
+  >([])
+
   const {
-    icu_chart_id,
-    icu_chart_cc,
-    icu_chart_dx,
+    icu_io_id,
+    age_in_days,
+    in_date,
+    out_date,
+    search_tags,
     patient_id: { name, owner_name, species, breed },
-    icu_io_id: { icu_io_id, age_in_days, in_date, out_date },
-  } = charts[0]
+  } = charts
+  const { dx, cc } = getPatientSymptoms(search_tags)
   const inAndOutDate = `${in_date} ~ ${out_date}`
 
+  useEffect(() => {
+    if (isAccordionOpen) {
+      setIsFetching(true)
+      const fetchSelectedCharts = async () => {
+        const selectedCharts = await getSelectedCharts(icu_io_id)
+
+        setSingleRowCharts(selectedCharts)
+
+        setIsFetching(false)
+      }
+
+      fetchSelectedCharts()
+    }
+  }, [icu_io_id, isAccordionOpen])
+
   return (
-    <TableRow key={icu_chart_id}>
+    <TableRow key={icu_io_id}>
       <TableCell colSpan={7} className="p-0">
-        <Accordion key={icu_io_id} type="single" collapsible className="w-full">
+        <Accordion
+          key={icu_io_id}
+          type="single"
+          collapsible
+          className="w-full"
+          onValueChange={(value) => setIsAccordionOpen(!!value)}
+        >
           <AccordionItem value={icu_io_id} className="border-b-0">
-            <AccordionTrigger className="h-10 w-full hover:bg-muted/50 [&[data-state=open]]:bg-muted">
+            <AccordionTrigger
+              className="h-10 w-full hover:bg-muted/50 [&[data-state=open]]:bg-muted"
+              noIcon
+            >
               <div className="flex w-full items-center">
                 <div
                   className={cn(
@@ -56,15 +90,15 @@ export default function GroupedChart({ charts }: { charts: SearchedChart[] }) {
                 <div className={cn(COLUMN_WIDTH.ageInDays, 'text-center')}>
                   {getAgeFromAgeInDays(age_in_days)}
                 </div>
-                <div className={cn('w-auto flex-1 text-center')}>
-                  {icu_chart_dx}
-                </div>
-                <div className={cn('flex-1 text-center')}>{icu_chart_cc}</div>
+                <div className={cn('w-auto flex-1 text-center')}>{dx}</div>
+                <div className={cn('flex-1 text-center')}>{cc}</div>
               </div>
             </AccordionTrigger>
 
             <AccordionContent className="py-0">
-              <Table>
+              <Table className="table-fixed">
+                {' '}
+                {/* table-fixed 추가 */}
                 <TableHeader className="border-b">
                   <TableRow>
                     <TableHead className="text-center">입원일차</TableHead>
@@ -74,7 +108,7 @@ export default function GroupedChart({ charts }: { charts: SearchedChart[] }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {charts.map((chart, index) => (
+                  {singleRowCharts.map((chart, index) => (
                     <SingleRow
                       chart={chart}
                       index={index}

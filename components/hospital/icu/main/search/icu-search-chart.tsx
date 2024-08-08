@@ -16,19 +16,9 @@ export default function IcuSearchChart() {
   const { hos_id } = useParams()
   const [isSearching, setIsSearching] = useState(false)
 
-  const [groupedCharts, setGroupedCharts] = useState<SearchedChart[][]>([])
-
-  const groupByIcuIoId = (searchedCharts: SearchedChart[]) => {
-    const groupedMap = new Map<string, SearchedChart[]>()
-
-    for (const chart of searchedCharts) {
-      const group = groupedMap.get(chart.icu_io_id.icu_io_id) || []
-      group.push(chart)
-      groupedMap.set(chart.icu_io_id.icu_io_id, group)
-    }
-
-    return Array.from(groupedMap.values())
-  }
+  const [searchedChartState, setSearchedChartState] = useState<SearchedChart[]>(
+    [],
+  )
 
   const handleSearch = useDebouncedCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,9 +32,7 @@ export default function IcuSearchChart() {
           hos_id as string,
         )
 
-        const groupedCharts = groupByIcuIoId(searchedCharts)
-
-        setGroupedCharts(groupedCharts)
+        setSearchedChartState(searchedCharts)
 
         setIsSearching(false)
       }
@@ -72,7 +60,7 @@ export default function IcuSearchChart() {
           <LargeLoaderCircle />
         </div>
       ) : (
-        <SearchChartTable groupedCharts={groupedCharts} />
+        <SearchChartTable searchedCharts={searchedChartState} />
       )}
     </div>
   )

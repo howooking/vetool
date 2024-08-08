@@ -106,6 +106,13 @@ export const updateTags = (tags: string, value: string, part: 'dx' | 'cc') => {
   return { updatedIcuTags, updatedSearchTags }
 }
 
+// search tag string을 입력 받아, dx와 cc를 반환
+export const getPatientSymptoms = (searchTags: string) => {
+  const parts = searchTags.split('#')
+  const [, dx, cc] = parts
+  return { dx, cc }
+}
+
 // YYYY-MM-DD string을 받아 현재와 입력받은 날짜 간의 차이를 반환
 export const getDaysDifference = (dateString: string) => {
   // 날짜 문자열을 Date 객체로 변환

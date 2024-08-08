@@ -27,7 +27,10 @@ export default function SelectedChart({
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
 
   return (
-    <div className="flex flex-col gap-2 p-2 pb-[48px]" ref={pdfRef}>
+    <div
+      className="flex flex-col gap-2 overflow-auto p-2 pb-[48px]"
+      ref={pdfRef}
+    >
       <ChartHeader
         isPatientOut={isPatientOut}
         chartData={restChartData}

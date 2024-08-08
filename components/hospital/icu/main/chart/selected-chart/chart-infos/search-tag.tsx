@@ -22,10 +22,10 @@ import { useCallback, useEffect, useState } from 'react'
 
 export default function SearchTag({
   searchTags,
-  icuChartId,
+  icuIoId,
 }: {
   searchTags: string
-  icuChartId: string
+  icuIoId: string
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -52,7 +52,7 @@ export default function SearchTag({
     setIsSubmitting(true)
     const updatedSearchTags = '#' + searchTagsList.join('#')
 
-    await updateSearchTags(icuChartId, updatedSearchTags)
+    await updateSearchTags(icuIoId, updatedSearchTags)
 
     toast({ title: '검색 태그를 변경하였습니다' })
     setIsSubmitting(false)

@@ -42,6 +42,7 @@ export default function ChartInfos({
         <Diagnosis
           diagnosis={chartData.icu_chart_dx}
           icuChartId={chartData.icu_chart_id}
+          icuIoId={selectedIo.icu_io_id}
         />
       </div>
 
@@ -62,14 +63,15 @@ export default function ChartInfos({
 
       <div className="col-span-2">
         <SearchTag
-          searchTags={chartData.search_tags}
-          icuChartId={chartData.icu_chart_id}
+          searchTags={selectedIo.search_tags}
+          icuIoId={selectedIo.icu_io_id}
         />
       </div>
 
       <div className="col-span-4 flex gap-2">
         <ChiefComplaint
           chiefComplaint={chartData.icu_chart_cc}
+          icuIoId={selectedIo.icu_io_id}
           icuChartId={chartData.icu_chart_id}
         />
       </div>

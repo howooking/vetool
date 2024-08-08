@@ -23,7 +23,7 @@ export default function IcuEntry({
         vetsListData={icuData.vetsListData}
       />
 
-      <div className="h-icu-chart w-full">
+      <div className="h-icu-chart w-full overflow-auto">
         <IcuMain icuData={icuData} />
         <IcuFooter />
       </div>

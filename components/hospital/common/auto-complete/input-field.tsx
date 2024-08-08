@@ -110,28 +110,30 @@ export default function InputField({
   return (
     <div className="flex items-center gap-2 overflow-x-auto rounded-md border py-1 focus-within:border-black">
       <Label
-        className="top-[10px] z-10 ml-2 text-xs text-muted-foreground"
+        className="top-[10px] z-10 ml-2 min-w-fit text-xs text-muted-foreground"
         htmlFor="diagnosis"
       >
         {label}
       </Label>
 
-      {selectedKeywords.map((item, index) => (
-        <Badge
-          key={item.keyword + index}
-          className="ml-1 flex items-center whitespace-nowrap pl-2 pr-1 text-xs"
-          variant="outline"
-          onClick={() => handleRemoveItem(item)}
-        >
-          <span>{`${item.keyword}${item.mainKeyWord ? ` (${item.mainKeyWord})` : ''}`}</span>
-          <X size={12} className="ml-1 flex-shrink-0 cursor-pointer" />
-        </Badge>
-      ))}
+      {selectedKeywords.map(
+        (item, index) =>
+          item.keyword && (
+            <Badge
+              key={item.keyword + index}
+              className="ml-1 flex items-center whitespace-nowrap pl-2 pr-1 text-xs"
+              variant="outline"
+              onClick={() => handleRemoveItem(item)}
+            >
+              <span>{`${item.keyword}${item.mainKeyWord ? ` (${item.mainKeyWord})` : ''}`}</span>
+              <X size={12} className="ml-1 flex-shrink-0 cursor-pointer" />
+            </Badge>
+          ),
+      )}
 
       <input
         ref={inputRef}
         id="diagnosis"
-        placeholder="진단명"
         className="h-6 flex-grow overflow-hidden bg-transparent text-sm outline-none"
         value={inputValue}
         onChange={handleInputChange}

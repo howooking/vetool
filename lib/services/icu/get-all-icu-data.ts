@@ -17,7 +17,8 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .from('icu_io')
       .select(
         `
-          icu_io_id, in_date, out_date, out_due_date, group_list, age_in_days,
+          icu_io_id, in_date, out_date, out_due_date, group_list, age_in_days, 
+          icu_io_tags, search_tags,
           patient_id(name, breed, patient_id),
           hos_id(group_list)
         `,

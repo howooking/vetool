@@ -43,8 +43,8 @@ export default function OrderTitle({
         )?.color,
       }}
     >
-      <span className="whitespace-nowrap">{orderName}</span>
-      <span className="truncate text-xs text-muted-foreground">
+      <span className="min-w-16 truncate">{orderName}</span>
+      <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
         {orderComment}
       </span>
     </TableCell>
