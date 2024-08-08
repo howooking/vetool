@@ -161,7 +161,9 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
   {
     accessorKey: 'select_patient',
     header: ({ table }) => {
-      const isIcu = table.getRow('0').original.isIcu
+      const firstRow = table.getRowModel().rows[0]
+      const isIcu = firstRow ? firstRow.original.isIcu : false
+
       return (
         <div className={cn('flex justify-center', !isIcu && 'hidden')}>
           선택

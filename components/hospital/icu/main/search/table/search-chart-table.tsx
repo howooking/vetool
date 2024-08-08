@@ -1,7 +1,11 @@
 import NoResult from '@/components/common/no-result'
+import { ConfirmCopyDialog } from '@/components/hospital/icu/common-dialogs/confirm-copy-dilalog'
+import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
+import GroupedChart from '@/components/hospital/icu/main/search/table/grouped-chart'
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -10,9 +14,6 @@ import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import { cn } from '@/lib/utils'
 import type { SearchedChart } from '@/types/icu'
-import { ConfirmCopyDialog } from '../../../common-dialogs/confirm-copy-dilalog'
-import PreviewDialog from '../../../common-dialogs/preview/preview-dialog'
-import GroupedChart from './grouped-chart'
 
 export const COLUMN_WIDTH = {
   name: 'w-[200px]',
@@ -24,15 +25,20 @@ export const COLUMN_WIDTH = {
 }
 
 export default function SearchChartTable({
-  groupedCharts,
+  searchedCharts,
 }: {
-  groupedCharts: SearchedChart[][]
+  searchedCharts: SearchedChart[]
 }) {
   const { isPreviewModalOpen } = useOrderPreviewStore()
   const { isConfirmCopyDialogOpen } = useCopiedChartStore()
 
-  if (groupedCharts.length === 0) {
-    return <NoResult title="결과가 없습니다" className="h-[400px]" />
+  if (!searchedCharts) {
+    return (
+      <NoResult
+        title="검색 가능한 차트가 존재하지 않습니다"
+        className="h-[400px]"
+      />
+    )
   }
 
   return (
@@ -62,20 +68,19 @@ export default function SearchChartTable({
         </TableHeader>
 
         <TableBody>
-          {groupedCharts.length === 0 && (
+          {searchedCharts.length === 0 && (
             <TableRow>
-              <NoResult title="결과가 없습니다" className="h-40" />
+              <TableCell colSpan={100} className="h-40">
+                <div className="flex h-full items-center justify-center">
+                  <NoResult title="결과가 없습니다" />
+                </div>
+              </TableCell>
             </TableRow>
           )}
 
-          {groupedCharts.length > 0 &&
-            groupedCharts.map((charts) => {
-              return (
-                <GroupedChart
-                  key={charts[0].icu_io_id.icu_io_id}
-                  charts={charts}
-                />
-              )
+          {searchedCharts.length > 0 &&
+            searchedCharts.map((charts) => {
+              return <GroupedChart key={charts.icu_io_id} charts={charts} />
             })}
         </TableBody>
       </Table>

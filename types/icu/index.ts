@@ -23,6 +23,8 @@ export type IcuIoPatientJoined = Pick<
   | 'group_list'
   | 'icu_io_id'
   | 'age_in_days'
+  | 'icu_io_tags'
+  | 'search_tags'
 > & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
   hos_id: Pick<Hospital, 'group_list'>
@@ -49,15 +51,15 @@ export type IcuChartJoined = Omit<
 }
 
 export type SearchedChart = Pick<
-  IcuChart,
-  | 'icu_chart_id'
-  | 'target_date'
-  | 'icu_chart_dx'
-  | 'icu_chart_cc'
-  | 'icu_chart_tags'
+  IcuIo,
+  | 'icu_io_id'
+  | 'out_date'
+  | 'in_date'
+  | 'age_in_days'
+  | 'icu_io_tags'
+  | 'search_tags'
 > & {
   patient_id: Pick<Patients, 'name' | 'owner_name' | 'species' | 'breed'>
-  icu_io_id: Pick<IcuIo, 'icu_io_id' | 'out_date' | 'in_date' | 'age_in_days'>
 }
 
 export type IcuChartOrderJoined = IcuChartOrder & {
@@ -119,3 +121,8 @@ export type IcuChartBookmarkJoined = {
 export type CopiedOrder = IcuChartOrder & {
   icu_io_id: IcuIo
 }
+
+export type SelectedSearchedChart = Pick<
+  IcuChart,
+  'target_date' | 'icu_chart_id'
+>
