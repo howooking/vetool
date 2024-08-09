@@ -37,10 +37,13 @@ export default function AutoComplete({
   useEffect(() => {
     setAutoCompleteState((prevState) => ({
       ...prevState,
-      selectedKeywords: defaultValue.split(',').map((keyword) => ({
-        keyword: keyword.trim(),
-        mainKeyWord: '',
-      })),
+      selectedKeywords: defaultValue
+        .split(',')
+        .map((keyword) => ({
+          keyword: keyword.trim(),
+          mainKeyWord: '',
+        }))
+        .filter((item) => item.keyword !== ''),
     }))
   }, [defaultValue])
 
