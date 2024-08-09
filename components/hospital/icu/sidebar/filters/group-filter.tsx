@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function GroupFilter({
@@ -24,6 +25,8 @@ export default function GroupFilter({
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [tempSelectedGroup, setTempSelectedGroup] = useState<string[]>([])
 
+  const { push } = useRouter()
+
   useEffect(() => {
     setTempSelectedGroup(selectedGroup)
   }, [selectedGroup])
@@ -34,6 +37,8 @@ export default function GroupFilter({
         ? prevGroups.filter((value) => value !== group)
         : [...prevGroups, group],
     )
+
+    push(`?group=${tempSelectedGroup.join(',')}`)
   }
 
   const handleResetClick = () => {

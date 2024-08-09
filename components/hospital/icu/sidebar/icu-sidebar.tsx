@@ -42,6 +42,7 @@ export default function IcuSidebar({
 
     const filterByVet = (data: IcuIoPatientJoined[]) => {
       if (filters.selectedVet === '') return data
+
       const vetFilteredIds = new Set(
         icuChartData
           .filter(
