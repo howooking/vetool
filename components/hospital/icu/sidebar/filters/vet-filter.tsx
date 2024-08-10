@@ -41,7 +41,6 @@ export default function VetFilter({
     const newUrl = `${pathname}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
 
     push(newUrl)
-    setSelectedVet(value)
   }
 
   return (

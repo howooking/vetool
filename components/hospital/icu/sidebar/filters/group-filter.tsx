@@ -32,19 +32,16 @@ export default function GroupFilter({
   const { push } = useRouter()
 
   const handleCheckboxChange = (group: string) => {
-    setTempSelectedGroup((prevGroups) => {
-      const newGroups = prevGroups.includes(group)
+    setTempSelectedGroup((prevGroups) =>
+      prevGroups.includes(group)
         ? prevGroups.filter((value) => value !== group)
-        : [...prevGroups, group]
-
-      push(`?group=${newGroups.join(',')}`)
-
-      return newGroups
-    })
+        : [...prevGroups, group],
+    )
   }
 
   const handleResetClick = () => {
     setTempSelectedGroup([])
+
     currentParams.delete('group')
     const newUrl = `${pathname}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
 
