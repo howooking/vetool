@@ -10,6 +10,7 @@ import type {
 import { useMemo, useState } from 'react'
 import Filters from './filters/filters'
 import { Separator } from '@/components/ui/separator'
+import { useSearchParams } from 'next/navigation'
 
 export type Filters = {
   selectedGroup: string[]
@@ -25,9 +26,11 @@ export default function IcuSidebar({
   icuChartData: IcuChartJoined[]
   vetsListData: IcuUserList[]
 }) {
-  const [filters, setFilters] = useState<Filters>({
-    selectedGroup: [] as string[],
-    selectedVet: '',
+  const searchParams = useSearchParams()
+
+  const [filters, setFilters] = useState({
+    selectedGroup: searchParams.get('group')?.split(',') || [],
+    selectedVet: searchParams.get('vet') || '',
   })
 
   const filteredData = useMemo(() => {

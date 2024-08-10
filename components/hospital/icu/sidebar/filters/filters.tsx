@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction } from 'react'
 import type { Filters } from '../icu-sidebar'
 import GroupFilter from './group-filter'
 import VetFilter from './vet-filter'
+import { usePathname, useRouter } from 'next/navigation'
 
 export default function Filters({
   filters,
@@ -16,8 +17,13 @@ export default function Filters({
   icuIoData: IcuIoPatientJoined[]
   vetsListData: IcuUserList[]
 }) {
+  const pathname = usePathname()
+
+  const { push } = useRouter()
+
   const resetFilters = () => {
     setFilters({ selectedGroup: [], selectedVet: '' })
+    push(pathname)
   }
 
   return (
