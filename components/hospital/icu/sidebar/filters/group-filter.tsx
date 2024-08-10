@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function GroupFilter({
@@ -21,12 +22,14 @@ export default function GroupFilter({
   selectedGroup: string[]
   setSelectedGroup: (group: string[]) => void
 }) {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const currentParams = new URLSearchParams(searchParams.toString())
+
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [tempSelectedGroup, setTempSelectedGroup] = useState<string[]>([])
 
-  useEffect(() => {
-    setTempSelectedGroup(selectedGroup)
-  }, [selectedGroup])
+  const { push } = useRouter()
 
   const handleCheckboxChange = (group: string) => {
     setTempSelectedGroup((prevGroups) =>
@@ -38,12 +41,27 @@ export default function GroupFilter({
 
   const handleResetClick = () => {
     setTempSelectedGroup([])
+
+    currentParams.delete('group')
+    const newUrl = `${pathname}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
+
+    push(newUrl)
   }
 
   const handleOkButtonClick = () => {
     setSelectedGroup(tempSelectedGroup)
     setIsDialogOpen(false)
   }
+
+  useEffect(() => {
+    setTempSelectedGroup(selectedGroup)
+  }, [selectedGroup])
+
+  useEffect(() => {
+    if (tempSelectedGroup.length > 0) {
+      push(`?group=${tempSelectedGroup.join(',')}`)
+    }
+  }, [tempSelectedGroup, push])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

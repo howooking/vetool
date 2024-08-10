@@ -4,16 +4,22 @@ import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/he
 import { Button } from '@/components/ui/button'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 export default function HeaderDateSelector() {
-  const { target_date } = useParams()
+  const searchParams = useSearchParams()
+  const { target_date, hos_id } = useParams()
   const { push } = useRouter()
 
   const handleUpdateDate = (days: number) => {
     const newDate = new Date(target_date as string)
     newDate.setDate(newDate.getDate() + days)
-    push(`${format(newDate, 'yyyy-MM-dd')}`)
+
+    const newDateString = format(newDate, 'yyyy-MM-dd')
+    const params = new URLSearchParams(searchParams)
+    const newPath = `/hospital/${hos_id}/icu/${newDateString}?${params.toString()}`
+
+    push(newPath)
   }
 
   return (

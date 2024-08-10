@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/select'
 import type { IcuUserList } from '@/types/icu'
 import Image from 'next/image'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function VetFilter({
@@ -20,13 +21,26 @@ export default function VetFilter({
   selectedVet: string
   setSelectedVet: (vet: string) => void
 }) {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const currentParams = new URLSearchParams(searchParams.toString())
+
   const [isSelectorOpen, setIsSelectorOpen] = useState(false)
+
+  const { push } = useRouter()
+
   const handleValueChange = (value: string) => {
     if (value === 'reset') {
-      return setSelectedVet('')
+      currentParams.delete('vet')
+      setSelectedVet('')
+    } else {
+      currentParams.set('vet', value)
+      setSelectedVet(value)
     }
 
-    setSelectedVet(value)
+    const newUrl = `${pathname}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
+
+    push(newUrl)
   }
 
   return (
