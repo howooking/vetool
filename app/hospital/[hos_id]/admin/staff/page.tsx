@@ -1,0 +1,35 @@
+import { columns } from '@/components/hospital/admin/staff/columns'
+import DataTable from '@/components/ui/data-table'
+import { checkIsAdmin, getUser } from '@/lib/services/auth/authorization'
+import { getStaffs } from '@/lib/services/settings/staff-settings'
+import type { HospitalUserDataTable } from '@/types/adimin'
+
+export default async function AdminStaffPage({
+  params,
+}: {
+  params: { hos_id: string }
+}) {
+  await checkIsAdmin(params.hos_id)
+
+  const staffs = await getStaffs(params.hos_id)
+
+  const authUser = await getUser()
+
+  const isMaster = staffs[0].hos_id.master_user_id === authUser?.id
+
+  const data: HospitalUserDataTable[] = staffs!.map((user) => ({
+    group: user.group,
+    name: user.name,
+    position: user.position,
+    rank: user.rank,
+    is_admin: user.is_admin,
+    is_vet: user.is_vet,
+    user_id: user.user_id,
+    avatar_url: user.avatar_url,
+    master_user_id: user.hos_id.master_user_id,
+    group_list: user.hos_id.group_list,
+    isMaster,
+  }))
+
+  return <DataTable columns={columns} data={data} />
+}
