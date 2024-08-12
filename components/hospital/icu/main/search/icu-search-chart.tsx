@@ -1,5 +1,3 @@
-// TODO : 삭제
-
 'use client'
 
 import HelperTooltip from '@/components/common/helper-tooltip'
@@ -15,7 +13,6 @@ import { useDebouncedCallback } from 'use-debounce'
 export default function IcuSearchChart() {
   const { hos_id } = useParams()
   const [isSearching, setIsSearching] = useState(false)
-
   const [searchedChartState, setSearchedChartState] = useState<SearchedChart[]>(
     [],
   )
@@ -55,13 +52,10 @@ export default function IcuSearchChart() {
         </HelperTooltip>
       </div>
 
-      {isSearching ? (
-        <div className="flex h-[400px] items-center justify-center">
-          <LargeLoaderCircle />
-        </div>
-      ) : (
-        <SearchChartTable searchedCharts={searchedChartState} />
-      )}
+      <SearchChartTable
+        searchedCharts={searchedChartState}
+        isSearching={isSearching}
+      />
     </div>
   )
 }

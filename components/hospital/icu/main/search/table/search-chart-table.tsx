@@ -1,3 +1,4 @@
+import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import NoResult from '@/components/common/no-result'
 import { ConfirmCopyDialog } from '@/components/hospital/icu/common-dialogs/confirm-copy-dilalog'
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
@@ -26,20 +27,13 @@ export const COLUMN_WIDTH = {
 
 export default function SearchChartTable({
   searchedCharts,
+  isSearching,
 }: {
   searchedCharts: SearchedChart[]
+  isSearching: boolean
 }) {
   const { isPreviewModalOpen } = useOrderPreviewStore()
   const { isConfirmCopyDialogOpen } = useCopiedChartStore()
-
-  if (!searchedCharts) {
-    return (
-      <NoResult
-        title="검색 가능한 차트가 존재하지 않습니다"
-        className="h-[400px]"
-      />
-    )
-  }
 
   return (
     <>
@@ -68,17 +62,24 @@ export default function SearchChartTable({
         </TableHeader>
 
         <TableBody>
-          {searchedCharts.length === 0 && (
+          <TableRow>
+            {isSearching && (
+              <TableCell colSpan={100}>
+                <LargeLoaderCircle className="h-[400px]" />
+              </TableCell>
+            )}
+          </TableRow>
+
+          {!isSearching && searchedCharts.length === 0 && (
             <TableRow>
-              <TableCell colSpan={100} className="h-40">
-                <div className="flex h-full items-center justify-center">
-                  <NoResult title="결과가 없습니다" />
-                </div>
+              <TableCell colSpan={100}>
+                <NoResult title="검색 결과가 없습니다" className="h-[400px]" />
               </TableCell>
             </TableRow>
           )}
 
-          {searchedCharts.length > 0 &&
+          {!isSearching &&
+            searchedCharts.length > 0 &&
             searchedCharts.map((charts) => {
               return <GroupedChart key={charts.icu_io_id} charts={charts} />
             })}
