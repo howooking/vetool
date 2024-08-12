@@ -1,7 +1,6 @@
 'use client'
 
 import HelperTooltip from '@/components/common/helper-tooltip'
-import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import SearchChartTable from '@/components/hospital/icu/main/search/table/search-chart-table'
 import { Input } from '@/components/ui/input'
 import { searchIcuChart } from '@/lib/services/icu/search-charts'

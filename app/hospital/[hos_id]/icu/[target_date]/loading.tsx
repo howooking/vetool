@@ -19,9 +19,7 @@ export default function IcuSkeleton() {
         <Skeleton className="h-8 w-[127px]" />
       </div>
 
-      <div className="flex w-full items-center justify-center">
-        <LargeLoaderCircle />
-      </div>
+      <LargeLoaderCircle />
     </div>
   )
 }

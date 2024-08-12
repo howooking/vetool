@@ -87,11 +87,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
   }
 
   if (isChartLoading) {
-    return (
-      <div className="flex h-icu-chart items-center justify-center">
-        <LargeLoaderCircle />
-      </div>
-    )
+    return <LargeLoaderCircle className="h-icu-chart" />
   }
 
   if (!selectedIo) {
