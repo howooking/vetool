@@ -33,7 +33,7 @@ export default function Layout({
       </SidebarWrapper>
 
       <div className="relative w-full">
-        <HospitalHeader hosId={params.hos_id} />
+        <HospitalHeader />
         <main>{children}</main>
       </div>
     </div>
