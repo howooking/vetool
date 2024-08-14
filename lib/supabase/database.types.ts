@@ -791,6 +791,7 @@ export type Database = {
           notice_order: number
           notice_text: string
           updated_at: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -800,6 +801,7 @@ export type Database = {
           notice_order: number
           notice_text?: string
           updated_at?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -809,6 +811,7 @@ export type Database = {
           notice_order?: number
           notice_text?: string
           updated_at?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -817,6 +820,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "notices_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
           },
         ]
       }
