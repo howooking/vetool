@@ -59,7 +59,7 @@ export default function ChangeMemoName({ memoNames }: { memoNames: string[] }) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="w-2/3 w-full space-y-4 py-4"
+        className="w-full space-y-4 py-4"
       >
         <FormField
           control={form.control}

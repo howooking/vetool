@@ -83,15 +83,11 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
   )
 
   if (!selectedPatient) {
-    return <NoResult title="환자를 선택해주세요" />
+    return <NoResult title="환자를 선택해주세요" className="h-icu-chart" />
   }
 
   if (isChartLoading) {
-    return (
-      <div className="flex h-icu-chart items-center justify-center">
-        <LargeLoaderCircle />
-      </div>
-    )
+    return <LargeLoaderCircle className="h-icu-chart" />
   }
 
   if (!selectedIo) {
@@ -104,6 +100,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
             하였습니다
           </>
         }
+        className="h-icu-chart"
       />
     )
   }

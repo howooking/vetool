@@ -15,6 +15,7 @@ import { useState } from 'react'
 export function PatientRegisterDialog({ hosId }: { hosId: string }) {
   const [isPatientRegisterDialogOpen, setIsPatientRegisterDialogOpen] =
     useState(false)
+
   return (
     <Dialog
       open={isPatientRegisterDialogOpen}

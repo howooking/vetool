@@ -23,7 +23,6 @@ export const searchIcuChart = async (searchInput: string, hosId: string) => {
       in_date,
       out_date,
       icu_io_tags,
-      search_tags,
       patient_id(
         name,
         owner_name,
@@ -58,7 +57,7 @@ export const getSelectedCharts = async (icuIoId: string) => {
     await supabase
       .from('icu_chart')
       .select('icu_chart_id, target_date')
-      .order('created_at', { ascending: true })
+      .order('target_date', { ascending: true })
       .match({ icu_io_id: icuIoId })
 
   if (selectedIcuChartDataError) {

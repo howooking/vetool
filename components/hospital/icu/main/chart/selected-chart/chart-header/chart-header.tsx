@@ -62,6 +62,7 @@ export default function ChartHeader({
           name={name}
           isPatientOut={isPatientOut}
           selectedChartOrders={selectedChartOrders}
+          chartData={chartData}
         />
 
         <ExportDioalog

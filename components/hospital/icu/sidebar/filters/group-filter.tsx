@@ -51,17 +51,15 @@ export default function GroupFilter({
   const handleOkButtonClick = () => {
     setSelectedGroup(tempSelectedGroup)
     setIsDialogOpen(false)
+    currentParams.set('group', tempSelectedGroup.join(','))
+    const newUrl = `${pathname}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
+
+    push(newUrl)
   }
 
   useEffect(() => {
     setTempSelectedGroup(selectedGroup)
   }, [selectedGroup])
-
-  useEffect(() => {
-    if (tempSelectedGroup.length > 0) {
-      push(`?group=${tempSelectedGroup.join(',')}`)
-    }
-  }, [tempSelectedGroup, push])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

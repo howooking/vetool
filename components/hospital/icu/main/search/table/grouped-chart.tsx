@@ -7,22 +7,20 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
+import SingleRow from '@/components/hospital/icu/main/search/table/single-row/single-row'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { cn, getAgeFromAgeInDays, getPatientSymptoms } from '@/lib/utils'
+import { getSelectedCharts } from '@/lib/services/icu/search-charts'
+import { cn, getAgeFromAgeInDays } from '@/lib/utils'
 import type { SearchedChart, SelectedSearchedChart } from '@/types/icu'
 import { Cat, Dog } from 'lucide-react'
-import { COLUMN_WIDTH } from '@/components/hospital/icu/main/search/table/search-chart-table'
-import SingleRow from './single-row/single-row'
 import { useEffect, useState } from 'react'
-import { getSelectedCharts } from '@/lib/services/icu/search-charts'
 export default function GroupedChart({ charts }: { charts: SearchedChart }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false)
-  const [isFetching, setIsFetching] = useState(false)
   const [singleRowCharts, setSingleRowCharts] = useState<
     SelectedSearchedChart[]
   >([])
@@ -32,21 +30,16 @@ export default function GroupedChart({ charts }: { charts: SearchedChart }) {
     age_in_days,
     in_date,
     out_date,
-    search_tags,
     patient_id: { name, owner_name, species, breed },
   } = charts
-  const { dx, cc } = getPatientSymptoms(search_tags)
   const inAndOutDate = `${in_date} ~ ${out_date}`
 
   useEffect(() => {
     if (isAccordionOpen) {
-      setIsFetching(true)
       const fetchSelectedCharts = async () => {
         const selectedCharts = await getSelectedCharts(icu_io_id)
 
         setSingleRowCharts(selectedCharts)
-
-        setIsFetching(false)
       }
 
       fetchSelectedCharts()
@@ -55,9 +48,8 @@ export default function GroupedChart({ charts }: { charts: SearchedChart }) {
 
   return (
     <TableRow key={icu_io_id}>
-      <TableCell colSpan={7} className="p-0">
+      <TableCell colSpan={5} className="border-0 p-0 pl-[1px]">
         <Accordion
-          key={icu_io_id}
           type="single"
           collapsible
           className="w-full"
@@ -65,12 +57,9 @@ export default function GroupedChart({ charts }: { charts: SearchedChart }) {
         >
           <AccordionItem value={icu_io_id} className="border-b-0">
             <AccordionTrigger className="h-10 w-full hover:bg-muted/50 [&[data-state=open]]:bg-muted">
-              <div className="flex w-full items-center">
+              <div className="flex w-full">
                 <div
-                  className={cn(
-                    COLUMN_WIDTH.name,
-                    'flex items-center justify-center gap-1',
-                  )}
+                  className={cn('flex w-1/4 items-center justify-center gap-1')}
                 >
                   {species === 'canine' ? <Dog size={20} /> : <Cat size={20} />}
                   {name}
@@ -78,30 +67,29 @@ export default function GroupedChart({ charts }: { charts: SearchedChart }) {
                     ({breed})
                   </span>
                 </div>
-                <div className={cn(COLUMN_WIDTH.ownerName, 'text-center')}>
+                <div className={cn('w-1/4 text-center')}>
                   {owner_name || '미등록'}
                 </div>
-                <div className={cn(COLUMN_WIDTH.inAndOutDate, 'text-center')}>
-                  {inAndOutDate}
-                </div>
-                <div className={cn(COLUMN_WIDTH.ageInDays, 'text-center')}>
+                <div className={cn('w-1/4 text-center')}>{inAndOutDate}</div>
+                <div className={cn('w-1/4 text-center')}>
                   {getAgeFromAgeInDays(age_in_days)}
                 </div>
-                <div className={cn('w-auto flex-1 text-center')}>{dx}</div>
-                <div className={cn('flex-1 text-center')}>{cc}</div>
               </div>
             </AccordionTrigger>
 
             <AccordionContent className="py-0">
-              <Table className="table-fixed">
-                {' '}
-                {/* table-fixed 추가 */}
+              <Table>
                 <TableHeader className="border-b">
                   <TableRow>
-                    <TableHead className="text-center">입원일차</TableHead>
-                    <TableHead className="text-center">입원일</TableHead>
-                    <TableHead className="text-center">미리보기</TableHead>
-                    <TableHead className="text-center">복사</TableHead>
+                    <TableHead className="w-1/4 text-center">
+                      입원일차
+                    </TableHead>
+                    <TableHead className="w-1/4 text-center">입원일</TableHead>
+                    <TableHead className="w-1/4 text-center">
+                      미리보기
+                    </TableHead>
+                    <TableHead className="w-1/4 text-center">복사</TableHead>
+                    <TableHead />
                   </TableRow>
                 </TableHeader>
                 <TableBody>
