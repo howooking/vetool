@@ -30,10 +30,10 @@ export default function SingleNotice({
             width={20}
             height={20}
             className="rounded-full"
+            priority
           />
-          <span className="text-sm text-muted-foreground">
-            {notice.user_id.name}
-          </span>
+          <span className="text-sm">{notice.user_id.name}</span>
+          <span className="ml-2 text-sm">{notice.created_at.slice(0, 10)}</span>
         </div>
       </div>
 

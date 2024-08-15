@@ -782,6 +782,30 @@ export type Database = {
           },
         ]
       }
+      keywords: {
+        Row: {
+          created_at: string
+          id: number
+          keyword: string | null
+          main_key_word: string | null
+          tags: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          keyword?: string | null
+          main_key_word?: string | null
+          tags?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          keyword?: string | null
+          main_key_word?: string | null
+          tags?: string | null
+        }
+        Relationships: []
+      }
       notices: {
         Row: {
           created_at: string
@@ -801,7 +825,7 @@ export type Database = {
           notice_order: number
           notice_text?: string
           updated_at?: string | null
-          user_id: string
+          user_id?: string
         }
         Update: {
           created_at?: string
@@ -937,6 +961,47 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "owners"
             referencedColumns: ["owner_id"]
+          },
+        ]
+      }
+      todos: {
+        Row: {
+          created_at: string
+          hos_id: string
+          id: string
+          is_done: boolean
+          is_repeat: boolean
+          target_date: string | null
+          target_user: string | null
+          todo_title: string
+        }
+        Insert: {
+          created_at?: string
+          hos_id: string
+          id?: string
+          is_done?: boolean
+          is_repeat?: boolean
+          target_date?: string | null
+          target_user?: string | null
+          todo_title?: string
+        }
+        Update: {
+          created_at?: string
+          hos_id?: string
+          id?: string
+          is_done?: boolean
+          is_repeat?: boolean
+          target_date?: string | null
+          target_user?: string | null
+          todo_title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "todos_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
           },
         ]
       }
@@ -1088,6 +1153,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      "(prev)icu_out_patient": {
+        Args: {
+          icu_io_id_input: string
+          icu_chart_id_input: string
+          is_patient_out_input: boolean
+          target_date_input: string
+          chart_orders_input: string
+          patient_id_input: string
+        }
+        Returns: undefined
+      }
       "(unused)insert_patient_with_selected_owner": {
         Args: {
           hos_id_input: string
@@ -1199,10 +1275,11 @@ export type Database = {
         Args: {
           icu_io_id_input: string
           icu_chart_id_input: string
+          patient_id_input: string
           is_patient_out_input: boolean
           target_date_input: string
           chart_orders_input: string
-          patient_id_input: string
+          symptoms_input: string
         }
         Returns: undefined
       }

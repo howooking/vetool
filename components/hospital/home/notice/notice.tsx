@@ -1,28 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { getUser } from '@/lib/services/auth/authorization'
 import { getNotices } from '@/lib/services/hospital-home/notice'
+import CreateOrUpdateNoticeDialog from './create-or-update-notice-dialog'
 import DragAndDropNoticeList from './drag-and-drop-notice-list'
 
 export default async function Notice({ hosId }: { hosId: string }) {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
   const noticesData = await getNotices(hosId)
-  const authuser = await getUser()
 
   return (
-    <Card className="rounded-sm">
+    <Card className="h-[calc(50vh-36px)] rounded-sm">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           공지사항
+          <CreateOrUpdateNoticeDialog hosId={hosId} />
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="">
-        <DragAndDropNoticeList
-          noticesData={noticesData}
-          hosId={hosId}
-          authuserId={authuser!.id}
-        />
+      <CardContent className="h-[calc(50vh-120px)] overflow-scroll">
+        <DragAndDropNoticeList noticesData={noticesData} hosId={hosId} />
       </CardContent>
     </Card>
   )

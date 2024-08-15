@@ -36,14 +36,12 @@ import DeleteNoticeButton from './delete-notice-button'
 import { NOTICE_COLORS, NoticeColorType, noticeSchema } from './notice-schema'
 
 export default function CreateOrUpdateNoticeDialog({
-  authuserId,
   hosId,
   isEdit,
   oldNoticeText,
   oldNoticeColor,
   oldNoticeId,
 }: {
-  authuserId?: string
   hosId: string
   isEdit?: boolean
   oldNoticeId?: string
@@ -68,7 +66,7 @@ export default function CreateOrUpdateNoticeDialog({
         color: oldNoticeColor ?? '#ffffff',
       })
     }
-  }, [isDialogOpen, form, isEdit])
+  }, [isDialogOpen, form, isEdit, oldNoticeText, oldNoticeColor])
 
   const handleCreateOrUpdateNotice = async (
     values: z.infer<typeof noticeSchema>,
@@ -79,7 +77,7 @@ export default function CreateOrUpdateNoticeDialog({
     if (isEdit) {
       await updateNotice(oldNoticeId!, notice, color)
     } else {
-      await createNotice(notice, color, hosId, authuserId!)
+      await createNotice(notice, color, hosId)
     }
 
     toast({
@@ -99,7 +97,7 @@ export default function CreateOrUpdateNoticeDialog({
           <Button
             variant={'default'}
             size="icon"
-            className="absolute -top-11 right-0 h-6 w-6 rounded-full"
+            className="h-6 w-6 rounded-full"
           >
             <Plus size={14} />
           </Button>
@@ -128,7 +126,7 @@ export default function CreateOrUpdateNoticeDialog({
                 <FormItem className="cols-span-1">
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value ?? '#ffffff'}
+                    defaultValue={field.value}
                     name="color"
                   >
                     <FormControl>

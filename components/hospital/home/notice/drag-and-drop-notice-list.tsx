@@ -1,23 +1,18 @@
-// TODO: 카드 고정 높이
-
 'use client'
 
+import NoResult from '@/components/common/no-result'
+import { reorderNotices } from '@/lib/services/hospital-home/notice'
+import type { NoticeUserJoined } from '@/types/hospital/notice'
 import { useState } from 'react'
 import { ReactSortable, Sortable } from 'react-sortablejs'
 import SingleNotice from './single-notice'
-import CreateOrUpdateNoticeDialog from './create-or-update-notice-dialog'
-import NoResult from '@/components/common/no-result'
-import type { NoticeUserJoined } from '@/types/hospital/notice'
-import { reorderNotices } from '@/lib/services/hospital-home/notice'
 
 export default function DragAndDropNoticeList({
   noticesData,
   hosId,
-  authuserId,
 }: {
   noticesData: NoticeUserJoined[]
   hosId: string
-  authuserId: string
 }) {
   const [sortableNotice, setSortableNotice] = useState(noticesData)
 
@@ -30,13 +25,8 @@ export default function DragAndDropNoticeList({
 
   return (
     <div className="relative">
-      <CreateOrUpdateNoticeDialog hosId={hosId} authuserId={authuserId} />
-
       {noticesData.length === 0 ? (
-        <NoResult
-          title="공지사항이 없습니다"
-          className="my-auto h-full items-center justify-center"
-        />
+        <NoResult title="공지사항이 없습니다" className="h-[calc(35vh)]" />
       ) : (
         <ReactSortable
           list={sortableNotice}
