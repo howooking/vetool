@@ -155,6 +155,7 @@ export default function InputField({
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
           disabled={isUpdating}
+          autoComplete="off"
         />
       </div>
     </div>
