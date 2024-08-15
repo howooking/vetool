@@ -16,15 +16,6 @@ import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import { cn } from '@/lib/utils'
 import type { SearchedChart } from '@/types/icu'
 
-export const COLUMN_WIDTH = {
-  name: 'w-[200px]',
-  ownerName: 'w-[200px]',
-  inAndOutDate: 'w-[240px]',
-  ageInDays: 'w-[160px]',
-  dx: 'w-auto',
-  cc: 'w-auto',
-}
-
 export default function SearchChartTable({
   searchedCharts,
   isSearching,
@@ -40,24 +31,11 @@ export default function SearchChartTable({
       <Table className="border">
         <TableHeader>
           <TableRow>
-            <TableHead className={cn(COLUMN_WIDTH.name, 'text-center')}>
-              환자
-            </TableHead>
-            <TableHead className={cn(COLUMN_WIDTH.ownerName, 'text-center')}>
-              보호자
-            </TableHead>
-            <TableHead className={cn(COLUMN_WIDTH.inAndOutDate, 'text-center')}>
-              입원기간
-            </TableHead>
-            <TableHead className={cn(COLUMN_WIDTH.ageInDays, 'text-center')}>
-              입원시 나이
-            </TableHead>
-            <TableHead className={cn(COLUMN_WIDTH.dx, 'text-center')}>
-              DX
-            </TableHead>
-            <TableHead className={cn(COLUMN_WIDTH.cc, 'text-center')}>
-              CC
-            </TableHead>
+            <TableHead className="w-1/4 text-center">환자</TableHead>
+            <TableHead className="w-1/4 text-center">보호자</TableHead>
+            <TableHead className="w-1/4 text-center">입원기간</TableHead>
+            <TableHead className="w-1/4 text-center">입원시 나이</TableHead>
+            <TableHead />
           </TableRow>
         </TableHeader>
 

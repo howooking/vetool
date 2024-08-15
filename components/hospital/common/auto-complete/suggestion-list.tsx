@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { CommandGroup, CommandItem, CommandList } from '@/components/ui/command'
 import {
   SearchKeywordResult,
@@ -13,7 +14,6 @@ export default function SuggestionList({
   setAutoCompleteState: SetAutoCompleteStates
   suggestions: SearchKeywordResult[]
 }) {
-  // Auto Complete Select Handler
   const handleSelect = (selectedSuggestion: SearchKeywordResult) => {
     // 선택한 값 update
     setAutoCompleteState((prev) => ({
@@ -21,27 +21,23 @@ export default function SuggestionList({
       suggestions: [],
       selectedKeywords: [...prev.selectedKeywords, selectedSuggestion],
     }))
-
-    inputRef.current?.focus()
   }
 
   return (
-    <>
+    <CommandList className="absolute z-20 mt-9 max-h-[300px] w-full rounded-lg bg-white shadow-lg">
       {suggestions.length > 0 && (
-        <CommandList className="absolute z-20 mt-9 max-h-[300px] w-full rounded-lg border bg-white shadow-lg">
-          <CommandGroup>
-            {suggestions.map((suggestion, index) => (
-              <CommandItem
-                key={suggestion.keyword + index}
-                value={suggestion.keyword + suggestion.mainKeyWord}
-                onSelect={() => handleSelect(suggestion)}
-              >
-                {`${suggestion.keyword} (${suggestion.mainKeyWord})`}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
+        <CommandGroup>
+          {suggestions.map((suggestion, index) => (
+            <CommandItem
+              key={index}
+              value={suggestion.keyword + suggestion.mainKeyWord}
+              onSelect={() => handleSelect(suggestion)}
+            >
+              {`${suggestion.keyword} (${suggestion.mainKeyWord})`}
+            </CommandItem>
+          ))}
+        </CommandGroup>
       )}
-    </>
+    </CommandList>
   )
 }

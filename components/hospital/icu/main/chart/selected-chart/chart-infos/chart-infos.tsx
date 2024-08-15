@@ -1,13 +1,12 @@
 'use client'
 
+import ChiefComplaint from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/chief-complaint'
+import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/diagnosis'
+import Group from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/group/group'
+import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/in-and-out-date/in-and-out-date'
+import { MainSubVet } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/main-sub-vet/main-sub-vet'
+import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/onwer-name'
 import type { IcuChartJoined, IcuIoPatientJoined } from '@/types/icu'
-import ChiefComplaint from './chief-complaint'
-import Diagnosis from './diagnosis'
-import Group from './group/group'
-import InAndOutDate from './in-and-out-date/in-and-out-date'
-import { MainSubVet } from './main-sub-vet/main-sub-vet'
-import OwnerName from './onwer-name'
-import SearchTag from './search-tag'
 
 export default function ChartInfos({
   chartData,
@@ -42,11 +41,10 @@ export default function ChartInfos({
         <Diagnosis
           diagnosis={chartData.icu_chart_dx}
           icuChartId={chartData.icu_chart_id}
-          icuIoId={selectedIo.icu_io_id}
         />
       </div>
 
-      <div className="col-span-1">
+      <div className="col-span-3">
         <Group
           hosGroupList={chartData.hos_id.group_list}
           currentGroups={selectedIo.group_list}
@@ -61,17 +59,9 @@ export default function ChartInfos({
         />
       </div>
 
-      <div className="col-span-2">
-        <SearchTag
-          searchTags={selectedIo.search_tags}
-          icuIoId={selectedIo.icu_io_id}
-        />
-      </div>
-
       <div className="col-span-4 flex gap-2">
         <ChiefComplaint
           chiefComplaint={chartData.icu_chart_cc}
-          icuIoId={selectedIo.icu_io_id}
           icuChartId={chartData.icu_chart_id}
         />
       </div>

@@ -38,23 +38,20 @@ export default function SearchTag({
   )
 
   useEffect(() => {
-    setSearchTagsList(parseSearchTags(searchTags))
-  }, [parseSearchTags, searchTags])
+    if (!isDialogOpen) setTagInput('')
 
-  useEffect(() => {
-    if (!isDialogOpen) {
-      setTagInput('')
-    }
     setSearchTagsList(parseSearchTags(searchTags))
   }, [isDialogOpen, parseSearchTags, searchTags])
 
   const handleUpdateSearchTags = async () => {
     setIsSubmitting(true)
+
     const updatedSearchTags = '#' + searchTagsList.join('#')
 
     await updateSearchTags(icuIoId, updatedSearchTags)
 
     toast({ title: '검색 태그를 변경하였습니다' })
+
     setIsSubmitting(false)
     setIsDialogOpen(false)
   }

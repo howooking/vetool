@@ -49,7 +49,7 @@ export default function AutoComplete({
 
   return (
     <div className="w-full">
-      <Command>
+      <Command loop>
         <InputField
           inputRef={inputRef}
           autoCompleteState={autoCompleteState}

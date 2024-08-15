@@ -8,11 +8,9 @@ import { useState } from 'react'
 export default function Diagnosis({
   diagnosis,
   icuChartId,
-  icuIoId,
 }: {
   diagnosis: string
   icuChartId: string
-  icuIoId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
 
@@ -25,7 +23,7 @@ export default function Diagnosis({
 
     setIsUpdating(true)
 
-    await updateDiagnosis(icuChartId, icuIoId, trimmedValue)
+    await updateDiagnosis(icuChartId, trimmedValue)
 
     toast({
       title: '진단명을 변경하였습니다',
