@@ -81,38 +81,6 @@ export function calculateAge(dateString: string) {
   }
 }
 
-export const updateTags = (tags: string, value: string, part: 'dx' | 'cc') => {
-  // '#'로 문자열을 분할
-  const parts = tags.split('#')
-
-  // 각 부분을 추출
-  const [, breed, species, name, bod, dx, cc] = parts
-
-  // 변경할 위치에 따라 새 값을 적용
-  let newDx = dx
-  let newCc = cc
-
-  if (part === 'dx') {
-    newDx = value
-  }
-  if (part === 'cc') {
-    newCc = value
-  }
-
-  // 새로운 문자열 구성
-  const updatedIcuTags = `#${breed}#${species}#${name}#${bod}#${newDx}#${newCc}`
-  const updatedSearchTags = `#${newDx}#${newCc}`
-
-  return { updatedIcuTags, updatedSearchTags }
-}
-
-// search tag string을 입력 받아, dx와 cc를 반환
-export const getPatientSymptoms = (searchTags: string) => {
-  const parts = searchTags.split('#')
-  const [, dx, cc] = parts
-  return { dx, cc }
-}
-
 // YYYY-MM-DD string을 받아 현재와 입력받은 날짜 간의 차이를 반환
 export const getDaysDifference = (dateString: string) => {
   // 날짜 문자열을 Date 객체로 변환

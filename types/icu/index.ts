@@ -24,7 +24,6 @@ export type IcuIoPatientJoined = Pick<
   | 'icu_io_id'
   | 'age_in_days'
   | 'icu_io_tags'
-  | 'search_tags'
 > & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
   hos_id: Pick<Hospital, 'group_list'>
@@ -52,12 +51,7 @@ export type IcuChartJoined = Omit<
 
 export type SearchedChart = Pick<
   IcuIo,
-  | 'icu_io_id'
-  | 'out_date'
-  | 'in_date'
-  | 'age_in_days'
-  | 'icu_io_tags'
-  | 'search_tags'
+  'icu_io_id' | 'out_date' | 'in_date' | 'age_in_days' | 'icu_io_tags'
 > & {
   patient_id: Pick<Patients, 'name' | 'owner_name' | 'species' | 'breed'>
 }
