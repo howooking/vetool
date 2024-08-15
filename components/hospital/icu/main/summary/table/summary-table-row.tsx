@@ -13,30 +13,25 @@ export default function SummaryTableRow({
   orders: IcuChartOrderJoined[]
   handleClickRow: (patientId: string, patientName: string) => void
 }) {
-  const ioDaysDifference = getDaysDifference(chart.icu_io_id.in_date)
-  const isDisabled = !!chart.icu_io_id.out_date
-  const rowClassName = cn(
-    'cursor-pointer divide-x',
-    isDisabled && 'text-muted-foreground line-through',
-  )
+  const hospitalizationDays = getDaysDifference(chart.icu_io_id.in_date)
+  const isPatientOut = !!chart.icu_io_id.out_date
 
   return (
     <TableRow
-      className={rowClassName}
+      className={cn(
+        'cursor-pointer divide-x',
+        isPatientOut && 'text-muted-foreground line-through',
+      )}
       onClick={() =>
         handleClickRow(chart.patient_id.patient_id, chart.patient_id.name)
       }
     >
-      <TableCell className="flex w-[200px] items-center justify-between gap-2">
-        <div className={cn(isDisabled && 'text-muted-foreground line-through')}>
-          {chart.patient_id.name}
-          <span className="text-xs text-muted-foreground">
-            ({chart.patient_id.breed})
-          </span>
+      <TableCell className="flex w-[200px] items-center justify-between">
+        <div>
+          <span>{chart.patient_id.name}</span>
+          <span className="text-xs">({chart.patient_id.breed})</span>
         </div>
-        <span className="text-xs text-muted-foreground">
-          {ioDaysDifference}일차
-        </span>
+        <span className="text-xs">{hospitalizationDays}일차</span>
       </TableCell>
 
       {TIMES.map((time) => (
