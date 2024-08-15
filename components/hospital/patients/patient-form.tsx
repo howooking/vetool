@@ -53,6 +53,7 @@ import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import BirthDatePicker from './birth-date-picker'
 
 type PatientFormRegisterProps = {
   hosId: string
@@ -60,8 +61,10 @@ type PatientFormRegisterProps = {
   icu?: false
   setStep?: null
   editingPatient?: null
+  isRegister?: boolean
   setIsPatientRegisterDialogOpen: Dispatch<SetStateAction<boolean>>
   setIsPatientUpdateDialogOpen?: null
+  setIsIcuDialogOpen?: null
 }
 type PatientFormIcuRegisterProps = {
   hosId: string
@@ -71,6 +74,8 @@ type PatientFormIcuRegisterProps = {
   editingPatient?: null
   setIsPatientRegisterDialogOpen?: null
   setIsPatientUpdateDialogOpen?: null
+  setIsIcuDialogOpen: (isRegisterDialogOpen: boolean) => void
+  isRegister?: null
 }
 type PatientFormEditProps = {
   hosId: string
@@ -80,6 +85,8 @@ type PatientFormEditProps = {
   editingPatient: PatientDataTable
   setIsPatientRegisterDialogOpen?: null
   setIsPatientUpdateDialogOpen: Dispatch<SetStateAction<boolean>>
+  setIsIcuDialogOpen?: null
+  isRegister?: null
 }
 
 type PatientFormProps =
@@ -95,6 +102,7 @@ export default function PatientForm({
   editingPatient,
   setIsPatientRegisterDialogOpen,
   setIsPatientUpdateDialogOpen,
+  setIsIcuDialogOpen,
 }: PatientFormProps) {
   const [breedOpen, setBreedOpen] = useState(false)
   const [selectedSpecies, setSelectedSpecies] = useState<string>(
@@ -174,6 +182,7 @@ export default function PatientForm({
     setIsSubmitting(true)
 
     await updatePatient(values, hosId, editingPatient?.patient_id!)
+
     toast({
       title: '환자 정보가 수정되었습니다',
     })
@@ -367,60 +376,7 @@ export default function PatientForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="birth"
-          render={({ field }) => (
-            <FormItem className="flex flex-col justify-end">
-              <FormLabel>출생일*</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={'outline'}
-                      className={cn(
-                        'h-8 overflow-hidden border border-input bg-inherit pl-3 text-left text-sm font-normal',
-                        !field.value && 'text-muted-foreground',
-                      )}
-                    >
-                      {field.value ? (
-                        <>{format(field.value, 'yyyy-MM-dd')}</>
-                      ) : (
-                        <span className="overflow-hidden whitespace-nowrap">
-                          출생일을 선택해주세요
-                        </span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    styles={{
-                      caption_label: { display: 'none' },
-                      dropdown_month: { fontSize: 14 },
-                      dropdown_year: { fontSize: 14 },
-                      button: { fontSize: 14 },
-                    }}
-                    captionLayout="dropdown-buttons"
-                    fromYear={1990}
-                    toYear={new Date().getFullYear()}
-                    showOutsideDays
-                    fixedWeeks
-                    locale={ko}
-                    mode="single"
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date('1990-01-01')
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage className="text-xs" />
-            </FormItem>
-          )}
-        />
+        <BirthDatePicker form={form} />
 
         <FormField
           control={form.control}
@@ -494,11 +450,14 @@ export default function PatientForm({
             disabled={isSubmitting}
             variant="outline"
             onClick={() => {
-              icu
-                ? setStep!('patientRegister')
-                : edit
-                  ? setIsPatientUpdateDialogOpen(false)
-                  : setIsPatientRegisterDialogOpen!(false)
+              if (icu && setStep) {
+                setStep('patientRegister')
+                setIsIcuDialogOpen(false)
+              } else if (edit) {
+                setIsPatientUpdateDialogOpen(false)
+              } else {
+                setIsPatientRegisterDialogOpen!(false)
+              }
             }}
           >
             {edit ? '취소' : '닫기'}
