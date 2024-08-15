@@ -7,22 +7,21 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
+import { COLUMN_WIDTH } from '@/components/hospital/icu/main/search/table/search-chart-table'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { getSelectedCharts } from '@/lib/services/icu/search-charts'
 import { cn, getAgeFromAgeInDays, getPatientSymptoms } from '@/lib/utils'
 import type { SearchedChart, SelectedSearchedChart } from '@/types/icu'
 import { Cat, Dog } from 'lucide-react'
-import { COLUMN_WIDTH } from '@/components/hospital/icu/main/search/table/search-chart-table'
-import SingleRow from './single-row/single-row'
 import { useEffect, useState } from 'react'
-import { getSelectedCharts } from '@/lib/services/icu/search-charts'
+import SingleRow from './single-row/single-row'
 export default function GroupedChart({ charts }: { charts: SearchedChart }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false)
-  const [isFetching, setIsFetching] = useState(false)
   const [singleRowCharts, setSingleRowCharts] = useState<
     SelectedSearchedChart[]
   >([])
@@ -40,13 +39,10 @@ export default function GroupedChart({ charts }: { charts: SearchedChart }) {
 
   useEffect(() => {
     if (isAccordionOpen) {
-      setIsFetching(true)
       const fetchSelectedCharts = async () => {
         const selectedCharts = await getSelectedCharts(icu_io_id)
 
         setSingleRowCharts(selectedCharts)
-
-        setIsFetching(false)
       }
 
       fetchSelectedCharts()
@@ -57,7 +53,6 @@ export default function GroupedChart({ charts }: { charts: SearchedChart }) {
     <TableRow key={icu_io_id}>
       <TableCell colSpan={7} className="p-0">
         <Accordion
-          key={icu_io_id}
           type="single"
           collapsible
           className="w-full"
@@ -94,8 +89,6 @@ export default function GroupedChart({ charts }: { charts: SearchedChart }) {
 
             <AccordionContent className="py-0">
               <Table className="table-fixed">
-                {' '}
-                {/* table-fixed 추가 */}
                 <TableHeader className="border-b">
                   <TableRow>
                     <TableHead className="text-center">입원일차</TableHead>

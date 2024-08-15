@@ -127,3 +127,17 @@ export const getDaysDifference = (dateString: string) => {
 
   return diffDays
 }
+
+export const getYesterdatTodayTomorrow = () => {
+  const today = new Date()
+  const yesterday = new Date(today)
+  yesterday.setDate(today.getDate() - 1)
+  const tomorrow = new Date(today)
+  tomorrow.setDate(today.getDate() + 1)
+
+  return {
+    yesterday: yesterday.toISOString().split('T')[0],
+    today: today.toISOString().split('T')[0],
+    tomorrow: tomorrow.toISOString().split('T')[0],
+  }
+}

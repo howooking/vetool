@@ -1,0 +1,49 @@
+import type { NoticeUserJoined } from '@/types/hospital/notice'
+import { GripVertical } from 'lucide-react'
+import Image from 'next/image'
+import CreateOrUpdateNoticeDialog from './create-or-update-notice-dialog'
+import { NoticeColorType } from './notice-schema'
+
+export default function SingleNotice({
+  hosId,
+  notice,
+}: {
+  hosId: string
+  notice: NoticeUserJoined
+}) {
+  return (
+    <div
+      className="relative flex items-center justify-between rounded-md border border-border px-1 py-1"
+      style={{ backgroundColor: notice.notice_color ?? '#fff' }}
+    >
+      <div className="mx-2 flex w-full items-center justify-between">
+        <div className="flex items-center gap-2">
+          <GripVertical className="handle z-20" size={16} cursor="grab" />
+          <span>{notice.notice_text}</span>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <Image
+            unoptimized
+            src={notice.user_id.avatar_url ?? ''}
+            alt={notice.user_id.name}
+            width={20}
+            height={20}
+            className="rounded-full"
+            priority
+          />
+          <span className="text-sm">{notice.user_id.name}</span>
+          <span className="ml-2 text-sm">{notice.created_at.slice(0, 10)}</span>
+        </div>
+      </div>
+
+      <CreateOrUpdateNoticeDialog
+        hosId={hosId}
+        isEdit
+        oldNoticeId={notice.id}
+        oldNoticeText={notice.notice_text}
+        oldNoticeColor={notice.notice_color as NoticeColorType}
+      />
+    </div>
+  )
+}

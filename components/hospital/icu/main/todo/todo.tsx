@@ -114,7 +114,7 @@ export default function Todo({ icuData }: { icuData: IcuData }) {
   )
 
   if (!filteredAndSortedOrder.length) {
-    return <NoResult title="입원환자가 없습니다" />
+    return <NoResult title="입원환자가 없습니다" className="h-icu-chart" />
   }
 
   return (
