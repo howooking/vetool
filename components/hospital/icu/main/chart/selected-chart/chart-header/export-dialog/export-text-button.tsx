@@ -19,11 +19,22 @@ export default function ExportTextButton({
   const handleExportText = async () => {
     // TODO 언제 무슨 오더가 들어갔는지 줄글 형식으로
     const textContents = `
-환자명: ${chartData.patient_id.name}
-입원일: ${chartData.target_date}
-DX: ${chartData.icu_chart_dx}
-CC: ${chartData.icu_chart_cc}
-`
+    환자명: ${chartData.patient_id.name}
+    입원일: ${chartData.target_date}
+    DX: ${chartData.icu_chart_dx}
+    CC: ${chartData.icu_chart_cc}
+    `
+
+    const chartOrders = selectedChartOrders.filter(
+      (chartOrder) => chartOrder.icu_chart_order_type !== 'fluid',
+    )
+    chartOrders.forEach((chartOrder) => {
+      chartOrder.icu_chart_order_time.forEach((time, index) => {
+        if (time === '1') {
+          console.log(chartOrder.icu_chart_order_name, index, '시')
+        }
+      })
+    })
 
     try {
       setIsExportingText(true)
