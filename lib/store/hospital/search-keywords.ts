@@ -7,7 +7,6 @@ import { create } from 'zustand'
 type SearchKeyWordsState = {
   trie: TrieSearch<Keyword>
   search: (keyword: string) => SearchKeywordResult[]
-
   initialize: () => void
 }
 
