@@ -7,7 +7,7 @@ export default async function Notice({ hosId }: { hosId: string }) {
   const noticesData = await getNotices(hosId)
 
   return (
-    <Card className="h-[calc(50vh-36px)] rounded-sm">
+    <Card className="flex-1 rounded-sm">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           공지사항
@@ -15,7 +15,7 @@ export default async function Notice({ hosId }: { hosId: string }) {
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="h-[calc(50vh-120px)] overflow-scroll">
+      <CardContent>
         <DragAndDropNoticeList noticesData={noticesData} hosId={hosId} />
       </CardContent>
     </Card>

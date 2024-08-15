@@ -13,7 +13,7 @@ export default function SummaryTableRow({
   orders: IcuChartOrderJoined[]
   handleClickRow: (patientId: string, patientName: string) => void
 }) {
-  const hospitalizationDays = getDaysDifference(chart.icu_io_id.in_date)
+  const hospitalizationDays = getDaysDifference(chart.icu_io_id.in_date) + 1
   const isPatientOut = !!chart.icu_io_id.out_date
 
   return (

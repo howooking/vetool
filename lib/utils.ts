@@ -101,16 +101,28 @@ export const getDaysDifference = (dateString: string) => {
   return diffDays
 }
 
-export const getYesterdatTodayTomorrow = () => {
-  const today = new Date()
-  const yesterday = new Date(today)
+export const getYesterdayTodayTomorrow = () => {
+  const now = new Date()
+  const koreaTime = new Date(
+    now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }),
+  )
+
+  const today = new Date(koreaTime)
+  const yesterday = new Date(koreaTime)
   yesterday.setDate(today.getDate() - 1)
-  const tomorrow = new Date(today)
+  const tomorrow = new Date(koreaTime)
   tomorrow.setDate(today.getDate() + 1)
 
+  const formatDate = (date: Date) => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
   return {
-    yesterday: yesterday.toISOString().split('T')[0],
-    today: today.toISOString().split('T')[0],
-    tomorrow: tomorrow.toISOString().split('T')[0],
+    yesterday: formatDate(yesterday),
+    today: formatDate(today),
+    tomorrow: formatDate(tomorrow),
   }
 }
