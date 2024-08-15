@@ -19,6 +19,7 @@ export default function SingleRow({
       <TableCell className="text-center">
         <CopyButton chartId={chart.icu_chart_id} />
       </TableCell>
+      <TableCell className="w-4 text-center" colSpan={1} />
     </TableRow>
   )
 }
