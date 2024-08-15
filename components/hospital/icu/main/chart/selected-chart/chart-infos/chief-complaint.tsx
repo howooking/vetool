@@ -1,19 +1,15 @@
 'use client'
 
 import AutoComplete from '@/components/hospital/common/auto-complete/auto-complete'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
 import { updateChiefComplaint } from '@/lib/services/icu/update-icu-chart-infos'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function ChiefComplaint({
   chiefComplaint,
-  icuIoId,
   icuChartId,
 }: {
   chiefComplaint: string
-  icuIoId: string
   icuChartId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
@@ -26,7 +22,7 @@ export default function ChiefComplaint({
 
     setIsUpdating(true)
 
-    await updateChiefComplaint(icuChartId, icuIoId, trimmedValue)
+    await updateChiefComplaint(icuChartId, trimmedValue)
 
     toast({
       title: '주증상을 변경하였습니다',
