@@ -23,13 +23,18 @@ export function getAgeFromAgeInDays(ageInDays: number) {
   const years = Math.floor(ageInDays / 365)
   const remainingDays = ageInDays % 365
   const months = Math.floor(remainingDays / 30)
+  const days = remainingDays % 30
 
   if (years === 0) {
-    return `${ageInDays}일`
+    if (months === 0) {
+      return `${days}일`
+    } else {
+      return `${months}개월 ${days}일`
+    }
   } else if (years > 0 && months === 0) {
-    return `${years}살`
+    return `${years}년`
   } else {
-    return `${years}살 ${months}개월`
+    return `${years}년 ${months}개월`
   }
 }
 

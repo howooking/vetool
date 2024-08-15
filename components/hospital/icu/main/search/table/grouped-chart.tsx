@@ -1,3 +1,10 @@
+import SingleRow from '@/components/hospital/icu/main/search/table/single-row/single-row'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import {
   Table,
   TableBody,
@@ -6,14 +13,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-
-import SingleRow from '@/components/hospital/icu/main/search/table/single-row/single-row'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
 import { getSelectedCharts } from '@/lib/services/icu/search-charts'
 import { cn, getAgeFromAgeInDays } from '@/lib/utils'
 import type { SearchedChart, SelectedSearchedChart } from '@/types/icu'
