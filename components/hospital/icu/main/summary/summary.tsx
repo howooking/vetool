@@ -3,7 +3,7 @@ import type { IcuData } from '@/types/icu'
 
 export default function Summary({ icuData }: { icuData: IcuData }) {
   return (
-    <div className="flex w-full flex-col gap-2 p-2">
+    <div className="flex h-icu-chart w-full flex-col gap-2 overflow-auto p-2 pb-[48px]">
       <SummaryTable icuData={icuData} />
       {/* <IoRadialChart /> */}
     </div>

@@ -12,7 +12,7 @@ export default function PatientList({
   excludedIcuIoData,
 }: IcuSidebarContentProps) {
   return (
-    <>
+    <div className="flex-col gap-3 overflow-y-auto">
       {filteredIcuIoData.length > 0 ? (
         <ul className="flex flex-col gap-2">
           <span className="text-xs font-bold text-gray-500">입원환자</span>
@@ -30,7 +30,7 @@ export default function PatientList({
 
       {excludedIcuIoData.length > 0 && (
         <>
-          <Separator />
+          <Separator className="my-3" />
 
           <ul className="flex flex-col gap-2">
             <span className="text-xs font-bold text-gray-500">필터링 제외</span>
@@ -42,6 +42,6 @@ export default function PatientList({
           </ul>
         </>
       )}
-    </>
+    </div>
   )
 }

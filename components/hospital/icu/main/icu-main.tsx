@@ -5,7 +5,6 @@ import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import type { IcuData } from '@/types/icu'
 import dynamic from 'next/dynamic'
 
-// !!lazy loading
 const DynamicSummary = dynamic(() => import('./summary/summary'), {
   ssr: false,
   loading: () => <LargeLoaderCircle className="h-icu-chart" />,
