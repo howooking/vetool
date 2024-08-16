@@ -1,5 +1,6 @@
 'use client'
 
+import IcuAlert from '@/components/hospital/icu/alert/icu-alert'
 import IcuFooter from '@/components/hospital/icu/icu-footer'
 import IcuMain from '@/components/hospital/icu/main/icu-main'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
@@ -26,6 +27,7 @@ export default function IcuEntry({
       <div className="h-icu-chart w-full overflow-auto">
         <IcuMain icuData={icuData} />
         <IcuFooter />
+        <IcuAlert />
       </div>
     </div>
   )

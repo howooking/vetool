@@ -2,12 +2,16 @@ import { Dispatch, SetStateAction } from 'react'
 
 export type SearchKeywordResult = {
   keyword: string
+}
+
+export type SuggestionListProps = {
+  keyword: string
   mainKeyWord: string
 }
 
 export type AutoCompleteStates = {
   inputValue: string
-  suggestions: SearchKeywordResult[]
+  suggestions: SuggestionListProps[]
   selectedKeywords: SearchKeywordResult[]
 }
 
