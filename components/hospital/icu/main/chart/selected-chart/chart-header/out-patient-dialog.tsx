@@ -14,7 +14,12 @@ import { toggleOutPatient } from '@/lib/services/icu/update-icu-chart-infos'
 import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
 import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
-import { LoaderCircle, UserRoundMinus, UserRoundPlus } from 'lucide-react'
+import {
+  LoaderCircle,
+  Undo2,
+  UserRoundMinus,
+  UserRoundPlus,
+} from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 export default function OutPatientDialog({
@@ -72,11 +77,7 @@ export default function OutPatientDialog({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
-          {isPatientOut ? (
-            <UserRoundPlus size={18} />
-          ) : (
-            <UserRoundMinus size={18} />
-          )}
+          {isPatientOut ? <Undo2 size={18} /> : <UserRoundMinus size={18} />}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
