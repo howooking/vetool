@@ -10,7 +10,7 @@ export const FOOTER_MAIN_VIEW_MENUS = [
   },
   {
     label: '처치표',
-    value: 'todo',
+    value: 'tx-table',
   },
   {
     label: '입원 차트',

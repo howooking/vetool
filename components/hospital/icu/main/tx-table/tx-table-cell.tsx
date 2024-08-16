@@ -9,7 +9,7 @@ export default function TxTableCell({
   time: number
   order: IcuChartOrderJoined
 }) {
-  const getTime = useCallback(
+  const getOrderName = useCallback(
     (order: IcuChartOrderJoined) => {
       if (
         order.icu_chart_order_time[time - 1] === '1' &&
@@ -21,5 +21,5 @@ export default function TxTableCell({
     },
     [time],
   )
-  return <TableCell className="text-center">{getTime(order)}</TableCell>
+  return <TableCell className="text-center">{getOrderName(order)}</TableCell>
 }
