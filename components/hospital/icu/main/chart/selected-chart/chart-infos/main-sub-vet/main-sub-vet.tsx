@@ -41,40 +41,45 @@ export function MainSubVet({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="relative flex w-full items-center gap-2"
+          className="flex w-full items-center justify-start gap-4 px-2"
         >
-          <span className="absolute left-2 text-xs text-muted-foreground">
-            주치의 / 부주치의
-          </span>
-          <div className="flex items-center gap-1">
-            <Image
-              unoptimized
-              src={mainVet.avatar_url ?? ''}
-              alt={mainVet.name}
-              width={20}
-              height={20}
-              className="rounded-full"
-            />
-            <span>{mainVet.name}</span>
+          <div className="flex h-4 items-center gap-1 text-xs text-muted-foreground">
+            <span>주치의</span>
+            <Separator orientation="vertical" />
+            <span>부주치의 </span>
           </div>
 
-          <Separator orientation="vertical" />
-
-          {subVet ? (
+          <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
               <Image
                 unoptimized
-                src={subVet.avatar_url ?? ''}
-                alt={subVet.name}
+                src={mainVet.avatar_url ?? ''}
+                alt={mainVet.name}
                 width={20}
                 height={20}
                 className="rounded-full"
               />
-              {`${subVet.name}`}
+              <span>{mainVet.name}</span>
             </div>
-          ) : (
-            '미선택'
-          )}
+
+            <Separator orientation="vertical" className="h-4" />
+
+            {subVet ? (
+              <div className="flex items-center gap-1">
+                <Image
+                  unoptimized
+                  src={subVet.avatar_url ?? ''}
+                  alt={subVet.name}
+                  width={20}
+                  height={20}
+                  className="rounded-full"
+                />
+                {`${subVet.name}`}
+              </div>
+            ) : (
+              '미선택'
+            )}
+          </div>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[640px]">
