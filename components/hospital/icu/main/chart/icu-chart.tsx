@@ -73,7 +73,6 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
 
   const isPatientOut = useMemo(
     () => selectedIo?.out_date !== null,
-
     [selectedIo?.out_date],
   )
 

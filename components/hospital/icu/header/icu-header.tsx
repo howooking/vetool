@@ -4,15 +4,6 @@ import RegisterDialog from './register-dialog/register-dialog'
 
 export default async function IcuHeader({ hosId }: { hosId: string }) {
   const { hosGroupList, patientsData, vetsData } = await getIcuHeaderData(hosId)
-  // const DynamicRegisterDialog = dynamic(
-  //   () =>
-  //     import(
-  //       '@/components/hospital/icu/header/register-dialog/register-dialog'
-  //     ),
-  //   {
-  //     loading: () => <LargeLoaderCircle className="animate-spin" />,
-  //   },
-  // )
 
   return (
     <div className="absolute left-0 top-2 z-10 flex items-center gap-4 px-2">
