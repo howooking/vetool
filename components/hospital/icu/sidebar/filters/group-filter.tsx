@@ -77,7 +77,7 @@ export default function GroupFilter({
         <DialogHeader>
           <DialogTitle>그룹 선택</DialogTitle>
           <DialogDescription>
-            "또는(or)" 조건으로 필터링됩니다
+            &quot;또는(or)&quot; 조건으로 필터링됩니다
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-2">
