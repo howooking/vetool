@@ -90,13 +90,15 @@ export function calculateAge(dateString: string) {
 export const getDaysDifference = (dateString: string) => {
   // 날짜 문자열을 Date 객체로 변환
   const targetDate = new Date(dateString)
-  const today = new Date()
+  const today = new Date(
+    new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }),
+  )
 
   // 두 날짜의 차이를 밀리초 단위로 계산
-  const diffTime = today.getTime() - targetDate.getTime()
+  const diff = today.getTime() - targetDate.getTime()
 
   // 밀리초를 일 단위로 변환
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24))
 
   return diffDays
 }
