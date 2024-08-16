@@ -12,7 +12,7 @@ import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import { IcuData } from '@/types/icu'
 import { useCallback, useMemo } from 'react'
-import TodoTableCell from './todo-table-cell'
+import TxTableCell from './tx-table-cell'
 import NoResult from '@/components/common/no-result'
 
 const TODO_BACKGROUD_COLORS = [
@@ -35,7 +35,7 @@ const TODO_BACKGROUD_COLORS = [
   '#faf5ff',
   '#fdf2f8',
 ]
-export default function Todo({ icuData }: { icuData: IcuData }) {
+export default function TxTable({ icuData }: { icuData: IcuData }) {
   const { icuChartData, icuChartOrderData } = icuData
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setSelectedPatient } = useIcuSelectedPatientStore()
@@ -168,7 +168,7 @@ export default function Todo({ icuData }: { icuData: IcuData }) {
                 </TableCell>
 
                 {TIMES.map((time) => {
-                  return <TodoTableCell key={time} time={time} order={order} />
+                  return <TxTableCell key={time} time={time} order={order} />
                 })}
               </TableRow>
             )

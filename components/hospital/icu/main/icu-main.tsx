@@ -9,7 +9,7 @@ const DynamicSummary = dynamic(() => import('./summary/summary'), {
   ssr: false,
   loading: () => <LargeLoaderCircle className="h-icu-chart" />,
 })
-const DynamicTodo = dynamic(() => import('./todo/todo'), {
+const DynamicTxTable = dynamic(() => import('./tx-table/tx-table'), {
   ssr: false,
   loading: () => <LargeLoaderCircle className="h-icu-chart" />,
 })
@@ -29,7 +29,9 @@ export default function IcuMain({ icuData }: { icuData: IcuData }) {
     <>
       {selectIcudMainView === 'summary' && <DynamicSummary icuData={icuData} />}
 
-      {selectIcudMainView === 'todo' && <DynamicTodo icuData={icuData} />}
+      {selectIcudMainView === 'tx-table' && (
+        <DynamicTxTable icuData={icuData} />
+      )}
 
       {selectIcudMainView === 'chart' && <DynamicIcuChart icuData={icuData} />}
 

@@ -1,5 +1,5 @@
-import HosTodo from '@/components/hospital/home/hos-todo/hos-todo'
-import TodoSkeleton from '@/components/hospital/home/hos-todo/todo-skeleton'
+import Todo from '@/components/hospital/home/todo/todo'
+import TodoSkeleton from '@/components/hospital/home/todo/todo-skeleton'
 import Notice from '@/components/hospital/home/notice/notice'
 import NoticeSkeleton from '@/components/hospital/home/notice/notice-skeleton'
 import { Suspense } from 'react'
@@ -16,7 +16,7 @@ export default function HospitalHomePage({
       </Suspense>
 
       <Suspense fallback={<TodoSkeleton />}>
-        <HosTodo hosId={params.hos_id} />
+        <Todo hosId={params.hos_id} />
       </Suspense>
     </div>
   )

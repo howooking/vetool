@@ -4,7 +4,7 @@ import { getTodos } from '@/lib/services/hospital-home/todo'
 import { getYesterdayTodayTomorrow } from '@/lib/utils'
 import TodoList from './todo-list'
 
-export default async function HosTodo({ hosId }: { hosId: string }) {
+export default async function Todo({ hosId }: { hosId: string }) {
   const todosData = await getTodos(hosId)
 
   const { yesterday, today, tomorrow } = getYesterdayTodayTomorrow()
@@ -47,11 +47,4 @@ export default async function HosTodo({ hosId }: { hosId: string }) {
       </CardContent>
     </Card>
   )
-}
-function getYesterdatTodayTomorrow(): {
-  yesterday: any
-  today: any
-  tomorrow: any
-} {
-  throw new Error('Function not implemented.')
 }

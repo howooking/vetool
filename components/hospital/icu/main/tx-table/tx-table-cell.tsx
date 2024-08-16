@@ -2,7 +2,7 @@ import { TableCell } from '@/components/ui/table'
 import { IcuChartOrderJoined } from '@/types/icu'
 import { useCallback } from 'react'
 
-export default function TodoTableCell({
+export default function TxTableCell({
   time,
   order,
 }: {
