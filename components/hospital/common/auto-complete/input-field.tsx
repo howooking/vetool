@@ -12,14 +12,12 @@ import React, { useCallback } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 export default function InputField({
-  inputRef,
   autoCompleteState,
   setAutoCompleteState,
   handleChange,
   label,
   isUpdating,
 }: {
-  inputRef: React.RefObject<HTMLInputElement>
   autoCompleteState: AutoCompleteStates
   setAutoCompleteState: SetAutoCompleteStates
   handleChange: (value: string) => void
@@ -59,66 +57,61 @@ export default function InputField({
     [debouncedSearch, setAutoCompleteState],
   )
 
-  const handleKeyUp = useDebouncedCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      // 불필요 입력으로 인한 오류 방지
-      if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !inputValue) {
-        e.preventDefault()
-      }
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // 불필요 입력으로 인한 오류 방지
+    if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !inputValue) {
+      e.preventDefault()
+    }
 
-      // 엔터 혹은 콤마 입력 시 수동 입력으로 판별, keyword state 업데이트 진행
-      if (
-        e.key === ',' ||
-        (e.key === 'Enter' && !autoCompleteState.suggestions.length)
-      ) {
-        let trimmedValue = inputValue.replace(/,$/, '').trim()
+    // 엔터 혹은 콤마 입력 시 수동 입력으로 판별, keyword state 업데이트 진행
+    if (
+      e.key === ',' ||
+      (e.key === 'Enter' && !autoCompleteState.suggestions.length)
+    ) {
+      let trimmedValue = inputValue.replace(/,$/, '').trim()
 
-        if (trimmedValue === '') return
+      if (trimmedValue === '') return
 
-        setAutoCompleteState((prevState) => ({
-          inputValue: '',
-          suggestions: [],
-          selectedKeywords: [
-            ...prevState.selectedKeywords,
-            { keyword: trimmedValue, mainKeyWord: '' },
-          ],
-        }))
-      }
-    },
-    50,
-  )
+      setAutoCompleteState((prevState) => ({
+        inputValue: '',
+        suggestions: [],
+        selectedKeywords: [
+          ...prevState.selectedKeywords,
+          { keyword: trimmedValue, mainKeyWord: '' },
+        ],
+      }))
+    }
+  }
 
-  const handleKeyDown = useDebouncedCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !inputValue) {
-        e.preventDefault()
-      }
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !inputValue) {
+  //     e.preventDefault()
+  //   }
 
-      // 백스페이스 입력 시 해당 keyword state 제거
-      if (
-        e.key === 'Backspace' &&
-        inputValue === '' &&
-        selectedKeywords.length > 0
-      ) {
-        setAutoCompleteState((prevState) => ({
-          ...prevState,
-          selectedKeywords: prevState.selectedKeywords.slice(0, -1),
-        }))
-      }
-    },
-    50,
-  )
+  //   // 백스페이스 입력 시 해당 keyword state 제거
+  //   if (
+  //     e.key === 'Backspace' &&
+  //     inputValue.length < 1 &&
+  //     selectedKeywords.length > 0
+  //   ) {
+  //     setAutoCompleteState((prevState) => ({
+  //       ...prevState,
+  //       selectedKeywords: prevState.selectedKeywords.slice(0, -1),
+  //     }))
+  //   }
+  // }
 
   const handleRemoveItem = (item: SearchKeywordResult) => {
+    const newKeywords = selectedKeywords.filter(
+      (value) => value.keyword !== item.keyword,
+    )
+
     setAutoCompleteState((prevState) => ({
       ...prevState,
-      selectedKeywords: prevState.selectedKeywords.filter(
-        (value) =>
-          value.keyword !== item.keyword ||
-          value.mainKeyWord !== item.mainKeyWord,
-      ),
+      selectedKeywords: newKeywords,
     }))
-    inputRef.current?.focus()
+
+    formatKeywords(newKeywords)
   }
 
   return (
@@ -137,22 +130,24 @@ export default function InputField({
               key={item.keyword + index}
               className="ml-1 flex items-center whitespace-nowrap pl-2 pr-1 text-xs"
               variant="outline"
-              onClick={() => handleRemoveItem(item)}
             >
-              <span>{`${item.keyword}${item.mainKeyWord ? ` (${item.mainKeyWord})` : ''}`}</span>
-              <X size={12} className="ml-1 flex-shrink-0 cursor-pointer" />
+              <span>{item.keyword}</span>
+              <X
+                size={12}
+                className="ml-1 flex-shrink-0 cursor-pointer"
+                onClick={() => handleRemoveItem(item)}
+              />
             </Badge>
           ),
       )}
-      <div className="[&_[cmdk-input-wrapper]]:border-b-0 [&_[cmdk-input-wrapper]]:px-0">
+      <div className="w-full [&_[cmdk-input-wrapper]]:border-b-0 [&_[cmdk-input-wrapper]]:px-0">
         <CommandInput
-          ref={inputRef}
           id="diagnosis"
           className="h-6 flex-grow overflow-hidden bg-transparent text-sm outline-none"
           value={inputValue}
           onValueChange={handleInputChange}
           onBlur={() => formatKeywords(selectedKeywords)}
-          onKeyDown={handleKeyDown}
+          // onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
           disabled={isUpdating}
         />
