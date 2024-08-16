@@ -43,7 +43,7 @@ export default function OwnerName({
     <div className="relative flex items-center">
       <Label
         className="absolute left-2 text-xs text-muted-foreground"
-        htmlFor="diagnosis"
+        htmlFor="ownerName"
       >
         보호자
       </Label>

@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Separator } from '@/components/ui/separator'
 import { getVetList } from '@/lib/services/icu/get-staffs'
 import type { IcuUserList, MainAndSubVet } from '@/types/icu'
 import Image from 'next/image'
@@ -38,7 +39,13 @@ export function MainSubVet({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex w-full items-center gap-2">
+        <Button
+          variant="outline"
+          className="relative flex w-full items-center gap-2"
+        >
+          <span className="absolute left-2 text-xs text-muted-foreground">
+            주치의 / 부주치의
+          </span>
           <div className="flex items-center gap-1">
             <Image
               unoptimized
@@ -48,9 +55,11 @@ export function MainSubVet({
               height={20}
               className="rounded-full"
             />
-            {`${mainVet.name}`}
+            <span>{mainVet.name}</span>
           </div>
-          <span>/</span>
+
+          <Separator orientation="vertical" />
+
           {subVet ? (
             <div className="flex items-center gap-1">
               <Image
