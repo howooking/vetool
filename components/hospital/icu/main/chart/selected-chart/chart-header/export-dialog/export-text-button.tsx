@@ -17,23 +17,51 @@ export default function ExportTextButton({
   const [isExportingText, setIsExportingText] = useState(false)
 
   const handleExportText = async () => {
-    // TODO 언제 무슨 오더가 들어갔는지 줄글 형식으로
-    const textContents = `
-    환자명: ${chartData.patient_id.name}
-    입원일: ${chartData.target_date}
-    DX: ${chartData.icu_chart_dx}
-    CC: ${chartData.icu_chart_cc}
-    `
-
-    const chartOrders = selectedChartOrders.filter(
-      (chartOrder) => chartOrder.icu_chart_order_type !== 'fluid',
+    let textContents = `
+환자명: ${chartData.patient_id.name}
+입원일: ${chartData.target_date}
+DX: ${chartData.icu_chart_dx}
+CC: ${chartData.icu_chart_cc}
+`
+    const hash: Record<string, string[]> = {}
+    const fluidOrders = selectedChartOrders.filter(
+      (order) => order.icu_chart_order_type === 'fluid',
     )
-    chartOrders.forEach((chartOrder) => {
-      chartOrder.icu_chart_order_time.forEach((time, index) => {
-        if (time === '1') {
-          console.log(chartOrder.icu_chart_order_name, index, '시')
-        }
-      })
+    const otherOrders = selectedChartOrders.filter(
+      (order) => order.icu_chart_order_type !== 'fluid',
+    )
+
+    fluidOrders.forEach((chartOrder) => {
+      const { icu_chart_order_name, icu_chart_order_comment } = chartOrder
+
+      textContents += `${icu_chart_order_name}: (${icu_chart_order_comment}) \n`
+    })
+
+    textContents += `\n=================\n\n`
+
+    otherOrders.forEach((chartOrder) => {
+      const { icu_chart_order_name } = chartOrder
+
+      const txTable = Array.from({ length: 24 }, (_, index) => index + 1)
+        .filter(
+          (time) =>
+            chartOrder[
+              `icu_chart_order_tx_${time}` as keyof IcuChartOrderJoined
+            ],
+        )
+        .map((time) => `${time}시`)
+
+      if (txTable.length) {
+        hash[icu_chart_order_name] = (hash[icu_chart_order_name] || []).concat(
+          txTable,
+        )
+      }
+    })
+
+    Object.entries(hash).forEach(([key, value]) => {
+      if (value.length) {
+        textContents += key + ': ' + value.join(', ') + '\n'
+      }
     })
 
     try {
