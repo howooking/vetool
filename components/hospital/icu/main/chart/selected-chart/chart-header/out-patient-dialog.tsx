@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils'
 import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 import {
   LoaderCircle,
+  LogOut,
   Undo2,
   UserRoundMinus,
   UserRoundPlus,
@@ -77,7 +78,7 @@ export default function OutPatientDialog({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
-          {isPatientOut ? <Undo2 size={18} /> : <UserRoundMinus size={18} />}
+          {isPatientOut ? <Undo2 size={18} /> : <LogOut size={18} />}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
