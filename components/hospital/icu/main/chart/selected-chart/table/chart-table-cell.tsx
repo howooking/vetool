@@ -82,7 +82,7 @@ export default function ChartTableCell({
     longPressTimeoutRef.current = setTimeout(() => {
       setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
       setStep('detailInsert')
-    }, 300)
+    }, 500)
   }
 
   const handleLongClickEnd = () => {

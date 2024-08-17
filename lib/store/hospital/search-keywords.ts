@@ -1,27 +1,35 @@
 import { KEYWORDS } from '@/constants/hospital/keywords'
-import type { SearchKeywordResult } from '@/types/hospital/auto-complete'
+import type { SuggestionListProps } from '@/types/hospital/auto-complete'
 import type { Keyword } from '@/types/hospital/keywords'
 import TrieSearch from 'trie-search'
 import { create } from 'zustand'
 
 type SearchKeyWordsState = {
-  trie: TrieSearch<Keyword>
-  search: (keyword: string) => SearchKeywordResult[]
+  koreanTrie: TrieSearch<Keyword>
+  nonKoreanTrie: TrieSearch<Keyword>
+  search: (keyword: string) => SuggestionListProps[]
   initialize: () => void
 }
+
+const isKorean = (str: string) => /[가-힣]/.test(str)
 
 export const useSearchKeyWordsStore = create<SearchKeyWordsState>(
   (set, get) => ({
     // 배열 내 요소(key) 검색
-    trie: new TrieSearch<Keyword>(['keyword', 'mainkeyword']),
+    koreanTrie: new TrieSearch<Keyword>(['keyword', 'mainkeyword'], { min: 1 }),
+    nonKoreanTrie: new TrieSearch<Keyword>(['keyword', 'mainkeyword'], {
+      min: 2,
+    }),
 
     search: (target: string) => {
       if (!target) return []
 
-      const { trie } = get()
+      const { koreanTrie, nonKoreanTrie } = get()
+      const trie = isKorean(target) ? koreanTrie : nonKoreanTrie
+
       const results = trie
         .search(target)
-        .reduce((acc: SearchKeywordResult[], result) => {
+        .reduce((acc: SuggestionListProps[], result) => {
           const item = {
             keyword: result.keyword,
             mainKeyWord: result.mainkeyword,
@@ -36,9 +44,15 @@ export const useSearchKeyWordsStore = create<SearchKeyWordsState>(
       return results.sort((a, b) => a.keyword.length - b.keyword.length)
     },
     initialize: () => {
-      const { trie } = get()
+      const { koreanTrie, nonKoreanTrie } = get()
 
-      KEYWORDS.forEach((category) => trie.add(category))
+      KEYWORDS.forEach((category) => {
+        if (isKorean(category.keyword)) {
+          koreanTrie.add(category)
+        } else {
+          nonKoreanTrie.add(category)
+        }
+      })
     },
   }),
 )

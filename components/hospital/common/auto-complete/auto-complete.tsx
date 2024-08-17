@@ -4,14 +4,6 @@ import { Command } from '@/components/ui/command'
 import type { AutoCompleteStates } from '@/types/hospital/auto-complete'
 import { useEffect, useRef, useState } from 'react'
 
-/**
- * 저장된 Keywords를 탐색하여 키워드 자동완성를 제안하는 컴포넌트
- *
- * @param {string} props.defaultValue - Input Field의 기본값
- * @param {function} props.handleChange - Input Field Change에 따른 이벤트
- * @param {string} props.label - Input의 Label (Optional)
- * @param {boolean} props.isUpdating - Input Field Change Effect (Optional)
- */
 export default function AutoComplete({
   defaultValue,
   handleChange,
@@ -23,8 +15,6 @@ export default function AutoComplete({
   label?: string
   isUpdating?: boolean
 }) {
-  const inputRef = useRef<HTMLInputElement>(null)
-
   const [autoCompleteState, setAutoCompleteState] =
     useState<AutoCompleteStates>({
       inputValue: '',
@@ -32,8 +22,8 @@ export default function AutoComplete({
       selectedKeywords: [],
     })
 
-  // defaultValue의 변경을 감지하고, 변경될 때마다 autoCompleteState를 업데이트
-  // TODO: DB상 mainKeyWord를 저장해두지 않기 때문에, 현재는 빈값으로 초기화됨..
+  const autoCompleteRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     setAutoCompleteState((prevState) => ({
       ...prevState,
@@ -41,17 +31,36 @@ export default function AutoComplete({
         .split(',')
         .map((keyword) => ({
           keyword: keyword.trim(),
-          mainKeyWord: '',
         }))
         .filter((item) => item.keyword !== ''),
     }))
   }, [defaultValue])
 
+  // AutoComplete 컴포넌트 외부의 클릭 감지, suggestions & inputValue 초기화 → SuggestionList 닫음
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        autoCompleteRef.current &&
+        !autoCompleteRef.current.contains(event.target as Node)
+      ) {
+        setAutoCompleteState((prevState) => ({
+          ...prevState,
+          suggestions: [],
+          inputValue: '',
+        }))
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   return (
-    <div className="w-full">
+    <div className="w-full" ref={autoCompleteRef}>
       <Command loop>
         <InputField
-          inputRef={inputRef}
           autoCompleteState={autoCompleteState}
           setAutoCompleteState={setAutoCompleteState}
           handleChange={handleChange}
@@ -59,7 +68,6 @@ export default function AutoComplete({
           isUpdating={isUpdating}
         />
         <SuggestionList
-          inputRef={inputRef}
           suggestions={autoCompleteState.suggestions}
           setAutoCompleteState={setAutoCompleteState}
         />

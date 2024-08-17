@@ -1,20 +1,18 @@
-import { useState } from 'react'
 import { CommandGroup, CommandItem, CommandList } from '@/components/ui/command'
 import {
-  SearchKeywordResult,
   SetAutoCompleteStates,
+  SuggestionListProps,
 } from '@/types/hospital/auto-complete'
 
 export default function SuggestionList({
-  inputRef,
   setAutoCompleteState,
   suggestions,
 }: {
-  inputRef: React.RefObject<HTMLInputElement>
   setAutoCompleteState: SetAutoCompleteStates
-  suggestions: SearchKeywordResult[]
+  suggestions: SuggestionListProps[]
 }) {
-  const handleSelect = (selectedSuggestion: SearchKeywordResult) => {
+  // Auto Complete Select Handler
+  const handleSelect = (selectedSuggestion: SuggestionListProps) => {
     // 선택한 값 update
     setAutoCompleteState((prev) => ({
       inputValue: '',

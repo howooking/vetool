@@ -78,16 +78,14 @@ export default function GroupedChart({ charts }: { charts: SearchedChart }) {
 
             <AccordionContent className="py-0">
               <Table>
-                <TableHeader className="border-b">
+                <TableHeader className="table-fixed border-b">
                   <TableRow>
-                    <TableHead className="w-1/4 text-center">
-                      입원일차
-                    </TableHead>
-                    <TableHead className="w-1/4 text-center">입원일</TableHead>
-                    <TableHead className="w-1/4 text-center">
-                      미리보기
-                    </TableHead>
-                    <TableHead className="w-1/4 text-center">복사</TableHead>
+                    <TableHead className="text-center">입원일차</TableHead>
+                    <TableHead className="text-center">입원일</TableHead>
+                    <TableHead className="text-center">진단명</TableHead>
+                    <TableHead className="text-center">주요 증상</TableHead>
+                    <TableHead className="text-center">미리보기</TableHead>
+                    <TableHead className="text-center">복사</TableHead>
                     <TableHead />
                   </TableRow>
                 </TableHeader>
