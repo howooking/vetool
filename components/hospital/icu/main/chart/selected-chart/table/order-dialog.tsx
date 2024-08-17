@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import { ClipboardPlus } from 'lucide-react'
+import { ClipboardPlus, Plus } from 'lucide-react'
 
 export default function OrderDialog({
   icuIoId,
@@ -28,8 +28,13 @@ export default function OrderDialog({
   return (
     <Dialog open={isModalOpen} onOpenChange={toggleModal}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" onClick={handleDialogOpen}>
-          <ClipboardPlus size={18} />
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleDialogOpen}
+          className="absolute right-1 top-0.5"
+        >
+          <Plus size={18} />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl">

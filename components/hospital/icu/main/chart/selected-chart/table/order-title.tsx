@@ -51,7 +51,10 @@ export default function OrderTitle({
             <Button
               variant="ghost"
               onClick={handleDialogOpen}
-              className="flex w-[320px] justify-between rounded-none bg-transparent"
+              className={cn(
+                'flex w-[320px] justify-between rounded-none bg-transparent',
+                preview ? 'cursor-not-allowed' : 'cursor-pointer',
+              )}
             >
               <span className="truncate">{orderName}</span>
               <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
@@ -59,7 +62,7 @@ export default function OrderTitle({
               </span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent side="right">
+          <TooltipContent side="right" className={preview ? 'hidden' : ''}>
             <div className="flex gap-2">
               <span className="font-bold">{orderName}</span>
               <span className="text-xs">{orderComment}</span>
