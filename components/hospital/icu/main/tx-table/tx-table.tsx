@@ -1,3 +1,4 @@
+import NoResult from '@/components/common/no-result'
 import {
   Table,
   TableBody,
@@ -12,8 +13,7 @@ import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import { IcuData } from '@/types/icu'
 import { useCallback, useMemo } from 'react'
-import TodoTableCell from './todo-table-cell'
-import NoResult from '@/components/common/no-result'
+import TxTableCell from './tx-table-cell'
 
 const TODO_BACKGROUD_COLORS = [
   '#fef2f2',
@@ -35,13 +35,13 @@ const TODO_BACKGROUD_COLORS = [
   '#faf5ff',
   '#fdf2f8',
 ]
-export default function Todo({ icuData }: { icuData: IcuData }) {
+export default function TxTable({ icuData }: { icuData: IcuData }) {
   const { icuChartData, icuChartOrderData } = icuData
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setSelectedPatient } = useIcuSelectedPatientStore()
 
-  const filteredAndSortedOrder = useMemo(() => {
-    return (
+  const filteredAndSortedOrder = useMemo(
+    () =>
       icuChartOrderData
         // 퇴원완료 제거
         .filter((order) => !order.icu_io_id.out_date)
@@ -79,9 +79,9 @@ export default function Todo({ icuData }: { icuData: IcuData }) {
           (a, b) =>
             new Date(a.icu_io_id.created_at).getTime() -
             new Date(b.icu_io_id.created_at).getTime(),
-        )
-    )
-  }, [icuChartOrderData])
+        ),
+    [icuChartOrderData],
+  )
 
   const handleClickRow = useCallback(
     (patientId: string, patientName: string) => {
@@ -156,20 +156,17 @@ export default function Todo({ icuData }: { icuData: IcuData }) {
                   className={cn('flex w-[200px] items-center justify-between')}
                 >
                   <div>
-                    {foundChart?.patient_id.name}
-                    <span className="text-xs text-muted-foreground">
-                      {' '}
+                    <span>{foundChart?.patient_id.name}</span>
+                    <span className="text-xs">
                       ({foundChart?.patient_id.breed})
                     </span>
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    {foundChart?.weight}kg
-                  </span>
+                  <span className="text-xs">{foundChart?.weight}kg</span>
                 </TableCell>
 
-                {TIMES.map((time) => {
-                  return <TodoTableCell key={time} time={time} order={order} />
-                })}
+                {TIMES.map((time) => (
+                  <TxTableCell key={time} time={time} order={order} />
+                ))}
               </TableRow>
             )
           })}

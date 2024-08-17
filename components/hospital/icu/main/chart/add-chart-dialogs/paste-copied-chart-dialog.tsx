@@ -40,8 +40,8 @@ export default function PasteCopiedChartDialog({
       setIsDialogOpen(false)
 
       toast({
-        title: '차트 생성 실패',
-        description: '차트 검색을 통해 먼저 차트를 복사해주세요',
+        title: '차트 붙여넣기 실패',
+        description: '차트를 먼저 복사해주세요',
         variant: 'destructive',
       })
       return

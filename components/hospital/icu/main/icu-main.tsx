@@ -1,24 +1,41 @@
 'use client'
 
-import IcuChart from '@/components/hospital/icu/main/chart/icu-chart'
-import IcuChartSearch from '@/components/hospital/icu/main/search/icu-search-chart'
+import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import type { IcuData } from '@/types/icu'
-import Summary from './summary/summary'
-import Todo from './todo/todo'
+import dynamic from 'next/dynamic'
+
+const DynamicSummary = dynamic(() => import('./summary/summary'), {
+  ssr: false,
+  loading: () => <LargeLoaderCircle className="h-icu-chart" />,
+})
+const DynamicTxTable = dynamic(() => import('./tx-table/tx-table'), {
+  ssr: false,
+  loading: () => <LargeLoaderCircle className="h-icu-chart" />,
+})
+const DynamicIcuChart = dynamic(() => import('./chart/icu-chart'), {
+  ssr: false,
+  loading: () => <LargeLoaderCircle className="h-icu-chart" />,
+})
+const DynamicIcuChartSearch = dynamic(
+  () => import('./search/icu-search-chart'),
+  { ssr: false, loading: () => <LargeLoaderCircle className="h-icu-chart" /> },
+)
 
 export default function IcuMain({ icuData }: { icuData: IcuData }) {
   const { selectIcudMainView } = useSelectedMainViewStore()
 
   return (
     <>
-      {selectIcudMainView === 'summary' && <Summary icuData={icuData} />}
+      {selectIcudMainView === 'summary' && <DynamicSummary icuData={icuData} />}
 
-      {selectIcudMainView === 'todo' && <Todo icuData={icuData} />}
+      {selectIcudMainView === 'tx-table' && (
+        <DynamicTxTable icuData={icuData} />
+      )}
 
-      {selectIcudMainView === 'chart' && <IcuChart icuData={icuData} />}
+      {selectIcudMainView === 'chart' && <DynamicIcuChart icuData={icuData} />}
 
-      {selectIcudMainView === 'search' && <IcuChartSearch />}
+      {selectIcudMainView === 'search' && <DynamicIcuChartSearch />}
     </>
   )
 }

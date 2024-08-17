@@ -76,7 +76,9 @@ export default function GroupFilter({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>그룹 선택</DialogTitle>
-          <DialogDescription>또는 조건으로 필터링됩니다</DialogDescription>
+          <DialogDescription>
+            &quot;또는(or)&quot; 조건으로 필터링됩니다
+          </DialogDescription>
         </DialogHeader>
         <div className="grid gap-2">
           {hosGroupList.map((group) => (

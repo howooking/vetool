@@ -29,7 +29,7 @@ export default function ChartHeader({
   const { weight, weight_measured_date, icu_chart_id, bookmark_id } = chartData
 
   return (
-    <header className="absolute left-0 top-0 flex h-12 w-full items-center justify-center gap-2 text-muted-foreground">
+    <header className="fixed left-0 top-0 flex h-12 w-full items-center justify-center gap-2 text-muted-foreground">
       <BookmarkDialog icuChartId={icu_chart_id} bookmarkData={bookmark_id} />
       {species === 'canine' ? (
         <Dog size={20} className="text-black" />

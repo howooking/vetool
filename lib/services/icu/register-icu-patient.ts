@@ -19,8 +19,7 @@ export const registerIcuPatient = async (
 ) => {
   const supabase = createClient()
 
-  // todo: 2에서 원래 버전으로
-  const { error: rpcError } = await supabase.rpc('register_icu_patient2', {
+  const { error: rpcError } = await supabase.rpc('register_icu_patient', {
     hos_id_input: hosId,
     icu_chart_dx_input: dx,
     icu_chart_cc_input: cc,

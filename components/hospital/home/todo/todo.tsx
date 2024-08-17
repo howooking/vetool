@@ -1,13 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { getTodos } from '@/lib/services/hospital-home/todo'
-import { getYesterdatTodayTomorrow } from '@/lib/utils'
+import { getYesterdayTodayTomorrow } from '@/lib/utils'
 import TodoList from './todo-list'
 
-export default async function HosTodo({ hosId }: { hosId: string }) {
+export default async function Todo({ hosId }: { hosId: string }) {
   const todosData = await getTodos(hosId)
 
-  const { yesterday, today, tomorrow } = getYesterdatTodayTomorrow()
+  const { yesterday, today, tomorrow } = getYesterdayTodayTomorrow()
   const yesterdayTodos = todosData.filter(
     (todo) => todo.target_date === yesterday,
   )
@@ -17,12 +17,12 @@ export default async function HosTodo({ hosId }: { hosId: string }) {
   )
 
   return (
-    <Card className="h-[calc(50vh-36px)] rounded-sm">
+    <Card className="h-1/2 w-[480px] rounded-sm">
       <CardHeader>
         <CardTitle>TODO</CardTitle>
       </CardHeader>
 
-      <CardContent className="flex h-[calc(50vh-110px)] flex-col gap-4 overflow-scroll">
+      <CardContent className="flex flex-col gap-4">
         <TodoList
           type="어제"
           date={yesterday}

@@ -2,14 +2,14 @@ import { TableCell } from '@/components/ui/table'
 import { IcuChartOrderJoined } from '@/types/icu'
 import { useCallback } from 'react'
 
-export default function TodoTableCell({
+export default function TxTableCell({
   time,
   order,
 }: {
   time: number
   order: IcuChartOrderJoined
 }) {
-  const getTime = useCallback(
+  const getOrderName = useCallback(
     (order: IcuChartOrderJoined) => {
       if (
         order.icu_chart_order_time[time - 1] === '1' &&
@@ -21,5 +21,5 @@ export default function TodoTableCell({
     },
     [time],
   )
-  return <TableCell className="text-center">{getTime(order)}</TableCell>
+  return <TableCell className="text-center">{getOrderName(order)}</TableCell>
 }

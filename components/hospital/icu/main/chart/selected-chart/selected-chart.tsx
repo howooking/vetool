@@ -6,9 +6,9 @@ import type {
   IcuChartOrderJoined,
   IcuIoPatientJoined,
 } from '@/types/icu'
-
 import { useRef } from 'react'
 import ChartHeader from './chart-header/chart-header'
+import OutPatientCover from './out-patient-cover'
 
 export default function SelectedChart({
   selectedIo,
@@ -27,10 +27,7 @@ export default function SelectedChart({
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
 
   return (
-    <div
-      className="flex flex-col gap-2 overflow-auto p-2 pb-[48px]"
-      ref={pdfRef}
-    >
+    <div className="relative flex flex-col gap-2 p-2 pb-[48px]" ref={pdfRef}>
       <ChartHeader
         isPatientOut={isPatientOut}
         chartData={restChartData}
@@ -56,6 +53,8 @@ export default function SelectedChart({
         icuChartId={selectedChart.icu_chart_id}
         hosIcuMemoNames={selectedChart.hos_id.icu_memo_names}
       />
+
+      {isPatientOut && <OutPatientCover />}
     </div>
   )
 }
