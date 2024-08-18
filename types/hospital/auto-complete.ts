@@ -4,14 +4,14 @@ export type SearchKeywordResult = {
   keyword: string
 }
 
-export type SuggestionListProps = {
+export type Suggestion = {
   keyword: string
   mainKeyWord: string
 }
 
 export type AutoCompleteStates = {
   inputValue: string
-  suggestions: SuggestionListProps[]
+  suggestions: Suggestion[]
   selectedKeywords: SearchKeywordResult[]
 }
 

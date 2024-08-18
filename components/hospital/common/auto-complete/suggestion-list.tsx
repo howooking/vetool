@@ -1,7 +1,7 @@
 import { CommandGroup, CommandItem, CommandList } from '@/components/ui/command'
 import {
   SetAutoCompleteStates,
-  SuggestionListProps,
+  Suggestion,
 } from '@/types/hospital/auto-complete'
 
 export default function SuggestionList({
@@ -9,11 +9,9 @@ export default function SuggestionList({
   suggestions,
 }: {
   setAutoCompleteState: SetAutoCompleteStates
-  suggestions: SuggestionListProps[]
+  suggestions: Suggestion[]
 }) {
-  // Auto Complete Select Handler
-  const handleSelect = (selectedSuggestion: SuggestionListProps) => {
-    // 선택한 값 update
+  const handleSelect = (selectedSuggestion: Suggestion) => {
     setAutoCompleteState((prev) => ({
       inputValue: '',
       suggestions: [],
