@@ -56,7 +56,7 @@ export const getSelectedCharts = async (icuIoId: string) => {
   const { data: selectedIcuChartData, error: selectedIcuChartDataError } =
     await supabase
       .from('icu_chart')
-      .select('icu_chart_id, target_date')
+      .select('icu_chart_id, target_date, icu_chart_dx, icu_chart_cc')
       .order('target_date', { ascending: true })
       .match({ icu_io_id: icuIoId })
 

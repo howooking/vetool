@@ -1,6 +1,13 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { TableCell } from '@/components/ui/table'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
@@ -31,22 +38,38 @@ export default function OrderTitle({
 
   return (
     <TableCell
-      className={cn(
-        preview ? 'cursor-default' : 'cursor-pointer',
-        'flex w-[296px] items-center justify-between gap-2 transition hover:opacity-70',
-      )}
-      onClick={handleDialogOpen}
-      title={orderComment ?? ''}
+      className={cn('w-[320px] p-0')}
       style={{
         background: DEFAULT_ICU_ORDER_TYPE.find(
           (order) => order.value === orderType,
         )?.color,
       }}
     >
-      <span className="min-w-16 truncate">{orderName}</span>
-      <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
-        {orderComment}
-      </span>
+      <TooltipProvider delayDuration={20}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              onClick={handleDialogOpen}
+              className={cn(
+                'flex w-[320px] justify-between rounded-none bg-transparent',
+                preview ? 'cursor-not-allowed' : 'cursor-pointer',
+              )}
+            >
+              <span className="truncate">{orderName}</span>
+              <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
+                {orderComment}
+              </span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right" className={preview ? 'hidden' : ''}>
+            <div className="flex gap-2">
+              <span className="font-bold">{orderName}</span>
+              <span className="text-xs">{orderComment}</span>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </TableCell>
   )
 }

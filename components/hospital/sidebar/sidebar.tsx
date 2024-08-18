@@ -32,7 +32,7 @@ const SIDE_BAR_ITEMS = [
 export default async function Sidebar({ hosId }: { hosId: string }) {
   return (
     <>
-      <ul>
+      <ul className="z-50">
         {SIDE_BAR_ITEMS.map((item) => (
           <SidebarItem
             name={item.name}

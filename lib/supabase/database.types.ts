@@ -1350,21 +1350,6 @@ export type Database = {
           group_list_input: Json
           age_in_days_input: number
         }
-        Returns: Json
-      }
-      register_icu_patient2: {
-        Args: {
-          hos_id_input: string
-          patient_id_input: string
-          icu_chart_dx_input: string
-          icu_chart_cc_input: string
-          in_date_input: string
-          out_due_date_input: string
-          main_vet_input: string
-          sub_vet_input: string
-          group_list_input: Json
-          age_in_days_input: number
-        }
         Returns: undefined
       }
       update_icu_chart_with_vitals: {

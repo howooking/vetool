@@ -62,6 +62,7 @@ export default function BirthDatePicker({
 
           <div className="flex gap-4">
             <Input
+              id="birth"
               type="number"
               value={inputValue}
               onChange={handleInputChange}

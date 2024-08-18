@@ -208,7 +208,7 @@ export default function PatientForm({
                 <Input
                   {...field}
                   className="h-8 text-sm"
-                  autoCapitalize="none"
+                  autoComplete="off"
                   id="name"
                 />
               </FormControl>
@@ -347,7 +347,11 @@ export default function PatientForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>성별*</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                name="sex"
+              >
                 <FormControl>
                   <SelectTrigger
                     className={cn(

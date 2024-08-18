@@ -5,8 +5,8 @@ import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart
 import Group from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/group/group'
 import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/in-and-out-date/in-and-out-date'
 import { MainSubVet } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/main-sub-vet/main-sub-vet'
-import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/onwer-name'
 import type { IcuChartJoined, IcuIoPatientJoined } from '@/types/icu'
+import OwnerName from './owner-name'
 
 export default function ChartInfos({
   chartData,
@@ -44,7 +44,7 @@ export default function ChartInfos({
         />
       </div>
 
-      <div className="col-span-3">
+      <div className="col-span-2">
         <Group
           hosGroupList={chartData.hos_id.group_list}
           currentGroups={selectedIo.group_list}
@@ -52,7 +52,7 @@ export default function ChartInfos({
         />
       </div>
 
-      <div className="col-span-1">
+      <div className="col-span-2">
         <OwnerName
           ownerName={chartData.patient_id.owner_name}
           patientId={chartData.patient_id.patient_id}

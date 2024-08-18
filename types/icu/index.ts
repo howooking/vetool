@@ -118,5 +118,5 @@ export type CopiedOrder = IcuChartOrder & {
 
 export type SelectedSearchedChart = Pick<
   IcuChart,
-  'target_date' | 'icu_chart_id'
+  'target_date' | 'icu_chart_id' | 'icu_chart_dx' | 'icu_chart_cc'
 >

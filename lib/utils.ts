@@ -23,13 +23,18 @@ export function getAgeFromAgeInDays(ageInDays: number) {
   const years = Math.floor(ageInDays / 365)
   const remainingDays = ageInDays % 365
   const months = Math.floor(remainingDays / 30)
+  const days = remainingDays % 30
 
   if (years === 0) {
-    return `${ageInDays}일`
+    if (months === 0) {
+      return `${days}일`
+    } else {
+      return `${months}개월 ${days}일`
+    }
   } else if (years > 0 && months === 0) {
-    return `${years}살`
+    return `${years}년`
   } else {
-    return `${years}살 ${months}개월`
+    return `${years}년 ${months}개월`
   }
 }
 
@@ -85,27 +90,41 @@ export function calculateAge(dateString: string) {
 export const getDaysDifference = (dateString: string) => {
   // 날짜 문자열을 Date 객체로 변환
   const targetDate = new Date(dateString)
-  const today = new Date()
+  const today = new Date(
+    new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }),
+  )
 
   // 두 날짜의 차이를 밀리초 단위로 계산
-  const diffTime = today.getTime() - targetDate.getTime()
+  const diff = today.getTime() - targetDate.getTime()
 
   // 밀리초를 일 단위로 변환
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24))
 
   return diffDays
 }
 
-export const getYesterdatTodayTomorrow = () => {
-  const today = new Date()
-  const yesterday = new Date(today)
+export const getYesterdayTodayTomorrow = () => {
+  const now = new Date()
+  const koreaTime = new Date(
+    now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }),
+  )
+
+  const today = new Date(koreaTime)
+  const yesterday = new Date(koreaTime)
   yesterday.setDate(today.getDate() - 1)
-  const tomorrow = new Date(today)
+  const tomorrow = new Date(koreaTime)
   tomorrow.setDate(today.getDate() + 1)
 
+  const formatDate = (date: Date) => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
   return {
-    yesterday: yesterday.toISOString().split('T')[0],
-    today: today.toISOString().split('T')[0],
-    tomorrow: tomorrow.toISOString().split('T')[0],
+    yesterday: formatDate(yesterday),
+    today: formatDate(today),
+    tomorrow: formatDate(tomorrow),
   }
 }

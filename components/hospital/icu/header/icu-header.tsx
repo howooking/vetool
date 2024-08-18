@@ -1,6 +1,6 @@
 import IcuHeaderDateSelector from '@/components/hospital/icu/header/date-picker/header-date-selector'
-import RegisterDialog from '@/components/hospital/icu/header/register-dialog/register-dialog'
 import { getIcuHeaderData } from '@/lib/services/icu/get-icu-header-data'
+import RegisterDialog from './register-dialog/register-dialog'
 
 export default async function IcuHeader({ hosId }: { hosId: string }) {
   const { hosGroupList, patientsData, vetsData } = await getIcuHeaderData(hosId)

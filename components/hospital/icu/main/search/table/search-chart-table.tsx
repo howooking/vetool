@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/table'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
-import { cn } from '@/lib/utils'
 import type { SearchedChart } from '@/types/icu'
 
 export default function SearchChartTable({
@@ -58,9 +57,9 @@ export default function SearchChartTable({
 
           {!isSearching &&
             searchedCharts.length > 0 &&
-            searchedCharts.map((charts) => {
-              return <GroupedChart key={charts.icu_io_id} charts={charts} />
-            })}
+            searchedCharts.map((charts) => (
+              <GroupedChart key={charts.icu_io_id} charts={charts} />
+            ))}
         </TableBody>
       </Table>
 

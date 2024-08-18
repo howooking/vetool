@@ -27,6 +27,7 @@ export default function PatientSelectButton({
   const handlePatientClick = async () => {
     setIsLoading(true)
     const icuIoData = await getIcuIoByPatientId(patientId)
+    setIsLoading(false)
 
     if (icuIoData?.in_date && !icuIoData?.out_date) {
       toast({
@@ -34,7 +35,6 @@ export default function PatientSelectButton({
         title: '입원중인 환자',
         description: '이미 입원중인 환자입니다',
       })
-      setIsLoading(false)
       return
     }
 
@@ -43,7 +43,7 @@ export default function PatientSelectButton({
       patientId,
       birth,
       patientName,
-      ageInDays: icuIoData?.age_in_days || getDaysSince(birth),
+      ageInDays: getDaysSince(birth),
     })
   }
 
@@ -52,7 +52,7 @@ export default function PatientSelectButton({
       type="button"
       size="sm"
       onClick={handlePatientClick}
-      className={cn(isIcu ? 'block' : 'hidden', 'flex w-12')}
+      className={cn(isIcu ? 'flex' : 'hidden', 'w-11')}
       disabled={isLoading}
     >
       {isLoading ? <LoaderCircle size={16} className="animate-spin" /> : '선택'}

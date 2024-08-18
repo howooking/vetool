@@ -34,7 +34,7 @@ export default function ChartTable({
     <Table className="h-full border">
       <TableHeader>
         <TableRow>
-          <TableHead className="flex w-[296px] items-center justify-center gap-2 text-center">
+          <TableHead className="relative flex w-[320px] items-center justify-center gap-2 text-center">
             <span>오더 목록</span>
             {!preview && (
               <OrderDialog
