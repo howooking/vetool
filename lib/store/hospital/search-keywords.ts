@@ -32,7 +32,7 @@ export const useSearchKeyWordsStore = create<SearchKeyWordsState>(
         .reduce((acc: SuggestionListProps[], result) => {
           const item = {
             keyword: result.keyword,
-            mainKeyWord: result.mainkeyword,
+            mainKeyWord: result.mainKeyword,
           }
 
           acc.push(item)
