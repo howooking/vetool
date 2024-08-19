@@ -1,7 +1,7 @@
 'use client'
 
+import Autocomplete from '@/components/hospital/common/auto-complete/auto-complete'
 import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/register-icu/schema'
-import AutoComplete from '@/components/hospital/common/auto-complete/auto-complete'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
@@ -158,11 +157,9 @@ export default function RegisterIcuForm({
             <FormItem className="relative">
               <FormLabel>진단명 DX*</FormLabel>
               <FormControl className="w-full">
-                <AutoComplete
+                <Autocomplete
                   defaultValue={field.value || ''}
-                  handleChange={(value) => field.onChange(value)}
-                  label="진단명"
-                  isUpdating={isSubmitting}
+                  handleUpdate={(value) => field.onChange(value)}
                 />
               </FormControl>
               <FormMessage className="text-xs" />
@@ -177,11 +174,9 @@ export default function RegisterIcuForm({
             <FormItem className="relative">
               <FormLabel>주증상 CC*</FormLabel>
               <FormControl>
-                <AutoComplete
+                <Autocomplete
                   defaultValue={field.value || ''}
-                  handleChange={(value) => field.onChange(value)}
-                  label="주증상"
-                  isUpdating={isSubmitting}
+                  handleUpdate={(value) => field.onChange(value)}
                 />
               </FormControl>
 
@@ -368,7 +363,12 @@ export default function RegisterIcuForm({
             이전
           </Button>
 
-          <Button type="submit" className="ml-2" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            className="ml-2"
+            disabled={isSubmitting}
+            onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+          >
             등록
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
