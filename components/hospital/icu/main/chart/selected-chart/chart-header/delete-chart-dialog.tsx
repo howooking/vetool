@@ -16,7 +16,7 @@ import {
   deleteChart,
   deleteOrders,
 } from '@/lib/services/icu/delete-icu-chart'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { cn } from '@/lib/utils'
 import { LoaderCircle, Trash2 } from 'lucide-react'
@@ -38,7 +38,8 @@ export default function DeleteChartDialog({
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeletingAllCharts, setIsDeletingAllCharts] = useState(false)
-  const { setSelectedPatient } = useIcuSelectedPatientStore()
+  const { setSelectedPatientId: setSelectedPatient } =
+    useIcuSelectedPatientIdStore()
   const { setIsChartLoading } = useIsChartLoadingStore()
 
   const handleDeleteChart = async () => {

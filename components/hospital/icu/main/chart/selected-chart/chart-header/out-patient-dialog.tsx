@@ -11,16 +11,10 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { toggleOutPatient } from '@/lib/services/icu/update-icu-chart-infos'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
 import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
-import {
-  LoaderCircle,
-  LogOut,
-  Undo2,
-  UserRoundMinus,
-  UserRoundPlus,
-} from 'lucide-react'
+import { LoaderCircle, LogOut, Undo2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 export default function OutPatientDialog({
@@ -39,7 +33,7 @@ export default function OutPatientDialog({
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { selectedPatient } = useIcuSelectedPatientStore()
+  const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { icu_chart_dx: dx, icu_chart_cc: cc } = chartData
   const { target_date } = useParams()
 
@@ -60,7 +54,7 @@ export default function OutPatientDialog({
       isPatientOut,
       target_date as string,
       filteredSelectedChartOrderNames,
-      selectedPatient?.patientId as string,
+      selectedPatientId!,
       symptoms,
     )
 

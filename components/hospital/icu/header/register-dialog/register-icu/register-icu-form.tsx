@@ -32,7 +32,7 @@ import {
   usePatientRegisterDialog,
   usePatientRegisterStep,
 } from '@/lib/store/icu/icu-register'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
@@ -74,7 +74,7 @@ export default function RegisterIcuForm({
       patientName: string
     }
   }
-  const { setSelectedPatient } = useIcuSelectedPatientStore()
+  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setStep } = usePatientRegisterStep()
 
@@ -125,10 +125,7 @@ export default function RegisterIcuForm({
 
     setIsRegisterDialogOpen(false)
     setIsSubmitting(false)
-    setSelectedPatient({
-      patientId: registeringPatient.patientId,
-      patientName: registeringPatient.patientName,
-    })
+    setSelectedPatientId(registeringPatient.patientId)
     setSelectedIcuMainView('chart')
     push(`${format(in_date, 'yyyy-MM-dd')}`)
   }
@@ -148,7 +145,7 @@ export default function RegisterIcuForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="mt-4 grid grid-cols-2 gap-4"
+        className="grid grid-cols-2 gap-6"
       >
         <FormField
           control={form.control}
@@ -363,12 +360,7 @@ export default function RegisterIcuForm({
             이전
           </Button>
 
-          <Button
-            type="submit"
-            className="ml-2"
-            disabled={isSubmitting}
-            onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
-          >
+          <Button type="submit" className="ml-2" disabled={isSubmitting}>
             등록
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}

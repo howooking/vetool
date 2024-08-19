@@ -1,8 +1,8 @@
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useEffect, useState } from 'react'
 
 export default function OutPatientCover() {
-  const { selectedPatient } = useIcuSelectedPatientStore()
+  const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const [opacity, setOpacity] = useState(1)
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function OutPatientCover() {
     return () => {
       clearTimeout(fadeOutTimer)
     }
-  }, [selectedPatient])
+  }, [selectedPatientId])
 
   return (
     <div className="absolute left-0 right-0 top-0 flex h-full cursor-not-allowed justify-center">

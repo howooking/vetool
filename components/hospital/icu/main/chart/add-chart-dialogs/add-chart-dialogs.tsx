@@ -7,14 +7,11 @@ import CopyPrevChartDialog from './copy-prev-chart-dialog'
 import PasteCopiedChartDialog from './paste-copied-chart-dialog'
 
 export default function AddChartDialogs({
-  selectedPatient,
+  selectedPatientId,
   selectedChart,
   isFirstChart,
 }: {
-  selectedPatient: {
-    patientName: string
-    patientId: string
-  }
+  selectedPatientId: string
   selectedChart?: IcuChartJoined
   isFirstChart: boolean
 }) {
@@ -26,7 +23,7 @@ export default function AddChartDialogs({
       {!isFirstChart && (
         <CopyPrevChartDialog
           targetDate={target_date as string}
-          selectedPatient={selectedPatient}
+          selectedPatientId={selectedPatientId}
           setIsCreatingChart={setIsChartLoading}
         />
       )}
@@ -40,7 +37,7 @@ export default function AddChartDialogs({
 
       <PasteCopiedChartDialog
         targetDate={target_date as string}
-        selectedPatient={selectedPatient}
+        selectedPatientId={selectedPatientId}
         setIsCreatingChart={setIsChartLoading}
       />
       <AddBookmarkChartDialog />
