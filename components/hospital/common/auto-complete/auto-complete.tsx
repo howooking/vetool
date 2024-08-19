@@ -125,6 +125,9 @@ export default function Autocomplete({
         e.preventDefault()
         setSuggestions([])
         break
+      case 'Tab':
+        setSuggestions([])
+        break
       case 'Enter':
         e.preventDefault()
         insertSuggestion(suggestions[selectedIndex].keyword)
@@ -167,7 +170,7 @@ export default function Autocomplete({
       )}
 
       <HelperTooltip className="absolute right-2 top-2">
-        키워드는 콤마(",") 또는 스페이스로 구분됩니다
+        키워드는 콤마 또는 스페이스로 구분됩니다
       </HelperTooltip>
     </div>
   )
