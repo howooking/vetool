@@ -39,6 +39,8 @@ export default function ChartTableCell({
     }
   }, [txData?.icu_chart_tx_result, step])
 
+  const hasComment = !!txData?.icu_chart_tx_comment
+
   const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleUpsertBriefTxResultInput = async () => {
@@ -91,6 +93,17 @@ export default function ChartTableCell({
     }
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const target = e.currentTarget
+      setTimeout(() => {
+        if (target) {
+          target.blur()
+        }
+      }, 0)
+    }
+  }
+
   const targetedIsUpserting = useMemo(
     () =>
       isTxUpserting &&
@@ -110,34 +123,31 @@ export default function ChartTableCell({
       {targetedIsUpserting ? (
         <LoaderCircle className="mx-auto animate-spin text-muted-foreground" />
       ) : (
-        <Input
-          id={`${icuChartOrderId}-tx-result-${time}`}
-          className={cn(
-            'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
-            hasOrder && 'bg-rose-100/60',
-            isDone && 'bg-green-100/60',
+        <div className="relative">
+          <Input
+            id={`${icuChartOrderId}-tx-result-${time}`}
+            className={cn(
+              'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
+              hasOrder && 'bg-rose-100/60',
+              isDone && 'bg-green-100/60',
+              hasComment && '',
+            )}
+            disabled={preview || isTxUpserting}
+            value={briefTxResultInput}
+            onChange={(e) => setBriefTxResultInput(e.target.value)}
+            onBlur={handleUpsertBriefTxResultInput}
+            onKeyDown={handleKeyDown}
+            onTouchStart={handleLongClickStart}
+            onTouchEnd={handleLongClickEnd}
+            onTouchCancel={handleLongClickEnd}
+            onMouseDown={handleLongClickStart}
+            onMouseUp={handleLongClickEnd}
+            onMouseLeave={handleLongClickEnd}
+          />
+          {hasComment && (
+            <div className="absolute right-0 top-0 border-l-[10px] border-t-[10px] border-l-transparent border-t-amber-400" />
           )}
-          disabled={preview || isTxUpserting}
-          value={briefTxResultInput}
-          onChange={(e) => setBriefTxResultInput(e.target.value)}
-          onBlur={handleUpsertBriefTxResultInput}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              const target = e.currentTarget
-              setTimeout(() => {
-                if (target) {
-                  target.blur()
-                }
-              }, 0)
-            }
-          }}
-          onTouchStart={handleLongClickStart}
-          onTouchEnd={handleLongClickEnd}
-          onTouchCancel={handleLongClickEnd}
-          onMouseDown={handleLongClickStart}
-          onMouseUp={handleLongClickEnd}
-          onMouseLeave={handleLongClickEnd}
-        />
+        </div>
       )}
     </TableCell>
   )
