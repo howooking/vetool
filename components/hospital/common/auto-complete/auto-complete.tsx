@@ -1,5 +1,6 @@
 'use client'
 
+import HelperTooltip from '@/components/common/helper-tooltip'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useOutsideClick } from '@/hooks/use-outside-click'
@@ -46,9 +47,7 @@ export default function Autocomplete({
   const inputRef = useRef<HTMLInputElement>(null)
 
   useOutsideClick(autocompleteComponentRef, () => {
-    if (suggestions.length > 0) {
-      setSuggestions([])
-    }
+    setSuggestions([])
   })
 
   useEffect(() => {
@@ -62,7 +61,7 @@ export default function Autocomplete({
         const results = trie
           .search(wordAtCursor)
           .sort((a, b) => a.keyword.length - b.keyword.length)
-          .slice(0, 10)
+          .slice(0, 15)
         setSuggestions(results)
       } else {
         setSuggestions([])
@@ -163,8 +162,13 @@ export default function Autocomplete({
           suggestions={suggestions}
           insertSuggestion={insertSuggestion}
           selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
         />
       )}
+
+      <HelperTooltip className="absolute right-2 top-2">
+        키워드는 콤마(",") 또는 스페이스로 구분됩니다
+      </HelperTooltip>
     </div>
   )
 }

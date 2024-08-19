@@ -731,6 +731,8 @@ export type Database = {
           created_at: string
           group_list: string[]
           hos_id: string | null
+          icu_io_cc: string
+          icu_io_dx: string
           icu_io_id: string
           icu_io_tags: string
           in_date: string
@@ -744,6 +746,8 @@ export type Database = {
           created_at?: string
           group_list: string[]
           hos_id?: string | null
+          icu_io_cc?: string
+          icu_io_dx?: string
           icu_io_id?: string
           icu_io_tags?: string
           in_date: string
@@ -757,6 +761,8 @@ export type Database = {
           created_at?: string
           group_list?: string[]
           hos_id?: string | null
+          icu_io_cc?: string
+          icu_io_dx?: string
           icu_io_id?: string
           icu_io_tags?: string
           in_date?: string
@@ -775,6 +781,64 @@ export type Database = {
           },
           {
             foreignKeyName: "icu_io_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
+          },
+        ]
+      }
+      icu_notification: {
+        Row: {
+          created_at: string
+          hos_id: string
+          icu_chart_id: string
+          is_read: boolean
+          notification_content: string | null
+          notification_id: string
+          notification_title: string
+          patient_id: string
+          target_date: string
+        }
+        Insert: {
+          created_at?: string
+          hos_id: string
+          icu_chart_id: string
+          is_read?: boolean
+          notification_content?: string | null
+          notification_id?: string
+          notification_title: string
+          patient_id: string
+          target_date: string
+        }
+        Update: {
+          created_at?: string
+          hos_id?: string
+          icu_chart_id?: string
+          is_read?: boolean
+          notification_content?: string | null
+          notification_id?: string
+          notification_title?: string
+          patient_id?: string
+          target_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "\bicu_notification_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "\bicu_notification_icu_chart_id_fkey"
+            columns: ["icu_chart_id"]
+            isOneToOne: false
+            referencedRelation: "icu_chart"
+            referencedColumns: ["icu_chart_id"]
+          },
+          {
+            foreignKeyName: "\bicu_notification_patient_id_fkey"
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
