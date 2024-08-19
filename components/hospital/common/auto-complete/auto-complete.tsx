@@ -45,7 +45,11 @@ export default function Autocomplete({
   const autocompleteComponentRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  useOutsideClick(autocompleteComponentRef, () => setSuggestions([]))
+  useOutsideClick(autocompleteComponentRef, () => {
+    if (suggestions.length > 0) {
+      setSuggestions([])
+    }
+  })
 
   useEffect(() => {
     setInput(defaultValue ?? '')
