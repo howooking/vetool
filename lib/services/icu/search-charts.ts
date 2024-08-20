@@ -4,12 +4,12 @@ const SPECIAL_CHAR_REGEX = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]+/g
 
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { createClient } from '@/lib/supabase/server'
-import { CopiedOrder, SearchedChart } from '@/types/icu'
+import { CopiedOrder, SearchedIcuIos } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
 
-export const searchIcuChart = async (searchInput: string, hosId: string) => {
+export const searchIos = async (searchInput: string, hosId: string) => {
   const safeWords = searchInput
     .trim()
     .replace(SPECIAL_CHAR_REGEX, ' ')
@@ -23,6 +23,8 @@ export const searchIcuChart = async (searchInput: string, hosId: string) => {
       in_date,
       out_date,
       icu_io_tags,
+      icu_io_dx,
+      icu_io_cc,
       patient_id(
         name,
         owner_name,
@@ -42,7 +44,7 @@ export const searchIcuChart = async (searchInput: string, hosId: string) => {
       .match({ hos_id: hosId })
       .not('out_date', 'is', null)
       .order('created_at', { ascending: false })
-      .returns<SearchedChart[]>()
+      .returns<SearchedIcuIos[]>()
 
   if (searchedIcuIoDataError) {
     console.log(searchedIcuIoDataError)

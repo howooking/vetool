@@ -51,9 +51,15 @@ export type IcuChartJoined = Omit<
   > | null
 }
 
-export type SearchedChart = Pick<
+export type SearchedIcuIos = Pick<
   IcuIo,
-  'icu_io_id' | 'out_date' | 'in_date' | 'age_in_days' | 'icu_io_tags'
+  | 'icu_io_id'
+  | 'out_date'
+  | 'in_date'
+  | 'age_in_days'
+  | 'icu_io_tags'
+  | 'icu_io_dx'
+  | 'icu_io_cc'
 > & {
   patient_id: Pick<Patients, 'name' | 'owner_name' | 'species' | 'breed'>
 }
@@ -118,7 +124,7 @@ export type CopiedOrder = IcuChartOrder & {
   icu_io_id: IcuIo
 }
 
-export type SelectedSearchedChart = Pick<
+export type SearchedIcuCharts = Pick<
   IcuChart,
   'target_date' | 'icu_chart_id' | 'icu_chart_dx' | 'icu_chart_cc'
 >
