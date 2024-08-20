@@ -152,11 +152,12 @@ export default function RegisterIcuForm({
           name="dx"
           render={({ field }) => (
             <FormItem className="relative">
-              <FormLabel>진단명 DX*</FormLabel>
+              <FormLabel htmlFor="DX">진단명 DX*</FormLabel>
               <FormControl className="w-full">
                 <Autocomplete
                   defaultValue={field.value || ''}
                   handleUpdate={(value) => field.onChange(value)}
+                  label="DX"
                 />
               </FormControl>
               <FormMessage className="text-xs" />
@@ -169,11 +170,12 @@ export default function RegisterIcuForm({
           name="cc"
           render={({ field }) => (
             <FormItem className="relative">
-              <FormLabel>주증상 CC*</FormLabel>
+              <FormLabel htmlFor="CC">주증상 CC*</FormLabel>
               <FormControl>
                 <Autocomplete
                   defaultValue={field.value || ''}
                   handleUpdate={(value) => field.onChange(value)}
+                  label="CC"
                 />
               </FormControl>
 
@@ -229,7 +231,7 @@ export default function RegisterIcuForm({
           name="group_list"
           render={() => (
             <FormItem>
-              <FormLabel className="text-base">그룹</FormLabel>
+              <p className="text-sm">그룹</p>
               <div className="flex flex-wrap items-center gap-2">
                 {groupList.map((item) => (
                   <FormField
@@ -283,7 +285,11 @@ export default function RegisterIcuForm({
                 </FormControl>
                 <SelectContent>
                   {vetsData.map((vet) => (
-                    <SelectItem key={vet.user_id} value={vet.user_id}>
+                    <SelectItem
+                      key={vet.user_id}
+                      value={vet.user_id}
+                      id={vet.user_id}
+                    >
                       <div className="flex items-center gap-2">
                         <Image
                           unoptimized
@@ -327,7 +333,11 @@ export default function RegisterIcuForm({
                 </FormControl>
                 <SelectContent>
                   {vetsData.map((vet) => (
-                    <SelectItem key={vet.user_id} value={vet.user_id}>
+                    <SelectItem
+                      key={vet.user_id}
+                      value={vet.user_id}
+                      id={vet.user_id}
+                    >
                       <div className="flex items-center gap-2">
                         <Image
                           unoptimized

@@ -142,12 +142,9 @@ export default function Autocomplete({
       ref={autocompleteComponentRef}
     >
       {label && (
-        <Label
-          className="absolute left-2 top-2.5 text-xs text-muted-foreground"
-          htmlFor={label}
-        >
+        <p className="absolute left-2 top-2.5 text-xs text-muted-foreground">
           {label}
-        </Label>
+        </p>
       )}
 
       <Input
