@@ -2,7 +2,6 @@
 
 import HelperTooltip from '@/components/common/helper-tooltip'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { useOutsideClick } from '@/hooks/use-outside-click'
 import { useKeywordTrieStore } from '@/lib/store/hospital/keyword-trie'
 import { cn } from '@/lib/utils'
@@ -148,6 +147,7 @@ export default function Autocomplete({
       )}
 
       <Input
+        autoComplete="off"
         id={label}
         ref={inputRef}
         value={input}

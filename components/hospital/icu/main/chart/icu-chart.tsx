@@ -76,10 +76,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     [selectedIo?.out_date],
   )
 
-  const isFirstChart = useMemo(
-    () => selectedChart?.target_date === selectedIo?.in_date,
-    [selectedChart?.target_date, selectedIo?.in_date],
-  )
+  const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
 
   if (!selectedPatientId) {
     return <NoResult title="환자를 선택해주세요" className="h-icu-chart" />

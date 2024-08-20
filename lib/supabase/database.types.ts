@@ -227,8 +227,8 @@ export type Database = {
           bookmark_id: string | null
           created_at: string
           hos_id: string
-          icu_chart_cc: string
-          icu_chart_dx: string
+          icu_chart_cc: string | null
+          icu_chart_dx: string | null
           icu_chart_id: string
           icu_io_id: string
           main_vet: string
@@ -245,8 +245,8 @@ export type Database = {
           bookmark_id?: string | null
           created_at?: string
           hos_id: string
-          icu_chart_cc: string
-          icu_chart_dx: string
+          icu_chart_cc?: string | null
+          icu_chart_dx?: string | null
           icu_chart_id?: string
           icu_io_id: string
           main_vet: string
@@ -263,8 +263,8 @@ export type Database = {
           bookmark_id?: string | null
           created_at?: string
           hos_id?: string
-          icu_chart_cc?: string
-          icu_chart_dx?: string
+          icu_chart_cc?: string | null
+          icu_chart_dx?: string | null
           icu_chart_id?: string
           icu_io_id?: string
           main_vet?: string
@@ -1405,8 +1405,8 @@ export type Database = {
         Args: {
           hos_id_input: string
           patient_id_input: string
-          icu_chart_dx_input: string
-          icu_chart_cc_input: string
+          icu_io_dx_input: string
+          icu_io_cc_input: string
           in_date_input: string
           out_due_date_input: string
           main_vet_input: string
