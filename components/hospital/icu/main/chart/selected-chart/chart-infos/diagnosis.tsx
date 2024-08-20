@@ -3,15 +3,14 @@
 import Autocomplete from '@/components/hospital/common/auto-complete/auto-complete'
 import { toast } from '@/components/ui/use-toast'
 import { updateDiagnosis } from '@/lib/services/icu/update-icu-chart-infos'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function Diagnosis({
   diagnosis,
-  icuChartId,
+  icuIoId,
 }: {
   diagnosis: string
-  icuChartId: string
+  icuIoId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
 
@@ -24,7 +23,7 @@ export default function Diagnosis({
 
     setIsUpdating(true)
 
-    await updateDiagnosis(icuChartId, trimmedValue)
+    await updateDiagnosis(icuIoId, trimmedValue)
 
     toast({
       title: '진단명을 변경하였습니다',

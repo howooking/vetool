@@ -24,6 +24,8 @@ export type IcuIoPatientJoined = Pick<
   | 'icu_io_id'
   | 'age_in_days'
   | 'icu_io_tags'
+  | 'icu_io_dx'
+  | 'icu_io_cc'
 > & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
   hos_id: Pick<Hospital, 'group_list'>

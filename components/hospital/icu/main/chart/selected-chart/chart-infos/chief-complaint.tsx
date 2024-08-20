@@ -7,10 +7,10 @@ import { useState } from 'react'
 
 export default function ChiefComplaint({
   chiefComplaint,
-  icuChartId,
+  icuIoId,
 }: {
   chiefComplaint: string
-  icuChartId: string
+  icuIoId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
 
@@ -23,7 +23,7 @@ export default function ChiefComplaint({
 
     setIsUpdating(true)
 
-    await updateChiefComplaint(icuChartId, trimmedValue)
+    await updateChiefComplaint(icuIoId, trimmedValue)
 
     toast({
       title: '주증상을 변경하였습니다',
