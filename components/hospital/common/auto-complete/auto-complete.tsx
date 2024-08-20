@@ -47,6 +47,7 @@ export default function Autocomplete({
   const inputRef = useRef<HTMLInputElement>(null)
 
   useOutsideClick(autocompleteComponentRef, () => {
+    if (suggestions.length === 0) return
     setSuggestions([])
   })
 
