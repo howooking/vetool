@@ -128,3 +128,11 @@ export const getYesterdayTodayTomorrow = () => {
     tomorrow: formatDate(tomorrow),
   }
 }
+
+// stringifiedHashtagKeywords('사과, 바나나') => '#사과#바나나'
+export const hashtagKeyword = (stringKeywords: string) => {
+  return stringKeywords
+    .split(',')
+    .map((keyword) => `#${keyword.trim()}`)
+    .join('')
+}

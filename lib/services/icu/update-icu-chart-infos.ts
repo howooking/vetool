@@ -134,24 +134,23 @@ export const updateMemo = async (
 
 export const toggleOutPatient = async (
   icuIoId: string,
-  icuChartId: string,
   isPatientOut: boolean,
-  targetDate: string,
   chartOrders: string,
   patientId: string,
-  symptoms: string,
+  hashtaggedDxCc: string,
 ) => {
   const supabase = createClient()
 
-  const { error: updateOutDateError } = await supabase.rpc('icu_out_patient', {
-    icu_io_id_input: icuIoId,
-    icu_chart_id_input: icuChartId,
-    is_patient_out_input: isPatientOut,
-    target_date_input: targetDate,
-    chart_orders_input: chartOrders,
-    patient_id_input: patientId,
-    symptoms_input: symptoms,
-  })
+  const { error: updateOutDateError } = await supabase.rpc(
+    'toggle-out-patient',
+    {
+      icu_io_id_input: icuIoId,
+      is_patient_out_input: isPatientOut,
+      chart_orders_input: chartOrders,
+      patient_id_input: patientId,
+      keywords_input: hashtaggedDxCc,
+    },
+  )
 
   if (updateOutDateError) {
     console.log(updateOutDateError)
@@ -189,23 +188,23 @@ export const selectIcuIoTags = async (icuIoId: string) => {
   return icuIoTagsData.icu_io_tags
 }
 
-export const updateWithMainKeyword = async (
-  symptomTags: string,
-  icuIoId: string,
-) => {
-  const prevIoTags = await selectIcuIoTags(icuIoId)
+// export const updateWithMainKeyword = async (
+//   symptomTags: string,
+//   icuIoId: string,
+// ) => {
+//   const prevIoTags = await selectIcuIoTags(icuIoId)
 
-  const { error: updateWithMainKeywordError } = await supabase
-    .from('icu_io')
-    .update({ icu_io_tags: prevIoTags + '#' + symptomTags })
-    .match({ icu_io_id: icuIoId })
-    .single()
+//   const { error: updateWithMainKeywordError } = await supabase
+//     .from('icu_io')
+//     .update({ icu_io_tags: prevIoTags + '#' + symptomTags })
+//     .match({ icu_io_id: icuIoId })
+//     .single()
 
-  if (updateWithMainKeywordError) {
-    console.log(updateWithMainKeywordError)
-    redirect(`/error/?message=${updateWithMainKeywordError.message}`)
-  }
-}
+//   if (updateWithMainKeywordError) {
+//     console.log(updateWithMainKeywordError)
+//     redirect(`/error/?message=${updateWithMainKeywordError.message}`)
+//   }
+// }
 
 // TODO: 'search_tags column 삭제'
 // const getTags = async (icuIoId: string) => {

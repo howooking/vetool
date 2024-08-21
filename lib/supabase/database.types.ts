@@ -734,7 +734,7 @@ export type Database = {
           icu_io_cc: string
           icu_io_dx: string
           icu_io_id: string
-          icu_io_tags: string
+          icu_io_tags: string | null
           in_date: string
           out_date: string | null
           out_due_date: string
@@ -749,7 +749,7 @@ export type Database = {
           icu_io_cc?: string
           icu_io_dx?: string
           icu_io_id?: string
-          icu_io_tags?: string
+          icu_io_tags?: string | null
           in_date: string
           out_date?: string | null
           out_due_date: string
@@ -764,7 +764,7 @@ export type Database = {
           icu_io_cc?: string
           icu_io_dx?: string
           icu_io_id?: string
-          icu_io_tags?: string
+          icu_io_tags?: string | null
           in_date?: string
           out_date?: string | null
           out_due_date?: string
@@ -1413,6 +1413,16 @@ export type Database = {
           sub_vet_input: string
           group_list_input: Json
           age_in_days_input: number
+        }
+        Returns: undefined
+      }
+      "toggle-out-patient": {
+        Args: {
+          icu_io_id_input: string
+          is_patient_out_input: boolean
+          patient_id_input: string
+          chart_orders_input: string
+          keywords_input: string
         }
         Returns: undefined
       }
