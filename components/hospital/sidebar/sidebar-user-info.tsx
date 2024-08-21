@@ -48,7 +48,9 @@ export default async function SidebarUserInfo({ hosId }: { hosId: string }) {
                 <Link href={`/hospital/${hosId}/admin/staff`}>관리자</Link>
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem>프로필 수정</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/hospital/${hosId}/my-page`}>프로필 수정</Link>
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
