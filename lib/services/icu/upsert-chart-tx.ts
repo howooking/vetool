@@ -8,14 +8,17 @@ import { redirect } from 'next/navigation'
 const supabase = createClient()
 
 export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
+  hosId: string,
+  patientId: string,
+  chartId: string,
+  targetDate: string,
   txLocalState?: TxLocalState,
   updatedLogs?: TxLog[],
-  hosId?: string,
 ) => {
   const { data: returningData, error: upsertIcuChartTxError } = await supabase
     .from('icu_chart_tx')
     .upsert({
-      hos_id: hosId!,
+      hos_id: hosId,
       icu_chart_tx_id: txLocalState?.txId,
       icu_io_id: txLocalState?.icuIoId,
       icu_chart_order_id: txLocalState?.icuChartOrderId,
@@ -30,6 +33,24 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
   if (upsertIcuChartTxError) {
     console.log(upsertIcuChartTxError)
     redirect(`/error?message=${upsertIcuChartTxError.message}`)
+  }
+
+  if (txLocalState?.isNotificationChecked) {
+    const { error: notificationError } = await supabase
+      .from('icu_notification')
+      .insert({
+        hos_id: hosId!,
+        patient_id: patientId,
+        icu_chart_id: chartId,
+        notification_title: txLocalState?.txResult!,
+        notification_content: txLocalState?.txComment,
+        target_date: targetDate,
+      })
+
+    if (notificationError) {
+      console.log(notificationError)
+      redirect(`/error?message=${notificationError.message}`)
+    }
   }
 
   if (txLocalState?.txId) return
