@@ -4,7 +4,8 @@ import { SIDEBAR_STYLE } from '@/constants/hospital/icu/notification'
 import { useDimensions } from '@/hooks/use-dimensions'
 import { useRealtimeSubscription } from '@/hooks/use-realtime-subscription'
 import { getIcuNotification } from '@/lib/services/icu/get-icu-notification'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
+
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { createClient } from '@/lib/supabase/client'
 import type { IcuNotification } from '@/types'
@@ -19,7 +20,7 @@ export default function IcuNotification() {
 
   const { hos_id } = useParams()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setSelectedPatient } = useIcuSelectedPatientStore()
+  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
   const { height } = useDimensions(containerRef)
   const { push } = useRouter()
 
@@ -112,14 +113,14 @@ export default function IcuNotification() {
       setUnreadCount((prevCount) => prevCount - 1)
       handleUpdateDate(targetDate)
       setSelectedIcuMainView('chart')
-      setSelectedPatient({ patientId, patientName: '' })
+      setSelectedPatientId(patientId)
       setIsToggleOpen()
     },
     [
       handleUpdateDate,
-      setSelectedIcuMainView,
-      setSelectedPatient,
       setIsToggleOpen,
+      setSelectedIcuMainView,
+      setSelectedPatientId,
     ],
   )
 

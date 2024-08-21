@@ -1,9 +1,9 @@
+import { LI_STYLE } from '@/constants/hospital/icu/notification'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
+import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import { IcuNotification } from '@/types'
 import { motion } from 'framer-motion'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
-import { LI_STYLE } from '@/constants/hospital/icu/notification'
 
 type MenuItemProps = {
   data: IcuNotification
@@ -27,7 +27,7 @@ export default function MenuItem({
   handleUpdateDate,
 }: MenuItemProps) {
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setSelectedPatient } = useIcuSelectedPatientStore()
+  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
 
   const handleClick = () => {
     if (!isRead) {
@@ -38,7 +38,7 @@ export default function MenuItem({
       )
     } else {
       setSelectedIcuMainView('chart')
-      setSelectedPatient({ patientId: data.patient_id, patientName: '' })
+      setSelectedPatientId(data.patient_id)
       setIsToggleOpen()
       handleUpdateDate(data.target_date)
     }

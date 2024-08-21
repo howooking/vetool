@@ -46,6 +46,7 @@ export const copyPrevChart = async (
     return { error: 'prev orders not found' }
   }
 
+  // 전날의 차트와 오더가 있다는 것을 모두 확인 후에 target날의 차트 생성
   const { data: newIcuChartId, error: creatingNewIcuChartError } =
     await supabase
       .from('icu_chart')
