@@ -28,7 +28,7 @@ export default function AddChartDialogs({
         />
       )}
 
-      {selectedChart && (
+      {isFirstChart && (
         <AddDefaultChartDialog
           selectedChart={selectedChart}
           setIsCreatingChart={setIsChartLoading}

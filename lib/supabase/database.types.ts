@@ -227,8 +227,6 @@ export type Database = {
           bookmark_id: string | null
           created_at: string
           hos_id: string
-          icu_chart_cc: string | null
-          icu_chart_dx: string | null
           icu_chart_id: string
           icu_io_id: string
           main_vet: string
@@ -245,8 +243,6 @@ export type Database = {
           bookmark_id?: string | null
           created_at?: string
           hos_id: string
-          icu_chart_cc?: string | null
-          icu_chart_dx?: string | null
           icu_chart_id?: string
           icu_io_id: string
           main_vet: string
@@ -263,8 +259,6 @@ export type Database = {
           bookmark_id?: string | null
           created_at?: string
           hos_id?: string
-          icu_chart_cc?: string | null
-          icu_chart_dx?: string | null
           icu_chart_id?: string
           icu_io_id?: string
           main_vet?: string
@@ -739,7 +733,6 @@ export type Database = {
           out_date: string | null
           out_due_date: string
           patient_id: string
-          search_tags: string
         }
         Insert: {
           age_in_days: number
@@ -754,7 +747,6 @@ export type Database = {
           out_date?: string | null
           out_due_date: string
           patient_id: string
-          search_tags?: string
         }
         Update: {
           age_in_days?: number
@@ -769,7 +761,6 @@ export type Database = {
           out_date?: string | null
           out_due_date?: string
           patient_id?: string
-          search_tags?: string
         }
         Relationships: [
           {
@@ -1217,86 +1208,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      "(prev)icu_out_patient": {
-        Args: {
-          icu_io_id_input: string
-          icu_chart_id_input: string
-          is_patient_out_input: boolean
-          target_date_input: string
-          chart_orders_input: string
-          patient_id_input: string
-        }
-        Returns: undefined
-      }
-      "(unused)insert_patient_with_selected_owner": {
-        Args: {
-          hos_id_input: string
-          hos_patient_id_input: string
-          birth_input: string
-          species_input: string
-          breed_input: string
-          gender_input: string
-          name_input: string
-          memo_input: string
-          microchip_no_input: string
-          owner_id_input: string
-          body_weight_input: string
-        }
-        Returns: string
-      }
-      "(unused)insert_patient_without_selected_owner": {
-        Args: {
-          hos_id_input: string
-          owner_name_input: string
-          owner_address_input: string
-          owner_phone_number_input: string
-          owner_memo_input: string
-          hos_owner_id_input: string
-          hos_patient_id_input: string
-          birth_input: string
-          species_input: string
-          breed_input: string
-          gender_input: string
-          name_input: string
-          memo_input: string
-          microchip_no_input: string
-          body_weight_input: string
-        }
-        Returns: string
-      }
-      "(unused)paste_icu_chart_after_search_chart": {
-        Args: {
-          icu_chart_id_input: string
-          patient_id_input: string
-          target_date_input: string
-        }
-        Returns: Json
-      }
-      "(unused)paste_icu_chart_when_register_patient": {
-        Args: {
-          icu_chart_id_input: string
-          patient_id_input: string
-          age_in_days_input: number
-          target_date_input: string
-        }
-        Returns: Json
-      }
-      "(unused)update_cc": {
-        Args: {
-          icu_chart_id_input: string
-          icu_io_id_input: string
-          cc_input: string
-        }
-        Returns: undefined
-      }
-      "(unused)update_dx": {
-        Args: {
-          icu_chart_id_input: string
-          icu_io_id_input: string
-          diagnosis_input: string
-        }
-        Returns: undefined
-      }
       copy_prev_chart: {
         Args: {
           patient_id_input: string
@@ -1304,60 +1215,6 @@ export type Database = {
           prev_target_date_input: string
         }
         Returns: Json
-      }
-      delete_icu_chart: {
-        Args: {
-          icu_chart_id_input: string
-          icu_io_id_input: string
-          target_date_input: string
-          patient_id_input: string
-        }
-        Returns: Json
-      }
-      get_icu_patient_data_with_due: {
-        Args: Record<PropertyKey, never>
-        Returns: Json
-      }
-      "icu_chart_order_comment_input: preSelectedChartOrders": {
-        Args: {
-          hos_id_input: string
-          main_vet_input: string
-          sub_vet_input: string
-          weight_input: string
-          weight_measured_date_input: string
-          target_date_input: string
-          patient_id_input: string
-          caution_input: string
-          memo_a_input: string
-          memo_b_input: string
-          memo_c_input: string
-          icu_io_id_input: string
-        }
-        Returns: string
-      }
-      icu_out_patient: {
-        Args: {
-          icu_io_id_input: string
-          icu_chart_id_input: string
-          patient_id_input: string
-          is_patient_out_input: boolean
-          target_date_input: string
-          chart_orders_input: string
-          symptoms_input: string
-        }
-        Returns: undefined
-      }
-      insert_icu_tx_data_with_icu_order: {
-        Args: {
-          order_id_input: string
-          io_id_input: string
-          result_input: string
-          comment_input: string
-          images_input: string
-          log_input: string
-          time_input: number
-        }
-        Returns: undefined
       }
       insert_patient_when_register: {
         Args: {
@@ -1374,32 +1231,6 @@ export type Database = {
           memo_input: string
         }
         Returns: string
-      }
-      insert_user_data_when_create_hospital: {
-        Args: {
-          name_input: string
-          city_input: string
-          district_input: string
-          business_number_input: string
-        }
-        Returns: string
-      }
-      paste_icu_chart_after_search_chart: {
-        Args: {
-          icu_chart_id_input: string
-          patient_id_input: string
-          target_date_input: string
-        }
-        Returns: Json
-      }
-      paste_icu_chart_when_register_patient: {
-        Args: {
-          icu_chart_id_input: string
-          patient_id_input: string
-          age_in_days_input: number
-          target_date_input: string
-        }
-        Returns: Json
       }
       register_icu_patient: {
         Args: {
@@ -1423,15 +1254,6 @@ export type Database = {
           patient_id_input: string
           chart_orders_input: string
           keywords_input: string
-        }
-        Returns: undefined
-      }
-      update_icu_chart_with_vitals: {
-        Args: {
-          patient_id_input: string
-          weight_input: string
-          target_date_input: string
-          weight_measured_date_input: string
         }
         Returns: undefined
       }

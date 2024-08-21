@@ -5,6 +5,7 @@ import type { SearchedIcuCharts, SearchedIcuIos } from '@/types/icu'
 import { useEffect, useState } from 'react'
 import GroupedAccordionContents from './grouped-accordion-contents'
 import GroupedAccordionTrigger from './grouped-accordion-trigger'
+
 export default function GroupedByIcuIo({ icuIo }: { icuIo: SearchedIcuIos }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false)
   const [searchedIcuCharts, setSearchedIcuCharts] = useState<

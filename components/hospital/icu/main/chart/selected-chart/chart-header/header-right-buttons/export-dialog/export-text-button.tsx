@@ -20,8 +20,8 @@ export default function ExportTextButton({
     let textContents = `
 환자명: ${chartData.patient_id.name}
 입원일: ${chartData.target_date}
-DX: ${chartData.icu_chart_dx}
-CC: ${chartData.icu_chart_cc}
+DX: ${chartData.icu_io_id.icu_io_dx}
+CC: ${chartData.icu_io_id.icu_io_cc}
 `
     const hash: Record<string, string[]> = {}
     const fluidOrders = selectedChartOrders.filter(

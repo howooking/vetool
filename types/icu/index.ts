@@ -37,7 +37,10 @@ export type IcuChartJoined = Omit<
   IcuChart,
   'main_vet' | 'sub_vet' | 'patient_id' | 'hos_id' | 'icu_io_id' | 'bookmark_id'
 > & {
-  icu_io_id: Pick<IcuIo, 'out_date' | 'in_date' | 'icu_io_id'>
+  icu_io_id: Pick<
+    IcuIo,
+    'out_date' | 'in_date' | 'icu_io_id' | 'icu_io_dx' | 'icu_io_cc'
+  >
   hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names'>
   patient_id: Pick<
     Patients,
@@ -124,7 +127,4 @@ export type CopiedOrder = IcuChartOrder & {
   icu_io_id: IcuIo
 }
 
-export type SearchedIcuCharts = Pick<
-  IcuChart,
-  'target_date' | 'icu_chart_id' | 'icu_chart_dx' | 'icu_chart_cc'
->
+export type SearchedIcuCharts = Pick<IcuChart, 'target_date' | 'icu_chart_id'>
