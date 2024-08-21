@@ -6,7 +6,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuData } from '@/types/icu'
@@ -15,11 +15,11 @@ import SummaryTableRow from './summary-table-row'
 export default function SummaryTable({ icuData }: { icuData: IcuData }) {
   const { icuChartData, icuChartOrderData } = icuData
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setSelectedPatient } = useIcuSelectedPatientStore()
+  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
 
-  const handleClickRow = (patientId: string, patientName: string) => {
+  const handleClickRow = (patientId: string) => {
     setSelectedIcuMainView('chart')
-    setSelectedPatient({ patientId, patientName })
+    setSelectedPatientId(patientId)
   }
 
   return (

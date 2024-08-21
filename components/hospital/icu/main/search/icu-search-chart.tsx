@@ -1,20 +1,18 @@
 'use client'
 
 import HelperTooltip from '@/components/common/helper-tooltip'
-import SearchChartTable from '@/components/hospital/icu/main/search/table/search-chart-table'
 import { Input } from '@/components/ui/input'
-import { searchIcuChart } from '@/lib/services/icu/search-charts'
-import type { SearchedChart } from '@/types/icu'
+import { searchIos } from '@/lib/services/icu/search-charts'
+import type { SearchedIcuIos } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
+import SearchChartTable from './search-chart-table'
 
 export default function IcuSearchChart() {
   const { hos_id } = useParams()
   const [isSearching, setIsSearching] = useState(false)
-  const [searchedChartState, setSearchedChartState] = useState<SearchedChart[]>(
-    [],
-  )
+  const [searchedIcuIos, setSearchedIcuIos] = useState<SearchedIcuIos[]>([])
 
   const handleSearch = useDebouncedCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,12 +21,8 @@ export default function IcuSearchChart() {
       if (searchInput) {
         setIsSearching(true)
 
-        const searchedCharts = await searchIcuChart(
-          searchInput,
-          hos_id as string,
-        )
-
-        setSearchedChartState(searchedCharts)
+        const searchResult = await searchIos(searchInput, hos_id as string)
+        setSearchedIcuIos(searchResult)
 
         setIsSearching(false)
       }
@@ -47,13 +41,12 @@ export default function IcuSearchChart() {
         />
 
         <HelperTooltip className="absolute right-2 top-2">
-          키워드 검색에 대한 설명글 추가, pacreatitis는 inflammatory 및
-          pacratic, intestinal 검색 시 필터링된다..
+          상위 키워드 검색 가능 내용
         </HelperTooltip>
       </div>
 
       <SearchChartTable
-        searchedCharts={searchedChartState}
+        searchedIcuIos={searchedIcuIos}
         isSearching={isSearching}
       />
     </div>

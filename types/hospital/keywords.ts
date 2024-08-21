@@ -1,5 +1,5 @@
 export type Keyword = {
   id: number
   keyword: string
-  mainkeyword: string
+  mainKeyword: string
 }

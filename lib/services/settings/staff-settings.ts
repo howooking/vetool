@@ -179,3 +179,17 @@ export const approveStaff = async (hosId: string, userId: string) => {
     redirect(`/error/?message=${rpcError.message}`)
   }
 }
+
+export const updateStaffName = async (userId: string, nameInput: string) => {
+  const supabase = createClient()
+
+  const { error: updateNameError } = await supabase
+    .from('users')
+    .update({ name: nameInput })
+    .match({ user_id: userId })
+
+  if (updateNameError) {
+    console.log(updateNameError)
+    redirect(`/error/?message=${updateNameError.message}`)
+  }
+}

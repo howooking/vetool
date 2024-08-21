@@ -52,7 +52,7 @@ export default function OrderTitle({
               variant="ghost"
               onClick={handleDialogOpen}
               className={cn(
-                'flex w-[320px] justify-between rounded-none bg-transparent',
+                'flex w-[320px] justify-between rounded-none bg-transparent px-2',
                 preview ? 'cursor-not-allowed' : 'cursor-pointer',
               )}
             >

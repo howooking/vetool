@@ -14,46 +14,71 @@ export const copyPrevChart = async (
   const newDate = new Date(targetDate)
   const prevDate = format(newDate.setDate(newDate.getDate() - 1), 'yyyy-MM-dd')
 
-  const { data: returningIcuChartIds, error: rpcError } = await supabase.rpc(
-    'copy_prev_chart',
-    {
-      patient_id_input: selectedPatientId,
-      prev_target_date_input: prevDate,
-      target_date_input: targetDate,
-    },
-  )
+  const { data: prevChartData, error } = await supabase
+    .from('icu_chart')
+    .select(
+      'icu_io_id, icu_chart_id, hos_id, main_vet, sub_vet, memo_a, memo_b, memo_c, weight_measured_date, weight',
+    )
+    .match({ patient_id: selectedPatientId, target_date: prevDate })
+    .maybeSingle()
 
-  if (rpcError) {
-    console.log(rpcError)
-    return { error: rpcError }
+  if (error) {
+    console.log(error)
+    redirect(`/error?message=${error.message}`)
   }
 
-  const { newIcuChartId, prevIcuChartId, icuIoId } = returningIcuChartIds as {
-    newIcuChartId: string
-    prevIcuChartId: string
-    icuIoId: string
+  if (!prevChartData) {
+    return { error: 'prev chart not found' }
   }
 
-  const {
-    data: preSelectedChartOrdersData,
-    error: preSelectedChartOrdersDataError,
-  } = await supabase.from('icu_chart_order').select('*').match({
-    icu_chart_id: prevIcuChartId,
-  })
+  const { data: prevChartOrdersData, error: prevChartOrdersDataError } =
+    await supabase.from('icu_chart_order').select('*').match({
+      icu_chart_id: prevChartData.icu_chart_id,
+    })
 
-  if (preSelectedChartOrdersDataError) {
-    console.log(preSelectedChartOrdersDataError)
-    redirect(`/error?message=${preSelectedChartOrdersDataError.message}`)
+  if (prevChartOrdersDataError) {
+    console.log(prevChartOrdersDataError)
+    redirect(`/error?message=${prevChartOrdersDataError.message}`)
   }
 
-  preSelectedChartOrdersData.forEach(async (order) => {
+  // 첫째날 차트는 오더가 없고 차트는 있기 때문에 확인해야함
+  if (prevChartOrdersData.length === 0) {
+    return { error: 'prev orders not found' }
+  }
+
+  // 전날의 차트와 오더가 있다는 것을 모두 확인 후에 target날의 차트 생성
+  const { data: newIcuChartId, error: creatingNewIcuChartError } =
+    await supabase
+      .from('icu_chart')
+      .insert({
+        icu_io_id: prevChartData.icu_io_id,
+        hos_id: prevChartData.hos_id,
+        main_vet: prevChartData.main_vet,
+        sub_vet: prevChartData.sub_vet,
+        target_date: targetDate,
+        memo_a: prevChartData.memo_a,
+        memo_b: prevChartData.memo_b,
+        memo_c: prevChartData.memo_c,
+        weight_measured_date: prevChartData.weight_measured_date,
+        weight: prevChartData.weight,
+        patient_id: selectedPatientId,
+      })
+      .select('icu_chart_id')
+      .single()
+
+  if (creatingNewIcuChartError) {
+    console.log(creatingNewIcuChartError)
+    redirect(`/error?message=${creatingNewIcuChartError.message}`)
+  }
+
+  prevChartOrdersData.forEach(async (order) => {
     const { error: icuChartOrderError } = await supabase
       .from('icu_chart_order')
       .insert({
         hos_id: order.hos_id,
         icu_chart_order_type: order.icu_chart_order_type,
-        icu_chart_id: newIcuChartId,
-        icu_io_id: icuIoId,
+        icu_chart_id: newIcuChartId.icu_chart_id,
+        icu_io_id: prevChartData.icu_io_id,
         icu_chart_order_name: order.icu_chart_order_name,
         icu_chart_order_comment: order.icu_chart_order_comment,
         icu_chart_order_time: order.icu_chart_order_time,

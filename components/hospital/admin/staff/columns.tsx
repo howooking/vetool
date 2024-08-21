@@ -7,11 +7,11 @@ import IsAdminColumn from '@/components/hospital/admin/staff/is-admin-column'
 import IsVetColumn from '@/components/hospital/admin/staff/is-vet-column'
 import PositionColumn from '@/components/hospital/admin/staff/position-column'
 import RankColumn from '@/components/hospital/admin/staff/rank-column'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { HospitalUserDataTable } from '@/types/adimin'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
+import NameColumn from './name-column'
 
 export const columns: ColumnDef<HospitalUserDataTable>[] = [
   {
@@ -49,18 +49,8 @@ export const columns: ColumnDef<HospitalUserDataTable>[] = [
     cell: ({ row }) => {
       const name = row.original.name
       const avatarUrl = row.original.avatar_url
-      return (
-        <div className="flex items-center gap-2">
-          <Avatar className="h-8 w-8">
-            <AvatarImage
-              src={avatarUrl ?? ''}
-              alt={name ?? 'user avatar image'}
-            />
-            <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
-          </Avatar>
-          <span>{name}</span>
-        </div>
-      )
+      const userId = row.original.user_id
+      return <NameColumn avatarUrl={avatarUrl} name={name} userId={userId} />
     },
   },
   {

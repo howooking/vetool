@@ -36,6 +36,8 @@ export default function SelectedChart({
         selectedChartOrders={selectedChartOrders}
         isFirstChart={isFirstChart}
         pdfRef={pdfRef}
+        dx={selectedIo.icu_io_dx}
+        cc={selectedIo.icu_io_cc}
       />
 
       <ChartInfos

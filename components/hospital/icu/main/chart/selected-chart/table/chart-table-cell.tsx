@@ -1,12 +1,13 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
 import { toast } from '@/components/ui/use-toast'
+import { useLongPress } from '@/hooks/use-long-press'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
 import { LoaderCircle } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export default function ChartTableCell({
   time,
@@ -39,9 +40,38 @@ export default function ChartTableCell({
     }
   }, [txData?.icu_chart_tx_result, step])
 
-  const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const targetedIsUpserting = useMemo(
+    () =>
+      isTxUpserting &&
+      time === txLocalState?.time &&
+      txLocalState.icuChartOrderId === icuChartOrderId,
+    [
+      icuChartOrderId,
+      isTxUpserting,
+      time,
+      txLocalState?.icuChartOrderId,
+      txLocalState?.time,
+    ],
+  )
 
-  const handleUpsertBriefTxResultInput = async () => {
+  const longPressEvents = useLongPress({
+    onLongPress: () => {
+      setTxLocalState({
+        icuChartOrderId,
+        icuIoId,
+        txResult: txData?.icu_chart_tx_result,
+        txComment: txData?.icu_chart_tx_comment,
+        txImages: txData?.icu_chart_tx_images,
+        txId: icuChartTxId,
+        time,
+        txLog: txData?.icu_chart_tx_log as TxLog[] | null,
+      })
+      setStep('detailInsert')
+    },
+    delay: 600,
+  })
+
+  const handleUpsertBriefTxResultInput = useCallback(async () => {
     if ((txData?.icu_chart_tx_result ?? '') === briefTxResultInput.trim()) {
       setBriefTxResultInput(briefTxResultInput.trim())
       return
@@ -65,79 +95,57 @@ export default function ChartTableCell({
     })
 
     setStep('seletctUser')
-  }
+  }, [
+    briefTxResultInput,
+    icuChartOrderId,
+    icuChartTxId,
+    icuIoId,
+    setStep,
+    setTxLocalState,
+    time,
+    txData?.icu_chart_tx_result,
+  ])
 
-  const handleLongClickStart = () => {
-    setTxLocalState({
-      icuChartOrderId,
-      icuIoId,
-      txResult: txData?.icu_chart_tx_result,
-      txComment: txData?.icu_chart_tx_comment,
-      txImages: txData?.icu_chart_tx_images,
-      txId: icuChartTxId,
-      time,
-      txLog: txData?.icu_chart_tx_log as TxLog[] | null,
-    })
-
-    longPressTimeoutRef.current = setTimeout(() => {
-      setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
-      setStep('detailInsert')
-    }, 500)
-  }
-
-  const handleLongClickEnd = () => {
-    if (longPressTimeoutRef.current) {
-      clearTimeout(longPressTimeoutRef.current)
-    }
-  }
-
-  const targetedIsUpserting = useMemo(
-    () =>
-      isTxUpserting &&
-      time === txLocalState?.time &&
-      txLocalState.icuChartOrderId === icuChartOrderId,
-    [
-      icuChartOrderId,
-      isTxUpserting,
-      time,
-      txLocalState?.icuChartOrderId,
-      txLocalState?.time,
-    ],
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        const target = e.currentTarget
+        setTimeout(() => {
+          if (target) {
+            target.blur()
+          }
+        }, 0)
+      }
+    },
+    [],
   )
+
+  const hasComment = !!txData?.icu_chart_tx_comment
 
   return (
     <TableCell className="p-0">
       {targetedIsUpserting ? (
         <LoaderCircle className="mx-auto animate-spin text-muted-foreground" />
       ) : (
-        <Input
-          id={`${icuChartOrderId}-tx-result-${time}`}
-          className={cn(
-            'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
-            hasOrder && 'bg-rose-100/60',
-            isDone && 'bg-green-100/60',
+        <div className="relative">
+          <Input
+            id={`${icuChartOrderId}-tx-result-${time}`}
+            className={cn(
+              'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
+              hasOrder && 'bg-rose-100/60',
+              isDone && 'bg-green-100/60',
+            )}
+            disabled={preview || isTxUpserting}
+            value={briefTxResultInput}
+            onChange={(e) => setBriefTxResultInput(e.target.value)}
+            onBlur={handleUpsertBriefTxResultInput}
+            onKeyDown={handleKeyDown}
+            {...longPressEvents}
+          />
+          {hasComment && (
+            <div className="absolute right-0 top-0 border-l-[10px] border-t-[10px] border-l-transparent border-t-amber-400" />
           )}
-          disabled={preview || isTxUpserting}
-          value={briefTxResultInput}
-          onChange={(e) => setBriefTxResultInput(e.target.value)}
-          onBlur={handleUpsertBriefTxResultInput}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              const target = e.currentTarget
-              setTimeout(() => {
-                if (target) {
-                  target.blur()
-                }
-              }, 0)
-            }
-          }}
-          onTouchStart={handleLongClickStart}
-          onTouchEnd={handleLongClickEnd}
-          onTouchCancel={handleLongClickEnd}
-          onMouseDown={handleLongClickStart}
-          onMouseUp={handleLongClickEnd}
-          onMouseLeave={handleLongClickEnd}
-        />
+        </div>
       )}
     </TableCell>
   )

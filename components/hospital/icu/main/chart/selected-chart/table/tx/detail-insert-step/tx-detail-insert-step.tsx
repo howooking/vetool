@@ -1,5 +1,7 @@
 import TxLog from '@/components/hospital/icu/main/chart/selected-chart/table/tx/detail-insert-step/tx-log'
+import { txDetailRegisterFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/tx/schema'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   DialogClose,
   DialogDescription,
@@ -21,11 +23,9 @@ import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { txDetailRegisterFormSchema } from '../schema'
-import { Checkbox } from '@/components/ui/checkbox'
 
 export default function TxDetailInsertStep() {
-  const { reset, setStep, txLocalState, setTxLocalState, setIsTxUpserting } =
+  const { setStep, txLocalState, setTxLocalState, setIsTxUpserting } =
     useUpsertTxStore()
 
   const form = useForm<z.infer<typeof txDetailRegisterFormSchema>>({
@@ -43,6 +43,7 @@ export default function TxDetailInsertStep() {
       txResult: values.result,
       txComment: values.comment,
     })
+
     setStep('seletctUser')
   }
 

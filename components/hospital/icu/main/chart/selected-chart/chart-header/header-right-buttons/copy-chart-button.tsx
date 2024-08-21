@@ -3,9 +3,13 @@ import { toast } from '@/components/ui/use-toast'
 import { getSelectedChartOrders } from '@/lib/services/icu/search-charts'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { Copy, CopyCheck, LoaderCircle } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
-export default function CopyChartButton({ chartId }: { chartId: string }) {
+export default function CopyChartButton({
+  icuChartId,
+}: {
+  icuChartId: string
+}) {
   const [isCopying, setIsCopying] = useState(false)
   const { copiedChartId, setCopiedChartId, setCopiedOrders } =
     useCopiedChartStore()
@@ -13,9 +17,9 @@ export default function CopyChartButton({ chartId }: { chartId: string }) {
   const handleCopy = async () => {
     setIsCopying(true)
 
-    setCopiedChartId(chartId)
+    setCopiedChartId(icuChartId)
 
-    const selectedChartOrders = await getSelectedChartOrders(chartId)
+    const selectedChartOrders = await getSelectedChartOrders(icuChartId)
     setCopiedOrders(selectedChartOrders)
 
     toast({
@@ -26,10 +30,7 @@ export default function CopyChartButton({ chartId }: { chartId: string }) {
     setIsCopying(false)
   }
 
-  const isCopied = useMemo(
-    () => copiedChartId === chartId,
-    [chartId, copiedChartId],
-  )
+  const isCopied = copiedChartId === icuChartId
 
   return (
     <Button

@@ -20,10 +20,12 @@ import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { userLogFormSchema } from './schema'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 
-export default function TxSelectUserStep() {
+export default function TxSelectUserStep({ chartId }: { chartId: string }) {
   const { txLocalState, setStep, setIsTxUpserting } = useUpsertTxStore()
-  const { hos_id } = useParams()
+  const { hos_id, target_date } = useParams()
+  const { selectedPatientId } = useIcuSelectedPatientIdStore()
 
   const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
@@ -49,10 +51,14 @@ export default function TxSelectUserStep() {
 
     setIsTxUpserting(true)
     setStep('closed')
+
     await upsertIcuChartTxAndUpdateIcuChartOrder(
+      hos_id as string,
+      selectedPatientId as string,
+      chartId,
+      target_date as string,
       txLocalState,
       updatedLogs,
-      hos_id as string,
     )
 
     toast({
