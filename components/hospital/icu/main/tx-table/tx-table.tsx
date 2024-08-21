@@ -114,7 +114,7 @@ export default function TxTable({ icuData }: { icuData: IcuData }) {
   )
 
   if (!filteredAndSortedOrder.length) {
-    return <NoResult title="입원환자가 없습니다" className="h-icu-chart" />
+    return <NoResult title="실행할 처치가 없습니다" className="h-icu-chart" />
   }
 
   return (
