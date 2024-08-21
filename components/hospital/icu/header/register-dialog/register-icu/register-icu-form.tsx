@@ -145,7 +145,7 @@ export default function RegisterIcuForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="grid grid-cols-2 gap-6"
+        className="grid grid-cols-2 gap-4"
       >
         <FormField
           control={form.control}
@@ -231,7 +231,7 @@ export default function RegisterIcuForm({
           name="group_list"
           render={() => (
             <FormItem>
-              <p className="text-sm">그룹</p>
+              <p className="text-sm font-medium">그룹</p>
               <div className="flex flex-wrap items-center gap-2">
                 {groupList.map((item) => (
                   <FormField

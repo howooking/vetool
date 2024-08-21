@@ -4,13 +4,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { FormLabel } from '@/components/ui/form'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import type { TxLog } from '@/types/icu'
 
 export default function TxLog({ logs }: { logs: TxLog[] }) {
   return (
     <div>
-      <div>처치 기록</div>
+      <div className="text-sm font-medium">처치 로그</div>
       <Accordion type="single" collapsible className="mt-2">
         <AccordionItem value="logs">
           <AccordionTrigger className="py-1">

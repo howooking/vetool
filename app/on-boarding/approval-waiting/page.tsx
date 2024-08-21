@@ -1,6 +1,6 @@
 import DotLottie from '@/components/common/dot-lottie'
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
-import ApprovalWaitingContents from '@/components/hospital/admin/approval/apprval-waiting-contents'
+import ApprovalWaitingContents from '@/components/hospital/admin/approval/approval-waiting-contents'
 import logoWhite from '@/public/logo-white.svg'
 import Image from 'next/image'
 import { Suspense } from 'react'

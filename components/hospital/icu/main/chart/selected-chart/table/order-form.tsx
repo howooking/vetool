@@ -127,7 +127,7 @@ export default function OrderForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col space-y-8"
+        className="flex flex-col space-y-4"
       >
         <FormField
           control={form.control}
@@ -259,24 +259,23 @@ export default function OrderForm({
               </Button>
             </div>
           </div>
-        </div>
-
-        <div className="col-span-2 flex w-full justify-between">
-          {TIMES.map((time, index) => (
-            <Button
-              tabIndex={-1}
-              type="button"
-              variant="outline"
-              key={time}
-              className={cn(
-                orderTime[index] === '1' && 'bg-rose-100 hover:bg-rose-200',
-                'h-6 w-7 px-3 py-2 text-xs',
-              )}
-              onClick={handleTimeToggle(index)}
-            >
-              {time}
-            </Button>
-          ))}
+          <div className="mt-2 flex w-full justify-between">
+            {TIMES.map((time, index) => (
+              <Button
+                tabIndex={-1}
+                type="button"
+                variant="outline"
+                key={time}
+                className={cn(
+                  orderTime[index] === '1' && 'bg-rose-100 hover:bg-rose-200',
+                  'h-6 w-7 px-3 py-2 text-xs',
+                )}
+                onClick={handleTimeToggle(index)}
+              >
+                {time}
+              </Button>
+            ))}
+          </div>
         </div>
 
         <DialogFooter className="ml-auto w-full">

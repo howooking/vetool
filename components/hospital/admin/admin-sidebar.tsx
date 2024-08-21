@@ -43,7 +43,7 @@ const ADMIN_SIDE_BAR_ITEMS = [
     icon: TestTubeDiagonal,
   },
   {
-    name: 'ICU 관리',
+    name: '입원차트 설정',
     path: 'icu-settings',
     icon: Syringe,
   },

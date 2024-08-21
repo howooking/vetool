@@ -110,7 +110,7 @@ export function GroupColumnDialog({
                         return (
                           <FormItem
                             key={item}
-                            className="flex flex-row items-start space-x-3 space-y-0"
+                            className="flex flex-row items-center gap-2 space-y-0"
                           >
                             <FormControl>
                               <Checkbox

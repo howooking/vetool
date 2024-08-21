@@ -68,7 +68,7 @@ export default function MainSubVetUpdateForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleUpdateMainAndSubVet)}
-        className="mt-4 grid grid-cols-2 gap-4"
+        className="grid grid-cols-2 gap-4"
       >
         <FormField
           control={form.control}
