@@ -1,5 +1,5 @@
 import { KEYWORDS } from '@/constants/hospital/keywords'
-import type { SuggestionListProps } from '@/types/hospital/auto-complete'
+import type { Suggestion } from '@/types/hospital/auto-complete'
 import type { Keyword } from '@/types/hospital/keywords'
 import TrieSearch from 'trie-search'
 import { create } from 'zustand'
@@ -7,7 +7,7 @@ import { create } from 'zustand'
 type SearchKeyWordsState = {
   koreanTrie: TrieSearch<Keyword>
   nonKoreanTrie: TrieSearch<Keyword>
-  search: (keyword: string) => SuggestionListProps[]
+  search: (keyword: string) => Suggestion[]
   initialize: () => void
 }
 
@@ -29,10 +29,10 @@ export const useSearchKeyWordsStore = create<SearchKeyWordsState>(
 
       const results = trie
         .search(target)
-        .reduce((acc: SuggestionListProps[], result) => {
+        .reduce((acc: Suggestion[], result) => {
           const item = {
             keyword: result.keyword,
-            mainKeyWord: result.mainkeyword,
+            mainKeyWord: result.mainKeyword,
           }
 
           acc.push(item)

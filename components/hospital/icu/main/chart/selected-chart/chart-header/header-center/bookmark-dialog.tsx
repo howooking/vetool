@@ -25,7 +25,6 @@ import {
   deleteBookmarkChart,
   upsertBookmarkChart,
 } from '@/lib/services/icu/bookmark'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
 import { IcuChartBookmark } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -50,7 +49,6 @@ export default function BookmarkDialog({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const { selectedPatient } = useIcuSelectedPatientStore()
 
   const form = useForm<z.infer<typeof bookmarkFormSchema>>({
     resolver: zodResolver(bookmarkFormSchema),
@@ -99,10 +97,9 @@ export default function BookmarkDialog({
       })
     }
   }, [
-    selectedPatient,
-    form,
     bookmarkData?.bookmark_comment,
     bookmarkData?.bookmark_name,
+    form,
     isDialogOpen,
   ])
 

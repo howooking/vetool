@@ -11,57 +11,51 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { toggleOutPatient } from '@/lib/services/icu/update-icu-chart-infos'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
-import { cn } from '@/lib/utils'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
-import {
-  LoaderCircle,
-  LogOut,
-  Undo2,
-  UserRoundMinus,
-  UserRoundPlus,
-} from 'lucide-react'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
+import { cn, hashtagKeyword } from '@/lib/utils'
+import type { IcuChartOrderJoined } from '@/types/icu'
+import { LoaderCircle, LogOut, Undo2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 export default function OutPatientDialog({
   icuIoId,
   name,
   isPatientOut,
+  icuChartId,
   selectedChartOrders,
-  chartData,
+  dx,
+  cc,
 }: {
   icuIoId: string
   name: string
   isPatientOut: boolean
+  icuChartId: string
   selectedChartOrders: IcuChartOrderJoined[]
-  chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
+  dx: string
+  cc: string
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { selectedPatient } = useIcuSelectedPatientStore()
-  const { icu_chart_dx: dx, icu_chart_cc: cc } = chartData
+  const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { target_date } = useParams()
-
-  const chartId = selectedChartOrders[0].icu_chart_id.icu_chart_id
-  const symptoms = [dx, cc].flatMap((str) => str.split(',')).join(',')
 
   const handleOutPatient = async () => {
     setIsSubmitting(true)
 
-    const filteredSelectedChartOrderNames = selectedChartOrders
+    const hashtaggedDxCc = hashtagKeyword(`${dx}, ${cc}`)
+
+    const hashtaggedStringifiedOrderNames = selectedChartOrders
       .filter((order) => order.icu_chart_order_type !== 'checklist')
-      .map((order) => order.icu_chart_order_name)
-      .join(', ')
+      .map((order) => `#${order.icu_chart_order_name.trim()}`)
+      .join('')
 
     await toggleOutPatient(
       icuIoId,
-      chartId,
       isPatientOut,
-      target_date as string,
-      filteredSelectedChartOrderNames,
-      selectedPatient?.patientId as string,
-      symptoms,
+      hashtaggedStringifiedOrderNames,
+      selectedPatientId!,
+      hashtaggedDxCc,
     )
 
     toast({

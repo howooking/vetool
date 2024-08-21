@@ -11,7 +11,7 @@ import { toast } from '@/components/ui/use-toast'
 import { pasteChart } from '@/lib/services/icu/paste-chart'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { cn } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
@@ -20,7 +20,7 @@ import { useState } from 'react'
 
 export function ConfirmCopyDialog() {
   const { target_date } = useParams()
-  const { selectedPatient } = useIcuSelectedPatientStore()
+  const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { setBookmarkModalOpen } = useIcuBookmarkStore()
   const { setIsChartLoading } = useIsChartLoadingStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -35,11 +35,7 @@ export function ConfirmCopyDialog() {
     setIsSubmitting(true)
     setIsChartLoading(true)
 
-    await pasteChart(
-      selectedPatient?.patientId!,
-      copiedOrders!,
-      target_date as string,
-    )
+    await pasteChart(selectedPatientId!, copiedOrders!, target_date as string)
 
     toast({
       title: '차트를 생성하였습니다',

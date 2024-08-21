@@ -1,7 +1,7 @@
 'use client'
 
+import Autocomplete from '@/components/hospital/common/auto-complete/auto-complete'
 import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/register-icu/schema'
-import AutoComplete from '@/components/hospital/common/auto-complete/auto-complete'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
@@ -33,7 +32,7 @@ import {
   usePatientRegisterDialog,
   usePatientRegisterStep,
 } from '@/lib/store/icu/icu-register'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
@@ -75,7 +74,7 @@ export default function RegisterIcuForm({
       patientName: string
     }
   }
-  const { setSelectedPatient } = useIcuSelectedPatientStore()
+  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setStep } = usePatientRegisterStep()
 
@@ -126,10 +125,7 @@ export default function RegisterIcuForm({
 
     setIsRegisterDialogOpen(false)
     setIsSubmitting(false)
-    setSelectedPatient({
-      patientId: registeringPatient.patientId,
-      patientName: registeringPatient.patientName,
-    })
+    setSelectedPatientId(registeringPatient.patientId)
     setSelectedIcuMainView('chart')
     push(`${format(in_date, 'yyyy-MM-dd')}`)
   }
@@ -149,20 +145,19 @@ export default function RegisterIcuForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="mt-4 grid grid-cols-2 gap-4"
+        className="grid grid-cols-2 gap-6"
       >
         <FormField
           control={form.control}
           name="dx"
           render={({ field }) => (
             <FormItem className="relative">
-              <FormLabel>진단명 DX*</FormLabel>
+              <FormLabel htmlFor="DX">진단명 DX*</FormLabel>
               <FormControl className="w-full">
-                <AutoComplete
+                <Autocomplete
                   defaultValue={field.value || ''}
-                  handleChange={(value) => field.onChange(value)}
-                  label="진단명"
-                  isUpdating={isSubmitting}
+                  handleUpdate={(value) => field.onChange(value)}
+                  label="DX"
                 />
               </FormControl>
               <FormMessage className="text-xs" />
@@ -175,13 +170,12 @@ export default function RegisterIcuForm({
           name="cc"
           render={({ field }) => (
             <FormItem className="relative">
-              <FormLabel>주증상 CC*</FormLabel>
+              <FormLabel htmlFor="CC">주증상 CC*</FormLabel>
               <FormControl>
-                <AutoComplete
+                <Autocomplete
                   defaultValue={field.value || ''}
-                  handleChange={(value) => field.onChange(value)}
-                  label="주증상"
-                  isUpdating={isSubmitting}
+                  handleUpdate={(value) => field.onChange(value)}
+                  label="CC"
                 />
               </FormControl>
 
@@ -237,7 +231,7 @@ export default function RegisterIcuForm({
           name="group_list"
           render={() => (
             <FormItem>
-              <FormLabel className="text-base">그룹</FormLabel>
+              <p className="text-sm">그룹</p>
               <div className="flex flex-wrap items-center gap-2">
                 {groupList.map((item) => (
                   <FormField
@@ -291,7 +285,11 @@ export default function RegisterIcuForm({
                 </FormControl>
                 <SelectContent>
                   {vetsData.map((vet) => (
-                    <SelectItem key={vet.user_id} value={vet.user_id}>
+                    <SelectItem
+                      key={vet.user_id}
+                      value={vet.user_id}
+                      id={vet.user_id}
+                    >
                       <div className="flex items-center gap-2">
                         <Image
                           unoptimized
@@ -335,7 +333,11 @@ export default function RegisterIcuForm({
                 </FormControl>
                 <SelectContent>
                   {vetsData.map((vet) => (
-                    <SelectItem key={vet.user_id} value={vet.user_id}>
+                    <SelectItem
+                      key={vet.user_id}
+                      value={vet.user_id}
+                      id={vet.user_id}
+                    >
                       <div className="flex items-center gap-2">
                         <Image
                           unoptimized

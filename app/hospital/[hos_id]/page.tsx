@@ -1,7 +1,7 @@
-import Todo from '@/components/hospital/home/todo/todo'
-import TodoSkeleton from '@/components/hospital/home/todo/todo-skeleton'
 import Notice from '@/components/hospital/home/notice/notice'
 import NoticeSkeleton from '@/components/hospital/home/notice/notice-skeleton'
+import Todo from '@/components/hospital/home/todo/todo'
+import TodoSkeleton from '@/components/hospital/home/todo/todo-skeleton'
 import { Suspense } from 'react'
 
 export default function HospitalHomePage({

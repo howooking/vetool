@@ -8,7 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import { IcuData } from '@/types/icu'
@@ -38,7 +38,7 @@ const TODO_BACKGROUD_COLORS = [
 export default function TxTable({ icuData }: { icuData: IcuData }) {
   const { icuChartData, icuChartOrderData } = icuData
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setSelectedPatient } = useIcuSelectedPatientStore()
+  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
 
   const filteredAndSortedOrder = useMemo(
     () =>
@@ -84,11 +84,11 @@ export default function TxTable({ icuData }: { icuData: IcuData }) {
   )
 
   const handleClickRow = useCallback(
-    (patientId: string, patientName: string) => {
+    (patientId: string) => {
       setSelectedIcuMainView('chart')
-      setSelectedPatient({ patientId, patientName })
+      setSelectedPatientId(patientId)
     },
-    [setSelectedIcuMainView, setSelectedPatient],
+    [setSelectedIcuMainView, setSelectedPatientId],
   )
 
   const chartBackgroundMap = useMemo(
@@ -146,10 +146,7 @@ export default function TxTable({ icuData }: { icuData: IcuData }) {
                 className="cursor-pointer divide-x transition-all hover:opacity-60"
                 key={order.icu_chart_order_id}
                 onClick={() =>
-                  handleClickRow(
-                    foundChart?.patient_id.patient_id!,
-                    foundChart?.patient_id.name!,
-                  )
+                  handleClickRow(foundChart?.patient_id.patient_id!)
                 }
               >
                 <TableCell

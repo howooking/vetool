@@ -4,7 +4,7 @@ import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import NoResult from '@/components/common/no-result'
 import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/selected-chart'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import type {
@@ -17,7 +17,7 @@ import { useEffect, useMemo, useState } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 
 export default function IcuChart({ icuData }: { icuData: IcuData }) {
-  const { selectedPatient } = useIcuSelectedPatientStore()
+  const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
   const { setIsTxUpserting } = useUpsertTxStore()
 
@@ -32,19 +32,19 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
 
   useEffect(() => {
     const selectedIo = icuIoData.find(
-      (io) => io.patient_id.patient_id === selectedPatient?.patientId,
+      (io) => io.patient_id.patient_id === selectedPatientId,
     )
     setSeletedIo(selectedIo)
     setIsChartLoading(false)
-  }, [icuIoData, selectedPatient?.patientId, setIsChartLoading])
+  }, [icuIoData, selectedPatientId, setIsChartLoading])
 
   useEffect(() => {
     const selectedChart = icuChartData.find(
-      (chart) => chart.patient_id.patient_id === selectedPatient?.patientId,
+      (chart) => chart.patient_id.patient_id === selectedPatientId,
     )
     setSelectedChart(selectedChart)
     setIsChartLoading(false)
-  }, [icuChartData, selectedPatient?.patientId, setIsChartLoading])
+  }, [icuChartData, selectedPatientId, setIsChartLoading])
 
   useEffect(() => {
     const selectedChartOrders = icuChartOrderData
@@ -76,12 +76,9 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     [selectedIo?.out_date],
   )
 
-  const isFirstChart = useMemo(
-    () => selectedChart?.target_date === selectedIo?.in_date,
-    [selectedChart?.target_date, selectedIo?.in_date],
-  )
+  const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
 
-  if (!selectedPatient) {
+  if (!selectedPatientId) {
     return <NoResult title="환자를 선택해주세요" className="h-icu-chart" />
   }
 
@@ -94,9 +91,8 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
       <NoResult
         title={
           <>
-            {selectedPatient.patientName}은(는) 선택한 날짜의 차트가 없습니다{' '}
-            <br /> 선택한 날짜에 아직 입원을 하지 않았거나 이미 퇴원을
-            하였습니다
+            해당환자는 선택한 날짜의 차트가 없습니다 <br /> 선택한 날짜에 아직
+            입원을 하지 않았거나 이미 퇴원을 하였습니다
           </>
         }
         className="h-icu-chart"
@@ -108,7 +104,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     return (
       <AddChartDialogs
         isFirstChart={isFirstChart}
-        selectedPatient={selectedPatient}
+        selectedPatientId={selectedPatientId}
         selectedChart={selectedChart}
       />
     )

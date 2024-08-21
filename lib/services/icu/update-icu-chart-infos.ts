@@ -6,33 +6,16 @@ import { redirect } from 'next/navigation'
 
 const supabase = createClient()
 
-// 'search_tags column 삭제'
-// const getTags = async (icuIoId: string) => {
-//   const { data: searchedTagsData, error: searchedTagsDataError } =
-//     await supabase
-//       .from('icu_io')
-//       .select('search_tags')
-//       .match({ icu_io_id: icuIoId })
-//       .single()
-
-//   if (searchedTagsDataError) {
-//     console.log(searchedTagsDataError)
-//     redirect(`/error/?message=${searchedTagsDataError.message}`)
-//   }
-
-//   return searchedTagsData.search_tags
-// }
-
 export const updateDiagnosis = async (
-  icuChartId: string,
-  diagnosis: string,
+  icuIoId: string,
+  diagnosisInput: string,
 ) => {
   const { error: updateDiagnosisError } = await supabase
-    .from('icu_chart')
+    .from('icu_io')
     .update({
-      icu_chart_dx: diagnosis,
+      icu_io_dx: diagnosisInput,
     })
-    .match({ icu_chart_id: icuChartId })
+    .match({ icu_io_id: icuIoId })
 
   if (updateDiagnosisError) {
     console.log(updateDiagnosisError)
@@ -41,34 +24,19 @@ export const updateDiagnosis = async (
 }
 
 export const updateChiefComplaint = async (
-  icuChartId: string,
+  icuIoId: string,
   chiefComplaint: string,
 ) => {
   const { error: updateChiefComplaintError } = await supabase
-    .from('icu_chart')
+    .from('icu_io')
     .update({
-      icu_chart_cc: chiefComplaint,
+      icu_io_cc: chiefComplaint,
     })
-    .match({ icu_chart_id: icuChartId })
+    .match({ icu_io_id: icuIoId })
 
   if (updateChiefComplaintError) {
     console.log(updateChiefComplaintError)
     redirect(`/error/?message=${updateChiefComplaintError.message}`)
-  }
-}
-
-export const updateSearchTags = async (
-  icuChartId: string,
-  searchTags: string,
-) => {
-  const { error: updateSearchTagsError } = await supabase
-    .from('icu_io')
-    .update({ search_tags: searchTags })
-    .match({ icu_chart_id: icuChartId })
-
-  if (updateSearchTagsError) {
-    console.log(updateSearchTagsError)
-    redirect(`/error/?message=${updateSearchTagsError.message}`)
   }
 }
 
@@ -166,24 +134,23 @@ export const updateMemo = async (
 
 export const toggleOutPatient = async (
   icuIoId: string,
-  icuChartId: string,
   isPatientOut: boolean,
-  targetDate: string,
   chartOrders: string,
   patientId: string,
-  symptoms: string,
+  hashtaggedDxCc: string,
 ) => {
   const supabase = createClient()
 
-  const { error: updateOutDateError } = await supabase.rpc('icu_out_patient', {
-    icu_io_id_input: icuIoId,
-    icu_chart_id_input: icuChartId,
-    is_patient_out_input: isPatientOut,
-    target_date_input: targetDate,
-    chart_orders_input: chartOrders,
-    patient_id_input: patientId,
-    symptoms_input: symptoms,
-  })
+  const { error: updateOutDateError } = await supabase.rpc(
+    'toggle-out-patient',
+    {
+      icu_io_id_input: icuIoId,
+      is_patient_out_input: isPatientOut,
+      chart_orders_input: chartOrders,
+      patient_id_input: patientId,
+      keywords_input: hashtaggedDxCc,
+    },
+  )
 
   if (updateOutDateError) {
     console.log(updateOutDateError)
@@ -221,20 +188,52 @@ export const selectIcuIoTags = async (icuIoId: string) => {
   return icuIoTagsData.icu_io_tags
 }
 
-export const updateWithMainKeyword = async (
-  symptomTags: string,
-  icuIoId: string,
-) => {
-  const prevIoTags = await selectIcuIoTags(icuIoId)
+// export const updateWithMainKeyword = async (
+//   symptomTags: string,
+//   icuIoId: string,
+// ) => {
+//   const prevIoTags = await selectIcuIoTags(icuIoId)
 
-  const { error: updateWithMainKeywordError } = await supabase
-    .from('icu_io')
-    .update({ icu_io_tags: prevIoTags + '#' + symptomTags })
-    .match({ icu_io_id: icuIoId })
-    .single()
+//   const { error: updateWithMainKeywordError } = await supabase
+//     .from('icu_io')
+//     .update({ icu_io_tags: prevIoTags + '#' + symptomTags })
+//     .match({ icu_io_id: icuIoId })
+//     .single()
 
-  if (updateWithMainKeywordError) {
-    console.log(updateWithMainKeywordError)
-    redirect(`/error/?message=${updateWithMainKeywordError.message}`)
-  }
-}
+//   if (updateWithMainKeywordError) {
+//     console.log(updateWithMainKeywordError)
+//     redirect(`/error/?message=${updateWithMainKeywordError.message}`)
+//   }
+// }
+
+// TODO: 'search_tags column 삭제'
+// const getTags = async (icuIoId: string) => {
+//   const { data: searchedTagsData, error: searchedTagsDataError } =
+//     await supabase
+//       .from('icu_io')
+//       .select('search_tags')
+//       .match({ icu_io_id: icuIoId })
+//       .single()
+
+//   if (searchedTagsDataError) {
+//     console.log(searchedTagsDataError)
+//     redirect(`/error/?message=${searchedTagsDataError.message}`)
+//   }
+
+//   return searchedTagsData.search_tags
+// }
+
+// export const updateSearchTags = async (
+//   icuChartId: string,
+//   searchTags: string,
+// ) => {
+//   const { error: updateSearchTagsError } = await supabase
+//     .from('icu_io')
+//     .update({ search_tags: searchTags })
+//     .match({ icu_chart_id: icuChartId })
+
+//   if (updateSearchTagsError) {
+//     console.log(updateSearchTagsError)
+//     redirect(`/error/?message=${updateSearchTagsError.message}`)
+//   }
+// }

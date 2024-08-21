@@ -17,14 +17,11 @@ import { CopyCheck, LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 export default function PasteCopiedChartDialog({
   targetDate,
-  selectedPatient,
+  selectedPatientId,
   setIsCreatingChart,
 }: {
   targetDate: string
-  selectedPatient: {
-    patientName: string
-    patientId: string
-  }
+  selectedPatientId: string
   setIsCreatingChart: (isCreatingChart: boolean) => void
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -50,7 +47,7 @@ export default function PasteCopiedChartDialog({
     setIsSubmitting(true)
     setIsCreatingChart(true)
 
-    await pasteChart(selectedPatient.patientId, copiedChartOrder, targetDate)
+    await pasteChart(selectedPatientId, copiedChartOrder, targetDate)
 
     toast({
       title: '차트를 붙여넣었습니다',

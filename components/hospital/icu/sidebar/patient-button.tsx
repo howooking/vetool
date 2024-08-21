@@ -1,18 +1,16 @@
 import { Button } from '@/components/ui/button'
-import { useIcuSelectedPatientStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuIoPatientJoined } from '@/types/icu'
 
 export default function PatientButton({ data }: { data: IcuIoPatientJoined }) {
-  const { selectedPatient, setSelectedPatient } = useIcuSelectedPatientStore()
+  const { selectedPatientId, setSelectedPatientId: setSelectedPatientId } =
+    useIcuSelectedPatientIdStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
 
   const handlePatientButtonClick = (data: IcuIoPatientJoined) => {
-    setSelectedPatient({
-      patientId: data.patient_id.patient_id,
-      patientName: data.patient_id.name,
-    })
+    setSelectedPatientId(data.patient_id.patient_id)
     setSelectedIcuMainView('chart')
   }
 
@@ -22,7 +20,7 @@ export default function PatientButton({ data }: { data: IcuIoPatientJoined }) {
       size="sm"
       className={cn(
         'w-full',
-        selectedPatient?.patientId === data.patient_id.patient_id && 'bg-muted',
+        selectedPatientId === data.patient_id.patient_id && 'bg-muted',
       )}
       onClick={() => handlePatientButtonClick(data)}
     >

@@ -5,6 +5,8 @@ import { getDaysSince } from '@/lib/utils'
 import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 
+const supabase = createClient()
+
 export const registerIcuPatient = async (
   hosId: string,
   patientId: string,
@@ -17,12 +19,10 @@ export const registerIcuPatient = async (
   main_vet: string,
   sub_vet?: string,
 ) => {
-  const supabase = createClient()
-
   const { error: rpcError } = await supabase.rpc('register_icu_patient', {
     hos_id_input: hosId,
-    icu_chart_dx_input: dx,
-    icu_chart_cc_input: cc,
+    icu_io_dx_input: dx,
+    icu_io_cc_input: cc,
     in_date_input: format(in_date, 'yyyy-MM-dd'),
     out_due_date_input: format(out_due_date, 'yyyy-MM-dd'),
     group_list_input: JSON.stringify(group_list),
