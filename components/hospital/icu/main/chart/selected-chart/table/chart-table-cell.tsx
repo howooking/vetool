@@ -8,6 +8,7 @@ import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
 import { LoaderCircle } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { TxDetailHover } from './tx/tx-detail-hover-card'
 
 export default function ChartTableCell({
   time,
@@ -143,7 +144,7 @@ export default function ChartTableCell({
             {...longPressEvents}
           />
           {hasComment && (
-            <div className="absolute right-0 top-0 border-l-[10px] border-t-[10px] border-l-transparent border-t-amber-400" />
+            <TxDetailHover txComment={txData?.icu_chart_tx_comment} />
           )}
         </div>
       )}
