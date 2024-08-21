@@ -1,5 +1,5 @@
 import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/table/delete-order-alert-dialog'
-import { GroupCheckFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/schema'
+import { GroupCheckFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/order-schema'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import {

@@ -1,8 +1,7 @@
 'use client'
 
-import { registerPatientFormSchema } from '@/components/hospital/patients/schema'
+import { registerPatientFormSchema } from '@/components/hospital/patients/patient-schema'
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import {
   Command,
   CommandEmpty,
@@ -45,9 +44,8 @@ import { useIcuRegisteringPatient } from '@/lib/store/icu/icu-register'
 import { cn, getDaysSince } from '@/lib/utils'
 import type { PatientDataTable } from '@/types/patients'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
+import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
-import { ko } from 'date-fns/locale'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useState } from 'react'

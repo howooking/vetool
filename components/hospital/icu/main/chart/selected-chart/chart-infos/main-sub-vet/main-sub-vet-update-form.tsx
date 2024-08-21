@@ -25,7 +25,7 @@ import Image from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { mainSubVetFormSchema } from './schema'
+import { mainSubVetFormSchema } from './vet-schema'
 
 export default function MainSubVetUpdateForm({
   mainVet,

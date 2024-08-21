@@ -1,6 +1,6 @@
 'use client'
 
-import { newHospitalFormSchema } from '@/components/on-boarding/create-hospital/schema'
+import { newHospitalFormSchema } from '@/components/on-boarding/create-hospital/hospital-schema'
 import { Button } from '@/components/ui/button'
 import {
   Form,

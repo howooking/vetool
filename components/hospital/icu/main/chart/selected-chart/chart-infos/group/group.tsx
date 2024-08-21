@@ -24,7 +24,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import GroupBadge from './group-badge'
-import { groupCheckFormSchema } from './schema'
+import { groupCheckFormSchema } from './group-schema'
 
 export default function Group({
   hosGroupList,

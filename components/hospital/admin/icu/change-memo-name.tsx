@@ -1,4 +1,4 @@
-import { memoNameFormSchema } from '@/components/hospital/admin/icu/schema'
+import { memoNameFormSchema } from '@/components/hospital/admin/icu/memo-name-schema'
 import { Button } from '@/components/ui/button'
 import {
   Form,
