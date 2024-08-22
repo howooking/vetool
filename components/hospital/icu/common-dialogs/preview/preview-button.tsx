@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { getSelectedChartOrders } from '@/lib/services/icu/search-charts'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
-import { LoaderCircle } from 'lucide-react'
+import { Eye, LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 
 export default function PreviewButton({ chartId }: { chartId: string }) {
@@ -22,16 +22,15 @@ export default function PreviewButton({ chartId }: { chartId: string }) {
 
   return (
     <Button
-      size="sm"
-      variant="outline"
+      size="icon"
+      variant="ghost"
       onClick={handleOpenPreviewDialog}
       disabled={isPreviwing}
-      className="w-[68px]"
     >
       {isPreviwing ? (
-        <LoaderCircle size={16} className="animate-spin" />
+        <LoaderCircle size={18} className="animate-spin" />
       ) : (
-        '미리보기'
+        <Eye size={18} />
       )}
     </Button>
   )

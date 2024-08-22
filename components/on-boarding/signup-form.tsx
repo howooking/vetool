@@ -69,10 +69,7 @@ export function SignupForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">
-                  {' '}
-                  성함을 입력해주세요
-                </FormLabel>
+                <FormLabel className="text-base">성함을 입력해주세요</FormLabel>
                 <FormControl>
                   <Input placeholder="김벳툴" {...field} />
                 </FormControl>

@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { UseFormReturn } from 'react-hook-form'
-import { registerPatientFormSchema } from './schema'
+import { registerPatientFormSchema } from './patient-schema'
 import { z } from 'zod'
 
 export default function BirthDatePicker({

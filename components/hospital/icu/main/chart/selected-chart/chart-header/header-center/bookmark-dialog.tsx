@@ -33,7 +33,7 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { bookmarkFormSchema } from './schema'
+import { bookmarkFormSchema } from './weght-bookmark-schema'
 
 export default function BookmarkDialog({
   icuChartId,

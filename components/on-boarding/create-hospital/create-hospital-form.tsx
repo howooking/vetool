@@ -1,6 +1,6 @@
 'use client'
 
-import { newHospitalFormSchema } from '@/components/on-boarding/create-hospital/schema'
+import { newHospitalFormSchema } from '@/components/on-boarding/create-hospital/hospital-schema'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -91,7 +91,7 @@ export default function CreateHospitalForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>병원 이름</FormLabel>
+              <FormLabel className="text-base">병원 이름</FormLabel>
               <FormControl>
                 <Input
                   placeholder="벳툴 동물병원"
@@ -110,7 +110,7 @@ export default function CreateHospitalForm() {
             name="city"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>병원 주소</FormLabel>
+                <FormLabel className="text-base">병원 주소</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -169,7 +169,7 @@ export default function CreateHospitalForm() {
           name="businessNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>사업자 등록번호</FormLabel>
+              <FormLabel className="text-base">사업자 등록번호</FormLabel>
               <FormControl>
                 <Input placeholder="사업자 등록번호 10자리" {...field} />
               </FormControl>

@@ -1,6 +1,7 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
 import { toast } from '@/components/ui/use-toast'
+import { CELL_COLORS } from '@/constants/hospital/icu/chart/colors'
 import { useLongPress } from '@/hooks/use-long-press'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { cn } from '@/lib/utils'
@@ -8,6 +9,7 @@ import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
 import { LoaderCircle } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { TxDetailHover } from './tx/tx-detail-hover'
 
 export default function ChartTableCell({
   time,
@@ -132,9 +134,13 @@ export default function ChartTableCell({
             id={`${icuChartOrderId}-tx-result-${time}`}
             className={cn(
               'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
-              hasOrder && 'bg-rose-100/60',
-              isDone && 'bg-green-100/60',
             )}
+            style={{
+              backgroundColor:
+                (isDone && CELL_COLORS.DONE) ||
+                (hasOrder && CELL_COLORS.NOT_DONE) ||
+                'transparent',
+            }}
             disabled={preview || isTxUpserting}
             value={briefTxResultInput}
             onChange={(e) => setBriefTxResultInput(e.target.value)}
@@ -143,7 +149,7 @@ export default function ChartTableCell({
             {...longPressEvents}
           />
           {hasComment && (
-            <div className="absolute right-0 top-0 border-l-[10px] border-t-[10px] border-l-transparent border-t-amber-400" />
+            <TxDetailHover txComment={txData?.icu_chart_tx_comment} />
           )}
         </div>
       )}

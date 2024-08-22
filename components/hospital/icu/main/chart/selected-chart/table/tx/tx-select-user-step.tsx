@@ -10,6 +10,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { upsertIcuChartTxAndUpdateIcuChartOrder } from '@/lib/services/icu/upsert-chart-tx'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import type { TxLog } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,8 +20,7 @@ import { useParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { userLogFormSchema } from './schema'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
+import { userLogFormSchema } from './tx-schema'
 
 export default function TxSelectUserStep({ chartId }: { chartId: string }) {
   const { txLocalState, setStep, setIsTxUpserting } = useUpsertTxStore()
