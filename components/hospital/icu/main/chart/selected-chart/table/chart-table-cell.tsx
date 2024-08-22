@@ -9,7 +9,7 @@ import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
 import { LoaderCircle } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { TxDetailHover } from './tx/tx-detail-hover-card'
+import { TxDetailHover } from './tx/tx-detail-hover'
 
 export default function ChartTableCell({
   time,
