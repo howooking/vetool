@@ -23,6 +23,7 @@ export default function GroupedAccordionContents({
             <TableHead className="text-center">입원일</TableHead>
             <TableHead className="text-center">미리보기</TableHead>
             <TableHead className="text-center">복사</TableHead>
+            <TableHead className="text-center">이동</TableHead>
             <TableHead />
           </TableRow>
         </TableHeader>

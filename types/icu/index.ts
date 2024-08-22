@@ -127,4 +127,7 @@ export type CopiedOrder = IcuChartOrder & {
   icu_io_id: IcuIo
 }
 
-export type SearchedIcuCharts = Pick<IcuChart, 'target_date' | 'icu_chart_id'>
+export type SearchedIcuCharts = Pick<
+  IcuChart,
+  'target_date' | 'icu_chart_id' | 'patient_id'
+>
