@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState, useCallback } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
-export function useRealtimeSubscription(hosId: string) {
+export function useHomeRealtimeSubscription(hosId: string) {
   const supabase = createClient()
   const { refresh } = useRouter()
   const [pendingChanges, setPendingChanges] = useState(false)
@@ -25,7 +25,7 @@ export function useRealtimeSubscription(hosId: string) {
   )
 
   useEffect(() => {
-    const tables = ['icu_io', 'icu_chart', 'icu_chart_order', 'icu_chart_tx']
+    const tables = ['notices', 'todos']
     const subscriptions = tables.map((table) =>
       supabase
         .channel(`${table}_changes`)
