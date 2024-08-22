@@ -17,7 +17,6 @@ export default function DeleteNoticeButton({
     setIsDeleting(true)
     await deleteNotice(noticeId)
     setIsDialogOpen(false)
-    window.location.reload()
     setIsDeleting(false)
   }
 

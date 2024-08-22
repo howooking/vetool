@@ -739,8 +739,8 @@ export type Database = {
           created_at?: string
           group_list: string[]
           hos_id?: string | null
-          icu_io_cc?: string
-          icu_io_dx?: string
+          icu_io_cc: string
+          icu_io_dx: string
           icu_io_id?: string
           icu_io_tags?: string | null
           in_date: string
@@ -815,21 +815,21 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "\bicu_notification_hos_id_fkey"
+            foreignKeyName: "icu_notification_hos_id_fkey"
             columns: ["hos_id"]
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
           },
           {
-            foreignKeyName: "\bicu_notification_icu_chart_id_fkey"
+            foreignKeyName: "icu_notification_icu_chart_id_fkey"
             columns: ["icu_chart_id"]
             isOneToOne: false
             referencedRelation: "icu_chart"
             referencedColumns: ["icu_chart_id"]
           },
           {
-            foreignKeyName: "\bicu_notification_patient_id_fkey"
+            foreignKeyName: "icu_notification_patient_id_fkey"
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
@@ -1208,14 +1208,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      copy_prev_chart: {
-        Args: {
-          patient_id_input: string
-          target_date_input: string
-          prev_target_date_input: string
-        }
-        Returns: Json
-      }
       insert_patient_when_register: {
         Args: {
           hos_id_input: string

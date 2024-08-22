@@ -1,23 +1,20 @@
-import Notice from '@/components/hospital/home/notice/notice'
-import NoticeSkeleton from '@/components/hospital/home/notice/notice-skeleton'
-import Todo from '@/components/hospital/home/todo/todo'
-import TodoSkeleton from '@/components/hospital/home/todo/todo-skeleton'
-import { Suspense } from 'react'
+import HomeEntry from '@/components/hospital/home/home-entry'
+import { getNotices } from '@/lib/services/hospital-home/notice'
+import { getTodos } from '@/lib/services/hospital-home/todo'
 
-export default function HospitalHomePage({
+export default async function HospitalHomePage({
   params,
 }: {
   params: { hos_id: string }
 }) {
-  return (
-    <div className="flex w-full flex-row gap-2 p-2">
-      <Suspense fallback={<NoticeSkeleton />}>
-        <Notice hosId={params.hos_id} />
-      </Suspense>
+  const noticesData = await getNotices(params.hos_id)
+  const todosData = await getTodos(params.hos_id)
 
-      <Suspense fallback={<TodoSkeleton />}>
-        <Todo hosId={params.hos_id} />
-      </Suspense>
-    </div>
+  return (
+    <HomeEntry
+      noticesData={noticesData}
+      todosData={todosData}
+      hosId={params.hos_id}
+    />
   )
 }

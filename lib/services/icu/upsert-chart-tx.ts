@@ -75,14 +75,14 @@ export const deleteIcuChartTx = async (
 ) => {
   const filedName = `icu_chart_order_tx_${time}`
 
-  const { error: updateIcuChartOrder } = await supabase
+  const { error: updateIcuChartOrderError } = await supabase
     .from('icu_chart_order')
     .update({ [filedName]: null })
     .match({ icu_chart_order_id: icuChartOrderId })
 
-  if (updateIcuChartOrder) {
-    console.log(updateIcuChartOrder)
-    redirect(`/error?message=${updateIcuChartOrder.message}`)
+  if (updateIcuChartOrderError) {
+    console.log(updateIcuChartOrderError)
+    redirect(`/error?message=${updateIcuChartOrderError.message}`)
   }
 
   const { error: deleteIcuChartTxError } = await supabase

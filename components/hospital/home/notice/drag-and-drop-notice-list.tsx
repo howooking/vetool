@@ -1,11 +1,11 @@
 'use client'
 
 import NoResult from '@/components/common/no-result'
+import SingleNotice from '@/components/hospital/home/notice/single-notice'
 import { reorderNotices } from '@/lib/services/hospital-home/notice'
 import type { NoticeUserJoined } from '@/types/hospital/notice'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ReactSortable, Sortable } from 'react-sortablejs'
-import SingleNotice from './single-notice'
 
 export default function DragAndDropNoticeList({
   noticesData,
@@ -15,6 +15,10 @@ export default function DragAndDropNoticeList({
   hosId: string
 }) {
   const [sortableNotice, setSortableNotice] = useState(noticesData)
+
+  useEffect(() => {
+    setSortableNotice(noticesData)
+  }, [noticesData])
 
   const handleReorder = (event: Sortable.SortableEvent) => {
     const noticeIds = noticesData.map((notice) => notice.id)

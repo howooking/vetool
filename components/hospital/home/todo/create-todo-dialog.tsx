@@ -104,6 +104,7 @@ export default function CreateTodoDialog({
                   <FormControl>
                     <Input
                       {...field}
+                      value={field.value ?? ''}
                       className="h-8 text-sm"
                       autoComplete="off"
                       placeholder="검체수거"
@@ -122,6 +123,7 @@ export default function CreateTodoDialog({
                   <FormControl>
                     <Input
                       {...field}
+                      value={field.value ?? ''}
                       className="h-8 text-sm"
                       autoComplete="off"
                       placeholder="간호팀"
