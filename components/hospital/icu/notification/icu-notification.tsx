@@ -2,12 +2,12 @@ import MenuToggle from '@/components/hospital/icu/notification/menu-toggle'
 import Navigation from '@/components/hospital/icu/notification/navigation'
 import { SIDEBAR_STYLE } from '@/constants/hospital/icu/notification'
 import { useDimensions } from '@/hooks/use-dimensions'
-import { useRealtimeSubscription } from '@/hooks/use-realtime-subscription'
 import { getIcuNotification } from '@/lib/services/icu/get-icu-notification'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 import type { IcuNotification } from '@/types'
 import { format } from 'date-fns'
 import { motion, useCycle } from 'framer-motion'
@@ -31,8 +31,6 @@ export default function IcuNotification() {
   const [notificationData, setNotificationData] = useState<IcuNotification[]>(
     [],
   )
-
-  useRealtimeSubscription(hos_id as string)
 
   const fetchNotifications = useCallback(async () => {
     const data = await getIcuNotification(hos_id as string, page)
@@ -125,28 +123,36 @@ export default function IcuNotification() {
   )
 
   return (
-    <motion.nav
-      initial={false}
-      animate={isToggleOpen ? 'open' : 'closed'}
-      custom={height}
-      ref={containerRef}
-      className="fixed bottom-3 right-3 top-1/2 ml-auto w-[300px]"
-    >
-      <motion.div
-        className="fixed bottom-3 right-3 top-1/2 w-[300px] rounded-lg bg-primary"
-        variants={SIDEBAR_STYLE}
-      />
-      <Navigation
-        notificationData={notificationData}
-        readStatus={readStatus}
-        isToggleOpen={isToggleOpen}
-        setIsToggleOpen={setIsToggleOpen}
-        page={page}
-        setPage={setPage}
-        handleReadStatusChange={handleReadStatusChange}
-        handleUpdateDate={handleUpdateDate}
-      />
+    <>
+      <motion.nav
+        initial={false}
+        animate={isToggleOpen ? 'open' : 'closed'}
+        custom={height}
+        ref={containerRef}
+        className={cn(
+          'fixed bottom-3 right-3 top-1/2 ml-auto w-[300px]',
+          !isToggleOpen && 'pointer-events-none',
+        )}
+      >
+        <motion.div
+          className={cn(
+            'fixed bottom-3 right-3 top-1/2 w-[300px] rounded-lg bg-primary',
+            !isToggleOpen && 'pointer-events-none',
+          )}
+          variants={SIDEBAR_STYLE}
+        />
+        <Navigation
+          notificationData={notificationData}
+          readStatus={readStatus}
+          isToggleOpen={isToggleOpen}
+          setIsToggleOpen={setIsToggleOpen}
+          page={page}
+          setPage={setPage}
+          handleReadStatusChange={handleReadStatusChange}
+          handleUpdateDate={handleUpdateDate}
+        />
+      </motion.nav>
       <MenuToggle toggle={() => setIsToggleOpen()} unReadCount={unreadCount} />
-    </motion.nav>
+    </>
   )
 }

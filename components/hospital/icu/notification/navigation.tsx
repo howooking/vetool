@@ -39,15 +39,13 @@ export default function Navigation({
   return (
     <motion.ul
       variants={UL_STYLE}
-      className="z-20 flex h-[85%] w-[300px] flex-col gap-4 overflow-auto p-6"
+      className="flex h-[85%] w-[300px] flex-col gap-4 overflow-auto p-6"
     >
       <motion.li
         variants={LI_STYLE}
-        className={cn(
-          'relative z-10 rounded-lg text-center text-lg font-bold text-white',
-          isToggleOpen && 'bg-primary',
-          !isToggleOpen && 'hidden',
-        )}
+        className={
+          'relative rounded-lg text-center text-lg font-bold text-white'
+        }
       >
         {notificationData.length > 0 ? '알림 목록' : '표시할 알림이 없습니다'}
       </motion.li>

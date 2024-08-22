@@ -1,11 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { getNotices } from '@/lib/services/hospital-home/notice'
+import type { NoticeUserJoined } from '@/types/hospital/notice'
 import CreateOrUpdateNoticeDialog from './create-or-update-notice-dialog'
 import DragAndDropNoticeList from './drag-and-drop-notice-list'
 
-export default async function Notice({ hosId }: { hosId: string }) {
-  const noticesData = await getNotices(hosId)
-
+export default function Notice({
+  noticesData,
+  hosId,
+}: {
+  noticesData: NoticeUserJoined[]
+  hosId: string
+}) {
   return (
     <Card className="flex-1 rounded-sm">
       <CardHeader>

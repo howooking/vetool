@@ -10,7 +10,7 @@ export default function MenuToggle({
   return (
     <button
       onClick={toggle}
-      className="fixed bottom-5 right-5 flex h-12 w-12 items-center justify-center rounded-full"
+      className="fixed bottom-5 right-5 flex h-12 w-12 items-center justify-center rounded-full bg-primary"
     >
       <MessageSquareWarning size={24} color={'#acdac9'} />
       {unReadCount > 0 && (

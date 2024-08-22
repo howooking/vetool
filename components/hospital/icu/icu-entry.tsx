@@ -4,7 +4,7 @@ import IcuFooter from '@/components/hospital/icu/icu-footer'
 import IcuMain from '@/components/hospital/icu/main/icu-main'
 import IcuNotification from '@/components/hospital/icu/notification/icu-notification'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
-import { useRealtimeSubscription } from '@/hooks/use-realtime-subscription'
+import { useIcuRealtimeSubscription } from '@/hooks/use-icu-realtime-subscription'
 import type { IcuData } from '@/types/icu'
 
 export default function IcuEntry({
@@ -14,7 +14,7 @@ export default function IcuEntry({
   hosId: string
   icuData: IcuData
 }) {
-  useRealtimeSubscription(hosId)
+  useIcuRealtimeSubscription(hosId)
 
   return (
     <div className="flex">

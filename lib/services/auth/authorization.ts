@@ -47,7 +47,7 @@ export async function checkIsAdmin(hosId: string) {
   }
 }
 
-export const getUserData = async (userId: string) => {
+export const getUserData = async () => {
   const supabase = createClient()
   const {
     data: { user },
@@ -61,7 +61,7 @@ export const getUserData = async (userId: string) => {
 
   const { data: userData, error: userDataError } = await supabase
     .from('users')
-    .select('email, name, avatar_url, position, is_admin')
+    .select('email, name, avatar_url, position, is_admin, user_id')
     .match({ user_id: user?.id })
     .single()
 
