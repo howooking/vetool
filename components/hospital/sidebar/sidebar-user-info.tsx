@@ -18,7 +18,7 @@ import { getUserData } from '@/lib/services/auth/authorization'
 import Link from 'next/link'
 
 export default async function SidebarUserInfo({ hosId }: { hosId: string }) {
-  const userData = await getUserData(hosId)
+  const userData = await getUserData()
 
   return (
     <div className="absolute bottom-12 left-2">
