@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
+import { CELL_COLORS } from '@/constants/hospital/icu/chart/colors'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import {
   TIMES,
@@ -266,10 +267,13 @@ export default function OrderForm({
                 type="button"
                 variant="outline"
                 key={time}
-                className={cn(
-                  orderTime[index] === '1' && 'bg-rose-100 hover:bg-rose-200',
-                  'h-6 w-7 px-3 py-2 text-xs',
-                )}
+                className="h-6 w-7 px-3 py-2 text-xs"
+                style={{
+                  background:
+                    orderTime[index] === '1'
+                      ? CELL_COLORS.NOT_DONE
+                      : 'transparent',
+                }}
                 onClick={handleTimeToggle(index)}
               >
                 {time}
