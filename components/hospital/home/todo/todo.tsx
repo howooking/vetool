@@ -1,12 +1,16 @@
+import TodoList from '@/components/hospital/home/todo/todo-list'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { getTodos } from '@/lib/services/hospital-home/todo'
 import { getYesterdayTodayTomorrow } from '@/lib/utils'
-import TodoList from './todo-list'
+import type { Todo } from '@/types'
 
-export default async function Todo({ hosId }: { hosId: string }) {
-  const todosData = await getTodos(hosId)
-
+export default function Todo({
+  todosData,
+  hosId,
+}: {
+  todosData: Todo[]
+  hosId: string
+}) {
   const { yesterday, today, tomorrow } = getYesterdayTodayTomorrow()
   const yesterdayTodos = todosData.filter(
     (todo) => todo.target_date === yesterday,

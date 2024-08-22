@@ -85,7 +85,6 @@ export default function CreateOrUpdateNoticeDialog({
     })
     setIsDialogOpen(false)
     setIsSubmitting(false)
-    window.location.reload()
   }
 
   return (
