@@ -35978,7 +35978,7 @@ export const KEYWORDS: Keyword[] = [
   },
   {
     id: 7195,
-    keyword: '식도천공',
+    keyword: '식도 천공',
     mainKeyword: 'esophageal perforation',
   },
   {
