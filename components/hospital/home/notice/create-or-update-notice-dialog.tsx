@@ -34,6 +34,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import DeleteNoticeButton from './delete-notice-button'
 import { NOTICE_COLORS, NoticeColorType, noticeSchema } from './notice-schema'
+import { Textarea } from '@/components/ui/textarea'
 
 export default function CreateOrUpdateNoticeDialog({
   hosId,
@@ -116,8 +117,24 @@ export default function CreateOrUpdateNoticeDialog({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleCreateOrUpdateNotice)}
-            className="grid grid-cols-5 gap-2"
+            className="space-y-4"
           >
+            <FormField
+              control={form.control}
+              name="notice"
+              render={({ field }) => (
+                <FormItem className="col-span-4">
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      className="h-8 text-sm"
+                      autoComplete="off"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="color"
@@ -131,7 +148,7 @@ export default function CreateOrUpdateNoticeDialog({
                     <FormControl>
                       <SelectTrigger
                         className={cn(
-                          'h-8 text-sm',
+                          'w-32',
                           !field.value && 'text-muted-foreground',
                         )}
                       >
@@ -155,23 +172,6 @@ export default function CreateOrUpdateNoticeDialog({
                   </Select>
 
                   <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="notice"
-              render={({ field }) => (
-                <FormItem className="col-span-4">
-                  <FormControl>
-                    <Input
-                      {...field}
-                      className="h-8 text-sm"
-                      autoComplete="off"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
