@@ -958,7 +958,7 @@ export type Database = {
           birth: string
           breed: string
           created_at: string
-          gender: Database["public"]["Enums"]["patient_gender"]
+          gender: string
           hos_id: string
           hos_patient_id: string
           is_alive: boolean
@@ -968,13 +968,13 @@ export type Database = {
           owner_id: string | null
           owner_name: string
           patient_id: string
-          species: Database["public"]["Enums"]["patient_species"]
+          species: string
         }
         Insert: {
           birth: string
           breed: string
           created_at?: string
-          gender: Database["public"]["Enums"]["patient_gender"]
+          gender: string
           hos_id: string
           hos_patient_id?: string
           is_alive?: boolean
@@ -984,13 +984,13 @@ export type Database = {
           owner_id?: string | null
           owner_name?: string
           patient_id?: string
-          species: Database["public"]["Enums"]["patient_species"]
+          species: string
         }
         Update: {
           birth?: string
           breed?: string
           created_at?: string
-          gender?: Database["public"]["Enums"]["patient_gender"]
+          gender?: string
           hos_id?: string
           hos_patient_id?: string
           is_alive?: boolean
@@ -1000,7 +1000,7 @@ export type Database = {
           owner_id?: string | null
           owner_name?: string
           patient_id?: string
-          species?: Database["public"]["Enums"]["patient_species"]
+          species?: string
         }
         Relationships: [
           {
@@ -1239,7 +1239,7 @@ export type Database = {
         }
         Returns: undefined
       }
-      "toggle-out-patient": {
+      toggle_out_patient: {
         Args: {
           icu_io_id_input: string
           is_patient_out_input: boolean
@@ -1251,8 +1251,8 @@ export type Database = {
       }
       update_user_approval_and_user_hos_id_when_approved: {
         Args: {
-          hos_id_input: string
           user_id_input: string
+          hos_id_input: string
         }
         Returns: undefined
       }
@@ -1296,8 +1296,6 @@ export type Database = {
     }
     Enums: {
       owner_level_enum: "S" | "A" | "B" | "C"
-      patient_gender: "cm" | "sf" | "im" | "if" | "un"
-      patient_species: "canine" | "feline"
     }
     CompositeTypes: {
       [_ in never]: never

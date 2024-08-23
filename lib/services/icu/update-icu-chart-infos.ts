@@ -142,7 +142,7 @@ export const toggleOutPatient = async (
   const supabase = createClient()
 
   const { error: updateOutDateError } = await supabase.rpc(
-    'toggle-out-patient',
+    'toggle_out_patient',
     {
       icu_io_id_input: icuIoId,
       is_patient_out_input: isPatientOut,
