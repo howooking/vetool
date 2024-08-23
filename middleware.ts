@@ -128,6 +128,13 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  if (
+    request.nextUrl.pathname.startsWith('/hospital') &&
+    request.nextUrl.pathname.endsWith('/api/notification')
+  ) {
+    return response
+  }
+
   // Redirect to login page if the user is not logged in and tries to access hospital routes
   if (request.nextUrl.pathname.startsWith('/hospital')) {
     if (!authUser) {
