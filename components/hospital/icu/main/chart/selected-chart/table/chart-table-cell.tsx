@@ -30,26 +30,24 @@ export default function ChartTableCell({
   icuChartTxId?: string
   preview?: boolean
 }) {
-  const [briefTxResultInput, setBriefTxResultInput] = useState(
-    txData?.icu_chart_tx_result ?? '',
-  )
-  const { txLocalState, setStep, setTxLocalState, step, isTxUpserting } =
+  const [briefTxResultInput, setBriefTxResultInput] = useState('')
+  const { txLocalState, setStep, setTxLocalState, step, isTxMutating } =
     useUpsertTxStore()
 
   useEffect(() => {
     if (step === 'closed') {
       setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
     }
-  }, [txData?.icu_chart_tx_result, step])
+  }, [step, txData?.icu_chart_tx_result])
 
-  const targetedIsUpserting = useMemo(
+  const targetedIsTxMutating = useMemo(
     () =>
-      isTxUpserting &&
+      isTxMutating &&
       time === txLocalState?.time &&
       txLocalState.icuChartOrderId === icuChartOrderId,
     [
       icuChartOrderId,
-      isTxUpserting,
+      isTxMutating,
       time,
       txLocalState?.icuChartOrderId,
       txLocalState?.time,
@@ -126,8 +124,10 @@ export default function ChartTableCell({
 
   return (
     <TableCell className="p-0">
-      {targetedIsUpserting ? (
-        <LoaderCircle className="mx-auto animate-spin text-muted-foreground" />
+      {targetedIsTxMutating ? (
+        <div className="flex h-full items-center justify-center bg-amber-50">
+          <LoaderCircle className="mx-auto animate-spin text-amber-500" />
+        </div>
       ) : (
         <div className="relative">
           <Input
@@ -141,7 +141,7 @@ export default function ChartTableCell({
                 (hasOrder && CELL_COLORS.NOT_DONE) ||
                 'transparent',
             }}
-            disabled={preview || isTxUpserting}
+            disabled={preview}
             value={briefTxResultInput}
             onChange={(e) => setBriefTxResultInput(e.target.value)}
             onBlur={handleUpsertBriefTxResultInput}

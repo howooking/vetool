@@ -27,7 +27,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useState } from 'react'
 import NoResult from '../common/no-result'
 
@@ -87,6 +87,14 @@ export default function DataTable<TData, TValue>({
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value ?? '')}
           />
+          <Button
+            size="icon"
+            variant="ghost"
+            className="absolute right-8 h-5 w-5 text-muted-foreground"
+            onClick={() => setGlobalFilter('')}
+          >
+            <X size={12} />
+          </Button>
         </div>
       )}
 
