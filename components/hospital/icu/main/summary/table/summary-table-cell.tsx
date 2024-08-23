@@ -1,5 +1,5 @@
 import { TableCell } from '@/components/ui/table'
-import { cn } from '@/lib/utils'
+import { CELL_COLORS } from '@/constants/hospital/icu/chart/colors'
 import { IcuChartOrderJoined } from '@/types/icu'
 import { useMemo } from 'react'
 
@@ -26,10 +26,11 @@ export default function SummaryTableCell({
 
   return (
     <TableCell
-      className={cn(
-        pendingCount > 0 ? 'bg-rose-100/60' : 'bg-green-100/60',
-        'text-center',
-      )}
+      className="text-center"
+      style={{
+        backgroundColor:
+          pendingCount > 0 ? CELL_COLORS.NOT_DONE : CELL_COLORS.DONE,
+      }}
     >
       {pendingCount}
     </TableCell>

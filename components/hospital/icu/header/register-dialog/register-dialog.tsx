@@ -70,7 +70,7 @@ export default function RegisterDialog({
           value={tab}
         >
           <TabsList
-            className={cn('w-full', step === 'icuRegister' && 'hidden')}
+            className={cn('mb-2 w-full', step === 'icuRegister' && 'hidden')}
           >
             <TabsTrigger value="search" className="w-full">
               환자 조회

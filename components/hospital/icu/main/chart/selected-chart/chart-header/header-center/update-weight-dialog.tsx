@@ -24,7 +24,7 @@ import { Gauge } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { weightFormSchema } from './schema'
+import { weightFormSchema } from './weght-bookmark-schema'
 
 export default function UpdateWeightDialog({
   weight,

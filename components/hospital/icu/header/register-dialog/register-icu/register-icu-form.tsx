@@ -1,7 +1,7 @@
 'use client'
 
 import Autocomplete from '@/components/hospital/common/auto-complete/auto-complete'
-import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/register-icu/schema'
+import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/register-icu/icu-schema'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -145,7 +145,7 @@ export default function RegisterIcuForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="grid grid-cols-2 gap-6"
+        className="grid grid-cols-2 gap-4"
       >
         <FormField
           control={form.control}
@@ -231,7 +231,7 @@ export default function RegisterIcuForm({
           name="group_list"
           render={() => (
             <FormItem>
-              <p className="text-sm">그룹</p>
+              <p className="text-sm font-medium">그룹</p>
               <div className="flex flex-wrap items-center gap-2">
                 {groupList.map((item) => (
                   <FormField

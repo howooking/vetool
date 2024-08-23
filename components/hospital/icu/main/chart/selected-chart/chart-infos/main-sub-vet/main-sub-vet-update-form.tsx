@@ -25,7 +25,7 @@ import Image from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { mainSubVetFormSchema } from './schema'
+import { mainSubVetFormSchema } from './vet-schema'
 
 export default function MainSubVetUpdateForm({
   mainVet,
@@ -68,7 +68,7 @@ export default function MainSubVetUpdateForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleUpdateMainAndSubVet)}
-        className="mt-4 grid grid-cols-2 gap-4"
+        className="grid grid-cols-2 gap-4"
       >
         <FormField
           control={form.control}
