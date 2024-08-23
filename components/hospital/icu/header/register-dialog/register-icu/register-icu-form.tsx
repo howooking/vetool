@@ -145,7 +145,7 @@ export default function RegisterIcuForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="grid grid-cols-2 gap-4"
+        className="flex flex-col gap-4"
       >
         <FormField
           control={form.control}
@@ -361,7 +361,7 @@ export default function RegisterIcuForm({
           )}
         />
 
-        <div className="col-span-2 ml-auto font-semibold">
+        <div className="col-span-2 mt-24 flex justify-end gap-2 font-semibold">
           <Button
             type="button"
             variant="outline"
@@ -370,7 +370,7 @@ export default function RegisterIcuForm({
             이전
           </Button>
 
-          <Button type="submit" className="ml-2" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             등록
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}

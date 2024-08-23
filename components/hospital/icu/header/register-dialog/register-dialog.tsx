@@ -61,7 +61,12 @@ export default function RegisterDialog({
         <Button size="sm">환자입원</Button>
       </DialogTrigger>
 
-      <DialogContent className="flex flex-col sm:max-w-[1200px]">
+      <DialogContent
+        className="flex h-[720px] flex-col sm:max-w-[1200px]"
+        onInteractOutside={(e) => {
+          e.preventDefault()
+        }}
+      >
         <RegisterDialogHeader step={step} />
 
         <Tabs
@@ -80,7 +85,7 @@ export default function RegisterDialog({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="search">
+          <TabsContent value="search" className="h-full">
             {step === 'patientSearch' && (
               <PatientSearchTable patientData={patientsData} />
             )}
