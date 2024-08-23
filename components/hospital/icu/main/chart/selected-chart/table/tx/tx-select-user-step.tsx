@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { upsertIcuChartTxAndUpdateIcuChartOrder } from '@/lib/services/icu/upsert-chart-tx'
+import { upsertIcuChartTxAndUpdateIcuChartOrder } from '@/lib/services/icu/tx-mutation'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import type { TxLog } from '@/types/icu'
@@ -23,7 +23,7 @@ import { z } from 'zod'
 import { userLogFormSchema } from './tx-schema'
 
 export default function TxSelectUserStep({ chartId }: { chartId: string }) {
-  const { txLocalState, setStep, setIsTxUpserting } = useUpsertTxStore()
+  const { txLocalState, setStep, setIsTxMutating } = useUpsertTxStore()
   const { hos_id, target_date } = useParams()
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
 
@@ -49,7 +49,7 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
 
     const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
-    setIsTxUpserting(true)
+    setIsTxMutating(true)
     setStep('closed')
 
     await upsertIcuChartTxAndUpdateIcuChartOrder(

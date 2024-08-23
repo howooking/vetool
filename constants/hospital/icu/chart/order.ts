@@ -40,6 +40,11 @@ export const DEFAULT_ICU_ORDER_NAME = [
     dataType: 'checklist',
   },
   {
+    orderName: '라인체크',
+    orderComment: '',
+    dataType: 'fluid',
+  },
+  {
     orderName: '수액',
     orderComment: '',
     dataType: 'fluid',

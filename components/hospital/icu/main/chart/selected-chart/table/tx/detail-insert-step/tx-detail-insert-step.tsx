@@ -18,14 +18,15 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { deleteIcuChartTx } from '@/lib/services/icu/upsert-chart-tx'
+import { toast } from '@/components/ui/use-toast'
+import { deleteIcuChartTx } from '@/lib/services/icu/tx-mutation'
 import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export default function TxDetailInsertStep() {
-  const { setStep, txLocalState, setTxLocalState, setIsTxUpserting } =
+  const { setStep, txLocalState, setTxLocalState, setIsTxMutating } =
     useUpsertTxStore()
 
   const form = useForm<z.infer<typeof txDetailRegisterFormSchema>>({
@@ -48,7 +49,7 @@ export default function TxDetailInsertStep() {
   }
 
   const handleDeleteTx = async () => {
-    setIsTxUpserting(true)
+    setIsTxMutating(true)
     setStep('closed')
 
     await deleteIcuChartTx(
@@ -56,6 +57,9 @@ export default function TxDetailInsertStep() {
       txLocalState?.icuChartOrderId!,
       txLocalState?.time!,
     )
+    toast({
+      title: '처치내역을 삭제하였습니다',
+    })
   }
 
   return (

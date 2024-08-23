@@ -13,13 +13,13 @@ import type {
   IcuData,
   IcuIoPatientJoined,
 } from '@/types/icu'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 
 export default function IcuChart({ icuData }: { icuData: IcuData }) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
-  const { setIsTxUpserting } = useUpsertTxStore()
+  const { setIsTxMutating } = useUpsertTxStore()
 
   const { icuChartData, icuChartOrderData, icuIoData } = icuData
   const [selectedChartOrders, setSelectedChartOrders] = useState<
@@ -63,18 +63,15 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
       )
     setSelectedChartOrders(selectedChartOrders)
     setIsChartLoading(false)
-    setIsTxUpserting(false)
+    setIsTxMutating(false)
   }, [
     icuChartOrderData,
     selectedChart?.icu_chart_id,
     setIsChartLoading,
-    setIsTxUpserting,
+    setIsTxMutating,
   ])
 
-  const isPatientOut = useMemo(
-    () => selectedIo?.out_date !== null,
-    [selectedIo?.out_date],
-  )
+  const isPatientOut = selectedIo?.out_date !== null
 
   const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
 

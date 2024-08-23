@@ -22,8 +22,8 @@ type IcuUpsertTxState = {
   txLocalState?: TxLocalState
   setTxLocalState: (updates: Partial<TxLocalState>) => void
 
-  isTxUpserting: boolean
-  setIsTxUpserting: (isTxUpserting: boolean) => void
+  isTxMutating: boolean
+  setIsTxMutating: (isTxMutating: boolean) => void
 
   reset: () => void
 }
@@ -38,8 +38,8 @@ export const useUpsertTxStore = create<IcuUpsertTxState>((set) => ({
   setTxLocalState: (updates) =>
     set((state) => ({ txLocalState: { ...state.txLocalState, ...updates } })),
 
-  isTxUpserting: false,
-  setIsTxUpserting: (isTxUpserting) => set({ isTxUpserting }),
+  isTxMutating: false,
+  setIsTxMutating: (isTxMutating) => set({ isTxMutating }),
 
   reset: () =>
     set({
