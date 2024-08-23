@@ -131,3 +131,7 @@ export type SearchedIcuCharts = Pick<
   IcuChart,
   'target_date' | 'icu_chart_id' | 'patient_id'
 >
+
+export type IcuNotificationRouteJoined = IcuChartOrder & {
+  icu_chart_id: Pick<IcuChart, 'target_date' | 'icu_chart_id' | 'patient_id'>
+}

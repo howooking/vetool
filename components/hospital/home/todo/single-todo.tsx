@@ -5,8 +5,7 @@ import { toggleIsDone } from '@/lib/services/hospital-home/todo'
 import { cn } from '@/lib/utils'
 import type { Todo } from '@/types'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DeleteTodoDialog from './delete-todo-dialog'
 
 export default function SingleTodo({
@@ -16,16 +15,20 @@ export default function SingleTodo({
   todo: Todo
   type: '어제' | '오늘' | '내일'
 }) {
-  const { refresh } = useRouter()
   const [isToggling, setIsToggling] = useState(false)
   const [isChecked, setIsChecked] = useState(todo.is_done)
+
+  useEffect(() => {
+    setIsChecked(todo.is_done)
+  }, [todo.is_done])
 
   const handleIsDone = async () => {
     setIsToggling(true)
     setIsChecked((prev) => !prev)
+
     await toggleIsDone(todo.id, todo.is_done)
+
     setIsToggling(false)
-    refresh()
   }
 
   return (
