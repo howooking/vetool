@@ -17,7 +17,7 @@ export default function HeaderCenter({
   weight,
   patientId,
 }: {
-  species: 'canine' | 'feline'
+  species: string
   isPatientOut: boolean
   bookmartData: Pick<
     IcuChartBookmark,
