@@ -27,7 +27,7 @@ export default function IcuFooter() {
     useSelectedMainViewStore()
 
   return (
-    <footer className="fixed bottom-0 h-10 w-full border-t bg-white">
+    <footer className="fixed bottom-0 z-20 h-10 w-full border-t bg-white">
       <ul className="flex h-full items-center gap-2 pl-1">
         {FOOTER_MAIN_VIEW_MENUS.map(({ label, value }) => (
           <li key={value}>
