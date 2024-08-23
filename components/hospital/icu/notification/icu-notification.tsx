@@ -4,7 +4,6 @@ import { SIDEBAR_STYLE } from '@/constants/hospital/icu/notification'
 import { useDimensions } from '@/hooks/use-dimensions'
 import { getIcuNotification } from '@/lib/services/icu/get-icu-notification'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
