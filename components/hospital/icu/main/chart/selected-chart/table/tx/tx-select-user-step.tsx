@@ -23,7 +23,7 @@ import { z } from 'zod'
 import { userLogFormSchema } from './tx-schema'
 
 export default function TxSelectUserStep({ chartId }: { chartId: string }) {
-  const { txLocalState, setStep, setIsTxMutating } = useUpsertTxStore()
+  const { txLocalState, setStep, setIsTxMutating, reset } = useUpsertTxStore()
   const { hos_id, target_date } = useParams()
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
 
@@ -61,6 +61,7 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
       updatedLogs,
     )
 
+    reset()
     toast({
       title: '처치 내역이 업데이트 되었습니다',
     })

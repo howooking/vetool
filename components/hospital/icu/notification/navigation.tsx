@@ -1,18 +1,17 @@
 import MenuItem from '@/components/hospital/icu/notification/menu-item'
 import { LI_STYLE, UL_STYLE } from '@/constants/hospital/icu/notification'
-import { cn } from '@/lib/utils'
-import type { IcuNotification } from '@/types'
+import type { IcuNotificationJoined } from '@/types/icu'
 import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, X } from 'lucide-react'
 import { Dispatch, SetStateAction } from 'react'
 
 type NavigationProps = {
   page: number
   isToggleOpen: boolean
-  notificationData: IcuNotification[]
+  notificationData: IcuNotificationJoined[]
   readStatus: { [key: string]: boolean }
   setPage: Dispatch<SetStateAction<number>>
-  setIsToggleOpen: () => void
+  setIsToggleOpen: Dispatch<SetStateAction<boolean>>
   handleUpdateDate: (targetDate: string) => void
   handleReadStatusChange: (
     notificationId: string,
@@ -44,10 +43,16 @@ export default function Navigation({
       <motion.li
         variants={LI_STYLE}
         className={
-          'relative rounded-lg text-center text-lg font-bold text-white'
+          'relative flex items-center justify-between rounded-lg text-center text-xl font-bold text-white'
         }
       >
         {notificationData.length > 0 ? '알림 목록' : '표시할 알림이 없습니다'}
+
+        <X
+          size={20}
+          onClick={() => setIsToggleOpen(false)}
+          className="cursor-pointer"
+        />
       </motion.li>
 
       {notificationData.map((data) => (

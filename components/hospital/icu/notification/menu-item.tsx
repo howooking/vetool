@@ -1,15 +1,16 @@
 import { LI_STYLE } from '@/constants/hospital/icu/notification'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
-import { cn } from '@/lib/utils'
-import { IcuNotification } from '@/types'
+import { cn, getTimeSince } from '@/lib/utils'
+import { IcuNotificationJoined } from '@/types/icu'
 import { motion } from 'framer-motion'
+import { Dispatch, SetStateAction } from 'react'
 
 type MenuItemProps = {
-  data: IcuNotification
+  data: IcuNotificationJoined
   isRead: boolean
   isToggleOpen: boolean
-  setIsToggleOpen: () => void
+  setIsToggleOpen: Dispatch<SetStateAction<boolean>>
   handleUpdateDate: (targetDate: string) => void
   handleReadStatusChange: (
     notificationId: string,
@@ -33,13 +34,13 @@ export default function MenuItem({
     if (!isRead) {
       handleReadStatusChange(
         data.notification_id,
-        data.patient_id,
+        data.patient_id.patient_id,
         data.target_date,
       )
     } else {
       setSelectedIcuMainView('chart')
-      setSelectedPatientId(data.patient_id)
-      setIsToggleOpen()
+      setSelectedPatientId(data.patient_id.patient_id)
+      setIsToggleOpen(false)
       handleUpdateDate(data.target_date)
     }
   }
@@ -58,12 +59,29 @@ export default function MenuItem({
     >
       <div className="flex w-full flex-col">
         <div className="mb-1 flex items-center justify-between font-semibold text-primary">
-          <span>{data.notification_title}</span>
+          <span className="line-clamp-2 max-w-[90%]">
+            {data.notification_title}
+          </span>
+
           {!isRead && (
             <span className="h-2 w-2 rounded-full bg-blue-500"></span>
           )}
         </div>
-        <div className="text-sm text-gray-600">{data.notification_content}</div>
+
+        <div className="mb-2 mt-1 line-clamp-5 text-sm text-gray-600">
+          {data.notification_content}
+        </div>
+
+        <div className="flex justify-between">
+          <div className="text-[11px] text-gray-600">
+            {`${data.patient_id.name}·
+              ${data.patient_id.breed}·
+              ${data.patient_id.gender}`}
+          </div>
+          <div className="text-right text-xs text-gray-600">
+            {getTimeSince(data.created_at)}
+          </div>
+        </div>
       </div>
     </motion.li>
   )

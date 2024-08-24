@@ -4,7 +4,12 @@ import IcuFooter from '@/components/hospital/icu/icu-footer'
 import IcuMain from '@/components/hospital/icu/main/icu-main'
 import IcuNotification from '@/components/hospital/icu/notification/icu-notification'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
-import { useIcuRealtimeSubscription } from '@/hooks/use-icu-realtime-subscription'
+import {
+  useChartRealtime,
+  useIoRealtime,
+  useOrderRealtime,
+  useTxRealtime,
+} from '@/hooks/use-icu-realtime-subscription'
 import type { IcuData } from '@/types/icu'
 
 export default function IcuEntry({
@@ -14,7 +19,10 @@ export default function IcuEntry({
   hosId: string
   icuData: IcuData
 }) {
-  useIcuRealtimeSubscription(hosId)
+  useIoRealtime(hosId)
+  useChartRealtime(hosId)
+  useOrderRealtime(hosId)
+  useTxRealtime(hosId)
 
   return (
     <div className="flex">
