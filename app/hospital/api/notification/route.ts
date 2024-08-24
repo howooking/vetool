@@ -8,10 +8,11 @@ import { NextResponse } from 'next/server'
 // Cron-job 전용으로 생성
 // 현재는 미사용입니다.
 export async function GET() {
-  // const supabase = createClient()
-  // const locale = new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' })
-  // const targetDate = formatDate(new Date(locale))
-  // const targetHour = String(new Date(locale).getHours())
+  const supabase = createClient()
+  const locale = new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' })
+  const targetDate = formatDate(new Date(locale))
+  const targetHour = String(new Date(locale).getHours())
+
   // const { data, error } = await supabase
   //   .from('icu_chart_order')
   //   .select(
@@ -50,5 +51,6 @@ export async function GET() {
   //     }
   //   })
   // }
-  // return NextResponse.json(notificationData)
+
+  return NextResponse.json({})
 }
