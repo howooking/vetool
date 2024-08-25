@@ -6,7 +6,6 @@ import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/s
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
-import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
@@ -19,7 +18,7 @@ import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 export default function IcuChart({ icuData }: { icuData: IcuData }) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
-  const { setIsTxMutating } = useUpsertTxStore()
+  // const { setIsTxMutating } = useUpsertTxStore()
 
   const { icuChartData, icuChartOrderData, icuIoData } = icuData
   const [selectedChartOrders, setSelectedChartOrders] = useState<
@@ -63,12 +62,12 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
       )
     setSelectedChartOrders(selectedChartOrders)
     setIsChartLoading(false)
-    setIsTxMutating(false)
+    // setIsTxMutating(false)
   }, [
     icuChartOrderData,
     selectedChart?.icu_chart_id,
     setIsChartLoading,
-    setIsTxMutating,
+    // setIsTxMutating,
   ])
 
   const isPatientOut = selectedIo?.out_date !== null
