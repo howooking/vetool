@@ -78,6 +78,7 @@ export default function ChartTable({
                   icuChartOrderId={order.icu_chart_order_id}
                   hasOrder={order.icu_chart_order_time[index] === '1'}
                   isDone={isDone}
+                  icuChartOrderName={order.icu_chart_order_name}
                   icuChartTxId={
                     (order[`icu_chart_order_tx_${time}`] as IcuChartTx)
                       ?.icu_chart_tx_id

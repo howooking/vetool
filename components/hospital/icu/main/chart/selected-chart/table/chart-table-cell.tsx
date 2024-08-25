@@ -13,6 +13,7 @@ export default function ChartTableCell({
   txData,
   icuIoId,
   icuChartOrderId,
+  icuChartOrderName,
   hasOrder,
   isDone,
   icuChartTxId,
@@ -22,6 +23,7 @@ export default function ChartTableCell({
   txData: IcuChartTx | null
   icuIoId: string
   icuChartOrderId: string
+  icuChartOrderName: string
   hasOrder: boolean
   isDone: boolean
   icuChartTxId?: string
@@ -62,6 +64,7 @@ export default function ChartTableCell({
         txId: icuChartTxId,
         time,
         txLog: txData?.icu_chart_tx_log as TxLog[] | null,
+        orderName: icuChartOrderName,
       })
       setStep('detailInsert')
     },

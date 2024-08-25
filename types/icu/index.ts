@@ -5,6 +5,7 @@ import type {
   IcuChartOrder,
   IcuChartTx,
   IcuIo,
+  IcuNotification,
   Patients,
   User,
 } from '@/types'
@@ -131,3 +132,11 @@ export type SearchedIcuCharts = Pick<
   IcuChart,
   'target_date' | 'icu_chart_id' | 'patient_id'
 >
+
+export type IcuNotificationRouteJoined = IcuChartOrder & {
+  icu_chart_id: Pick<IcuChart, 'target_date' | 'icu_chart_id' | 'patient_id'>
+}
+
+export type IcuNotificationJoined = IcuNotification & {
+  patient_id: Pick<Patients, 'name' | 'breed' | 'gender' | 'patient_id'>
+}

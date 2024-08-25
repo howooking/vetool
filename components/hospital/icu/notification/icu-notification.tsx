@@ -2,21 +2,22 @@ import MenuToggle from '@/components/hospital/icu/notification/menu-toggle'
 import Navigation from '@/components/hospital/icu/notification/navigation'
 import { SIDEBAR_STYLE } from '@/constants/hospital/icu/notification'
 import { useDimensions } from '@/hooks/use-dimensions'
+import { useOutsideClick } from '@/hooks/use-outside-click'
 import { getIcuNotification } from '@/lib/services/icu/get-icu-notification'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
-import type { IcuNotification } from '@/types'
+import type { IcuNotificationJoined } from '@/types/icu'
 import { format } from 'date-fns'
-import { motion, useCycle } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 export default function IcuNotification() {
-  const containerRef = useRef(null)
   const searchParams = useSearchParams()
+  const containerRef = useRef<HTMLElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   const { hos_id } = useParams()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
@@ -26,16 +27,23 @@ export default function IcuNotification() {
 
   const [page, setPage] = useState(1)
   const [unreadCount, setUnreadCount] = useState(0)
-  const [isToggleOpen, setIsToggleOpen] = useCycle(false, true)
+  const [isToggleOpen, setIsToggleOpen] = useState(false)
   const [readStatus, setReadStatus] = useState<{ [key: string]: boolean }>({})
-  const [notificationData, setNotificationData] = useState<IcuNotification[]>(
-    [],
-  )
+  const [notificationData, setNotificationData] = useState<
+    IcuNotificationJoined[]
+  >([])
 
   const fetchNotifications = useCallback(async () => {
     const data = await getIcuNotification(hos_id as string, page)
 
-    setNotificationData(data)
+    if (page > 1) {
+      setNotificationData((prevNotificationData) => [
+        ...prevNotificationData,
+        ...data,
+      ])
+    } else {
+      setNotificationData(data)
+    }
   }, [hos_id, page])
 
   useEffect(() => {
@@ -112,7 +120,7 @@ export default function IcuNotification() {
       handleUpdateDate(targetDate)
       setSelectedIcuMainView('chart')
       setSelectedPatientId(patientId)
-      setIsToggleOpen()
+      setIsToggleOpen(false)
     },
     [
       handleUpdateDate,
@@ -121,6 +129,10 @@ export default function IcuNotification() {
       setSelectedPatientId,
     ],
   )
+
+  useOutsideClick(containerRef, () => {
+    setIsToggleOpen(false)
+  })
 
   return (
     <>
@@ -152,7 +164,12 @@ export default function IcuNotification() {
           handleUpdateDate={handleUpdateDate}
         />
       </motion.nav>
-      <MenuToggle toggle={() => setIsToggleOpen()} unReadCount={unreadCount} />
+      <MenuToggle
+        isToggleOpen={isToggleOpen}
+        setIsToggleOpen={setIsToggleOpen}
+        unReadCount={unreadCount}
+        buttonRef={buttonRef}
+      />
     </>
   )
 }
