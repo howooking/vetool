@@ -1,14 +1,11 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
-import { toast } from '@/components/ui/use-toast'
-import { CELL_COLORS } from '@/constants/hospital/icu/chart/colors'
 import { useLongPress } from '@/hooks/use-long-press'
-import { useUpsertTxStore } from '@/lib/store/icu/upsert-tx'
+import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
-import { LoaderCircle } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { TxDetailHover } from './tx/tx-detail-hover'
 
 export default function ChartTableCell({
@@ -33,28 +30,28 @@ export default function ChartTableCell({
   preview?: boolean
 }) {
   const [briefTxResultInput, setBriefTxResultInput] = useState('')
-  const { txLocalState, setStep, setTxLocalState, step, isTxMutating } =
-    useUpsertTxStore()
+  const [isFocused, setIsFocused] = useState(false)
+  const {
+    isMutationCanceled,
+    setIsMutationCanceled,
+    setStep,
+    setTxLocalState,
+  } = useTxMutationStore()
+  const cellRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
-    if (step === 'closed') {
-      setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
+    if (txData?.icu_chart_tx_result || isMutationCanceled) {
+      setBriefTxResultInput('')
+      setIsMutationCanceled(false)
     }
-  }, [step, txData?.icu_chart_tx_result])
+  }, [isMutationCanceled, setIsMutationCanceled, txData?.icu_chart_tx_result])
 
-  const targetedIsTxMutating = useMemo(
-    () =>
-      isTxMutating &&
-      time === txLocalState?.time &&
-      txLocalState.icuChartOrderId === icuChartOrderId,
-    [
-      icuChartOrderId,
-      isTxMutating,
-      time,
-      txLocalState?.icuChartOrderId,
-      txLocalState?.time,
-    ],
-  )
+  // const targetedIsTxMutating = useMemo(
+  //   () => isTxMutating && txLocalState?.cellId === `${icuChartOrderId}-${time}`,
+  //   [icuChartOrderId, isTxMutating, time, txLocalState?.cellId],
+  // )
+
+  // const cellRef = useRef<HTMLInputElement | null>(null)
 
   const longPressEvents = useLongPress({
     onLongPress: () => {
@@ -63,7 +60,7 @@ export default function ChartTableCell({
         icuIoId,
         txResult: txData?.icu_chart_tx_result,
         txComment: txData?.icu_chart_tx_comment,
-        txImages: txData?.icu_chart_tx_images,
+        // txImages: txData?.icu_chart_tx_images,
         txId: icuChartTxId,
         time,
         txLog: txData?.icu_chart_tx_log as TxLog[] | null,
@@ -71,22 +68,33 @@ export default function ChartTableCell({
       })
       setStep('detailInsert')
     },
+    // onClick: () => {
+    //   setCellId(`${icuChartOrderId}-${time}`)
+    // },
     delay: 600,
   })
 
   const handleUpsertBriefTxResultInput = useCallback(async () => {
     if ((txData?.icu_chart_tx_result ?? '') === briefTxResultInput.trim()) {
-      setBriefTxResultInput(briefTxResultInput.trim())
+      setBriefTxResultInput('')
       return
     }
 
+    // 수정시 길이 0인 string 방지
     if (icuChartTxId && briefTxResultInput.trim() === '') {
-      toast({
-        title: '결과값을 입력해주세요',
-        variant: 'destructive',
-      })
-      setBriefTxResultInput(txData?.icu_chart_tx_result ?? '')
+      setBriefTxResultInput('')
       return
+    }
+
+    // create
+    if (!icuChartTxId) {
+      setTxLocalState({
+        time,
+        txResult: briefTxResultInput.trim(),
+        icuChartOrderId,
+        icuIoId,
+        txId: icuChartTxId,
+      })
     }
 
     setTxLocalState({
@@ -103,6 +111,7 @@ export default function ChartTableCell({
     icuChartOrderId,
     icuChartTxId,
     icuIoId,
+    setBriefTxResultInput,
     setStep,
     setTxLocalState,
     time,
@@ -127,35 +136,52 @@ export default function ChartTableCell({
 
   return (
     <TableCell className="p-0">
-      {targetedIsTxMutating ? (
+      {/* {targetedIsTxMutating ? (
         <div className="flex h-full items-center justify-center bg-amber-50">
           <LoaderCircle className="mx-auto animate-spin text-amber-500" />
         </div>
-      ) : (
-        <div className="relative">
-          <Input
-            id={`${icuChartOrderId}-tx-result-${time}`}
-            className={cn(
-              'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
-            )}
-            style={{
-              backgroundColor:
-                (isDone && CELL_COLORS.DONE) ||
-                (hasOrder && CELL_COLORS.NOT_DONE) ||
-                'transparent',
-            }}
-            disabled={preview}
-            value={briefTxResultInput}
-            onChange={(e) => setBriefTxResultInput(e.target.value)}
-            onBlur={handleUpsertBriefTxResultInput}
-            onKeyDown={handleKeyDown}
-            {...longPressEvents}
-          />
-          {hasComment && (
-            <TxDetailHover txComment={txData?.icu_chart_tx_comment} />
+      ) : ( */}
+      <div className="relative overflow-hidden">
+        <Input
+          ref={cellRef}
+          id={`${icuChartOrderId}-${time}`}
+          className={cn(
+            'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
+            hasOrder && 'bg-rose-500/10',
+            isDone && 'bg-emerald-400/10',
           )}
+          // style={{
+          //   backgroundColor:
+          //     (isDone && CELL_COLORS.DONE) ||
+          //     (hasOrder && CELL_COLORS.NOT_DONE) ||
+          //     'transparent',
+          // }}
+          onFocus={() => setIsFocused(true)}
+          disabled={preview}
+          value={briefTxResultInput}
+          onChange={(e) => setBriefTxResultInput(e.target.value)}
+          onBlur={() => {
+            handleUpsertBriefTxResultInput()
+            setIsFocused(false)
+          }}
+          onKeyDown={handleKeyDown}
+          {...longPressEvents}
+        />
+
+        <div
+          className={cn(
+            'absolute inset-0 -z-10 flex items-center justify-center text-black transition',
+            isFocused && 'opacity-20',
+          )}
+        >
+          {txData?.icu_chart_tx_result ?? ''}
         </div>
-      )}
+
+        {hasComment && (
+          <TxDetailHover txComment={txData?.icu_chart_tx_comment} />
+        )}
+      </div>
+      {/* )} */}
     </TableCell>
   )
 }

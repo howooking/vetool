@@ -1,6 +1,6 @@
 'use server'
 
-import type { TxLocalState } from '@/lib/store/icu/upsert-tx'
+import type { TxLocalState } from '@/lib/store/icu/tx-mutation'
 import { createClient } from '@/lib/supabase/server'
 import type { TxLog } from '@/types/icu'
 import { redirect } from 'next/navigation'
@@ -24,7 +24,7 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
       icu_chart_order_id: txLocalState?.icuChartOrderId,
       icu_chart_tx_comment: txLocalState?.txComment,
       icu_chart_tx_result: txLocalState?.txResult,
-      icu_chart_tx_images: txLocalState?.txImages,
+      icu_chart_tx_images: undefined,
       icu_chart_tx_log: updatedLogs,
     })
     .select('icu_chart_tx_id')
