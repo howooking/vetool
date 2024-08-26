@@ -1,28 +1,12 @@
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState, useCallback } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
+import { useEffect } from 'react'
 
 export function useHomeRealtimeSubscription(hosId: string) {
   const supabase = createClient()
   const { refresh } = useRouter()
-  const [pendingChanges, setPendingChanges] = useState(false)
 
-  const debouncedRefresh = useDebouncedCallback(() => {
-    if (pendingChanges) {
-      refresh()
-      setPendingChanges(false)
-    }
-  }, 300)
-
-  const handleChange = useCallback(
-    (tableName: string) => {
-      console.log(`${tableName} changed`)
-      setPendingChanges(true)
-      debouncedRefresh()
-    },
-    [debouncedRefresh],
-  )
+  //!!디바운스 불필요
 
   useEffect(() => {
     const tables = ['notices', 'todos']
@@ -37,7 +21,7 @@ export function useHomeRealtimeSubscription(hosId: string) {
             table,
             filter: `hos_id=eq.${hosId}`,
           },
-          () => handleChange(table),
+          () => refresh(),
         )
         .subscribe(),
     )
@@ -45,12 +29,5 @@ export function useHomeRealtimeSubscription(hosId: string) {
     return () => {
       subscriptions.forEach((subscription) => subscription.unsubscribe())
     }
-  }, [hosId, supabase, handleChange])
-
-  // Ensure a refresh happens if there are pending changes
-  useEffect(() => {
-    if (pendingChanges) {
-      debouncedRefresh()
-    }
-  }, [pendingChanges, debouncedRefresh])
+  }, [hosId, supabase, refresh])
 }
