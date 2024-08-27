@@ -76,10 +76,7 @@ export default function IcuSidebar({
   }
 
   return (
-
     <aside className="flex h-icu-chart w-[144px] shrink-0 flex-col gap-3 border-r p-2">
-
-
       <Filters
         setFilters={setFilters}
         filters={filters}
