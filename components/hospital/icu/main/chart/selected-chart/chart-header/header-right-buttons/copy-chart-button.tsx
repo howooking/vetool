@@ -3,7 +3,7 @@ import { toast } from '@/components/ui/use-toast'
 import { getSelectedChartOrders } from '@/lib/services/icu/search-charts'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { Copy, CopyCheck, LoaderCircle } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export default function CopyChartButton({
   icuChartId,
@@ -14,7 +14,7 @@ export default function CopyChartButton({
   const { copiedChartId, setCopiedChartId, setCopiedOrders } =
     useCopiedChartStore()
 
-  const handleCopy = async () => {
+  const handleCopy = useCallback(async () => {
     setIsCopying(true)
 
     setCopiedChartId(icuChartId)
@@ -28,7 +28,25 @@ export default function CopyChartButton({
     })
 
     setIsCopying(false)
-  }
+  }, [icuChartId, setCopiedChartId, setCopiedOrders])
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
+        // 선택한 텍스트가 있는지 확인
+        if (!window.getSelection()?.toString()) {
+          event.preventDefault()
+          handleCopy()
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleCopy, icuChartId])
 
   const isCopied = copiedChartId === icuChartId
 
