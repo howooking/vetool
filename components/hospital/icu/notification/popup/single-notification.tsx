@@ -68,9 +68,14 @@ export default function SingleNotification({
           </span>
         </div>
 
-        <span className="line-clamp-1 text-sm font-bold text-gray-600">
-          {notification.notification_title}
-        </span>
+        <div className="flex items-center gap-1">
+          <span className="shrink-0 text-xs text-muted-foreground">
+            {notification.notification_time}시
+          </span>
+          <span className="line-clamp-1 text-sm font-bold text-gray-600">
+            {notification.notification_title}
+          </span>
+        </div>
 
         <span className="truncate text-xs">
           {notification.notification_content}

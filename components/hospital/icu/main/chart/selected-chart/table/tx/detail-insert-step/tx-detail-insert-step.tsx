@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
 import { deleteIcuChartTx } from '@/lib/services/icu/tx-mutation'
@@ -34,6 +35,7 @@ export default function TxDetailInsertStep() {
     defaultValues: {
       result: txLocalState?.txResult ?? '',
       comment: txLocalState?.txComment ?? '',
+      isNotificationChecked: false,
     },
   })
 
@@ -43,6 +45,7 @@ export default function TxDetailInsertStep() {
     setTxLocalState({
       txResult: values.result,
       txComment: values.comment,
+      isNotificationChecked: values.isNotificationChecked,
     })
 
     setStep('seletctUser')
@@ -121,22 +124,25 @@ export default function TxDetailInsertStep() {
 
           {txLocalState?.txLog?.length && <TxLog logs={txLocalState?.txLog} />}
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="notify"
-              onCheckedChange={(chekced) =>
-                setTxLocalState({
-                  isNotificationChecked: chekced as boolean,
-                })
-              }
-            />
-            <label
-              htmlFor="notify"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              알림 보내기
-            </label>
-          </div>
+          <FormField
+            control={form.control}
+            name="isNotificationChecked"
+            render={({ field }) => (
+              <FormItem className="flex items-start space-x-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    id="notification"
+                    name="notification"
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel htmlFor="notification">알림 보내기</FormLabel>
+                </div>
+              </FormItem>
+            )}
+          />
 
           <div className="flex justify-between">
             {txLocalState?.txId && (

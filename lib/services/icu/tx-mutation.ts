@@ -39,12 +39,13 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
     const { error: notificationError } = await supabase
       .from('icu_notification')
       .insert({
-        hos_id: hosId!,
+        hos_id: hosId,
         patient_id: patientId,
         icu_chart_id: chartId,
         notification_title: txLocalState.orderName!,
         notification_content: `${txLocalState?.txResult!} / ${txLocalState?.txComment}`,
         target_date: targetDate,
+        notification_time: txLocalState?.time!,
       })
 
     if (notificationError) {
