@@ -4,111 +4,43 @@ import { useEffect } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 const supabase = createClient()
+const tables = ['icu_io', 'icu_chart', 'icu_chart_order', 'icu_chart_tx']
 
-export function useIoRealtime(hosId: string) {
-  const { refresh } = useRouter()
-
-  useEffect(() => {
-    const subscriptions = supabase
-      .channel(`io_realtime`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'icu_io',
-          filter: `hos_id=eq.${hosId}`,
-        },
-        () => {
-          console.log('io changed')
-          refresh()
-        },
-      )
-      .subscribe()
-    return () => {
-      supabase.removeChannel(subscriptions)
-    }
-  }, [hosId, refresh])
-}
-
-export function useChartRealtime(hosId: string) {
-  const { refresh } = useRouter()
-
-  useEffect(() => {
-    const subscriptions = supabase
-      .channel(`chart_realtime`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'icu_chart',
-          filter: `hos_id=eq.${hosId}`,
-        },
-        () => {
-          console.log('chart changed')
-          refresh()
-        },
-      )
-      .subscribe()
-    return () => {
-      supabase.removeChannel(subscriptions)
-    }
-  }, [hosId, refresh])
-}
-
-export function useOrderRealtime(hosId: string) {
-  const { refresh } = useRouter()
-
+export function useIcuRealTime(hosId: string) {
   const debouncedRefresh = useDebouncedCallback(() => {
-    refresh()
+    // 여러개 생성되더라도 한번만 실행
     console.log('order changed')
+    refresh()
   }, 300)
-
-  useEffect(() => {
-    const subscriptions = supabase
-      .channel(`order_realtime`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'icu_chart_order',
-          filter: `hos_id=eq.${hosId}`,
-        },
-        () => {
-          debouncedRefresh()
-        },
-      )
-      .subscribe()
-    return () => {
-      supabase.removeChannel(subscriptions)
-    }
-  }, [debouncedRefresh, hosId, refresh])
-}
-
-export function useTxRealtime(hosId: string) {
   const { refresh } = useRouter()
 
+  const handleChange = (table: string) => {
+    if (table === 'icu_chart_order') {
+      debouncedRefresh()
+    } else {
+      console.log(table + 'changed')
+      refresh()
+    }
+  }
+
   useEffect(() => {
-    const subscriptions = supabase
-      .channel(`tx_realtime`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'icu_chart_tx',
-          filter: `hos_id=eq.${hosId}`,
-        },
-        () => {
-          console.log('tx changed')
-          refresh()
-        },
-      )
-      .subscribe()
+    const subscriptions = tables.map((table) =>
+      supabase
+        .channel(`${table}_changes`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table,
+            filter: `hos_id=eq.${hosId}`,
+          },
+          () => handleChange(table),
+        )
+        .subscribe(),
+    )
     return () => {
-      supabase.removeChannel(subscriptions)
+      subscriptions.forEach((subscription) => subscription.unsubscribe())
     }
   }, [hosId, refresh])
 }
