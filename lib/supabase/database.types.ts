@@ -784,7 +784,6 @@ export type Database = {
           created_at: string
           hos_id: string
           icu_chart_id: string
-          is_read: boolean
           notification_content: string | null
           notification_id: string
           notification_title: string
@@ -795,7 +794,6 @@ export type Database = {
           created_at?: string
           hos_id: string
           icu_chart_id: string
-          is_read?: boolean
           notification_content?: string | null
           notification_id?: string
           notification_title: string
@@ -806,7 +804,6 @@ export type Database = {
           created_at?: string
           hos_id?: string
           icu_chart_id?: string
-          is_read?: boolean
           notification_content?: string | null
           notification_id?: string
           notification_title?: string
