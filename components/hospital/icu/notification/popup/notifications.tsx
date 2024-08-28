@@ -5,6 +5,7 @@ import useRealtimeNotification from '@/hooks/use-realtime-notification'
 import { ChevronDown, X } from 'lucide-react'
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import SingleNotification from './single-notification'
+import { cn } from '@/lib/utils'
 
 export default function Notifications({
   isPopupOpen,
@@ -53,7 +54,12 @@ export default function Notifications({
   }, [notifications, setUnreadCount])
 
   return (
-    <ul className="flex w-[300px] flex-col gap-3 overflow-auto">
+    <ul
+      className={cn(
+        'flex w-[300px] flex-col gap-3 overflow-auto',
+        !isPopupOpen && 'hidden',
+      )}
+    >
       <div
         className={
           'relative flex items-center justify-between rounded-lg text-white'
@@ -82,7 +88,7 @@ export default function Notifications({
         )
       })}
 
-      {!isLastPage && isPopupOpen && (
+      {!isLastPage && (
         <Button
           variant="outline"
           onClick={() => setPage((prevPage) => prevPage + 1)}
