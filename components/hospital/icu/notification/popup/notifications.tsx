@@ -7,7 +7,7 @@ import { ChevronDown, X } from 'lucide-react'
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import SingleNotification from './single-notification'
 
-export type LocalReadNotification = {
+export type LocalReadStatus = {
   id: string
   created_at: string
 }
@@ -23,9 +23,7 @@ export default function Notifications({
   hosId: string
   setUnreadCount: Dispatch<SetStateAction<number>>
 }) {
-  const [localReadNotifications, setLocalReadNotification] = useState<
-    LocalReadNotification[]
-  >([])
+  const [localReadStatus, setLocalReadStatus] = useState<LocalReadStatus[]>([])
 
   // 실제 데이터가 사용되는 곳에서 커스텀 훅(웹소켓 연결 + 데이터 가져오기)
   const [page, setPage] = useState(1)
@@ -40,11 +38,11 @@ export default function Notifications({
 
   useEffect(() => {
     const stringifiedReadNotifications = localStorage.getItem('notifications')
-    const parsedLocalStorageNotification: LocalReadNotification[] =
+    const parsedLocalStorageNotification: LocalReadStatus[] =
       stringifiedReadNotifications
         ? JSON.parse(stringifiedReadNotifications)
         : []
-    setLocalReadNotification(parsedLocalStorageNotification)
+    setLocalReadStatus(parsedLocalStorageNotification)
 
     const readNotificationIds = new Set(
       parsedLocalStorageNotification.map((readNote) => readNote.id),
@@ -84,7 +82,7 @@ export default function Notifications({
       </div>
 
       {notifications.map((notification) => {
-        const isRead = localReadNotifications.some(
+        const isRead = localReadStatus.some(
           (n) => n.id === notification.notification_id,
         )
         return (
@@ -94,8 +92,8 @@ export default function Notifications({
             isRead={isRead}
             setIsPopupOpen={setIsPopupOpen}
             setUnreadCount={setUnreadCount}
-            setLocalReadNotification={setLocalReadNotification}
-            localReadNotifications={localReadNotifications}
+            setLocalReadStatus={setLocalReadStatus}
+            localReadStatus={localReadStatus}
           />
         )
       })}

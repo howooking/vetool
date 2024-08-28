@@ -1,20 +1,20 @@
 import { LI_MOTION } from '@/constants/hospital/icu/notification/aniimations'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
-import { cn, getTimeSince } from '@/lib/utils'
+import { cn, getTimeSince, isDaysBehind } from '@/lib/utils'
 import { IcuNotificationJoined } from '@/types/icu'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction } from 'react'
-import { LocalReadNotification } from './notifications'
+import { LocalReadStatus } from './notifications'
 
 type MenuItemProps = {
   notification: IcuNotificationJoined
   isRead: boolean
   setIsPopupOpen: Dispatch<SetStateAction<boolean>>
   setUnreadCount: Dispatch<SetStateAction<number>>
-  setLocalReadNotification: Dispatch<SetStateAction<LocalReadNotification[]>>
-  localReadNotifications: LocalReadNotification[]
+  setLocalReadStatus: Dispatch<SetStateAction<LocalReadStatus[]>>
+  localReadStatus: LocalReadStatus[]
 }
 
 export default function SingleNotification({
@@ -22,8 +22,8 @@ export default function SingleNotification({
   isRead,
   setIsPopupOpen,
   setUnreadCount,
-  setLocalReadNotification,
-  localReadNotifications,
+  setLocalReadStatus,
+  localReadStatus,
 }: MenuItemProps) {
   const { push } = useRouter()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
@@ -38,14 +38,19 @@ export default function SingleNotification({
 
     if (isRead) return
 
+    // !!안읽은 알림을 눌렀을 때 10일이상 된 로컬저장소 기록을 삭제
+    const feshedNotifications = localReadStatus.filter(
+      (n) => !isDaysBehind(n.created_at, 10),
+    )
+
     const newNotifications = [
-      ...localReadNotifications,
+      ...feshedNotifications,
       {
         id: notification.notification_id,
         created_at: notification.created_at,
       },
     ]
-    setLocalReadNotification(newNotifications)
+    setLocalReadStatus(newNotifications)
     localStorage.setItem('notifications', JSON.stringify(newNotifications))
     setUnreadCount((prev) => prev - 1)
   }
