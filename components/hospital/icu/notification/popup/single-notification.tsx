@@ -5,14 +5,16 @@ import { cn, getTimeSince } from '@/lib/utils'
 import { IcuNotificationJoined } from '@/types/icu'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction, useCallback } from 'react'
+import { Dispatch, SetStateAction } from 'react'
+import { LocalReadNotification } from './notifications'
 
 type MenuItemProps = {
   notification: IcuNotificationJoined
   isRead: boolean
   setIsPopupOpen: Dispatch<SetStateAction<boolean>>
   setUnreadCount: Dispatch<SetStateAction<number>>
-  setReadStatus: Dispatch<SetStateAction<{ [key: string]: boolean }>>
+  setLocalReadNotification: Dispatch<SetStateAction<LocalReadNotification[]>>
+  localReadNotifications: LocalReadNotification[]
 }
 
 export default function SingleNotification({
@@ -20,7 +22,8 @@ export default function SingleNotification({
   isRead,
   setIsPopupOpen,
   setUnreadCount,
-  setReadStatus,
+  setLocalReadNotification,
+  localReadNotifications,
 }: MenuItemProps) {
   const { push } = useRouter()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
@@ -33,17 +36,18 @@ export default function SingleNotification({
     push(`${notification.target_date}`)
     setIsPopupOpen(false)
 
-    if (!isRead) {
-      setReadStatus((prevStatus) => ({
-        ...prevStatus,
-        [notification.notification_id]: true,
-      }))
-      localStorage.setItem(
-        `notification_${notification.notification_id}`,
-        'true',
-      )
-      setUnreadCount((prevCount) => prevCount - 1)
-    }
+    if (isRead) return
+
+    const newNotifications = [
+      ...localReadNotifications,
+      {
+        id: notification.notification_id,
+        created_at: notification.created_at,
+      },
+    ]
+    setLocalReadNotification(newNotifications)
+    localStorage.setItem('notifications', JSON.stringify(newNotifications))
+    setUnreadCount((prev) => prev - 1)
   }
 
   return (

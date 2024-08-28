@@ -42,7 +42,7 @@ export default function useRealtimeNotification(
     return () => {
       channel.unsubscribe()
     }
-  }, [supabase, hosId, fetchIcuNotification])
+  }, [hosId, fetchIcuNotification])
 
   return { notifications }
 }

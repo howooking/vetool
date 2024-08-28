@@ -2,10 +2,15 @@
 
 import { Button } from '@/components/ui/button'
 import useRealtimeNotification from '@/hooks/use-realtime-notification'
+import { cn } from '@/lib/utils'
 import { ChevronDown, X } from 'lucide-react'
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import SingleNotification from './single-notification'
-import { cn } from '@/lib/utils'
+
+export type LocalReadNotification = {
+  id: string
+  created_at: string
+}
 
 export default function Notifications({
   isPopupOpen,
@@ -18,8 +23,12 @@ export default function Notifications({
   hosId: string
   setUnreadCount: Dispatch<SetStateAction<number>>
 }) {
-  const [page, setPage] = useState(1)
+  const [localReadNotifications, setLocalReadNotification] = useState<
+    LocalReadNotification[]
+  >([])
+
   // 실제 데이터가 사용되는 곳에서 커스텀 훅(웹소켓 연결 + 데이터 가져오기)
+  const [page, setPage] = useState(1)
   const { notifications } = useRealtimeNotification(page, hosId)
   const isLastPage = useMemo(
     () =>
@@ -29,28 +38,28 @@ export default function Notifications({
     [page, notifications.length],
   )
 
-  // 로컬저장소에서 저장만하고 삭제는 안하고 있음 나중에 문제발생 가능성
-  const [readStatus, setReadStatus] = useState<{ [key: string]: boolean }>({})
   useEffect(() => {
-    // 읽은 알림 key-value state
-    const storedReadStatus: { [key: string]: boolean } = {}
-    // 읽지 않은 알림의 개수
-    let newUnreadCount = 0
+    const stringifiedReadNotifications = localStorage.getItem('notifications')
+    const parsedLocalStorageNotification: LocalReadNotification[] =
+      stringifiedReadNotifications
+        ? JSON.parse(stringifiedReadNotifications)
+        : []
+    setLocalReadNotification(parsedLocalStorageNotification)
 
-    // 읽은 알림 저장
-    notifications.forEach((notification) => {
-      const isRead =
-        localStorage.getItem(`notification_${notification.notification_id}`) ===
-        'true'
+    const readNotificationIds = new Set(
+      parsedLocalStorageNotification.map((readNote) => readNote.id),
+    )
 
-      storedReadStatus[notification.notification_id] = isRead
+    if (notifications.length === 0) {
+      setUnreadCount(0)
+      return
+    }
 
-      // 읽지 않은 알림이라면 개수 +1
-      if (!isRead) newUnreadCount += 1
-    })
-
-    setReadStatus(storedReadStatus)
-    setUnreadCount(newUnreadCount)
+    const unreadCount = notifications.reduce((count, notification) => {
+      const isRead = readNotificationIds.has(notification.notification_id)
+      return isRead ? count : count + 1
+    }, 0)
+    setUnreadCount(unreadCount)
   }, [notifications, setUnreadCount])
 
   return (
@@ -75,7 +84,9 @@ export default function Notifications({
       </div>
 
       {notifications.map((notification) => {
-        const isRead = readStatus[notification.notification_id]
+        const isRead = localReadNotifications.some(
+          (n) => n.id === notification.notification_id,
+        )
         return (
           <SingleNotification
             key={notification.notification_id}
@@ -83,7 +94,8 @@ export default function Notifications({
             isRead={isRead}
             setIsPopupOpen={setIsPopupOpen}
             setUnreadCount={setUnreadCount}
-            setReadStatus={setReadStatus}
+            setLocalReadNotification={setLocalReadNotification}
+            localReadNotifications={localReadNotifications}
           />
         )
       })}
