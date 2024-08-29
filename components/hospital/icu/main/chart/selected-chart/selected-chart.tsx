@@ -14,17 +14,17 @@ export default function SelectedChart({
   selectedIo,
   selectedChart,
   selectedChartOrders,
-  isPatientOut,
   isFirstChart,
 }: {
   selectedIo: IcuIoJoined
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
-  isPatientOut: boolean
   isFirstChart: boolean
 }) {
   const pdfRef = useRef<HTMLDivElement>(null)
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
+
+  const isPatientOut = selectedIo?.out_date !== null
 
   return (
     <div className="relative flex flex-col gap-2 p-2 pb-[48px]" ref={pdfRef}>

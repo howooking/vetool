@@ -34,6 +34,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
       (io) => io.patient_id.patient_id === selectedPatientId,
     )
     setSeletedIo(selectedIo)
+
     setIsChartLoading(false)
   }, [icuIoData, selectedPatientId, setIsChartLoading])
 
@@ -69,8 +70,6 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     setIsChartLoading,
     // setIsTxMutating,
   ])
-
-  const isPatientOut = selectedIo?.out_date !== null
 
   const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
 
@@ -113,7 +112,6 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
         selectedIo={selectedIo}
         selectedChart={selectedChart}
         selectedChartOrders={selectedChartOrders}
-        isPatientOut={isPatientOut}
       />
     )
   }
