@@ -11,23 +11,14 @@ import type {
   IcuChartOrderJoined,
   IcuData,
   IcuIoJoined,
-  IcuUserList,
 } from '@/types/icu'
 import { useEffect, useState } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 
-export default function IcuChart({
-  icuData,
-  vetsList,
-}: {
-  icuData: IcuData
-  vetsList: IcuUserList[]
-}) {
+export default function IcuChart({ icuData }: { icuData: IcuData }) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
   // const { setIsTxMutating } = useUpsertTxStore()
-
-  console.log('rendering')
 
   const [selectedChartOrders, setSelectedChartOrders] = useState<
     IcuChartOrderJoined[]
@@ -41,13 +32,9 @@ export default function IcuChart({
     const selectedIo = icuData.icuIoData.find(
       (io) => io.patient_id.patient_id === selectedPatientId,
     )
-    setSeletedIo(selectedIo)
-
     const selectedChart = icuData.icuChartData.find(
       (chart) => chart.patient_id.patient_id === selectedPatientId,
     )
-    setSelectedChart(selectedChart)
-
     const selectedChartOrders = icuData.icuChartOrderData
       .filter(
         (order) =>
@@ -62,24 +49,13 @@ export default function IcuChart({
             (order) => order === next.icu_chart_order_type,
           ),
       )
+
+    setSeletedIo(selectedIo)
+    setSelectedChart(selectedChart)
     setSelectedChartOrders(selectedChartOrders)
 
     setIsChartLoading(false)
   }, [icuData, selectedPatientId, setIsChartLoading])
-
-  // useEffect(() => {
-  //   setIsChartLoading(false)
-  // }, [icuChartData, selectedPatientId, setIsChartLoading])
-
-  // useEffect(() => {
-  //   setIsChartLoading(false)
-  //   // setIsTxMutating(false)
-  // }, [
-  //   icuChartOrderData,
-  //   selectedChart?.icu_chart_id,
-  //   setIsChartLoading,
-  //   // setIsTxMutating,
-  // ])
 
   const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
 
@@ -118,7 +94,7 @@ export default function IcuChart({
   if (selectedChart && selectedIo && selectedChartOrders) {
     return (
       <SelectedChart
-        vetsList={vetsList}
+        vetsList={icuData.vetsListData}
         isFirstChart={isFirstChart}
         selectedIo={selectedIo}
         selectedChart={selectedChart}
