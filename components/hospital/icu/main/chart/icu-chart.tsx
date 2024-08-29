@@ -11,11 +11,18 @@ import type {
   IcuChartOrderJoined,
   IcuData,
   IcuIoJoined,
+  IcuUserList,
 } from '@/types/icu'
 import { useEffect, useState } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 
-export default function IcuChart({ icuData }: { icuData: IcuData }) {
+export default function IcuChart({
+  icuData,
+  vetsList,
+}: {
+  icuData: IcuData
+  vetsList: IcuUserList[]
+}) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
   // const { setIsTxMutating } = useUpsertTxStore()
@@ -108,6 +115,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
   if (selectedChart && selectedIo && selectedChartOrders) {
     return (
       <SelectedChart
+        vetsList={vetsList}
         isFirstChart={isFirstChart}
         selectedIo={selectedIo}
         selectedChart={selectedChart}

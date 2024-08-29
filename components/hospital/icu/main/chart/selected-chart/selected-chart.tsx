@@ -5,6 +5,7 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoJoined,
+  IcuUserList,
 } from '@/types/icu'
 import { useRef } from 'react'
 import ChartHeader from './chart-header/chart-header'
@@ -15,11 +16,13 @@ export default function SelectedChart({
   selectedChart,
   selectedChartOrders,
   isFirstChart,
+  vetsList,
 }: {
   selectedIo: IcuIoJoined
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
   isFirstChart: boolean
+  vetsList: IcuUserList[]
 }) {
   const pdfRef = useRef<HTMLDivElement>(null)
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
@@ -41,6 +44,7 @@ export default function SelectedChart({
       />
 
       <ChartInfos
+        vetsList={vetsList}
         selectedIo={selectedIo}
         chartData={restChartData}
         isPatientOut={isPatientOut}

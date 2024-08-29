@@ -5,17 +5,19 @@ import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart
 import Group from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/group/group'
 import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/in-and-out-date/in-and-out-date'
 import { MainSubVet } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/main-sub-vet/main-sub-vet'
-import type { IcuChartJoined, IcuIoJoined } from '@/types/icu'
+import type { IcuChartJoined, IcuIoJoined, IcuUserList } from '@/types/icu'
 import OwnerName from './owner-name'
 
 export default function ChartInfos({
   chartData,
   isPatientOut,
   selectedIo,
+  vetsList,
 }: {
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   isPatientOut: boolean
   selectedIo: IcuIoJoined
+  vetsList: IcuUserList[]
 }) {
   return (
     <div className="grid grid-cols-8 gap-2">
@@ -31,6 +33,7 @@ export default function ChartInfos({
 
       <div className="col-span-2">
         <MainSubVet
+          vetsList={vetsList}
           mainVet={chartData.main_vet}
           subVet={chartData.sub_vet}
           icuChartId={chartData.icu_chart_id}

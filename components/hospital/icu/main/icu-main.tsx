@@ -33,7 +33,9 @@ export default function IcuMain({ icuData }: { icuData: IcuData }) {
         <DynamicTxTable icuData={icuData} />
       )}
 
-      {selectIcudMainView === 'chart' && <DynamicIcuChart icuData={icuData} />}
+      {selectIcudMainView === 'chart' && (
+        <DynamicIcuChart vetsList={icuData.vetsListData} icuData={icuData} />
+      )}
 
       {selectIcudMainView === 'search' && <DynamicIcuChartSearch />}
     </>
