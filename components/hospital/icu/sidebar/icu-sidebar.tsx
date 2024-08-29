@@ -2,11 +2,7 @@
 
 import NoPatients from '@/components/hospital/icu/sidebar/no-patients'
 import PatientList from '@/components/hospital/icu/sidebar/patient-list'
-import type {
-  IcuChartJoined,
-  IcuIoPatientJoined,
-  IcuUserList,
-} from '@/types/icu'
+import type { IcuChartJoined, IcuIoJoined, IcuUserList } from '@/types/icu'
 import { useMemo, useState } from 'react'
 import Filters from './filters/filters'
 import { Separator } from '@/components/ui/separator'
@@ -22,7 +18,7 @@ export default function IcuSidebar({
   icuChartData,
   vetsListData,
 }: {
-  icuIoData: IcuIoPatientJoined[]
+  icuIoData: IcuIoJoined[]
   icuChartData: IcuChartJoined[]
   vetsListData: IcuUserList[]
 }) {
@@ -34,7 +30,7 @@ export default function IcuSidebar({
   })
 
   const filteredData = useMemo(() => {
-    const filterByGroup = (data: IcuIoPatientJoined[]) =>
+    const filterByGroup = (data: IcuIoJoined[]) =>
       filters.selectedGroup.length === 0
         ? data
         : data.filter((item) =>
@@ -43,7 +39,7 @@ export default function IcuSidebar({
             ),
           )
 
-    const filterByVet = (data: IcuIoPatientJoined[]) => {
+    const filterByVet = (data: IcuIoJoined[]) => {
       if (filters.selectedVet === '') return data
 
       const vetFilteredIds = new Set(

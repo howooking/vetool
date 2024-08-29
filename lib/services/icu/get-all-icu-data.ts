@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
-  IcuIoPatientJoined,
+  IcuIoJoined,
   IcuUserList,
 } from '@/types/icu'
 import { redirect } from 'next/navigation'
@@ -23,11 +23,10 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
           out_due_date,
           group_list,
           age_in_days,
-          icu_io_tags,
           icu_io_dx,
           icu_io_cc,
           patient_id(name, breed, patient_id),
-          hos_id(group_list)
+          hos_id(group_list, icu_memo_names)
         `,
       )
       .match({ hos_id: hosId })
@@ -35,15 +34,20 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .or(`out_date.is.null, out_date.gte.${targetDate}`)
       .order('out_date', { ascending: false })
       .order('in_date, created_at', { ascending: true })
-      .returns<IcuIoPatientJoined[]>(),
+      .returns<IcuIoJoined[]>(),
 
     supabase
       .from('icu_chart')
       .select(
         `
-          *,
+          icu_chart_id,
+          target_date,
+          memo_a,
+          memo_b,
+          memo_c,
+          weight_measured_date,
+          weight,
           icu_io_id!inner(out_date, in_date, created_at, icu_io_id),
-          hos_id(group_list, icu_memo_names),
           patient_id(name, gender, breed, patient_id, species, owner_name),
           main_vet(name, user_id, avatar_url),
           sub_vet(name, user_id, avatar_url),
@@ -113,7 +117,7 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
     icuChartOrderDataError ||
     vetsListDataError
   ) {
-    console.log({
+    console.error({
       icuIoDataError,
       icuChartDataError,
       icuChartOrderDataError,

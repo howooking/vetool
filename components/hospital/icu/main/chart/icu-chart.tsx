@@ -10,7 +10,7 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuData,
-  IcuIoPatientJoined,
+  IcuIoJoined,
 } from '@/types/icu'
 import { useEffect, useState } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
@@ -27,7 +27,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
   const [selectedChart, setSelectedChart] = useState<
     IcuChartJoined | undefined
   >()
-  const [selectedIo, setSeletedIo] = useState<IcuIoPatientJoined | undefined>()
+  const [selectedIo, setSeletedIo] = useState<IcuIoJoined | undefined>()
 
   useEffect(() => {
     const selectedIo = icuIoData.find(

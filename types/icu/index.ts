@@ -11,12 +11,12 @@ import type {
 } from '@/types'
 
 export type IcuData = {
-  icuIoData: IcuIoPatientJoined[]
+  icuIoData: IcuIoJoined[]
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
   vetsListData: IcuUserList[]
 }
-export type IcuIoPatientJoined = Pick<
+export type IcuIoJoined = Pick<
   IcuIo,
   | 'in_date'
   | 'out_date'
@@ -24,25 +24,30 @@ export type IcuIoPatientJoined = Pick<
   | 'group_list'
   | 'icu_io_id'
   | 'age_in_days'
-  | 'icu_io_tags'
   | 'icu_io_dx'
   | 'icu_io_cc'
 > & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
-  hos_id: Pick<Hospital, 'group_list'>
+  hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names'>
 }
 
 export type MainAndSubVet = Pick<User, 'name' | 'avatar_url' | 'user_id'>
 
 export type IcuChartJoined = Omit<
   IcuChart,
-  'main_vet' | 'sub_vet' | 'patient_id' | 'hos_id' | 'icu_io_id' | 'bookmark_id'
+  | 'main_vet'
+  | 'sub_vet'
+  | 'patient_id'
+  | 'hos_id'
+  | 'icu_io_id'
+  | 'bookmark_id'
+  | 'created_at'
+  | 'hos_id'
 > & {
   icu_io_id: Pick<
     IcuIo,
     'out_date' | 'in_date' | 'icu_io_id' | 'icu_io_dx' | 'icu_io_cc'
   >
-  hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names'>
   patient_id: Pick<
     Patients,
     'name' | 'gender' | 'breed' | 'patient_id' | 'species' | 'owner_name'

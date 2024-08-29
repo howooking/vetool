@@ -21,7 +21,6 @@ export default function OutPatientDialog({
   icuIoId,
   name,
   isPatientOut,
-  icuChartId,
   selectedChartOrders,
   dx,
   cc,
@@ -29,7 +28,6 @@ export default function OutPatientDialog({
   icuIoId: string
   name: string
   isPatientOut: boolean
-  icuChartId: string
   selectedChartOrders: IcuChartOrderJoined[]
   dx: string
   cc: string

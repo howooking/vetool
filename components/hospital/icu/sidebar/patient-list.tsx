@@ -1,10 +1,10 @@
 import PatientButton from '@/components/hospital/icu/sidebar/patient-button'
 import { Separator } from '@/components/ui/separator'
-import type { IcuIoPatientJoined } from '@/types/icu'
+import type { IcuIoJoined } from '@/types/icu'
 
 type IcuSidebarContentProps = {
-  filteredIcuIoData: IcuIoPatientJoined[]
-  excludedIcuIoData: IcuIoPatientJoined[]
+  filteredIcuIoData: IcuIoJoined[]
+  excludedIcuIoData: IcuIoJoined[]
 }
 
 export default function PatientList({

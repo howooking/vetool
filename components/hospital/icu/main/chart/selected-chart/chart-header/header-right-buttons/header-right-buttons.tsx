@@ -36,7 +36,6 @@ export default function HeaderRightButtons({
         icuIoId={icuIoId}
         name={name}
         isPatientOut={isPatientOut}
-        icuChartId={icuChartId}
         selectedChartOrders={selectedChartOrders}
         dx={dx}
         cc={cc}

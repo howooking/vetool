@@ -4,7 +4,7 @@ import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/tabl
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
-  IcuIoPatientJoined,
+  IcuIoJoined,
 } from '@/types/icu'
 import { useRef } from 'react'
 import ChartHeader from './chart-header/chart-header'
@@ -17,7 +17,7 @@ export default function SelectedChart({
   isPatientOut,
   isFirstChart,
 }: {
-  selectedIo: IcuIoPatientJoined
+  selectedIo: IcuIoJoined
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
   isPatientOut: boolean
@@ -53,7 +53,7 @@ export default function SelectedChart({
         memoB={memo_b}
         memoC={memo_c}
         icuChartId={selectedChart.icu_chart_id}
-        hosIcuMemoNames={selectedChart.hos_id.icu_memo_names}
+        hosIcuMemoNames={selectedIo.hos_id.icu_memo_names}
       />
 
       {isPatientOut && <OutPatientCover />}

@@ -183,7 +183,6 @@ export type Database = {
           icu_order_type: string[]
           is_personal: boolean
           master_user_id: string
-          memo_list: string[]
           name: string
           plan: string
         }
@@ -200,7 +199,6 @@ export type Database = {
           icu_order_type?: string[]
           is_personal?: boolean
           master_user_id: string
-          memo_list?: string[]
           name: string
           plan?: string
         }
@@ -217,7 +215,6 @@ export type Database = {
           icu_order_type?: string[]
           is_personal?: boolean
           master_user_id?: string
-          memo_list?: string[]
           name?: string
           plan?: string
         }
