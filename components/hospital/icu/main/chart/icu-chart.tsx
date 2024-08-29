@@ -27,7 +27,8 @@ export default function IcuChart({
   const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
   // const { setIsTxMutating } = useUpsertTxStore()
 
-  const { icuChartData, icuChartOrderData, icuIoData } = icuData
+  console.log('rendering')
+
   const [selectedChartOrders, setSelectedChartOrders] = useState<
     IcuChartOrderJoined[]
   >([])
@@ -37,24 +38,17 @@ export default function IcuChart({
   const [selectedIo, setSeletedIo] = useState<IcuIoJoined | undefined>()
 
   useEffect(() => {
-    const selectedIo = icuIoData.find(
+    const selectedIo = icuData.icuIoData.find(
       (io) => io.patient_id.patient_id === selectedPatientId,
     )
     setSeletedIo(selectedIo)
 
-    setIsChartLoading(false)
-  }, [icuIoData, selectedPatientId, setIsChartLoading])
-
-  useEffect(() => {
-    const selectedChart = icuChartData.find(
+    const selectedChart = icuData.icuChartData.find(
       (chart) => chart.patient_id.patient_id === selectedPatientId,
     )
     setSelectedChart(selectedChart)
-    setIsChartLoading(false)
-  }, [icuChartData, selectedPatientId, setIsChartLoading])
 
-  useEffect(() => {
-    const selectedChartOrders = icuChartOrderData
+    const selectedChartOrders = icuData.icuChartOrderData
       .filter(
         (order) =>
           order.icu_chart_id.icu_chart_id === selectedChart?.icu_chart_id,
@@ -69,14 +63,23 @@ export default function IcuChart({
           ),
       )
     setSelectedChartOrders(selectedChartOrders)
+
     setIsChartLoading(false)
-    // setIsTxMutating(false)
-  }, [
-    icuChartOrderData,
-    selectedChart?.icu_chart_id,
-    setIsChartLoading,
-    // setIsTxMutating,
-  ])
+  }, [icuData, selectedPatientId, setIsChartLoading])
+
+  // useEffect(() => {
+  //   setIsChartLoading(false)
+  // }, [icuChartData, selectedPatientId, setIsChartLoading])
+
+  // useEffect(() => {
+  //   setIsChartLoading(false)
+  //   // setIsTxMutating(false)
+  // }, [
+  //   icuChartOrderData,
+  //   selectedChart?.icu_chart_id,
+  //   setIsChartLoading,
+  //   // setIsTxMutating,
+  // ])
 
   const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
 
