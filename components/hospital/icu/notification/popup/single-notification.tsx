@@ -38,9 +38,9 @@ export default function SingleNotification({
 
     if (isRead) return
 
-    // !!안읽은 알림을 눌렀을 때 10일이상 된 로컬저장소 기록을 삭제
+    // !!안읽은 알림을 눌렀을 때 1일이상 된 로컬저장소 기록을 삭제
     const feshedNotifications = localReadStatus.filter(
-      (n) => !isDaysBehind(n.created_at, 10),
+      (n) => !isDaysBehind(n.created_at, 1),
     )
 
     const newNotifications = [
