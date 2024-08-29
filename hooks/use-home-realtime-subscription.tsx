@@ -7,7 +7,6 @@ export function useHomeRealtimeSubscription(hosId: string) {
   const { refresh } = useRouter()
 
   //!!디바운스 불필요
-
   useEffect(() => {
     const tables = ['notices', 'todos']
     const subscriptions = tables.map((table) =>
@@ -21,7 +20,7 @@ export function useHomeRealtimeSubscription(hosId: string) {
             table,
             filter: `hos_id=eq.${hosId}`,
           },
-          () => refresh(),
+          refresh,
         )
         .subscribe(),
     )

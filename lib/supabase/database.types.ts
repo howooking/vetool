@@ -1034,7 +1034,6 @@ export type Database = {
           hos_id: string
           id: string
           is_done: boolean
-          is_repeat: boolean
           target_date: string | null
           target_user: string | null
           todo_title: string
@@ -1044,7 +1043,6 @@ export type Database = {
           hos_id: string
           id?: string
           is_done?: boolean
-          is_repeat?: boolean
           target_date?: string | null
           target_user?: string | null
           todo_title?: string
@@ -1054,7 +1052,6 @@ export type Database = {
           hos_id?: string
           id?: string
           is_done?: boolean
-          is_repeat?: boolean
           target_date?: string | null
           target_user?: string | null
           todo_title?: string

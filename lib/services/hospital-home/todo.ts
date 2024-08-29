@@ -7,12 +7,12 @@ export const getTodos = async (hosId: string) => {
   const supabase = createClient()
   const { data: todosData, error: todosDataError } = await supabase
     .from('todos')
-    .select('*')
+    .select('id, is_done, target_date, target_user, todo_title')
     .match({ hos_id: hosId })
     .order('created_at')
 
   if (todosDataError) {
-    console.log(todosDataError)
+    console.error(todosDataError)
     redirect(`/error?message=${todosDataError.message}`)
   }
   return todosData
@@ -33,7 +33,7 @@ export const createTodo = async (
   })
 
   if (createTodoError) {
-    console.log(createTodoError)
+    console.error(createTodoError)
     redirect(`/error?message=${createTodoError.message}`)
   }
 }
@@ -48,7 +48,7 @@ export const toggleIsDone = async (todoId: string, isDone: boolean) => {
     .match({ id: todoId })
 
   if (toggleIsDoneError) {
-    console.log(toggleIsDoneError)
+    console.error(toggleIsDoneError)
     redirect(`/error?message=${toggleIsDoneError.message}`)
   }
 }
@@ -61,7 +61,7 @@ export const deleteTodo = async (todoId: string) => {
     .match({ id: todoId })
 
   if (deleteTodoError) {
-    console.log(deleteTodoError)
+    console.error(deleteTodoError)
     redirect(`/error?message=${deleteTodoError.message}`)
   }
 }
