@@ -374,7 +374,6 @@ export type Database = {
           icu_chart_id: string
           icu_chart_order_comment: string | null
           icu_chart_order_id: string
-          icu_chart_order_log: string[] | null
           icu_chart_order_name: string
           icu_chart_order_time: string[]
           icu_chart_order_tx_1: string | null
@@ -411,7 +410,6 @@ export type Database = {
           icu_chart_id: string
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
-          icu_chart_order_log?: string[] | null
           icu_chart_order_name: string
           icu_chart_order_time?: string[]
           icu_chart_order_tx_1?: string | null
@@ -448,7 +446,6 @@ export type Database = {
           icu_chart_id?: string
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
-          icu_chart_order_log?: string[] | null
           icu_chart_order_name?: string
           icu_chart_order_time?: string[]
           icu_chart_order_tx_1?: string | null
