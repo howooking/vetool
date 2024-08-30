@@ -26,6 +26,7 @@ export default function PreviewButton({ chartId }: { chartId: string }) {
       variant="ghost"
       onClick={handleOpenPreviewDialog}
       disabled={isPreviwing}
+      className="flex items-center justify-center"
     >
       {isPreviwing ? (
         <LoaderCircle size={18} className="animate-spin" />
