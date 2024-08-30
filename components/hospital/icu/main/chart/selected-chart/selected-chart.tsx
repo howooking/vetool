@@ -30,7 +30,7 @@ export default function SelectedChart({
   const isPatientOut = selectedIo?.out_date !== null
 
   return (
-    <div className="relative flex flex-col gap-2 p-2 pb-[48px]" ref={pdfRef}>
+    <div className="relative flex flex-col gap-2 p-2 pb-[48px]">
       <ChartHeader
         isPatientOut={isPatientOut}
         chartData={restChartData}
@@ -42,24 +42,24 @@ export default function SelectedChart({
         dx={selectedIo.icu_io_dx}
         cc={selectedIo.icu_io_cc}
       />
+      <div className="flex flex-col gap-2" ref={pdfRef}>
+        <ChartInfos
+          vetsList={vetsList}
+          selectedIo={selectedIo}
+          chartData={restChartData}
+          isPatientOut={isPatientOut}
+        />
 
-      <ChartInfos
-        vetsList={vetsList}
-        selectedIo={selectedIo}
-        chartData={restChartData}
-        isPatientOut={isPatientOut}
-      />
+        <ChartTable selectedChartOrders={selectedChartOrders} />
 
-      <ChartTable selectedChartOrders={selectedChartOrders} />
-
-      <ChartMemos
-        memoA={memo_a}
-        memoB={memo_b}
-        memoC={memo_c}
-        icuChartId={selectedChart.icu_chart_id}
-        hosIcuMemoNames={selectedIo.hos_id.icu_memo_names}
-      />
-
+        <ChartMemos
+          memoA={memo_a}
+          memoB={memo_b}
+          memoC={memo_c}
+          icuChartId={selectedChart.icu_chart_id}
+          hosIcuMemoNames={selectedIo.hos_id.icu_memo_names}
+        />
+      </div>
       {isPatientOut && <OutPatientCover />}
     </div>
   )
