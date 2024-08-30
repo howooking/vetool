@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx'
+import { differenceInDays, isValid, parseISO } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -167,4 +168,19 @@ export const getTimeSince = (inputTime: string) => {
   } else {
     return '방금 전'
   }
+}
+
+// created_at 형식의 날짜를 현재와 비교해서 difference 차이가 크다면 true
+export const isDaysBehind = (dateString: string, difference: number) => {
+  const isoDate = parseISO(dateString)
+
+  // Check if the parsed date is valid
+  if (!isValid(isoDate)) {
+    throw new Error('Invalid date string provided')
+  }
+
+  const currentDate = new Date()
+  const differenceDays = differenceInDays(currentDate, isoDate)
+
+  return differenceDays >= difference
 }

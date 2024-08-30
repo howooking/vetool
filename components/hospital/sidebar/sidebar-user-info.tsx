@@ -27,6 +27,7 @@ export default async function SidebarUserInfo({ hosId }: { hosId: string }) {
           <div className="flex items-center">
             <Avatar>
               <AvatarImage
+                loading="lazy"
                 src={userData.avatar_url ?? ''}
                 alt={userData.name}
               />

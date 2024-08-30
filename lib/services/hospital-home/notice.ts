@@ -10,7 +10,7 @@ export const getNotices = async (hosId: string) => {
     .from('notices')
     .select(
       `
-        *,
+        id, notice_color, notice_text, notice_order, created_at,
         user_id (
           user_id, name, avatar_url
         )
@@ -22,7 +22,7 @@ export const getNotices = async (hosId: string) => {
     .returns<NoticeUserJoined[]>()
 
   if (noticesDataError) {
-    console.log(noticesDataError)
+    console.error(noticesDataError)
     redirect(`/error?message=${noticesDataError.message}`)
   }
   return noticesData
@@ -42,7 +42,7 @@ export const createNotice = async (
   })
 
   if (createNoticeError) {
-    console.log(createNoticeError)
+    console.error(createNoticeError)
     redirect(`/error?message=${createNoticeError.message}`)
   }
 }
@@ -62,7 +62,7 @@ export const updateNotice = async (
     .match({ id: noticeId })
 
   if (updateNoticeError) {
-    console.log(updateNoticeError)
+    console.error(updateNoticeError)
     redirect(`/error?message=${updateNoticeError.message}`)
   }
 }
@@ -75,7 +75,7 @@ export const deleteNotice = async (noticeId: string) => {
     .match({ id: noticeId })
 
   if (deleteNoticeError) {
-    console.log(deleteNoticeError)
+    console.error(deleteNoticeError)
     redirect(`/error?message=${deleteNoticeError.message}`)
   }
 }
@@ -90,7 +90,7 @@ export const reorderNotices = async (noticeIds: string[]) => {
       .match({ id: noticeId })
 
     if (reorderNoticesError) {
-      console.log(reorderNoticesError)
+      console.error(reorderNoticesError)
       redirect(`/error?message=${reorderNoticesError.message}`)
     }
   })

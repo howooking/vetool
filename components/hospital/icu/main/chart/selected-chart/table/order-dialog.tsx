@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import { ClipboardPlus, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 
 export default function OrderDialog({
   icuIoId,

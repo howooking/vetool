@@ -3,7 +3,7 @@
 import { Checkbox } from '@/components/ui/checkbox'
 import { toggleIsDone } from '@/lib/services/hospital-home/todo'
 import { cn } from '@/lib/utils'
-import type { Todo } from '@/types'
+import type { QueriedTodo } from '@/types/hospital/todo'
 import { LoaderCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import DeleteTodoDialog from './delete-todo-dialog'
@@ -12,7 +12,7 @@ export default function SingleTodo({
   todo,
   type,
 }: {
-  todo: Todo
+  todo: QueriedTodo
   type: '어제' | '오늘' | '내일'
 }) {
   const [isToggling, setIsToggling] = useState(false)
@@ -39,7 +39,7 @@ export default function SingleTodo({
         ) : (
           <Checkbox
             id={todo.id}
-            disabled={isToggling || type === '어제' || type === '내일'}
+            disabled={isToggling}
             checked={isChecked}
             onCheckedChange={handleIsDone}
           />

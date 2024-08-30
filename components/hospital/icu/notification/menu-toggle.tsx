@@ -1,35 +1,37 @@
-import { MessageSquareWarning } from 'lucide-react'
-import { Dispatch, SetStateAction, useRef } from 'react'
+// todo : 파일명  변경
 
-export default function MenuToggle({
-  isToggleOpen,
-  setIsToggleOpen,
+import { Button } from '@/components/ui/button'
+import { MessageSquare } from 'lucide-react'
+import { Dispatch, SetStateAction } from 'react'
+import UnReadCount from './unread-count'
+
+export default function NotificationButton({
+  isPopupOpen,
+  setIsPopupOpen,
   unReadCount,
-  buttonRef,
 }: {
-  isToggleOpen: boolean
-  setIsToggleOpen: Dispatch<SetStateAction<boolean>>
+  isPopupOpen: boolean
+  setIsPopupOpen: Dispatch<SetStateAction<boolean>>
   unReadCount: number
-  buttonRef: React.RefObject<HTMLButtonElement>
 }) {
-  const handleButtonClick = () => {
-    setIsToggleOpen((prevIsToggleOpen) => !prevIsToggleOpen)
-  }
+  // !!간단한 함수는 그냥 바로 사용
+  // const handleButtonClick = () => {
+  //   setIsPopupOpen(true)
+  // }
 
   return (
-    <button
-      onClick={handleButtonClick}
-      ref={buttonRef}
-      disabled={isToggleOpen}
-      className="fixed bottom-5 right-5 flex h-12 w-12 transform items-center justify-center rounded-full bg-primary transition-transform duration-100 hover:scale-105"
+    // !!Shadcn Button 사용
+    <Button
+      onClick={() => setIsPopupOpen(true)}
+      disabled={isPopupOpen}
+      size="sm"
+      variant="ghost"
+      className="relative z-10 mr-1"
     >
-      <MessageSquareWarning size={24} color="#fff" />
+      <MessageSquare />
 
-      {unReadCount > 0 && (
-        <div className="absolute bottom-7 left-7 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-          {unReadCount}
-        </div>
-      )}
-    </button>
+      {/* 추상화 */}
+      {unReadCount > 0 && <UnReadCount unReadCount={unReadCount} />}
+    </Button>
   )
 }

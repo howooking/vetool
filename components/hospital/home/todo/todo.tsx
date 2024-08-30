@@ -2,13 +2,13 @@ import TodoList from '@/components/hospital/home/todo/todo-list'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { getYesterdayTodayTomorrow } from '@/lib/utils'
-import type { Todo } from '@/types'
+import type { QueriedTodo } from '@/types/hospital/todo'
 
 export default function Todo({
   todosData,
   hosId,
 }: {
-  todosData: Todo[]
+  todosData: QueriedTodo[]
   hosId: string
 }) {
   const { yesterday, today, tomorrow } = getYesterdayTodayTomorrow()
@@ -21,7 +21,7 @@ export default function Todo({
   )
 
   return (
-    <Card className="h-1/2 w-[480px] rounded-sm">
+    <Card className="w-[600px] rounded-sm">
       <CardHeader>
         <CardTitle>TODO</CardTitle>
       </CardHeader>

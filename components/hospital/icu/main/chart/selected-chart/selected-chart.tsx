@@ -4,7 +4,8 @@ import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/tabl
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
-  IcuIoPatientJoined,
+  IcuIoJoined,
+  IcuUserList,
 } from '@/types/icu'
 import { useRef } from 'react'
 import ChartHeader from './chart-header/chart-header'
@@ -14,17 +15,19 @@ export default function SelectedChart({
   selectedIo,
   selectedChart,
   selectedChartOrders,
-  isPatientOut,
   isFirstChart,
+  vetsList,
 }: {
-  selectedIo: IcuIoPatientJoined
+  selectedIo: IcuIoJoined
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
-  isPatientOut: boolean
   isFirstChart: boolean
+  vetsList: IcuUserList[]
 }) {
   const pdfRef = useRef<HTMLDivElement>(null)
   const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
+
+  const isPatientOut = selectedIo?.out_date !== null
 
   return (
     <div className="relative flex flex-col gap-2 p-2 pb-[48px]" ref={pdfRef}>
@@ -41,6 +44,7 @@ export default function SelectedChart({
       />
 
       <ChartInfos
+        vetsList={vetsList}
         selectedIo={selectedIo}
         chartData={restChartData}
         isPatientOut={isPatientOut}
@@ -53,7 +57,7 @@ export default function SelectedChart({
         memoB={memo_b}
         memoC={memo_c}
         icuChartId={selectedChart.icu_chart_id}
-        hosIcuMemoNames={selectedChart.hos_id.icu_memo_names}
+        hosIcuMemoNames={selectedIo.hos_id.icu_memo_names}
       />
 
       {isPatientOut && <OutPatientCover />}

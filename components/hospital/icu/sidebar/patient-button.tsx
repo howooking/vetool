@@ -2,14 +2,14 @@ import { Button } from '@/components/ui/button'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import type { IcuIoPatientJoined } from '@/types/icu'
+import type { IcuIoJoined } from '@/types/icu'
 
-export default function PatientButton({ data }: { data: IcuIoPatientJoined }) {
+export default function PatientButton({ data }: { data: IcuIoJoined }) {
   const { selectedPatientId, setSelectedPatientId: setSelectedPatientId } =
     useIcuSelectedPatientIdStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
 
-  const handlePatientButtonClick = (data: IcuIoPatientJoined) => {
+  const handlePatientButtonClick = (data: IcuIoJoined) => {
     setSelectedPatientId(data.patient_id.patient_id)
     setSelectedIcuMainView('chart')
   }

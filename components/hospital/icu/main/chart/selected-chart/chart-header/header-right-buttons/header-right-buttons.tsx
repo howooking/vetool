@@ -29,14 +29,13 @@ export default function HeaderRightButtons({
   cc: string
 }) {
   return (
-    <div className="absolute right-2 top-2 flex gap-1">
+    <div className="absolute right-2 top-1.5 flex gap-1">
       <CopyChartButton icuChartId={icuChartId} />
 
       <OutPatientDialog
         icuIoId={icuIoId}
         name={name}
         isPatientOut={isPatientOut}
-        icuChartId={icuChartId}
         selectedChartOrders={selectedChartOrders}
         dx={dx}
         cc={cc}

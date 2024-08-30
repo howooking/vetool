@@ -6,5 +6,9 @@ export default function PreviewTable({
 }: {
   copiedOrders: CopiedOrder[]
 }) {
-  return <ChartTable selectedChartOrders={copiedOrders} preview />
+  return (
+    <div className="h-[800px] overflow-y-auto">
+      <ChartTable selectedChartOrders={copiedOrders} preview />
+    </div>
+  )
 }
