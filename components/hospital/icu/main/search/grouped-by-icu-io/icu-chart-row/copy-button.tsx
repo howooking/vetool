@@ -32,7 +32,7 @@ export default function CopyButton({ chartId }: { chartId: string }) {
       disabled={isCopying}
       size="icon"
       variant="ghost"
-      className="flex items-center justify-center"
+      className="mx-auto flex items-center justify-center"
     >
       {isCopying ? (
         <LoaderCircle size={18} className="animate-spin" />
