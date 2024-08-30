@@ -10,7 +10,7 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuData,
-  IcuIoPatientJoined,
+  IcuIoJoined,
 } from '@/types/icu'
 import { useEffect, useState } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
@@ -20,33 +20,22 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
   const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
   // const { setIsTxMutating } = useUpsertTxStore()
 
-  const { icuChartData, icuChartOrderData, icuIoData } = icuData
   const [selectedChartOrders, setSelectedChartOrders] = useState<
     IcuChartOrderJoined[]
   >([])
   const [selectedChart, setSelectedChart] = useState<
     IcuChartJoined | undefined
   >()
-  const [selectedIo, setSeletedIo] = useState<IcuIoPatientJoined | undefined>()
+  const [selectedIo, setSeletedIo] = useState<IcuIoJoined | undefined>()
 
   useEffect(() => {
-    const selectedIo = icuIoData.find(
+    const selectedIo = icuData.icuIoData.find(
       (io) => io.patient_id.patient_id === selectedPatientId,
     )
-    setSeletedIo(selectedIo)
-    setIsChartLoading(false)
-  }, [icuIoData, selectedPatientId, setIsChartLoading])
-
-  useEffect(() => {
-    const selectedChart = icuChartData.find(
+    const selectedChart = icuData.icuChartData.find(
       (chart) => chart.patient_id.patient_id === selectedPatientId,
     )
-    setSelectedChart(selectedChart)
-    setIsChartLoading(false)
-  }, [icuChartData, selectedPatientId, setIsChartLoading])
-
-  useEffect(() => {
-    const selectedChartOrders = icuChartOrderData
+    const selectedChartOrders = icuData.icuChartOrderData
       .filter(
         (order) =>
           order.icu_chart_id.icu_chart_id === selectedChart?.icu_chart_id,
@@ -60,17 +49,13 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
             (order) => order === next.icu_chart_order_type,
           ),
       )
-    setSelectedChartOrders(selectedChartOrders)
-    setIsChartLoading(false)
-    // setIsTxMutating(false)
-  }, [
-    icuChartOrderData,
-    selectedChart?.icu_chart_id,
-    setIsChartLoading,
-    // setIsTxMutating,
-  ])
 
-  const isPatientOut = selectedIo?.out_date !== null
+    setSeletedIo(selectedIo)
+    setSelectedChart(selectedChart)
+    setSelectedChartOrders(selectedChartOrders)
+
+    setIsChartLoading(false)
+  }, [icuData, selectedPatientId, setIsChartLoading])
 
   const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
 
@@ -109,11 +94,11 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
   if (selectedChart && selectedIo && selectedChartOrders) {
     return (
       <SelectedChart
+        vetsList={icuData.vetsListData}
         isFirstChart={isFirstChart}
         selectedIo={selectedIo}
         selectedChart={selectedChart}
         selectedChartOrders={selectedChartOrders}
-        isPatientOut={isPatientOut}
       />
     )
   }

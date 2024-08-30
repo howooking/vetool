@@ -37,7 +37,7 @@ CC: ${chartData.icu_io_id.icu_io_cc}
       textContents += `${icu_chart_order_name}: (${icu_chart_order_comment}) \n`
     })
 
-    textContents += `\n=================\n\n`
+    textContents += `\n=================\n`
 
     otherOrders.forEach((chartOrder) => {
       const { icu_chart_order_name } = chartOrder

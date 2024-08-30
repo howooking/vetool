@@ -14,7 +14,7 @@ import { pasteChart } from '@/lib/services/icu/paste-chart'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { cn } from '@/lib/utils'
 import { CopyCheck, LoaderCircle } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 export default function PasteCopiedChartDialog({
   targetDate,
   selectedPatientId,
@@ -32,7 +32,7 @@ export default function PasteCopiedChartDialog({
     reset,
   } = useCopiedChartStore()
 
-  const handlePasteCopiedChart = async () => {
+  const handlePasteCopiedChart = useCallback(async () => {
     if (!copiedChartId || !copiedChartOrder) {
       setIsDialogOpen(false)
 
@@ -57,7 +57,29 @@ export default function PasteCopiedChartDialog({
     reset()
     setIsDialogOpen(false)
     setIsSubmitting(false)
-  }
+  }, [
+    copiedChartId,
+    copiedChartOrder,
+    reset,
+    selectedPatientId,
+    setIsCreatingChart,
+    targetDate,
+  ])
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'v') {
+        event.preventDefault()
+        handlePasteCopiedChart()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handlePasteCopiedChart])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

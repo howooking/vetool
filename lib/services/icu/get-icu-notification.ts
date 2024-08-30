@@ -15,9 +15,10 @@ export const getIcuNotification = async (hosId: string, page: number = 1) => {
     await supabase
       .from('icu_notification')
       .select(
+        // inner! 불필요
         `
           *,
-          patient_id!inner(name, breed, patient_id, gender)
+          patient_id(name, breed, patient_id, gender)
         `,
       )
       .match({ hos_id: hosId })

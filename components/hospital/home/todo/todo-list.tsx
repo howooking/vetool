@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { Todo } from '@/types'
+import type { QueriedTodo } from '@/types/hospital/todo'
 import CreateTodoDialog from './create-todo-dialog'
 import SingleTodo from './single-todo'
 
@@ -13,7 +13,7 @@ export default function TodoList({
   date: string
   type: '어제' | '오늘' | '내일'
   hosId: string
-  todos: Todo[]
+  todos: QueriedTodo[]
   className?: string
 }) {
   return (

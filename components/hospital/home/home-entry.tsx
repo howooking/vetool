@@ -3,8 +3,8 @@
 import Notice from '@/components/hospital/home/notice/notice'
 import Todo from '@/components/hospital/home/todo/todo'
 import { useHomeRealtimeSubscription } from '@/hooks/use-home-realtime-subscription'
-import type { Todo as TodosData } from '@/types'
 import type { NoticeUserJoined } from '@/types/hospital/notice'
+import type { QueriedTodo } from '@/types/hospital/todo'
 
 export default function HomeEntry({
   noticesData,
@@ -12,7 +12,7 @@ export default function HomeEntry({
   hosId,
 }: {
   noticesData: NoticeUserJoined[]
-  todosData: TodosData[]
+  todosData: QueriedTodo[]
   hosId: string
 }) {
   useHomeRealtimeSubscription(hosId)

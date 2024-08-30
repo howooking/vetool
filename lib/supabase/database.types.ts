@@ -178,9 +178,11 @@ export type Database = {
           group_list: string[]
           hos_id: string
           icu_memo_names: string[]
+          icu_order_comment: string[]
+          icu_order_name: string[]
+          icu_order_type: string[]
           is_personal: boolean
           master_user_id: string
-          memo_list: string[]
           name: string
           plan: string
         }
@@ -192,9 +194,11 @@ export type Database = {
           group_list?: string[]
           hos_id?: string
           icu_memo_names?: string[]
+          icu_order_comment?: string[]
+          icu_order_name?: string[]
+          icu_order_type?: string[]
           is_personal?: boolean
           master_user_id: string
-          memo_list?: string[]
           name: string
           plan?: string
         }
@@ -206,9 +210,11 @@ export type Database = {
           group_list?: string[]
           hos_id?: string
           icu_memo_names?: string[]
+          icu_order_comment?: string[]
+          icu_order_name?: string[]
+          icu_order_type?: string[]
           is_personal?: boolean
           master_user_id?: string
-          memo_list?: string[]
           name?: string
           plan?: string
         }
@@ -368,7 +374,6 @@ export type Database = {
           icu_chart_id: string
           icu_chart_order_comment: string | null
           icu_chart_order_id: string
-          icu_chart_order_log: string[] | null
           icu_chart_order_name: string
           icu_chart_order_time: string[]
           icu_chart_order_tx_1: string | null
@@ -405,7 +410,6 @@ export type Database = {
           icu_chart_id: string
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
-          icu_chart_order_log?: string[] | null
           icu_chart_order_name: string
           icu_chart_order_time?: string[]
           icu_chart_order_tx_1?: string | null
@@ -442,7 +446,6 @@ export type Database = {
           icu_chart_id?: string
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
-          icu_chart_order_log?: string[] | null
           icu_chart_order_name?: string
           icu_chart_order_time?: string[]
           icu_chart_order_tx_1?: string | null
@@ -784,9 +787,9 @@ export type Database = {
           created_at: string
           hos_id: string
           icu_chart_id: string
-          is_read: boolean
           notification_content: string | null
           notification_id: string
+          notification_time: number
           notification_title: string
           patient_id: string
           target_date: string
@@ -795,9 +798,9 @@ export type Database = {
           created_at?: string
           hos_id: string
           icu_chart_id: string
-          is_read?: boolean
           notification_content?: string | null
           notification_id?: string
+          notification_time: number
           notification_title: string
           patient_id: string
           target_date: string
@@ -806,9 +809,9 @@ export type Database = {
           created_at?: string
           hos_id?: string
           icu_chart_id?: string
-          is_read?: boolean
           notification_content?: string | null
           notification_id?: string
+          notification_time?: number
           notification_title?: string
           patient_id?: string
           target_date?: string
@@ -1025,7 +1028,6 @@ export type Database = {
           hos_id: string
           id: string
           is_done: boolean
-          is_repeat: boolean
           target_date: string | null
           target_user: string | null
           todo_title: string
@@ -1035,7 +1037,6 @@ export type Database = {
           hos_id: string
           id?: string
           is_done?: boolean
-          is_repeat?: boolean
           target_date?: string | null
           target_user?: string | null
           todo_title?: string
@@ -1045,7 +1046,6 @@ export type Database = {
           hos_id?: string
           id?: string
           is_done?: boolean
-          is_repeat?: boolean
           target_date?: string | null
           target_user?: string | null
           todo_title?: string
