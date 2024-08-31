@@ -4,12 +4,12 @@ import type { IcuIoJoined } from '@/types/icu'
 
 type IcuSidebarContentProps = {
   filteredIcuIoData: IcuIoJoined[]
-  excludedIcuIoData: IcuIoJoined[]
+  // excludedIcuIoData: IcuIoJoined[]
 }
 
 export default function PatientList({
   filteredIcuIoData,
-  excludedIcuIoData,
+  // excludedIcuIoData,
 }: IcuSidebarContentProps) {
   return (
     <div className="flex-col gap-3 overflow-y-auto">
@@ -28,7 +28,7 @@ export default function PatientList({
         </span>
       )}
 
-      {excludedIcuIoData.length > 0 && (
+      {/* {excludedIcuIoData.length > 0 && (
         <>
           <Separator className="my-3" />
 
@@ -41,7 +41,7 @@ export default function PatientList({
             ))}
           </ul>
         </>
-      )}
+      )} */}
     </div>
   )
 }
