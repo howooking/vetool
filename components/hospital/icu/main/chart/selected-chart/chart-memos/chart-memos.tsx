@@ -1,4 +1,6 @@
 import Memo from '@/components/hospital/icu/main/chart/selected-chart/chart-memos/memo'
+import { useState } from 'react'
+import HideAndShowButton from './HideAndShowButton'
 
 export default function ChartMemos({
   memoA,
@@ -13,26 +15,32 @@ export default function ChartMemos({
   icuChartId: string
   hosIcuMemoNames: string[]
 }) {
+  const [isShow, setIsShow] = useState(true)
   return (
-    <div className="flex gap-2">
-      <Memo
-        memo={memoA}
-        icuChartId={icuChartId}
-        hosIcuMemoNames={hosIcuMemoNames}
-        index={0}
-      />
-      <Memo
-        memo={memoB}
-        icuChartId={icuChartId}
-        hosIcuMemoNames={hosIcuMemoNames}
-        index={1}
-      />
-      <Memo
-        memo={memoC}
-        icuChartId={icuChartId}
-        hosIcuMemoNames={hosIcuMemoNames}
-        index={2}
-      />
+    <div className="relative">
+      {isShow && (
+        <div className="flex gap-2">
+          <Memo
+            memo={memoA}
+            icuChartId={icuChartId}
+            hosIcuMemoNames={hosIcuMemoNames}
+            index={0}
+          />
+          <Memo
+            memo={memoB}
+            icuChartId={icuChartId}
+            hosIcuMemoNames={hosIcuMemoNames}
+            index={1}
+          />
+          <Memo
+            memo={memoC}
+            icuChartId={icuChartId}
+            hosIcuMemoNames={hosIcuMemoNames}
+            index={2}
+          />
+        </div>
+      )}
+      <HideAndShowButton setIsShow={setIsShow} isShow={isShow} />
     </div>
   )
 }

@@ -32,7 +32,7 @@ export default function ChartTable({
 }: ChartTableProps) {
   return (
     <Table className="h-full border">
-      <TableHeader className="sticky top-0 z-10 bg-slate-50">
+      <TableHeader>
         <TableRow>
           <TableHead className="relative flex w-[320px] items-center justify-center gap-2 text-center">
             <span>오더 목록</span>
