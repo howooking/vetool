@@ -1,16 +1,18 @@
 'use client'
 
+import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import NoResult from '@/components/common/no-result'
 import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/selected-chart'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
+import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import type { IcuData } from '@/types/icu'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 
 export default function IcuChart({ icuData }: { icuData: IcuData }) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
-  // const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
+  const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
 
   // const [selectedChartOrders, setSelectedChartOrders] = useState<
   //   IcuChartOrderJoined[]
@@ -53,11 +55,11 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     [icuData.icuChartOrderData, selectedChart?.icu_chart_id],
   )
 
-  // useEffect(() => {
-  //   if (selectedChartOrders.length > 0) {
-  //     setIsChartLoading(false)
-  //   }
-  // }, [selectedChart, selectedChartOrders.length, setIsChartLoading])
+  useEffect(() => {
+    if (selectedChart && selectedIo && selectedChartOrders.length > 0) {
+      setIsChartLoading(false)
+    }
+  }, [selectedChart, selectedChartOrders.length, selectedIo, setIsChartLoading])
 
   const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
 
@@ -65,9 +67,9 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     return <NoResult title="환자를 선택해주세요" className="h-icu-chart" />
   }
 
-  // if (isChartLoading) {
-  //   return <LargeLoaderCircle className="h-icu-chart" />
-  // }
+  if (isChartLoading) {
+    return <LargeLoaderCircle className="h-icu-chart" />
+  }
 
   if (!selectedIo) {
     return (
