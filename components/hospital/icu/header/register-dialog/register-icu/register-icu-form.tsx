@@ -104,7 +104,6 @@ export default function RegisterIcuForm({
     const { dx, cc, in_date, out_due_date, main_vet, sub_vet, group_list } =
       values
     setIsSubmitting(true)
-    setIsChartLoading(true)
 
     await registerIcuPatient(
       hosId,
