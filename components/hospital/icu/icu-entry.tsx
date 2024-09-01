@@ -3,43 +3,30 @@
 import IcuFooter from '@/components/hospital/icu/icu-footer'
 import IcuMain from '@/components/hospital/icu/main/icu-main'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
-import {
-  useIcuChartRealtime,
-  useIcuIoRealtime,
-  useIcuOrderRealtime,
-} from '@/hooks/use-icu-realtime'
-import { IcuData } from '@/types/icu'
-// import { useIcuRealTime } from '@/hooks/use-icu-realtime-subscription'
-// import type { IcuData } from '@/types/icu'
+import { useIcuRealtime } from '@/hooks/use-icu-realtime'
+import type { IcuData } from '@/types/icu'
 
 export default function IcuEntry({
   hosId,
   targetDate,
+  initialIcuData,
 }: {
   hosId: string
   targetDate: string
+  initialIcuData: IcuData
 }) {
-  const { data: icuIoData, isLoading: icuIoDataLoading } = useIcuIoRealtime(
-    hosId,
-    targetDate,
-  )
-  const { data: icuChartData, isLoading: icuChartDataLoading } =
-    useIcuChartRealtime(hosId, targetDate)
-  const { data: icuChartOrderData, isLoading: icuChartOrderDataLoading } =
-    useIcuOrderRealtime(hosId, targetDate)
-
-  console.log(icuIoData)
-
-  if (icuIoDataLoading || icuChartDataLoading || icuChartOrderDataLoading) {
-    return <div>Loading...</div>
-  }
+  const {
+    icuIoQuery: { data: icuIoData },
+    icuChartOrderQuery: { data: icuChartOrderData },
+    icuChartQuery: { data: icuChartData },
+  } = useIcuRealtime(hosId, targetDate, initialIcuData)
 
   return (
     <div className="flex">
       <IcuSidebar
-        icuIoData={icuIoData!}
-        // icuChartData={icuChartData!}
-        // vetsListData={icuData.vetsListData}
+        icuIoData={icuIoData}
+        icuChartData={icuChartData}
+        vetsListData={initialIcuData.vetsListData}
       />
 
       <div className="h-icu-chart w-full flex-col overflow-y-auto">
@@ -49,7 +36,7 @@ export default function IcuEntry({
               icuIoData,
               icuChartData,
               icuChartOrderData,
-              vetsListData: [],
+              vetsListData: initialIcuData.vetsListData,
             } as IcuData
           }
         />
