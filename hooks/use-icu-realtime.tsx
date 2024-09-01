@@ -23,28 +23,29 @@ export function useIcuRealtime(
     queryKey: ['icu_io_realtime', hosId, targetDate],
     queryFn: () => getIcuIo(hosId, targetDate),
     initialData: initialIcuData.icuIoData,
-    refetchInterval: 10000,
+    refetchInterval: 600000,
   })
 
   const icuChartQuery = useQuery({
     queryKey: ['icu_chart_realtime', hosId, targetDate],
     queryFn: () => getIcuChart(hosId, targetDate),
     initialData: initialIcuData.icuChartData,
-    refetchInterval: 10000,
+    refetchInterval: 600000,
   })
 
   const icuChartOrderQuery = useQuery({
     queryKey: ['icu_chart_order_realtime', hosId, targetDate],
     queryFn: () => getIcuOrder(hosId, targetDate),
     initialData: initialIcuData.icuChartOrderData,
-    refetchInterval: 10000,
+    refetchInterval: 600000,
   })
 
   const debouncedRevalidation = useDebouncedCallback(() => {
     console.log('icu_chart_order changed')
-    queryClient.invalidateQueries({
-      queryKey: ['icu_chart_order_realtime', hosId, targetDate],
-    })
+    // queryClient.invalidateQueries({
+    //   queryKey: ['icu_chart_order_realtime', hosId, targetDate],
+    // })
+    icuChartOrderQuery.refetch()
   }, 400)
 
   useEffect(() => {
@@ -96,9 +97,7 @@ export function useIcuRealtime(
           table: 'icu_chart_order',
           filter: `hos_id=eq.${hosId}`,
         },
-        () => {
-          debouncedRevalidation()
-        },
+        () => debouncedRevalidation(),
       )
       .subscribe()
 
@@ -107,7 +106,13 @@ export function useIcuRealtime(
       supabase.removeChannel(icuChartSubscription)
       supabase.removeChannel(icuOrderSubscription)
     }
-  }, [debouncedRevalidation, hosId, queryClient, targetDate])
+  }, [
+    debouncedRevalidation,
+    hosId,
+    icuChartOrderQuery,
+    queryClient,
+    targetDate,
+  ])
 
   return {
     icuIoQuery,
