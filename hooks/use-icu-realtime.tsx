@@ -20,27 +20,30 @@ export function useIcuRealtime(
   const queryClient = useQueryClient()
 
   const icuIoQuery = useQuery({
-    queryKey: [`icu_io_realtime_${hosId}_${targetDate}`],
+    queryKey: ['icu_io_realtime', hosId, targetDate],
     queryFn: () => getIcuIo(hosId, targetDate),
     initialData: initialIcuData.icuIoData,
+    refetchInterval: 10000,
   })
 
   const icuChartQuery = useQuery({
-    queryKey: [`icu_chart_realtime_${hosId}_${targetDate}`],
+    queryKey: ['icu_chart_realtime', hosId, targetDate],
     queryFn: () => getIcuChart(hosId, targetDate),
     initialData: initialIcuData.icuChartData,
+    refetchInterval: 10000,
   })
 
   const icuChartOrderQuery = useQuery({
-    queryKey: [`icu_chart_order_realtime_${hosId}_${targetDate}`],
+    queryKey: ['icu_chart_order_realtime', hosId, targetDate],
     queryFn: () => getIcuOrder(hosId, targetDate),
     initialData: initialIcuData.icuChartOrderData,
+    refetchInterval: 10000,
   })
 
-  const debouncedRevalidation = useDebouncedCallback((table: string) => {
-    console.log(`${table} changed`)
+  const debouncedRevalidation = useDebouncedCallback(() => {
+    console.log('icu_chart_order changed')
     queryClient.invalidateQueries({
-      queryKey: [`${table}_realtime_${hosId}_${targetDate}`],
+      queryKey: ['icu_chart_order_realtime', hosId, targetDate],
     })
   }, 400)
 
@@ -58,7 +61,7 @@ export function useIcuRealtime(
         () => {
           console.log(`icu_io changed`)
           queryClient.invalidateQueries({
-            queryKey: [`icu_io_realtime_${hosId}_${targetDate}`],
+            queryKey: ['icu_chart_realtime', hosId, targetDate],
           })
         },
       )
@@ -77,7 +80,7 @@ export function useIcuRealtime(
         () => {
           console.log(`icu_cahrt changed`)
           queryClient.invalidateQueries({
-            queryKey: [`icu_chart_realtime_${hosId}_${targetDate}`],
+            queryKey: ['icu_chart_realtime', hosId, targetDate],
           })
         },
       )
@@ -94,7 +97,7 @@ export function useIcuRealtime(
           filter: `hos_id=eq.${hosId}`,
         },
         () => {
-          debouncedRevalidation('icu_chart_order')
+          debouncedRevalidation()
         },
       )
       .subscribe()
