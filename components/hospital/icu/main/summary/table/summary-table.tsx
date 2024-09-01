@@ -9,11 +9,16 @@ import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import type { IcuData } from '@/types/icu'
+import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 import SummaryTableRow from './summary-table-row'
 
-export default function SummaryTable({ icuData }: { icuData: IcuData }) {
-  const { icuChartData, icuChartOrderData } = icuData
+export default function SummaryTable({
+  icuChartData,
+  icuChartOrderData,
+}: {
+  icuChartData: IcuChartJoined[]
+  icuChartOrderData: IcuChartOrderJoined[]
+}) {
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
 

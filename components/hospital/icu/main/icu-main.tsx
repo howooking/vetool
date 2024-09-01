@@ -27,10 +27,18 @@ export default function IcuMain({ icuData }: { icuData: IcuData }) {
 
   return (
     <>
-      {selectIcudMainView === 'summary' && <DynamicSummary icuData={icuData} />}
+      {selectIcudMainView === 'summary' && (
+        <DynamicSummary
+          icuChartData={icuData.icuChartData}
+          icuChartOrderData={icuData.icuChartOrderData}
+        />
+      )}
 
       {selectIcudMainView === 'tx-table' && (
-        <DynamicTxTable icuData={icuData} />
+        <DynamicTxTable
+          icuChartData={icuData.icuChartData}
+          icuChartOrderData={icuData.icuChartOrderData}
+        />
       )}
 
       {selectIcudMainView === 'chart' && <DynamicIcuChart icuData={icuData} />}

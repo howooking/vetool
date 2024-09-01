@@ -11,7 +11,7 @@ import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import { IcuData } from '@/types/icu'
+import { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 import { useCallback, useMemo } from 'react'
 import TxTableCell from './tx-table-cell'
 
@@ -35,8 +35,13 @@ const TODO_BACKGROUD_COLORS = [
   '#faf5ff',
   '#fdf2f8',
 ]
-export default function TxTable({ icuData }: { icuData: IcuData }) {
-  const { icuChartData, icuChartOrderData } = icuData
+export default function TxTable({
+  icuChartData,
+  icuChartOrderData,
+}: {
+  icuChartData: IcuChartJoined[]
+  icuChartOrderData: IcuChartOrderJoined[]
+}) {
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
 

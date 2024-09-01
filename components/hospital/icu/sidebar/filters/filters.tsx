@@ -10,12 +10,12 @@ export default function Filters({
   filters,
   setFilters,
   icuIoData,
-  // vetsListData,
+  vetsListData,
 }: {
   filters: Filters
   setFilters: Dispatch<SetStateAction<Filters>>
   icuIoData: IcuIoJoined[]
-  // vetsListData: IcuUserList[]
+  vetsListData: IcuUserList[]
 }) {
   const pathname = usePathname()
 
@@ -38,19 +38,19 @@ export default function Filters({
         />
       </div>
 
-      {/* <GroupFilter
+      <GroupFilter
         hosGroupList={icuIoData[0]?.hos_id.group_list || []}
         selectedGroup={filters.selectedGroup}
         setSelectedGroup={(group) =>
           setFilters({ ...filters, selectedGroup: group })
         }
-      /> */}
+      />
 
-      {/* <VetFilter
+      <VetFilter
         vetsListData={vetsListData}
         selectedVet={filters.selectedVet}
         setSelectedVet={(vet) => setFilters({ ...filters, selectedVet: vet })}
-      /> */}
+      />
     </div>
   )
 }
