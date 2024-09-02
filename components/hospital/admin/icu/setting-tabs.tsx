@@ -1,28 +1,33 @@
 'use client'
 
 import ChangeMemoName from '@/components/hospital/admin/icu/memo/change-memo-name'
-import ChangeDefaultOrders from '@/components/hospital/admin/icu/order/change-default-orders'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import type { HospitalIcuOrder } from '@/types/icu'
+import type { IcuChartBookmarkJoined } from '@/types/icu'
+import BookmarkSetting from './bookmark/bookmark-setting'
 
 export default function SettingTabs({
   memoNames,
-  hospitalOrder,
+  bookmarkCharts,
+  // hospitalOrder,
 }: {
   memoNames: string[]
-  hospitalOrder: HospitalIcuOrder
+  bookmarkCharts: IcuChartBookmarkJoined[]
+  // hospitalOrder: HospitalIcuOrder
 }) {
   return (
-    <Tabs defaultValue="defaultOrder">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="defaultOrder">기본차트 설정</TabsTrigger>
-        <TabsTrigger value="memo">메모이름 설정</TabsTrigger>
+    <Tabs defaultValue="bookmark">
+      <TabsList className="grid w-full grid-cols-3">
+        <TabsTrigger value="bookmark">즐겨찾기</TabsTrigger>
+        <TabsTrigger value="defaultOrder">기본차트</TabsTrigger>
+        <TabsTrigger value="memo">메모이름</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="defaultOrder">
-        <ChangeDefaultOrders hospitalOrder={hospitalOrder} />
+      <TabsContent value="bookmark">
+        <BookmarkSetting bookmarkCharts={bookmarkCharts} />
       </TabsContent>
-
+      <TabsContent value="defaultOrder">
+        {/* <ChangeDefaultOrders hospitalOrder={hospitalOrder} /> */}
+      </TabsContent>
       <TabsContent value="memo">
         <ChangeMemoName memoNames={memoNames} />
       </TabsContent>

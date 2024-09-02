@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { deleteOrder } from '@/lib/services/icu/create-new-order'
-import { deleteHospitalOrder } from '@/lib/services/icu/hospital-orders'
+// import { deleteHospitalOrder } from '@/lib/services/icu/hospital-orders'
 import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined } from '@/types/icu'
 import { LoaderCircle } from 'lucide-react'
@@ -34,25 +34,25 @@ export default function DeleteOrderAlertDialog({
   const { refresh } = useRouter()
 
   const handleDeleteOrderClick = async () => {
-    setIsDeleting(true)
+    // setIsDeleting(true)
 
-    if (isSettingMode) {
-      await deleteHospitalOrder(hos_id as string, {
-        hos_order_names: selectedChartOrder.icu_chart_order_name,
-        hos_order_comments: selectedChartOrder.icu_chart_order_comment ?? '',
-        hos_order_types: selectedChartOrder.icu_chart_order_type,
-      })
+    // if (isSettingMode) {
+    //   await deleteHospitalOrder(hos_id as string, {
+    //     hos_order_names: selectedChartOrder.icu_chart_order_name,
+    //     hos_order_comments: selectedChartOrder.icu_chart_order_comment ?? '',
+    //     hos_order_types: selectedChartOrder.icu_chart_order_type,
+    //   })
 
-      refresh()
-    } else {
-      await deleteOrder(selectedChartOrder.icu_chart_order_id)
-    }
+    //   refresh()
+    // } else {
+    //   await deleteOrder(selectedChartOrder.icu_chart_order_id)
+    // }
 
-    toast({
-      title: `${selectedChartOrder.icu_chart_order_name} 오더를 삭제하였습니다`,
-    })
-    toggleModal()
-    setIsDeleting(false)
+    // toast({
+    //   title: `${selectedChartOrder.icu_chart_order_name} 오더를 삭제하였습니다`,
+    // })
+    // toggleModal()
+    // setIsDeleting(false)
   }
 
   return (

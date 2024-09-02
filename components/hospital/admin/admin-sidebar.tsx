@@ -23,6 +23,11 @@ const ADMIN_SIDE_BAR_ITEMS = [
     icon: UserCheck,
   },
   {
+    name: '입원차트 설정',
+    path: 'icu-settings',
+    icon: Syringe,
+  },
+  {
     name: '데이터분석',
     path: 'statistics',
     icon: BarChart3,
@@ -41,11 +46,6 @@ const ADMIN_SIDE_BAR_ITEMS = [
     name: '검사설정',
     path: 'test-settings',
     icon: TestTubeDiagonal,
-  },
-  {
-    name: '입원차트 설정',
-    path: 'icu-settings',
-    icon: Syringe,
   },
 ]
 
