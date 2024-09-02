@@ -4,12 +4,18 @@ const SPECIAL_CHAR_REGEX = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]+/g
 
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { createClient } from '@/lib/supabase/server'
+import { getDateMonthsAgo } from '@/lib/utils'
 import { CopiedOrder, SearchedIcuIos } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
 
-export const searchIos = async (searchInput: string, hosId: string) => {
+export const searchIos = async (
+  searchInput: string,
+  hosId: string,
+  timeRange: string,
+  order: string,
+) => {
   const safeWords = searchInput
     .trim()
     .replace(SPECIAL_CHAR_REGEX, ' ')
@@ -39,11 +45,17 @@ export const searchIos = async (searchInput: string, hosId: string) => {
     queryBuilder = queryBuilder.ilike('icu_io_tags', `%${word}%`)
   })
 
+  if (timeRange !== 'all') {
+    const monthsAgo = getDateMonthsAgo(timeRange)
+
+    queryBuilder = queryBuilder.gte('out_date', monthsAgo)
+  }
+
   const { data: searchedIcuIoData, error: searchedIcuIoDataError } =
     await queryBuilder
       .match({ hos_id: hosId })
       .not('out_date', 'is', null)
-      .order('created_at', { ascending: false })
+      .order('out_date', { ascending: order === 'asc' })
       .returns<SearchedIcuIos[]>()
 
   if (searchedIcuIoDataError) {
