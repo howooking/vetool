@@ -55,13 +55,21 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     [icuData.icuChartOrderData, selectedChart?.icu_chart_id],
   )
 
+  const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
+
   useEffect(() => {
-    if (selectedChart && selectedIo && selectedChartOrders.length > 0) {
+    if (
+      (selectedChart && selectedChartOrders.length > 0) ||
+      (selectedChart && isFirstChart)
+    ) {
       setIsChartLoading(false)
     }
-  }, [selectedChart, selectedChartOrders.length, selectedIo, setIsChartLoading])
-
-  const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
+  }, [
+    isFirstChart,
+    selectedChart,
+    selectedChartOrders.length,
+    setIsChartLoading,
+  ])
 
   if (!selectedPatientId) {
     return <NoResult title="환자를 선택해주세요" className="h-icu-chart" />
