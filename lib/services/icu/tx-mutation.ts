@@ -46,7 +46,6 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
         notification_content: `${txLocalState?.txResult!} / ${txLocalState?.txComment}`,
         notification_time: txLocalState.time!,
         target_date: targetDate,
-        notification_time: txLocalState?.time!,
       })
 
     if (notificationError) {
