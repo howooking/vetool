@@ -1,0 +1,67 @@
+import type { SearchOptions } from '@/components/hospital/icu/main/search/icu-search-chart'
+import DateRagneSelect from '@/components/hospital/icu/main/search/sheet/date-range-select'
+import OrderSelect from '@/components/hospital/icu/main/search/sheet/order-select'
+import { Button } from '@/components/ui/button'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { COLORS } from '@/constants/common/colors'
+import { CalendarSearch } from 'lucide-react'
+import { Dispatch, SetStateAction, useState } from 'react'
+
+export default function SearchChartSheet({
+  searchOptions,
+  setSearchOptions,
+}: {
+  searchOptions: SearchOptions
+  setSearchOptions: Dispatch<SetStateAction<SearchOptions>>
+}) {
+  const { timeRange, order } = searchOptions
+
+  const [options, setOptions] = useState(searchOptions)
+
+  const handleOkButtonClick = () => {
+    setSearchOptions(options)
+  }
+
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <CalendarSearch
+          className="cursor-pointer"
+          size={18}
+          color={COLORS.primary}
+        />
+      </SheetTrigger>
+
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>검색 필터 설정</SheetTitle>
+          <SheetDescription>
+            기본 값은 최근 1개월 및 최신순 정렬입니다
+          </SheetDescription>
+        </SheetHeader>
+
+        <div className="grid gap-4 py-4">
+          <DateRagneSelect timeRange={timeRange} setOptions={setOptions} />
+          <OrderSelect order={order} setOptions={setOptions} />
+        </div>
+
+        <SheetFooter>
+          <SheetClose asChild>
+            <Button type="button" onClick={handleOkButtonClick}>
+              확인
+            </Button>
+          </SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  )
+}
