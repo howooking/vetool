@@ -1,10 +1,17 @@
 'use client'
 
-import ChangeMemoName from '@/components/hospital/admin/icu/change-memo-name'
-import SettingOrder from '@/components/hospital/admin/icu/setting-order'
+import ChangeMemoName from '@/components/hospital/admin/icu/memo/change-memo-name'
+import ChangeHosOrder from '@/components/hospital/admin/icu/order/change-hos-order'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import type { HospitalIcuOrder } from '@/types/icu'
 
-export default function SettingTabs({ memoNames }: { memoNames: string[] }) {
+export default function SettingTabs({
+  memoNames,
+  hospitalOrder,
+}: {
+  memoNames: string[]
+  hospitalOrder: HospitalIcuOrder
+}) {
   return (
     <Tabs defaultValue="order">
       <TabsList className="grid w-full grid-cols-2">
@@ -13,7 +20,7 @@ export default function SettingTabs({ memoNames }: { memoNames: string[] }) {
       </TabsList>
 
       <TabsContent value="order">
-        <SettingOrder />
+        <ChangeHosOrder hospitalOrder={hospitalOrder} />
       </TabsContent>
 
       <TabsContent value="memo">

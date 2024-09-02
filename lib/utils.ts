@@ -184,3 +184,15 @@ export const isDaysBehind = (dateString: string, difference: number) => {
 
   return differenceDays >= difference
 }
+
+export const getDateMonthsAgo = (months: string) => {
+  const now = new Date()
+
+  return formatTimestamp(
+    new Date(
+      now.getFullYear(),
+      now.getMonth() - Number(months),
+      now.getDate(),
+    ).toString(),
+  )
+}

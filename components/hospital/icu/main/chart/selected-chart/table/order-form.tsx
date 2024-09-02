@@ -28,11 +28,13 @@ import {
   TX_ORDER_TIME_INTERVALS,
 } from '@/constants/hospital/icu/chart/time'
 import { upsertOrder } from '@/lib/services/icu/create-new-order'
+import { updateHospitalOrder } from '@/lib/services/icu/hospital-orders'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
+import { IcuChartOrderJoined } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -40,12 +42,16 @@ import { z } from 'zod'
 export default function OrderForm({
   icuIoId,
   icuChartId,
+  isSettingMode,
 }: {
-  icuIoId: string
-  icuChartId: string
+  icuIoId?: string
+  icuChartId?: string
+  isSettingMode?: boolean
 }) {
   const { hos_id } = useParams()
-  const { toggleModal, selectedChartOrder, isEditMode } = useCreateOrderStore()
+  const { refresh } = useRouter()
+  const { toggleModal, selectedChartOrder, isEditMode, orderIndex } =
+    useCreateOrderStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
   // 왜 undefined로 안하고 "undefined"로 했냐면, 값을 undefined로 만들었을 때 ui가 초기화되지 않음
   const [startTime, setStartTime] = useState<string>('undefined')
@@ -81,25 +87,34 @@ export default function OrderForm({
   const handleSubmit = async (values: z.infer<typeof GroupCheckFormSchema>) => {
     setIsSubmitting(true)
 
-    await upsertOrder(
-      icuChartId,
-      icuIoId,
-      selectedChartOrder.icu_chart_order_id,
-      orderTime,
-      hos_id as string,
-      {
-        icu_chart_order_type: values.icu_chart_order_type,
-        icu_chart_order_name: values.icu_chart_order_name.trim(),
-        icu_chart_order_comment: values.icu_chart_order_comment ?? null,
-      },
-    )
+    if (isSettingMode) {
+      await updateHospitalOrder(hos_id as string, orderIndex, {
+        hos_order_names: values.icu_chart_order_name.trim(),
+        hos_order_comments: values.icu_chart_order_comment ?? '',
+        hos_order_types: values.icu_chart_order_type,
+      })
+
+      refresh()
+    } else {
+      await upsertOrder(
+        icuChartId!,
+        icuIoId!,
+        selectedChartOrder.icu_chart_order_id!,
+        orderTime,
+        hos_id as string,
+        {
+          icu_chart_order_type: values.icu_chart_order_type,
+          icu_chart_order_name: values.icu_chart_order_name.trim(),
+          icu_chart_order_comment: values.icu_chart_order_comment ?? null,
+        },
+      )
+    }
 
     toast({
       title: `${values.icu_chart_order_name} 오더를 추가하였습니다`,
     })
-
-    setIsSubmitting(false)
     toggleModal()
+    setIsSubmitting(false)
   }
 
   const handleTimeToggle = (index: number) => () => {
@@ -108,6 +123,7 @@ export default function OrderForm({
       newOrderTime[index] = newOrderTime[index] === '1' ? '0' : '1'
       return newOrderTime
     })
+
     setStartTime('undefined')
     setTimeTerm('undefined')
   }
@@ -117,9 +133,11 @@ export default function OrderForm({
       const start = Number(startTime)
       const term = Number(timeTerm)
       const newOrderTime = Array(24).fill('0')
+
       for (let i = start - 1; i < 24; i += term) {
         newOrderTime[i] = '1'
       }
+
       setOrderTime(newOrderTime)
     }
   }, [form, startTime, timeTerm])
@@ -193,100 +211,105 @@ export default function OrderForm({
           )}
         />
 
-        <div className="flex flex-col gap-2">
-          <span className="text-sm font-semibold">오더 시간 설정</span>
-          <div className="flex justify-between">
-            <div className="flex gap-2">
-              <Select onValueChange={setStartTime} value={startTime}>
-                <SelectTrigger className="h-9 w-36 text-xs">
-                  <SelectValue placeholder="시작 시간" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {['undefined', ...TIMES].map((time) => (
-                      <SelectItem
-                        value={time.toString()}
-                        key={time}
-                        className="text-xs"
-                      >
-                        {time === 'undefined' ? '시작 시간' : `${time}시 시작`}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-
-              <Select
-                onValueChange={setTimeTerm}
-                value={timeTerm}
-                disabled={startTime === 'undefined'}
-              >
-                <SelectTrigger className="h-9 w-36 text-xs">
-                  <SelectValue placeholder="시간 간격" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {['undefined', ...TX_ORDER_TIME_INTERVALS].map(
-                      (interval) => (
+        {!isSettingMode && (
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-semibold">오더 시간 설정</span>
+            <div className="flex justify-between">
+              <div className="flex gap-2">
+                <Select onValueChange={setStartTime} value={startTime}>
+                  <SelectTrigger className="h-9 w-36 text-xs">
+                    <SelectValue placeholder="시작 시간" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {['undefined', ...TIMES].map((time) => (
                         <SelectItem
-                          value={interval.toString()}
-                          key={interval}
+                          value={time.toString()}
+                          key={time}
                           className="text-xs"
                         >
-                          {interval === 'undefined'
-                            ? '시간 간격'
-                            : `${interval}시간 간격`}
+                          {time === 'undefined'
+                            ? '시작 시간'
+                            : `${time}시 시작`}
                         </SelectItem>
-                      ),
-                    )}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Select
+                  onValueChange={setTimeTerm}
+                  value={timeTerm}
+                  disabled={startTime === 'undefined'}
+                >
+                  <SelectTrigger className="h-9 w-36 text-xs">
+                    <SelectValue placeholder="시간 간격" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {['undefined', ...TX_ORDER_TIME_INTERVALS].map(
+                        (interval) => (
+                          <SelectItem
+                            value={interval.toString()}
+                            key={interval}
+                            className="text-xs"
+                          >
+                            {interval === 'undefined'
+                              ? '시간 간격'
+                              : `${interval}시간 간격`}
+                          </SelectItem>
+                        ),
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleSelectAllClick}
+                >
+                  전체선택
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancelAllClick}
+                >
+                  전체취소
+                </Button>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleSelectAllClick}
-              >
-                전체선택
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleCancelAllClick}
-              >
-                전체취소
-              </Button>
+            <div className="mt-2 flex w-full justify-between">
+              {TIMES.map((time, index) => (
+                <Button
+                  tabIndex={-1}
+                  type="button"
+                  variant="outline"
+                  key={time}
+                  className="h-6 w-7 px-3 py-2 text-xs"
+                  style={{
+                    background:
+                      orderTime[index] === '1'
+                        ? CELL_COLORS.NOT_DONE
+                        : 'transparent',
+                  }}
+                  onClick={handleTimeToggle(index)}
+                >
+                  {time}
+                </Button>
+              ))}
             </div>
           </div>
-          <div className="mt-2 flex w-full justify-between">
-            {TIMES.map((time, index) => (
-              <Button
-                tabIndex={-1}
-                type="button"
-                variant="outline"
-                key={time}
-                className="h-6 w-7 px-3 py-2 text-xs"
-                style={{
-                  background:
-                    orderTime[index] === '1'
-                      ? CELL_COLORS.NOT_DONE
-                      : 'transparent',
-                }}
-                onClick={handleTimeToggle(index)}
-              >
-                {time}
-              </Button>
-            ))}
-          </div>
-        </div>
+        )}
 
         <DialogFooter className="ml-auto w-full">
           {isEditMode && (
             <DeleteOrderAlertDialog
-              selectedChartOrder={selectedChartOrder}
+              selectedChartOrder={selectedChartOrder as IcuChartOrderJoined}
               toggleModal={toggleModal}
+              isSettingMode={isSettingMode}
             />
           )}
 

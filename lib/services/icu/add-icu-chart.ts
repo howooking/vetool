@@ -1,9 +1,9 @@
 'use server'
 
-import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart/order'
 import { createClient } from '@/lib/supabase/server'
 import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
+import { getHospitalOrder } from '@/lib/services/icu/hospital-orders'
 
 export const hasPrevChart = async (
   targetDate: string,
@@ -127,22 +127,23 @@ export const registerDefaultChart = async (
   ioId: string,
 ) => {
   const supabase = createClient()
+  const orderData = await getHospitalOrder(hosId)
 
-  DEFAULT_ICU_ORDER_NAME.forEach(async (order) => {
+  for (let index = 0; index < orderData.hos_order_names.length; index += 1) {
     const { error: icuChartOrderError } = await supabase
       .from('icu_chart_order')
       .insert({
         hos_id: hosId,
-        icu_chart_order_type: order.dataType,
+        icu_chart_order_type: orderData.hos_order_types[index],
         icu_chart_id: chartId,
         icu_io_id: ioId,
-        icu_chart_order_name: order.orderName,
-        icu_chart_order_comment: order.orderComment,
+        icu_chart_order_name: orderData.hos_order_names[index],
+        icu_chart_order_comment: orderData.hos_order_comments[index],
       })
 
     if (icuChartOrderError) {
       console.log(icuChartOrderError)
       redirect(`/error?message=${icuChartOrderError.message}`)
     }
-  })
+  }
 }
