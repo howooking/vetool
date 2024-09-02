@@ -29,7 +29,7 @@ export const upsertOrder = async (
     icu_chart_order_type: string
   },
 ) => {
-  const { error: upsertOrderrError } = await supabase
+  const { error: upsertOrderError } = await supabase
     .from('icu_chart_order')
     .upsert({
       icu_chart_order_id: icuChartOrderId,
@@ -40,8 +40,8 @@ export const upsertOrder = async (
       ...order,
     })
 
-  if (upsertOrderrError) {
-    console.log(upsertOrderrError)
-    redirect(`/error?message=${upsertOrderrError.message}`)
+  if (upsertOrderError) {
+    console.log(upsertOrderError)
+    redirect(`/error?message=${upsertOrderError.message}`)
   }
 }
