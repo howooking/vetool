@@ -1,5 +1,5 @@
 import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/table/delete-order-alert-dialog'
-import { GroupCheckFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/order-schema'
+import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/order-schema'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import {
@@ -60,8 +60,8 @@ export default function OrderForm({
     selectedChartOrder.icu_chart_order_time || new Array(24).fill('0'),
   )
 
-  const form = useForm<z.infer<typeof GroupCheckFormSchema>>({
-    resolver: zodResolver(GroupCheckFormSchema),
+  const form = useForm<z.infer<typeof orderSchema>>({
+    resolver: zodResolver(orderSchema),
     defaultValues: {
       icu_chart_order_type:
         selectedChartOrder.icu_chart_order_type ?? undefined,
@@ -84,7 +84,7 @@ export default function OrderForm({
     setOrderTime(Array(24).fill('0'))
   }
 
-  const handleSubmit = async (values: z.infer<typeof GroupCheckFormSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof orderSchema>) => {
     setIsSubmitting(true)
 
     if (isSettingMode) {
@@ -93,7 +93,6 @@ export default function OrderForm({
         hos_order_comments: values.icu_chart_order_comment ?? '',
         hos_order_types: values.icu_chart_order_type,
       })
-
       refresh()
     } else {
       await upsertOrder(

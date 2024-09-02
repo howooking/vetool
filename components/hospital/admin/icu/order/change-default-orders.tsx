@@ -3,7 +3,7 @@ import OrderTableHeader from '@/components/hospital/admin/icu/order/order-table-
 import { Table } from '@/components/ui/table'
 import { HospitalIcuOrder } from '@/types/icu'
 
-export default function ChangeHosOrder({
+export default function ChangeDefaultOrders({
   hospitalOrder,
 }: {
   hospitalOrder: HospitalIcuOrder

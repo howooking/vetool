@@ -1,11 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
@@ -50,38 +44,25 @@ export default function OrderTableBody({
       {sortedOrders.map((sortedOrder, index) => (
         <TableRow className={cn('divide-x')} key={sortedOrder.name + index}>
           <TableCell
-            className={cn('w-[320px] p-0')}
+            className={cn('p-0')}
             style={{
               background: DEFAULT_ICU_ORDER_TYPE.find(
                 (order) => order.value === sortedOrder.type,
               )?.color,
             }}
           >
-            <TooltipProvider delayDuration={20}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    onClick={() => handleEditDialogOpen(index)}
-                    className={cn(
-                      'flex w-[320px] justify-between rounded-none bg-transparent px-2',
-                    )}
-                  >
-                    <span className="truncate">{sortedOrder.name}</span>
-                    <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
-                      {sortedOrder.comment}
-                    </span>
-                  </Button>
-                </TooltipTrigger>
-
-                <TooltipContent side="right">
-                  <div className="flex gap-2">
-                    <span className="font-bold">{sortedOrder.name}</span>
-                    <span className="text-xs">{sortedOrder.comment}</span>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Button
+              variant="ghost"
+              onClick={() => handleEditDialogOpen(index)}
+              className={cn(
+                'flex w-full justify-between rounded-none bg-transparent px-2',
+              )}
+            >
+              <span className="truncate">{sortedOrder.name}</span>
+              <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
+                {sortedOrder.comment}
+              </span>
+            </Button>
           </TableCell>
         </TableRow>
       ))}
