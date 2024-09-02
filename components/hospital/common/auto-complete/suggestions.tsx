@@ -14,7 +14,7 @@ export default function Suggestions({
 }) {
   const handleSuggestionClick = useCallback(
     (suggestion: Keyword) => {
-      insertSuggestion(suggestion.keyword)
+      insertSuggestion(suggestion.mainKeyword)
     },
     [insertSuggestion],
   )
