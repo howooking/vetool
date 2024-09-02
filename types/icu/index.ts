@@ -166,3 +166,8 @@ export type IcuNotificationRouteJoined = IcuChartOrder & {
 export type IcuNotificationJoined = IcuNotification & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'gender' | 'patient_id'>
 }
+
+export type HospitalIcuOrder = Pick<
+  Hospital,
+  'hos_order_names' | 'hos_order_comments' | 'hos_order_types'
+>
