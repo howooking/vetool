@@ -62,8 +62,8 @@ export default function OrderForm({
     orderColorJson[selectedChartOrder.icu_chart_order_type!],
   )
 
-  const form = useForm<z.infer<typeof GroupCheckFormSchema>>({
-    resolver: zodResolver(GroupCheckFormSchema),
+  const form = useForm<z.infer<typeof orderSchema>>({
+    resolver: zodResolver(orderSchema),
     defaultValues: {
       icu_chart_order_type:
         selectedChartOrder.icu_chart_order_type ?? undefined,
@@ -89,7 +89,6 @@ export default function OrderForm({
         default_chart_order_comment: values.icu_chart_order_comment ?? '',
         default_chart_order_type: values.icu_chart_order_type,
       })
-
       refresh()
     } else {
       await upsertOrder(

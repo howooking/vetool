@@ -1,11 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
@@ -51,7 +45,7 @@ export default function OrderTableBody({
       {sortedOrders.map((sortedOrder) => (
         <TableRow className={cn('divide-x')} key={sortedOrder.default_chart_id}>
           <TableCell
-            className={cn('w-[320px] p-0')}
+            className={cn('p-0')}
             style={{
               background: orderColorJson[sortedOrder.default_chart_order_type],
             }}

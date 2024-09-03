@@ -35,21 +35,22 @@ export default function DeleteOrderAlertDialog({
   const { defaultChartId } = useCreateOrderStore()
 
   const handleDeleteOrderClick = async () => {
-    setIsDeleting(true)
+    // setIsDeleting(true)
+
 
     if (isSettingMode) {
       await deleteDefaultChartOrder(defaultChartId)
 
-      refresh()
-    } else {
-      await deleteOrder(selectedChartOrder.icu_chart_order_id)
-    }
+    //   refresh()
+    // } else {
+    //   await deleteOrder(selectedChartOrder.icu_chart_order_id)
+    // }
 
-    toast({
-      title: `${selectedChartOrder.icu_chart_order_name} 오더를 삭제하였습니다`,
-    })
-    toggleModal()
-    setIsDeleting(false)
+    // toast({
+    //   title: `${selectedChartOrder.icu_chart_order_name} 오더를 삭제하였습니다`,
+    // })
+    // toggleModal()
+    // setIsDeleting(false)
   }
 
   return (

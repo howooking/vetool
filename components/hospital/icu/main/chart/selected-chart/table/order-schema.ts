@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const GroupCheckFormSchema = z.object({
+export const orderSchema = z.object({
   icu_chart_order_type: z.string({
     message: '오더 타입을 선택해주세요',
   }),

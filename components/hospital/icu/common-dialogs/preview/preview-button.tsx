@@ -8,7 +8,7 @@ import { useState } from 'react'
 export default function PreviewButton({ chartId }: { chartId: string }) {
   const { setCopiedOrders } = useCopiedChartStore()
   const { setPreviewModalOpen } = useOrderPreviewStore()
-  const [isPreviwing, setIsPreviewing] = useState(false)
+  const [isPreviewing, setIsPreviewing] = useState(false)
 
   const handleOpenPreviewDialog = async () => {
     setIsPreviewing(true)
@@ -25,10 +25,10 @@ export default function PreviewButton({ chartId }: { chartId: string }) {
       size="icon"
       variant="ghost"
       onClick={handleOpenPreviewDialog}
-      disabled={isPreviwing}
+      disabled={isPreviewing}
       className="mx-auto flex items-center justify-center"
     >
-      {isPreviwing ? (
+      {isPreviewing ? (
         <LoaderCircle size={18} className="animate-spin" />
       ) : (
         <Eye size={18} />

@@ -1,6 +1,11 @@
 import { create } from 'zustand'
 
-export type IcuMainViewEnum = 'summary' | 'chart' | 'search' | 'tx-table'
+export type IcuMainViewEnum =
+  | 'summary'
+  | 'chart'
+  | 'search'
+  | 'tx-table'
+  | 'bookmark'
 
 type IcuSelectedMainViewState = {
   selectIcudMainView: IcuMainViewEnum

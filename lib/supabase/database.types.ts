@@ -164,7 +164,6 @@ export type Database = {
           created_at: string
           hos_id: string
           icu_chart_id: string
-          updated_at: string | null
         }
         Insert: {
           bookmark_comment?: string | null
@@ -173,7 +172,6 @@ export type Database = {
           created_at?: string
           hos_id: string
           icu_chart_id: string
-          updated_at?: string | null
         }
         Update: {
           bookmark_comment?: string | null
@@ -182,7 +180,6 @@ export type Database = {
           created_at?: string
           hos_id?: string
           icu_chart_id?: string
-          updated_at?: string | null
         }
         Relationships: [
           {
@@ -1154,6 +1151,15 @@ export type Database = {
         Returns: undefined
       }
       upsert_chart_bookmark: {
+        Args: {
+          icu_chart_id_input: string
+          bookmark_name_input: string
+          bookmark_comment_input: string
+          hos_id_input: string
+        }
+        Returns: undefined
+      }
+      upsert_icu_bookmark: {
         Args: {
           icu_chart_id_input: string
           bookmark_name_input: string
