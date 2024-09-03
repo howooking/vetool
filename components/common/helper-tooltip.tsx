@@ -17,7 +17,7 @@ export default function HelperTooltip({
     <TooltipProvider delayDuration={70}>
       <Tooltip>
         <TooltipTrigger asChild className={className}>
-          <CircleHelp className="mb-1 cursor-pointer text-primary" size={18} />
+          <CircleHelp className="cursor-pointer text-primary" size={18} />
         </TooltipTrigger>
         <TooltipContent>
           <p>{children}</p>

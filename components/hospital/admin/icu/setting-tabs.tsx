@@ -1,15 +1,16 @@
 'use client'
 
 import ChangeMemoName from '@/components/hospital/admin/icu/memo/change-memo-name'
+import ChangeDefaultOrder from '@/components/hospital/admin/icu/order/change-default-order'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import type { IcuChartBookmarkJoined } from '@/types/icu'
+import type { IcuDefaultChartJoined } from '@/types/icu'
 
 export default function SettingTabs({
   memoNames,
-  // hospitalOrder,
+  defaultChartOrders,
 }: {
   memoNames: string[]
-  // hospitalOrder: HospitalIcuOrder
+  defaultChartOrders: IcuDefaultChartJoined[]
 }) {
   return (
     <Tabs defaultValue="bookmark">
@@ -18,8 +19,8 @@ export default function SettingTabs({
         <TabsTrigger value="memo">메모이름</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="defaultOrder">
-        {/* <ChangeDefaultOrders hospitalOrder={hospitalOrder} /> */}
+      <TabsContent value="order">
+        <ChangeDefaultOrder defaultChartOrders={defaultChartOrders} />
       </TabsContent>
       <TabsContent value="memo">
         <ChangeMemoName memoNames={memoNames} />
