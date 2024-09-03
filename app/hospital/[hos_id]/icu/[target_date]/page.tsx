@@ -12,6 +12,7 @@ export default async function IcuPage({
     params.hos_id as string,
     params.target_date as string,
   )
+
   return (
     <TanstackQueryProvider>
       <IcuEntry

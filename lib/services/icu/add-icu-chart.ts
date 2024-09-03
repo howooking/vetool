@@ -3,7 +3,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
-import { getHospitalOrder } from '@/lib/services/icu/hospital-orders'
 
 export const hasPrevChart = async (
   targetDate: string,
@@ -127,23 +126,35 @@ export const registerDefaultChart = async (
   ioId: string,
 ) => {
   const supabase = createClient()
-  const orderData = await getHospitalOrder(hosId)
 
-  for (let index = 0; index < orderData.hos_order_names.length; index += 1) {
+  const { data: defaultChartOrderData, error: defaultChartOrderError } =
+    await supabase
+      .from('icu_default_chart')
+      .select(
+        'default_chart_order_name, default_chart_order_comment, default_chart_order_type',
+      )
+      .match({ hos_id: hosId })
+
+  if (defaultChartOrderError) {
+    console.log(defaultChartOrderError)
+    redirect(`/error?message=${defaultChartOrderError.message}`)
+  }
+
+  defaultChartOrderData.forEach(async (order) => {
     const { error: icuChartOrderError } = await supabase
       .from('icu_chart_order')
       .insert({
         hos_id: hosId,
-        icu_chart_order_type: orderData.hos_order_types[index],
         icu_chart_id: chartId,
         icu_io_id: ioId,
-        icu_chart_order_name: orderData.hos_order_names[index],
-        icu_chart_order_comment: orderData.hos_order_comments[index],
+        icu_chart_order_name: order.default_chart_order_name,
+        icu_chart_order_comment: order.default_chart_order_comment,
+        icu_chart_order_type: order.default_chart_order_type,
       })
 
     if (icuChartOrderError) {
       console.log(icuChartOrderError)
       redirect(`/error?message=${icuChartOrderError.message}`)
     }
-  }
+  })
 }

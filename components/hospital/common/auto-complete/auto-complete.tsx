@@ -1,6 +1,7 @@
 'use client'
 
 import HelperTooltip from '@/components/common/helper-tooltip'
+import Suggestions from '@/components/hospital/common/auto-complete/suggestions'
 import { Input } from '@/components/ui/input'
 import { useOutsideClick } from '@/hooks/use-outside-click'
 import { useKeywordTrieStore } from '@/lib/store/hospital/keyword-trie'
@@ -15,7 +16,6 @@ import {
   useState,
 } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
-import Suggestions from './suggestions'
 
 const getWordAtCursor = (keywords: string, position: number) => {
   const leftPart = keywords.slice(0, position).split(/,\s*/)
@@ -129,8 +129,10 @@ export default function Autocomplete({
         setSuggestions([])
         break
       case 'Enter':
-        e.preventDefault()
-        insertSuggestion(suggestions[selectedIndex].keyword)
+        setTimeout(() => {
+          e.preventDefault()
+          insertSuggestion(suggestions[selectedIndex].mainKeyword)
+        }, 0)
         break
     }
   }

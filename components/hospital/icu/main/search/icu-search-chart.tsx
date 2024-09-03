@@ -2,23 +2,33 @@
 
 import HelperTooltip from '@/components/common/helper-tooltip'
 import SearchChartTable from '@/components/hospital/icu/main/search/search-chart-table'
-import SearchIoSheet from '@/components/hospital/icu/main/search/search-io-sheet'
+import SearchChartSheet from '@/components/hospital/icu/main/search/sheet/search-chart-sheet'
+import SearchTypeRadio from '@/components/hospital/icu/main/search/sheet/search-type-radio'
 import { Input } from '@/components/ui/input'
 import { searchIos } from '@/lib/services/icu/search-charts'
+import { useKeywordTrieStore } from '@/lib/store/hospital/keyword-trie'
 import type { SearchedIcuIos } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
+export type SearchOptions = {
+  timeRange: string
+  order: 'desc' | 'asc'
+  searchType: 'simple' | 'keyword'
+}
+
 export default function IcuSearchChart() {
   const { hos_id } = useParams()
+  const { trie } = useKeywordTrieStore()
 
   const [searchInput, setSearchInput] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [searchedIcuIos, setSearchedIcuIos] = useState<SearchedIcuIos[]>([])
-  const [searchOptions, setSearchOptions] = useState({
+  const [searchOptions, setSearchOptions] = useState<SearchOptions>({
     timeRange: '1',
     order: 'desc',
+    searchType: 'keyword',
   })
 
   const performSearch = useCallback(async () => {
@@ -43,27 +53,36 @@ export default function IcuSearchChart() {
   }, [searchInput, searchOptions, debouncedSearch])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value.trim())
+    const value = e.target.value.trim()
+
+    if (searchOptions.searchType === 'keyword') {
+      const result = trie
+        ?.search(value)
+        .sort((a, b) => a.keyword.length - b.keyword.length)[0]
+
+      setSearchInput(result?.searchKeyword ?? '')
+    } else {
+      setSearchInput(value)
+    }
   }
 
   return (
     <div className="flex flex-col gap-2 p-2">
-      <div className="relative">
+      <div className="flex items-center gap-4">
         <Input
           placeholder="환자명, 종(canine, feline), 품종(영어), DX, CC, 상위 수의학 키워드 검색"
           onChange={handleInputChange}
           id="search-chart"
           autoComplete="off"
+          className="w-1/2"
         />
 
-        <SearchIoSheet
+        <SearchTypeRadio setOptions={setSearchOptions} />
+        <HelperTooltip>상위 키워드 검색 가능 내용</HelperTooltip>
+        <SearchChartSheet
           searchOptions={searchOptions}
           setSearchOptions={setSearchOptions}
         />
-
-        <HelperTooltip className="absolute right-2 top-2">
-          상위 키워드 검색 가능 내용
-        </HelperTooltip>
       </div>
 
       <SearchChartTable
