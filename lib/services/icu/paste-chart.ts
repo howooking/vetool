@@ -30,9 +30,10 @@ const pasteOrders = async (
     }
   })
 }
+
 export const pasteChart = async (
   patientId: string,
-  copiedChartOrder: CopiedOrder[],
+  copiedOrders: CopiedOrder[],
   targetDate: string,
 ) => {
   const { data: returningData, error: returningDataError } = await supabase
@@ -65,7 +66,7 @@ export const pasteChart = async (
 
   // 첫 차트인 경우 : chart 복사할 필요가 없고 order만 복사
   if (target_date === targetDate) {
-    await pasteOrders(copiedChartOrder, icu_chart_id, icu_io_id)
+    await pasteOrders(copiedOrders, icu_chart_id, icu_io_id)
   }
 
   // 첫차트가 아닌 경우 : 첫차트의 chart data와 order 모두 복사
@@ -94,10 +95,6 @@ export const pasteChart = async (
       redirect(`/error?message=${insertingNewChartError.message}`)
     }
 
-    await pasteOrders(
-      copiedChartOrder,
-      returningIcuChartId.icu_chart_id,
-      icu_io_id,
-    )
+    await pasteOrders(copiedOrders, returningIcuChartId.icu_chart_id, icu_io_id)
   }
 }

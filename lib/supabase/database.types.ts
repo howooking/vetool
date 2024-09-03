@@ -9,166 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      drug_doses: {
-        Row: {
-          bw_unit: string
-          created_at: string
-          cri_unit: string | null
-          default_dose: string
-          description: string | null
-          does_id: string
-          dose_unit: string
-          drug_id: string | null
-          max_dose: string | null
-          min_dose: string | null
-          route: string
-          species: string
-        }
-        Insert: {
-          bw_unit?: string
-          created_at?: string
-          cri_unit?: string | null
-          default_dose?: string
-          description?: string | null
-          does_id?: string
-          dose_unit?: string
-          drug_id?: string | null
-          max_dose?: string | null
-          min_dose?: string | null
-          route?: string
-          species?: string
-        }
-        Update: {
-          bw_unit?: string
-          created_at?: string
-          cri_unit?: string | null
-          default_dose?: string
-          description?: string | null
-          does_id?: string
-          dose_unit?: string
-          drug_id?: string | null
-          max_dose?: string | null
-          min_dose?: string | null
-          route?: string
-          species?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "drug_doses_drug_id_fkey"
-            columns: ["drug_id"]
-            isOneToOne: false
-            referencedRelation: "drugs"
-            referencedColumns: ["drug_id"]
-          },
-        ]
-      }
-      drug_products: {
-        Row: {
-          company: string | null
-          created_at: string
-          description: string | null
-          drug_id: string | null
-          drug_product_id: string
-          hos_id: string | null
-          mass_unit: string
-          name: string
-          price: string | null
-          tag: string | null
-          type: string
-          unit: string
-          volume: string | null
-        }
-        Insert: {
-          company?: string | null
-          created_at?: string
-          description?: string | null
-          drug_id?: string | null
-          drug_product_id?: string
-          hos_id?: string | null
-          mass_unit?: string
-          name?: string
-          price?: string | null
-          tag?: string | null
-          type?: string
-          unit?: string
-          volume?: string | null
-        }
-        Update: {
-          company?: string | null
-          created_at?: string
-          description?: string | null
-          drug_id?: string | null
-          drug_product_id?: string
-          hos_id?: string | null
-          mass_unit?: string
-          name?: string
-          price?: string | null
-          tag?: string | null
-          type?: string
-          unit?: string
-          volume?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "drug_products_drug_id_fkey"
-            columns: ["drug_id"]
-            isOneToOne: false
-            referencedRelation: "drugs"
-            referencedColumns: ["drug_id"]
-          },
-          {
-            foreignKeyName: "drug_products_hos_id_fkey"
-            columns: ["hos_id"]
-            isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
-          },
-        ]
-      }
-      drugs: {
-        Row: {
-          classification: string | null
-          created_at: string
-          description: string | null
-          drug_id: string
-          hos_id: string | null
-          indication: string | null
-          name: string | null
-          side_effect: string | null
-          tag: string | null
-        }
-        Insert: {
-          classification?: string | null
-          created_at?: string
-          description?: string | null
-          drug_id?: string
-          hos_id?: string | null
-          indication?: string | null
-          name?: string | null
-          side_effect?: string | null
-          tag?: string | null
-        }
-        Update: {
-          classification?: string | null
-          created_at?: string
-          description?: string | null
-          drug_id?: string
-          hos_id?: string | null
-          indication?: string | null
-          name?: string | null
-          side_effect?: string | null
-          tag?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "drugs_hos_id_fkey"
-            columns: ["hos_id"]
-            isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
-          },
-        ]
-      }
       hospitals: {
         Row: {
           business_number: string
@@ -178,12 +18,10 @@ export type Database = {
           group_list: string[]
           hos_id: string
           icu_memo_names: string[]
-          icu_order_comment: string[]
-          icu_order_name: string[]
-          icu_order_type: string[]
           is_personal: boolean
           master_user_id: string
           name: string
+          order_color: Json | null
           plan: string
         }
         Insert: {
@@ -194,12 +32,10 @@ export type Database = {
           group_list?: string[]
           hos_id?: string
           icu_memo_names?: string[]
-          icu_order_comment?: string[]
-          icu_order_name?: string[]
-          icu_order_type?: string[]
           is_personal?: boolean
           master_user_id: string
           name: string
+          order_color?: Json | null
           plan?: string
         }
         Update: {
@@ -210,12 +46,10 @@ export type Database = {
           group_list?: string[]
           hos_id?: string
           icu_memo_names?: string[]
-          icu_order_comment?: string[]
-          icu_order_name?: string[]
-          icu_order_type?: string[]
           is_personal?: boolean
           master_user_id?: string
           name?: string
+          order_color?: Json | null
           plan?: string
         }
         Relationships: [
@@ -722,6 +556,41 @@ export type Database = {
           },
         ]
       }
+      icu_default_chart: {
+        Row: {
+          created_at: string
+          default_chart_id: string
+          default_chart_order_comment: string
+          default_chart_order_name: string
+          default_chart_order_type: string
+          hos_id: string
+        }
+        Insert: {
+          created_at?: string
+          default_chart_id?: string
+          default_chart_order_comment: string
+          default_chart_order_name: string
+          default_chart_order_type: string
+          hos_id: string
+        }
+        Update: {
+          created_at?: string
+          default_chart_id?: string
+          default_chart_order_comment?: string
+          default_chart_order_name?: string
+          default_chart_order_type?: string
+          hos_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_default_chart_temp_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+        ]
+      }
       icu_io: {
         Row: {
           age_in_days: number
@@ -842,25 +711,25 @@ export type Database = {
       }
       keywords: {
         Row: {
-          created_at: string
-          id: number
-          keyword: string | null
-          main_key_word: string | null
-          tags: string | null
+          keyword: string
+          keyword_id: number
+          main_keyword: string
+          search_keyword: string
+          tags: string
         }
         Insert: {
-          created_at?: string
-          id?: number
-          keyword?: string | null
-          main_key_word?: string | null
-          tags?: string | null
+          keyword: string
+          keyword_id?: number
+          main_keyword: string
+          search_keyword: string
+          tags: string
         }
         Update: {
-          created_at?: string
-          id?: number
-          keyword?: string | null
-          main_key_word?: string | null
-          tags?: string | null
+          keyword?: string
+          keyword_id?: number
+          main_keyword?: string
+          search_keyword?: string
+          tags?: string
         }
         Relationships: []
       }

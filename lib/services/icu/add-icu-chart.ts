@@ -1,9 +1,31 @@
 'use server'
 
-import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart/order'
 import { createClient } from '@/lib/supabase/server'
 import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
+
+export const hasPrevChart = async (
+  targetDate: string,
+  selectedPatientId: string,
+) => {
+  const supabase = createClient()
+
+  const newDate = new Date(targetDate)
+  const prevDate = format(newDate.setDate(newDate.getDate() - 1), 'yyyy-MM-dd')
+
+  const { data: prevChartData, error } = await supabase
+    .from('icu_chart')
+    .select('icu_chart_id')
+    .match({ patient_id: selectedPatientId, target_date: prevDate })
+    .maybeSingle()
+
+  if (error) {
+    console.log(error)
+    redirect(`/error?message=${error.message}`)
+  }
+
+  return !!prevChartData
+}
 
 export const copyPrevChart = async (
   targetDate: string,
@@ -17,7 +39,17 @@ export const copyPrevChart = async (
   const { data: prevChartData, error } = await supabase
     .from('icu_chart')
     .select(
-      'icu_io_id, icu_chart_id, hos_id, main_vet, sub_vet, memo_a, memo_b, memo_c, weight_measured_date, weight',
+      `
+        icu_io_id,
+        icu_chart_id,
+        hos_id, main_vet,
+        sub_vet,
+        memo_a,
+        memo_b,
+        memo_c,
+        weight_measured_date,
+        weight
+      `,
     )
     .match({ patient_id: selectedPatientId, target_date: prevDate })
     .maybeSingle()
@@ -27,13 +59,9 @@ export const copyPrevChart = async (
     redirect(`/error?message=${error.message}`)
   }
 
-  if (!prevChartData) {
-    return { error: 'prev chart not found' }
-  }
-
   const { data: prevChartOrdersData, error: prevChartOrdersDataError } =
     await supabase.from('icu_chart_order').select('*').match({
-      icu_chart_id: prevChartData.icu_chart_id,
+      icu_chart_id: prevChartData!.icu_chart_id,
     })
 
   if (prevChartOrdersDataError) {
@@ -51,16 +79,16 @@ export const copyPrevChart = async (
     await supabase
       .from('icu_chart')
       .insert({
-        icu_io_id: prevChartData.icu_io_id,
-        hos_id: prevChartData.hos_id,
-        main_vet: prevChartData.main_vet,
-        sub_vet: prevChartData.sub_vet,
+        icu_io_id: prevChartData!.icu_io_id,
+        hos_id: prevChartData!.hos_id,
+        main_vet: prevChartData!.main_vet,
+        sub_vet: prevChartData!.sub_vet,
         target_date: targetDate,
-        memo_a: prevChartData.memo_a,
-        memo_b: prevChartData.memo_b,
-        memo_c: prevChartData.memo_c,
-        weight_measured_date: prevChartData.weight_measured_date,
-        weight: prevChartData.weight,
+        memo_a: prevChartData!.memo_a,
+        memo_b: prevChartData!.memo_b,
+        memo_c: prevChartData!.memo_c,
+        weight_measured_date: prevChartData!.weight_measured_date,
+        weight: prevChartData!.weight,
         patient_id: selectedPatientId,
       })
       .select('icu_chart_id')
@@ -78,7 +106,7 @@ export const copyPrevChart = async (
         hos_id: order.hos_id,
         icu_chart_order_type: order.icu_chart_order_type,
         icu_chart_id: newIcuChartId.icu_chart_id,
-        icu_io_id: prevChartData.icu_io_id,
+        icu_io_id: prevChartData!.icu_io_id,
         icu_chart_order_name: order.icu_chart_order_name,
         icu_chart_order_comment: order.icu_chart_order_comment,
         icu_chart_order_time: order.icu_chart_order_time,
@@ -99,16 +127,29 @@ export const registerDefaultChart = async (
 ) => {
   const supabase = createClient()
 
-  DEFAULT_ICU_ORDER_NAME.forEach(async (order) => {
+  const { data: defaultChartOrderData, error: defaultChartOrderError } =
+    await supabase
+      .from('icu_default_chart')
+      .select(
+        'default_chart_order_name, default_chart_order_comment, default_chart_order_type',
+      )
+      .match({ hos_id: hosId })
+
+  if (defaultChartOrderError) {
+    console.log(defaultChartOrderError)
+    redirect(`/error?message=${defaultChartOrderError.message}`)
+  }
+
+  defaultChartOrderData.forEach(async (order) => {
     const { error: icuChartOrderError } = await supabase
       .from('icu_chart_order')
       .insert({
         hos_id: hosId,
-        icu_chart_order_type: order.dataType,
         icu_chart_id: chartId,
         icu_io_id: ioId,
-        icu_chart_order_name: order.orderName,
-        icu_chart_order_comment: order.orderComment,
+        icu_chart_order_name: order.default_chart_order_name,
+        icu_chart_order_comment: order.default_chart_order_comment,
+        icu_chart_order_type: order.default_chart_order_type,
       })
 
     if (icuChartOrderError) {

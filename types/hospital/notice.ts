@@ -1,4 +1,4 @@
-import { Notice, User } from '..'
+import { Notice, User } from '@/types'
 
 export type NoticeUserJoined = Omit<
   Notice,

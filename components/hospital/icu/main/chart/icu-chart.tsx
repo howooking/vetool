@@ -6,58 +6,70 @@ import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/s
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
-import type {
-  IcuChartJoined,
-  IcuChartOrderJoined,
-  IcuData,
-  IcuIoJoined,
-} from '@/types/icu'
-import { useEffect, useState } from 'react'
+import type { IcuData } from '@/types/icu'
+import { useEffect, useMemo } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 
 export default function IcuChart({ icuData }: { icuData: IcuData }) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
-  // const { setIsTxMutating } = useUpsertTxStore()
 
-  const [selectedChartOrders, setSelectedChartOrders] = useState<
-    IcuChartOrderJoined[]
-  >([])
-  const [selectedChart, setSelectedChart] = useState<
-    IcuChartJoined | undefined
-  >()
-  const [selectedIo, setSeletedIo] = useState<IcuIoJoined | undefined>()
+  // const [selectedChartOrders, setSelectedChartOrders] = useState<
+  //   IcuChartOrderJoined[]
+  // >([])
+  // const [selectedChart, setSelectedChart] = useState<
+  //   IcuChartJoined | undefined
+  // >()
+  // const [selectedIo, setSeletedIo] = useState<IcuIoJoined | undefined>()
 
-  useEffect(() => {
-    const selectedIo = icuData.icuIoData.find(
-      (io) => io.patient_id.patient_id === selectedPatientId,
-    )
-    const selectedChart = icuData.icuChartData.find(
-      (chart) => chart.patient_id.patient_id === selectedPatientId,
-    )
-    const selectedChartOrders = icuData.icuChartOrderData
-      .filter(
-        (order) =>
-          order.icu_chart_id.icu_chart_id === selectedChart?.icu_chart_id,
-      )
-      .sort(
-        (prev, next) =>
-          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-            (order) => order === prev.icu_chart_order_type,
-          ) -
-          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-            (order) => order === next.icu_chart_order_type,
-          ),
-      )
-
-    setSeletedIo(selectedIo)
-    setSelectedChart(selectedChart)
-    setSelectedChartOrders(selectedChartOrders)
-
-    setIsChartLoading(false)
-  }, [icuData, selectedPatientId, setIsChartLoading])
+  const selectedIo = useMemo(
+    () =>
+      icuData.icuIoData.find(
+        (io) => io.patient_id.patient_id === selectedPatientId,
+      ),
+    [icuData.icuIoData, selectedPatientId],
+  )
+  const selectedChart = useMemo(
+    () =>
+      icuData.icuChartData.find(
+        (chart) => chart.patient_id.patient_id === selectedPatientId,
+      ),
+    [icuData.icuChartData, selectedPatientId],
+  )
+  const selectedChartOrders = useMemo(
+    () =>
+      icuData.icuChartOrderData
+        .filter(
+          (order) =>
+            order.icu_chart_id.icu_chart_id === selectedChart?.icu_chart_id,
+        )
+        .sort(
+          (prev, next) =>
+            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+              (order) => order === prev.icu_chart_order_type,
+            ) -
+            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+              (order) => order === next.icu_chart_order_type,
+            ),
+        ),
+    [icuData.icuChartOrderData, selectedChart?.icu_chart_id],
+  )
 
   const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
+
+  useEffect(() => {
+    if (
+      (selectedChart && selectedChartOrders.length > 0) ||
+      (selectedChart && isFirstChart)
+    ) {
+      setIsChartLoading(false)
+    }
+  }, [
+    isFirstChart,
+    selectedChart,
+    selectedChartOrders.length,
+    setIsChartLoading,
+  ])
 
   if (!selectedPatientId) {
     return <NoResult title="환자를 선택해주세요" className="h-icu-chart" />

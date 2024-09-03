@@ -1,8 +1,7 @@
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import SidebarSkeleton from '@/components/hospital/icu/sidebar/sidebar-skeleton'
-import { Skeleton } from '@/components/ui/skeleton'
 
-export default function IcuLoading() {
+export default function IcuSkeleton() {
   return (
     <div className="flex">
       <SidebarSkeleton />

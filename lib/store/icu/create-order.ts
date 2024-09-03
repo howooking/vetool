@@ -4,10 +4,12 @@ import { create } from 'zustand'
 type IcuCreateOrderState = {
   isModalOpen: boolean
   isEditMode?: boolean
-  selectedChartOrder: IcuChartOrderJoined
+  selectedChartOrder: Partial<IcuChartOrderJoined>
+  defaultChartId: string
   toggleModal: () => void
   setIsEditMode: (isEditMode: boolean) => void
-  setChartOrder: (chartOrder: IcuChartOrderJoined) => void
+  setChartOrder: (chartOrder: Partial<IcuChartOrderJoined>) => void
+  setDefaultChartId: (defaultChartId: string) => void
   resetState: () => void
 }
 
@@ -15,9 +17,11 @@ export const useCreateOrderStore = create<IcuCreateOrderState>((set) => ({
   isModalOpen: false,
   isEditMode: false,
   selectedChartOrder: {} as IcuChartOrderJoined,
+  defaultChartId: '',
   toggleModal: () => set((state) => ({ isModalOpen: !state.isModalOpen })),
   setIsEditMode: (isEditMode) => set({ isEditMode }),
   setChartOrder: (selectedChartOrder) => set({ selectedChartOrder }),
+  setDefaultChartId: (defaultChartId) => set({ defaultChartId }),
   resetState: () =>
     set({ isEditMode: false, selectedChartOrder: {} as IcuChartOrderJoined }),
 }))

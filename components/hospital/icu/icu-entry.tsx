@@ -3,28 +3,43 @@
 import IcuFooter from '@/components/hospital/icu/icu-footer'
 import IcuMain from '@/components/hospital/icu/main/icu-main'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
-import { useIcuRealTime } from '@/hooks/use-icu-realtime-subscription'
+import { useIcuRealtime } from '@/hooks/use-icu-realtime'
 import type { IcuData } from '@/types/icu'
 
 export default function IcuEntry({
   hosId,
-  icuData,
+  targetDate,
+  initialIcuData,
 }: {
   hosId: string
-  icuData: IcuData
+  targetDate: string
+  initialIcuData: IcuData
 }) {
-  useIcuRealTime(hosId)
+  const {
+    icuIoQuery: { data: icuIoData },
+    icuChartOrderQuery: { data: icuChartOrderData },
+    icuChartQuery: { data: icuChartData },
+  } = useIcuRealtime(hosId, targetDate, initialIcuData)
 
   return (
     <div className="flex">
       <IcuSidebar
-        icuIoData={icuData.icuIoData}
-        icuChartData={icuData.icuChartData}
-        vetsListData={icuData.vetsListData}
+        icuIoData={icuIoData}
+        icuChartData={icuChartData}
+        vetsListData={initialIcuData.vetsListData}
       />
 
       <div className="h-icu-chart w-full flex-col overflow-y-auto">
-        <IcuMain icuData={icuData} />
+        <IcuMain
+          icuData={
+            {
+              icuIoData,
+              icuChartData,
+              icuChartOrderData,
+              vetsListData: initialIcuData.vetsListData,
+            } as IcuData
+          }
+        />
         {/* notification을 footer안으로 이동 */}
         <IcuFooter hosId={hosId} />
       </div>

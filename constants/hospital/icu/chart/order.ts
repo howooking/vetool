@@ -40,18 +40,28 @@ export const DEFAULT_ICU_ORDER_NAME = [
     dataType: 'checklist',
   },
   {
-    orderName: '라인체크',
-    orderComment: '',
+    orderName: '수액',
+    orderComment: 'N/S',
     dataType: 'fluid',
   },
   {
-    orderName: '수액',
-    orderComment: '',
+    orderName: '라인확인',
+    orderComment: '라인설치일',
     dataType: 'fluid',
+  },
+  {
+    orderName: 'Cefazoline 30mg/kg IV TID',
+    orderComment: '2ml/dog',
+    dataType: 'injection',
+  },
+  {
+    orderName: 'Famotidine 0.5mg/kg IV BID',
+    orderComment: '1ml/dog',
+    dataType: 'injection',
   },
   {
     orderName: '사료',
-    orderComment: '①자발 ②핸드피딩 ③강제급여',
+    orderComment: '①모두먹음 ②절반 ③안먹음',
     dataType: 'feed',
   },
 ] as const
@@ -60,36 +70,29 @@ export const DEFAULT_ICU_ORDER_TYPE = [
   {
     label: '체크리스트',
     value: 'checklist',
-    color: '#ffedd5', // orange
   },
   {
     label: '수액',
     value: 'fluid',
-    color: '#e0f2fe', // sky
   },
   {
     label: '주사',
     value: 'injection',
-    color: '#ecfccb', // lime
   },
   {
     label: '경구',
     value: 'po',
-    color: '#fae8ff', // fuchsia
   },
   {
     label: '검사',
     value: 'test',
-    color: '#fef9c3', // amber
   },
   {
     label: '기타',
     value: 'manual',
-    color: '#ccfbf1', // teal
   },
   {
     label: '식이',
     value: 'feed',
-    color: '#fee2e2', // red
   },
 ] as const

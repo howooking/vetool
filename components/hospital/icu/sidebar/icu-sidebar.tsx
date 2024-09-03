@@ -2,11 +2,11 @@
 
 import NoPatients from '@/components/hospital/icu/sidebar/no-patients'
 import PatientList from '@/components/hospital/icu/sidebar/patient-list'
+import { Separator } from '@/components/ui/separator'
 import type { IcuChartJoined, IcuIoJoined, IcuUserList } from '@/types/icu'
+import { useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import Filters from './filters/filters'
-import { Separator } from '@/components/ui/separator'
-import { useSearchParams } from 'next/navigation'
 
 export type Filters = {
   selectedGroup: string[]
