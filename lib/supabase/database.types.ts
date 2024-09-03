@@ -17,16 +17,11 @@ export type Database = {
           district: string
           group_list: string[]
           hos_id: string
-          hos_order_comments: string[]
-          hos_order_names: string[]
-          hos_order_types: string[]
           icu_memo_names: string[]
-          icu_order_comment: string[]
-          icu_order_name: string[]
-          icu_order_type: string[]
           is_personal: boolean
           master_user_id: string
           name: string
+          order_color: Json | null
           plan: string
         }
         Insert: {
@@ -36,16 +31,11 @@ export type Database = {
           district: string
           group_list?: string[]
           hos_id?: string
-          hos_order_comments?: string[]
-          hos_order_names?: string[]
-          hos_order_types?: string[]
           icu_memo_names?: string[]
-          icu_order_comment?: string[]
-          icu_order_name?: string[]
-          icu_order_type?: string[]
           is_personal?: boolean
           master_user_id: string
           name: string
+          order_color?: Json | null
           plan?: string
         }
         Update: {
@@ -55,16 +45,11 @@ export type Database = {
           district?: string
           group_list?: string[]
           hos_id?: string
-          hos_order_comments?: string[]
-          hos_order_names?: string[]
-          hos_order_types?: string[]
           icu_memo_names?: string[]
-          icu_order_comment?: string[]
-          icu_order_name?: string[]
-          icu_order_type?: string[]
           is_personal?: boolean
           master_user_id?: string
           name?: string
+          order_color?: Json | null
           plan?: string
         }
         Relationships: [
@@ -571,6 +556,41 @@ export type Database = {
           },
         ]
       }
+      icu_default_chart: {
+        Row: {
+          created_at: string
+          default_chart_id: string
+          default_chart_order_comment: string
+          default_chart_order_name: string
+          default_chart_order_type: string
+          hos_id: string
+        }
+        Insert: {
+          created_at?: string
+          default_chart_id?: string
+          default_chart_order_comment: string
+          default_chart_order_name: string
+          default_chart_order_type: string
+          hos_id: string
+        }
+        Update: {
+          created_at?: string
+          default_chart_id?: string
+          default_chart_order_comment?: string
+          default_chart_order_name?: string
+          default_chart_order_type?: string
+          hos_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_default_chart_temp_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+        ]
+      }
       icu_io: {
         Row: {
           age_in_days: number
@@ -691,25 +711,25 @@ export type Database = {
       }
       keywords: {
         Row: {
-          created_at: string
-          id: number
-          keyword: string | null
-          main_key_word: string | null
-          tags: string | null
+          keyword: string
+          keyword_id: number
+          main_keyword: string
+          search_keyword: string
+          tags: string
         }
         Insert: {
-          created_at?: string
-          id?: number
-          keyword?: string | null
-          main_key_word?: string | null
-          tags?: string | null
+          keyword: string
+          keyword_id?: number
+          main_keyword: string
+          search_keyword: string
+          tags: string
         }
         Update: {
-          created_at?: string
-          id?: number
-          keyword?: string | null
-          main_key_word?: string | null
-          tags?: string | null
+          keyword?: string
+          keyword_id?: number
+          main_keyword?: string
+          search_keyword?: string
+          tags?: string
         }
         Relationships: []
       }

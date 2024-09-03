@@ -4,6 +4,7 @@ import type {
   IcuChartBookmark,
   IcuChartOrder,
   IcuChartTx,
+  IcuDefaultChart,
   IcuIo,
   IcuNotification,
   Patients,
@@ -28,7 +29,7 @@ export type IcuIoJoined = Pick<
   | 'icu_io_cc'
 > & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
-  hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names'>
+  hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names' | 'order_color'>
 }
 
 export type MainAndSubVet = Pick<User, 'name' | 'avatar_url' | 'user_id'>
@@ -167,7 +168,22 @@ export type IcuNotificationJoined = IcuNotification & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'gender' | 'patient_id'>
 }
 
-export type HospitalIcuOrder = Pick<
-  Hospital,
-  'hos_order_names' | 'hos_order_comments' | 'hos_order_types'
->
+export type IcuDefaultChartJoined = Pick<
+  IcuDefaultChart,
+  | 'default_chart_id'
+  | 'default_chart_order_name'
+  | 'default_chart_order_comment'
+  | 'default_chart_order_type'
+> & {
+  hos_id: Pick<Hospital, 'order_color'>
+}
+
+export type OrderColorProps = {
+  po: string
+  feed: string
+  test: string
+  fluid: string
+  manual: string
+  checklist: string
+  injection: string
+}

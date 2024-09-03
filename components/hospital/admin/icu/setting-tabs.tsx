@@ -1,16 +1,16 @@
 'use client'
 
 import ChangeMemoName from '@/components/hospital/admin/icu/memo/change-memo-name'
-import ChangeHosOrder from '@/components/hospital/admin/icu/order/change-hos-order'
+import ChangeDefaultOrder from '@/components/hospital/admin/icu/order/change-default-order'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import type { HospitalIcuOrder } from '@/types/icu'
+import type { IcuDefaultChartJoined } from '@/types/icu'
 
 export default function SettingTabs({
   memoNames,
-  hospitalOrder,
+  defaultChartOrders,
 }: {
   memoNames: string[]
-  hospitalOrder: HospitalIcuOrder
+  defaultChartOrders: IcuDefaultChartJoined[]
 }) {
   return (
     <Tabs defaultValue="order">
@@ -20,7 +20,7 @@ export default function SettingTabs({
       </TabsList>
 
       <TabsContent value="order">
-        <ChangeHosOrder hospitalOrder={hospitalOrder} />
+        <ChangeDefaultOrder defaultChartOrders={defaultChartOrders} />
       </TabsContent>
 
       <TabsContent value="memo">

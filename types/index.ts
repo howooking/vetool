@@ -16,6 +16,8 @@ export type Notice = Database['public']['Tables']['notices']['Row']
 export type IcuNotification =
   Database['public']['Tables']['icu_notification']['Row']
 export type Todo = Database['public']['Tables']['todos']['Row']
+export type IcuDefaultChart =
+  Database['public']['Tables']['icu_default_chart']['Row']
 
 // supabase.auth.getUser() 시 return되는 유져타입
 export type AuthUser = {

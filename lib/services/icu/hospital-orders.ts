@@ -1,118 +1,91 @@
 'use server'
 
-import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { createClient } from '@/lib/supabase/server'
+import { IcuDefaultChartJoined } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
-export const getHospitalOrder = async (hosId: string) => {
+export const getDefaultChartOrders = async (hosId: string) => {
   const supabase = createClient()
 
-  const { data: hospitalOrder, error: orderDataError } = await supabase
-    .from('hospitals')
-    .select('hos_order_names, hos_order_comments, hos_order_types')
+  const { data: hospitalOrders, error: hospitalOrdersError } = await supabase
+    .from('icu_default_chart')
+    .select(
+      `
+        default_chart_id,
+        default_chart_order_name,
+        default_chart_order_comment,
+        default_chart_order_type,
+        hos_id(order_color)
+      `,
+    )
     .match({ hos_id: hosId })
-    .single()
+    .returns<IcuDefaultChartJoined[]>()
 
-  if (orderDataError) {
-    console.log(orderDataError)
-    redirect(`/error?message=${orderDataError.message}`)
+  if (hospitalOrdersError) {
+    console.log(hospitalOrdersError)
+    redirect(`/error?message=${hospitalOrdersError.message}`)
   }
 
-  return hospitalOrder
+  return hospitalOrders
 }
 
-export const deleteHospitalOrder = async (
-  hosId: string,
-  orderData: {
-    hos_order_names: string
-    hos_order_comments: string
-    hos_order_types: string
-  },
-) => {
+export const deleteDefaultChartOrder = async (defaultChartId: string) => {
   const supabase = createClient()
-  const prevOrderData = await getHospitalOrder(hosId)
 
-  const updatedOrderData = {
-    hos_order_names: prevOrderData.hos_order_names.filter(
-      (name) => name !== orderData.hos_order_names,
-    ),
-    hos_order_comments: prevOrderData.hos_order_comments.filter(
-      (comment) => comment !== orderData.hos_order_comments,
-    ),
-    hos_order_types: prevOrderData.hos_order_types.filter(
-      (type) => type !== orderData.hos_order_types,
-    ),
-  }
+  const { error: deleteDefaultChartOrderError } = await supabase
+    .from('icu_default_chart')
+    .delete()
+    .match({ default_chart_id: defaultChartId })
 
-  const { error: deleteOrderError } = await supabase
-    .from('hospitals')
-    .update(updatedOrderData)
-    .match({ hos_id: hosId })
-
-  if (deleteOrderError) {
-    console.log(deleteOrderError)
-    redirect(`/error?message=${deleteOrderError.message}`)
+  if (deleteDefaultChartOrderError) {
+    console.log(deleteDefaultChartOrderError)
+    redirect(`/error?message=${deleteDefaultChartOrderError.message}`)
   }
 }
 
-export const updateHospitalOrder = async (
-  hosId: string,
-  orderIndex: number | null,
+export const updateDefaultChartOrder = async (
+  defaultChartId: string,
   orderData: {
-    hos_order_names: string
-    hos_order_comments: string
-    hos_order_types: string
+    default_chart_order_name: string
+    default_chart_order_comment: string
+    default_chart_order_type: string
   },
 ) => {
   const supabase = createClient()
-  const prevOrderData = await getHospitalOrder(hosId)
-
-  // 기존 오더 데이터를 객체 배열로 변환
-  let orders = prevOrderData.hos_order_names.map((name, index) => ({
-    name,
-    comment: prevOrderData.hos_order_comments[index],
-    type: prevOrderData.hos_order_types[index],
-  }))
-
-  if (orderIndex !== null && orderIndex >= 0) {
-    // 기존 오더 수정
-    orders[orderIndex] = {
-      name: orderData.hos_order_names,
-      comment: orderData.hos_order_comments,
-      type: orderData.hos_order_types,
-    }
-  } else {
-    // 새 오더 추가
-    orders.push({
-      name: orderData.hos_order_names,
-      comment: orderData.hos_order_comments,
-      type: orderData.hos_order_types,
-    })
-  }
-
-  // 오더 정렬
-  orders.sort(
-    (prev, next) =>
-      DEFAULT_ICU_ORDER_TYPE.findIndex((order) => order.value === prev.type) -
-      DEFAULT_ICU_ORDER_TYPE.findIndex((order) => order.value === next.type),
-  )
-
-  // 정렬된 오더를 다시 개별 배열로 분리
-  const updatedIcuOrderName = orders.map((order) => order.name)
-  const updatedIcuOrderComment = orders.map((order) => order.comment)
-  const updatedIcuOrderType = orders.map((order) => order.type)
+  const {
+    default_chart_order_name,
+    default_chart_order_comment,
+    default_chart_order_type,
+  } = orderData
 
   const { error: upsertOrderError } = await supabase
-    .from('hospitals')
+    .from('icu_default_chart')
     .update({
-      hos_order_names: updatedIcuOrderName,
-      hos_order_comments: updatedIcuOrderComment,
-      hos_order_types: updatedIcuOrderType,
+      default_chart_order_name,
+      default_chart_order_comment,
+      default_chart_order_type,
     })
-    .match({ hos_id: hosId })
+    .match({ default_chart_id: defaultChartId })
 
   if (upsertOrderError) {
     console.log(upsertOrderError)
     redirect(`/error?message=${upsertOrderError.message}`)
+  }
+}
+
+export const updateOrderColor = async (
+  hosId: string,
+  orderColor: {
+    [key: string]: string
+  },
+) => {
+  const supabase = createClient()
+  const { error: updateOrderColorError } = await supabase
+    .from('hospitals')
+    .update({ order_color: orderColor })
+    .match({ hos_id: hosId })
+  if (updateOrderColorError) {
+    console.log(updateOrderColorError)
+    redirect(`/error?message=${updateOrderColorError.message}`)
   }
 }
