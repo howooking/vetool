@@ -11,22 +11,16 @@ import {
 import { TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
+import type { Json } from '@/lib/supabase/database.types'
 import { cn } from '@/lib/utils'
 import { Plus } from 'lucide-react'
 
-export default function OrderTableHeader() {
-  const {
-    isModalOpen,
-    toggleModal,
-    isEditMode,
-    setIsEditMode,
-    setOrderIndex,
-    resetState,
-  } = useCreateOrderStore()
+export default function OrderTableHeader({ orderColor }: { orderColor: Json }) {
+  const { isModalOpen, toggleModal, isEditMode, setIsEditMode, resetState } =
+    useCreateOrderStore()
 
   const handleAddDialogOpen = () => {
     setIsEditMode(false)
-    setOrderIndex(null)
     resetState()
   }
 
@@ -53,7 +47,7 @@ export default function OrderTableHeader() {
                 <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
                 <DialogDescription />
               </DialogHeader>
-              <OrderForm isSettingMode />
+              <OrderForm orderColor={orderColor} isSettingMode />
             </DialogContent>
           </Dialog>
         </TableHead>

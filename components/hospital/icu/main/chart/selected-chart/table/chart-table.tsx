@@ -10,17 +10,20 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
+import { Json } from '@/lib/supabase/database.types'
 import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
 import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
 
 type ChartTablePropsPreview = {
   selectedChartOrders: CopiedOrder[]
+  orderColor: Json
   preview: true
 }
 
 type ChartTablePropsNonPreview = {
   selectedChartOrders: IcuChartOrderJoined[]
+  orderColor: Json
   preview?: false
 }
 
@@ -28,6 +31,7 @@ type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview
 
 export default function ChartTable({
   selectedChartOrders,
+  orderColor,
   preview,
 }: ChartTableProps) {
   return (
@@ -40,6 +44,7 @@ export default function ChartTable({
               <OrderDialog
                 icuIoId={selectedChartOrders[0].icu_io_id.icu_io_id}
                 icuChartId={selectedChartOrders[0].icu_chart_id.icu_chart_id}
+                orderColor={orderColor}
               />
             )}
           </TableHead>
@@ -61,7 +66,11 @@ export default function ChartTable({
 
         {selectedChartOrders.map((order) => (
           <TableRow className={cn('divide-x')} key={order.icu_chart_order_id}>
-            <OrderTitle order={order} preview={preview} />
+            <OrderTitle
+              order={order}
+              preview={preview}
+              orderColor={orderColor}
+            />
 
             {TIMES.map((time, index) => {
               const isDone =

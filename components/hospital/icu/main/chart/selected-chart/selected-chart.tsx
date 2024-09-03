@@ -25,9 +25,8 @@ export default function SelectedChart({
   vetsList: IcuUserList[]
 }) {
   const pdfRef = useRef<HTMLDivElement>(null)
-  const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
-
   const isPatientOut = selectedIo?.out_date !== null
+  const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
 
   return (
     <div className="relative flex flex-col gap-2 p-2 pb-[48px]">
@@ -50,7 +49,10 @@ export default function SelectedChart({
           isPatientOut={isPatientOut}
         />
 
-        <ChartTable selectedChartOrders={selectedChartOrders} />
+        <ChartTable
+          selectedChartOrders={selectedChartOrders}
+          orderColor={selectedIo.hos_id.order_color}
+        />
 
         <ChartMemos
           memoA={memo_a}
