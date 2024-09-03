@@ -23,6 +23,10 @@ export const FOOTER_MAIN_VIEW_MENUS = [
     label: '차트 검색',
     value: 'search',
   },
+  {
+    label: '즐겨찾기',
+    value: 'bookmark',
+  },
 ] as const
 
 export default function IcuFooter({ hosId }: { hosId: string }) {

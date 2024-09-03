@@ -14,10 +14,9 @@ export default function GotoIcuButton({
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
   const { push } = useRouter()
-  const { hos_id } = useParams()
 
   const handleGoto = () => {
-    push(`/hospital/${hos_id}/icu/${targetDate}`)
+    push(targetDate)
     setSelectedIcuMainView('chart')
     setSelectedPatientId(patientId)
   }

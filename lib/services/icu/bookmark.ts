@@ -12,7 +12,7 @@ export const upsertBookmarkChart = async (
 ) => {
   const supabase = createClient()
 
-  const { error: rpcError } = await supabase.rpc('upsert_chart_bookmark', {
+  const { error: rpcError } = await supabase.rpc('upsert_icu_bookmark', {
     bookmark_name_input: name,
     bookmark_comment_input: comment,
     icu_chart_id_input: icuChartId,

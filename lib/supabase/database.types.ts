@@ -1159,6 +1159,15 @@ export type Database = {
         }
         Returns: undefined
       }
+      upsert_icu_bookmark: {
+        Args: {
+          icu_chart_id_input: string
+          bookmark_name_input: string
+          bookmark_comment_input: string
+          hos_id_input: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       owner_level_enum: "S" | "A" | "B" | "C"

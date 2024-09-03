@@ -21,6 +21,10 @@ const DynamicIcuChartSearch = dynamic(
   () => import('./search/icu-search-chart'),
   { ssr: false, loading: () => <LargeLoaderCircle className="h-icu-chart" /> },
 )
+const DynamicBookmark = dynamic(() => import('./bookmark/bookmark'), {
+  ssr: false,
+  loading: () => <LargeLoaderCircle className="h-icu-chart" />,
+})
 
 export default function IcuMain({ icuData }: { icuData: IcuData }) {
   const { selectIcudMainView } = useSelectedMainViewStore()
@@ -44,6 +48,8 @@ export default function IcuMain({ icuData }: { icuData: IcuData }) {
       {selectIcudMainView === 'chart' && <DynamicIcuChart icuData={icuData} />}
 
       {selectIcudMainView === 'search' && <DynamicIcuChartSearch />}
+
+      {selectIcudMainView === 'bookmark' && <DynamicBookmark />}
     </>
   )
 }
