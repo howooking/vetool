@@ -19,7 +19,7 @@ export default function OrderDialog({
 }: {
   icuIoId: string
   icuChartId: string
-  orderColor: Json
+  orderColor?: Json
 }) {
   const { isModalOpen, isEditMode, toggleModal, setIsEditMode, resetState } =
     useCreateOrderStore()

@@ -23,7 +23,7 @@ export default function OrderTitle({
   preview,
 }: {
   order: CopiedOrder | IcuChartOrderJoined
-  orderColor: Json
+  orderColor?: Json
   preview?: boolean
 }) {
   const {

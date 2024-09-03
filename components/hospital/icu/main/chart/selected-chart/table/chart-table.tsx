@@ -17,13 +17,13 @@ import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
 
 type ChartTablePropsPreview = {
   selectedChartOrders: CopiedOrder[]
-  orderColor: Json
+  orderColor?: Json
   preview: true
 }
 
 type ChartTablePropsNonPreview = {
   selectedChartOrders: IcuChartOrderJoined[]
-  orderColor: Json
+  orderColor?: Json
   preview?: false
 }
 
