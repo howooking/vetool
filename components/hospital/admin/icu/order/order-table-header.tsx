@@ -11,7 +11,6 @@ import {
 import { TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import type { Json } from '@/lib/supabase/database.types'
-import { cn } from '@/lib/utils'
 import { Plus } from 'lucide-react'
 
 export default function OrderTableHeader({ orderColor }: { orderColor: Json }) {

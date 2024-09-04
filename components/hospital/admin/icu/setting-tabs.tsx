@@ -13,13 +13,13 @@ export default function SettingTabs({
   defaultChartOrders: IcuDefaultChartJoined[]
 }) {
   return (
-    <Tabs defaultValue="bookmark">
-      <TabsList className="grid w-full grid-cols-3">
+    <Tabs defaultValue="defaultOrder">
+      <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="defaultOrder">기본차트</TabsTrigger>
         <TabsTrigger value="memo">메모이름</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="order">
+      <TabsContent value="defaultOrder">
         <ChangeDefaultOrder defaultChartOrders={defaultChartOrders} />
       </TabsContent>
       <TabsContent value="memo">

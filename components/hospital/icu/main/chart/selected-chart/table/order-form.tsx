@@ -1,6 +1,6 @@
 import OrderColorPicker from '@/components/hospital/admin/icu/order/order-color-picker'
 import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/table/delete-order-alert-dialog'
-import { GroupCheckFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/order-schema'
+import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/order-schema'
 import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/table/order-time-settings'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
@@ -74,7 +74,7 @@ export default function OrderForm({
     },
   })
 
-  const handleSubmit = async (values: z.infer<typeof GroupCheckFormSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof orderSchema>) => {
     setIsSubmitting(true)
 
     if (color !== orderColorJson[selectedChartOrder.icu_chart_order_type!]) {

@@ -50,37 +50,20 @@ export default function OrderTableBody({
               background: orderColorJson[sortedOrder.default_chart_order_type],
             }}
           >
-            <TooltipProvider delayDuration={20}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    onClick={() => handleEditDialogOpen(sortedOrder)}
-                    className={cn(
-                      'flex w-[320px] justify-between rounded-none bg-transparent px-2',
-                    )}
-                  >
-                    <span className="truncate">
-                      {sortedOrder.default_chart_order_name}
-                    </span>
-                    <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
-                      {sortedOrder.default_chart_order_comment}
-                    </span>
-                  </Button>
-                </TooltipTrigger>
-
-                <TooltipContent side="right">
-                  <div className="flex gap-2">
-                    <span className="font-bold">
-                      {sortedOrder.default_chart_order_name}
-                    </span>
-                    <span className="text-xs">
-                      {sortedOrder.default_chart_order_comment}
-                    </span>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Button
+              variant="ghost"
+              onClick={() => handleEditDialogOpen(sortedOrder)}
+              className={cn(
+                'flex w-full justify-between rounded-none bg-transparent px-2',
+              )}
+            >
+              <span className="truncate">
+                {sortedOrder.default_chart_order_name}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {sortedOrder.default_chart_order_comment}
+              </span>
+            </Button>
           </TableCell>
         </TableRow>
       ))}
