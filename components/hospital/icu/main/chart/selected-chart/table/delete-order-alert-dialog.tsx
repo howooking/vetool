@@ -31,7 +31,13 @@ export default function DeleteOrderAlertDialog({
   const { defaultChartId } = useCreateOrderStore()
 
   const handleDeleteOrderClick = async () => {
+<<<<<<< HEAD
     if (isSettingMode) {
+=======
+    setIsDeleting(true)
+
+    if (isSettingMode && defaultChartId) {
+>>>>>>> df1147e (fix: defaultChartId 수정)
       await deleteDefaultChartOrder(defaultChartId)
       toggleModal()
       refresh()
