@@ -178,13 +178,3 @@ export type IcuDefaultChartJoined = Pick<
 > & {
   hos_id: Pick<Hospital, 'order_color'>
 }
-
-export type OrderColorProps = {
-  po: string
-  feed: string
-  test: string
-  fluid: string
-  manual: string
-  checklist: string
-  injection: string
-}

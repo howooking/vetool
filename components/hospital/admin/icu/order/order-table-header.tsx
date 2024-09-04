@@ -10,10 +10,9 @@ import {
 } from '@/components/ui/dialog'
 import { TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import type { Json } from '@/lib/supabase/database.types'
 import { Plus } from 'lucide-react'
 
-export default function OrderTableHeader({ orderColor }: { orderColor: Json }) {
+export default function OrderTableHeader() {
   const { isModalOpen, toggleModal, isEditMode, setIsEditMode, resetState } =
     useCreateOrderStore()
 
@@ -45,7 +44,7 @@ export default function OrderTableHeader({ orderColor }: { orderColor: Json }) {
                 <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
                 <DialogDescription />
               </DialogHeader>
-              <OrderForm orderColor={orderColor} isSettingMode />
+              <OrderForm isSettingMode />
             </DialogContent>
           </Dialog>
         </TableHead>

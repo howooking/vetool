@@ -1,4 +1,3 @@
-import OrderColorPicker from '@/components/hospital/admin/icu/order/order-color-picker'
 import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/table/delete-order-alert-dialog'
 import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/order-schema'
 import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/table/order-time-settings'
@@ -17,14 +16,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { upsertOrder } from '@/lib/services/icu/create-new-order'
-import {
-  upsertDefaultChartOrder,
-  updateOrderColor,
-} from '@/lib/services/icu/hospital-orders'
+import { upsertDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import type { Json } from '@/lib/supabase/database.types'
 import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined, OrderColorProps } from '@/types/icu'
+import type { IcuChartOrderJoined } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -36,16 +31,11 @@ export default function OrderForm({
   icuIoId,
   icuChartId,
   isSettingMode,
-  orderColor,
 }: {
   icuIoId?: string
   icuChartId?: string
   isSettingMode?: boolean
-  orderColor?: Json
 }) {
-  const orderColorJson: { [key: string]: string } =
-    orderColor as OrderColorProps
-
   const { hos_id } = useParams()
   const { refresh } = useRouter()
   const {
@@ -62,9 +52,6 @@ export default function OrderForm({
   const [timeTerm, setTimeTerm] = useState<string>('undefined')
   const [orderTime, setOrderTime] = useState<string[]>(
     selectedChartOrder.icu_chart_order_time || new Array(24).fill('0'),
-  )
-  const [color, setColor] = useState(
-    orderColorJson[selectedChartOrder.icu_chart_order_type!],
   )
 
   const form = useForm<z.infer<typeof orderSchema>>({
@@ -85,15 +72,6 @@ export default function OrderForm({
     const trimmedOrderName = values.icu_chart_order_name.trim()
     const orderComment = values.icu_chart_order_comment ?? ''
     const orderType = values.icu_chart_order_type
-
-    // 색상 업데이트 처리
-    if (
-      (!isEditMode && isSettingMode) ||
-      color !== orderColorJson[selectedChartOrder.icu_chart_order_type!]
-    ) {
-      orderColorJson[orderType] = color
-      await updateOrderColor(hos_id as string, orderColorJson)
-    }
 
     if (isSettingMode) {
       await upsertDefaultChartOrder(hos_id as string, defaultChartId, {
@@ -209,9 +187,7 @@ export default function OrderForm({
           )}
         />
 
-        {isSettingMode ? (
-          <OrderColorPicker value={color} onChange={setColor} />
-        ) : (
+        {!isSettingMode && (
           <OrderTimeSettings
             startTime={startTime}
             timeTerm={timeTerm}

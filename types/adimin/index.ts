@@ -27,3 +27,14 @@ export type ApprovalDataTable = Omit<
   'user_id' | 'hos_id' | 'user_approval_id'
 > &
   Pick<User, 'user_id' | 'name' | 'avatar_url' | 'is_vet'>
+
+export type IcuOrderTypeColor = {
+  [key in
+    | 'po'
+    | 'feed'
+    | 'test'
+    | 'fluid'
+    | 'manual'
+    | 'checklist'
+    | 'injection']: string
+}

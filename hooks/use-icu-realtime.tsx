@@ -65,7 +65,7 @@ export function useIcuRealtime(
         () => {
           console.log(`icu_io changed`)
           queryClient.invalidateQueries({
-            queryKey: ['icu_chart_realtime', hosId, targetDate],
+            queryKey: ['icu_io_realtime', hosId, targetDate],
           })
         },
       )
@@ -82,7 +82,7 @@ export function useIcuRealtime(
           filter: `hos_id=eq.${hosId}`,
         },
         () => {
-          console.log(`icu_cahrt changed`)
+          console.log(`icu_chart changed`)
           queryClient.invalidateQueries({
             queryKey: ['icu_chart_realtime', hosId, targetDate],
           })

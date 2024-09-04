@@ -9,21 +9,17 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import type { Json } from '@/lib/supabase/database.types'
 import { cn } from '@/lib/utils'
-import type {
-  CopiedOrder,
-  IcuChartOrderJoined,
-  OrderColorProps,
-} from '@/types/icu'
+import { IcuOrderTypeColor } from '@/types/adimin'
+import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
 
 export default function OrderTitle({
   order,
-  orderColor,
+  orderColors,
   preview,
 }: {
   order: CopiedOrder | IcuChartOrderJoined
-  orderColor?: Json
+  orderColors: IcuOrderTypeColor
   preview?: boolean
 }) {
   const {
@@ -31,9 +27,6 @@ export default function OrderTitle({
     icu_chart_order_name: orderName,
     icu_chart_order_comment: orderComment,
   } = order
-
-  const orderColorJson: { [key: string]: string } =
-    orderColor as OrderColorProps
 
   const { toggleModal, setIsEditMode, setChartOrder } = useCreateOrderStore()
 
@@ -49,7 +42,7 @@ export default function OrderTitle({
     <TableCell
       className={cn('w-[320px] p-0')}
       style={{
-        background: orderColorJson[orderType],
+        background: orderColors[orderType as keyof IcuOrderTypeColor],
       }}
     >
       <TooltipProvider delayDuration={20}>

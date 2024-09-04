@@ -40,7 +40,6 @@ export default function IcuEntry({
             } as IcuData
           }
         />
-        {/* notification을 footer안으로 이동 */}
         <IcuFooter hosId={hosId} />
       </div>
     </div>

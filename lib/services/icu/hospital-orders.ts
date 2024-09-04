@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { IcuOrderTypeColor } from '@/types/adimin'
 import { IcuDefaultChartJoined } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
@@ -77,15 +78,15 @@ export const upsertDefaultChartOrder = async (
 
 export const updateOrderColor = async (
   hosId: string,
-  orderColor: {
-    [key: string]: string
-  },
+  orderTypeColorsInput: IcuOrderTypeColor,
 ) => {
   const supabase = createClient()
+
   const { error: updateOrderColorError } = await supabase
     .from('hospitals')
-    .update({ order_color: orderColor })
+    .update({ order_color: orderTypeColorsInput })
     .match({ hos_id: hosId })
+
   if (updateOrderColorError) {
     console.log(updateOrderColorError)
     redirect(`/error?message=${updateOrderColorError.message}`)

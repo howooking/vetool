@@ -3,7 +3,8 @@ import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
-import type { IcuDefaultChartJoined, OrderColorProps } from '@/types/icu'
+import { IcuOrderTypeColor } from '@/types/adimin'
+import type { IcuDefaultChartJoined } from '@/types/icu'
 import { useMemo } from 'react'
 
 export default function OrderTableBody({
@@ -26,8 +27,8 @@ export default function OrderTableBody({
     )
   }, [defaultChartOrders])
 
-  const orderColorJson: { [key: string]: string } = sortedOrders[0].hos_id
-    .order_color as OrderColorProps
+  const orderColors = defaultChartOrders[0].hos_id
+    .order_color as IcuOrderTypeColor
 
   const handleEditDialogOpen = (sortedOrder: IcuDefaultChartJoined) => {
     toggleModal()
@@ -47,7 +48,10 @@ export default function OrderTableBody({
           <TableCell
             className={cn('p-0')}
             style={{
-              background: orderColorJson[sortedOrder.default_chart_order_type],
+              background:
+                orderColors[
+                  sortedOrder.default_chart_order_type as keyof IcuOrderTypeColor
+                ],
             }}
           >
             <Button
