@@ -1,3 +1,4 @@
+import IcuChartTxImageInput from '@/components/hospital/icu/main/chart/selected-chart/table/tx/detail-insert-step/tx-image-input'
 import TxLog from '@/components/hospital/icu/main/chart/selected-chart/table/tx/detail-insert-step/tx-log'
 import { txDetailRegisterFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/tx/tx-schema'
 import { Button } from '@/components/ui/button'
@@ -17,7 +18,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
 import { deleteIcuChartTx } from '@/lib/services/icu/tx-mutation'
@@ -27,8 +27,15 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export default function TxDetailInsertStep() {
-  const { setStep, txLocalState, setTxLocalState, setIsDeleting } =
-    useTxMutationStore()
+  const {
+    setStep,
+    txLocalState,
+    setTxLocalState,
+    setIsDeleting,
+    txImageState,
+    setTxImageState,
+    reset,
+  } = useTxMutationStore()
 
   const form = useForm<z.infer<typeof txDetailRegisterFormSchema>>({
     resolver: zodResolver(txDetailRegisterFormSchema),
@@ -65,12 +72,18 @@ export default function TxDetailInsertStep() {
     })
   }
 
+  const handleCloseClick = () => {
+    setStep('closed')
+    reset()
+  }
+
   return (
     <>
       <DialogHeader>
         <DialogTitle>처치 상세 입력</DialogTitle>
         <DialogDescription />
       </DialogHeader>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleNextStep)}
@@ -112,14 +125,10 @@ export default function TxDetailInsertStep() {
             )}
           />
 
-          {/* proplan에서만 제공 */}
           {/* <IcuChartTxImageInput
-            images={txLocalState?.txImages ?? []}
-            onImagesChange={(newImages) =>
-              setTxLocalState({
-                txImages: newImages,
-              })
-            }
+            txId={txLocalState?.txId}
+            images={txImageState ?? []}
+            onImagesChange={(newImages) => setTxImageState(newImages)}
           /> */}
 
           {txLocalState?.txLog?.length && <TxLog logs={txLocalState?.txLog} />}
@@ -159,7 +168,7 @@ export default function TxDetailInsertStep() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setStep('closed')}
+                  onClick={handleCloseClick}
                   tabIndex={-1}
                 >
                   닫기

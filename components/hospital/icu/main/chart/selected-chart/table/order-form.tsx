@@ -208,7 +208,7 @@ export default function OrderForm({
           )}
 
           <DialogClose asChild>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" tabIndex={-1}>
               닫기
             </Button>
           </DialogClose>

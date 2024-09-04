@@ -1115,12 +1115,33 @@ export type Database = {
         }
         Returns: undefined
       }
+      toggle_out_patient_test: {
+        Args: {
+          icu_io_id_input: string
+          patient_id_input: string
+          is_patient_out_input: boolean
+          chart_orders_input: string
+          keywords_input: string
+        }
+        Returns: undefined
+      }
       update_user_approval_and_user_hos_id_when_approved: {
         Args: {
           user_id_input: string
           hos_id_input: string
         }
         Returns: undefined
+      }
+      update_user_info_when_create_new_hospital: {
+        Args: {
+          hos_name_input: string
+          user_name_input: string
+          is_vet_input: boolean
+          city_input: string
+          district_input: string
+          business_number_input: string
+        }
+        Returns: string
       }
       update_user_info_when_creating_new_hospital: {
         Args: {
@@ -1147,15 +1168,6 @@ export type Database = {
           icu_chart_id_input: string
           weight_input: string
           weight_measured_date_input: string
-        }
-        Returns: undefined
-      }
-      upsert_chart_bookmark: {
-        Args: {
-          icu_chart_id_input: string
-          bookmark_name_input: string
-          bookmark_comment_input: string
-          hos_id_input: string
         }
         Returns: undefined
       }

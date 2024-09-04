@@ -4,7 +4,6 @@ import { createClient } from '@/lib/supabase/server'
 import type { UserApprovalHosJoined } from '@/types/on-boarding'
 import { redirect } from 'next/navigation'
 import { getUser } from '../auth/authorization'
-import { DEFAULT_ICU_ORDER_NAME } from '@/constants/hospital/icu/chart/order'
 
 export const getUserAppoval = async () => {
   const supabase = createClient()
@@ -97,7 +96,7 @@ export const createHospital = async (
   const supabase = createClient()
 
   const { data: hosId, error } = await supabase.rpc(
-    'update_user_info_when_creating_new_hospital',
+    'update_user_info_when_create_new_hospital',
     {
       hos_name_input: name,
       user_name_input: username,
@@ -111,17 +110,6 @@ export const createHospital = async (
   if (error) {
     console.log(error)
     redirect(`/error/?message=${error.message}`)
-  }
-
-  if (hosId) {
-    DEFAULT_ICU_ORDER_NAME.forEach(async (order) => {
-      await supabase.from('icu_default_chart').insert({
-        hos_id: hosId,
-        default_chart_order_name: order.orderName,
-        default_chart_order_comment: order.orderComment,
-        default_chart_order_type: order.dataType,
-      })
-    })
   }
 
   return hosId
