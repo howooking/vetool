@@ -1,8 +1,8 @@
 'use server'
 
-import type { TxLocalState } from '@/lib/store/icu/tx-mutation'
+import { TxLocalState } from '@/lib/store/icu/tx-mutation'
 import { createClient } from '@/lib/supabase/server'
-import type { TxLog } from '@/types/icu'
+import { TxLog } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
@@ -12,7 +12,7 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
   patientId: string,
   chartId: string,
   targetDate: string,
-  txLocalState?: TxLocalState,
+  txLocalState: TxLocalState,
   updatedLogs?: TxLog[],
 ) => {
   const { data: returningData, error: upsertIcuChartTxError } = await supabase
@@ -24,7 +24,6 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
       icu_chart_order_id: txLocalState?.icuChartOrderId,
       icu_chart_tx_comment: txLocalState?.txComment,
       icu_chart_tx_result: txLocalState?.txResult,
-      icu_chart_tx_images: undefined,
       icu_chart_tx_log: updatedLogs,
     })
     .select('icu_chart_tx_id')
@@ -54,7 +53,7 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
     }
   }
 
-  if (txLocalState?.txId) return
+  if (txLocalState?.txId) return returningData.icu_chart_tx_id
 
   // insert인 경우
   const filedName = `icu_chart_order_tx_${txLocalState?.time}`
@@ -67,6 +66,8 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
     console.log(icuChartOrderError)
     redirect(`/error?message=${icuChartOrderError.message}`)
   }
+
+  return returningData.icu_chart_tx_id
 }
 
 export const deleteIcuChartTx = async (
@@ -91,6 +92,16 @@ export const deleteIcuChartTx = async (
     .delete()
     .match({ icu_chart_tx_id: icuChartTxId })
 
+  if (deleteIcuChartTxError) {
+    console.log(deleteIcuChartTxError)
+    redirect(`/error?message=${deleteIcuChartTxError.message}`)
+  }
+}
+
+export const uploadTxImage = async (icuChartTxId: string, image: File) => {
+  const { error: deleteIcuChartTxError } = await supabase.storage
+    .from('tx_images')
+    .upload(`${icuChartTxId}/${image.name}`, image)
   if (deleteIcuChartTxError) {
     console.log(deleteIcuChartTxError)
     redirect(`/error?message=${deleteIcuChartTxError.message}`)

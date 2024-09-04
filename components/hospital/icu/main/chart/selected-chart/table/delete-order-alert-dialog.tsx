@@ -49,7 +49,12 @@ export default function DeleteOrderAlertDialog({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button type="button" className="mr-auto" variant="destructive">
+        <Button
+          type="button"
+          className="mr-auto"
+          variant="destructive"
+          tabIndex={-1}
+        >
           삭제
         </Button>
       </AlertDialogTrigger>
