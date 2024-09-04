@@ -36,13 +36,14 @@ export const copyPrevChart = async (
   const newDate = new Date(targetDate)
   const prevDate = format(newDate.setDate(newDate.getDate() - 1), 'yyyy-MM-dd')
 
-  const { data: prevChartData, error } = await supabase
+  const { data: prevChartData, error: prevChartDataError } = await supabase
     .from('icu_chart')
     .select(
       `
         icu_io_id,
         icu_chart_id,
-        hos_id, main_vet,
+        hos_id, 
+        main_vet,
         sub_vet,
         memo_a,
         memo_b,
@@ -54,14 +55,18 @@ export const copyPrevChart = async (
     .match({ patient_id: selectedPatientId, target_date: prevDate })
     .maybeSingle()
 
-  if (error) {
-    console.log(error)
-    redirect(`/error?message=${error.message}`)
+  if (prevChartDataError) {
+    console.log(prevChartDataError)
+    redirect(`/error?message=${prevChartDataError.message}`)
+  }
+  //  전일 차트 데이터가 없으면 클라이언트에서 토스트 띄우기 위해
+  if (prevChartData === null) {
+    return { error: 'prev chart not found' }
   }
 
   const { data: prevChartOrdersData, error: prevChartOrdersDataError } =
     await supabase.from('icu_chart_order').select('*').match({
-      icu_chart_id: prevChartData!.icu_chart_id,
+      icu_chart_id: prevChartData.icu_chart_id,
     })
 
   if (prevChartOrdersDataError) {
@@ -79,16 +84,16 @@ export const copyPrevChart = async (
     await supabase
       .from('icu_chart')
       .insert({
-        icu_io_id: prevChartData!.icu_io_id,
-        hos_id: prevChartData!.hos_id,
-        main_vet: prevChartData!.main_vet,
-        sub_vet: prevChartData!.sub_vet,
+        icu_io_id: prevChartData.icu_io_id,
+        hos_id: prevChartData.hos_id,
+        main_vet: prevChartData.main_vet,
+        sub_vet: prevChartData.sub_vet,
         target_date: targetDate,
-        memo_a: prevChartData!.memo_a,
-        memo_b: prevChartData!.memo_b,
-        memo_c: prevChartData!.memo_c,
-        weight_measured_date: prevChartData!.weight_measured_date,
-        weight: prevChartData!.weight,
+        memo_a: prevChartData.memo_a,
+        memo_b: prevChartData.memo_b,
+        memo_c: prevChartData.memo_c,
+        weight_measured_date: prevChartData.weight_measured_date,
+        weight: prevChartData.weight,
         patient_id: selectedPatientId,
       })
       .select('icu_chart_id')

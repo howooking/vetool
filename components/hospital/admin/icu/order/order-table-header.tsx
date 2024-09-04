@@ -9,13 +9,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import type { Json } from '@/lib/supabase/database.types'
-import { cn } from '@/lib/utils'
 import { Plus } from 'lucide-react'
 
-export default function OrderTableHeader({ orderColor }: { orderColor: Json }) {
+export default function OrderTableHeader() {
   const { isModalOpen, toggleModal, isEditMode, setIsEditMode, resetState } =
     useCreateOrderStore()
 
@@ -27,7 +24,7 @@ export default function OrderTableHeader({ orderColor }: { orderColor: Json }) {
   return (
     <TableHeader>
       <TableRow>
-        <TableHead className="relative flex w-[320px] items-center justify-center gap-2 text-center">
+        <TableHead className="relative flex items-center justify-center gap-2 text-center">
           <span>오더 목록</span>
 
           <Dialog open={isModalOpen} onOpenChange={toggleModal}>
@@ -47,16 +44,10 @@ export default function OrderTableHeader({ orderColor }: { orderColor: Json }) {
                 <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
                 <DialogDescription />
               </DialogHeader>
-              <OrderForm orderColor={orderColor} isSettingMode />
+              <OrderForm isSettingMode />
             </DialogContent>
           </Dialog>
         </TableHead>
-
-        {TIMES.map((time) => (
-          <TableHead className={cn('border text-center')} key={time}>
-            {time.toString().padStart(2, '0')}
-          </TableHead>
-        ))}
       </TableRow>
     </TableHeader>
   )

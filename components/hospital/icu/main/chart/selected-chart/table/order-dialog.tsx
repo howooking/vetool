@@ -9,17 +9,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import type { Json } from '@/lib/supabase/database.types'
 import { Plus } from 'lucide-react'
 
 export default function OrderDialog({
   icuIoId,
   icuChartId,
-  orderColor,
 }: {
   icuIoId: string
   icuChartId: string
-  orderColor?: Json
 }) {
   const { isModalOpen, isEditMode, toggleModal, setIsEditMode, resetState } =
     useCreateOrderStore()
@@ -45,11 +42,7 @@ export default function OrderDialog({
           <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
           <DialogDescription />
         </DialogHeader>
-        <OrderForm
-          icuIoId={icuIoId}
-          icuChartId={icuChartId}
-          orderColor={orderColor}
-        />
+        <OrderForm icuIoId={icuIoId} icuChartId={icuChartId} />
       </DialogContent>
     </Dialog>
   )

@@ -1,6 +1,5 @@
-import OrderColorPicker from '@/components/hospital/admin/icu/order/order-color-picker'
 import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/table/delete-order-alert-dialog'
-import { GroupCheckFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/order-schema'
+import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/order-schema'
 import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/table/order-time-settings'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
@@ -17,14 +16,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { upsertOrder } from '@/lib/services/icu/create-new-order'
-import {
-  updateDefaultChartOrder,
-  updateOrderColor,
-} from '@/lib/services/icu/hospital-orders'
+import { upsertDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import type { Json } from '@/lib/supabase/database.types'
 import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined, OrderColorProps } from '@/types/icu'
+import type { IcuChartOrderJoined } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -36,20 +31,20 @@ export default function OrderForm({
   icuIoId,
   icuChartId,
   isSettingMode,
-  orderColor,
 }: {
   icuIoId?: string
   icuChartId?: string
   isSettingMode?: boolean
-  orderColor?: Json
 }) {
-  const orderColorJson: { [key: string]: string } =
-    orderColor as OrderColorProps
-
   const { hos_id } = useParams()
   const { refresh } = useRouter()
-  const { toggleModal, selectedChartOrder, isEditMode, defaultChartId } =
-    useCreateOrderStore()
+  const {
+    toggleModal,
+    selectedChartOrder,
+    isEditMode,
+    defaultChartId,
+    resetState,
+  } = useCreateOrderStore()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   // 왜 undefined로 안하고 "undefined"로 했냐면, 값을 undefined로 만들었을 때 ui가 초기화되지 않음
@@ -58,12 +53,9 @@ export default function OrderForm({
   const [orderTime, setOrderTime] = useState<string[]>(
     selectedChartOrder.icu_chart_order_time || new Array(24).fill('0'),
   )
-  const [color, setColor] = useState(
-    orderColorJson[selectedChartOrder.icu_chart_order_type!],
-  )
 
-  const form = useForm<z.infer<typeof GroupCheckFormSchema>>({
-    resolver: zodResolver(GroupCheckFormSchema),
+  const form = useForm<z.infer<typeof orderSchema>>({
+    resolver: zodResolver(orderSchema),
     defaultValues: {
       icu_chart_order_type:
         selectedChartOrder.icu_chart_order_type ?? undefined,
@@ -74,22 +66,19 @@ export default function OrderForm({
     },
   })
 
-  const handleSubmit = async (values: z.infer<typeof GroupCheckFormSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof orderSchema>) => {
     setIsSubmitting(true)
 
-    if (color !== orderColorJson[selectedChartOrder.icu_chart_order_type!]) {
-      orderColorJson[selectedChartOrder.icu_chart_order_type!] = color
-
-      await updateOrderColor(hos_id as string, orderColorJson)
-    }
+    const trimmedOrderName = values.icu_chart_order_name.trim()
+    const orderComment = values.icu_chart_order_comment ?? ''
+    const orderType = values.icu_chart_order_type
 
     if (isSettingMode) {
-      await updateDefaultChartOrder(defaultChartId, {
-        default_chart_order_name: values.icu_chart_order_name.trim(),
-        default_chart_order_comment: values.icu_chart_order_comment ?? '',
-        default_chart_order_type: values.icu_chart_order_type,
+      await upsertDefaultChartOrder(hos_id as string, defaultChartId, {
+        default_chart_order_name: trimmedOrderName,
+        default_chart_order_comment: orderComment,
+        default_chart_order_type: orderType,
       })
-
       refresh()
     } else {
       await upsertOrder(
@@ -99,9 +88,9 @@ export default function OrderForm({
         orderTime,
         hos_id as string,
         {
-          icu_chart_order_type: values.icu_chart_order_type,
-          icu_chart_order_name: values.icu_chart_order_name.trim(),
-          icu_chart_order_comment: values.icu_chart_order_comment ?? null,
+          icu_chart_order_name: trimmedOrderName,
+          icu_chart_order_comment: orderComment,
+          icu_chart_order_type: orderType,
         },
       )
     }
@@ -110,6 +99,7 @@ export default function OrderForm({
       title: `${values.icu_chart_order_name} 오더를 추가하였습니다`,
     })
 
+    resetState()
     toggleModal()
     setIsSubmitting(false)
   }
@@ -197,9 +187,7 @@ export default function OrderForm({
           )}
         />
 
-        {isSettingMode ? (
-          <OrderColorPicker value={color} onChange={setColor} />
-        ) : (
+        {!isSettingMode && (
           <OrderTimeSettings
             startTime={startTime}
             timeTerm={timeTerm}

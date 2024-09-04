@@ -9,6 +9,7 @@ import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import type { IcuData } from '@/types/icu'
 import { useEffect, useMemo } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
+import { IcuOrderTypeColor } from '@/types/adimin'
 
 export default function IcuChart({ icuData }: { icuData: IcuData }) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
@@ -78,6 +79,7 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
   if (isChartLoading) {
     return <LargeLoaderCircle className="h-icu-chart" />
   }
+  console.log(selectedChart)
 
   if (!selectedIo) {
     return (
@@ -99,6 +101,9 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
         isFirstChart={isFirstChart}
         selectedPatientId={selectedPatientId}
         selectedChart={selectedChart}
+        orderColors={
+          icuData.icuIoData[0].hos_id.order_color as IcuOrderTypeColor
+        }
       />
     )
   }

@@ -146,8 +146,9 @@ export type TxState = {
 export type IcuChartBookmarkJoined = {
   icu_chart_id: {
     icu_chart_id: string
-    patient_id: Pick<Patients, 'name'>
-    icu_io_id: Pick<IcuIo, 'icu_io_id'>
+    target_date: string
+    patient_id: Pick<Patients, 'name' | 'patient_id'>
+    // icu_io_id: Pick<IcuIo, 'icu_io_id'>
   }
 } & IcuChartBookmark
 
@@ -176,14 +177,4 @@ export type IcuDefaultChartJoined = Pick<
   | 'default_chart_order_type'
 > & {
   hos_id: Pick<Hospital, 'order_color'>
-}
-
-export type OrderColorProps = {
-  po: string
-  feed: string
-  test: string
-  fluid: string
-  manual: string
-  checklist: string
-  injection: string
 }

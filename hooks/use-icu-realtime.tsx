@@ -24,6 +24,7 @@ export function useIcuRealtime(
     queryFn: () => getIcuIo(hosId, targetDate),
     initialData: initialIcuData.icuIoData,
     refetchInterval: 600000,
+    refetchOnWindowFocus: true,
   })
 
   const icuChartQuery = useQuery({
@@ -31,6 +32,7 @@ export function useIcuRealtime(
     queryFn: () => getIcuChart(hosId, targetDate),
     initialData: initialIcuData.icuChartData,
     refetchInterval: 600000,
+    refetchOnWindowFocus: true,
   })
 
   const icuChartOrderQuery = useQuery({
@@ -38,14 +40,15 @@ export function useIcuRealtime(
     queryFn: () => getIcuOrder(hosId, targetDate),
     initialData: initialIcuData.icuChartOrderData,
     refetchInterval: 600000,
+    refetchOnWindowFocus: true,
   })
 
   const debouncedRevalidation = useDebouncedCallback(() => {
     console.log('icu_chart_order changed')
-    // queryClient.invalidateQueries({
-    //   queryKey: ['icu_chart_order_realtime', hosId, targetDate],
-    // })
-    icuChartOrderQuery.refetch()
+    queryClient.invalidateQueries({
+      queryKey: ['icu_chart_order_realtime', hosId, targetDate],
+    })
+    // icuChartOrderQuery.refetch()
   }, 400)
 
   useEffect(() => {
@@ -62,7 +65,7 @@ export function useIcuRealtime(
         () => {
           console.log(`icu_io changed`)
           queryClient.invalidateQueries({
-            queryKey: ['icu_chart_realtime', hosId, targetDate],
+            queryKey: ['icu_io_realtime', hosId, targetDate],
           })
         },
       )
@@ -79,7 +82,7 @@ export function useIcuRealtime(
           filter: `hos_id=eq.${hosId}`,
         },
         () => {
-          console.log(`icu_cahrt changed`)
+          console.log(`icu_chart changed`)
           queryClient.invalidateQueries({
             queryKey: ['icu_chart_realtime', hosId, targetDate],
           })

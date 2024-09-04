@@ -1,15 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
-import type { IcuDefaultChartJoined, OrderColorProps } from '@/types/icu'
+import { IcuOrderTypeColor } from '@/types/adimin'
+import type { IcuDefaultChartJoined } from '@/types/icu'
 import { useMemo } from 'react'
 
 export default function OrderTableBody({
@@ -32,8 +27,8 @@ export default function OrderTableBody({
     )
   }, [defaultChartOrders])
 
-  const orderColorJson: { [key: string]: string } = sortedOrders[0].hos_id
-    .order_color as OrderColorProps
+  const orderColors = defaultChartOrders[0].hos_id
+    .order_color as IcuOrderTypeColor
 
   const handleEditDialogOpen = (sortedOrder: IcuDefaultChartJoined) => {
     toggleModal()
@@ -51,42 +46,28 @@ export default function OrderTableBody({
       {sortedOrders.map((sortedOrder) => (
         <TableRow className={cn('divide-x')} key={sortedOrder.default_chart_id}>
           <TableCell
-            className={cn('w-[320px] p-0')}
+            className={cn('p-0')}
             style={{
-              background: orderColorJson[sortedOrder.default_chart_order_type],
+              background:
+                orderColors[
+                  sortedOrder.default_chart_order_type as keyof IcuOrderTypeColor
+                ],
             }}
           >
-            <TooltipProvider delayDuration={20}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    onClick={() => handleEditDialogOpen(sortedOrder)}
-                    className={cn(
-                      'flex w-[320px] justify-between rounded-none bg-transparent px-2',
-                    )}
-                  >
-                    <span className="truncate">
-                      {sortedOrder.default_chart_order_name}
-                    </span>
-                    <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
-                      {sortedOrder.default_chart_order_comment}
-                    </span>
-                  </Button>
-                </TooltipTrigger>
-
-                <TooltipContent side="right">
-                  <div className="flex gap-2">
-                    <span className="font-bold">
-                      {sortedOrder.default_chart_order_name}
-                    </span>
-                    <span className="text-xs">
-                      {sortedOrder.default_chart_order_comment}
-                    </span>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Button
+              variant="ghost"
+              onClick={() => handleEditDialogOpen(sortedOrder)}
+              className={cn(
+                'flex w-full justify-between rounded-none bg-transparent px-2',
+              )}
+            >
+              <span className="truncate">
+                {sortedOrder.default_chart_order_name}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {sortedOrder.default_chart_order_comment}
+              </span>
+            </Button>
           </TableCell>
         </TableRow>
       ))}

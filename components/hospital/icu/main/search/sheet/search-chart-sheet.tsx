@@ -12,7 +12,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { COLORS } from '@/constants/common/colors'
 import { CalendarSearch } from 'lucide-react'
 import { Dispatch, SetStateAction, useState } from 'react'
 
@@ -34,11 +33,7 @@ export default function SearchChartSheet({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <CalendarSearch
-          className="cursor-pointer"
-          size={18}
-          color={COLORS.primary}
-        />
+        <CalendarSearch className="cursor-pointer text-primary" size={18} />
       </SheetTrigger>
 
       <SheetContent>

@@ -15,11 +15,8 @@ import { toast } from '@/components/ui/use-toast'
 import { deleteOrder } from '@/lib/services/icu/create-new-order'
 import { deleteDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined } from '@/types/icu'
-import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 
 export default function DeleteOrderAlertDialog({
   selectedChartOrder,
@@ -30,37 +27,29 @@ export default function DeleteOrderAlertDialog({
   toggleModal: () => void
   isSettingMode?: boolean
 }) {
-  const [isDeleting, setIsDeleting] = useState(false)
   const { refresh } = useRouter()
   const { defaultChartId } = useCreateOrderStore()
 
   const handleDeleteOrderClick = async () => {
-    setIsDeleting(true)
-
-    if (isSettingMode) {
+    if (isSettingMode && defaultChartId) {
       await deleteDefaultChartOrder(defaultChartId)
-
+      toggleModal()
       refresh()
-    } else {
-      await deleteOrder(selectedChartOrder.icu_chart_order_id)
+      return
     }
+
+    await deleteOrder(selectedChartOrder.icu_chart_order_id)
 
     toast({
       title: `${selectedChartOrder.icu_chart_order_name} 오더를 삭제하였습니다`,
     })
     toggleModal()
-    setIsDeleting(false)
   }
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button
-          type="button"
-          className="mr-auto"
-          variant="destructive"
-          disabled={isDeleting}
-        >
+        <Button type="button" className="mr-auto" variant="destructive">
           삭제
         </Button>
       </AlertDialogTrigger>
@@ -81,9 +70,6 @@ export default function DeleteOrderAlertDialog({
             onClick={handleDeleteOrderClick}
           >
             삭제
-            <LoaderCircle
-              className={cn(isDeleting ? 'ml-2 animate-spin' : 'hidden')}
-            />
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
