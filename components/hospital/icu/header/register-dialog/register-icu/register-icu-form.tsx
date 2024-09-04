@@ -38,6 +38,7 @@ import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuUserList } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
@@ -77,6 +78,7 @@ export default function RegisterIcuForm({
   const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setStep } = usePatientRegisterStep()
+  const queryClient = useQueryClient()
 
   const form = useForm<z.infer<typeof registerIcuPatientFormSchema>>({
     resolver: zodResolver(registerIcuPatientFormSchema),
@@ -98,6 +100,45 @@ export default function RegisterIcuForm({
     }
   }, [form, range])
 
+  const { mutate } = useMutation({
+    mutationFn: (variable: {
+      dx: string
+      cc: string
+      in_date: Date
+      out_due_date: Date
+      group_list: string[]
+      main_vet: string
+      sub_vet?: string
+    }) =>
+      registerIcuPatient(
+        hosId,
+        registeringPatient.patientId,
+        registeringPatient.birth,
+        variable.dx,
+        variable.cc,
+        variable.in_date,
+        variable.out_due_date,
+        variable.group_list,
+        variable.main_vet,
+        variable.sub_vet,
+      ),
+    onSuccess: () => {
+      toast({
+        title: '입원 환자가 등록되었습니다',
+      })
+
+      queryClient.invalidateQueries({
+        queryKey: ['icu_io_realtime', hosId, 'icu_chart_realtime'],
+      })
+
+      setIsRegisterDialogOpen(false)
+      setIsSubmitting(false)
+      setSelectedPatientId(registeringPatient.patientId)
+      setSelectedIcuMainView('chart')
+      setIsChartLoading(false)
+    },
+  })
+
   const handleSubmit = async (
     values: z.infer<typeof registerIcuPatientFormSchema>,
   ) => {
@@ -106,10 +147,7 @@ export default function RegisterIcuForm({
     setIsSubmitting(true)
     setIsChartLoading(true)
 
-    await registerIcuPatient(
-      hosId,
-      registeringPatient.patientId,
-      registeringPatient.birth,
+    mutate({
       dx,
       cc,
       in_date,
@@ -117,16 +155,8 @@ export default function RegisterIcuForm({
       group_list,
       main_vet,
       sub_vet,
-    )
-
-    toast({
-      title: '입원 환자가 등록되었습니다',
     })
 
-    setIsRegisterDialogOpen(false)
-    setIsSubmitting(false)
-    setSelectedPatientId(registeringPatient.patientId)
-    setSelectedIcuMainView('chart')
     push(`${format(in_date, 'yyyy-MM-dd')}`)
   }
 
