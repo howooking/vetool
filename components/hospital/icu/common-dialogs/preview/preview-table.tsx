@@ -10,7 +10,7 @@ export default function PreviewTable({
   orderColors: IcuOrderTypeColor
 }) {
   return (
-    <div className="h-[800px] overflow-y-auto">
+    <div className="max-h-[800px] overflow-y-auto">
       <ChartTable
         selectedChartOrders={copiedOrders}
         preview

@@ -14,6 +14,7 @@ import { toggleOutPatient } from '@/lib/services/icu/update-icu-chart-infos'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn, hashtagKeyword } from '@/lib/utils'
 import type { IcuChartOrderJoined } from '@/types/icu'
+import { useQueryClient } from '@tanstack/react-query'
 import { LoaderCircle, LogOut, Undo2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
@@ -38,6 +39,8 @@ export default function OutPatientDialog({
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { target_date } = useParams()
 
+  const queryClient = useQueryClient()
+  const { hos_id } = useParams()
   const handleOutPatient = async () => {
     setIsSubmitting(true)
 
@@ -55,6 +58,10 @@ export default function OutPatientDialog({
       selectedPatientId!,
       hashtaggedDxCc,
     )
+
+    queryClient.invalidateQueries({
+      queryKey: ['icu_io_realtime', hos_id],
+    })
 
     toast({
       title: isPatientOut
