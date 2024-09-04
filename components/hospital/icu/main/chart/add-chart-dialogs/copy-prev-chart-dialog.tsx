@@ -12,7 +12,9 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { copyPrevChart } from '@/lib/services/icu/add-icu-chart'
 import { cn } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
 import { ClipboardPaste, LoaderCircle } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function CopyPrevChartDialog({
@@ -26,6 +28,8 @@ export default function CopyPrevChartDialog({
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
+  const queryClient = useQueryClient()
+  const { hosId } = useParams()
   const handleCopyPrevSelectedChart = async () => {
     setIsCreatingChart(true)
 
@@ -42,6 +46,9 @@ export default function CopyPrevChartDialog({
       return
     }
 
+    queryClient.invalidateQueries({
+      queryKey: ['icu_chart_order_realtime', 'icu_chart_realtime', hosId],
+    })
     toast({
       title: '전날 차트를 복사하였습니다',
     })

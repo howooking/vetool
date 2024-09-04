@@ -23,7 +23,7 @@ export function useIcuRealtime(
     queryKey: ['icu_io_realtime', hosId, targetDate],
     queryFn: () => getIcuIo(hosId, targetDate),
     initialData: initialIcuData.icuIoData,
-    refetchInterval: 30000,
+    refetchInterval: 60000,
     refetchOnWindowFocus: true,
   })
 
@@ -31,7 +31,7 @@ export function useIcuRealtime(
     queryKey: ['icu_chart_realtime', hosId, targetDate],
     queryFn: () => getIcuChart(hosId, targetDate),
     initialData: initialIcuData.icuChartData,
-    refetchInterval: 30000,
+    refetchInterval: 60000,
     refetchOnWindowFocus: true,
   })
 
@@ -39,7 +39,7 @@ export function useIcuRealtime(
     queryKey: ['icu_chart_order_realtime', hosId, targetDate],
     queryFn: () => getIcuOrder(hosId, targetDate),
     initialData: initialIcuData.icuChartOrderData,
-    refetchInterval: 30000,
+    refetchInterval: 60000,
     refetchOnWindowFocus: true,
   })
 

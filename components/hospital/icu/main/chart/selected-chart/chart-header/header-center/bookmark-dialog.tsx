@@ -34,6 +34,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { bookmarkFormSchema } from './weght-bookmark-schema'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function BookmarkDialog({
   icuChartId,
@@ -58,6 +59,8 @@ export default function BookmarkDialog({
     },
   })
 
+  const queryClient = useQueryClient()
+
   const handleSubmit = async (values: z.infer<typeof bookmarkFormSchema>) => {
     setIsSubmitting(true)
 
@@ -68,6 +71,9 @@ export default function BookmarkDialog({
       hos_id as string,
     )
 
+    queryClient.invalidateQueries({
+      queryKey: ['icu_chart_order_realtime', 'icu_chart_realtime', hos_id],
+    })
     toast({
       title: '즐겨찾기가 추가되었습니다',
     })
