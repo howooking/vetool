@@ -5,7 +5,6 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoJoined,
-  IcuUserList,
 } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
@@ -122,10 +121,3 @@ export const getIcuOrder = async (hosId: string, targetDate: string) => {
   }
   return icuOrderData
 }
-
-// supabase
-// .from('users')
-// .select('name, position, user_id, avatar_url')
-// .match({ hos_id: hosId, is_vet: true })
-// .returns<IcuUserList[]>(),
-// ]
