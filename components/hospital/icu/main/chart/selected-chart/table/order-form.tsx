@@ -18,7 +18,7 @@ import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { upsertOrder } from '@/lib/services/icu/create-new-order'
 import {
-  updateDefaultChartOrder,
+  upsertDefaultChartOrder,
   updateOrderColor,
 } from '@/lib/services/icu/hospital-orders'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
@@ -48,8 +48,13 @@ export default function OrderForm({
 
   const { hos_id } = useParams()
   const { refresh } = useRouter()
-  const { toggleModal, selectedChartOrder, isEditMode, defaultChartId } =
-    useCreateOrderStore()
+  const {
+    toggleModal,
+    selectedChartOrder,
+    isEditMode,
+    defaultChartId,
+    resetState,
+  } = useCreateOrderStore()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   // 왜 undefined로 안하고 "undefined"로 했냐면, 값을 undefined로 만들었을 때 ui가 초기화되지 않음
@@ -77,17 +82,24 @@ export default function OrderForm({
   const handleSubmit = async (values: z.infer<typeof orderSchema>) => {
     setIsSubmitting(true)
 
-    if (color !== orderColorJson[selectedChartOrder.icu_chart_order_type!]) {
-      orderColorJson[selectedChartOrder.icu_chart_order_type!] = color
+    const trimmedOrderName = values.icu_chart_order_name.trim()
+    const orderComment = values.icu_chart_order_comment ?? ''
+    const orderType = values.icu_chart_order_type
 
+    // 색상 업데이트 처리
+    if (
+      (!isEditMode && isSettingMode) ||
+      color !== orderColorJson[selectedChartOrder.icu_chart_order_type!]
+    ) {
+      orderColorJson[orderType] = color
       await updateOrderColor(hos_id as string, orderColorJson)
     }
 
     if (isSettingMode) {
-      await updateDefaultChartOrder(defaultChartId, {
-        default_chart_order_name: values.icu_chart_order_name.trim(),
-        default_chart_order_comment: values.icu_chart_order_comment ?? '',
-        default_chart_order_type: values.icu_chart_order_type,
+      await upsertDefaultChartOrder(hos_id as string, defaultChartId, {
+        default_chart_order_name: trimmedOrderName,
+        default_chart_order_comment: orderComment,
+        default_chart_order_type: orderType,
       })
       refresh()
     } else {
@@ -98,9 +110,9 @@ export default function OrderForm({
         orderTime,
         hos_id as string,
         {
-          icu_chart_order_type: values.icu_chart_order_type,
-          icu_chart_order_name: values.icu_chart_order_name.trim(),
-          icu_chart_order_comment: values.icu_chart_order_comment ?? null,
+          icu_chart_order_name: trimmedOrderName,
+          icu_chart_order_comment: orderComment,
+          icu_chart_order_type: orderType,
         },
       )
     }
@@ -109,6 +121,7 @@ export default function OrderForm({
       title: `${values.icu_chart_order_name} 오더를 추가하였습니다`,
     })
 
+    resetState()
     toggleModal()
     setIsSubmitting(false)
   }

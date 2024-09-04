@@ -27,14 +27,12 @@ export default function OrderColorPicker({
 
       <Select onValueChange={onChange} value={parsedValue}>
         <SelectTrigger className="w-24 border-none shadow-none">
-          <Button
-            size="icon"
-            variant="outline"
-            className="rounded-full"
+          <div
+            className="h-9 w-9 rounded-full border"
             style={{
               backgroundColor: parsedValue,
             }}
-          ></Button>
+          />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
