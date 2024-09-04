@@ -89,7 +89,6 @@ export const columns: ColumnDef<ApprovalDataTable>[] = [
     },
     cell: ({ row }) => {
       const updatedAt = row.original.updated_at
-      console.log(updatedAt)
 
       return <span>{updatedAt ? formatTimestamp(updatedAt) : '미승인'} </span>
     },

@@ -1,3 +1,4 @@
+import { userLogFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/tx/tx-schema'
 import { Button } from '@/components/ui/button'
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import {
@@ -9,6 +10,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
+import { uploadTxImage } from '@/lib/services/icu/tx-image'
 import { upsertIcuChartTxAndUpdateIcuChartOrder } from '@/lib/services/icu/tx-mutation'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
@@ -20,10 +22,10 @@ import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { userLogFormSchema } from './tx-schema'
 
 export default function TxSelectUserStep({ chartId }: { chartId: string }) {
-  const { txLocalState, setStep, setIsMutationCanceled } = useTxMutationStore()
+  const { txLocalState, txImageState, setStep, setIsMutationCanceled, reset } =
+    useTxMutationStore()
   const { hos_id, target_date } = useParams()
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
 
@@ -41,6 +43,7 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
       userLog: '',
     },
   })
+
   const handleUpsertTx = useCallback(
     async (values: z.infer<typeof userLogFormSchema>) => {
       const newLog: TxLog = {
@@ -54,7 +57,7 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
       // setIsTxMutating(true)
       setStep('closed')
 
-      await upsertIcuChartTxAndUpdateIcuChartOrder(
+      const txId = await upsertIcuChartTxAndUpdateIcuChartOrder(
         hos_id as string,
         selectedPatientId as string,
         chartId,
@@ -63,11 +66,25 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
         updatedLogs,
       )
 
+      await uploadTxImage(txId, txImageState ?? [])
+      // const test = await getTxImageList(txId)
+
+      reset()
+
       toast({
         title: '처치 내역이 업데이트 되었습니다',
       })
     },
-    [chartId, hos_id, selectedPatientId, setStep, target_date, txLocalState],
+    [
+      chartId,
+      hos_id,
+      reset,
+      selectedPatientId,
+      setStep,
+      target_date,
+      txImageState,
+      txLocalState,
+    ],
   )
 
   const handleCancel = useCallback(() => {

@@ -20,7 +20,7 @@ export default async function IcuPage({
         targetDate={params.target_date}
         initialIcuData={initialIcuData}
       />
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </TanstackQueryProvider>
   )
 }

@@ -104,7 +104,7 @@ export default function UserInfoItem({
             {!isValid && (
               <div className="flex w-full justify-end pb-4">
                 <span className="ml-auto text-sm text-red-500">
-                  invalid message
+                  이름은 2자 이상 및 10자 이하여야 합니다
                 </span>
               </div>
             )}

@@ -6,31 +6,29 @@ import Image from 'next/image'
 import { useRef } from 'react'
 
 export default function IcuChartTxImageInput({
+  txId,
   images,
   onImagesChange,
 }: {
-  images: string[]
-  onImagesChange: (newImages: string[]) => void
+  txId: string | undefined
+  images: File[]
+  onImagesChange: (newImages: File[]) => void
 }) {
-  // input(type="file")의 ref
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // 이미지 input의 change 핸들러
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
 
-    if (files) {
+    if (files && txId) {
       const newImages = [...images]
 
-      Array.from(files).forEach((file) => {
+      Array.from(files).forEach(async (file) => {
         const reader = new FileReader()
 
-        reader.onloadend = () => {
-          newImages.push(reader.result as string)
-          if (newImages.length > 5) newImages.shift()
+        newImages.push(file)
+        if (newImages.length > 5) newImages.shift()
 
-          onImagesChange(newImages)
-        }
+        onImagesChange(newImages)
 
         reader.readAsDataURL(file)
       })
@@ -39,6 +37,7 @@ export default function IcuChartTxImageInput({
 
   const handleDeleteImage = (index: number) => {
     const newImages = images.filter((_, i) => i !== index)
+
     onImagesChange(newImages)
   }
 
@@ -66,9 +65,9 @@ export default function IcuChartTxImageInput({
       {/* 업로드된 이미지 목록 DIV */}
       <div className="mt-4 flex flex-wrap gap-4">
         {images.map((image, index) => (
-          <div key={image} className="relative h-24 w-24">
+          <div key={index} className="relative h-24 w-24">
             <Image
-              src={image}
+              src={URL.createObjectURL(image)}
               fill
               alt={`이미지 ${index + 1}`}
               className="rounded-md object-cover"
@@ -76,12 +75,13 @@ export default function IcuChartTxImageInput({
             />
 
             {/* 이미지 삭제 BUTTON */}
-            <button
+            <Button
               onClick={() => handleDeleteImage(index)}
-              className="absolute right-1 top-1 rounded-full bg-white bg-opacity-70 transition-colors duration-200 hover:bg-opacity-100"
+              variant="outline"
+              className="absolute right-1 top-1 h-5 w-5 rounded-full border-none bg-black bg-opacity-50 p-0 transition-colors duration-200 hover:bg-black"
             >
-              <X size={12} className="text-red-500" />
-            </button>
+              <X size={12} strokeWidth={3} className="text-white" />
+            </Button>
           </div>
         ))}
       </div>
