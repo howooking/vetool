@@ -24,6 +24,7 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
   },
   {
     accessorKey: 'bookmark_comment',
+
     header: ({ column }) => {
       return (
         <Button
@@ -41,21 +42,21 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
     },
   },
   {
-    accessorKey: 'created_at',
+    accessorKey: 'target_date',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          등록일
+          입원일
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
     cell: ({ row }) => {
-      const createdAt = row.original.created_at
-      return <span>{createdAt.slice(0, 10)}</span>
+      const targetDate = row.original.icu_chart_id.target_date
+      return <span>{targetDate}</span>
     },
   },
   {

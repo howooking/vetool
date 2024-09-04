@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import {
   Select,
@@ -8,29 +7,36 @@ import {
   SelectTrigger,
 } from '@/components/ui/select'
 import { COLORS } from '@/constants/common/colors'
-import { useMemo } from 'react'
+import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 
 export default function OrderColorPicker({
-  value,
-  onChange,
+  color,
+  handleChangeOrderTypeColor,
+  orderType,
 }: {
-  value: string
-  onChange: (value: string) => void
+  color: string
+  handleChangeOrderTypeColor: (orderType: string, color: string) => void
+  orderType: string
 }) {
-  const parsedValue = useMemo(() => {
-    return value || '#ccfbf1'
-  }, [value])
+  const orderTypeLabel = DEFAULT_ICU_ORDER_TYPE.find(
+    (item) => item.value === orderType,
+  )?.label
 
   return (
-    <div className="flex w-full flex-col space-y-2">
-      <Label className="font-semibold">오더 색상</Label>
+    <div className="flex flex-col space-y-2">
+      <Label htmlFor={orderType}>{orderTypeLabel}</Label>
 
-      <Select onValueChange={onChange} value={parsedValue}>
-        <SelectTrigger className="w-24 border-none shadow-none">
+      <Select
+        onValueChange={(selectedColor) =>
+          handleChangeOrderTypeColor(orderType, selectedColor)
+        }
+        value={color}
+      >
+        <SelectTrigger className="w-36" id={orderType}>
           <div
-            className="h-9 w-9 rounded-full border"
+            className="h-5 w-5 rounded-full border"
             style={{
-              backgroundColor: parsedValue,
+              backgroundColor: color,
             }}
           />
         </SelectTrigger>
@@ -44,7 +50,7 @@ export default function OrderColorPicker({
               >
                 <div
                   style={{ backgroundColor: value }}
-                  className="h-4 w-20 rounded-full"
+                  className="h-4 w-20 rounded-full border"
                 />
               </SelectItem>
             ))}

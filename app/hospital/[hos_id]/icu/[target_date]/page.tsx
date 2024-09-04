@@ -14,13 +14,10 @@ export default async function IcuPage({
   )
 
   return (
-    <TanstackQueryProvider>
-      <IcuEntry
-        hosId={params.hos_id}
-        targetDate={params.target_date}
-        initialIcuData={initialIcuData}
-      />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </TanstackQueryProvider>
+    <IcuEntry
+      hosId={params.hos_id}
+      targetDate={params.target_date}
+      initialIcuData={initialIcuData}
+    />
   )
 }

@@ -10,6 +10,7 @@ import type {
 import { useRef } from 'react'
 import ChartHeader from './chart-header/chart-header'
 import OutPatientCover from './out-patient-cover'
+import { IcuOrderTypeColor } from '@/types/adimin'
 
 export default function SelectedChart({
   selectedIo,
@@ -51,7 +52,7 @@ export default function SelectedChart({
 
         <ChartTable
           selectedChartOrders={selectedChartOrders}
-          orderColor={selectedIo.hos_id.order_color}
+          orderColors={selectedIo.hos_id.order_color as IcuOrderTypeColor}
         />
 
         <ChartMemos
