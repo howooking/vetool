@@ -80,7 +80,7 @@ export default function ProfileImage({
             className="absolute bottom-0 right-0 h-8 w-8 rounded-full border-2 border-primary p-0"
             disabled={isUploading}
           >
-            <Camera size={20} strokeWidth={2} color={COLORS.primary} />
+            <Camera size={20} strokeWidth={2} className="text-primary" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
@@ -97,8 +97,7 @@ export default function ProfileImage({
       {isUploading && (
         <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50">
           <LoaderCircle
-            className="animate-spin rounded-full"
-            color={COLORS.primary}
+            className="animate-spin rounded-full text-primary"
             size={32}
           />
         </div>
