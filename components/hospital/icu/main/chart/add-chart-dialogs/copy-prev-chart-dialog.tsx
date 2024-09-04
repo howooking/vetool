@@ -25,10 +25,8 @@ export default function CopyPrevChartDialog({
   setIsCreatingChart: (isCreatingChart: boolean) => void
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleCopyPrevSelectedChart = async () => {
-    setIsSubmitting(true)
     setIsCreatingChart(true)
 
     const { error } = await copyPrevChart(targetDate, selectedPatientId)
@@ -40,7 +38,6 @@ export default function CopyPrevChartDialog({
         variant: 'destructive',
       })
       setIsCreatingChart(false)
-      setIsSubmitting(false)
       setIsDialogOpen(false)
       return
     }
@@ -49,7 +46,6 @@ export default function CopyPrevChartDialog({
       title: '전날 차트를 복사하였습니다',
     })
     setIsDialogOpen(false)
-    setIsSubmitting(false)
   }
 
   return (
@@ -77,12 +73,7 @@ export default function CopyPrevChartDialog({
               취소
             </Button>
           </DialogClose>
-          <Button onClick={handleCopyPrevSelectedChart} disabled={isSubmitting}>
-            복사
-            <LoaderCircle
-              className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-            />
-          </Button>
+          <Button onClick={handleCopyPrevSelectedChart}>복사</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
