@@ -79,7 +79,6 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
   if (isChartLoading) {
     return <LargeLoaderCircle className="h-icu-chart" />
   }
-  console.log(selectedChart)
 
   if (!selectedIo) {
     return (

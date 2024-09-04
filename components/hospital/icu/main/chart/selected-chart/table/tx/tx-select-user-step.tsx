@@ -21,6 +21,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { userLogFormSchema } from './tx-schema'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function TxSelectUserStep({ chartId }: { chartId: string }) {
   const { txLocalState, setStep, setIsMutationCanceled } = useTxMutationStore()
@@ -41,6 +42,7 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
       userLog: '',
     },
   })
+
   const handleUpsertTx = useCallback(
     async (values: z.infer<typeof userLogFormSchema>) => {
       const newLog: TxLog = {
