@@ -11,12 +11,14 @@ import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 
 export default function OrderColorPicker({
   color,
-  handleChangeOrderTypeColor,
   orderType,
+  isLoading,
+  handleChangeOrderTypeColor,
 }: {
   color: string
-  handleChangeOrderTypeColor: (orderType: string, color: string) => void
   orderType: string
+  isLoading: boolean
+  handleChangeOrderTypeColor: (orderType: string, color: string) => void
 }) {
   const orderTypeLabel = DEFAULT_ICU_ORDER_TYPE.find(
     (item) => item.value === orderType,
@@ -31,6 +33,7 @@ export default function OrderColorPicker({
           handleChangeOrderTypeColor(orderType, selectedColor)
         }
         value={color}
+        disabled={isLoading}
       >
         <SelectTrigger className="w-36" id={orderType}>
           <div

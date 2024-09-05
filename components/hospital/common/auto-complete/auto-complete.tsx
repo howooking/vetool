@@ -129,8 +129,10 @@ export default function Autocomplete({
         setSuggestions([])
         break
       case 'Enter':
+        e.preventDefault()
+        e.stopPropagation()
+
         setTimeout(() => {
-          e.preventDefault()
           insertSuggestion(suggestions[selectedIndex].mainKeyword)
         }, 0)
         break

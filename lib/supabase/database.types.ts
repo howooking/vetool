@@ -1108,16 +1108,6 @@ export type Database = {
       toggle_out_patient: {
         Args: {
           icu_io_id_input: string
-          is_patient_out_input: boolean
-          patient_id_input: string
-          chart_orders_input: string
-          keywords_input: string
-        }
-        Returns: undefined
-      }
-      toggle_out_patient_test: {
-        Args: {
-          icu_io_id_input: string
           patient_id_input: string
           is_patient_out_input: boolean
           chart_orders_input: string
@@ -1140,17 +1130,6 @@ export type Database = {
           city_input: string
           district_input: string
           business_number_input: string
-        }
-        Returns: string
-      }
-      update_user_info_when_creating_new_hospital: {
-        Args: {
-          hos_name_input: string
-          city_input: string
-          district_input: string
-          business_number_input: string
-          user_name_input: string
-          is_vet_input: boolean
         }
         Returns: string
       }

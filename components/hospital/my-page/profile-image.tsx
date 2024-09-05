@@ -5,11 +5,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
-import { COLORS } from '@/constants/common/colors'
 import { useUpdateUserInfoStore } from '@/lib/store/hospital/update-user-info'
 import { Camera, LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
@@ -73,7 +71,9 @@ export default function ProfileImage({
         onChange={handleFileChange}
         accept="image/*"
       />
-      <DropdownMenu>
+
+      {/* TODO: 프로필 이미지 변경 */}
+      {/* <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
@@ -92,7 +92,7 @@ export default function ProfileImage({
             기본 이미지로 변경
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
 
       {isUploading && (
         <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50">
