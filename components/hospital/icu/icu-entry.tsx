@@ -38,9 +38,7 @@ export default function IcuEntry({
 
       <div className="h-icu-chart w-full flex-col overflow-y-auto">
         {isLoading ? (
-          <>
-            <LoaderCircle className="h-icu-chart" />
-          </>
+          <LoaderCircle className="h-icu-chart" />
         ) : (
           <IcuMain
             icuData={

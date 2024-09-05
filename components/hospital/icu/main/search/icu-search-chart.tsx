@@ -33,7 +33,7 @@ export default function IcuSearchChart({
   const [searchOptions, setSearchOptions] = useState<SearchOptions>({
     timeRange: '1',
     order: 'desc',
-    searchType: 'keyword',
+    searchType: 'simple',
   })
 
   const performSearch = useCallback(async () => {

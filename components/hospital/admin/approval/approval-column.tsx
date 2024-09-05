@@ -32,14 +32,11 @@ export function ApprovalColumn({
 
   const handleApproval = async () => {
     setIsUpdating(true)
-
     await approveStaff(hos_id as string, userId)
-
     toast({
       title: `${name}님을 스태프목록에 추가하였습니다`,
       description: '스태프관리에서 스테프설정을 변경할 수 있습니다',
     })
-
     setIsUpdating(false)
     setIsOpen(false)
     refresh()
@@ -59,16 +56,17 @@ export function ApprovalColumn({
         <DialogHeader>
           <DialogTitle>스태프 추가</DialogTitle>
           <DialogDescription>
-            {name}님을 스태프목록에 추가하시겠습니까?
+            {name}님을 스태프 목록에 추가하시겠습니까?
           </DialogDescription>
         </DialogHeader>
 
         <DialogFooter className="ml-auto">
           <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              아니오
+            <Button type="button" tabIndex={-1} variant="secondary">
+              닫기
             </Button>
           </DialogClose>
+
           <Button type="button" onClick={handleApproval} disabled={isUpdating}>
             추가
             <LoaderCircle
