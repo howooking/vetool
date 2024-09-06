@@ -12,18 +12,18 @@ import {
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
-import { IcuOrderTypeColor } from '@/types/adimin'
+import { IcuOrderColors } from '@/types/adimin'
 import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
 
 type ChartTablePropsPreview = {
   selectedChartOrders: CopiedOrder[]
-  orderColors?: IcuOrderTypeColor
+  orderColors: IcuOrderColors
   preview: true
 }
 
 type ChartTablePropsNonPreview = {
   selectedChartOrders: IcuChartOrderJoined[]
-  orderColors?: IcuOrderTypeColor
+  orderColors: IcuOrderColors
   preview?: false
 }
 
@@ -31,7 +31,7 @@ type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview
 
 export default function ChartTable({
   selectedChartOrders,
-  // orderColors,
+  orderColors,
   preview,
 }: ChartTableProps) {
   return (
@@ -68,7 +68,7 @@ export default function ChartTable({
             <OrderTitle
               order={order}
               preview={preview}
-              // orderColors={orderColors}
+              orderColors={orderColors}
             />
 
             {TIMES.map((time, index) => {

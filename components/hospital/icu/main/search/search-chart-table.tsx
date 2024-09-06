@@ -11,17 +11,17 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
-import type { IcuOrderTypeColor } from '@/types/adimin'
+import type { IcuOrderColors } from '@/types/adimin'
 import type { SearchedIcuIos } from '@/types/icu'
 
 export default function SearchChartTable({
   searchedIcuIos,
   isSearching,
-  // orderColors,
+  orderColors,
 }: {
   searchedIcuIos: SearchedIcuIos[]
   isSearching: boolean
-  // orderColors: IcuOrderTypeColor
+  orderColors: IcuOrderColors
 }) {
   const { isPreviewModalOpen } = useOrderPreviewStore()
 
@@ -65,11 +65,7 @@ export default function SearchChartTable({
         </TableBody>
       </Table>
 
-      {isPreviewModalOpen && (
-        <PreviewDialog
-        // orderColors={orderColors}
-        />
-      )}
+      {isPreviewModalOpen && <PreviewDialog orderColors={orderColors} />}
     </>
   )
 }

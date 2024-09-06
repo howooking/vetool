@@ -3,7 +3,7 @@ import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
-import { IcuOrderTypeColor } from '@/types/adimin'
+import { IcuOrderColors } from '@/types/adimin'
 import type { IcuDefaultChartJoined } from '@/types/icu'
 import { useMemo } from 'react'
 
@@ -29,8 +29,7 @@ export default function OrderTableBody({
     )
   }, [defaultChartOrders])
 
-  const orderColors = defaultChartOrders[0].hos_id
-    .order_color as IcuOrderTypeColor
+  const orderColors = defaultChartOrders[0].hos_id.order_color as IcuOrderColors
 
   const handleEditDialogOpen = (sortedOrder: IcuDefaultChartJoined) => {
     toggleModal()
@@ -52,7 +51,7 @@ export default function OrderTableBody({
             style={{
               background:
                 orderColors[
-                  sortedOrder.default_chart_order_type as keyof IcuOrderTypeColor
+                  sortedOrder.default_chart_order_type as keyof IcuOrderColors
                 ],
             }}
           >

@@ -10,7 +10,7 @@ import type {
 import { useRef } from 'react'
 import ChartHeader from './chart-header/chart-header'
 import OutPatientCover from './out-patient-cover'
-import { IcuOrderTypeColor } from '@/types/adimin'
+import { IcuOrderColors } from '@/types/adimin'
 
 export default function SelectedChart({
   selectedIo,
@@ -18,12 +18,14 @@ export default function SelectedChart({
   selectedChartOrders,
   isFirstChart,
   vetsList,
+  orderColors,
 }: {
   selectedIo: IcuIoJoined
   selectedChart: IcuChartJoined
   selectedChartOrders: IcuChartOrderJoined[]
   isFirstChart: boolean
   vetsList: IcuUserList[]
+  orderColors: IcuOrderColors
 }) {
   const pdfRef = useRef<HTMLDivElement>(null)
   const isPatientOut = selectedIo?.out_date !== null
@@ -52,7 +54,7 @@ export default function SelectedChart({
 
         <ChartTable
           selectedChartOrders={selectedChartOrders}
-          orderColors={selectedIo.hos_id.order_color as IcuOrderTypeColor}
+          orderColors={orderColors}
         />
 
         <ChartMemos

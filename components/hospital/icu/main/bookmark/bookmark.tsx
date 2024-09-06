@@ -2,20 +2,18 @@ import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import DataTable from '@/components/ui/data-table'
 import { getBookmarkCharts } from '@/lib/services/icu/bookmark'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
-import type { IcuOrderTypeColor } from '@/types/adimin'
+import type { IcuOrderColors } from '@/types/adimin'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import PreviewDialog from '../../common-dialogs/preview/preview-dialog'
 import { bookmarkColumns } from './bookmark-columns'
 
-export default function Bookmark(
-  {
-    // orderColors,
-  }: {
-    // orderColors: IcuOrderTypeColor
-  },
-) {
+export default function Bookmark({
+  orderColors,
+}: {
+  orderColors: IcuOrderColors
+}) {
   const { isPreviewModalOpen } = useOrderPreviewStore()
   const [isFetching, setIsFetching] = useState(true)
   const [bookmarkCharts, setBookmarkCharts] = useState<
@@ -43,11 +41,7 @@ export default function Bookmark(
         rowLength={10}
       />
 
-      {isPreviewModalOpen && (
-        <PreviewDialog
-        // orderColors={orderColors}
-        />
-      )}
+      {isPreviewModalOpen && <PreviewDialog orderColors={orderColors} />}
     </div>
   )
 }
