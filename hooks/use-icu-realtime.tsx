@@ -12,7 +12,6 @@ const supabase = createClient()
 
 export function useIcuRealtime(hosId: string, targetDate: string) {
   const queryClient = useQueryClient()
-  // const refetchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const icuIoQuery = useQuery({
     queryKey: ['icu_io', hosId, targetDate],
@@ -36,15 +35,6 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
   })
 
   const invalidateQueries = useDebouncedCallback((queryKey: string) => {
-    // console.log(`Invalidating ${queryKey}`)
-    // queryClient.invalidateQueries({
-    //   queryKey: [queryKey, hosId, targetDate],
-    // })
-
-    // if (refetchTimeoutRef.current) {
-    //   clearTimeout(refetchTimeoutRef.current)
-    // }
-
     console.log(`Refetching ${queryKey}`)
     queryClient.refetchQueries({
       queryKey: [queryKey, hosId, targetDate],
@@ -113,9 +103,6 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
       supabase.removeChannel(icuIoSubscription)
       supabase.removeChannel(icuChartSubscription)
       supabase.removeChannel(icuOrderSubscription)
-      // if (refetchTimeoutRef.current) {
-      //   clearTimeout(refetchTimeoutRef.current)
-      // }
     }
   }, [hosId, invalidateQueries, queryClient, targetDate])
 
