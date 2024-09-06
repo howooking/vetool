@@ -38,7 +38,6 @@ import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuUserList } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
@@ -99,8 +98,6 @@ export default function RegisterIcuForm({
     }
   }, [form, range])
 
-  const queryClient = useQueryClient()
-
   const handleSubmit = async (
     values: z.infer<typeof registerIcuPatientFormSchema>,
   ) => {
@@ -122,9 +119,6 @@ export default function RegisterIcuForm({
       sub_vet,
     )
 
-    queryClient.invalidateQueries({
-      queryKey: ['icu_io_realtime', 'icu_chart_realtime', hosId],
-    })
     toast({
       title: '입원 환자가 등록되었습니다',
     })

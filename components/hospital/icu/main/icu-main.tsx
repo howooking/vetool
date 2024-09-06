@@ -3,7 +3,12 @@
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import type { IcuOrderTypeColor } from '@/types/adimin'
-import type { IcuData } from '@/types/icu'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuIoJoined,
+  IcuUserList,
+} from '@/types/icu'
 import dynamic from 'next/dynamic'
 
 const DynamicSummary = dynamic(() => import('./summary/summary'), {
@@ -27,40 +32,53 @@ const DynamicBookmark = dynamic(() => import('./bookmark/bookmark'), {
   loading: () => <LargeLoaderCircle className="h-icu-chart" />,
 })
 
-export default function IcuMain({ icuData }: { icuData: IcuData }) {
+export default function IcuMain({
+  icuIoData,
+  icuChartData,
+  icuChartOrderData,
+  vetListData,
+}: {
+  icuIoData: IcuIoJoined[]
+  icuChartData: IcuChartJoined[]
+  icuChartOrderData: IcuChartOrderJoined[]
+  vetListData: IcuUserList[]
+}) {
   const { selectIcudMainView } = useSelectedMainViewStore()
 
   return (
     <>
       {selectIcudMainView === 'summary' && (
         <DynamicSummary
-          icuChartData={icuData.icuChartData}
-          icuChartOrderData={icuData.icuChartOrderData}
+          icuChartData={icuChartData}
+          icuChartOrderData={icuChartOrderData}
         />
       )}
 
       {selectIcudMainView === 'tx-table' && (
         <DynamicTxTable
-          icuChartData={icuData.icuChartData}
-          icuChartOrderData={icuData.icuChartOrderData}
+          icuChartData={icuChartData}
+          icuChartOrderData={icuChartOrderData}
         />
       )}
 
-      {selectIcudMainView === 'chart' && <DynamicIcuChart icuData={icuData} />}
+      {selectIcudMainView === 'chart' && (
+        <DynamicIcuChart
+          icuIoData={icuIoData}
+          icuChartData={icuChartData}
+          icuChartOrderData={icuChartOrderData}
+          vetListData={vetListData}
+        />
+      )}
 
       {selectIcudMainView === 'search' && (
         <DynamicIcuChartSearch
-          orderColors={
-            icuData.icuIoData[0].hos_id.order_color as IcuOrderTypeColor
-          }
+          orderColors={icuIoData[0].hos_id.order_color as IcuOrderTypeColor}
         />
       )}
 
       {selectIcudMainView === 'bookmark' && (
         <DynamicBookmark
-          orderColors={
-            icuData.icuIoData[0].hos_id.order_color as IcuOrderTypeColor
-          }
+          orderColors={icuIoData[0].hos_id.order_color as IcuOrderTypeColor}
         />
       )}
     </>

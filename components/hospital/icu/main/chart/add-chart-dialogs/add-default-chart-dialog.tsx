@@ -11,9 +11,8 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { registerDefaultChart } from '@/lib/services/icu/add-icu-chart'
-import { cn } from '@/lib/utils'
 import type { IcuChartJoined } from '@/types/icu'
-import { File, LoaderCircle } from 'lucide-react'
+import { File } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
@@ -26,11 +25,10 @@ export default function AddDefaultChartDialog({
 }) {
   const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleAddDefaultChart = async () => {
-    setIsSubmitting(true)
     setIsCreatingChart(true)
+    setIsDialogOpen(false)
 
     await registerDefaultChart(
       hos_id as string,
@@ -41,9 +39,6 @@ export default function AddDefaultChartDialog({
     toast({
       title: '기본형식의 차트를 생성했습니다',
     })
-
-    setIsDialogOpen(false)
-    setIsSubmitting(false)
   }
 
   return (
@@ -69,12 +64,7 @@ export default function AddDefaultChartDialog({
               취소
             </Button>
           </DialogClose>
-          <Button onClick={handleAddDefaultChart} disabled={isSubmitting}>
-            생성
-            <LoaderCircle
-              className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-            />
-          </Button>
+          <Button onClick={handleAddDefaultChart}>생성</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
