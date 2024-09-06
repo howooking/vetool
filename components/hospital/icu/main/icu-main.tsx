@@ -72,13 +72,13 @@ export default function IcuMain({
 
       {selectIcudMainView === 'search' && (
         <DynamicIcuChartSearch
-          orderColors={icuIoData[0].hos_id.order_color as IcuOrderTypeColor}
+        // orderColors={icuIoData[0].hos_id.order_color as IcuOrderTypeColor}
         />
       )}
 
       {selectIcudMainView === 'bookmark' && (
         <DynamicBookmark
-          orderColors={icuIoData[0].hos_id.order_color as IcuOrderTypeColor}
+        // orderColors={icuIoData[0].hos_id.order_color as IcuOrderTypeColor}
         />
       )}
     </>

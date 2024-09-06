@@ -15,11 +15,11 @@ import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
 
 export default function OrderTitle({
   order,
-  orderColors,
+  // orderColors,
   preview,
 }: {
   order: CopiedOrder | IcuChartOrderJoined
-  orderColors: IcuOrderTypeColor
+  // orderColors: IcuOrderTypeColor
   preview?: boolean
 }) {
   const {
@@ -41,9 +41,11 @@ export default function OrderTitle({
   return (
     <TableCell
       className={cn('w-[320px] p-0')}
-      style={{
-        background: orderColors[orderType as keyof IcuOrderTypeColor],
-      }}
+      style={
+        {
+          // background: orderColors[orderType as keyof IcuOrderTypeColor],
+        }
+      }
     >
       <TooltipProvider delayDuration={20}>
         <Tooltip>
