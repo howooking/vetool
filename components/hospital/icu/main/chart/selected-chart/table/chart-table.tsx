@@ -17,13 +17,13 @@ import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
 
 type ChartTablePropsPreview = {
   selectedChartOrders: CopiedOrder[]
-  orderColors: IcuOrderTypeColor
+  orderColors?: IcuOrderTypeColor
   preview: true
 }
 
 type ChartTablePropsNonPreview = {
   selectedChartOrders: IcuChartOrderJoined[]
-  orderColors: IcuOrderTypeColor
+  orderColors?: IcuOrderTypeColor
   preview?: false
 }
 
@@ -31,7 +31,7 @@ type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview
 
 export default function ChartTable({
   selectedChartOrders,
-  orderColors,
+  // orderColors,
   preview,
 }: ChartTableProps) {
   return (
@@ -68,7 +68,7 @@ export default function ChartTable({
             <OrderTitle
               order={order}
               preview={preview}
-              orderColors={orderColors}
+              // orderColors={orderColors}
             />
 
             {TIMES.map((time, index) => {

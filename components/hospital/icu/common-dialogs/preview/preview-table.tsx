@@ -4,17 +4,17 @@ import type { CopiedOrder } from '@/types/icu'
 
 export default function PreviewTable({
   copiedOrders,
-  orderColors,
+  // orderColors,
 }: {
   copiedOrders: CopiedOrder[]
-  orderColors: IcuOrderTypeColor
+  // orderColors: IcuOrderTypeColor
 }) {
   return (
     <div className="max-h-[800px] overflow-y-auto">
       <ChartTable
         selectedChartOrders={copiedOrders}
         preview
-        orderColors={orderColors}
+        // orderColors={orderColors}
       />
     </div>
   )
