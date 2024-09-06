@@ -1268,7 +1268,8 @@ export type Database = {
       }
       copy_prev_chart_orders: {
         Args: {
-          icu_chart_id_input: string
+          prev_chart_id_input: string
+          new_chart_id_input: string
         }
         Returns: undefined
       }

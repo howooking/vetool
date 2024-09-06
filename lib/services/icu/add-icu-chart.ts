@@ -105,7 +105,8 @@ export const copyPrevChart = async (
   }
 
   await supabase.rpc('copy_prev_chart_orders', {
-    icu_chart_id_input: newIcuChartId.icu_chart_id,
+    prev_chart_id_input: prevChartData.icu_chart_id,
+    new_chart_id_input: newIcuChartId.icu_chart_id,
   })
 
   return { error: null }
