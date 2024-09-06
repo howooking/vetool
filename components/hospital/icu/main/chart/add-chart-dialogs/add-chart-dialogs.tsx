@@ -5,7 +5,7 @@ import AddDefaultChartDialog from './add-default-chart-dialog'
 import AddBookmarkChartDialog from './bookmark/add-bookmark-chart-dialog'
 import CopyPrevChartDialog from './copy-prev-chart-dialog'
 import PasteCopiedChartDialog from './paste-copied-chart-dialog'
-import type { IcuOrderTypeColor } from '@/types/adimin'
+import type { IcuOrderColors } from '@/types/adimin'
 
 export default function AddChartDialogs({
   selectedPatientId,
@@ -16,7 +16,7 @@ export default function AddChartDialogs({
   selectedPatientId: string
   selectedChart?: IcuChartJoined
   isFirstChart: boolean
-  orderColors: IcuOrderTypeColor
+  orderColors: IcuOrderColors
 }) {
   const { target_date } = useParams()
   const { setIsChartLoading } = useIsChartLoadingStore()

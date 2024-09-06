@@ -13,7 +13,13 @@ export default function IcuEntry({
   hosId: string
   icuData: IcuData
 }) {
-  const { icuChartData, icuChartOrderData, icuIoData, vetsListData } = icuData
+  const {
+    icuChartData,
+    icuChartOrderData,
+    icuIoData,
+    vetsListData,
+    orderColorsData,
+  } = icuData
   useIcuRealTimeSubscription(hosId)
 
   return (
@@ -30,6 +36,7 @@ export default function IcuEntry({
           icuChartData={icuChartData}
           icuChartOrderData={icuChartOrderData}
           vetListData={vetsListData}
+          orderColors={orderColorsData}
         />
 
         <IcuFooter hosId={hosId} />

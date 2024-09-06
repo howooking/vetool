@@ -6,7 +6,7 @@ import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/s
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
-import { IcuOrderTypeColor } from '@/types/adimin'
+import { IcuOrderColors } from '@/types/adimin'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
@@ -21,11 +21,13 @@ export default function IcuChart({
   icuChartData,
   icuChartOrderData,
   vetListData,
+  orderColors,
 }: {
   icuIoData: IcuIoJoined[]
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
   vetListData: IcuUserList[]
+  orderColors: IcuOrderColors
 }) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
 
@@ -109,7 +111,7 @@ export default function IcuChart({
         isFirstChart={isFirstChart}
         selectedPatientId={selectedPatientId}
         selectedChart={selectedChart}
-        orderColors={icuIoData[0].hos_id.order_color as IcuOrderTypeColor}
+        orderColors={icuIoData[0].hos_id.order_color as IcuOrderColors}
       />
     )
   }
@@ -118,15 +120,14 @@ export default function IcuChart({
     return <LargeLoaderCircle className="h-icu-chart" />
   }
 
-  if (selectedChart && selectedIo && selectedChartOrders) {
-    return (
-      <SelectedChart
-        vetsList={vetListData}
-        isFirstChart={isFirstChart}
-        selectedIo={selectedIo}
-        selectedChart={selectedChart}
-        selectedChartOrders={selectedChartOrders}
-      />
-    )
-  }
+  return (
+    <SelectedChart
+      orderColors={orderColors}
+      vetsList={vetListData}
+      isFirstChart={isFirstChart}
+      selectedIo={selectedIo}
+      selectedChart={selectedChart}
+      selectedChartOrders={selectedChartOrders}
+    />
+  )
 }

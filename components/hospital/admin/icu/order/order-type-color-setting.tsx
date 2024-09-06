@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { updateOrderColor } from '@/lib/services/icu/hospital-orders'
-import { IcuOrderTypeColor } from '@/types/adimin'
+import { IcuOrderColors } from '@/types/adimin'
 import { useParams, useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useState } from 'react'
 import OrderColorPicker from './order-color-picker'
@@ -16,7 +16,7 @@ export default function OrderTypeColorSetting({
 }: {
   isLoading: boolean
   setIsLoading: Dispatch<SetStateAction<boolean>>
-  orderTypeColors: IcuOrderTypeColor
+  orderTypeColors: IcuOrderColors
 }) {
   const [colors, setColors] = useState(orderTypeColors)
   const { hos_id } = useParams()

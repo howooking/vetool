@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { IcuOrderTypeColor } from '@/types/adimin'
+import { IcuOrderColors } from '@/types/adimin'
 import { IcuDefaultChartJoined } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
@@ -78,7 +78,7 @@ export const upsertDefaultChartOrder = async (
 
 export const updateOrderColor = async (
   hosId: string,
-  orderTypeColorsInput: IcuOrderTypeColor,
+  orderTypeColorsInput: IcuOrderColors,
 ) => {
   const supabase = createClient()
 

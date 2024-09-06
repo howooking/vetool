@@ -2,7 +2,7 @@ import OrderTableBody from '@/components/hospital/admin/icu/order/order-table-bo
 import OrderTableHeader from '@/components/hospital/admin/icu/order/order-table-header'
 import OrderTypeColorSetting from '@/components/hospital/admin/icu/order/order-type-color-setting'
 import { Table } from '@/components/ui/table'
-import { IcuOrderTypeColor } from '@/types/adimin'
+import { IcuOrderColors } from '@/types/adimin'
 import { IcuDefaultChartJoined } from '@/types/icu'
 import { useState } from 'react'
 
@@ -27,7 +27,7 @@ export default function ChangeDefaultOrder({
         isLoading={isLoading}
         setIsLoading={setIsLoading}
         orderTypeColors={
-          defaultChartOrders[0].hos_id.order_color as IcuOrderTypeColor
+          defaultChartOrders[0].hos_id.order_color as IcuOrderColors
         }
       />
     </div>

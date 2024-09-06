@@ -1,5 +1,6 @@
 import IcuEntry from '@/components/hospital/icu/icu-entry'
 import { getAllIcuData } from '@/lib/services/icu/get-all-icu-data'
+import type { IcuData } from '@/types/icu'
 
 export default async function IcuPage({
   params,

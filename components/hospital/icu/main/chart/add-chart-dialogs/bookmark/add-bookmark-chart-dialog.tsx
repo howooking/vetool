@@ -17,7 +17,7 @@ import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import { cn } from '@/lib/utils'
-import type { IcuOrderTypeColor } from '@/types/adimin'
+import type { IcuOrderColors } from '@/types/adimin'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { LoaderCircle, Star } from 'lucide-react'
 import { useParams } from 'next/navigation'
@@ -26,7 +26,7 @@ import { useState } from 'react'
 export default function AddBookmarkChartDialog({
   orderColors,
 }: {
-  orderColors: IcuOrderTypeColor
+  orderColors: IcuOrderColors
 }) {
   const [isFetching, setIsFetching] = useState(false)
   const [bookmarkCharts, setBookmarkCharts] = useState<
@@ -74,11 +74,7 @@ export default function AddBookmarkChartDialog({
           searchPlaceHolder="즐겨찾기 이름 · 즐겨찾기 설명 · 환자명 검색"
         />
 
-        {isPreviewModalOpen && (
-          <PreviewDialog
-          // orderColors={orderColors}
-          />
-        )}
+        {isPreviewModalOpen && <PreviewDialog orderColors={orderColors} />}
         {isConfirmCopyDialogOpen && <ConfirmCopyDialog />}
 
         <DialogFooter>
