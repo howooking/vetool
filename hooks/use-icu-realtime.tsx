@@ -45,13 +45,11 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
       clearTimeout(refetchTimeoutRef.current)
     }
 
-    refetchTimeoutRef.current = setTimeout(() => {
-      console.log(`Refetching ${queryKey}`)
-      queryClient.refetchQueries({
-        queryKey: [queryKey, hosId, targetDate],
-      })
-    }, 500)
-  }, 700)
+    console.log(`Refetching ${queryKey}`)
+    queryClient.refetchQueries({
+      queryKey: [queryKey, hosId, targetDate],
+    })
+  }, 100)
 
   useEffect(() => {
     const icuIoSubscription = supabase
