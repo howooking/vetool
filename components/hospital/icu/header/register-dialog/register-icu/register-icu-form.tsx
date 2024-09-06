@@ -364,6 +364,7 @@ export default function RegisterIcuForm({
           <Button
             type="button"
             variant="outline"
+            tabIndex={-1}
             onClick={handlePreviousButtonClick}
           >
             이전

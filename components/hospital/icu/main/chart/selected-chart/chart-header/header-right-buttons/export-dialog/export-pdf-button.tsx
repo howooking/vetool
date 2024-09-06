@@ -24,19 +24,21 @@ export default function ExportPdfButton({
       setIsExportingPdf(true)
 
       const content = pdfRef.current
+
       const canvas = await html2canvas(pdfRef.current, {
         width: content.clientWidth,
         height: content.scrollHeight,
         scale: 2,
       })
+
       const imgData = canvas.toDataURL('image/png')
       const pdf = new jsPDF({
         orientation: 'landscape',
         unit: 'px',
-        format: [canvas.width / 2, canvas.height / 2],
+        format: [canvas.width / 4, canvas.height / 4],
       })
 
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2)
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 4, canvas.height / 4)
       pdf.save(`${chartData.target_date}/${chartData.patient_id.name}.pdf`)
     } catch (error) {
       toast({

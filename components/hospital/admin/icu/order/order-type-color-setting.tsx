@@ -3,13 +3,19 @@ import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { updateOrderColor } from '@/lib/services/icu/hospital-orders'
 import { IcuOrderTypeColor } from '@/types/adimin'
 import { useParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import OrderColorPicker from './order-color-picker'
 import { toast } from '@/components/ui/use-toast'
+import { LoaderCircle } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 export default function OrderTypeColorSetting({
+  isLoading,
+  setIsLoading,
   orderTypeColors,
 }: {
+  isLoading: boolean
+  setIsLoading: Dispatch<SetStateAction<boolean>>
   orderTypeColors: IcuOrderTypeColor
 }) {
   const [colors, setColors] = useState(orderTypeColors)
@@ -24,10 +30,14 @@ export default function OrderTypeColorSetting({
   }
 
   const handleUpdateOrderTypeColor = async () => {
+    setIsLoading(true)
+
     await updateOrderColor(hos_id as string, colors)
     toast({
-      title: '오더의 색생을 변경하였습니다.',
+      title: '오더의 색상을 변경하였습니다.',
     })
+
+    setIsLoading(false)
     refresh()
   }
 
@@ -43,23 +53,29 @@ export default function OrderTypeColorSetting({
   })
 
   return (
-    <div>
-      <div className="flex items-end gap-4">
-        <ul className="flex justify-between gap-2">
-          {sortedOrders.map(([key, value]) => (
-            <li key={key}>
-              <OrderColorPicker
-                color={value}
-                orderType={key}
-                handleChangeOrderTypeColor={handleChangeOrderTypeColor}
-              />
-            </li>
-          ))}
-        </ul>
-        <Button onClick={handleUpdateOrderTypeColor} size="sm">
-          수정
-        </Button>
-      </div>
+    <div className="flex items-end gap-4">
+      <ul className="flex justify-between gap-2">
+        {sortedOrders.map(([key, value]) => (
+          <li key={key}>
+            <OrderColorPicker
+              color={value}
+              orderType={key}
+              isLoading={isLoading}
+              handleChangeOrderTypeColor={handleChangeOrderTypeColor}
+            />
+          </li>
+        ))}
+      </ul>
+      <Button
+        onClick={handleUpdateOrderTypeColor}
+        disabled={isLoading}
+        size="sm"
+      >
+        수정
+        <LoaderCircle
+          className={cn(isLoading ? 'ml-2 animate-spin' : 'hidden')}
+        />
+      </Button>
     </div>
   )
 }
