@@ -9,11 +9,13 @@ import { useEffect, useState } from 'react'
 import PreviewDialog from '../../common-dialogs/preview/preview-dialog'
 import { bookmarkColumns } from './bookmark-columns'
 
-export default function Bookmark({
-  orderColors,
-}: {
-  orderColors: IcuOrderTypeColor
-}) {
+export default function Bookmark(
+  {
+    // orderColors,
+  }: {
+    // orderColors: IcuOrderTypeColor
+  },
+) {
   const { isPreviewModalOpen } = useOrderPreviewStore()
   const [isFetching, setIsFetching] = useState(true)
   const [bookmarkCharts, setBookmarkCharts] = useState<
@@ -41,7 +43,11 @@ export default function Bookmark({
         rowLength={10}
       />
 
-      {isPreviewModalOpen && <PreviewDialog orderColors={orderColors} />}
+      {isPreviewModalOpen && (
+        <PreviewDialog
+        // orderColors={orderColors}
+        />
+      )}
     </div>
   )
 }

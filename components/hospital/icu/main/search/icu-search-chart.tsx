@@ -19,11 +19,13 @@ export type SearchOptions = {
   searchType: 'simple' | 'keyword'
 }
 
-export default function IcuSearchChart({
-  orderColors,
-}: {
-  orderColors: IcuOrderTypeColor
-}) {
+export default function IcuSearchChart(
+  {
+    // orderColors,
+  }: {
+    // orderColors: IcuOrderTypeColor
+  },
+) {
   const { hos_id } = useParams()
   const { trie } = useKeywordTrieStore()
 
@@ -91,7 +93,7 @@ export default function IcuSearchChart({
       </div>
 
       <SearchChartTable
-        orderColors={orderColors}
+        // orderColors={orderColors}
         searchedIcuIos={searchedIcuIos}
         isSearching={isSearching}
       />
