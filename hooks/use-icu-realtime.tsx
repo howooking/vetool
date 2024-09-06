@@ -40,7 +40,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
     queryClient.refetchQueries({
       queryKey: [queryKey, hosId, targetDate],
     })
-  }, 100)
+  }, 500)
 
   useEffect(() => {
     const icuIoSubscription = supabase
