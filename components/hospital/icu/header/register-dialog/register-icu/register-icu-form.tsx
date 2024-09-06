@@ -60,11 +60,10 @@ export default function RegisterIcuForm({
   vetsData: IcuUserList[]
   tab: string
 }) {
-  const queryClient = useQueryClient()
   const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
   const { setIsChartLoading } = useIsChartLoadingStore()
   const { push } = useRouter()
-  const { target_date } = useParams()
+
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
     to: new Date(),
@@ -122,13 +121,6 @@ export default function RegisterIcuForm({
       sub_vet,
     )
 
-    queryClient.invalidateQueries({
-      queryKey: ['icu_io', hosId, target_date as string],
-    })
-    queryClient.invalidateQueries({
-      queryKey: ['icu_chart', hosId, target_date as string],
-    })
-
     toast({
       title: '입원 환자가 등록되었습니다',
     })
@@ -137,6 +129,7 @@ export default function RegisterIcuForm({
     setSelectedPatientId(registeringPatient.patientId)
     setSelectedIcuMainView('chart')
     push(`${format(in_date, 'yyyy-MM-dd')}`)
+    window.location.reload()
   }
 
   const handlePreviousButtonClick = () => {
