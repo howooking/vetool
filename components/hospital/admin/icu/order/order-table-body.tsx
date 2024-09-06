@@ -9,8 +9,10 @@ import { useMemo } from 'react'
 
 export default function OrderTableBody({
   defaultChartOrders,
+  isLoading,
 }: {
   defaultChartOrders: IcuDefaultChartJoined[]
+  isLoading: boolean
 }) {
   const { toggleModal, setIsEditMode, setChartOrder, setDefaultChartId } =
     useCreateOrderStore()
@@ -57,6 +59,7 @@ export default function OrderTableBody({
             <Button
               variant="ghost"
               onClick={() => handleEditDialogOpen(sortedOrder)}
+              disabled={isLoading}
               className={cn(
                 'flex w-full justify-between rounded-none bg-transparent px-2',
               )}

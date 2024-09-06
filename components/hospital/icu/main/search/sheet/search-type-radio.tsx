@@ -17,7 +17,7 @@ export default function SearchTypeRadio({
 
   return (
     <RadioGroup
-      defaultValue="keyword"
+      defaultValue="simple"
       className="flex"
       onValueChange={handleValueChange}
     >
