@@ -1,44 +1,49 @@
 'use client'
 
+import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import NoResult from '@/components/common/no-result'
 import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/selected-chart'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { IcuOrderTypeColor } from '@/types/adimin'
-import type { IcuData } from '@/types/icu'
-import { useMemo } from 'react'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuIoJoined,
+  IcuUserList,
+} from '@/types/icu'
+import { useEffect, useMemo } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 
-export default function IcuChart({ icuData }: { icuData: IcuData }) {
+export default function IcuChart({
+  icuIoData,
+  icuChartData,
+  icuChartOrderData,
+  vetListData,
+}: {
+  icuIoData: IcuIoJoined[]
+  icuChartData: IcuChartJoined[]
+  icuChartOrderData: IcuChartOrderJoined[]
+  vetListData: IcuUserList[]
+}) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
-  // const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
-
-  // const [selectedChartOrders, setSelectedChartOrders] = useState<
-  //   IcuChartOrderJoined[]
-  // >([])
-  // const [selectedChart, setSelectedChart] = useState<
-  //   IcuChartJoined | undefined
-  // >()
-  // const [selectedIo, setSeletedIo] = useState<IcuIoJoined | undefined>()
 
   const selectedIo = useMemo(
     () =>
-      icuData.icuIoData.find(
-        (io) => io.patient_id.patient_id === selectedPatientId,
-      ),
-    [icuData.icuIoData, selectedPatientId],
+      icuIoData.find((io) => io.patient_id.patient_id === selectedPatientId),
+    [icuIoData, selectedPatientId],
   )
   const selectedChart = useMemo(
     () =>
-      icuData.icuChartData.find(
+      icuChartData.find(
         (chart) => chart.patient_id.patient_id === selectedPatientId,
       ),
-    [icuData.icuChartData, selectedPatientId],
+    [icuChartData, selectedPatientId],
   )
   const selectedChartOrders = useMemo(
     () =>
-      icuData.icuChartOrderData
+      icuChartOrderData
         .filter(
           (order) =>
             order.icu_chart_id.icu_chart_id === selectedChart?.icu_chart_id,
@@ -52,32 +57,37 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
               (order) => order === next.icu_chart_order_type,
             ),
         ),
-    [icuData.icuChartOrderData, selectedChart?.icu_chart_id],
+    [icuChartOrderData, selectedChart?.icu_chart_id],
   )
 
-  const isFirstChart = selectedChart?.target_date === selectedIo?.in_date
+  const isFirstChart = useMemo(
+    () => selectedChart?.target_date === selectedIo?.in_date,
+    [selectedChart?.target_date, selectedIo?.in_date],
+  )
 
-  // useEffect(() => {
-  //   if (
-  //     (selectedChart && selectedChartOrders.length > 0) ||
-  //     (selectedChart && isFirstChart)
-  //   ) {
-  //     setIsChartLoading(false)
-  //   }
-  // }, [
-  //   isFirstChart,
-  //   selectedChart,
-  //   selectedChartOrders.length,
-  //   setIsChartLoading,
-  // ])
+  const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
+
+  useEffect(() => {
+    if (!isFirstChart && selectedChart) {
+      setIsChartLoading(false)
+    } else if (isFirstChart && selectedChartOrders.length) {
+      setIsChartLoading(false)
+    }
+    return () => setIsChartLoading(false)
+  }, [
+    isFirstChart,
+    selectedChart,
+    selectedChartOrders.length,
+    setIsChartLoading,
+  ])
 
   if (!selectedPatientId) {
     return <NoResult title="환자를 선택해주세요" className="h-icu-chart" />
   }
 
-  // if (isChartLoading) {
-  //   return <LargeLoaderCircle className="h-icu-chart" />
-  // }
+  if (isChartLoading) {
+    return <LargeLoaderCircle className="h-icu-chart" />
+  }
 
   if (!selectedIo) {
     return (
@@ -93,23 +103,25 @@ export default function IcuChart({ icuData }: { icuData: IcuData }) {
     )
   }
 
-  if (!selectedChartOrders.length) {
+  if (!selectedChart || (isFirstChart && !selectedChartOrders.length)) {
     return (
       <AddChartDialogs
         isFirstChart={isFirstChart}
         selectedPatientId={selectedPatientId}
         selectedChart={selectedChart}
-        orderColors={
-          icuData.icuIoData[0].hos_id.order_color as IcuOrderTypeColor
-        }
+        orderColors={icuIoData[0].hos_id.order_color as IcuOrderTypeColor}
       />
     )
+  }
+
+  if (!selectedChartOrders.length) {
+    return <LargeLoaderCircle className="h-icu-chart" />
   }
 
   if (selectedChart && selectedIo && selectedChartOrders) {
     return (
       <SelectedChart
-        vetsList={icuData.vetsListData}
+        vetsList={vetListData}
         isFirstChart={isFirstChart}
         selectedIo={selectedIo}
         selectedChart={selectedChart}

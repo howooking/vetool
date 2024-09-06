@@ -22,7 +22,6 @@ import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useQueryClient } from '@tanstack/react-query'
 
 export default function TxSelectUserStep({ chartId }: { chartId: string }) {
   const { txLocalState, txImageState, setStep, setIsMutationCanceled, reset } =

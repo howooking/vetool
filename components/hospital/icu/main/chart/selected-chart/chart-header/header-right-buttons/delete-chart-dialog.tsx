@@ -17,8 +17,8 @@ import {
   deleteOrders,
 } from '@/lib/services/icu/delete-icu-chart'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-import { cn } from '@/lib/utils'
-import { LoaderCircle, Trash2 } from 'lucide-react'
+import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
+import { Trash2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
@@ -35,13 +35,13 @@ export default function DeleteChartDialog({
 }) {
   const { target_date } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [isDeletingAllCharts, setIsDeletingAllCharts] = useState(false)
-  const { setSelectedPatientId: setSelectedPatient } =
-    useIcuSelectedPatientIdStore()
+
+  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
+  const { setIsChartLoading } = useIsChartLoadingStore()
 
   const handleDeleteChart = async () => {
-    setIsDeleting(true)
+    setIsDialogOpen(false)
+    setIsChartLoading(true)
 
     // 첫 차트인 경우 오더만 삭제, 2일차이상의 경우 차트 전체 삭제
     if (isFirstChart) {
@@ -53,12 +53,10 @@ export default function DeleteChartDialog({
     toast({
       title: '차트가 삭제되었습니다',
     })
-
-    setIsDeleting(false)
-    setIsDialogOpen(false)
   }
   const handleDeleteAllCharts = async () => {
-    setIsDeletingAllCharts(true)
+    setIsDialogOpen(false)
+    setIsChartLoading(true)
 
     await deleteAllCharts(icuIoId)
 
@@ -66,9 +64,7 @@ export default function DeleteChartDialog({
       title: `${name}의 모든차트가 삭제되었습니다`,
     })
 
-    setIsDeletingAllCharts(false)
-    setSelectedPatient(null)
-    setIsDialogOpen(false)
+    setSelectedPatientId(null)
   }
 
   return (
@@ -94,23 +90,9 @@ export default function DeleteChartDialog({
               취소
             </Button>
           </DialogClose>
-          <Button onClick={handleDeleteChart} disabled={isDeleting}>
-            선택차트삭제
-            <LoaderCircle
-              className={cn(isDeleting ? 'ml-2 animate-spin' : 'hidden')}
-            />
-          </Button>
-          <Button
-            onClick={handleDeleteAllCharts}
-            disabled={isDeletingAllCharts}
-            variant="destructive"
-          >
+          <Button onClick={handleDeleteChart}>선택차트삭제</Button>
+          <Button onClick={handleDeleteAllCharts} variant="destructive">
             모든차트삭제
-            <LoaderCircle
-              className={cn(
-                isDeletingAllCharts ? 'ml-2 animate-spin' : 'hidden',
-              )}
-            />
           </Button>
         </DialogFooter>
       </DialogContent>
