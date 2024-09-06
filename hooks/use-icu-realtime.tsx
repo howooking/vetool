@@ -51,7 +51,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
         queryKey: [queryKey, hosId, targetDate],
       })
     }, 500)
-  }, 700)
+  }, 1000)
 
   useEffect(() => {
     const icuIoSubscription = supabase
