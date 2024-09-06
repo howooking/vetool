@@ -35,15 +35,21 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
     refetchOnWindowFocus: true,
   })
 
-  const invalidateQueries = useDebouncedCallback((queryKey: string) => {
-    console.log(`Invalidating ${queryKey}`)
+  const invalidateQueries = useDebouncedCallback(() => {
+    console.log(`Invalidating`)
     queryClient.invalidateQueries({
-      queryKey: [queryKey, hosId, targetDate],
+      queryKey: ['icu_io', hosId, targetDate],
+    })
+    queryClient.invalidateQueries({
+      queryKey: ['icu_chart', hosId, targetDate],
+    })
+    queryClient.invalidateQueries({
+      queryKey: ['icu_order', hosId, targetDate],
     })
 
-    if (refetchTimeoutRef.current) {
-      clearTimeout(refetchTimeoutRef.current)
-    }
+    // if (refetchTimeoutRef.current) {
+    //   clearTimeout(refetchTimeoutRef.current)
+    // }
 
     // refetchTimeoutRef.current = setTimeout(() => {
     //   console.log(`Refetching ${queryKey}`)
@@ -66,7 +72,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
         },
         () => {
           console.log('%cio changed', 'background:blue; color:white')
-          invalidateQueries('icu_io')
+          invalidateQueries()
           // queryClient.refetchQueries({
           //   queryKey: ['icu_io', hosId, targetDate],
           // })
@@ -86,7 +92,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
         },
         () => {
           console.log('%cchart changed', 'background:red; color:white')
-          invalidateQueries('icu_chart')
+          invalidateQueries()
           // queryClient.refetchQueries({
           //   queryKey: ['icu_chart', hosId, targetDate],
           // })
@@ -106,7 +112,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
         },
         () => {
           console.log('%corder changed', 'background:green; color:white')
-          invalidateQueries('icu_order')
+          invalidateQueries()
         },
       )
       .subscribe()
@@ -115,9 +121,9 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
       supabase.removeChannel(icuIoSubscription)
       supabase.removeChannel(icuChartSubscription)
       supabase.removeChannel(icuOrderSubscription)
-      if (refetchTimeoutRef.current) {
-        clearTimeout(refetchTimeoutRef.current)
-      }
+      // if (refetchTimeoutRef.current) {
+      //   clearTimeout(refetchTimeoutRef.current)
+      // }
     }
   }, [hosId, queryClient])
 
