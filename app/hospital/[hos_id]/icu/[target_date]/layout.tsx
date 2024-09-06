@@ -1,5 +1,4 @@
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
-import TanstackQueryProvider from '@/providers/tanstack-query-provider'
 import React from 'react'
 
 export default function IcuPageLayout({
@@ -10,9 +9,9 @@ export default function IcuPageLayout({
   params: { target_date: string; hos_id: string }
 }) {
   return (
-    <TanstackQueryProvider>
+    <>
       <IcuHeader hosId={params.hos_id} />
       <div>{children}</div>
-    </TanstackQueryProvider>
+    </>
   )
 }

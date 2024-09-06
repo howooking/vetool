@@ -1,22 +1,12 @@
 import IcuEntry from '@/components/hospital/icu/icu-entry'
-import { getVetsList } from '@/lib/services/icu/get-vets-list'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { getAllIcuData } from '@/lib/services/icu/get-all-icu-data'
 
 export default async function IcuPage({
   params,
 }: {
   params: { hos_id: string; target_date: string }
 }) {
-  const vetsList = await getVetsList(params.hos_id)
+  const icuData = await getAllIcuData(params.hos_id, params.target_date)
 
-  return (
-    <>
-      <IcuEntry
-        hosId={params.hos_id}
-        targetDate={params.target_date}
-        vetsListData={vetsList}
-      />
-      <ReactQueryDevtools initialIsOpen={false} position="bottom" />
-    </>
-  )
+  return <IcuEntry hosId={params.hos_id} icuData={icuData} />
 }
