@@ -27,7 +27,7 @@ export function ConfirmCopyDialog() {
   const {
     isConfirmCopyDialogOpen,
     setIsConfirmCopyDialogOpen,
-    copiedOrders,
+    copiedChartId,
     reset,
   } = useCopiedChartStore()
 
@@ -35,7 +35,7 @@ export function ConfirmCopyDialog() {
     setIsSubmitting(true)
     setIsChartLoading(true)
 
-    await pasteChart(selectedPatientId!, copiedOrders!, target_date as string)
+    await pasteChart(selectedPatientId!, copiedChartId!, target_date as string)
 
     toast({
       title: '차트를 생성하였습니다',

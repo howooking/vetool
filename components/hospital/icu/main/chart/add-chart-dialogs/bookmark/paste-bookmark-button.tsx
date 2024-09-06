@@ -1,23 +1,17 @@
 import { Button } from '@/components/ui/button'
-import { getSelectedChartOrders } from '@/lib/services/icu/search-charts'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 
 export default function PasteBookmarkButton({ chartId }: { chartId: string }) {
   const [isFetching, setIsFetching] = useState(false)
-  const { setIsConfirmCopyDialogOpen, setCopiedChartId, setCopiedOrders } =
-    useCopiedChartStore()
+  const { setIsConfirmCopyDialogOpen, setCopiedChartId } = useCopiedChartStore()
 
   const handleSelect = async () => {
-    setCopiedChartId(chartId)
-
     setIsFetching(true)
-    const sortedChartOrders = await getSelectedChartOrders(chartId)
-    setCopiedOrders(sortedChartOrders)
-    setIsFetching(false)
-
+    setCopiedChartId(chartId)
     setIsConfirmCopyDialogOpen(true)
+    setIsFetching(false)
   }
 
   return (

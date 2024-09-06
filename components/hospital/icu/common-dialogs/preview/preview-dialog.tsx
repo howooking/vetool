@@ -1,3 +1,4 @@
+import PreviewTable from '@/components/hospital/icu/common-dialogs/preview/preview-table'
 import {
   Dialog,
   DialogContent,
@@ -8,7 +9,6 @@ import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import type { IcuOrderTypeColor } from '@/types/adimin'
 import { DialogDescription } from '@radix-ui/react-dialog'
-import PreviewTable from './preview-table'
 
 export default function PreviewDialog({
   orderColors,
