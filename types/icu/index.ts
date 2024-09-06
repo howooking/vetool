@@ -10,13 +10,16 @@ import type {
   Patients,
   User,
 } from '@/types'
+import { IcuOrderColors } from '../adimin'
 
 export type IcuData = {
   icuIoData: IcuIoJoined[]
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
   vetsListData: IcuUserList[]
+  orderColorsData: IcuOrderColors
 }
+
 export type IcuIoJoined = Pick<
   IcuIo,
   | 'in_date'
@@ -29,7 +32,7 @@ export type IcuIoJoined = Pick<
   | 'icu_io_cc'
 > & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
-  hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names' | 'order_color'>
+  hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names'>
 }
 
 export type MainAndSubVet = Pick<User, 'name' | 'avatar_url' | 'user_id'>
@@ -175,6 +178,4 @@ export type IcuDefaultChartJoined = Pick<
   | 'default_chart_order_name'
   | 'default_chart_order_comment'
   | 'default_chart_order_type'
-> & {
-  hos_id: Pick<Hospital, 'order_color'>
-}
+>

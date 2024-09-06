@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { IcuOrderColors } from '@/types/adimin'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
@@ -106,6 +107,12 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .select('name, position, user_id, avatar_url')
       .match({ hos_id: hosId, is_vet: true })
       .returns<IcuUserList[]>(),
+
+    supabase
+      .from('hospitals')
+      .select('order_color')
+      .match({ hos_id: hosId })
+      .single(),
   ])
 
   const [
@@ -113,26 +120,30 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
     { data: icuChartData, error: icuChartDataError },
     { data: icuChartOrderData, error: icuChartOrderDataError },
     { data: vetsListData, error: vetsListDataError },
+    { data: orderColorsData, error: orderColorsDataError },
   ] = await promiseArray
 
   if (
     icuIoDataError ||
     icuChartDataError ||
     icuChartOrderDataError ||
-    vetsListDataError
+    vetsListDataError ||
+    orderColorsDataError
   ) {
     console.error({
       icuIoDataError,
       icuChartDataError,
       icuChartOrderDataError,
       vetsListDataError,
+      orderColorsDataError,
     })
     redirect(
       `/error?message=${
         icuIoDataError?.message ||
         icuChartDataError?.message ||
         icuChartOrderDataError?.message ||
-        vetsListDataError?.message
+        vetsListDataError?.message ||
+        orderColorsDataError?.message
       }`,
     )
   }
@@ -141,5 +152,6 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
     icuChartData,
     icuChartOrderData,
     vetsListData,
+    orderColorsData: orderColorsData.order_color as IcuOrderColors,
   }
 }

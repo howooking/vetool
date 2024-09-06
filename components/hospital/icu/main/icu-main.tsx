@@ -2,7 +2,7 @@
 
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
-import type { IcuOrderTypeColor } from '@/types/adimin'
+import type { IcuOrderColors } from '@/types/adimin'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
@@ -37,11 +37,13 @@ export default function IcuMain({
   icuChartData,
   icuChartOrderData,
   vetListData,
+  orderColors,
 }: {
   icuIoData: IcuIoJoined[]
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
   vetListData: IcuUserList[]
+  orderColors: IcuOrderColors
 }) {
   const { selectIcudMainView } = useSelectedMainViewStore()
 
@@ -67,19 +69,16 @@ export default function IcuMain({
           icuChartData={icuChartData}
           icuChartOrderData={icuChartOrderData}
           vetListData={vetListData}
+          orderColors={orderColors}
         />
       )}
 
       {selectIcudMainView === 'search' && (
-        <DynamicIcuChartSearch
-        // orderColors={icuIoData[0].hos_id.order_color as IcuOrderTypeColor}
-        />
+        <DynamicIcuChartSearch orderColors={orderColors} />
       )}
 
       {selectIcudMainView === 'bookmark' && (
-        <DynamicBookmark
-        // orderColors={icuIoData[0].hos_id.order_color as IcuOrderTypeColor}
-        />
+        <DynamicBookmark orderColors={orderColors} />
       )}
     </>
   )

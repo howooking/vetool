@@ -10,16 +10,16 @@ import {
 } from '@/components/ui/tooltip'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
-import { IcuOrderTypeColor } from '@/types/adimin'
+import { IcuOrderColors } from '@/types/adimin'
 import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
 
 export default function OrderTitle({
   order,
-  // orderColors,
+  orderColors,
   preview,
 }: {
   order: CopiedOrder | IcuChartOrderJoined
-  // orderColors: IcuOrderTypeColor
+  orderColors: IcuOrderColors
   preview?: boolean
 }) {
   const {
@@ -41,11 +41,9 @@ export default function OrderTitle({
   return (
     <TableCell
       className={cn('w-[320px] p-0')}
-      style={
-        {
-          // background: orderColors[orderType as keyof IcuOrderTypeColor],
-        }
-      }
+      style={{
+        background: orderColors[orderType as keyof IcuOrderColors],
+      }}
     >
       <TooltipProvider delayDuration={20}>
         <Tooltip>

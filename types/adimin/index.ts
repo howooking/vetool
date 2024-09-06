@@ -28,7 +28,7 @@ export type ApprovalDataTable = Omit<
 > &
   Pick<User, 'user_id' | 'name' | 'avatar_url' | 'is_vet'>
 
-export type IcuOrderTypeColor = {
+export type IcuOrderColors = {
   [key in
     | 'po'
     | 'feed'
