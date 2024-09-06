@@ -1,6 +1,6 @@
-'use server'
+'use client'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/client'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation'
 const supabase = createClient()
 
 export const getIcuIo = async (hosId: string, targetDate: string) => {
+  console.log(`%cfetching IO ${targetDate}`, 'background:blue; color:white')
   const { data: icuIoData, error: icuIoDataError } = await supabase
     .from('icu_io')
     .select(
@@ -42,6 +43,7 @@ export const getIcuIo = async (hosId: string, targetDate: string) => {
 }
 
 export const getIcuChart = async (hosId: string, targetDate: string) => {
+  console.log(`%cfetching CHART ${targetDate}`, 'background:red; color:white')
   const { data: icuChartData, error: icuChartDataError } = await supabase
     .from('icu_chart')
     .select(
@@ -73,6 +75,7 @@ export const getIcuChart = async (hosId: string, targetDate: string) => {
 }
 
 export const getIcuOrder = async (hosId: string, targetDate: string) => {
+  console.log(`%cfetching ORDER ${targetDate}`, 'background:green; color:white')
   const { data: icuOrderData, error: icuChartOrderDataError } = await supabase
     .from('icu_chart_order')
     .select(

@@ -12,6 +12,7 @@ import { redirect } from 'next/navigation'
 export const getAllIcuData = async (hosId: string, targetDate: string) => {
   const supabase = createClient()
 
+  console.log('first data')
   const promiseArray = Promise.all([
     supabase
       .from('icu_io')
