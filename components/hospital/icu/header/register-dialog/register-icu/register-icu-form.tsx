@@ -129,7 +129,7 @@ export default function RegisterIcuForm({
     setSelectedPatientId(registeringPatient.patientId)
     setSelectedIcuMainView('chart')
     push(`${format(in_date, 'yyyy-MM-dd')}`)
-    window.location.reload()
+    // window.location.reload()
   }
 
   const handlePreviousButtonClick = () => {

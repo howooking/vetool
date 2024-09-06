@@ -18,6 +18,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
     queryFn: () => getIcuIo(hosId, targetDate),
     staleTime: 0,
     refetchOnWindowFocus: true,
+    refetchInterval: 5000,
   })
 
   const icuChartQuery = useQuery({
@@ -25,6 +26,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
     queryFn: () => getIcuChart(hosId, targetDate),
     staleTime: 0,
     refetchOnWindowFocus: true,
+    refetchInterval: 5000,
   })
 
   const icuChartOrderQuery = useQuery({
@@ -32,6 +34,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
     queryFn: () => getIcuOrder(hosId, targetDate),
     staleTime: 0,
     refetchOnWindowFocus: true,
+    refetchInterval: 5000,
   })
 
   const invalidateQueries = useDebouncedCallback((queryKey: string) => {
