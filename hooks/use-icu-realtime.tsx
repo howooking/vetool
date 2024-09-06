@@ -35,29 +35,23 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
     refetchOnWindowFocus: true,
   })
 
-  const invalidateQueries = useDebouncedCallback(() => {
-    console.log(`Invalidating`)
-    queryClient.invalidateQueries({
-      queryKey: ['icu_io', hosId, targetDate],
-    })
-    queryClient.invalidateQueries({
-      queryKey: ['icu_chart', hosId, targetDate],
-    })
-    queryClient.invalidateQueries({
-      queryKey: ['icu_order', hosId, targetDate],
-    })
+  const invalidateQueries = useDebouncedCallback((queryKey: string) => {
+    // console.log(`Invalidating ${queryKey}`)
+    // queryClient.invalidateQueries({
+    //   queryKey: [queryKey, hosId, targetDate],
+    // })
 
-    // if (refetchTimeoutRef.current) {
-    //   clearTimeout(refetchTimeoutRef.current)
-    // }
+    if (refetchTimeoutRef.current) {
+      clearTimeout(refetchTimeoutRef.current)
+    }
 
-    // refetchTimeoutRef.current = setTimeout(() => {
-    //   console.log(`Refetching ${queryKey}`)
-    //   queryClient.refetchQueries({
-    //     queryKey: [queryKey, hosId, targetDate],
-    //   })
-    // }, 500)
-  }, 1000)
+    refetchTimeoutRef.current = setTimeout(() => {
+      console.log(`Refetching ${queryKey}`)
+      queryClient.refetchQueries({
+        queryKey: [queryKey, hosId, targetDate],
+      })
+    }, 500)
+  }, 100)
 
   useEffect(() => {
     const icuIoSubscription = supabase
@@ -72,10 +66,10 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
         },
         () => {
           console.log('%cio changed', 'background:blue; color:white')
-          invalidateQueries()
-          // queryClient.refetchQueries({
-          //   queryKey: ['icu_io', hosId, targetDate],
-          // })
+          invalidateQueries('icu_io')
+          queryClient.refetchQueries({
+            queryKey: ['icu_io', hosId, targetDate],
+          })
         },
       )
       .subscribe()
@@ -92,10 +86,10 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
         },
         () => {
           console.log('%cchart changed', 'background:red; color:white')
-          invalidateQueries()
-          // queryClient.refetchQueries({
-          //   queryKey: ['icu_chart', hosId, targetDate],
-          // })
+          invalidateQueries('icu_chart')
+          queryClient.refetchQueries({
+            queryKey: ['icu_chart', hosId, targetDate],
+          })
         },
       )
       .subscribe()
@@ -112,7 +106,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
         },
         () => {
           console.log('%corder changed', 'background:green; color:white')
-          invalidateQueries()
+          invalidateQueries('icu_order')
         },
       )
       .subscribe()
@@ -121,9 +115,9 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
       supabase.removeChannel(icuIoSubscription)
       supabase.removeChannel(icuChartSubscription)
       supabase.removeChannel(icuOrderSubscription)
-      // if (refetchTimeoutRef.current) {
-      //   clearTimeout(refetchTimeoutRef.current)
-      // }
+      if (refetchTimeoutRef.current) {
+        clearTimeout(refetchTimeoutRef.current)
+      }
     }
   }, [hosId, queryClient])
 
