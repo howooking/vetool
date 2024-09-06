@@ -36,10 +36,10 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
   })
 
   const invalidateQueries = useDebouncedCallback((queryKey: string) => {
-    console.log(`Invalidating ${queryKey}`)
-    queryClient.invalidateQueries({
-      queryKey: [queryKey, hosId, targetDate],
-    })
+    // console.log(`Invalidating ${queryKey}`)
+    // queryClient.invalidateQueries({
+    //   queryKey: [queryKey, hosId, targetDate],
+    // })
 
     if (refetchTimeoutRef.current) {
       clearTimeout(refetchTimeoutRef.current)
@@ -67,9 +67,9 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
         () => {
           console.log('%cio changed', 'background:blue; color:white')
           invalidateQueries('icu_io')
-          // queryClient.refetchQueries({
-          //   queryKey: ['icu_io', hosId, targetDate],
-          // })
+          queryClient.refetchQueries({
+            queryKey: ['icu_io', hosId, targetDate],
+          })
         },
       )
       .subscribe()
@@ -87,9 +87,9 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
         () => {
           console.log('%cchart changed', 'background:red; color:white')
           invalidateQueries('icu_chart')
-          // queryClient.refetchQueries({
-          //   queryKey: ['icu_chart', hosId, targetDate],
-          // })
+          queryClient.refetchQueries({
+            queryKey: ['icu_chart', hosId, targetDate],
+          })
         },
       )
       .subscribe()
