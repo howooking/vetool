@@ -1,39 +1,25 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { CopiedOrder } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
 
-const pasteOrders = async (
-  copiedOrders: CopiedOrder[],
-  icu_chart_id: string,
-  icu_io_id: string,
-) => {
-  copiedOrders.forEach(async (order) => {
-    const { error: icuChartOrderError } = await supabase
-      .from('icu_chart_order')
-      .insert({
-        icu_chart_order_type: order.icu_chart_order_type,
-        icu_chart_id,
-        icu_io_id,
-        hos_id: order.hos_id,
-        icu_chart_order_name: order.icu_chart_order_name,
-        icu_chart_order_comment: order.icu_chart_order_comment,
-        icu_chart_order_time: order.icu_chart_order_time,
-      })
-
-    if (icuChartOrderError) {
-      console.log(icuChartOrderError)
-      redirect(`/error?message=${icuChartOrderError.message}`)
-    }
+const pasteOrders = async (prev_chart_id: string, new_chart_id: string) => {
+  const { error: rpcError } = await supabase.rpc('copy_prev_chart_orders', {
+    prev_chart_id_input: prev_chart_id,
+    new_chart_id_input: new_chart_id,
   })
+
+  if (rpcError) {
+    console.log(rpcError)
+    redirect(`/error?message=${rpcError.message}`)
+  }
 }
 
 export const pasteChart = async (
   patientId: string,
-  copiedOrders: CopiedOrder[],
+  prev_chart_id: string,
   targetDate: string,
 ) => {
   const { data: returningData, error: returningDataError } = await supabase
@@ -66,7 +52,7 @@ export const pasteChart = async (
 
   // 첫 차트인 경우 : chart 복사할 필요가 없고 order만 복사
   if (target_date === targetDate) {
-    await pasteOrders(copiedOrders, icu_chart_id, icu_io_id)
+    await pasteOrders(prev_chart_id, icu_chart_id)
   }
 
   // 첫차트가 아닌 경우 : 첫차트의 chart data와 order 모두 복사
@@ -95,6 +81,6 @@ export const pasteChart = async (
       redirect(`/error?message=${insertingNewChartError.message}`)
     }
 
-    await pasteOrders(copiedOrders, returningIcuChartId.icu_chart_id, icu_io_id)
+    await pasteOrders(prev_chart_id, returningIcuChartId.icu_chart_id)
   }
 }
