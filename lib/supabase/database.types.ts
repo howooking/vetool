@@ -9,6 +9,191 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      drug_products_rows: {
+        Row: {
+          active: boolean | null
+          company: string | null
+          created_at: string
+          description: string | null
+          drug_id: string | null
+          drug_name: string | null
+          drug_products_id: string
+          group: string | null
+          hos_id: string | null
+          mass_volume: number | null
+          name: string
+          name_simple: string | null
+          product_tag: string | null
+          standard: string | null
+          stock_plan: number | null
+          type: string | null
+          unit: string | null
+          volume: number | null
+        }
+        Insert: {
+          active?: boolean | null
+          company?: string | null
+          created_at?: string
+          description?: string | null
+          drug_id?: string | null
+          drug_name?: string | null
+          drug_products_id?: string
+          group?: string | null
+          hos_id?: string | null
+          mass_volume?: number | null
+          name: string
+          name_simple?: string | null
+          product_tag?: string | null
+          standard?: string | null
+          stock_plan?: number | null
+          type?: string | null
+          unit?: string | null
+          volume?: number | null
+        }
+        Update: {
+          active?: boolean | null
+          company?: string | null
+          created_at?: string
+          description?: string | null
+          drug_id?: string | null
+          drug_name?: string | null
+          drug_products_id?: string
+          group?: string | null
+          hos_id?: string | null
+          mass_volume?: number | null
+          name?: string
+          name_simple?: string | null
+          product_tag?: string | null
+          standard?: string | null
+          stock_plan?: number | null
+          type?: string | null
+          unit?: string | null
+          volume?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drug_products_rows_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "drugs_rows"
+            referencedColumns: ["drug_id"]
+          },
+          {
+            foreignKeyName: "drug_products_rows_drug_name_fkey"
+            columns: ["drug_name"]
+            isOneToOne: false
+            referencedRelation: "drugs_rows"
+            referencedColumns: ["drug_name"]
+          },
+          {
+            foreignKeyName: "drug_products_rows_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+        ]
+      }
+      drugs_description: {
+        Row: {
+          created_at: string
+          description: string | null
+          drug_id: string | null
+          drug_name: string
+          drugs_description_id: string
+          hos_id: string | null
+          indication: string | null
+          side_effect: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          drug_id?: string | null
+          drug_name: string
+          drugs_description_id?: string
+          hos_id?: string | null
+          indication?: string | null
+          side_effect?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          drug_id?: string | null
+          drug_name?: string
+          drugs_description_id?: string
+          hos_id?: string | null
+          indication?: string | null
+          side_effect?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drugs_description_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "drugs_rows"
+            referencedColumns: ["drug_id"]
+          },
+          {
+            foreignKeyName: "drugs_description_drug_name_fkey"
+            columns: ["drug_name"]
+            isOneToOne: true
+            referencedRelation: "drugs_rows"
+            referencedColumns: ["drug_name"]
+          },
+          {
+            foreignKeyName: "drugs_description_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+        ]
+      }
+      drugs_rows: {
+        Row: {
+          created_at: string
+          description: string | null
+          dose_max: number | null
+          dose_min: number | null
+          dose_unit: string | null
+          drug_id: string
+          drug_name: string
+          drug_tag: string | null
+          indication: string | null
+          indication_tag: string | null
+          side_effect: string | null
+          side_effect_tag: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          dose_max?: number | null
+          dose_min?: number | null
+          dose_unit?: string | null
+          drug_id?: string
+          drug_name: string
+          drug_tag?: string | null
+          indication?: string | null
+          indication_tag?: string | null
+          side_effect?: string | null
+          side_effect_tag?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          dose_max?: number | null
+          dose_min?: number | null
+          dose_unit?: string | null
+          drug_id?: string
+          drug_name?: string
+          drug_tag?: string | null
+          indication?: string | null
+          indication_tag?: string | null
+          side_effect?: string | null
+          side_effect_tag?: string | null
+        }
+        Relationships: []
+      }
       hospitals: {
         Row: {
           business_number: string
@@ -1074,6 +1259,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      copy_prev_chart: {
+        Args: {
+          target_date_input: string
+          patient_id_input: string
+        }
+        Returns: Json
+      }
+      copy_prev_chart_orders: {
+        Args: {
+          prev_chart_id_input: string
+          new_chart_id_input: string
+        }
+        Returns: undefined
+      }
+      insert_default_chart_orders: {
+        Args: {
+          hos_id_input: string
+          icu_chart_id_input: string
+          icu_io_id_input: string
+        }
+        Returns: undefined
+      }
       insert_patient_when_register: {
         Args: {
           hos_id_input: string
