@@ -1,6 +1,6 @@
+import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/table/chart-table'
 import { IcuOrderTypeColor } from '@/types/adimin'
 import type { CopiedOrder } from '@/types/icu'
-import ChartTable from '../../main/chart/selected-chart/table/chart-table'
 
 export default function PreviewTable({
   copiedOrders,

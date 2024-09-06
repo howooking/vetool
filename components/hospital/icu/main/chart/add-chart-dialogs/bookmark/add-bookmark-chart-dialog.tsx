@@ -1,4 +1,4 @@
-import { ConfirmCopyDialog } from '@/components/hospital/icu/common-dialogs/confirm-copy-dilalog'
+import { ConfirmCopyDialog } from '@/components/hospital/icu/common-dialogs/confirm-copy-dialog'
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
 import { bookmarkColumns } from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/bookmark-columns'
 import { Button } from '@/components/ui/button'
@@ -29,14 +29,14 @@ export default function AddBookmarkChartDialog({
   orderColors: IcuOrderTypeColor
 }) {
   const [isFetching, setIsFetching] = useState(false)
+  const [bookmarkCharts, setBookmarkCharts] = useState<
+    IcuChartBookmarkJoined[]
+  >([])
+
   const { hos_id } = useParams()
   const { isPreviewModalOpen } = useOrderPreviewStore()
   const { isBookmarkModalOpen, setBookmarkModalOpen } = useIcuBookmarkStore()
   const { isConfirmCopyDialogOpen } = useCopiedChartStore()
-
-  const [bookmarkCharts, setBookmarkCharts] = useState<
-    IcuChartBookmarkJoined[]
-  >([])
 
   const handleOpenBookmarkDialog = async () => {
     setIsFetching(true)
