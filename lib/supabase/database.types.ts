@@ -1266,6 +1266,20 @@ export type Database = {
         }
         Returns: Json
       }
+      copy_prev_chart_orders: {
+        Args: {
+          icu_chart_id_input: string
+        }
+        Returns: undefined
+      }
+      insert_default_chart_orders: {
+        Args: {
+          hos_id_input: string
+          icu_chart_id_input: string
+          icu_io_id_input: string
+        }
+        Returns: undefined
+      }
       insert_patient_when_register: {
         Args: {
           hos_id_input: string

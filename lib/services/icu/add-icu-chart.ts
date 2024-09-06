@@ -104,24 +104,10 @@ export const copyPrevChart = async (
     redirect(`/error?message=${creatingNewIcuChartError.message}`)
   }
 
-  prevChartOrdersData.forEach(async (order) => {
-    const { error: icuChartOrderError } = await supabase
-      .from('icu_chart_order')
-      .insert({
-        hos_id: order.hos_id,
-        icu_chart_order_type: order.icu_chart_order_type,
-        icu_chart_id: newIcuChartId.icu_chart_id,
-        icu_io_id: prevChartData!.icu_io_id,
-        icu_chart_order_name: order.icu_chart_order_name,
-        icu_chart_order_comment: order.icu_chart_order_comment,
-        icu_chart_order_time: order.icu_chart_order_time,
-      })
-
-    if (icuChartOrderError) {
-      console.log(icuChartOrderError)
-      return { error: icuChartOrderError }
-    }
+  supabase.rpc('copy_prev_chart_orders', {
+    icu_chart_id_input: newIcuChartId.icu_chart_id,
   })
+
   return { error: null }
 }
 
@@ -132,34 +118,9 @@ export const registerDefaultChart = async (
 ) => {
   const supabase = createClient()
 
-  const { data: defaultChartOrderData, error: defaultChartOrderError } =
-    await supabase
-      .from('icu_default_chart')
-      .select(
-        'default_chart_order_name, default_chart_order_comment, default_chart_order_type',
-      )
-      .match({ hos_id: hosId })
-
-  if (defaultChartOrderError) {
-    console.log(defaultChartOrderError)
-    redirect(`/error?message=${defaultChartOrderError.message}`)
-  }
-
-  defaultChartOrderData.forEach(async (order) => {
-    const { error: icuChartOrderError } = await supabase
-      .from('icu_chart_order')
-      .insert({
-        hos_id: hosId,
-        icu_chart_id: chartId,
-        icu_io_id: ioId,
-        icu_chart_order_name: order.default_chart_order_name,
-        icu_chart_order_comment: order.default_chart_order_comment,
-        icu_chart_order_type: order.default_chart_order_type,
-      })
-
-    if (icuChartOrderError) {
-      console.log(icuChartOrderError)
-      redirect(`/error?message=${icuChartOrderError.message}`)
-    }
+  await supabase.rpc('insert_default_chart_orders', {
+    hos_id_input: hosId,
+    icu_chart_id_input: chartId,
+    icu_io_id_input: ioId,
   })
 }
