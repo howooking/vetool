@@ -74,7 +74,11 @@ export default function AddBookmarkChartDialog({
           searchPlaceHolder="즐겨찾기 이름 · 즐겨찾기 설명 · 환자명 검색"
         />
 
-        {isPreviewModalOpen && <PreviewDialog orderColors={orderColors} />}
+        {isPreviewModalOpen && (
+          <PreviewDialog
+          // orderColors={orderColors}
+          />
+        )}
         {isConfirmCopyDialogOpen && <ConfirmCopyDialog />}
 
         <DialogFooter>
