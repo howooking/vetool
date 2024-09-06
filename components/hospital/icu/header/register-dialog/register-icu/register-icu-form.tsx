@@ -38,11 +38,12 @@ import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuUserList } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
@@ -59,9 +60,11 @@ export default function RegisterIcuForm({
   vetsData: IcuUserList[]
   tab: string
 }) {
+  const queryClient = useQueryClient()
   const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
   const { setIsChartLoading } = useIsChartLoadingStore()
   const { push } = useRouter()
+  const { target_date } = useParams()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
     to: new Date(),
@@ -118,6 +121,13 @@ export default function RegisterIcuForm({
       main_vet,
       sub_vet,
     )
+
+    queryClient.invalidateQueries({
+      queryKey: ['icu_io', hosId, target_date as string],
+    })
+    queryClient.invalidateQueries({
+      queryKey: ['icu_chart', hosId, target_date as string],
+    })
 
     toast({
       title: '입원 환자가 등록되었습니다',
