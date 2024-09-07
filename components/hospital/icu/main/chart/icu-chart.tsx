@@ -111,7 +111,7 @@ export default function IcuChart({
         isFirstChart={isFirstChart}
         selectedPatientId={selectedPatientId}
         selectedChart={selectedChart}
-        orderColors={icuIoData[0].hos_id.order_color as IcuOrderColors}
+        orderColors={orderColors}
       />
     )
   }
