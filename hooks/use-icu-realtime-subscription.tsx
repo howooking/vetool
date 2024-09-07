@@ -21,36 +21,67 @@ export function useIcuRealTimeSubscription(hosId: string) {
 
   const handleChange = useCallback(
     (table: string) => {
-      if (table === 'icu_chart_order') {
-        debouncedRefresh()
-      } else {
-        console.log(
-          `%c${table} changed`,
-          `background:${table === 'icu_chart' ? 'red' : 'blue'}; color:white`,
-        )
-        refresh()
-      }
+      // if (table === 'icu_chart_order') {
+      //   debouncedRefresh()
+      // } else {
+      console.log(
+        `%c${table} changed`,
+        `background:${table === 'icu_chart' ? 'red' : 'blue'}; color:white`,
+      )
+      refresh()
+      // }
     },
-    [debouncedRefresh, refresh],
+    [refresh],
   )
 
   useEffect(() => {
-    const subs = tables.map((table) =>
-      supabase
-        .channel(`${table}_changes`)
-        .on(
-          'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table,
-            filter: `hos_id=eq.${hosId}`,
-          },
-          () => handleChange(table),
-        )
-        .subscribe(),
-    )
-    return () => subs.forEach((subscription) => subscription.unsubscribe())
+    const subscription = supabase
+      .channel('icu_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'icu_io',
+          filter: `hos_id=eq.${hosId}`,
+        },
+        () => handleChange('icu_io'),
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'icu_chart',
+          filter: `hos_id=eq.${hosId}`,
+        },
+        () => handleChange('icu_chart'),
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'icu_chart_order',
+          filter: `hos_id=eq.${hosId}`,
+        },
+        () => handleChange('icu_chart_order'),
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'icu_chart_tx',
+          filter: `hos_id=eq.${hosId}`,
+        },
+        () => handleChange('icu_chart_tx'),
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(subscription)
+    }
   }, [handleChange, hosId])
 
   // const updateStatus = useCallback(

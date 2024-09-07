@@ -178,4 +178,6 @@ export type IcuDefaultChartJoined = Pick<
   | 'default_chart_order_name'
   | 'default_chart_order_comment'
   | 'default_chart_order_type'
->
+> & {
+  hos_id: Pick<Hospital, 'order_color'>
+}
