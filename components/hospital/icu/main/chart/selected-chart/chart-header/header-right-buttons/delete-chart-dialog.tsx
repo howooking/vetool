@@ -63,8 +63,6 @@ export default function DeleteChartDialog({
     toast({
       title: `${name}의 모든차트가 삭제되었습니다`,
     })
-
-    window.location.reload()
   }
 
   return (
