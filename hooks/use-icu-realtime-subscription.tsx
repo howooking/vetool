@@ -59,7 +59,10 @@ export function useIcuRealTimeSubscription(hosId: string) {
     })
 
     subscriptionRef.current = channel.subscribe((status) => {
-      if (status === 'SUBSCRIBED') {
+      if (status !== 'SUBSCRIBED') {
+        setIsSubscriptionReady(false)
+        console.log('unable to subscribe')
+      } else {
         setIsSubscriptionReady(true)
         console.log('Subscribed to all tables')
       }
