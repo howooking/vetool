@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { Button } from '@/components/ui/button'
@@ -52,9 +51,12 @@ export default function BirthDatePicker({
       setIsInputDisabled(true)
     } else {
       setIsInputDisabled(false)
+      updateBirthDate(new Date())
     }
 
-    updateBirthDate(currentDate)
+    if (currentDate.toString() !== new Date().toString()) {
+      updateBirthDate(currentDate)
+    }
   }, [yearInput, monthInput, updateBirthDate])
 
   const handleDateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +67,7 @@ export default function BirthDatePicker({
     if (value.length === 8 && /^\d+$/.test(value)) {
       const formatted = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`
       const parsedDate = parse(formatted, 'yyyy-MM-dd', new Date())
+
       if (isValid(parsedDate)) {
         updateBirthDate(parsedDate)
         setYearInput('')
