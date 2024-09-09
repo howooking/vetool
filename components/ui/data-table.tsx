@@ -51,9 +51,7 @@ export default function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    customColumnVisibility ?? {},
-  )
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
   const table = useReactTable({
@@ -69,7 +67,7 @@ export default function DataTable<TData, TValue>({
     state: {
       globalFilter,
       sorting,
-      columnVisibility,
+      columnVisibility: customColumnVisibility ?? columnVisibility,
       rowSelection,
     },
     initialState: {
