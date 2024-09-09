@@ -1264,6 +1264,7 @@ export type Database = {
         Args: {
           prev_chart_id_input: string
           new_chart_id_input: string
+          selected_io_id_input: string
         }
         Returns: undefined
       }

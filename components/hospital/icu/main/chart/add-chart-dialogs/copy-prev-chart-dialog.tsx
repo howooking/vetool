@@ -18,10 +18,12 @@ export default function CopyPrevChartDialog({
   targetDate,
   selectedPatientId,
   setIsCreatingChart,
+  selectedIoId,
 }: {
   targetDate: string
   selectedPatientId: string
   setIsCreatingChart: (isCreatingChart: boolean) => void
+  selectedIoId: string
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -29,7 +31,11 @@ export default function CopyPrevChartDialog({
     setIsCreatingChart(true)
     setIsDialogOpen(false)
 
-    const { error } = await copyPrevChart(targetDate, selectedPatientId)
+    const { error } = await copyPrevChart(
+      targetDate,
+      selectedPatientId,
+      selectedIoId,
+    )
 
     if (error) {
       toast({
