@@ -30,6 +30,7 @@ export const hasPrevChart = async (
 export const copyPrevChart = async (
   targetDate: string,
   selectedPatientId: string,
+  selectedIoId: string,
 ) => {
   const supabase = createClient()
 
@@ -107,6 +108,7 @@ export const copyPrevChart = async (
   await supabase.rpc('copy_prev_chart_orders', {
     prev_chart_id_input: prevChartData.icu_chart_id,
     new_chart_id_input: newIcuChartId.icu_chart_id,
+    selected_io_id_input: selectedIoId,
   })
 
   return { error: null }
