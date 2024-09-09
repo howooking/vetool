@@ -153,9 +153,6 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
-          dose_max: number | null
-          dose_min: number | null
-          dose_unit: string | null
           drug_id: string
           drug_name: string
           drug_tag: string | null
@@ -167,9 +164,6 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
-          dose_max?: number | null
-          dose_min?: number | null
-          dose_unit?: string | null
           drug_id?: string
           drug_name: string
           drug_tag?: string | null
@@ -181,9 +175,6 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
-          dose_max?: number | null
-          dose_min?: number | null
-          dose_unit?: string | null
           drug_id?: string
           drug_name?: string
           drug_tag?: string | null
@@ -348,7 +339,7 @@ export type Database = {
           bookmark_name: string
           created_at: string
           hos_id: string
-          icu_chart_id: string
+          icu_chart_id: string | null
         }
         Insert: {
           bookmark_comment?: string | null
@@ -356,7 +347,7 @@ export type Database = {
           bookmark_name?: string
           created_at?: string
           hos_id: string
-          icu_chart_id: string
+          icu_chart_id?: string | null
         }
         Update: {
           bookmark_comment?: string | null
@@ -364,7 +355,7 @@ export type Database = {
           bookmark_name?: string
           created_at?: string
           hos_id?: string
-          icu_chart_id?: string
+          icu_chart_id?: string | null
         }
         Relationships: [
           {
@@ -1014,6 +1005,7 @@ export type Database = {
           created_at: string
           gender: string
           hos_id: string
+          hos_owner_id: string | null
           hos_patient_id: string
           is_alive: boolean
           memo: string | null
@@ -1030,6 +1022,7 @@ export type Database = {
           created_at?: string
           gender: string
           hos_id: string
+          hos_owner_id?: string | null
           hos_patient_id?: string
           is_alive?: boolean
           memo?: string | null
@@ -1046,6 +1039,7 @@ export type Database = {
           created_at?: string
           gender?: string
           hos_id?: string
+          hos_owner_id?: string | null
           hos_patient_id?: string
           is_alive?: boolean
           memo?: string | null
@@ -1289,11 +1283,12 @@ export type Database = {
           species_input: string
           breed_input: string
           gender_input: string
-          birth_input: string
           microchip_no_input: string
           body_weight_input: string
           owner_name_input: string
+          owner_id_input: string
           memo_input: string
+          birth_input: string
         }
         Returns: string
       }
@@ -1344,6 +1339,14 @@ export type Database = {
         Args: {
           name_input: string
           is_vet_input: boolean
+          hos_id_input: string
+        }
+        Returns: undefined
+      }
+      update_user_info_when_sending_approval1: {
+        Args: {
+          is_vet_input: boolean
+          name_input: string
           hos_id_input: string
         }
         Returns: undefined
