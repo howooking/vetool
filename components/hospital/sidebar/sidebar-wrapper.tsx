@@ -16,13 +16,13 @@ export default function SidebarWrapper({
   return (
     <aside
       className={cn(
-        'flex h-screen shrink-0 flex-col border-r transition-all duration-200',
+        'hidden h-screen shrink-0 flex-col border-r transition-all duration-200 sm:flex',
         isExpanded ? 'w-48' : 'w-14',
       )}
     >
       {children}
 
-      <div className="absolute bottom-2 left-2.5">
+      <div className="absolute bottom-12 left-2.5">
         <Button
           size="icon"
           onClick={toggleSidebar}
