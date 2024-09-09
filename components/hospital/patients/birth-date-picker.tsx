@@ -29,6 +29,7 @@ export default function BirthDatePicker({
 }: {
   form: UseFormReturn<z.infer<typeof registerPatientFormSchema>>
 }) {
+  const [open, setOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [isDatePickerDisabled, setIsDatePickerDisabled] = useState(false)
   const [isInputDisabled, setIsInputDisabled] = useState(false)
@@ -71,7 +72,7 @@ export default function BirthDatePicker({
               placeholder="나이 (년수만 입력 ex: 3)"
             />
 
-            <Popover>
+            <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <FormControl>
                   <Button
