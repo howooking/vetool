@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type": "npx supabase gen types typescript --project-id ognykpkimfcqlhtttlss > lib/supabase/database.types.ts"
+    "type": "npx supabase gen types typescript --project-id ognykpkimfcqlhtttlss > lib/supabase/database.types.ts",
+    "https": "next dev --experimental-https"
   },
   "dependencies": {
     "@dotlottie/react-player": "^1.6.19",
