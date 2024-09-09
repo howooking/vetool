@@ -22,6 +22,7 @@ export default function PatientSearchTable({
       memo: patient.memo,
       is_alive: patient.is_alive,
       owner_name: patient.owner_name,
+      hos_owner_id: patient.hos_owner_id,
       isIcu: true,
     }),
   )
