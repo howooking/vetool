@@ -27,7 +27,7 @@ export default function IcuSearchChart({
   const { hos_id } = useParams()
   const { trie } = useKeywordTrieStore()
 
-  const [searchInput, setSearchInput] = useState('')
+  const [inputValue, setInputValue] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [searchedIcuIos, setSearchedIcuIos] = useState<SearchedIcuIos[]>([])
   const [searchOptions, setSearchOptions] = useState<SearchOptions>({
@@ -36,40 +36,48 @@ export default function IcuSearchChart({
     searchType: 'simple',
   })
 
-  const performSearch = useCallback(async () => {
-    if (searchInput) {
-      setIsSearching(true)
+  const getSearchValue = useCallback(
+    (value: string) => {
+      if (searchOptions.searchType === 'keyword') {
+        const result = trie
+          ?.search(value)
+          .sort((a, b) => a.keyword.length - b.keyword.length)[0]
+        return result?.searchKeyword ?? ''
+      }
+      return value
+    },
+    [searchOptions.searchType, trie],
+  )
 
+  const performSearch = useDebouncedCallback(async (searchValue: string) => {
+    setIsSearching(true)
+    if (searchValue) {
       const searchResult = await searchIos(
-        searchInput,
+        searchValue,
         hos_id as string,
         searchOptions.timeRange,
         searchOptions.order,
       )
+
       setSearchedIcuIos(searchResult)
-      setIsSearching(false)
     }
-  }, [searchInput, hos_id, searchOptions])
-
-  const debouncedSearch = useDebouncedCallback(performSearch, 600)
-
-  useEffect(() => {
-    debouncedSearch()
-  }, [searchInput, searchOptions, debouncedSearch])
+    setIsSearching(false)
+  }, 600)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim()
+    const searchedValue = getSearchValue(value)
 
-    if (searchOptions.searchType === 'keyword') {
-      const result = trie
-        ?.search(value)
-        .sort((a, b) => a.keyword.length - b.keyword.length)[0]
-
-      setSearchInput(result?.searchKeyword ?? '')
-    } else {
-      setSearchInput(value)
-    }
+    setInputValue(value)
+    performSearch(searchedValue)
   }
+
+  // searchOptions 변경을 감지하여 검색어 설정 및 검색 진행
+  useEffect(() => {
+    const searchedValue = getSearchValue(inputValue)
+
+    performSearch(searchedValue)
+  }, [searchOptions, inputValue, getSearchValue, performSearch])
 
   return (
     <div className="flex flex-col gap-2 p-2">

@@ -139,7 +139,6 @@ export default function BirthDatePicker({
                   fromYear={1900}
                   toYear={new Date().getFullYear()}
                   locale={ko}
-                  month={field.value}
                   selected={field.value}
                   mode="single"
                   onSelect={(date) => {
