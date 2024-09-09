@@ -12,557 +12,563 @@ export const SEX = [
 export type SexTypeEnum = (typeof SEX)[number]
 
 export const CANINE_BREEDS = [
-  'Affenpinscher',
-  'Afghan Hound',
-  'Aidi',
-  'Airedale Terrier',
-  'Akbash Dog',
-  'Akita',
-  'Alano Español',
-  'Alaskan Klee Kai',
-  'Alaskan Malamute',
-  'Alpine Dachsbracke',
-  'Alpine Spaniel',
-  'American Bulldog',
-  'American Cocker Spaniel',
-  'American Eskimo Dog',
-  'American Foxhound',
-  'American Hairless Terrier',
-  'American Pit Bull Terrier',
-  'American Staffordshire Terrier',
-  'American Water Spaniel',
-  'Anglo-Français de Petite Vénerie',
-  'Appenzeller Sennenhund',
-  'Ariege Pointer',
-  'Ariegeois',
-  'Armant',
-  'Armenian Gampr dog',
-  'Artois Hound',
-  'Australian Cattle Dog',
-  'Australian Kelpie',
-  'Australian Shepherd',
-  'Australian Silky Terrier',
-  'Australian Stumpy Tail Cattle Dog',
-  'Australian Terrier',
-  'Azawakh',
-  'Bakharwal Dog',
-  'Barbet',
-  'Basenji',
-  'Basque Shepherd Dog',
-  'Basset Artésien Normand',
-  'Basset Bleu de Gascogne',
-  'Basset Fauve de Bretagne',
-  'Basset Hound',
-  'Bavarian Mountain Hound',
-  'Beagle',
-  'Beagle-Harrier',
-  'Bearded Collie',
-  'Beauceron',
-  'Bedlington Terrier',
-  'Belgian Shepherd Dog',
-  'Bergamasco Shepherd',
-  'Berger Blanc Suisse',
-  'Berger Picard',
-  'Berner Laufhund',
-  'Bernese Mountain Dog',
-  'Bichon Frize',
-  'Billy',
-  'Black and Tan Coonhound',
-  'Black and Tan Virginia Foxhound',
-  'Black Norwegian Elkhound',
-  'Black Russian Terrier',
-  'Bloodhound',
-  'Blue Lacy',
-  'Blue Paul Terrier',
-  'Boerboel',
-  'Bohemian Shepherd',
-  'Bolognese',
-  'Border Collie',
-  'Border Terrier',
-  'Borzoi',
-  'Boston Terrier',
-  'Bouvier des Ardennes',
-  'Bouvier des Flandres',
-  'Boxer',
-  'Boykin Spaniel',
-  'Bracco Italiano',
-  "Braque d'Auvergne",
-  'Braque du Bourbonnais',
-  'Braque du Puy',
-  'Braque Francais',
-  'Braque Saint-Germain',
-  'Brazilian Terrier',
-  'Briard',
-  'Briquet Griffon Vendéen',
-  'Brittany',
-  'Broholmer',
-  'Bruno Jura Hound',
-  'Bucovina Shepherd Dog',
-  'Bull Terrier (Miniature)',
-  'Bull Terrier',
-  'Bulldog',
-  'Bullenbeisser',
-  'Bullmastiff',
-  'Bully Kutta',
-  'Burgos Pointer',
-  'Cairn Terrier',
-  'Canaan Dog',
-  'Canadian Eskimo Dog',
-  'Cane Corso',
-  'Cardigan Welsh Corgi',
-  'Carolina Dog',
-  'Carpathian Shepherd Dog',
-  'Catahoula Cur',
-  'Catalan Sheepdog',
-  'Caucasian Shepherd Dog',
-  'Cavalier King Charles Spaniel',
-  'Central Asian Shepherd Dog',
-  'Cesky Fousek',
-  'Cesky Terrier',
-  'Chesapeake Bay Retriever',
-  'Chien Français Blanc et Noir',
-  'Chien Français Blanc et Orange',
-  'Chien Français Tricolore',
-  'Chien-gris',
-  'Chihuahua',
-  'Chilean Fox Terrier',
-  'Chinese Chongqing Dog',
-  'Chinese Crested Dog',
-  'Chinese Imperial Dog',
-  'Chinook',
-  'Chippiparai',
-  'Chow Chow',
-  'Cierny Sery',
-  'Cimarrón Uruguayo',
-  "Cirneco dell'Etna",
-  'Clumber Spaniel',
-  'Combai',
-  'Cordoba Fighting Dog',
-  'Coton de Tulear',
-  'Cretan Hound',
-  'Croatian Sheepdog',
-  'Cumberland Sheepdog',
-  'Curly Coated Retriever',
-  'Cursinu',
-  'Cão da Serra de Aires',
-  'Cão de Castro Laboreiro',
-  'Cão Fila de São Miguel',
-  'Dachshund',
-  'Dalmatian',
-  'Dandie Dinmont Terrier',
-  'Danish Swedish Farmdog',
-  'Deutsche Bracke',
-  'Doberman Pinscher',
-  'Dogo Argentino',
-  'Dogo Cubano',
-  'Dogue de Bordeaux',
-  'Drentse Patrijshond',
-  'Drever',
-  'Dunker',
-  'Dutch Shepherd Dog',
-  'Dutch Smoushond',
-  'East Siberian Laika',
-  'East-European Shepherd',
-  'Elo',
-  'English Cocker Spaniel',
-  'English Foxhound',
-  'English Mastiff',
-  'English Setter',
-  'English Shepherd',
-  'English Springer Spaniel',
-  'English Toy Terrie',
-  'English Water Spaniel',
-  'English White Terrier',
-  'Entlebucher Mountain Dog',
-  'Estonian Hound',
-  'Estrela Mountain Dog',
-  'Eurasier',
-  'Field Spaniel',
-  'Fila Brasileiro',
-  'Finnish Hound',
-  'Finnish Lapphund',
-  'Finnish Spitz',
-  'Flat-Coated Retriever',
-  'Formosan Mountain Dog',
-  'Fox Terrier',
-  'French Bulldog',
-  'French Spaniel',
-  'Galgo Español',
-  'Gascon Saintongeois',
-  'German Longhaired Pointer',
-  'German Pinscher',
-  'German Shepherd',
-  'German Shorthaired Pointer',
-  'German Spaniel',
-  'German Spitz',
-  'German Wirehaired Pointer',
-  'Giant Schnauzer',
-  'Glen of Imaal Terrier',
-  'Golden Retriever',
-  'Gordon Setter',
-  'Gran Mastín de Borínquen',
-  'Grand Anglo-Français',
-  'Grand Basset Griffon Vendéen',
-  'Grand Bleu de Gascogne',
-  'Grand Griffon Vendéen',
-  'Great Dane',
-  'Great Pyrenees',
-  'Greater Swiss Mountain Dog',
-  'Greek Harehound',
-  'Greenland Dog',
-  'Greyhound',
-  'Griffon Bleu de Gascogne',
-  'Griffon Bruxellois',
-  'Griffon Fauve de Bretagne',
-  'Griffon Nivernais',
-  'Hamiltonstövare',
-  'Hanover Hound',
-  'Hare Indian Dog',
-  'Harrier',
-  'Havanese',
-  'Hawaiian Poi Dog',
-  'Himalayan Sheepdog',
-  'Hokkaido',
-  'Hovawart',
-  'Huntaway',
-  'Hygenhund',
-  'Ibizan Hound',
-  'Icelandic Sheepdog',
-  'Indian pariah dog',
-  'Indian Spitz',
-  'Irish Red and White Setter',
-  'Irish Setter',
-  'Irish Terrier',
-  'Irish Water Spaniel',
-  'Irish Wolfhound',
-  'Istrian Coarse-haired Hound',
-  'Istrian Shorthaired Hound',
-  'Italian Greyhound',
-  'Jack Russell Terrier',
-  'Jagdterrier',
-  'Jämthund',
-  'Kai Ken',
-  'Kaikadi',
-  'Kanni',
-  'Karelian Bear Dog',
-  'Karst Shepherd',
-  'Keeshond',
-  'Kerry Beagle',
-  'Kerry Blue Terrier',
-  'King Charles Spaniel',
-  'King Shepherd',
-  'Kintamani',
-  'Kishu',
-  'Komondor',
-  'Kooikerhondje',
-  'Koolie',
-  'Korean Jindo Dog',
-  'Kromfohrländer',
-  'Kumaon Mastiff',
-  'Kurī',
-  'Kuvasz',
-  'Kyi-Leo',
-  'Labrador Husky',
-  'Labrador Retriever',
-  'Lagotto Romagnolo',
-  'Lakeland Terrier',
-  'Lancashire Heeler',
-  'Landseer',
-  'Lapponian Herder',
-  'Large Münsterländer',
-  'Leonberger',
-  'Lhasa Apso',
-  'Lithuanian Hound',
-  'Longhaired Whippet',
-  'Löwchen',
-  'Mahratta Greyhound',
-  'Maltese',
-  'Manchester Terrier',
-  'Maremma Sheepdog',
-  'McNab',
-  'Mexican Hairless Dog',
-  'Miniature American Shepherd',
-  'Miniature Australian Shepherd',
-  'Miniature Fox Terrier',
-  'Miniature Pinscher',
-  'Miniature Schnauzer',
-  'Miniature Shar Pei',
-  'Molossus',
-  'Montenegrin Mountain Hound',
-  'Mongrel',
-  'Moscow Watchdog',
-  'Moscow Water Dog',
-  'Mountain Cur',
-  'Mucuchies',
-  'Mudhol Hound',
-  'Mudi',
-  'Neapolitan Mastiff',
-  'New Zealand Heading Dog',
-  'Newfoundland',
-  'Norfolk Spaniel',
-  'Norfolk Terrier',
-  'Norrbottenspets',
-  'North Country Beagle',
-  'Northern Inuit Dog',
-  'Norwegian Buhund',
-  'Norwegian Elkhound',
-  'Norwegian Lundehund',
-  'Norwich Terrier',
-  'Old Croatian Sighthound',
-  'Old Danish Pointer',
-  'Old English Sheepdog',
-  'Old English Terrier',
-  'Old German Shepherd Dog',
-  'Olde English Bulldogge',
-  'Otterhound',
-  'Pachon Navarro',
-  'Paisley Terrier',
-  'Pandikona',
-  'Papillon',
-  'Parson Russell Terrier',
-  'Patterdale Terrier',
-  'Pekingese',
-  'Pembroke Welsh Corgi',
-  'Perro de Presa Canario',
-  'Perro de Presa Mallorquin',
-  'Peruvian Hairless Dog',
-  'Petit Basset Griffon Vendéen',
-  'Petit Bleu de Gascogne',
-  'Phalène',
-  'Pharaoh Hound',
-  'Phu Quoc ridgeback dog',
-  'Picardy Spaniel',
-  'Plott Hound',
-  'Podenco Canario',
-  'Pointer',
-  'Polish Greyhound',
-  'Polish Hound',
-  'Polish Hunting Dog',
-  'Polish Lowland Sheepdog',
-  'Polish Tatra Sheepdog',
-  'Pomeranian',
-  'Pont-Audemer Spaniel',
-  'Poodle',
-  'Porcelaine',
-  'Portuguese Podengo',
-  'Portuguese Pointer',
-  'Portuguese Water Dog',
-  'Posavac Hound',
-  'Pražský Krysařík',
-  'Pudelpointer',
-  'Pug',
-  'Puli',
-  'Pumi',
-  'Pungsan Dog',
-  'Pyrenean Mastiff',
-  'Pyrenean Shepherd',
-  'Rafeiro do Alentejo',
-  'Rajapalayam',
-  'Rampur Greyhound',
-  'Rastreador Brasileiro',
-  'Rat Terrier',
-  'Ratonero Bodeguero Andaluz',
-  'Redbone Coonhound',
-  'Rhodesian Ridgeback',
-  'Rottweiler',
-  'Rough Collie',
-  'Russell Terrier',
-  'Russian Spaniel',
-  'Russian tracker',
-  'Russo-European Laika',
-  'Sabueso Español',
-  'Saint-Usuge Spaniel',
-  'Sakhalin Husky',
-  'Saluki',
-  'Samoyed',
-  'Sapsali',
-  'Schapendoes',
-  'Schillerstövare',
-  'Schipperke',
-  'Schweizer Laufhund',
-  'Schweizerischer Niederlaufhund',
-  'Scotch Collie',
-  'Scottish Deerhound',
-  'Scottish Terrier',
-  'Sealyham Terrier',
-  'Segugio Italiano',
-  'Seppala Siberian Sleddog',
-  'Serbian Hound',
-  'Serbian Tricolour Hound',
-  'Shar Pei',
-  'Shetland Sheepdog',
-  'Shiba Inu',
-  'Shih Tzu',
-  'Shikoku',
-  'Shiloh Shepherd Dog',
-  'Siberian Husky',
-  'Silken Windhound',
-  'Sinhala Hound',
-  'Skye Terrier',
-  'Sloughi',
-  'Slovak Cuvac',
-  'Slovakian Rough-haired Pointer',
-  'Small Greek Domestic Dog',
-  'Small Münsterländer',
-  'Smooth Collie',
-  'South Russian Ovcharka',
-  'Southern Hound',
-  'Spanish Mastiff',
-  'Spanish Water Dog',
-  'Spinone Italiano',
-  'Sporting Lucas Terrier',
-  'St. Bernard',
-  "St. John's water dog",
-  'Stabyhoun',
-  'Staffordshire Bull Terrier',
-  'Standard Schnauzer',
-  'Stephens Cur',
-  'Styrian Coarse-haired Hound',
-  'Sussex Spaniel',
-  'Swedish Lapphund',
-  'Swedish Vallhund',
-  'Tahltan Bear Dog',
-  'Taigan',
-  'Talbot',
-  'Tamaskan Dog',
-  'Teddy Roosevelt Terrier',
-  'Telomian',
-  'Tenterfield Terrier',
-  'Thai Bangkaew Dog',
-  'Thai Ridgeback',
-  'Tibetan Mastiff',
-  'Tibetan Spaniel',
-  'Tibetan Terrier',
-  'Tornjak',
-  'Tosa',
-  'Toy Bulldog',
-  'Toy Fox Terrier',
-  'Toy Manchester Terrier',
-  'Toy Trawler Spaniel',
-  'Transylvanian Hound',
-  'Treeing Cur',
-  'Treeing Walker Coonhound',
-  'Trigg Hound',
-  'Tweed Water Spaniel',
-  'Tyrolean Hound',
-  'Vizsla',
-  'Volpino Italiano',
-  'Weimaraner',
-  'Welsh Sheepdog',
-  'Welsh Springer Spaniel',
-  'Welsh Terrier',
-  'West Highland White Terrier',
-  'West Siberian Laika',
-  'Westphalian Dachsbracke',
-  'Wetterhoun',
-  'Whippet',
-  'White Shepherd',
-  'Wire Fox Terrier',
-  'Wirehaired Pointing Griffon',
-  'Wirehaired Vizsla',
-  'Yorkshire Terrier',
-  'Šarplaninac',
+  '아펜핀셔',
+
+  '아프간 라운드',
+
+  '에어데일 테리어',
+
+  '아키타견',
+
+  '아키타',
+
+  '알래스칸 클리 카이',
+
+  '말라뮤트',
+
+  '맬러뮤트',
+
+  '알래스칸 말라뮤트',
+
+  '알래스칸 맬러뮤트',
+
+  '아메리칸 불독',
+
+  '아메리칸 핏불 테리어',
+
+  '아메리칸 스태퍼드셔 테리어',
+
+  '아메리칸 워터 스파니엘',
+
+  '아메리칸 워터 스패니얼',
+
+  '아나톨리아 셰퍼드',
+
+  '오스트레일리안 캐틀독',
+
+  '켈피',
+
+  '오스트레일리안 켈피',
+
+  '오스트레일리언 셰퍼드',
+
+  '오스트레일리언 테리어',
+
+  '바센지',
+
+  '바셋하운드',
+
+  '비글',
+
+  '보더콜리',
+
+  '보스롱',
+
+  '베들링턴 테리어',
+
+  '벨기에 셰퍼드',
+
+  '벨지안 셰퍼드',
+
+  '벨기에 테뷰런',
+
+  '벨지안 테뷰런',
+
+  '버니즈 마운틴 독',
+
+  '비숑 프리제',
+
+  '블랙 러시안 테리어',
+
+  '블러드 하운드',
+
+  '보어보엘',
+
+  '볼로네즈',
+
+  '보더 콜리',
+
+  '보더 테리어',
+
+  '보르조이',
+
+  '보스턴 테리어',
+
+  '보스톤 테리어',
+
+  '부비에 데 플랑드르',
+
+  '복서',
+
+  '보이킨 스파니엘',
+
+  '보이킨 스패니얼',
+
+  '브리아드',
+
+  '브리트니 스패니얼',
+
+  '브리트니 스파니엘',
+
+  '브뤼셀 그리펀',
+
+  '불 테리어',
+
+  '불마스티프',
+
+  '케언 테리어',
+
+  '카발리에 킹 찰스 스파니엘',
+
+  '카발리에 킹 찰스 스패니얼',
+
+  '체서피크 베이 리트리버',
+
+  '치와와',
+
+  '차이니스 크레스티드',
+
+  '차우차우',
+
+  '클럼버 스패니얼',
+
+  '클럼버 스파니엘',
+
+  '코커 스패니얼',
+
+  '코커 스파니엘',
+
+  '콜리',
+
+  '쿤하운드',
+
+  '코통 드 튈레아르',
+
+  '컬리 코티드 리트리버',
+
+  '닥스훈트',
+
+  '달마시안',
+
+  '댄디 딘몬트 테리어',
+
+  '데니쉬 스웨디쉬 팜도그',
+
+  '스코티시 디어하운드',
+
+  '디어하운드',
+
+  '도베르만 핀셔',
+
+  '도고 아르헨티노',
+
+  '프렌치 마스티프',
+
+  '도그 드 보르도',
+
+  '드렌츠 패트리지 도그',
+
+  '잉글리쉬불독',
+
+  '잉글리시불독',
+
+  '잉글리시 세터',
+
+  '르웰린',
+
+  '잉글리시 셰퍼드',
+
+  '엔틀버쳐 마운틴 독',
+
+  '아메리칸 에스키모 독',
+
+  '필드 스파니엘',
+
+  '필드 스패니얼',
+
+  '필란드 사미개',
+
+  '필란드 스피츠',
+
+  '피니시 스피츠',
+
+  '플랫 코티드 리트리버',
+
+  '폭스테리어',
+
+  '폭스하운드',
+
+  '프렌치 불독',
+
+  '프렌치 스파니엘',
+
+  '프렌치 스패니얼',
+
+  '저먼 핀셔',
+
+  '저먼 셰퍼드',
+
+  '골든리트리버',
+
+  '고든 세터',
+
+  '그레이트 데인',
+
+  '그레이트 피레니즈',
+
+  '그레이터 스위스 마운틴 도그',
+
+  '그린란드견',
+
+  '그레이하운드',
+
+  '하바네즈',
+
+  '하바나 실크 독',
+
+  '하바나 독',
+
+  '호바와트',
+
+  '헌터웨이',
+
+  '이비전 하운드',
+
+  '아이리시 레드 앤드 화이트 세터',
+
+  '아이리시 세터',
+
+  '아이리시 테리어',
+
+  '아이리시 워터 스페니엘',
+
+  '아이리시 워터 스패니얼',
+
+  '아이리시 울프하운드',
+
+  '이탈리안 그레이하운드',
+
+  '잭 러셀 테리어',
+
+  '제퍼니스 친',
+
+  '제페니스 친',
+
+  '진돗개',
+
+  '진도견',
+
+  '키스혼드',
+
+  '케리 블루 테리어',
+
+  '코몬돌',
+
+  '쿠이커혼제',
+
+  '쿠바츠',
+
+  '래브라도 리트리버',
+
+  '레이클랜드 케리어',
+
+  '랭카셔 힐러',
+
+  '레온베르거',
+
+  '라사 압소',
+
+  '로첸',
+
+  '노르웨이 룬트훈트',
+
+  '룬트훈트',
+
+  '말티즈',
+
+  '말티푸',
+
+  '맨체스터 테리어',
+
+  '올드 잉글리시 마스티프',
+
+  '마스티프',
+
+  '맥냅 콜리',
+
+  '맥냅 셰퍼드',
+
+  '맥냅',
+
+  '멕시칸 헤어리스',
+
+  '미니어처 불 테리어',
+
+  '미니어처 핀셔',
+
+  '미니어처 푸들',
+
+  '믹스',
+
+  '혼합종',
+
+  '잡종',
+
+  '혼합견종',
+
+  '스몰 문스터랜더',
+
+  '나폴리탄 마스티노',
+
+  '나폴리탄 마스티프',
+
+  '뉴펀들랜드 도그',
+
+  '노퍽 테리어',
+
+  '노르웨이안 부훈트',
+
+  '노르웨이언 엘크하운드',
+
+  '노리치 테리어',
+
+  '노바 스코셔 덕 톨링 레트리버',
+
+  '올드 잉글리시 쉽독',
+
+  '오터 하운드',
+
+  '빠삐용',
+
+  '파슨 러셀 테리어',
+
+  '페키니스',
+
+  '페키니즈',
+
+  '프티 바세 그리퐁 방댕',
+
+  '잉글리시 포인터',
+
+  '포인터',
+
+  '폴리쉬 로랜드 쉽독',
+
+  '포메라니안',
+
+  '스탠다드 푸들',
+
+  '푸들',
+
+  '풍산개',
+
+  '포르투갈 워터 독',
+
+  '페로 드 프레사 카나리오',
+
+  '프레사 카나리오',
+
+  '퍼그',
+
+  '풀리',
+
+  '로디지안 리지백',
+
+  '로트와일러',
+
+  '로트바일러',
+
+  '세인트 버나드',
+
+  '살루키',
+
+  '사모예드',
+
+  '삽살개',
+
+  '스키퍼키',
+
+  '슈나우저',
+
+  '스코티시 테리어',
+
+  '실리엄 테리어',
+
+  '샤페이',
+
+  '셔틀랜드 시프독',
+
+  '셔틀랜드 십독',
+
+  '시바견',
+
+  '쉬즈',
+
+  '시츄',
+
+  '시추',
+
+  '시베리안 허스키',
+
+  '실켄 윈드하운드',
+
+  '오스트레일리안 실키 테리어',
+
+  '실키 테리어',
+
+  '슬루기',
+
+  '아이리쉬 소프트코티드 휘튼 테리어',
+
+  '스패니쉬 워터 독',
+
+  '이탈리안 스피노네',
+
+  '스피노네 이탈리아노',
+
+  '스프링어 스파니엘',
+
+  '스프링어 스패니얼',
+
+  '스타포드셔 불 테리어',
+
+  '서식스 스파니엘',
+
+  '서식스 스패니얼',
+
+  '쟘툰드',
+
+  '스웨덴 엘크하운드',
+
+  '스웨디시 라프훈트',
+
+  '티베탄 마스티프',
+
+  '티벳탄 스패니얼',
+
+  '티벳탄 스파니엘',
+
+  '티베탄 테리어',
+
+  '도사견',
+
+  '트리잉 워커 쿤 하운드',
+
+  '비즐라',
+
+  '바이마라너',
+
+  '웰시 코기',
+
+  '웰시 테리어',
+
+  '웨스트 하일랜드 화이트 테리어',
+
+  '휘핏',
+
+  '요크셔 테리어',
 ] as const
 
 export const FELINE_BREEDS = [
-  'Abyssinian',
-  'Aegean',
-  'American Curl',
-  'American Bobtail',
-  'American Shorthair',
-  'American Wirehair',
-  'Arabian Mau',
-  'Australian Mist',
-  'Asian',
-  'Asian Semi-longhair',
-  'Balinese',
-  'Bambino',
-  'Bengal',
-  'Birman',
-  'Bombay',
-  'Brazilian Shorthair',
-  'British Semi-longhair',
-  'British Shorthair',
-  'British Longhair',
-  'Burmese',
-  'Burmilla',
-  'California Spangled',
-  'Chantilly-Tiffany',
-  'Chartreux',
-  'Chausie',
-  'Cheetoh',
-  'Colorpoint Shorthair',
-  'Cornish Rex',
-  'Cymric',
-  'Cyprus',
-  'Devon Rex',
-  'Domestic Shorthair',
-  'Donskoy',
-  'Dragon Li',
-  'Dwarf cat',
-  'Egyptian Mau',
-  'European Shorthair',
-  'Exotic Shorthair',
-  'Foldex',
-  'German Rex',
-  'Havana Brown',
-  'Highlander',
-  'Himalayan',
-  'Japanese Bobtail',
-  'Javanese',
-  'Karelian Bobtail',
-  'Khao Manee',
-  'Korat',
-  'Korean Bobtail',
-  'Korean Shorthair',
-  'Korn Ja',
-  'Kurilian Bobtail',
-  'LaPerm',
-  'Lykoi',
-  'Maine Coon',
-  'Manx',
-  'Mekong Bobtail',
-  'Minskin',
-  'Munchkin',
-  'Nebelung',
-  'Napoleon',
-  'Norwegian Forest cat',
-  'Ocicat',
-  'Ojos Azules',
-  'Oregon Rex',
-  'Oriental Bicolor',
-  'Oriental Shorthair',
-  'Oriental Longhair',
-  'PerFold',
-  'Persian',
-  'Peterbald',
-  'Pixie-bob',
-  'Raas',
-  'Ragamuffin',
-  'Ragdoll',
-  'Russian Blue',
-  'Russian Tabby',
-  'Sam Sawet',
-  'Savannah',
-  'Scottish Fold',
-  'Selkirk Rex',
-  'Serengeti',
-  'Serrade petit',
-  'Siamese',
-  'Siberian',
-  'Singapura',
-  'Snowshoe',
-  'Sokoke',
-  'Somali',
-  'Sphynx',
-  'Suphalak',
-  'Thai',
-  'Thai Lilac',
-  'Tonkinese',
-  'Toyger',
-  'Turkish Angora',
-  'Turkish Van',
-  'Ukrainian Levkoy',
+  '아비시니안',
+
+  '아메리칸 밥테일',
+
+  '아메리칸 숏헤어',
+
+  '오스트레일리안 미스트',
+
+  '빌리니즈',
+
+  '벵갈',
+
+  '버만',
+
+  '봄베이',
+
+  '브리티시 숏헤어',
+
+  '버미즈',
+
+  '샤르트뢰',
+
+  '코니시 렉스',
+
+  '데본 렉스',
+
+  '도메스틱 롱 헤어',
+
+  '도메스틱 숏 헤어',
+
+  '이집션 마우',
+
+  '엑조틱 쇼트헤어',
+
+  '하바나 브라운',
+
+  '히말라얀',
+
+  '재패니즈밥테일',
+
+  '자바니즈',
+
+  '코랏',
+
+  '롱헤어 스코티시 폴드',
+
+  '메인쿤',
+
+  '맹크스',
+
+  '믹스',
+
+  '잡종',
+
+  '혼합묘종',
+
+  '혼합종',
+
+  '노르웨이숲',
+
+  '오시캣',
+
+  '오리엔탈 롱헤어',
+
+  '오리엔탈 숏헤어',
+
+  '페르시안',
+
+  '페르시안 친칠라',
+
+  '랙돌',
+
+  '러시안 블루',
+
+  '스코티시 폴드 숏헤어',
+
+  '스코티시 폴드',
+
+  '샴',
+
+  '싱가푸라',
+
+  '스노우슈',
+
+  '소말리',
+
+  '스핑크스',
+
+  '샹틀리-티파니',
+
+  '티파니',
+
+  '톤키니즈',
+
+  '터키시 앙고라',
+
+  '턱시도',
+
+  '두색털 고양이',
 ] as const
 
 export const COLORS = [
