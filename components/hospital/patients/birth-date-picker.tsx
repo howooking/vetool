@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { Button } from '@/components/ui/button'
@@ -52,9 +51,12 @@ export default function BirthDatePicker({
       setIsInputDisabled(true)
     } else {
       setIsInputDisabled(false)
+      updateBirthDate(new Date())
     }
 
-    updateBirthDate(currentDate)
+    if (currentDate.toString() !== new Date().toString()) {
+      updateBirthDate(currentDate)
+    }
   }, [yearInput, monthInput, updateBirthDate])
 
   const handleDateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +67,7 @@ export default function BirthDatePicker({
     if (value.length === 8 && /^\d+$/.test(value)) {
       const formatted = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`
       const parsedDate = parse(formatted, 'yyyy-MM-dd', new Date())
+
       if (isValid(parsedDate)) {
         updateBirthDate(parsedDate)
         setYearInput('')
@@ -92,22 +95,29 @@ export default function BirthDatePicker({
       render={({ field }) => (
         <FormItem className="flex flex-col justify-end">
           <FormLabel>생년월일*</FormLabel>
-          <div className="flex gap-2">
-            <Input
-              type="number"
-              value={yearInput}
-              onChange={handleYearInputChange}
-              className="h-8 w-32 text-sm"
-              placeholder="나이 (년수)"
-              max={99}
-            />
-            <Input
-              type="number"
-              value={monthInput}
-              onChange={handleMonthInputChange}
-              className="h-8 w-32 text-sm"
-              placeholder="나이 (개월수)"
-            />
+          <div className="flex items-center gap-2">
+            <div className="relative w-full">
+              <Input
+                type="number"
+                value={yearInput}
+                onChange={handleYearInputChange}
+                className="h-8 text-sm"
+                max={99}
+              />
+              <span className="absolute right-2 top-2 text-xs">살</span>
+            </div>
+            <div className="relative w-full">
+              <Input
+                type="number"
+                value={monthInput}
+                onChange={handleMonthInputChange}
+                className="h-8 text-sm"
+              />
+              <span className="absolute right-2 top-2 text-xs">개월</span>
+            </div>
+
+            <span className="shrink-0">OR</span>
+
             <Input
               type="text"
               value={dateInput}

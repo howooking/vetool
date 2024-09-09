@@ -18,7 +18,7 @@ import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
-export function ConfirmCopyDialog() {
+export function ConfirmCopyDialog({ selectedIoId }: { selectedIoId: string }) {
   const { target_date } = useParams()
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
   const { setBookmarkModalOpen } = useIcuBookmarkStore()
@@ -35,7 +35,12 @@ export function ConfirmCopyDialog() {
     setIsSubmitting(true)
     setIsChartLoading(true)
 
-    await pasteChart(selectedPatientId!, copiedChartId!, target_date as string)
+    await pasteChart(
+      selectedPatientId!,
+      copiedChartId!,
+      target_date as string,
+      selectedIoId,
+    )
 
     toast({
       title: '차트를 생성하였습니다',

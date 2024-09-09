@@ -19,10 +19,12 @@ export default function PasteCopiedChartDialog({
   targetDate,
   selectedPatientId,
   setIsCreatingChart,
+  selectedIoId,
 }: {
   targetDate: string
   selectedPatientId: string
   setIsCreatingChart: (isCreatingChart: boolean) => void
+  selectedIoId: string
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -43,7 +45,7 @@ export default function PasteCopiedChartDialog({
     setIsSubmitting(true)
     setIsCreatingChart(true)
 
-    await pasteChart(selectedPatientId, copiedChartId, targetDate)
+    await pasteChart(selectedPatientId, copiedChartId, targetDate, selectedIoId)
 
     toast({
       title: '차트를 붙여넣었습니다',
@@ -53,7 +55,14 @@ export default function PasteCopiedChartDialog({
     reset()
     setIsDialogOpen(false)
     setIsSubmitting(false)
-  }, [copiedChartId, reset, selectedPatientId, setIsCreatingChart, targetDate])
+  }, [
+    copiedChartId,
+    reset,
+    selectedIoId,
+    selectedPatientId,
+    setIsCreatingChart,
+    targetDate,
+  ])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
