@@ -1,4 +1,4 @@
-import HomepageHeader from '@/components/common/homepage-header'
+import HomepageHeader from '@/components/homepage/homepage-header'
 import React from 'react'
 
 export default function HompageLayout({

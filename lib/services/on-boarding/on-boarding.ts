@@ -14,27 +14,25 @@ export const getUserAppoval = async () => {
       .from('user_approvals')
       .select(
         `
-      user_approval_id,
-      hos_id (
-        name
-      )
-    `,
+          user_approval_id,
+          hos_id (name)
+        `,
       )
       .match({
         user_id: authUser?.id,
       })
-      .returns<UserApprovalHosJoined[]>()
+      .returns<UserApprovalHosJoined>()
+      .single()
 
   if (userApprovalDataError) {
     console.log(userApprovalDataError)
     redirect(`/error/?message=${userApprovalDataError.message}`)
   }
 
-  return userApprovalData
+  return userApprovalData as UserApprovalHosJoined
 }
-export const cancelApproval = async (formData: FormData) => {
+export const cancelApproval = async (userApprovalId: string) => {
   const supabase = createClient()
-  const userApprovalId = formData.get('user_approval_id') as string
 
   const { error } = await supabase.from('user_approvals').delete().match({
     user_approval_id: userApprovalId,
@@ -45,7 +43,7 @@ export const cancelApproval = async (formData: FormData) => {
     throw new Error(error.message)
   }
 
-  redirect('/on-boarding')
+  redirect('/')
 }
 
 export const getHospitals = async () => {
@@ -69,6 +67,7 @@ export const sendApprovalToHospital = async (
   username: string,
 ) => {
   const supabase = createClient()
+  console.log(hosId)
   const { error: rpcError } = await supabase.rpc(
     'update_user_info_when_sending_approval',
     {

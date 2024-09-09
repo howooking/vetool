@@ -1,10 +1,10 @@
 'use client'
 
-import SelectColumn from '@/components/on-boarding/select-hospital/select-column'
 import { Button } from '@/components/ui/button'
 import { SelectHosptialDataTable } from '@/types/on-boarding'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
+import ConfirmSelectHospitalDialog from './confirm-select-hospital-dialog'
 
 export const columns: ColumnDef<SelectHosptialDataTable>[] = [
   {
@@ -52,11 +52,12 @@ export const columns: ColumnDef<SelectHosptialDataTable>[] = [
   },
   {
     id: 'action',
+    header: '선택',
     cell: ({ row }) => {
       const hosId = row.original.hos_id
       const name = row.original.name
 
-      return <SelectColumn hosId={hosId} name={name} />
+      return <ConfirmSelectHospitalDialog hosId={hosId} name={name} />
     },
   },
 ]
