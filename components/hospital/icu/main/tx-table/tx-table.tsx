@@ -45,7 +45,6 @@ export default function TxTable({
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
   const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
 
-  console.log(icuChartOrderData)
   const filteredAndSortedOrder = useMemo(
     () =>
       icuChartOrderData

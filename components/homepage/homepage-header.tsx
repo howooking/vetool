@@ -1,14 +1,16 @@
 import MaxWidthContainer from '@/components/common/max-width-container'
 import { Button } from '@/components/ui/button'
-import logo from '@/public/logo.svg'
-import Image from 'next/image'
 import Link from 'next/link'
+import VetoolLogo from '../common/vetool-logo'
+import MobileNavMenu from './mobile-nav-menu'
 
 const NAV_MENUS = [
   { label: '벳툴소개', href: '/company' },
   { label: '제품안내', href: '/products' },
   { label: '가격안내', href: '/pricing' },
 ] as const
+export type NavMenus = typeof NAV_MENUS
+
 export default async function HomepageHeader() {
   return (
     <header className="sticky top-0 border-b">
@@ -16,15 +18,10 @@ export default async function HomepageHeader() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-12">
             <Link href="/">
-              <Image
-                src={logo}
-                alt="vetool logo"
-                unoptimized
-                className="h-8 w-auto"
-              />
+              <VetoolLogo />
             </Link>
 
-            <ul className="flex items-center gap-6">
+            <ul className="hidden items-center gap-6 md:flex">
               {NAV_MENUS.map((menu) => (
                 <li key={menu.href}>
                   <Link href={menu.href}>{menu.label}</Link>
@@ -34,18 +31,13 @@ export default async function HomepageHeader() {
           </div>
 
           <div className="flex items-center gap-2">
-            <>
-              <Button asChild variant="secondary">
-                <Link href="/login" className="font-bold">
-                  로그인
-                </Link>
-              </Button>
-              <Button asChild variant="default">
-                <Link href="/login" className="font-bold">
-                  무료로 시작하기
-                </Link>
-              </Button>
-            </>
+            <Button asChild variant="default">
+              <Link href="/login" className="font-bold">
+                로그인
+              </Link>
+            </Button>
+
+            <MobileNavMenu navMenus={NAV_MENUS} />
           </div>
         </div>
       </MaxWidthContainer>

@@ -21,7 +21,7 @@ export default function Todo({
   )
 
   return (
-    <Card className="w-[600px] rounded-sm">
+    <Card className="w-full rounded-sm md:w-[600px]">
       <CardHeader>
         <CardTitle>TODO</CardTitle>
       </CardHeader>

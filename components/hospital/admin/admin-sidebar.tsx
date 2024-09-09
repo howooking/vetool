@@ -54,7 +54,12 @@ export default function AdminSidebar() {
     <aside className="h-[calc(100vh-48px)] w-48 border-r">
       <ul className="flex flex-col gap-2 p-2">
         {ADMIN_SIDE_BAR_ITEMS.map((item) => (
-          <AdminSidebarItem key={item.name} {...item} />
+          <AdminSidebarItem
+            key={item.name}
+            icon={item.icon}
+            name={item.name}
+            path={item.path}
+          />
         ))}
       </ul>
     </aside>

@@ -38,6 +38,7 @@ type DataTableProps<TData, TValue> = {
   rowSelect?: boolean
   searchPlaceHolder?: string
   rowLength?: number
+  customColumnVisibility?: VisibilityState
 }
 export default function DataTable<TData, TValue>({
   columns,
@@ -46,6 +47,7 @@ export default function DataTable<TData, TValue>({
   rowSelect,
   searchPlaceHolder,
   rowLength = 10,
+  customColumnVisibility,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [globalFilter, setGlobalFilter] = useState('')
@@ -65,7 +67,7 @@ export default function DataTable<TData, TValue>({
     state: {
       globalFilter,
       sorting,
-      columnVisibility,
+      columnVisibility: customColumnVisibility ?? columnVisibility,
       rowSelection,
     },
     initialState: {
@@ -90,7 +92,7 @@ export default function DataTable<TData, TValue>({
           <Button
             size="icon"
             variant="ghost"
-            className="absolute right-8 h-5 w-5 text-muted-foreground"
+            className="absolute right-10 h-5 w-5 text-muted-foreground"
             onClick={() => setGlobalFilter('')}
           >
             <X size={12} />

@@ -12,18 +12,18 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { sendApprovalToHospital } from '@/lib/services/on-boarding/on-boarding'
 import { cn } from '@/lib/utils'
-import { LoaderCircle } from 'lucide-react'
+import { Check, LoaderCircle } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
-export default function SelectColumn({
+export default function ConfirmSelectHospitalDialog({
   hosId,
   name,
 }: {
   hosId: string
   name: string
 }) {
-  const { replace } = useRouter()
+  const { push } = useRouter()
   const searchParams = useSearchParams()
   const isVet = searchParams.get('is_vet')
   const username = searchParams.get('name')
@@ -42,23 +42,23 @@ export default function SelectColumn({
     })
     setIsSubmitting(false)
     setIsOpen(false)
-    replace('/')
+    push('/')
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline">
-          선택
+        <Button size="icon" variant="ghost">
+          <Check />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-w-[300px] rounded-md sm:max-w-md">
         <DialogHeader>
           <DialogTitle>승인 요청하기</DialogTitle>
           <DialogDescription>{name}에 승인요청을 보냅니다</DialogDescription>
         </DialogHeader>
 
-        <DialogFooter className="ml-auto sm:justify-start">
+        <DialogFooter className="flex gap-2 sm:justify-end">
           <DialogClose asChild>
             <Button type="button" variant="secondary">
               취소
@@ -67,7 +67,7 @@ export default function SelectColumn({
           <Button onClick={handleSubmit} disabled={isSubmitting}>
             확인
             <LoaderCircle
-              className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
+              className={cn(isSubmitting ? 'animate-spin' : 'hidden')}
             />
           </Button>
         </DialogFooter>
