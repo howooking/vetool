@@ -12,6 +12,7 @@ import { updateOutDueDate } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
 import { format, parseISO } from 'date-fns'
 import { ko } from 'date-fns/locale'
+import { LogOut } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function OutDueDate({
@@ -64,7 +65,8 @@ export default function OutDueDate({
               !outDueDateInput && 'text-muted-foreground',
             )}
           >
-            <span className="text-xs text-muted-foreground">퇴원예정</span>
+            <LogOut className="text-muted-foreground" size={16} />
+
             {outDueDateInput ? (
               <span className="text-sm font-normal">
                 {format(outDueDateInput, 'yyyy-MM-dd')}
