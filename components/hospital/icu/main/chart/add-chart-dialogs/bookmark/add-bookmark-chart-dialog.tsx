@@ -25,8 +25,10 @@ import { useState } from 'react'
 
 export default function AddBookmarkChartDialog({
   orderColors,
+  selectedIoId,
 }: {
   orderColors: IcuOrderColors
+  selectedIoId: string
 }) {
   const [isFetching, setIsFetching] = useState(false)
   const [bookmarkCharts, setBookmarkCharts] = useState<
@@ -75,7 +77,9 @@ export default function AddBookmarkChartDialog({
         />
 
         {isPreviewModalOpen && <PreviewDialog orderColors={orderColors} />}
-        {isConfirmCopyDialogOpen && <ConfirmCopyDialog />}
+        {isConfirmCopyDialogOpen && (
+          <ConfirmCopyDialog selectedIoId={selectedIoId} />
+        )}
 
         <DialogFooter>
           <DialogClose asChild>

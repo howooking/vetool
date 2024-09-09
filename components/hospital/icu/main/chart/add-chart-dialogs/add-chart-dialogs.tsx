@@ -12,11 +12,13 @@ export default function AddChartDialogs({
   selectedChart,
   isFirstChart,
   orderColors,
+  selectedIoId,
 }: {
   selectedPatientId: string
   selectedChart?: IcuChartJoined
   isFirstChart: boolean
   orderColors: IcuOrderColors
+  selectedIoId: string
 }) {
   const { target_date } = useParams()
   const { setIsChartLoading } = useIsChartLoadingStore()
@@ -28,6 +30,7 @@ export default function AddChartDialogs({
           targetDate={target_date as string}
           selectedPatientId={selectedPatientId}
           setIsCreatingChart={setIsChartLoading}
+          selectedIoId={selectedIoId}
         />
       )}
 
@@ -42,8 +45,12 @@ export default function AddChartDialogs({
         targetDate={target_date as string}
         selectedPatientId={selectedPatientId}
         setIsCreatingChart={setIsChartLoading}
+        selectedIoId={selectedIoId}
       />
-      <AddBookmarkChartDialog orderColors={orderColors} />
+      <AddBookmarkChartDialog
+        orderColors={orderColors}
+        selectedIoId={selectedIoId}
+      />
     </div>
   )
 }
