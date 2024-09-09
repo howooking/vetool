@@ -21,7 +21,7 @@ export default async function HomepageHeader() {
               <VetoolLogo />
             </Link>
 
-            <ul className="hidden items-center gap-6 sm:flex">
+            <ul className="hidden items-center gap-6 md:flex">
               {NAV_MENUS.map((menu) => (
                 <li key={menu.href}>
                   <Link href={menu.href}>{menu.label}</Link>

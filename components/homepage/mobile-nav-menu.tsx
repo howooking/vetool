@@ -21,7 +21,7 @@ export default function MobileNavMenu({ navMenus }: { navMenus: NavMenus }) {
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="sm:hidden">
+        <Button variant="ghost" size="icon" className="md:hidden">
           <MenuIcon />
         </Button>
       </SheetTrigger>

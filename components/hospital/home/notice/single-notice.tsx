@@ -16,7 +16,7 @@ export default function SingleNotice({
       className="relative flex items-center justify-between rounded-md border border-border px-1 py-1"
       style={{ backgroundColor: notice.notice_color ?? '#fff' }}
     >
-      <div className="mx-2 flex w-full flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
+      <div className="mx-2 flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
         <div className="flex items-center gap-2">
           <GripVertical
             className="handle z-20 hidden shrink-0 md:block"

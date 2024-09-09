@@ -7,8 +7,8 @@ import GoogleLoginButton from '../../components/login/google-login-button'
 export default async function LoginPage() {
   return (
     <div className="flex h-screen">
-      <div className="flex h-screen flex-col items-center justify-center gap-10 p-10 sm:w-2/5">
-        <VetoolLogo className="sm:hidden" />
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-10 p-10 md:w-2/5">
+        <VetoolLogo className="md:hidden" />
         <h2 className="text-2xl font-bold tracking-wider">
           로그인 또는 회원가입
         </h2>
@@ -35,7 +35,7 @@ export default async function LoginPage() {
         </div>
       </div>
 
-      <div className="hidden h-screen w-3/5 items-center justify-center bg-primary sm:flex">
+      <div className="hidden h-screen w-3/5 items-center justify-center bg-primary md:flex">
         <Image alt="vetool logo" src={logoWhite} unoptimized width={320} />
       </div>
     </div>

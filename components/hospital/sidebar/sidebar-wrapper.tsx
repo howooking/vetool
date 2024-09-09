@@ -16,7 +16,7 @@ export default function SidebarWrapper({
   return (
     <aside
       className={cn(
-        'hidden h-screen shrink-0 flex-col border-r transition-all duration-200 sm:flex',
+        'hidden h-screen shrink-0 flex-col border-r transition-all duration-200 md:flex',
         isExpanded ? 'w-48' : 'w-14',
       )}
     >
