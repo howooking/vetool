@@ -1,5 +1,6 @@
 'use client'
 
+import BirthDatePicker from '@/components/hospital/patients/birth-date-picker'
 import { registerPatientFormSchema } from '@/components/hospital/patients/patient-schema'
 import { Button } from '@/components/ui/button'
 import {
@@ -51,7 +52,6 @@ import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import BirthDatePicker from './birth-date-picker'
 
 type PatientFormRegisterProps = {
   hosId: string
@@ -126,6 +126,7 @@ export default function PatientForm({
           memo: editingPatient?.memo ?? '',
           weight: '',
           owner_name: editingPatient?.owner_name,
+          owner_id: editingPatient?.hos_owner_id ?? '',
         }
       : {
           name: undefined,
@@ -138,6 +139,7 @@ export default function PatientForm({
           memo: '',
           weight: '',
           owner_name: '',
+          owner_id: undefined,
         },
   })
 
@@ -299,7 +301,7 @@ export default function PatientForm({
                 <PopoverContent className="p-0 sm:w-[568px]">
                   <Command>
                     <CommandInput
-                      placeholder="품종 검색, 잡종시 'Mongrel' 선택"
+                      placeholder="품종 검색"
                       className="h-8 text-xs"
                       name="breed"
                     />
@@ -421,6 +423,21 @@ export default function PatientForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>보호자 이름</FormLabel>
+              <FormControl>
+                <Input {...field} className="h-8 text-sm" />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="owner_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>보호자 번호</FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
               </FormControl>

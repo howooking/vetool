@@ -17,5 +17,6 @@ export const registerPatientFormSchema = z.object({
   birth: z.date({ required_error: '생년월일을 선택해주세요' }),
   microchip_no: z.string({ required_error: '마이크로칩 넘버를 입력해주세요' }),
   owner_name: z.string({ required_error: '보호자 이름을 입력해주세요' }),
+  owner_id: z.string({ required_error: '보호자 번호를 입력해주세요' }),
   memo: z.string({ required_error: '종을 선택해주세요' }),
 })

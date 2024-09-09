@@ -17,6 +17,7 @@ export const insertPatient = async (
     hos_patient_id: string
     memo: string
     microchip_no: string
+    owner_id: string
   },
   hosId: string,
 ) => {
@@ -36,6 +37,7 @@ export const insertPatient = async (
       name_input: newPatient.name,
       species_input: newPatient.species,
       owner_name_input: newPatient.owner_name,
+      owner_id_input: newPatient.owner_id,
     },
   )
 
@@ -78,6 +80,7 @@ export const getPatients = async (hosId: string) => {
     memo: patient.memo,
     is_alive: patient.is_alive,
     owner_name: patient.owner_name,
+    hos_owner_id: patient.hos_owner_id,
     isIcu: false,
   })) as PatientDataTable[]
 }

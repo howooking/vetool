@@ -13,22 +13,33 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { deleteTodo } from '@/lib/services/hospital-home/todo'
-import { Trash2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { toast } from '@/components/ui/use-toast'
+import { deleteBookmarkChart } from '@/lib/services/icu/bookmark'
+import { LoaderCircle, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 
-export default function DeleteTodoDialog({
-  todoId,
-  todoTitle,
+export default function DeleteBookmarkDialog({
+  bookmarkId,
+  bookmarkName,
+  refreshData,
 }: {
-  todoId: string
-  todoTitle: string
+  bookmarkId: string
+  bookmarkName: string
+  refreshData: () => Promise<void>
 }) {
-  const { refresh } = useRouter()
+  const [isDeleting, setIsDeleting] = useState(false)
 
-  const handleDeleteNotice = async () => {
-    await deleteTodo(todoId)
-    refresh()
+  const handleDelete = async () => {
+    setIsDeleting(true)
+
+    await deleteBookmarkChart(bookmarkId)
+
+    toast({
+      title: '즐겨찾기가 삭제되었습니다',
+    })
+
+    setIsDeleting(false)
+    refreshData()
   }
 
   return (
@@ -42,7 +53,7 @@ export default function DeleteTodoDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {todoTitle} TODO를 삭제하시겠습니까?
+            {bookmarkName} 북마크를 삭제하시겠습니까?
           </AlertDialogTitle>
           <AlertDialogDescription>
             <WarningMessage text="해당 작업은 되돌릴 수 없습니다" />
@@ -52,10 +63,11 @@ export default function DeleteTodoDialog({
         <AlertDialogFooter>
           <AlertDialogCancel>취소</AlertDialogCancel>
           <AlertDialogAction
-            onClick={handleDeleteNotice}
+            onClick={handleDelete}
             className="bg-destructive hover:bg-destructive/90"
           >
             삭제
+            {isDeleting && <LoaderCircle className="ml-2 h-4 w-4" />}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -1,13 +1,13 @@
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
+import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
+import { bookmarkColumns } from '@/components/hospital/icu/main/bookmark/bookmark-columns'
 import DataTable from '@/components/ui/data-table'
 import { getBookmarkCharts } from '@/lib/services/icu/bookmark'
 import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
 import type { IcuOrderColors } from '@/types/adimin'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import PreviewDialog from '../../common-dialogs/preview/preview-dialog'
-import { bookmarkColumns } from './bookmark-columns'
+import { useCallback, useEffect, useState } from 'react'
 
 export default function Bookmark({
   orderColors,
@@ -21,12 +21,18 @@ export default function Bookmark({
   >([])
   const { hos_id } = useParams()
 
-  useEffect(() => {
+  const fetchBookmarks = useCallback(async () => {
     setIsFetching(true)
-    getBookmarkCharts(hos_id as string)
-      .then(setBookmarkCharts)
-      .finally(() => setIsFetching(false))
+
+    const charts = await getBookmarkCharts(hos_id as string)
+    setBookmarkCharts(charts)
+
+    setIsFetching(false)
   }, [hos_id])
+
+  useEffect(() => {
+    fetchBookmarks()
+  }, [fetchBookmarks])
 
   if (isFetching) {
     return <LargeLoaderCircle className="h-icu-chart" />
@@ -35,7 +41,7 @@ export default function Bookmark({
   return (
     <div className="p-2">
       <DataTable
-        columns={bookmarkColumns}
+        columns={bookmarkColumns(fetchBookmarks)}
         data={bookmarkCharts}
         searchPlaceHolder="북마크 검색"
         rowLength={10}
