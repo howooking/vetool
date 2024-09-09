@@ -139,7 +139,7 @@ export default function PatientForm({
           memo: '',
           weight: '',
           owner_name: '',
-          owner_id: undefined,
+          owner_id: '',
         },
   })
 
