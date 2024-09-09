@@ -1,13 +1,16 @@
 'use client'
 
 import PreviewButton from '@/components/hospital/icu/common-dialogs/preview/preview-button'
+import DeleteBookmarkDialog from '@/components/hospital/icu/main/bookmark/delete-bookmark-dialog'
+import GotoIcuButton from '@/components/hospital/icu/main/bookmark/goto-icu-button'
 import { Button } from '@/components/ui/button'
 import { IcuChartBookmarkJoined } from '@/types/icu'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
-import GotoIcuButton from './goto-icu-button'
 
-export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
+export const bookmarkColumns = (
+  refreshData: () => Promise<void>,
+): ColumnDef<IcuChartBookmarkJoined>[] => [
   {
     accessorKey: 'bookmark_name',
     header: ({ column }) => {
@@ -103,6 +106,21 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
       return (
         <div className="flex justify-center">
           <GotoIcuButton patientId={patientId} targetDate={targetDate} />
+        </div>
+      )
+    },
+  },
+  {
+    id: 'delete',
+    header: '삭제',
+    cell: ({ row }) => {
+      return (
+        <div className="flex justify-center">
+          <DeleteBookmarkDialog
+            bookmarkId={row.original.bookmark_id}
+            bookmarkName={row.original.bookmark_name}
+            refreshData={refreshData}
+          />
         </div>
       )
     },
