@@ -301,7 +301,7 @@ export default function PatientForm({
                 <PopoverContent className="p-0 sm:w-[568px]">
                   <Command>
                     <CommandInput
-                      placeholder="품종 검색, 잡종시 'Mongrel' 선택"
+                      placeholder="품종 검색"
                       className="h-8 text-xs"
                       name="breed"
                     />
