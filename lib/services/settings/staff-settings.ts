@@ -139,6 +139,16 @@ export const deleteStaff = async (userId: string) => {
     console.log(deleteStaffError)
     redirect(`/error/?message=${deleteStaffError.message}`)
   }
+
+  const { error: deleteUserInApproval } = await supabase
+    .from('user_approvals')
+    .delete()
+    .match({ user_id: userId })
+
+  if (deleteUserInApproval) {
+    console.log(deleteUserInApproval)
+    redirect(`/error/?message=${deleteUserInApproval.message}`)
+  }
 }
 
 export const getStaffApprovals = async (hosId: string) => {
