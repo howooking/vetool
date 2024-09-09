@@ -14,14 +14,24 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { logout } from '@/lib/services/auth/authentication'
-import { getUserData } from '@/lib/services/auth/authorization'
 import Link from 'next/link'
 
-export default async function SidebarUserInfo({ hosId }: { hosId: string }) {
-  const userData = await getUserData()
-
+export default function SidebarUserInfo({
+  hosId,
+  userData,
+}: {
+  hosId: string
+  userData: {
+    email: string | null
+    name: string
+    avatar_url: string | null
+    position: string
+    is_admin: boolean
+    user_id: string
+  }
+}) {
   return (
-    <div className="absolute bottom-12 left-2">
+    <div className="absolute bottom-0 left-2">
       <DropdownMenu>
         <DropdownMenuTrigger>
           <div className="flex items-center">

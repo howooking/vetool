@@ -18,7 +18,7 @@ export default function HomeEntry({
   useHomeRealtimeSubscription(hosId)
 
   return (
-    <div className="flex w-full flex-row gap-2 p-2">
+    <div className="flex w-full flex-col gap-2 p-2 md:flex-row">
       <Notice noticesData={noticesData} hosId={hosId} />
       <Todo todosData={todosData} hosId={hosId} />
     </div>

@@ -1,3 +1,4 @@
+import VetoolLogo from '@/components/common/vetool-logo'
 import logoWhite from '@/public/logo-white.svg'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -6,7 +7,8 @@ import GoogleLoginButton from '../../components/login/google-login-button'
 export default async function LoginPage() {
   return (
     <div className="flex h-screen">
-      <div className="flex h-screen w-2/5 flex-col items-center justify-center gap-10 p-10">
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-10 p-10 md:w-2/5">
+        <VetoolLogo className="md:hidden" />
         <h2 className="text-2xl font-bold tracking-wider">
           로그인 또는 회원가입
         </h2>
@@ -33,7 +35,7 @@ export default async function LoginPage() {
         </div>
       </div>
 
-      <div className="flex h-screen w-3/5 items-center justify-center bg-primary">
+      <div className="hidden h-screen w-3/5 items-center justify-center bg-primary md:flex">
         <Image alt="vetool logo" src={logoWhite} unoptimized width={320} />
       </div>
     </div>
