@@ -2,10 +2,9 @@
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { LucideProps } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ForwardRefExoticComponent, RefAttributes } from 'react'
 
 export default function AdminSidebarItem({
   name,
@@ -14,9 +13,7 @@ export default function AdminSidebarItem({
 }: {
   name: string
   path: string
-  icon: ForwardRefExoticComponent<
-    Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
-  >
+  icon: LucideIcon
 }) {
   const pathname = usePathname()
   const isActive = pathname.split('/').at(-1) === path
