@@ -112,6 +112,7 @@ export default function IcuChart({
         selectedPatientId={selectedPatientId}
         selectedChart={selectedChart}
         orderColors={orderColors}
+        selectedIoId={selectedIo.icu_io_id}
       />
     )
   }
