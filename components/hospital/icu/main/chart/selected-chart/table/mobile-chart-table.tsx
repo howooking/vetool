@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import useScreenSize from '@/hooks/use-screen-size'
 import { IcuOrderColors } from '@/types/adimin'
 import { IcuChartOrderJoined } from '@/types/icu'
 import { Fullscreen } from 'lucide-react'
@@ -20,8 +19,6 @@ export default function MobileChartTable({
   selectedChartOrders: IcuChartOrderJoined[]
   orderColors: IcuOrderColors
 }) {
-  const { height, width } = useScreenSize()
-
   return (
     <>
       <Dialog>
@@ -30,7 +27,7 @@ export default function MobileChartTable({
             variant="outline"
             className="flex h-[240px] items-center justify-center gap-2"
           >
-            <span className="">처치표 전체화면으로 보기</span>
+            <span className="">처치표 보기</span>
             <Fullscreen size={20} />
           </Button>
         </DialogTrigger>
@@ -40,16 +37,15 @@ export default function MobileChartTable({
           <DialogDescription />
         </DialogHeader>
 
-        <DialogContent
-          isMobileChartTable
-          className="max-w-fit rotate-90 overflow-auto p-0"
-          style={{ width: height, height: width }}
-        >
-          <div>
+        <DialogContent className="max-h-[95vh] overflow-hidden px-2 pb-2">
+          <DialogHeader>
+            <DialogTitle />
+            <DialogDescription />
+          </DialogHeader>
+          <div className="max-h-[calc(95vh-4rem)] overflow-auto">
             <DesktopChartTable
               orderColors={orderColors}
               selectedChartOrders={selectedChartOrders}
-              preview
             />
           </div>
         </DialogContent>
