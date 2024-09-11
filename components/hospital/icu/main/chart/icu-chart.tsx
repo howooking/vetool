@@ -15,6 +15,7 @@ import type {
 } from '@/types/icu'
 import { useEffect, useMemo } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
+import { useParams } from 'next/navigation'
 
 export default function IcuChart({
   icuIoData,
@@ -30,6 +31,7 @@ export default function IcuChart({
   orderColors: IcuOrderColors
 }) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
+  const { target_date } = useParams()
 
   const selectedIo = useMemo(
     () =>
@@ -63,8 +65,8 @@ export default function IcuChart({
   )
 
   const isFirstChart = useMemo(
-    () => selectedChart?.target_date === selectedIo?.in_date,
-    [selectedChart?.target_date, selectedIo?.in_date],
+    () => target_date === selectedIo?.in_date,
+    [target_date, selectedIo?.in_date],
   )
 
   const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()

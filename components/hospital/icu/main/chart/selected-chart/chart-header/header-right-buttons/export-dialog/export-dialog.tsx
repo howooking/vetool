@@ -1,3 +1,5 @@
+import ExportTextButton from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog//export-text-button'
+import ExportPdfButton from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog/export-pdf-button'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -11,8 +13,6 @@ import {
 import { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
 import { Share } from 'lucide-react'
 import { useState } from 'react'
-import ExportPdfButton from './export-pdf-button'
-import ExportTextButton from './export-text-button'
 
 export default function ExportDioalog({
   name,
