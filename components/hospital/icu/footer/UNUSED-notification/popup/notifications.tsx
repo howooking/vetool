@@ -1,5 +1,3 @@
-// 함수 사용하는 곳에서 선언
-
 import { Button } from '@/components/ui/button'
 import useRealtimeNotification from '@/hooks/use-realtime-notification'
 import { cn } from '@/lib/utils'
@@ -25,7 +23,6 @@ export default function Notifications({
 }) {
   const [localReadStatus, setLocalReadStatus] = useState<LocalReadStatus[]>([])
 
-  // 실제 데이터가 사용되는 곳에서 커스텀 훅(웹소켓 연결 + 데이터 가져오기)
   const [page, setPage] = useState(1)
   const { notifications } = useRealtimeNotification(page, hosId)
   const isLastPage = useMemo(

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
+import RealtimeStatus from './realtime-status'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
@@ -28,7 +29,13 @@ export const FOOTER_MAIN_VIEW_MENUS = [
   },
 ] as const
 
-export default function IcuFooter({ hosId }: { hosId: string }) {
+export default function IcuFooter({
+  hosId,
+  isSubscriptionReady,
+}: {
+  hosId: string
+  isSubscriptionReady: boolean
+}) {
   const { selectIcudMainView, setSelectedIcuMainView } =
     useSelectedMainViewStore()
   const { isExpanded } = useSidebarStore()
@@ -62,6 +69,8 @@ export default function IcuFooter({ hosId }: { hosId: string }) {
           </li>
         ))}
       </ul>
+
+      <RealtimeStatus isSubscriptionReady={isSubscriptionReady} />
 
       {/* ICU 알림 기능 일단 보류 */}
       {/* <IcuNotification hosId={hosId} /> */}

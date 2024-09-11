@@ -6,7 +6,6 @@ export function useHomeRealtimeSubscription(hosId: string) {
   const supabase = createClient()
   const { refresh } = useRouter()
 
-  //!!디바운스 불필요
   useEffect(() => {
     const tables = ['notices', 'todos']
     const subscriptions = tables.map((table) =>
