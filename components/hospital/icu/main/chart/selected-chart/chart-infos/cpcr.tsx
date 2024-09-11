@@ -29,7 +29,7 @@ export default function Cpcr({
     await updateCpcr(icuIoId, value)
 
     toast({
-      title: 'CPCR을 변경하였습니다',
+      title: 'CPCR 여부를 변경하였습니다',
     })
 
     setIsUpdating(false)
