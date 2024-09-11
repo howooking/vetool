@@ -90,7 +90,8 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
   const handleCancel = useCallback(() => {
     setStep('closed')
     setIsMutationCanceled(true)
-  }, [setIsMutationCanceled, setStep])
+    reset()
+  }, [reset, setIsMutationCanceled, setStep])
 
   return (
     <>
