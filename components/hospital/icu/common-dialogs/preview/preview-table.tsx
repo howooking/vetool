@@ -1,6 +1,6 @@
-import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/table/chart-table'
 import { IcuOrderColors } from '@/types/adimin'
 import type { CopiedOrder } from '@/types/icu'
+import DesktopChartTable from '../../main/chart/selected-chart/table/desktop-chart-table'
 
 export default function PreviewTable({
   copiedOrders,
@@ -11,10 +11,10 @@ export default function PreviewTable({
 }) {
   return (
     <div className="max-h-[800px] overflow-y-auto">
-      <ChartTable
+      <DesktopChartTable
+        orderColors={orderColors}
         selectedChartOrders={copiedOrders}
         preview
-        orderColors={orderColors}
       />
     </div>
   )

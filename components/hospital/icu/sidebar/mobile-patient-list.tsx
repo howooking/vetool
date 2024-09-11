@@ -25,9 +25,7 @@ export function MobilePatientList({
   return (
     <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
       <DrawerTrigger asChild className="block md:hidden">
-        <Button variant="outline" className="mx-2 mt-2">
-          입원환자 목록
-        </Button>
+        <Button className="rounded-none font-semibold">입원환자 목록</Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">

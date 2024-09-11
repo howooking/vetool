@@ -19,7 +19,7 @@ export default function ChartMemos({
   return (
     <div className="relative">
       {isShow && (
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 md:flex-row">
           <Memo
             memo={memoA}
             icuChartId={icuChartId}
