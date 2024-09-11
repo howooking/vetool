@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'VETOOL - 벳툴',
-    short_name: 'VETOOL - 벳툴',
+    name: 'VETOOL',
+    short_name: 'VETOOL',
     description: '수의사 전문차트 서비스',
     start_url: '/',
     display: 'standalone',
