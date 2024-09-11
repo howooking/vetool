@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button'
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import IcuNotification from './notification/icu-notification'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
@@ -64,8 +63,8 @@ export default function IcuFooter({ hosId }: { hosId: string }) {
         ))}
       </ul>
 
-      {/* notifictaion 새로운 위치 */}
-      <IcuNotification hosId={hosId} />
+      {/* ICU 알림 기능 일단 보류 */}
+      {/* <IcuNotification hosId={hosId} /> */}
     </footer>
   )
 }

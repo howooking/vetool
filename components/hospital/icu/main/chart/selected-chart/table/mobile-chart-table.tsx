@@ -37,7 +37,7 @@ export default function MobileChartTable({
           <DialogDescription />
         </DialogHeader>
 
-        <DialogContent className="max-h-[95vh] overflow-hidden px-2 pb-2">
+        <DialogContent className="flex max-h-[95vh] min-h-[40vh] flex-col justify-start overflow-hidden px-2 pb-10">
           <DialogHeader>
             <DialogTitle />
             <DialogDescription />
