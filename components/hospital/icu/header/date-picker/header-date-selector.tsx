@@ -22,6 +22,15 @@ export default function HeaderDateSelector() {
     push(newPath)
   }
 
+  const handleMoveToToday = () => {
+    const newDate = new Date()
+    const newDateString = format(newDate, 'yyyy-MM-dd')
+    const params = new URLSearchParams(searchParams)
+    const newPath = `/hospital/${hos_id}/icu/${newDateString}?${params.toString()}`
+
+    push(newPath)
+  }
+
   return (
     <div className="flex items-center gap-2">
       <Button
@@ -32,12 +41,10 @@ export default function HeaderDateSelector() {
       >
         <ArrowLeftIcon />
       </Button>
-
       <div className="flex items-center gap-1">
         <span className="min-w-20 text-sm">{target_date}</span>
         <IcuHeaderDatePicker targetDate={target_date as string} />
       </div>
-
       <Button
         onClick={() => handleUpdateDate(1)}
         size="icon"
@@ -45,6 +52,14 @@ export default function HeaderDateSelector() {
         className="h-6 w-6 rounded-full"
       >
         <ArrowRightIcon />
+      </Button>
+      <Button
+        onClick={handleMoveToToday}
+        type="button"
+        size="sm"
+        variant="outline"
+      >
+        오늘 날짜로 이동
       </Button>
     </div>
   )
