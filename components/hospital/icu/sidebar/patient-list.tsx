@@ -5,19 +5,27 @@ import type { IcuIoJoined } from '@/types/icu'
 type IcuSidebarContentProps = {
   filteredIcuIoData: IcuIoJoined[]
   excludedIcuIoData: IcuIoJoined[]
+  handleCloseMobileDrawer?: () => void
 }
 
 export default function PatientList({
   filteredIcuIoData,
   excludedIcuIoData,
+  handleCloseMobileDrawer,
 }: IcuSidebarContentProps) {
   return (
     <div className="flex-col gap-3 overflow-y-auto">
       {filteredIcuIoData.length > 0 ? (
         <ul className="flex flex-col gap-2">
-          <span className="text-xs font-bold text-gray-500">입원환자</span>
+          <span className="hidden text-xs font-bold text-gray-500 md:block">
+            입원환자
+          </span>
           {filteredIcuIoData.map((data) => (
-            <li key={data.icu_io_id} className="w-full">
+            <li
+              key={data.icu_io_id}
+              className="w-full"
+              onClick={handleCloseMobileDrawer}
+            >
               <PatientButton data={data} />
             </li>
           ))}

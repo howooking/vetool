@@ -7,6 +7,7 @@ import type { IcuChartJoined, IcuIoJoined, IcuUserList } from '@/types/icu'
 import { useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import Filters from './filters/filters'
+import { MobilePatientList } from './mobile-patient-list'
 
 export type Filters = {
   selectedGroup: string[]
@@ -72,20 +73,27 @@ export default function IcuSidebar({
   }
 
   return (
-    <aside className="flex h-icu-chart w-[144px] shrink-0 flex-col gap-3 border-r p-2">
-      <Filters
-        setFilters={setFilters}
-        filters={filters}
-        icuIoData={icuIoData}
-        vetsListData={vetsListData}
-      />
+    <>
+      <aside className="hidden h-icu-chart w-[144px] shrink-0 flex-col gap-3 border-r p-2 md:flex">
+        <Filters
+          setFilters={setFilters}
+          filters={filters}
+          icuIoData={icuIoData}
+          vetsListData={vetsListData}
+        />
 
-      <Separator />
+        <Separator />
 
-      <PatientList
+        <PatientList
+          filteredIcuIoData={filteredData.filteredIcuIoData}
+          excludedIcuIoData={filteredData.excludedIcuIoData}
+        />
+      </aside>
+
+      <MobilePatientList
         filteredIcuIoData={filteredData.filteredIcuIoData}
         excludedIcuIoData={filteredData.excludedIcuIoData}
       />
-    </aside>
+    </>
   )
 }

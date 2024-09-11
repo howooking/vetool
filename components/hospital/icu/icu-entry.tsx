@@ -44,7 +44,7 @@ export default function IcuEntry({
   }, [isSubscriptionReady])
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row">
       <IcuSidebar
         icuIoData={icuIoData}
         icuChartData={icuChartData}
