@@ -76,6 +76,7 @@ export default function DataTable<TData, TValue>({
       },
     },
     onGlobalFilterChange: setGlobalFilter,
+    autoResetPageIndex: false,
   })
 
   return (
@@ -182,7 +183,7 @@ export default function DataTable<TData, TValue>({
 
       <div className="flex items-center justify-end space-x-2 py-4">
         <span className="text-sm text-gray-700">
-          {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}{' '}
+          {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
           페이지
         </span>
         <Button

@@ -48,7 +48,7 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
           memo_c,
           weight_measured_date,
           weight,
-          icu_io_id!inner(out_date, in_date, created_at, icu_io_id, icu_io_dx, icu_io_cc),
+          icu_io_id!inner(out_date, in_date, created_at, icu_io_id, icu_io_dx, icu_io_cc, cpcr),
           patient_id(name, gender, breed, patient_id, species, owner_name),
           main_vet(name, user_id, avatar_url),
           sub_vet(name, user_id, avatar_url),

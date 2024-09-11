@@ -133,7 +133,7 @@ export default function TxDetailInsertStep() {
 
           {txLocalState?.txLog?.length && <TxLog logs={txLocalState?.txLog} />}
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="isNotificationChecked"
             render={({ field }) => (
@@ -151,7 +151,7 @@ export default function TxDetailInsertStep() {
                 </div>
               </FormItem>
             )}
-          />
+          /> */}
 
           <div className="flex justify-between">
             {txLocalState?.txId && (

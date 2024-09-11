@@ -74,7 +74,7 @@ export default function CopyPrevChartDialog({
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" tabIndex={-1}>
               취소
             </Button>
           </DialogClose>
