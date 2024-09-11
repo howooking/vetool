@@ -3,9 +3,13 @@ import SidebarSkeleton from '@/components/hospital/icu/sidebar/sidebar-skeleton'
 
 export default function IcuPageLoading() {
   return (
-    <div className="flex">
-      <SidebarSkeleton />
-      <LargeLoaderCircle />
-    </div>
+    <>
+      <div className="hidden md:flex">
+        <SidebarSkeleton />
+        <LargeLoaderCircle />
+      </div>
+
+      <LargeLoaderCircle className="h-icu-chart md:hidden" />
+    </>
   )
 }
