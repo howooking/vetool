@@ -32,7 +32,6 @@ export default function SingleNotification({
   const handleClick = () => {
     setSelectedIcuMainView('chart')
     setSelectedPatientId(notification.patient_id.patient_id)
-    // !! 새로운 url만들필요 없이 push하며 끝
     push(`${notification.target_date}`)
     setIsPopupOpen(false)
 

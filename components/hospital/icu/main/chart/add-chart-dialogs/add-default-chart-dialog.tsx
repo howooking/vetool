@@ -46,7 +46,7 @@ export default function AddDefaultChartDialog({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="flex h-1/3 w-1/4 items-center justify-center gap-2"
+          className="flex h-1/3 w-full items-center justify-center gap-2 md:w-1/4"
         >
           <File />
           <span>기본형식 차트생성</span>

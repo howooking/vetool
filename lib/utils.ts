@@ -33,9 +33,9 @@ export function getAgeFromAgeInDays(ageInDays: number) {
       return `${months}개월 ${days}일`
     }
   } else if (years > 0 && months === 0) {
-    return `${years}년`
+    return `${years}살`
   } else {
-    return `${years}년 ${months}개월`
+    return `${years}살 ${months}개월`
   }
 }
 

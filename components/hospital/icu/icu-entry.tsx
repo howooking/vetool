@@ -1,13 +1,12 @@
 'use client'
 
-import IcuFooter from '@/components/hospital/icu/icu-footer'
 import IcuMain from '@/components/hospital/icu/main/icu-main'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
-import { toast } from '@/components/ui/use-toast'
 import { useIcuRealTimeSubscription } from '@/hooks/use-icu-realtime-subscription'
 import type { IcuData } from '@/types/icu'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import IcuFooter from './footer/icu-footer'
 
 export default function IcuEntry({
   hosId,
@@ -34,15 +33,6 @@ export default function IcuEntry({
     return () => clearInterval(interval)
   }, [hosId, refresh])
 
-  useEffect(() => {
-    toast({
-      title: isSubscriptionReady
-        ? '차트의 실시간 변경을 감지하고 있습니다'
-        : '실시간 채널 입장 중...',
-      className: `${isSubscriptionReady ? 'bg-green-500' : 'bg-amber-500'} text-white`,
-    })
-  }, [isSubscriptionReady])
-
   return (
     <div className="flex flex-col md:flex-row">
       <IcuSidebar
@@ -60,7 +50,7 @@ export default function IcuEntry({
           orderColors={orderColorsData}
         />
 
-        <IcuFooter hosId={hosId} />
+        <IcuFooter hosId={hosId} isSubscriptionReady={isSubscriptionReady} />
       </div>
     </div>
   )
