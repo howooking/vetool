@@ -52,7 +52,7 @@ export default function AddBookmarkChartDialog({
     <Dialog open={isBookmarkModalOpen} onOpenChange={setBookmarkModalOpen}>
       <Button
         variant="outline"
-        className="flex h-1/3 w-1/4 items-center justify-center gap-2"
+        className="flex h-[200px] w-full items-center justify-center gap-2 md:h-1/3 md:w-1/4"
         onClick={handleOpenBookmarkDialog}
         disabled={isFetching}
       >

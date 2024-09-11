@@ -58,7 +58,7 @@ export default function CopyPrevChartDialog({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="flex h-1/3 w-1/4 items-center justify-center gap-2"
+          className="flex h-[200px] w-full items-center justify-center gap-2 md:h-1/3 md:w-1/4"
         >
           <ClipboardPaste />
           <span>전일 차트복사</span>
