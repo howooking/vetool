@@ -74,6 +74,33 @@ export default function ChartTableCell({
     delay: 600,
   })
 
+  const handleRightClick = useCallback(
+    (e: React.MouseEvent<HTMLInputElement>) => {
+      e.preventDefault()
+      setTxLocalState({
+        icuChartOrderId,
+        icuIoId,
+        txResult: txData?.icu_chart_tx_result,
+        txComment: txData?.icu_chart_tx_comment,
+        txId: icuChartTxId,
+        time,
+        txLog: txData?.icu_chart_tx_log as TxLog[] | null,
+        orderName: icuChartOrderName,
+      })
+      setStep('detailInsert')
+    },
+    [
+      icuChartOrderId,
+      icuIoId,
+      txData,
+      icuChartTxId,
+      time,
+      icuChartOrderName,
+      setTxLocalState,
+      setStep,
+    ],
+  )
+
   const handleUpsertBriefTxResultInput = useCallback(async () => {
     if ((txData?.icu_chart_tx_result ?? '') === briefTxResultInput.trim()) {
       setBriefTxResultInput('')
@@ -165,6 +192,7 @@ export default function ChartTableCell({
             setIsFocused(false)
           }}
           onKeyDown={handleKeyDown}
+          onContextMenu={handleRightClick}
           {...longPressEvents}
         />
 
