@@ -100,7 +100,7 @@ export default function PasteCopiedChartDialog({
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" tabIndex={-1}>
               취소
             </Button>
           </DialogClose>
