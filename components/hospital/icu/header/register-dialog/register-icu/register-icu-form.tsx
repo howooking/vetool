@@ -86,9 +86,9 @@ export default function RegisterIcuForm({
       cc: undefined,
       in_date: range?.from,
       out_due_date: range?.to,
-      main_vet: undefined,
+      main_vet: vetsData[0].user_id,
       sub_vet: undefined,
-      group_list: [],
+      group_list: [groupList[0]],
     },
   })
 
@@ -231,7 +231,7 @@ export default function RegisterIcuForm({
           name="group_list"
           render={() => (
             <FormItem>
-              <p className="text-sm font-medium">그룹</p>
+              <p className="text-sm font-medium">그룹*</p>
               <div className="flex flex-wrap items-center gap-2">
                 {groupList.map((item) => (
                   <FormField
