@@ -5,13 +5,13 @@ import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { useCallback } from 'react'
 
 export default function TxUpsertDialog({ chartId }: { chartId: string }) {
-  const { step, setStep } = useTxMutationStore()
-  const { setIsMutationCanceled } = useTxMutationStore()
+  const { step, setStep, reset, setIsMutationCanceled } = useTxMutationStore()
 
   const handleClose = useCallback(() => {
     setStep('closed')
     setIsMutationCanceled(true)
-  }, [setStep, setIsMutationCanceled])
+    reset()
+  }, [setStep, setIsMutationCanceled, reset])
 
   return (
     <Dialog open={step !== 'closed'} onOpenChange={handleClose}>
