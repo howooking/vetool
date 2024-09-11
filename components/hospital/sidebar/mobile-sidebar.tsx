@@ -61,7 +61,9 @@ export default function MobileSidebar({
       </SheetTrigger>
       <SheetContent side="left" className="p-0">
         <SheetHeader className="h-12 space-y-0">
-          <SheetTitle className="my-auto">{hosName}</SheetTitle>
+          <SheetTitle className="text-md my-auto pl-4 text-left">
+            {hosName}
+          </SheetTitle>
           <SheetDescription />
         </SheetHeader>
 
