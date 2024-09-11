@@ -31,8 +31,10 @@ export default function HeaderDateSelector() {
     push(newPath)
   }
 
+  const isToday = format(new Date(), 'yyyy-MM-dd') === target_date
+
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex h-8 items-center gap-2">
       <Button
         onClick={() => handleUpdateDate(-1)}
         size="icon"
@@ -53,14 +55,18 @@ export default function HeaderDateSelector() {
       >
         <ArrowRightIcon />
       </Button>
-      <Button
-        onClick={handleMoveToToday}
-        type="button"
-        size="sm"
-        variant="outline"
-      >
-        오늘 날짜로 이동
-      </Button>
+
+      {!isToday && (
+        <Button
+          onClick={handleMoveToToday}
+          type="button"
+          size="sm"
+          variant="outline"
+          className="px-2"
+        >
+          오늘로가기
+        </Button>
+      )}
     </div>
   )
 }

@@ -32,7 +32,7 @@ export default function ChartHeader({
   } = chartData
 
   return (
-    <header className="fixed left-0 top-0 w-full">
+    <header className="left-0 top-0 w-full md:fixed">
       <HeaderCenter
         isPatientOut={isPatientOut}
         ageInDays={ageInDays}

@@ -54,14 +54,16 @@ export default function MobileSidebar({
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-      <SheetTrigger className="absolute left-1 top-1 z-30 md:hidden" asChild>
+      <SheetTrigger className="absolute left-1 top-1.5 z-30 md:hidden" asChild>
         <Button variant="ghost" size="icon">
           <Menu />
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0">
         <SheetHeader className="h-12 space-y-0">
-          <SheetTitle className="my-auto">{hosName}</SheetTitle>
+          <SheetTitle className="text-md my-auto pl-4 text-left">
+            {hosName}
+          </SheetTitle>
           <SheetDescription />
         </SheetHeader>
 

@@ -173,6 +173,18 @@ export const updateOwnerName = async (
   }
 }
 
+export const updateCpcr = async (icuIoId: string, cpcr: string) => {
+  const { error: updateCpcrError } = await supabase
+    .from('icu_io')
+    .update({ cpcr })
+    .match({ icu_io_id: icuIoId })
+
+  if (updateCpcrError) {
+    console.log(updateCpcrError)
+    redirect(`/error/?message=${updateCpcrError.message}`)
+  }
+}
+
 export const selectIcuIoTags = async (icuIoId: string) => {
   const { data: icuIoTagsData, error: icuIoTagsDataError } = await supabase
     .from('icu_io')

@@ -1,12 +1,12 @@
 'use client'
 
+import PatientSelectButton from '@/components/hospital/icu/header/register-dialog/patient-search/patient-select-button'
 import PatientActions from '@/components/hospital/patients/patient-actions'
 import { Button } from '@/components/ui/button'
 import { calculateAge, cn } from '@/lib/utils'
 import { PatientDataTable } from '@/types/patients'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, Cat, Dog } from 'lucide-react'
-import PatientSelectButton from '../icu/header/register-dialog/patient-search/patient-select-button'
 
 export const patientsColumns: ColumnDef<PatientDataTable>[] = [
   {
