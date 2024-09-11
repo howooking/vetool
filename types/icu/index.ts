@@ -50,7 +50,7 @@ export type IcuChartJoined = Omit<
 > & {
   icu_io_id: Pick<
     IcuIo,
-    'out_date' | 'in_date' | 'icu_io_id' | 'icu_io_dx' | 'icu_io_cc'
+    'out_date' | 'in_date' | 'icu_io_id' | 'icu_io_dx' | 'icu_io_cc' | 'cpcr'
   >
   patient_id: Pick<
     Patients,

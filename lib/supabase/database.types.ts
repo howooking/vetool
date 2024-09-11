@@ -767,6 +767,7 @@ export type Database = {
       icu_io: {
         Row: {
           age_in_days: number
+          cpcr: string
           created_at: string
           group_list: string[]
           hos_id: string | null
@@ -781,6 +782,7 @@ export type Database = {
         }
         Insert: {
           age_in_days: number
+          cpcr?: string
           created_at?: string
           group_list: string[]
           hos_id?: string | null
@@ -795,6 +797,7 @@ export type Database = {
         }
         Update: {
           age_in_days?: number
+          cpcr?: string
           created_at?: string
           group_list?: string[]
           hos_id?: string | null

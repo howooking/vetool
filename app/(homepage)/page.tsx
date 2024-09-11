@@ -1,9 +1,11 @@
 import InstallPrompt from '@/app/pwa/install-prompt'
+import PushNotificationManager from '@/app/pwa/push-notification-manager'
 
-export default function CompanyHomePage() {
+export default async function CompanyHomePage() {
   return (
     <>
-      <InstallPrompt />
+      {/* <PushNotificationManager />
+      <InstallPrompt /> */}
       <h1>회사 소개 홈페이지</h1>
     </>
   )
