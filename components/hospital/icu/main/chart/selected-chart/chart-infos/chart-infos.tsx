@@ -7,6 +7,7 @@ import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/ch
 import { MainSubVet } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/main-sub-vet/main-sub-vet'
 import type { IcuChartJoined, IcuIoJoined, IcuUserList } from '@/types/icu'
 import OwnerName from './owner-name'
+import Cpcr from './cpcr'
 
 export default function ChartInfos({
   chartData,
@@ -47,18 +48,25 @@ export default function ChartInfos({
         />
       </div>
 
-      <div className="md:col-span-2">
+      <div className="col-span-1">
+        <Cpcr
+          cpcr={chartData.icu_io_id.cpcr}
+          icuIoId={chartData.icu_io_id.icu_io_id}
+        />
+      </div>
+
+      <div className="col-span-1">
+        <OwnerName
+          ownerName={chartData.patient_id.owner_name}
+          patientId={chartData.patient_id.patient_id}
+        />
+      </div>
+
+      <div className="col-span-2">
         <Group
           hosGroupList={selectedIo.hos_id.group_list}
           currentGroups={selectedIo.group_list}
           icuIoId={selectedIo.icu_io_id}
-        />
-      </div>
-
-      <div className="md:col-span-2">
-        <OwnerName
-          ownerName={chartData.patient_id.owner_name}
-          patientId={chartData.patient_id.patient_id}
         />
       </div>
 
