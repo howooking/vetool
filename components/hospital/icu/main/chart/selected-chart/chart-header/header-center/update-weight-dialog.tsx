@@ -20,7 +20,6 @@ import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { updateWeight } from '@/lib/services/icu/update-icu-chart-infos'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Gauge } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -30,10 +29,12 @@ export default function UpdateWeightDialog({
   weight,
   patientId,
   icuChartId,
+  weightMesuredDate,
 }: {
   patientId: string
   icuChartId: string
   weight: string
+  weightMesuredDate: string | null
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -69,8 +70,12 @@ export default function UpdateWeightDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Gauge size={18} />
+        <Button variant="ghost" className="h-6 px-2 py-1 text-xs md:text-sm">
+          {weightMesuredDate ? (
+            <span>{`${weight}kg (${weightMesuredDate})`}</span>
+          ) : (
+            <span>체중 미측정</span>
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[320px]">
