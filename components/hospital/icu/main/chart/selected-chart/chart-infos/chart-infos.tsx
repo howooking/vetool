@@ -20,7 +20,7 @@ export default function ChartInfos({
   vetsList: IcuUserList[]
 }) {
   return (
-    <div className="grid grid-cols-8 gap-2">
+    <div className="grid grid-cols-2 gap-2 md:grid-cols-8">
       <div className="col-span-2">
         <InAndOutDate
           icuIoId={selectedIo.icu_io_id}
@@ -40,14 +40,14 @@ export default function ChartInfos({
         />
       </div>
 
-      <div className="col-span-4">
+      <div className="order-last col-span-2 md:order-none md:col-span-4">
         <Diagnosis
           diagnosis={selectedIo.icu_io_dx}
           icuIoId={selectedIo.icu_io_id}
         />
       </div>
 
-      <div className="col-span-2">
+      <div className="md:col-span-2">
         <Group
           hosGroupList={selectedIo.hos_id.group_list}
           currentGroups={selectedIo.group_list}
@@ -55,14 +55,14 @@ export default function ChartInfos({
         />
       </div>
 
-      <div className="col-span-2">
+      <div className="md:col-span-2">
         <OwnerName
           ownerName={chartData.patient_id.owner_name}
           patientId={chartData.patient_id.patient_id}
         />
       </div>
 
-      <div className="col-span-4 flex gap-2">
+      <div className="order-last col-span-2 md:order-none md:col-span-4">
         <ChiefComplaint
           chiefComplaint={selectedIo.icu_io_cc}
           icuIoId={selectedIo.icu_io_id}

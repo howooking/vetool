@@ -39,12 +39,19 @@ export default function IcuFooter({ hosId }: { hosId: string }) {
       className={cn(
         'fixed bottom-0 z-20 flex h-10 w-full items-center justify-between border-t bg-white transition-all duration-200',
         // position fixed의 한계, 병원사이드바 펼쳤을 때 / 접었을 때 너비
-        isExpanded ? 'w-[calc(100%-336px)]' : 'w-[calc(100%-200px)]',
+        isExpanded ? 'md:w-[calc(100%-336px)]' : 'md:w-[calc(100%-200px)]',
       )}
     >
       <ul className="flex h-full items-center gap-2 pl-1">
         {FOOTER_MAIN_VIEW_MENUS.map(({ label, value }) => (
-          <li key={value}>
+          <li
+            key={value}
+            className={cn(
+              value === 'search' || value === 'bookmark'
+                ? 'hidden md:block'
+                : '',
+            )}
+          >
             <Button
               size="sm"
               variant="ghost"

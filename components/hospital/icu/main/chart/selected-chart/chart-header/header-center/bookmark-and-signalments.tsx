@@ -33,31 +33,20 @@ export default function HeaderCenter({
   patientId: string
 }) {
   return (
-    <div className="flex h-12 w-full items-center justify-center gap-2 text-muted-foreground">
+    <div className="flex w-full flex-wrap items-center justify-center gap-2 rounded-md bg-muted p-2 text-xs md:h-12 md:bg-transparent md:text-sm">
       <BookmarkDialog icuChartId={icuChartId} bookmarkData={bookmartData} />
-      {species === 'canine' ? (
-        <Dog size={20} className="text-black" />
-      ) : (
-        <Cat size={20} className="text-black" />
-      )}
-      <span className="text-black">
+      {species === 'canine' ? <Dog size={20} /> : <Cat size={20} />}
+      <span>
         {name} {isPatientOut && '(퇴원)'}
       </span>{' '}
-      ·<span className="text-sm">{breed}</span> ·
-      <span className="text-sm uppercase">{gender}</span> ·
-      <span className="text-sm">{getAgeFromAgeInDays(ageInDays)} </span> ·
-      <div className="flex items-center gap-1">
-        {weight_measured_date ? (
-          <span className="text-sm">{`${weight}kg (${weight_measured_date} 측정)`}</span>
-        ) : (
-          <span className="text-sm">체중 미측정</span>
-        )}
-        <UpdateWeightDialog
-          weight={weight}
-          patientId={patientId}
-          icuChartId={icuChartId}
-        />
-      </div>
+      ·<span>{breed}</span> ·<span className="uppercase">{gender}</span> ·
+      <span>{getAgeFromAgeInDays(ageInDays)} </span> ·
+      <UpdateWeightDialog
+        weightMesuredDate={weight_measured_date}
+        weight={weight}
+        patientId={patientId}
+        icuChartId={icuChartId}
+      />
     </div>
   )
 }

@@ -54,7 +54,7 @@ export default function MobileSidebar({
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-      <SheetTrigger className="absolute left-1 top-1 z-30 md:hidden" asChild>
+      <SheetTrigger className="absolute left-1 top-1.5 z-30 md:hidden" asChild>
         <Button variant="ghost" size="icon">
           <Menu />
         </Button>
