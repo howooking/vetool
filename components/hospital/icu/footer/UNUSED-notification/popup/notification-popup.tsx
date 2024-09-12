@@ -9,7 +9,6 @@ import { motion } from 'framer-motion'
 import { Dispatch, SetStateAction, useRef } from 'react'
 import Notifications from './notifications'
 
-// navigation보다는 Popup이 더 어울리는 이름
 export default function NotificationPopup({
   isPopupOpen,
   setIsPopupOpen,

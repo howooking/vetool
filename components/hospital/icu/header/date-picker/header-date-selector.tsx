@@ -64,7 +64,7 @@ export default function HeaderDateSelector() {
           variant="outline"
           className="px-2"
         >
-          오늘로가기
+          오늘로
         </Button>
       )}
     </div>

@@ -1,11 +1,11 @@
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
+import type { IcuOrderColors } from '@/types/adimin'
 import { IcuChartJoined } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import AddDefaultChartDialog from './add-default-chart-dialog'
 import AddBookmarkChartDialog from './bookmark/add-bookmark-chart-dialog'
 import CopyPrevChartDialog from './copy-prev-chart-dialog'
 import PasteCopiedChartDialog from './paste-copied-chart-dialog'
-import type { IcuOrderColors } from '@/types/adimin'
 
 export default function AddChartDialogs({
   selectedPatientId,
@@ -24,20 +24,18 @@ export default function AddChartDialogs({
   const { setIsChartLoading } = useIsChartLoadingStore()
 
   return (
-    <div className="flex h-icu-chart w-full items-center justify-center gap-10 p-10">
-      {!isFirstChart && (
+    <div className="flex w-full flex-col items-center justify-center gap-5 p-5 md:h-icu-chart md:flex-row md:gap-10">
+      {isFirstChart ? (
+        <AddDefaultChartDialog
+          selectedChart={selectedChart}
+          setIsCreatingChart={setIsChartLoading}
+        />
+      ) : (
         <CopyPrevChartDialog
           targetDate={target_date as string}
           selectedPatientId={selectedPatientId}
           setIsCreatingChart={setIsChartLoading}
           selectedIoId={selectedIoId}
-        />
-      )}
-
-      {isFirstChart && (
-        <AddDefaultChartDialog
-          selectedChart={selectedChart}
-          setIsCreatingChart={setIsChartLoading}
         />
       )}
 

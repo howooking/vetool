@@ -84,9 +84,9 @@ export default function PasteCopiedChartDialog({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="flex h-1/3 w-1/4 items-center justify-center gap-2"
+          className="hidden h-[200px] w-full items-center justify-center gap-2 md:flex md:h-1/3 md:w-1/4"
         >
-          <CopyCheck />
+          <CopyCheck size={20} />
           <span>복사한 차트 붙여넣기</span>
         </Button>
       </DialogTrigger>
@@ -98,7 +98,7 @@ export default function PasteCopiedChartDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter>
+        <DialogFooter className="gap-2 md:gap-0">
           <DialogClose asChild>
             <Button type="button" variant="outline" tabIndex={-1}>
               취소
