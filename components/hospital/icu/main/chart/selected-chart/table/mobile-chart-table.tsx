@@ -37,12 +37,12 @@ export default function MobileChartTable({
           <DialogDescription />
         </DialogHeader>
 
-        <DialogContent className="flex max-h-[95vh] min-h-[40vh] flex-col justify-start overflow-hidden px-2 pb-10">
+        <DialogContent className="flex max-h-[95vh] min-h-[40vh] max-w-full flex-col justify-start overflow-hidden px-2 pb-10">
           <DialogHeader>
             <DialogTitle />
             <DialogDescription />
           </DialogHeader>
-          <div className="max-h-[calc(95vh-4rem)] overflow-auto">
+          <div className="min-h-[calc(70vh)] overflow-auto">
             <DesktopChartTable
               orderColors={orderColors}
               selectedChartOrders={selectedChartOrders}
