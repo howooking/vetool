@@ -9,17 +9,24 @@ export default function TxTableCell({
   time: number
   order: IcuChartOrderJoined
 }) {
-  const getOrderName = useCallback(
+  const getOrder = useCallback(
     (order: IcuChartOrderJoined) => {
       if (
         order.icu_chart_order_time[time - 1] === '1' &&
         order[`icu_chart_order_tx_${time}` as keyof IcuChartOrderJoined] ===
           null
       ) {
-        return order.icu_chart_order_name
+        return (
+          <div className="flex flex-col gap-1">
+            <span>{order.icu_chart_order_name}</span>
+            <span className="text-xs text-muted-foreground">
+              {order.icu_chart_order_comment}
+            </span>
+          </div>
+        )
       }
     },
     [time],
   )
-  return <TableCell className="text-center">{getOrderName(order)}</TableCell>
+  return <TableCell className="text-center">{getOrder(order)}</TableCell>
 }
