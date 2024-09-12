@@ -1,10 +1,14 @@
 import GroupFilter from '@/components/hospital/icu/sidebar/filters/group-filter'
 import VetFilter from '@/components/hospital/icu/sidebar/filters/vet-filter'
-import type { Filters } from '@/components/hospital/icu/sidebar/icu-sidebar'
 import type { IcuIoJoined, IcuUserList } from '@/types/icu'
 import { RotateCcw } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction } from 'react'
+
+type Filter = {
+  selectedGroup: string[]
+  selectedVet: string
+}
 
 export default function Filters({
   filters,
@@ -12,8 +16,8 @@ export default function Filters({
   icuIoData,
   vetsListData,
 }: {
-  filters: Filters
-  setFilters: Dispatch<SetStateAction<Filters>>
+  filters: Filter
+  setFilters: Dispatch<SetStateAction<Filter>>
   icuIoData: IcuIoJoined[]
   vetsListData: IcuUserList[]
 }) {
