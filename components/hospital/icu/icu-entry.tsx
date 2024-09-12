@@ -41,7 +41,7 @@ export default function IcuEntry({
         vetsListData={vetsListData}
       />
 
-      <div className="h-icu-chart w-full flex-col overflow-y-auto">
+      <div className="h-[calc(100vh-86px)] w-full flex-col overflow-y-auto md:h-icu-chart">
         <IcuMain
           icuIoData={icuIoData}
           icuChartData={icuChartData}

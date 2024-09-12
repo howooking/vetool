@@ -1,12 +1,15 @@
 import { Button } from '@/components/ui/button'
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import type { IcuIoJoined } from '@/types/icu'
+import { Menu } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import PatientList from './patient-list'
@@ -19,29 +22,39 @@ export function MobilePatientList({
   excludedIcuIoData: IcuIoJoined[]
 }) {
   const { target_date } = useParams()
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const handleCloseMobileDrawer = () => setIsDrawerOpen(false)
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const handleCloseMobileDrawer = () => setIsSheetOpen(false)
+  const { selectedPatientId } = useIcuSelectedPatientIdStore()
+
+  const selectedPatient = filteredIcuIoData.find(
+    (el) => el.patient_id.patient_id === selectedPatientId,
+  )?.patient_id
 
   return (
-    <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-      <DrawerTrigger asChild className="block md:hidden">
-        <Button className="rounded-none font-semibold">입원환자 목록</Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>{target_date} 입원환자</DrawerTitle>
-          </DrawerHeader>
+    <div className="flex items-center border-b md:hidden">
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+        <SheetTrigger asChild>
+          <Button className="rounded-none font-semibold" size="icon">
+            <Menu size={18} />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="p-4">
+          <SheetHeader>
+            <SheetTitle>{target_date}</SheetTitle>
+            <SheetDescription />
+          </SheetHeader>
+          <PatientList
+            filteredIcuIoData={filteredIcuIoData}
+            excludedIcuIoData={excludedIcuIoData}
+            handleCloseMobileDrawer={handleCloseMobileDrawer}
+          />
+        </SheetContent>
+      </Sheet>
 
-          <div className="max-h-[560px] overflow-y-auto p-4">
-            <PatientList
-              filteredIcuIoData={filteredIcuIoData}
-              excludedIcuIoData={excludedIcuIoData}
-              handleCloseMobileDrawer={handleCloseMobileDrawer}
-            />
-          </div>
-        </div>
-      </DrawerContent>
-    </Drawer>
+      <div className="flex w-full items-center justify-center gap-1 pr-[36px] text-sm">
+        <span className="font-semibold">{selectedPatient?.name}</span>
+        <span className="text-muted-foreground">{selectedPatient?.breed}</span>
+      </div>
+    </div>
   )
 }

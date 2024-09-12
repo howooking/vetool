@@ -9,11 +9,6 @@ import { useMemo, useState } from 'react'
 import Filters from './filters/filters'
 import { MobilePatientList } from './mobile-patient-list'
 
-export type Filters = {
-  selectedGroup: string[]
-  selectedVet: string
-}
-
 export default function IcuSidebar({
   icuIoData,
   icuChartData,
