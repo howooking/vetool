@@ -52,18 +52,18 @@ export default function AddBookmarkChartDialog({
     <Dialog open={isBookmarkModalOpen} onOpenChange={setBookmarkModalOpen}>
       <Button
         variant="outline"
-        className="flex h-[200px] w-full items-center justify-center gap-2 md:h-1/3 md:w-1/4"
+        className="hidden h-[200px] w-full items-center justify-center gap-2 md:flex md:h-1/3 md:w-1/4"
         onClick={handleOpenBookmarkDialog}
         disabled={isFetching}
       >
-        <Star />
+        <Star size={20} />
         <span>즐겨찾기 차트 선택</span>
         <LoaderCircle
           className={cn(isFetching ? 'block animate-spin' : 'hidden')}
         />
       </Button>
 
-      <DialogContent className="sm:max-w-[1040px]">
+      <DialogContent className="md:max-w-[1040px]">
         <DialogHeader>
           <DialogTitle>즐겨찾기 차트 붙여넣기</DialogTitle>
           <DialogDescription>복사할 차트를 선택해주세요</DialogDescription>

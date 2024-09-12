@@ -160,13 +160,13 @@ export default function BookmarkDialog({
               )}
             />
 
-            <DialogFooter>
+            <div className="flex">
               {bookmarkData?.bookmark_id!! && (
                 <Button
                   type="button"
-                  className="mr-auto"
                   variant="destructive"
                   disabled={isDeleting}
+                  className="mr-auto"
                   onClick={handleDelete}
                 >
                   삭제
@@ -175,18 +175,23 @@ export default function BookmarkDialog({
                   />
                 </Button>
               )}
-              <DialogClose asChild>
-                <Button type="button" variant="outline" tabIndex={-1}>
-                  닫기
+
+              <div className="ml-auto">
+                <DialogClose asChild>
+                  <Button type="button" variant="outline" tabIndex={-1}>
+                    닫기
+                  </Button>
+                </DialogClose>
+                <Button type="submit" disabled={isSubmitting} className="ml-2">
+                  저장
+                  <LoaderCircle
+                    className={cn(
+                      isSubmitting ? 'ml-2 animate-spin' : 'hidden',
+                    )}
+                  />
                 </Button>
-              </DialogClose>
-              <Button type="submit" disabled={isSubmitting}>
-                저장
-                <LoaderCircle
-                  className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-                />
-              </Button>
-            </DialogFooter>
+              </div>
+            </div>
           </form>
         </Form>
       </DialogContent>

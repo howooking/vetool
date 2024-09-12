@@ -60,7 +60,7 @@ export default function CopyPrevChartDialog({
           variant="outline"
           className="flex h-[200px] w-full items-center justify-center gap-2 md:h-1/3 md:w-1/4"
         >
-          <ClipboardPaste />
+          <ClipboardPaste size={20} />
           <span>전일 차트복사</span>
         </Button>
       </DialogTrigger>
@@ -72,7 +72,7 @@ export default function CopyPrevChartDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter>
+        <DialogFooter className="gap-2 md:gap-0">
           <DialogClose asChild>
             <Button type="button" variant="outline" tabIndex={-1}>
               취소

@@ -48,7 +48,7 @@ export default function AddDefaultChartDialog({
           variant="outline"
           className="flex h-1/3 w-full items-center justify-center gap-2 md:w-1/4"
         >
-          <File />
+          <File size={20} />
           <span>기본형식 차트생성</span>
         </Button>
       </DialogTrigger>
@@ -58,7 +58,7 @@ export default function AddDefaultChartDialog({
           <DialogDescription>기본 형식의 차트가 생성됩니다</DialogDescription>
         </DialogHeader>
 
-        <DialogFooter>
+        <DialogFooter className="gap-2 md:gap-0">
           <DialogClose asChild>
             <Button type="button" variant="outline" tabIndex={-1}>
               취소

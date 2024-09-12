@@ -24,7 +24,7 @@ export default function AddChartDialogs({
   const { setIsChartLoading } = useIsChartLoadingStore()
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-5 p-10 md:h-icu-chart md:flex-row md:gap-10">
+    <div className="flex w-full flex-col items-center justify-center gap-5 p-5 md:h-icu-chart md:flex-row md:gap-10">
       {isFirstChart ? (
         <AddDefaultChartDialog
           selectedChart={selectedChart}
