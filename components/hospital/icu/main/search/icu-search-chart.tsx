@@ -81,17 +81,22 @@ export default function IcuSearchChart({
 
   return (
     <div className="flex flex-col gap-2 p-2">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 pr-2">
         <Input
-          placeholder="환자명, 종(canine, feline), 품종(영어), DX, CC, 상위 수의학 키워드 검색"
+          placeholder="환자명, 종(canine, feline), 품종, DX, CC, 처치명, 사용약물명"
           onChange={handleInputChange}
           id="search-chart"
           autoComplete="off"
-          className="w-1/2"
+          className="w-full"
         />
 
         <SearchTypeRadio setOptions={setSearchOptions} />
-        <HelperTooltip>상위 키워드 검색 가능 내용</HelperTooltip>
+        <HelperTooltip>
+          <div className="flex flex-col font-semibold">
+            <span>키워드 검색 : 키워드의 메인키워드를 검색함 </span>
+            <span>단순 검색 : 상위 키워드도 검색 가능하게 되어있음 일단은</span>
+          </div>
+        </HelperTooltip>
         <SearchChartSheet
           searchOptions={searchOptions}
           setSearchOptions={setSearchOptions}

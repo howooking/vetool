@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { updateCpcr } from '@/lib/services/icu/update-icu-chart-infos'
+import { Activity } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -42,8 +43,11 @@ export default function Cpcr({
       onValueChange={handleUpdateCpcr}
       disabled={isUpdating}
     >
-      <SelectTrigger>
-        <SelectValue className="justify-center" />
+      <SelectTrigger className="relative pl-8">
+        <SelectValue />
+        <span className="absolute left-2">
+          <Activity className="text-muted-foreground" size={16} />
+        </span>
       </SelectTrigger>
 
       <SelectContent>

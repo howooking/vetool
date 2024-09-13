@@ -20,7 +20,6 @@ export function useIcuRealTimeSubscription(hosId: string) {
         `%c${payload.table.toUpperCase()} ${payload.eventType.toUpperCase()}`,
         `background:${getColor(payload.table)}; color:white`,
       )
-      console.log('Payload:', payload)
       debouncedRefresh()
     },
     [debouncedRefresh],
@@ -61,7 +60,6 @@ export function useIcuRealTimeSubscription(hosId: string) {
     subscriptionRef.current = channel.subscribe((status) => {
       if (status !== 'SUBSCRIBED') {
         setIsSubscriptionReady(false)
-        console.log('unable to subscribe')
       } else {
         setIsSubscriptionReady(true)
         console.log('Subscribed to all tables')
