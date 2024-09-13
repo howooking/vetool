@@ -1,3 +1,5 @@
+'use client'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -6,19 +8,18 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { logout } from '@/lib/services/auth/authentication'
+import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
 export default function SidebarUserInfo({
   hosId,
   userData,
+  mobile,
+  setIsSheetOpen,
 }: {
   hosId: string
   userData: {
@@ -29,9 +30,11 @@ export default function SidebarUserInfo({
     is_admin: boolean
     user_id: string
   }
+  mobile?: boolean
+  setIsSheetOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   return (
-    <div className="absolute bottom-0 left-2">
+    <div className={cn('absolute bottom-0', mobile ? 'right-2' : 'left-2')}>
       <DropdownMenu>
         <DropdownMenuTrigger>
           <div className="flex items-center">
@@ -46,7 +49,7 @@ export default function SidebarUserInfo({
           </div>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-56">
+        <DropdownMenuContent className="w-56" side="top">
           <DropdownMenuLabel>
             <div className="text-center">
               {userData.name} - {userData.position}
@@ -55,16 +58,22 @@ export default function SidebarUserInfo({
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             {userData.is_admin && (
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem
+                asChild
+                onClick={() => setIsSheetOpen && setIsSheetOpen(false)}
+              >
                 <Link href={`/hospital/${hosId}/admin/staff`}>관리자</Link>
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem
+              asChild
+              onClick={() => setIsSheetOpen && setIsSheetOpen(false)}
+            >
               <Link href={`/hospital/${hosId}/my-page`}>프로필 수정</Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuGroup>
+          {/* <DropdownMenuGroup>
             <DropdownMenuItem>Team</DropdownMenuItem>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>업무</DropdownMenuSubTrigger>
@@ -77,7 +86,7 @@ export default function SidebarUserInfo({
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>
-          </DropdownMenuGroup>
+          </DropdownMenuGroup> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild className="p-0">
             <form action={logout}>

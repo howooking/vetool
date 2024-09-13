@@ -10,10 +10,12 @@ export default function AdminSidebarItem({
   name,
   path,
   icon: Icon,
+  setIsSheetOpen,
 }: {
   name: string
   path: string
   icon: LucideIcon
+  setIsSheetOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const pathname = usePathname()
   const isActive = pathname.split('/').at(-1) === path
@@ -24,6 +26,7 @@ export default function AdminSidebarItem({
         className="flex w-full items-center justify-start gap-3 px-2"
         variant="ghost"
         asChild
+        onClick={() => setIsSheetOpen && setIsSheetOpen(false)}
       >
         <Link href={path} className={cn('w-full', isActive && 'bg-muted')}>
           <Icon size={18} />

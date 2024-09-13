@@ -96,7 +96,12 @@ export default function MobileSidebar({
           })}
         </ul>
 
-        <SidebarUserInfo hosId={hosId} userData={userData} />
+        <SidebarUserInfo
+          hosId={hosId}
+          userData={userData}
+          mobile
+          setIsSheetOpen={setIsSheetOpen}
+        />
       </SheetContent>
     </Sheet>
   )

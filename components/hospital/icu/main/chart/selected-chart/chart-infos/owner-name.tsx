@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
 import { updateOwnerName } from '@/lib/services/icu/update-icu-chart-infos'
+import { User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -45,16 +46,17 @@ export default function OwnerName({
         className="absolute left-2 text-xs text-muted-foreground"
         htmlFor="ownerName"
       >
-        보호자
+        <User size={16} className="text-muted-foreground" />
       </Label>
       <Input
+        placeholder="보호자"
         disabled={isUpdating}
         id="ownerName"
         value={ownerNameInput}
         onChange={(e) => setOwnerNameInput(e.target.value)}
         onBlur={handleUpdateOwnerName}
         onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-        className="w-full pl-11"
+        className="w-full pl-8"
         title={ownerName ?? ''}
       />
     </div>
