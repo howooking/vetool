@@ -1,4 +1,4 @@
-import { columns } from '@/components/hospital/admin/staff/columns'
+import { staffColumns } from '@/components/hospital/admin/staff/staff-columns'
 import DataTable from '@/components/ui/data-table'
 import { checkIsAdmin, getUser } from '@/lib/services/auth/authorization'
 import { getStaffs } from '@/lib/services/settings/staff-settings'
@@ -31,5 +31,5 @@ export default async function AdminStaffPage({
     isMaster,
   }))
 
-  return <DataTable columns={columns} data={data} />
+  return <DataTable columns={staffColumns} data={data} />
 }

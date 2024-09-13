@@ -46,7 +46,7 @@ export default function PositionColumn({
 
   return (
     <Input
-      className="mx-auto w-40"
+      className="mx-auto w-32"
       value={positionInput ?? ''}
       onChange={(e) => setPositionInput(e.target.value)}
       onBlur={handleUpdatePosition}

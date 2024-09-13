@@ -48,7 +48,7 @@ export default function RankColumn({
 
   return (
     <Input
-      className="mx-auto w-14"
+      className="mx-auto w-12"
       disabled={isUpdating}
       value={rankInput}
       onChange={(e) => setRankInput(e.target.value)}

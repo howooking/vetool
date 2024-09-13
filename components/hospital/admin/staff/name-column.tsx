@@ -55,7 +55,7 @@ export default function NameColumn({
       </Avatar>
 
       <Input
-        className="w-40"
+        className="w-20"
         value={nameInput ?? ''}
         onChange={(e) => setNameInput(e.target.value)}
         onBlur={handleUpdatePosition}
