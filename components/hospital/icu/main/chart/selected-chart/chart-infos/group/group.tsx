@@ -25,6 +25,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import GroupBadge from './group-badge'
 import { groupCheckFormSchema } from './group-schema'
+import { Boxes, Component } from 'lucide-react'
 
 export default function Group({
   hosGroupList,
@@ -71,7 +72,8 @@ export default function Group({
           variant="outline"
           className="flex w-full justify-start overflow-x-auto px-2"
         >
-          <span className="mr-2 text-xs text-muted-foreground">그룹</span>
+          <Component size={16} className="mr-4 text-muted-foreground" />
+
           <GroupBadge currentGroups={currentGroups} />
         </Button>
       </DialogTrigger>

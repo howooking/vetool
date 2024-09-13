@@ -14,6 +14,7 @@ import type { IcuUserList, MainAndSubVet } from '@/types/icu'
 import Image from 'next/image'
 import { useState } from 'react'
 import MainSubVetUpdateForm from './main-sub-vet-update-form'
+import { Stethoscope, Users } from 'lucide-react'
 
 export function MainSubVet({
   mainVet,
@@ -35,11 +36,7 @@ export function MainSubVet({
           variant="outline"
           className="flex w-full items-center justify-start gap-4 px-2"
         >
-          <div className="flex h-4 items-center gap-1 text-xs text-muted-foreground">
-            <span>주치의</span>
-            <Separator orientation="vertical" />
-            <span>부주치의 </span>
-          </div>
+          <Stethoscope size={16} className="text-muted-foreground" />
 
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">

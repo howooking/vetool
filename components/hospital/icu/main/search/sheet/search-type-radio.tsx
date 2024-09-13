@@ -18,7 +18,7 @@ export default function SearchTypeRadio({
   return (
     <RadioGroup
       defaultValue="simple"
-      className="flex"
+      className="flex shrink-0"
       onValueChange={handleValueChange}
     >
       <div className="flex items-center space-x-2">

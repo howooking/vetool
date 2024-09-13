@@ -3,7 +3,14 @@
 import { useSidebarStore } from '@/lib/store/common/sidebar'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
-import { HeartPulse, Home, ListChecks, Slice, Syringe } from 'lucide-react'
+import {
+  BarChart4,
+  HeartPulse,
+  Home,
+  ListChecks,
+  Slice,
+  Syringe,
+} from 'lucide-react'
 import Link from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
 
@@ -14,6 +21,7 @@ const ICON_MAPPER = {
   Slice: <Slice size={18} className="ml-[17px]" />,
   HeartPulse: <HeartPulse size={18} className="ml-[17px]" />,
   ListChecks: <ListChecks size={18} className="ml-[17px]" />,
+  BarChart4: <BarChart4 size={18} className="ml-[17px]" />,
 }
 
 export default function SidebarItem({
