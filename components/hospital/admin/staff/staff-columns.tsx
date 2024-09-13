@@ -13,7 +13,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import NameColumn from './name-column'
 
-export const columns: ColumnDef<HospitalUserDataTable>[] = [
+export const staffColumns: ColumnDef<HospitalUserDataTable>[] = [
   {
     accessorKey: 'rank',
     header: ({ column }) => {
@@ -41,7 +41,7 @@ export const columns: ColumnDef<HospitalUserDataTable>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          스태프이름
+          이름
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -77,7 +77,7 @@ export const columns: ColumnDef<HospitalUserDataTable>[] = [
     header: ({ table }) => {
       const groupList = table.getRow('0').original.group_list
       return (
-        <div className="flex items-center justify-center gap-2">
+        <div className="mx-auto flex w-20 items-center justify-center gap-2">
           그룹
           <GroupListDialog groupList={groupList} />
         </div>

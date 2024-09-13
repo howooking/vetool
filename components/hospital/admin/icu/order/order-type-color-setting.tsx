@@ -54,7 +54,7 @@ export default function OrderTypeColorSetting({
 
   return (
     <div className="flex items-end gap-4">
-      <ul className="flex justify-between gap-2">
+      <ul className="flex flex-wrap justify-between gap-2">
         {sortedOrders.map(([key, value]) => (
           <li key={key}>
             <OrderColorPicker

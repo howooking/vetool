@@ -34,7 +34,7 @@ export function MobilePatientList({
     <div className="flex items-center border-b md:hidden">
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
-          <Button className="rounded-none font-semibold" size="icon">
+          <Button className="rounded-none" size="icon">
             <Menu size={18} />
           </Button>
         </SheetTrigger>
