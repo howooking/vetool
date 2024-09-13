@@ -24,4 +24,9 @@ export const SIDE_BAR_ITEMS = [
     path: 'checkup',
     iconName: 'ListChecks',
   },
+  {
+    name: '데이터분석',
+    path: 'analytics',
+    iconName: 'BarChart4',
+  },
 ] as const
