@@ -58,11 +58,17 @@ export default function SidebarUserInfo({
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             {userData.is_admin && (
-              <DropdownMenuItem asChild onClick={() => setIsSheetOpen!(false)}>
+              <DropdownMenuItem
+                asChild
+                onClick={() => setIsSheetOpen && setIsSheetOpen(false)}
+              >
                 <Link href={`/hospital/${hosId}/admin/staff`}>관리자</Link>
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem asChild onClick={() => setIsSheetOpen!(false)}>
+            <DropdownMenuItem
+              asChild
+              onClick={() => setIsSheetOpen && setIsSheetOpen(false)}
+            >
               <Link href={`/hospital/${hosId}/my-page`}>프로필 수정</Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
