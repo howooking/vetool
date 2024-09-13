@@ -1,6 +1,5 @@
 'use client'
 
-import { ADMIN_SIDE_BAR_ITEMS } from '@/app/hospital/[hos_id]/admin/layout'
 import AdminSidebarItem from '@/components/hospital/admin/admin-sidebar-item'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,6 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { ADMIN_SIDEBAR_ITEMS } from '@/constants/admin/admin-sidebar-items'
 import { Menu } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -20,7 +20,7 @@ export default function AdminMobileSidebar() {
   const path = usePathname()
   const currentAdminPath = path.split('/').at(-1)
 
-  const activePath = ADMIN_SIDE_BAR_ITEMS.find(
+  const activePath = ADMIN_SIDEBAR_ITEMS.find(
     (item) => item.path === currentAdminPath,
   )
 
@@ -38,7 +38,7 @@ export default function AdminMobileSidebar() {
             <SheetDescription />
           </SheetHeader>
           <ul className="flex flex-col gap-2 p-2">
-            {ADMIN_SIDE_BAR_ITEMS.map((item) => (
+            {ADMIN_SIDEBAR_ITEMS.map((item) => (
               <AdminSidebarItem
                 key={item.name}
                 icon={item.icon}
