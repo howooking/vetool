@@ -134,12 +134,12 @@ export default function OrderForm({
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex gap-3 space-x-2"
+                  className="flex flex-wrap gap-4"
                 >
                   {DEFAULT_ICU_ORDER_TYPE.map((item) => (
                     <FormItem
                       key={item.value}
-                      className="flex items-center space-x-2 space-y-0"
+                      className="flex items-center space-x-1 space-y-0"
                     >
                       <FormControl>
                         <RadioGroupItem value={item.value} />
@@ -198,7 +198,7 @@ export default function OrderForm({
           />
         )}
 
-        <DialogFooter className="ml-auto w-full">
+        <DialogFooter className="ml-auto w-full gap-2 md:gap-0">
           {isEditMode && (
             <DeleteOrderAlertDialog
               selectedChartOrder={selectedChartOrder as IcuChartOrderJoined}

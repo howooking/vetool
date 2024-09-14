@@ -57,7 +57,7 @@ export default function OrderTimeSettings({
   return (
     <div className="flex flex-col gap-2">
       <span className="text-sm font-semibold">오더 시간 설정</span>
-      <div className="flex justify-between">
+      <div className="flex flex-col justify-between gap-2 md:flex-row">
         <div className="flex gap-2">
           <Select onValueChange={setStartTime} value={startTime}>
             <SelectTrigger className="h-9 w-36 text-xs">
@@ -103,6 +103,7 @@ export default function OrderTimeSettings({
             </SelectContent>
           </Select>
         </div>
+
         <div className="flex gap-2">
           <Button
             type="button"
@@ -120,7 +121,7 @@ export default function OrderTimeSettings({
           </Button>
         </div>
       </div>
-      <div className="mt-2 flex w-full justify-between">
+      <div className="mt-2 flex w-full flex-wrap gap-0 md:justify-between md:gap-0">
         {TIMES.map((time, index) => (
           <Button
             tabIndex={-1}
