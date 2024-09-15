@@ -98,7 +98,7 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
         `,
       )
       .match({ hos_id: hosId })
-      .eq('icu_chart_id.target_date', targetDate)
+      .match({ 'icu_chart_id.target_date': targetDate })
       .order('icu_chart_order_name', { ascending: true })
       .returns<IcuChartOrderJoined[]>(),
 
