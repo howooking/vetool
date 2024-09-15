@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuUserList } from '@/types/icu'
+import type { Vet } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
 export const getVetsList = async (hosId: string) => {
@@ -11,7 +11,7 @@ export const getVetsList = async (hosId: string) => {
     .from('users')
     .select('name, position, user_id, avatar_url')
     .match({ hos_id: hosId, is_vet: true })
-    .returns<IcuUserList[]>()
+    .returns<Vet[]>()
 
   if (vetsListDataError) {
     console.log(vetsListDataError)

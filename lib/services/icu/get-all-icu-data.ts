@@ -6,11 +6,13 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoJoined,
-  IcuUserList,
+  Vet,
 } from '@/types/icu'
+import { PatientData } from '@/types/patients'
 import { redirect } from 'next/navigation'
 
-export const getAllIcuData = async (hosId: string, targetDate: string) => {
+export const getInitialIcuData = async (hosId: string, targetDate: string) => {
+  console.log('Initial Icu Data Fetching')
   const supabase = createClient()
 
   const promiseArray = Promise.all([
@@ -106,11 +108,25 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       .from('users')
       .select('name, position, user_id, avatar_url')
       .match({ hos_id: hosId, is_vet: true })
-      .returns<IcuUserList[]>(),
+      .returns<Vet[]>(),
 
     supabase
       .from('hospitals')
       .select('order_color')
+      .match({ hos_id: hosId })
+      .single(),
+
+    supabase
+      .from('patients')
+      .select('*')
+      .match({ hos_id: hosId })
+      .match({ is_alive: true })
+      .order('created_at', { ascending: false })
+      .returns<PatientData[]>(),
+
+    supabase
+      .from('hospitals')
+      .select('group_list')
       .match({ hos_id: hosId })
       .single(),
   ])
@@ -121,6 +137,8 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
     { data: icuChartOrderData, error: icuChartOrderDataError },
     { data: vetsListData, error: vetsListDataError },
     { data: orderColorsData, error: orderColorsDataError },
+    { data: patientsData, error: patientsDataError },
+    { data: groupListData, error: groupListDataError },
   ] = await promiseArray
 
   if (
@@ -128,7 +146,9 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
     icuChartDataError ||
     icuChartOrderDataError ||
     vetsListDataError ||
-    orderColorsDataError
+    orderColorsDataError ||
+    patientsDataError ||
+    groupListDataError
   ) {
     console.error({
       icuIoDataError,
@@ -136,6 +156,8 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
       icuChartOrderDataError,
       vetsListDataError,
       orderColorsDataError,
+      patientsDataError,
+      hosGroupListDataError: groupListDataError,
     })
     redirect(
       `/error?message=${
@@ -143,7 +165,9 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
         icuChartDataError?.message ||
         icuChartOrderDataError?.message ||
         vetsListDataError?.message ||
-        orderColorsDataError?.message
+        orderColorsDataError?.message ||
+        patientsDataError?.message ||
+        groupListDataError?.message
       }`,
     )
   }
@@ -153,5 +177,7 @@ export const getAllIcuData = async (hosId: string, targetDate: string) => {
     icuChartOrderData,
     vetsListData,
     orderColorsData: orderColorsData.order_color as IcuOrderColors,
+    patientsData,
+    groupListData: groupListData.group_list,
   }
 }

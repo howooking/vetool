@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import type { IcuUserList } from '@/types/icu'
+import type { Vet } from '@/types/icu'
 import Image from 'next/image'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -17,7 +17,7 @@ export default function VetFilter({
   selectedVet,
   setSelectedVet,
 }: {
-  vetsListData: IcuUserList[]
+  vetsListData: Vet[]
   selectedVet: string
   setSelectedVet: (vet: string) => void
 }) {

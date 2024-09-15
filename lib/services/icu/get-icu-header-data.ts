@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuUserList } from '@/types/icu'
+import type { Vet } from '@/types/icu'
 import type { PatientData } from '@/types/patients'
 import { redirect } from 'next/navigation'
 
@@ -19,7 +19,7 @@ export const getIcuHeaderData = async (hosId: string) => {
       .from('users')
       .select('name, position, user_id, avatar_url')
       .match({ hos_id: hosId, is_vet: true })
-      .returns<IcuUserList[]>(),
+      .returns<Vet[]>(),
 
     supabase
       .from('patients')

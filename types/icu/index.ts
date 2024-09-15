@@ -16,7 +16,7 @@ export type IcuData = {
   icuIoData: IcuIoJoined[]
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
-  vetsListData: IcuUserList[]
+  vetsListData: Vet[]
   orderColorsData: IcuOrderColors
 }
 
@@ -127,10 +127,7 @@ export type IcuChartOrderJoined = Pick<
   icu_chart_order_tx_24: QueriedIcuChartTx | null
 }
 
-export type IcuUserList = Pick<
-  User,
-  'avatar_url' | 'name' | 'position' | 'user_id'
->
+export type Vet = Pick<User, 'avatar_url' | 'name' | 'position' | 'user_id'>
 
 export type TxLog = {
   result: string | null
