@@ -30,7 +30,7 @@ export default function IcuEntry({
 
   return (
     <div className="flex flex-col md:flex-row">
-      <IcuSidebar
+      {/* <IcuSidebar
         icuIoData={icuIoQuery}
         icuChartData={icuChartQuery}
         vetsListData={icuData.vetsListData}
@@ -46,7 +46,7 @@ export default function IcuEntry({
         />
 
         <IcuFooter hosId={hosId} isSubscriptionReady={isSubscriptionReady} />
-      </div>
+      </div> */}
     </div>
   )
 }
