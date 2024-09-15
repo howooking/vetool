@@ -14,9 +14,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '../ui/button'
-import { NavMenus } from './homepage-header'
+import { NavbarItems } from './homepage-header'
 
-export default function MobileNavMenu({ navMenus }: { navMenus: NavMenus }) {
+export default function MobileNavMenu({
+  navbarItems,
+}: {
+  navbarItems: NavbarItems
+}) {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -35,14 +39,14 @@ export default function MobileNavMenu({ navMenus }: { navMenus: NavMenus }) {
               className="h-8 w-auto"
             />
           </SheetTitle>
-          <SheetDescription></SheetDescription>
+          <SheetDescription />
         </SheetHeader>
 
         <ul className="flex flex-col gap-4">
-          {navMenus.map((navMenu) => (
-            <li key={navMenu.label}>
-              <Link href={navMenu.href} onClick={() => setIsSheetOpen(false)}>
-                {navMenu.label}
+          {navbarItems.map((item) => (
+            <li key={item.label}>
+              <Link href={item.href} onClick={() => setIsSheetOpen(false)}>
+                {item.label}
               </Link>
             </li>
           ))}

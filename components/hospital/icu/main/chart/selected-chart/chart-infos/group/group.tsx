@@ -72,7 +72,7 @@ export default function Group({
           variant="outline"
           className="flex w-full justify-start overflow-x-auto px-2"
         >
-          <Component size={16} className="mr-4 text-muted-foreground" />
+          <Component size={16} className="mr-2 text-muted-foreground" />
 
           <GroupBadge currentGroups={currentGroups} />
         </Button>

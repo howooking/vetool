@@ -23,6 +23,7 @@ export default async function LoginPage() {
           </span> 및 <span className="text-primary">개인정보정책</span>에
           동의하게됩니다
         </div>
+
         <div>
           구글 계정이 없으신가요?{' '}
           <Link

@@ -34,7 +34,7 @@ export function MainSubVet({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="flex w-full items-center justify-start gap-4 px-2"
+          className="flex w-full items-center justify-start gap-2 px-2"
         >
           <Stethoscope size={16} className="text-muted-foreground" />
 

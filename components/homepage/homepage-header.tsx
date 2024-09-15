@@ -4,12 +4,12 @@ import Link from 'next/link'
 import VetoolLogo from '../common/vetool-logo'
 import MobileNavMenu from './mobile-nav-menu'
 
-const NAV_MENUS = [
+const HOMEPAGE_NAVBAR_ITEMS = [
   { label: '벳툴소개', href: '/company' },
   { label: '제품안내', href: '/products' },
   { label: '가격안내', href: '/pricing' },
 ] as const
-export type NavMenus = typeof NAV_MENUS
+export type NavbarItems = typeof HOMEPAGE_NAVBAR_ITEMS
 
 export default async function HomepageHeader() {
   return (
@@ -22,7 +22,7 @@ export default async function HomepageHeader() {
             </Link>
 
             <ul className="hidden items-center gap-6 md:flex">
-              {NAV_MENUS.map((menu) => (
+              {HOMEPAGE_NAVBAR_ITEMS.map((menu) => (
                 <li key={menu.href}>
                   <Link href={menu.href}>{menu.label}</Link>
                 </li>
@@ -31,13 +31,13 @@ export default async function HomepageHeader() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button asChild variant="default">
+            <Button asChild>
               <Link href="/login" className="font-bold">
                 로그인
               </Link>
             </Button>
 
-            <MobileNavMenu navMenus={NAV_MENUS} />
+            <MobileNavMenu navbarItems={HOMEPAGE_NAVBAR_ITEMS} />
           </div>
         </div>
       </MaxWidthContainer>
