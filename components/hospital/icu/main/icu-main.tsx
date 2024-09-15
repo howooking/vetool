@@ -7,7 +7,7 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoJoined,
-  IcuUserList,
+  Vet,
 } from '@/types/icu'
 import dynamic from 'next/dynamic'
 
@@ -42,7 +42,7 @@ export default function IcuMain({
   icuIoData: IcuIoJoined[]
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
-  vetListData: IcuUserList[]
+  vetListData: Vet[]
   orderColors: IcuOrderColors
 }) {
   const { selectIcudMainView } = useSelectedMainViewStore()

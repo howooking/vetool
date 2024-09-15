@@ -11,7 +11,7 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoJoined,
-  IcuUserList,
+  Vet,
 } from '@/types/icu'
 import { useEffect, useMemo } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
@@ -27,7 +27,7 @@ export default function IcuChart({
   icuIoData: IcuIoJoined[]
   icuChartData: IcuChartJoined[]
   icuChartOrderData: IcuChartOrderJoined[]
-  vetListData: IcuUserList[]
+  vetListData: Vet[]
   orderColors: IcuOrderColors
 }) {
   const { selectedPatientId } = useIcuSelectedPatientIdStore()

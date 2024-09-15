@@ -11,7 +11,7 @@ import {
   usePatientRegisterStep,
 } from '@/lib/store/icu/icu-register'
 import { cn } from '@/lib/utils'
-import type { IcuUserList } from '@/types/icu'
+import type { Vet } from '@/types/icu'
 import type { PatientData } from '@/types/patients'
 import { useEffect, useState } from 'react'
 import PatientSearchTable from './patient-search/patient-search-table'
@@ -25,7 +25,7 @@ export default function RegisterDialog({
   hosId: string
   patientsData: PatientData[]
   groupList: string[]
-  vetsData: IcuUserList[]
+  vetsData: Vet[]
 }) {
   const { isRegisterDialogOpen, setIsRegisterDialogOpen } =
     usePatientRegisterDialog()

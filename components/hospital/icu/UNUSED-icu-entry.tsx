@@ -7,47 +7,42 @@ import type { IcuData } from '@/types/icu'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import IcuFooter from './footer/icu-footer'
+import { useQueryIcuRealtime } from '@/hooks/use-query-icu-realtime'
+import { useIcuContext } from '@/providers/icu-provider'
 
 export default function IcuEntry({
   hosId,
-  icuData,
+  targetDate,
 }: {
   hosId: string
-  icuData: IcuData
+  targetDate: string
 }) {
-  const {
-    icuChartData,
-    icuChartOrderData,
-    icuIoData,
-    vetsListData,
-    orderColorsData,
-  } = icuData
-  const isSubscriptionReady = useIcuRealTimeSubscription(hosId)
+  const { icuData } = useIcuContext()
 
-  const { refresh } = useRouter()
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log('interval refreshing')
-      refresh()
-    }, 7000)
-    return () => clearInterval(interval)
-  }, [hosId, refresh])
+  const { isSubscriptionReady, icuChartQuery, icuIoQuery, icuOrderQuery } =
+    useQueryIcuRealtime(
+      hosId,
+      targetDate,
+      icuData.icuIoData,
+      icuData.icuChartData,
+      icuData.icuChartOrderData,
+    )
 
   return (
     <div className="flex flex-col md:flex-row">
       <IcuSidebar
-        icuIoData={icuIoData}
-        icuChartData={icuChartData}
-        vetsListData={vetsListData}
+        icuIoData={icuIoQuery}
+        icuChartData={icuChartQuery}
+        vetsListData={icuData.vetsListData}
       />
 
       <div className="h-[calc(100vh-86px)] w-full flex-col overflow-y-auto md:h-icu-chart">
         <IcuMain
-          icuIoData={icuIoData}
-          icuChartData={icuChartData}
-          icuChartOrderData={icuChartOrderData}
-          vetListData={vetsListData}
-          orderColors={orderColorsData}
+          icuIoData={icuIoQuery}
+          icuChartData={icuChartQuery}
+          icuChartOrderData={icuOrderQuery}
+          vetListData={icuData.vetsListData}
+          orderColors={icuData.orderColorsData}
         />
 
         <IcuFooter hosId={hosId} isSubscriptionReady={isSubscriptionReady} />

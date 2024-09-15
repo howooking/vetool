@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import type { IcuUserList, MainAndSubVet } from '@/types/icu'
+import type { Vet, MainAndSubVet } from '@/types/icu'
 import Image from 'next/image'
 import { useState } from 'react'
 import MainSubVetUpdateForm from './main-sub-vet-update-form'
@@ -25,7 +25,7 @@ export function MainSubVet({
   mainVet: MainAndSubVet
   subVet: MainAndSubVet | null
   icuChartId: string
-  vetsList: IcuUserList[]
+  vetsList: Vet[]
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
