@@ -9,7 +9,6 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { updateCpcr } from '@/lib/services/icu/update-icu-chart-infos'
 import { Activity } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Cpcr({
@@ -20,13 +19,15 @@ export default function Cpcr({
   icuIoId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
-  const { refresh } = useRouter()
+  const [cpcrValue, setCpcrValue] = useState(cpcr)
 
   const handleUpdateCpcr = async (value: string) => {
     if (cpcr === value) {
       return
     }
+
     setIsUpdating(true)
+    setCpcrValue(value)
     await updateCpcr(icuIoId, value)
 
     toast({
@@ -34,14 +35,19 @@ export default function Cpcr({
     })
 
     setIsUpdating(false)
-    refresh()
+    // !! 리얼타임이라서 refresh 불필요
+    // refresh()
   }
+
+  useEffect(() => {
+    setCpcrValue(cpcr)
+  }, [cpcr])
 
   return (
     <Select
-      defaultValue={cpcr}
       onValueChange={handleUpdateCpcr}
       disabled={isUpdating}
+      value={cpcrValue}
     >
       <SelectTrigger className="relative pl-8">
         <SelectValue />
