@@ -5,7 +5,7 @@ import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { TxDetailHover } from './tx/tx-detail-hover'
 
 type ChartTableCellProps = {
@@ -48,48 +48,42 @@ const ChartTableCell: React.FC<ChartTableCellProps> = React.memo(
       }
     }, [isMutationCanceled, setIsMutationCanceled, txData?.icu_chart_tx_result])
 
+    const handleOpenTxDetail = useCallback(() => {
+      setTxLocalState({
+        icuChartOrderId,
+        icuIoId,
+        txResult: txData?.icu_chart_tx_result,
+        txComment: txData?.icu_chart_tx_comment,
+        txId: icuChartTxId,
+        time,
+        txLog: txData?.icu_chart_tx_log as TxLog[] | null,
+        orderName: icuChartOrderName,
+      })
+      setStep('detailInsert')
+    }, [
+      icuChartOrderId,
+      icuChartOrderName,
+      icuChartTxId,
+      icuIoId,
+      setStep,
+      setTxLocalState,
+      time,
+      txData?.icu_chart_tx_comment,
+      txData?.icu_chart_tx_log,
+      txData?.icu_chart_tx_result,
+    ])
+
     const longPressEvents = useLongPress({
-      onLongPress: () => {
-        setTxLocalState({
-          icuChartOrderId,
-          icuIoId,
-          txResult: txData?.icu_chart_tx_result,
-          txComment: txData?.icu_chart_tx_comment,
-          txId: icuChartTxId,
-          time,
-          txLog: txData?.icu_chart_tx_log as TxLog[] | null,
-          orderName: icuChartOrderName,
-        })
-        setStep('detailInsert')
-      },
+      onLongPress: handleOpenTxDetail,
       delay: 800,
     })
 
     const handleRightClick = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault()
-        setTxLocalState({
-          icuChartOrderId,
-          icuIoId,
-          txResult: txData?.icu_chart_tx_result,
-          txComment: txData?.icu_chart_tx_comment,
-          txId: icuChartTxId,
-          time,
-          txLog: txData?.icu_chart_tx_log as TxLog[] | null,
-          orderName: icuChartOrderName,
-        })
-        setStep('detailInsert')
+        handleOpenTxDetail()
       },
-      [
-        icuChartOrderId,
-        icuIoId,
-        txData,
-        icuChartTxId,
-        time,
-        icuChartOrderName,
-        setTxLocalState,
-        setStep,
-      ],
+      [handleOpenTxDetail],
     )
 
     const handleUpsertBriefTxResultInput = React.useCallback(async () => {
@@ -134,7 +128,10 @@ const ChartTableCell: React.FC<ChartTableCellProps> = React.memo(
       [],
     )
 
-    const hasComment = !!txData?.icu_chart_tx_comment
+    const hasComment = useMemo(
+      () => !!txData?.icu_chart_tx_comment,
+      [txData?.icu_chart_tx_comment],
+    )
 
     return (
       <TableCell className="p-0">
