@@ -20,6 +20,7 @@ export default function ChartInfos({
   selectedIo: IcuIoJoined
   vetsList: Vet[]
 }) {
+  console.log(selectedIo)
   return (
     <div className="grid grid-cols-2 gap-2 md:grid-cols-8">
       <div className="col-span-2">
@@ -49,10 +50,7 @@ export default function ChartInfos({
       </div>
 
       <div className="col-span-1">
-        <Cpcr
-          cpcr={chartData.icu_io_id.cpcr}
-          icuIoId={chartData.icu_io_id.icu_io_id}
-        />
+        <Cpcr cpcr={selectedIo.cpcr} icuIoId={selectedIo.icu_io_id} />
       </div>
 
       <div className="col-span-1">
