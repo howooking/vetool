@@ -30,7 +30,6 @@ export function useQueryIcuRealtime(
   const icuIoQuery = useQuery({
     queryKey: ['icu_io', hosId, targetDate],
     queryFn: () => getIcuIo(hosId, targetDate),
-    staleTime: 0,
     refetchOnWindowFocus: true,
     refetchInterval: 60000,
     initialData: icuIoData,
@@ -39,7 +38,6 @@ export function useQueryIcuRealtime(
   const icuChartQuery = useQuery({
     queryKey: ['icu_chart', hosId, targetDate],
     queryFn: () => getIcuChart(hosId, targetDate),
-    staleTime: 0,
     refetchOnWindowFocus: true,
     refetchInterval: 60000,
     initialData: icuChartData,
@@ -48,18 +46,30 @@ export function useQueryIcuRealtime(
   const icuOrderQuery = useQuery({
     queryKey: ['icu_chart_order', hosId, targetDate],
     queryFn: () => getIcuOrder(hosId, targetDate),
-    staleTime: 0,
     refetchOnWindowFocus: true,
     refetchInterval: 60000,
     initialData: icuChartOrderData,
   })
 
-  const processRevalidationStack = useCallback(() => {
-    revalidationStackRef.current.forEach((table) => {
-      queryClient.invalidateQueries({
-        queryKey: [table, hosId, targetDate],
-      })
-    })
+  const processRevalidationStack = useCallback(async () => {
+    if (revalidationStackRef.current.has('icu_chart_tx')) {
+      revalidationStackRef.current.delete('icu_chart_order')
+    }
+
+    const revalidationPromises = Array.from(revalidationStackRef.current).map(
+      (table) => {
+        if (table === 'icu_chart_tx' || table === 'icu_chart_order') {
+          return queryClient.invalidateQueries({
+            queryKey: ['icu_chart_order', hosId, targetDate],
+          })
+        } else {
+          return queryClient.invalidateQueries({
+            queryKey: [table, hosId, targetDate],
+          })
+        }
+      },
+    )
+    await Promise.all(revalidationPromises)
     revalidationStackRef.current.clear()
     revalidationTimerRef.current = null
   }, [queryClient, hosId, targetDate])
@@ -67,7 +77,7 @@ export function useQueryIcuRealtime(
   const handleChange = useCallback(
     (payload: any) => {
       console.log(
-        `%c${payload.table.toUpperCase()} ${payload.eventType.toUpperCase()}`,
+        `%c${payload.table.toUpperCase()} ${payload.eventType}`,
         `background:${getLogColor(payload.table)}; color:white`,
       )
 
