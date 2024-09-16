@@ -1,6 +1,6 @@
 'use client'
 
-import Autocomplete from '@/components/hospital/common/auto-complete/auto-complete'
+import Autocomplete from '@/components/common/auto-complete/auto-complete'
 import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/register-icu/icu-schema'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
