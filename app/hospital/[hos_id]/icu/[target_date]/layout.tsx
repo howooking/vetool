@@ -1,5 +1,5 @@
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
-import { getInitialIcuData } from '@/lib/services/icu/get-all-icu-data'
+import { getInitialIcuData } from '@/lib/services/icu/get-initial-icu-data'
 import { IcuDataProvider } from '@/providers/icu-provider'
 import TanstackQueryProvider from '@/providers/tanstack-query-provider'
 import React from 'react'

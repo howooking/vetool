@@ -19,7 +19,7 @@ export default function Cpcr({
   icuIoId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
-  const [cpcrValue, setCpcrValue] = useState(cpcr)
+  const [cpcrState, setCpcrState] = useState(cpcr)
 
   const handleUpdateCpcr = async (value: string) => {
     if (cpcr === value) {
@@ -27,7 +27,7 @@ export default function Cpcr({
     }
 
     setIsUpdating(true)
-    setCpcrValue(value)
+    setCpcrState(value)
     await updateCpcr(icuIoId, value)
 
     toast({
@@ -38,14 +38,14 @@ export default function Cpcr({
   }
 
   useEffect(() => {
-    setCpcrValue(cpcr)
+    setCpcrState(cpcr)
   }, [cpcr])
 
   return (
     <Select
       onValueChange={handleUpdateCpcr}
       disabled={isUpdating}
-      value={cpcrValue}
+      value={cpcrState}
     >
       <SelectTrigger className="relative pl-8">
         <SelectValue />

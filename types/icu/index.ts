@@ -30,6 +30,7 @@ export type IcuIoJoined = Pick<
   | 'age_in_days'
   | 'icu_io_dx'
   | 'icu_io_cc'
+  | 'cpcr'
 > & {
   patient_id: Pick<Patients, 'name' | 'breed' | 'patient_id'>
   hos_id: Pick<Hospital, 'group_list' | 'icu_memo_names'>
@@ -50,7 +51,7 @@ export type IcuChartJoined = Omit<
 > & {
   icu_io_id: Pick<
     IcuIo,
-    'out_date' | 'in_date' | 'icu_io_id' | 'icu_io_dx' | 'icu_io_cc' | 'cpcr'
+    'out_date' | 'in_date' | 'icu_io_id' | 'icu_io_dx' | 'icu_io_cc'
   >
   patient_id: Pick<
     Patients,

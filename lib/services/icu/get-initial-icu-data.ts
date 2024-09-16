@@ -28,6 +28,7 @@ export const getInitialIcuData = async (hosId: string, targetDate: string) => {
           age_in_days,
           icu_io_dx,
           icu_io_cc,
+          cpcr,
           patient_id(name, breed, patient_id),
           hos_id(group_list, icu_memo_names, order_color)
         `,
@@ -50,7 +51,7 @@ export const getInitialIcuData = async (hosId: string, targetDate: string) => {
           memo_c,
           weight_measured_date,
           weight,
-          icu_io_id!inner(out_date, in_date, created_at, icu_io_id, icu_io_dx, icu_io_cc, cpcr),
+          icu_io_id!inner(out_date, in_date, created_at, icu_io_id, icu_io_dx, icu_io_cc),
           patient_id(name, gender, breed, patient_id, species, owner_name),
           main_vet(name, user_id, avatar_url),
           sub_vet(name, user_id, avatar_url),
