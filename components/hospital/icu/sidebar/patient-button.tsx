@@ -1,18 +1,23 @@
+import React, { useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuIoJoined } from '@/types/icu'
 
-export default function PatientButton({ data }: { data: IcuIoJoined }) {
-  const { selectedPatientId, setSelectedPatientId: setSelectedPatientId } =
+type PatientButtonProps = {
+  data: IcuIoJoined
+}
+
+const PatientButton: React.FC<PatientButtonProps> = React.memo(({ data }) => {
+  const { selectedPatientId, setSelectedPatientId } =
     useIcuSelectedPatientIdStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
 
-  const handlePatientButtonClick = (data: IcuIoJoined) => {
+  const handlePatientButtonClick = useCallback(() => {
     setSelectedPatientId(data.patient_id.patient_id)
     setSelectedIcuMainView('chart')
-  }
+  }, [data.patient_id.patient_id, setSelectedPatientId, setSelectedIcuMainView])
 
   return (
     <Button
@@ -22,7 +27,7 @@ export default function PatientButton({ data }: { data: IcuIoJoined }) {
         'w-full',
         selectedPatientId === data.patient_id.patient_id && 'bg-muted',
       )}
-      onClick={() => handlePatientButtonClick(data)}
+      onClick={handlePatientButtonClick}
     >
       <div
         className={cn(
@@ -35,4 +40,8 @@ export default function PatientButton({ data }: { data: IcuIoJoined }) {
       </div>
     </Button>
   )
-}
+})
+
+PatientButton.displayName = 'PatientButton'
+
+export default PatientButton

@@ -1,60 +1,59 @@
+import React, { useCallback } from 'react'
 import GroupFilter from '@/components/hospital/icu/sidebar/filters/group-filter'
 import VetFilter from '@/components/hospital/icu/sidebar/filters/vet-filter'
 import type { IcuIoJoined, Vet } from '@/types/icu'
 import { RotateCcw } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction } from 'react'
 
 type Filter = {
   selectedGroup: string[]
   selectedVet: string
 }
 
-export default function Filters({
-  filters,
-  setFilters,
-  icuIoData,
-  vetsListData,
-}: {
+type FiltersProps = {
   filters: Filter
-  setFilters: Dispatch<SetStateAction<Filter>>
+  setFilters: React.Dispatch<React.SetStateAction<Filter>>
   icuIoData: IcuIoJoined[]
   vetsListData: Vet[]
-}) {
-  const pathname = usePathname()
+}
 
-  const { push } = useRouter()
+const Filters: React.FC<FiltersProps> = React.memo(
+  ({ filters, setFilters, icuIoData, vetsListData }) => {
+    const pathname = usePathname()
+    const { push } = useRouter()
 
-  const resetFilters = () => {
-    setFilters({ selectedGroup: [], selectedVet: '' })
-    push(pathname)
-  }
+    const resetFilters = useCallback(() => {
+      setFilters({ selectedGroup: [], selectedVet: '' })
+      push(pathname)
+    }, [setFilters, push, pathname])
 
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-bold text-gray-500">필터</span>
-
-        <RotateCcw
-          size={14}
-          onClick={resetFilters}
-          className="cursor-pointer transition hover:text-primary"
+    return (
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold text-gray-500">필터</span>
+          <RotateCcw
+            size={14}
+            onClick={resetFilters}
+            className="cursor-pointer transition hover:text-primary"
+          />
+        </div>
+        <GroupFilter
+          hosGroupList={icuIoData[0]?.hos_id.group_list || []}
+          selectedGroup={filters.selectedGroup}
+          setSelectedGroup={(group) =>
+            setFilters({ ...filters, selectedGroup: group })
+          }
+        />
+        <VetFilter
+          vetsListData={vetsListData}
+          selectedVet={filters.selectedVet}
+          setSelectedVet={(vet) => setFilters({ ...filters, selectedVet: vet })}
         />
       </div>
+    )
+  },
+)
 
-      <GroupFilter
-        hosGroupList={icuIoData[0]?.hos_id.group_list || []}
-        selectedGroup={filters.selectedGroup}
-        setSelectedGroup={(group) =>
-          setFilters({ ...filters, selectedGroup: group })
-        }
-      />
+Filters.displayName = 'Filters'
 
-      <VetFilter
-        vetsListData={vetsListData}
-        selectedVet={filters.selectedVet}
-        setSelectedVet={(vet) => setFilters({ ...filters, selectedVet: vet })}
-      />
-    </div>
-  )
-}
+export default Filters
