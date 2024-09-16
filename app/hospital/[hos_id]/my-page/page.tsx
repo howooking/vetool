@@ -2,11 +2,7 @@ import ProfileImage from '@/components/hospital/my-page/profile-image'
 import UserInfoItem from '@/components/hospital/my-page/user-info-item'
 import { getUserData } from '@/lib/services/auth/authorization'
 
-export default async function MyPage({
-  params,
-}: {
-  params: { hos_id: string }
-}) {
+export default async function MyPage() {
   const userData = await getUserData()
   const userInfoItems = [
     { label: '이름', value: userData.name, canEdit: true },

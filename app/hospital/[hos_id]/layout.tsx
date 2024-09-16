@@ -11,7 +11,6 @@ export async function generateMetadata({
   params: { hos_id: string }
 }) {
   const hosName = await getHosName(params.hos_id)
-
   return {
     title: hosName,
   }

@@ -1,3 +1,3 @@
 export default function SurgeryPage() {
-  return <div>SurgeryPage</div>
+  return <div>외과차트</div>
 }

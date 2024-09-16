@@ -62,7 +62,7 @@ const ChartTableCell: React.FC<ChartTableCellProps> = React.memo(
         })
         setStep('detailInsert')
       },
-      delay: 600,
+      delay: 800,
     })
 
     const handleRightClick = useCallback(

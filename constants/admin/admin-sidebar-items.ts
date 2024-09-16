@@ -25,11 +25,6 @@ export const ADMIN_SIDEBAR_ITEMS = [
     icon: Syringe,
   },
   {
-    name: '데이터분석',
-    path: 'statistics',
-    icon: BarChart3,
-  },
-  {
     name: '약물설정',
     path: 'drug-settings',
     icon: Pill,

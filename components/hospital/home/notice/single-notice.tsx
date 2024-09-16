@@ -1,4 +1,4 @@
-import type { NoticeUserJoined } from '@/types/hospital/notice'
+import type { NoticeWithUser } from '@/types/hospital/notice'
 import { GripVertical } from 'lucide-react'
 import Image from 'next/image'
 import CreateOrUpdateNoticeDialog from './create-or-update-notice-dialog'
@@ -9,7 +9,7 @@ export default function SingleNotice({
   notice,
 }: {
   hosId: string
-  notice: NoticeUserJoined
+  notice: NoticeWithUser
 }) {
   return (
     <div

@@ -1,6 +1,6 @@
 import { Notice, User } from '@/types'
 
-export type NoticeUserJoined = Omit<
+export type NoticeWithUser = Omit<
   Notice,
   'user_id' | 'updated_at' | 'hos_id'
 > & {

@@ -35,8 +35,6 @@ export default function Cpcr({
     })
 
     setIsUpdating(false)
-    // !! 리얼타임이라서 refresh 불필요
-    // refresh()
   }
 
   useEffect(() => {

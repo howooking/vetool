@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { logout } from '@/lib/services/auth/authentication'
 import { cn } from '@/lib/utils'
+import { Crown, User } from 'lucide-react'
 import Link from 'next/link'
 
 export default function SidebarUserInfo({
@@ -62,31 +63,30 @@ export default function SidebarUserInfo({
                 asChild
                 onClick={() => setIsSheetOpen && setIsSheetOpen(false)}
               >
-                <Link href={`/hospital/${hosId}/admin/staff`}>관리자</Link>
+                <Link
+                  href={`/hospital/${hosId}/admin/staff`}
+                  className="flex items-center gap-2"
+                >
+                  <Crown size={18} />
+                  관리자
+                </Link>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
               asChild
               onClick={() => setIsSheetOpen && setIsSheetOpen(false)}
             >
-              <Link href={`/hospital/${hosId}/my-page`}>프로필 수정</Link>
+              <Link
+                href={`/hospital/${hosId}/my-page`}
+                className="flex items-center gap-2"
+              >
+                <User size={18} />
+                사용자 계정
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          {/* <DropdownMenuGroup>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>업무</DropdownMenuSubTrigger>
-              <DropdownMenuPortal>
-                <DropdownMenuSubContent>
-                  <DropdownMenuItem>진료기록</DropdownMenuItem>
-                  <DropdownMenuItem>근로기록</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>More...</DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuPortal>
-            </DropdownMenuSub>
-          </DropdownMenuGroup> */}
+
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild className="p-0">
             <form action={logout}>

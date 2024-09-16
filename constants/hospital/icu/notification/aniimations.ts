@@ -18,7 +18,6 @@ export const POPUP_MOTION = {
   },
 }
 
-// !!애니메이션 최소화
 export const LI_MOTION = {
   open: {
     opacity: 1,

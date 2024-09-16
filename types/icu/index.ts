@@ -148,7 +148,6 @@ export type IcuChartBookmarkJoined = {
     icu_chart_id: string
     target_date: string
     patient_id: Pick<Patients, 'name' | 'patient_id'>
-    // icu_io_id: Pick<IcuIo, 'icu_io_id'>
   }
 } & IcuChartBookmark
 
