@@ -4,12 +4,22 @@ import {
   getIcuOrder,
 } from '@/lib/services/icu/get-icu-data'
 import { createClient } from '@/lib/supabase/client'
-import { IcuChartJoined, IcuChartOrderJoined, IcuIoJoined } from '@/types/icu'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuIoJoined,
+} from '@/types/icu'
+import { useQueries, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 const supabase = createClient()
-const TABLES = ['icu_io', 'icu_chart', 'icu_chart_order', 'icu_chart_tx']
+const TABLES = [
+  'icu_io',
+  'icu_chart',
+  'icu_chart_order',
+  'icu_chart_tx',
+] as const
+type TableName = (typeof TABLES)[number]
 
 export function useQueryIcuRealtime(
   hosId: string,
@@ -22,33 +32,35 @@ export function useQueryIcuRealtime(
   const subscriptionRef = useRef<ReturnType<typeof supabase.channel> | null>(
     null,
   )
-  const revalidationStackRef = useRef<Set<string>>(new Set())
+  const revalidationStackRef = useRef<Set<TableName>>(new Set())
   const revalidationTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   const queryClient = useQueryClient()
 
-  const icuIoQuery = useQuery({
-    queryKey: ['icu_io', hosId, targetDate],
-    queryFn: () => getIcuIo(hosId, targetDate),
-    refetchOnWindowFocus: true,
-    refetchInterval: 60000,
-    initialData: icuIoData,
-  })
-
-  const icuChartQuery = useQuery({
-    queryKey: ['icu_chart', hosId, targetDate],
-    queryFn: () => getIcuChart(hosId, targetDate),
-    refetchOnWindowFocus: true,
-    refetchInterval: 60000,
-    initialData: icuChartData,
-  })
-
-  const icuOrderQuery = useQuery({
-    queryKey: ['icu_chart_order', hosId, targetDate],
-    queryFn: () => getIcuOrder(hosId, targetDate),
-    refetchOnWindowFocus: true,
-    refetchInterval: 60000,
-    initialData: icuChartOrderData,
+  const [icuIoQuery, icuChartQuery, icuOrderQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ['icu_io', hosId, targetDate],
+        queryFn: () => getIcuIo(hosId, targetDate),
+        refetchOnWindowFocus: true,
+        refetchInterval: 60000,
+        initialData: icuIoData,
+      },
+      {
+        queryKey: ['icu_chart', hosId, targetDate],
+        queryFn: () => getIcuChart(hosId, targetDate),
+        refetchOnWindowFocus: true,
+        refetchInterval: 60000,
+        initialData: icuChartData,
+      },
+      {
+        queryKey: ['icu_chart_order', hosId, targetDate],
+        queryFn: () => getIcuOrder(hosId, targetDate),
+        refetchOnWindowFocus: true,
+        refetchInterval: 60000,
+        initialData: icuChartOrderData,
+      },
+    ],
   })
 
   const processRevalidationStack = useCallback(async () => {
@@ -72,7 +84,7 @@ export function useQueryIcuRealtime(
     await Promise.all(revalidationPromises)
     revalidationStackRef.current.clear()
     revalidationTimerRef.current = null
-  }, [queryClient, hosId, targetDate])
+  }, [hosId, queryClient, targetDate])
 
   const handleChange = useCallback(
     (payload: any) => {
@@ -81,7 +93,7 @@ export function useQueryIcuRealtime(
         `background:${getLogColor(payload.table)}; color:white`,
       )
 
-      revalidationStackRef.current.add(payload.table)
+      revalidationStackRef.current.add(payload.table as TableName)
 
       if (revalidationTimerRef.current) {
         clearTimeout(revalidationTimerRef.current)
@@ -139,6 +151,7 @@ export function useQueryIcuRealtime(
       }
       if (revalidationTimerRef.current) {
         clearTimeout(revalidationTimerRef.current)
+        revalidationTimerRef.current = null
       }
     }
   }, [handleChange, hosId])

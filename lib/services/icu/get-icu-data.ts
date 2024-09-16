@@ -37,7 +37,8 @@ export const getIcuIo = async (hosId: string, targetDate: string) => {
     .lte('in_date', targetDate)
     .or(`out_date.is.null, out_date.gte.${targetDate}`)
     .order('out_date', { ascending: false })
-    .order('in_date, created_at', { ascending: true })
+    .order('in_date', { ascending: true })
+    .order('created_at', { ascending: true })
     .returns<IcuIoJoined[]>()
 
   if (icuIoDataError) {
@@ -72,7 +73,8 @@ export const getIcuChart = async (hosId: string, targetDate: string) => {
     )
     .match({ hos_id: hosId, target_date: targetDate })
     .order('icu_io_id(out_date)', { ascending: false })
-    .order('icu_io_id(in_date), icu_io_id(created_at)', { ascending: true })
+    .order('icu_io_id(in_date)', { ascending: true })
+    .order('icu_io_id(created_at)', { ascending: true })
     .returns<IcuChartJoined[]>()
 
   if (icuChartDataError) {
