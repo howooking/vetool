@@ -1,3 +1,3 @@
 export default function AdminFoodSettingsPage() {
-  return <div>AdminFoodSettingsPage</div>
+  return <div>관리자 사료설정</div>
 }

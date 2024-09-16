@@ -5,7 +5,7 @@ import {
   subscribeUser,
   unsubscribeUser,
   sendNotification,
-} from '@/app/(homepage)/actions'
+} from '@/app/(company)/actions'
 
 const urlBase64ToUint8Array = (base64String: string) => {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)

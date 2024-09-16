@@ -9,12 +9,8 @@ export default async function AdminStaffPage({
 }: {
   params: { hos_id: string }
 }) {
-  await checkIsAdmin(params.hos_id)
-
-  const staffs = await getStaffs(params.hos_id)
-
   const authUser = await getUser()
-
+  const staffs = await getStaffs(params.hos_id)
   const isMaster = staffs[0].hos_id.master_user_id === authUser?.id
 
   const data: HospitalUserDataTable[] = staffs!.map((user) => ({

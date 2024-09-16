@@ -68,3 +68,8 @@ export type AuthUser = {
     updated_at: string
   }[]
 }
+
+export type UserProfile = Pick<
+  User,
+  'email' | 'name' | 'avatar_url' | 'position' | 'is_admin' | 'user_id'
+>

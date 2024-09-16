@@ -15,7 +15,6 @@ export const getIcuNotification = async (hosId: string, page: number = 1) => {
     await supabase
       .from('icu_notification')
       .select(
-        // inner! 불필요
         `
           *,
           patient_id(name, breed, patient_id, gender)

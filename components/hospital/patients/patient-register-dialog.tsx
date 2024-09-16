@@ -25,7 +25,12 @@ export function PatientRegisterDialog({ hosId }: { hosId: string }) {
         <Button size="sm">환자 등록</Button>
       </DialogTrigger>
 
-      <DialogContent className="flex flex-col sm:max-w-[1200px]">
+      <DialogContent
+        className="flex flex-col sm:max-w-[1200px]"
+        onInteractOutside={(e) => {
+          e.preventDefault()
+        }}
+      >
         <DialogHeader>
           <DialogTitle>환자등록</DialogTitle>
           <DialogDescription>신규 환자를 등록합니다</DialogDescription>

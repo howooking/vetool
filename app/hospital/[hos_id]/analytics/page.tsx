@@ -1,3 +1,3 @@
 export default function AnalyticsPage() {
-  return <div>AnalyticsPage</div>
+  return <div>데이터분석</div>
 }

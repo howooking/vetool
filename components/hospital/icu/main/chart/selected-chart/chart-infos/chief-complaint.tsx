@@ -1,6 +1,6 @@
 'use client'
 
-import Autocomplete from '@/components/hospital/common/auto-complete/auto-complete'
+import Autocomplete from '@/components/common/auto-complete/auto-complete'
 import { toast } from '@/components/ui/use-toast'
 import { updateChiefComplaint } from '@/lib/services/icu/update-icu-chart-infos'
 import { useState } from 'react'

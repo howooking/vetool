@@ -5,7 +5,6 @@ import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
 import { updateOwnerName } from '@/lib/services/icu/update-icu-chart-infos'
 import { User } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function OwnerName({
@@ -17,7 +16,6 @@ export default function OwnerName({
 }) {
   const [ownerNameInput, setOwnerNameInput] = useState(ownerName)
   const [isUpdating, setIsUpdating] = useState(false)
-  const { refresh } = useRouter()
 
   const handleUpdateOwnerName = async () => {
     if (ownerName === ownerNameInput.trim()) {
@@ -33,7 +31,6 @@ export default function OwnerName({
     })
 
     setIsUpdating(false)
-    refresh()
   }
 
   useEffect(() => {

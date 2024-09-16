@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import VetoolLogo from '../common/vetool-logo'
 import MobileNavMenu from './mobile-nav-menu'
+import NavMenu from './navmenu'
 
 const HOMEPAGE_NAVBAR_ITEMS = [
   { label: '벳툴소개', href: '/company' },
@@ -21,13 +22,7 @@ export default async function HomepageHeader() {
               <VetoolLogo />
             </Link>
 
-            <ul className="hidden items-center gap-6 md:flex">
-              {HOMEPAGE_NAVBAR_ITEMS.map((menu) => (
-                <li key={menu.href}>
-                  <Link href={menu.href}>{menu.label}</Link>
-                </li>
-              ))}
-            </ul>
+            <NavMenu navbarItems={HOMEPAGE_NAVBAR_ITEMS} />
           </div>
 
           <div className="flex items-center gap-2">

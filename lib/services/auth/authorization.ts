@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { UserProfile } from '@/types'
 import { redirect } from 'next/navigation'
 
 export async function getUser() {
@@ -18,22 +19,13 @@ export async function getUser() {
   return authUser
 }
 
-export async function checkIsAdmin(hosId: string) {
+export async function checkIsAdmin(hosId: string, userId: string) {
   const supabase = createClient()
-  const {
-    data: { user: authUser },
-    error: authUsererror,
-  } = await supabase.auth.getUser()
-
-  if (authUsererror) {
-    console.log(authUsererror)
-    throw new Error(authUsererror.message)
-  }
 
   const { data: userAdminData, error: userAdminDataError } = await supabase
     .from('users')
     .select('is_admin')
-    .match({ user_id: authUser?.id })
+    .match({ user_id: userId })
 
   if (userAdminDataError) {
     console.log(userAdminDataError)

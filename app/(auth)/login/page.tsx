@@ -1,8 +1,8 @@
 import VetoolLogo from '@/components/common/vetool-logo'
+import GoogleLoginButton from '@/components/login/google-login-button'
 import logoWhite from '@/public/logo-white.svg'
 import Image from 'next/image'
 import Link from 'next/link'
-import GoogleLoginButton from '../../components/login/google-login-button'
 
 export default async function LoginPage() {
   return (

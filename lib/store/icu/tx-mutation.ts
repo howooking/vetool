@@ -17,11 +17,6 @@ type IcuUpsertTxState = {
   step: 'closed' | 'detailInsert' | 'seletctUser'
   setStep: (step: 'closed' | 'detailInsert' | 'seletctUser') => void
 
-  // mutationType: 'insert' | 'update' | 'delete' | null
-  // setMutationType: (mutationType: 'insert' | 'update' | 'delete') => void
-
-  // isImageDialogOpen: boolean
-
   txLocalState: TxLocalState
   setTxLocalState: (updates: Partial<TxLocalState>) => void
 
@@ -31,12 +26,6 @@ type IcuUpsertTxState = {
   isDeleting: boolean
   setIsDeleting: (isDeleting: boolean) => void
 
-  // isTxMutating: boolean
-  // setIsTxMutating: (isTxMutating: boolean) => void
-
-  // cellId?: string
-  // setCellId: (cellId: string) => void
-
   isMutationCanceled: boolean
   setIsMutationCanceled: (isMutationCanceled: boolean) => void
 
@@ -44,17 +33,8 @@ type IcuUpsertTxState = {
 }
 
 export const useTxMutationStore = create<IcuUpsertTxState>((set) => ({
-  // briefTxResultInput: '',
-  // setBriefTxResultInput: (briefTxResultInput: string) =>
-  //   set({ briefTxResultInput }),
-
   step: 'closed',
   setStep: (step) => set({ step }),
-
-  // mutationType: null,
-  // setMutationType: (mutationType) => set({ mutationType }),
-
-  // isImageDialogOpen: false,
 
   txLocalState: null,
   setTxLocalState: (updates) =>
@@ -66,20 +46,12 @@ export const useTxMutationStore = create<IcuUpsertTxState>((set) => ({
   isDeleting: false,
   setIsDeleting: (isDeleting) => set({ isDeleting }),
 
-  // isTxMutating: false,
-  // setIsTxMutating: (isTxMutating) => set({ isTxMutating }),
-
-  // cellId: undefined,
-  // setCellId: (cellId) => set({ cellId }),
-
   isMutationCanceled: false,
   setIsMutationCanceled: (isMutationCanceled) => set({ isMutationCanceled }),
 
   reset: () =>
     set({
-      // isImageDialogOpen: false,
       step: 'closed',
       txLocalState: null,
-      // mutationType: null,
     }),
 }))

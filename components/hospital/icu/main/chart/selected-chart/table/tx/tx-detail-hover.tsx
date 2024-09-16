@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 
-export function TxDetailHover({ txComment }: { txComment: string | null }) {
+export function TxDetailHover({ txComment }: { txComment?: string | null }) {
   return (
     <TooltipProvider delayDuration={10}>
       <Tooltip>

@@ -47,7 +47,6 @@ export default function OrderForm({
   } = useCreateOrderStore()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  // 왜 undefined로 안하고 "undefined"로 했냐면, 값을 undefined로 만들었을 때 ui가 초기화되지 않음
   const [startTime, setStartTime] = useState<string>('undefined')
   const [timeTerm, setTimeTerm] = useState<string>('undefined')
   const [orderTime, setOrderTime] = useState<string[]>(

@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import type { NoticeUserJoined } from '@/types/hospital/notice'
+import type { NoticeWithUser } from '@/types/hospital/notice'
 import CreateOrUpdateNoticeDialog from './create-or-update-notice-dialog'
 import DragAndDropNoticeList from './drag-and-drop-notice-list'
 
@@ -7,7 +7,7 @@ export default function Notice({
   noticesData,
   hosId,
 }: {
-  noticesData: NoticeUserJoined[]
+  noticesData: NoticeWithUser[]
   hosId: string
 }) {
   return (

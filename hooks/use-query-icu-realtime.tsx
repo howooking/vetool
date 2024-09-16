@@ -32,7 +32,7 @@ export function useQueryIcuRealtime(
     queryFn: () => getIcuIo(hosId, targetDate),
     staleTime: 0,
     refetchOnWindowFocus: true,
-    // refetchInterval: 7000,
+    refetchInterval: 60000,
     initialData: icuIoData,
   })
 
@@ -41,7 +41,7 @@ export function useQueryIcuRealtime(
     queryFn: () => getIcuChart(hosId, targetDate),
     staleTime: 0,
     refetchOnWindowFocus: true,
-    // refetchInterval: 7000,
+    refetchInterval: 60000,
     initialData: icuChartData,
   })
 
@@ -50,7 +50,7 @@ export function useQueryIcuRealtime(
     queryFn: () => getIcuOrder(hosId, targetDate),
     staleTime: 0,
     refetchOnWindowFocus: true,
-    // refetchInterval: 7000,
+    refetchInterval: 60000,
     initialData: icuChartOrderData,
   })
 
