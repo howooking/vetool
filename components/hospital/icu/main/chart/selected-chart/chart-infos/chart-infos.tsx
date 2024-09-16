@@ -20,7 +20,6 @@ export default function ChartInfos({
   selectedIo: IcuIoJoined
   vetsList: Vet[]
 }) {
-  console.log(selectedIo)
   return (
     <div className="grid grid-cols-2 gap-2 md:grid-cols-8">
       <div className="col-span-2">
