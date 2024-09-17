@@ -4,12 +4,24 @@ import {
   getIcuOrder,
 } from '@/lib/services/icu/get-icu-data'
 import { createClient } from '@/lib/supabase/client'
-import { IcuChartJoined, IcuChartOrderJoined, IcuIoJoined } from '@/types/icu'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuIoJoined,
+} from '@/types/icu'
+import type { RealtimeChannel } from '@supabase/supabase-js'
+import { useQueries, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 
 const supabase = createClient()
-const TABLES = ['icu_io', 'icu_chart', 'icu_chart_order', 'icu_chart_tx']
+const TABLES = [
+  'icu_io',
+  'icu_chart',
+  'icu_chart_order',
+  'icu_chart_tx',
+] as const
+type TableName = (typeof TABLES)[number]
 
 export function useQueryIcuRealtime(
   hosId: string,
@@ -18,37 +30,35 @@ export function useQueryIcuRealtime(
   icuChartData: IcuChartJoined[],
   icuChartOrderData: IcuChartOrderJoined[],
 ) {
+  const subscriptionRef = useRef<RealtimeChannel | null>(null)
+  const revalidationStackRef = useRef<Set<TableName>>(new Set())
   const [isSubscriptionReady, setIsSubscriptionReady] = useState(false)
-  const subscriptionRef = useRef<ReturnType<typeof supabase.channel> | null>(
-    null,
-  )
-  const revalidationStackRef = useRef<Set<string>>(new Set())
-  const revalidationTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   const queryClient = useQueryClient()
-
-  const icuIoQuery = useQuery({
-    queryKey: ['icu_io', hosId, targetDate],
-    queryFn: () => getIcuIo(hosId, targetDate),
-    refetchOnWindowFocus: true,
-    refetchInterval: 60000,
-    initialData: icuIoData,
-  })
-
-  const icuChartQuery = useQuery({
-    queryKey: ['icu_chart', hosId, targetDate],
-    queryFn: () => getIcuChart(hosId, targetDate),
-    refetchOnWindowFocus: true,
-    refetchInterval: 60000,
-    initialData: icuChartData,
-  })
-
-  const icuOrderQuery = useQuery({
-    queryKey: ['icu_chart_order', hosId, targetDate],
-    queryFn: () => getIcuOrder(hosId, targetDate),
-    refetchOnWindowFocus: true,
-    refetchInterval: 60000,
-    initialData: icuChartOrderData,
+  const [icuIoQuery, icuChartQuery, icuOrderQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ['icu_io', hosId, targetDate],
+        queryFn: () => getIcuIo(hosId, targetDate),
+        refetchOnWindowFocus: true,
+        refetchInterval: isSubscriptionReady ? false : 60000,
+        initialData: icuIoData,
+      },
+      {
+        queryKey: ['icu_chart', hosId, targetDate],
+        queryFn: () => getIcuChart(hosId, targetDate),
+        refetchOnWindowFocus: true,
+        refetchInterval: isSubscriptionReady ? false : 60000,
+        initialData: icuChartData,
+      },
+      {
+        queryKey: ['icu_chart_order', hosId, targetDate],
+        queryFn: () => getIcuOrder(hosId, targetDate),
+        refetchOnWindowFocus: true,
+        refetchInterval: isSubscriptionReady ? false : 60000,
+        initialData: icuChartOrderData,
+      },
+    ],
   })
 
   const processRevalidationStack = useCallback(async () => {
@@ -71,8 +81,12 @@ export function useQueryIcuRealtime(
     )
     await Promise.all(revalidationPromises)
     revalidationStackRef.current.clear()
-    revalidationTimerRef.current = null
-  }, [queryClient, hosId, targetDate])
+  }, [hosId, queryClient, targetDate])
+
+  const debouncedProcessRevalidationStack = useDebouncedCallback(
+    processRevalidationStack,
+    500,
+  )
 
   const handleChange = useCallback(
     (payload: any) => {
@@ -81,18 +95,19 @@ export function useQueryIcuRealtime(
         `background:${getLogColor(payload.table)}; color:white`,
       )
 
-      revalidationStackRef.current.add(payload.table)
+      revalidationStackRef.current.add(payload.table as TableName)
 
-      if (revalidationTimerRef.current) {
-        clearTimeout(revalidationTimerRef.current)
-      }
-
-      revalidationTimerRef.current = setTimeout(processRevalidationStack, 700)
+      debouncedProcessRevalidationStack()
     },
-    [processRevalidationStack],
+    [debouncedProcessRevalidationStack],
   )
 
-  useEffect(() => {
+  const subscribeToChannel = useCallback(() => {
+    if (subscriptionRef.current) {
+      console.log('Subscription already exists. Skipping...')
+      return
+    }
+
     const channel = supabase.channel(`icu_realtime_${hosId}`)
 
     TABLES.forEach((table) => {
@@ -125,25 +140,61 @@ export function useQueryIcuRealtime(
     })
 
     subscriptionRef.current = channel.subscribe((status) => {
-      if (status !== 'SUBSCRIBED') {
-        setIsSubscriptionReady(false)
-      } else {
-        setIsSubscriptionReady(true)
+      if (status === 'SUBSCRIBED') {
         console.log('Subscribed to all tables')
+        setIsSubscriptionReady(true)
+      } else {
+        console.log('Subscription failed')
+        setIsSubscriptionReady(false)
       }
     })
+  }, [hosId, handleChange])
 
-    return () => {
-      if (subscriptionRef.current) {
-        supabase.removeChannel(subscriptionRef.current)
-      }
-      if (revalidationTimerRef.current) {
-        clearTimeout(revalidationTimerRef.current)
+  const unsubscribe = useCallback(() => {
+    if (subscriptionRef.current) {
+      supabase.removeChannel(subscriptionRef.current)
+      subscriptionRef.current = null
+      setIsSubscriptionReady(false)
+    }
+  }, [])
+
+  const resubscribe = useCallback(() => {
+    unsubscribe()
+    subscribeToChannel()
+  }, [unsubscribe, subscribeToChannel])
+
+  useEffect(() => {
+    subscribeToChannel()
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        resubscribe()
       }
     }
-  }, [handleChange, hosId])
 
-  return { icuIoQuery, icuChartQuery, icuOrderQuery, isSubscriptionReady }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    const checkSubscriptionInterval = setInterval(resubscribe, 60000)
+
+    return () => {
+      unsubscribe()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      clearInterval(checkSubscriptionInterval)
+      debouncedProcessRevalidationStack.cancel()
+    }
+  }, [
+    subscribeToChannel,
+    unsubscribe,
+    resubscribe,
+    debouncedProcessRevalidationStack,
+  ])
+
+  return {
+    icuIoQuery,
+    icuChartQuery,
+    icuOrderQuery,
+    isSubscriptionReady,
+  }
 }
 
 export function getLogColor(table: string): string {
