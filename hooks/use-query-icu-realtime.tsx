@@ -31,7 +31,7 @@ export function useQueryIcuRealtime(
   icuChartOrderData: IcuChartOrderJoined[],
 ) {
   const subscriptionRef = useRef<RealtimeChannel | null>(null)
-  const revalidationStackRef = useRef<Set<TableName>>(new Set())
+  const revalidationQueueRef = useRef<Set<TableName>>(new Set())
   const [isSubscriptionReady, setIsSubscriptionReady] = useState(false)
 
   const queryClient = useQueryClient()
@@ -61,12 +61,12 @@ export function useQueryIcuRealtime(
     ],
   })
 
-  const processRevalidationStack = useCallback(async () => {
-    if (revalidationStackRef.current.has('icu_chart_tx')) {
-      revalidationStackRef.current.delete('icu_chart_order')
+  const processRevalidationQueue = useCallback(async () => {
+    if (revalidationQueueRef.current.has('icu_chart_tx')) {
+      revalidationQueueRef.current.delete('icu_chart_order')
     }
 
-    const revalidationPromises = Array.from(revalidationStackRef.current).map(
+    const revalidationPromises = Array.from(revalidationQueueRef.current).map(
       (table) => {
         if (table === 'icu_chart_tx' || table === 'icu_chart_order') {
           return queryClient.invalidateQueries({
@@ -80,11 +80,11 @@ export function useQueryIcuRealtime(
       },
     )
     await Promise.all(revalidationPromises)
-    revalidationStackRef.current.clear()
+    revalidationQueueRef.current.clear()
   }, [hosId, queryClient, targetDate])
 
   const debouncedProcessRevalidationStack = useDebouncedCallback(
-    processRevalidationStack,
+    processRevalidationQueue,
     500,
   )
 
@@ -95,7 +95,7 @@ export function useQueryIcuRealtime(
         `background:${getLogColor(payload.table)}; color:white`,
       )
 
-      revalidationStackRef.current.add(payload.table as TableName)
+      revalidationQueueRef.current.add(payload.table as TableName)
 
       debouncedProcessRevalidationStack()
     },
@@ -174,12 +174,9 @@ export function useQueryIcuRealtime(
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
-    const checkSubscriptionInterval = setInterval(resubscribe, 60000)
-
     return () => {
       unsubscribe()
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      clearInterval(checkSubscriptionInterval)
       debouncedProcessRevalidationStack.cancel()
     }
   }, [
