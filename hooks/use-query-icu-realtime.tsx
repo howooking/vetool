@@ -178,12 +178,10 @@ export function useQueryIcuRealtime(
     }
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
-    const checkSubscriptionInterval = setInterval(resubscribe, 60000)
 
     return () => {
       unsubscribe()
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      clearInterval(checkSubscriptionInterval)
       debouncedProcessRevalidationStack.cancel()
     }
   }, [
