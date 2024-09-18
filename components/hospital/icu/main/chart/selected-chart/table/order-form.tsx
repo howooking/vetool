@@ -186,7 +186,7 @@ export default function OrderForm({
           )}
         />
 
-        {/* {!isSettingMode && (
+        {!isSettingMode && (
           <OrderTimeSettings
             startTime={startTime}
             timeTerm={timeTerm}
@@ -195,7 +195,7 @@ export default function OrderForm({
             setTimeTerm={setTimeTerm}
             setOrderTime={setOrderTime}
           />
-        )} */}
+        )}
 
         <DialogFooter className="ml-auto w-full gap-2 md:gap-0">
           {isEditMode && (

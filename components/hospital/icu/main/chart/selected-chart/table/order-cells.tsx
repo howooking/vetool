@@ -26,7 +26,7 @@ export default function OrderCells({
 
   const handleUpdateOrderTime = useDebouncedCallback(() => {
     updateOrderTime(order.icu_chart_order_id, orderTimeState)
-  }, 1000)
+  }, 2000)
 
   return (
     <>
