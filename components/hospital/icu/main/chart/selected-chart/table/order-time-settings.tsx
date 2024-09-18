@@ -55,7 +55,7 @@ export default function OrderTimeSettings({
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 md:hidden">
       <span className="text-sm font-semibold">오더 시간 설정</span>
       <div className="flex flex-col justify-between gap-2 md:flex-row">
         <div className="flex gap-2">
