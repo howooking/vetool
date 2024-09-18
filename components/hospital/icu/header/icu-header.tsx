@@ -2,6 +2,7 @@ import IcuHeaderDateSelector from '@/components/hospital/icu/header/date-picker/
 import RegisterDialog from './register-dialog/register-dialog'
 import type { PatientData } from '@/types/patients'
 import type { Vet } from '@/types/icu'
+import RefreshButton from './refresh-button'
 
 export default async function IcuHeader({
   hosId,
@@ -15,7 +16,9 @@ export default async function IcuHeader({
   groupList: string[]
 }) {
   return (
-    <div className="absolute top-2 z-10 flex w-full items-center justify-center gap-4 px-2 md:left-0 md:w-auto md:justify-start">
+    <div className="absolute top-2 z-10 flex w-full items-center justify-center gap-2 px-2 md:left-0 md:w-auto md:justify-start">
+      <RefreshButton />
+
       <RegisterDialog
         hosId={hosId}
         patientsData={patientsData}
