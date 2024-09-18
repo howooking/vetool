@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import type { IcuChartTx } from '@/types'
 import type { TxLog } from '@/types/icu'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import type { DebouncedState } from 'use-debounce'
 import { TxDetailHover } from './tx/tx-detail-hover'
 
 type ChartTableCellProps = {
@@ -14,26 +15,32 @@ type ChartTableCellProps = {
   icuIoId: string
   icuChartOrderId: string
   icuChartOrderName: string
-  hasOrder: boolean
   isDone: boolean
   icuChartTxId?: string
   preview?: boolean
+  hasOrder: boolean
+  toggleOrderTime: (time: number) => void
+  handleUpdateOrderTime: DebouncedState<() => void>
 }
 
-const ChartTableCell: React.FC<ChartTableCellProps> = React.memo(
+const Cell: React.FC<ChartTableCellProps> = React.memo(
   ({
     time,
     txData,
     icuIoId,
     icuChartOrderId,
     icuChartOrderName,
-    hasOrder,
     isDone,
     icuChartTxId,
     preview,
+    hasOrder,
+    toggleOrderTime,
+    handleUpdateOrderTime,
   }) => {
+    const cellInput = React.useRef<HTMLInputElement>(null)
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
+
     const {
       isMutationCanceled,
       setIsMutationCanceled,
@@ -81,9 +88,10 @@ const ChartTableCell: React.FC<ChartTableCellProps> = React.memo(
     const handleRightClick = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault()
-        handleOpenTxDetail()
+        toggleOrderTime(time)
+        handleUpdateOrderTime()
       },
-      [handleOpenTxDetail],
+      [handleUpdateOrderTime, time, toggleOrderTime],
     )
 
     const handleUpsertBriefTxResultInput = React.useCallback(async () => {
@@ -137,7 +145,8 @@ const ChartTableCell: React.FC<ChartTableCellProps> = React.memo(
       <TableCell className="p-0">
         <div className="relative overflow-hidden">
           <Input
-            id={`${icuChartOrderId}-${time}`}
+            ref={cellInput}
+            id={`${icuChartOrderId}&${time}`}
             className={cn(
               'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
               hasOrder && 'bg-rose-500/10',
@@ -172,6 +181,6 @@ const ChartTableCell: React.FC<ChartTableCellProps> = React.memo(
   },
 )
 
-ChartTableCell.displayName = 'ChartTableCell'
+Cell.displayName = 'Cell'
 
-export default ChartTableCell
+export default Cell

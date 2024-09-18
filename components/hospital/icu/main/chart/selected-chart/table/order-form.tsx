@@ -15,8 +15,8 @@ import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
-import { upsertOrder } from '@/lib/services/icu/create-new-order'
 import { upsertDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
+import { upsertOrder } from '@/lib/services/icu/orders'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
 import type { IcuChartOrderJoined } from '@/types/icu'
@@ -186,7 +186,7 @@ export default function OrderForm({
           )}
         />
 
-        {!isSettingMode && (
+        {/* {!isSettingMode && (
           <OrderTimeSettings
             startTime={startTime}
             timeTerm={timeTerm}
@@ -195,7 +195,7 @@ export default function OrderForm({
             setTimeTerm={setTimeTerm}
             setOrderTime={setOrderTime}
           />
-        )}
+        )} */}
 
         <DialogFooter className="ml-auto w-full gap-2 md:gap-0">
           {isEditMode && (
