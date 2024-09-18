@@ -11,12 +11,11 @@ export default function RefreshButton() {
   return (
     <Button
       onClick={handleHardRefresh}
-      className="flex items-center gap-2"
+      className="hidden items-center gap-2 md:flex"
       size="sm"
       variant="outline"
     >
       <RefreshCw size={16} />
-      새로고침
     </Button>
   )
 }
