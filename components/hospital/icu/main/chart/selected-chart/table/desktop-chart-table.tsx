@@ -1,4 +1,3 @@
-import IcuChartTableCell from '@/components/hospital/icu/main/chart/selected-chart/table/chart-table-cell'
 import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/table/order-dialog'
 import OrderTitle from '@/components/hospital/icu/main/chart/selected-chart/table/order-title'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/table/tx/tx-upsert-dialog'
@@ -10,9 +9,9 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import type { IcuChartTx } from '@/types'
 import { IcuOrderColors } from '@/types/adimin'
 import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
+import OrderCells from './order-cells'
 
 type ChartTablePropsPreview = {
   selectedChartOrders: CopiedOrder[] | IcuChartOrderJoined[]
@@ -69,30 +68,7 @@ export default function DesktopChartTable({
               preview={preview}
               orderColors={orderColors}
             />
-
-            {TIMES.map((time, index) => {
-              const isDone =
-                !preview &&
-                order.icu_chart_order_time[index] === '1' &&
-                order[`icu_chart_order_tx_${time}`] !== null
-              return (
-                <IcuChartTableCell
-                  preview={preview}
-                  key={time}
-                  time={time}
-                  txData={order[`icu_chart_order_tx_${time}`] as IcuChartTx}
-                  icuIoId={order.icu_io_id.icu_io_id}
-                  icuChartOrderId={order.icu_chart_order_id}
-                  hasOrder={order.icu_chart_order_time[index] === '1'}
-                  isDone={isDone}
-                  icuChartOrderName={order.icu_chart_order_name}
-                  icuChartTxId={
-                    (order[`icu_chart_order_tx_${time}`] as IcuChartTx)
-                      ?.icu_chart_tx_id
-                  }
-                />
-              )
-            })}
+            <OrderCells preview={preview} order={order} />
           </TableRow>
         ))}
       </TableBody>

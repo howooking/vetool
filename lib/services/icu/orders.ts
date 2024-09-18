@@ -45,3 +45,17 @@ export const upsertOrder = async (
     redirect(`/error?message=${upsertOrderError.message}`)
   }
 }
+export const updateOrderTime = async (
+  icuChartOrderId: string,
+  orderTime: string[],
+) => {
+  const { error: updateOrderTimeError } = await supabase
+    .from('icu_chart_order')
+    .update({ icu_chart_order_time: orderTime })
+    .match({ icu_chart_order_id: icuChartOrderId })
+
+  if (updateOrderTimeError) {
+    console.log(updateOrderTimeError)
+    redirect(`/error?message=${updateOrderTimeError.message}`)
+  }
+}

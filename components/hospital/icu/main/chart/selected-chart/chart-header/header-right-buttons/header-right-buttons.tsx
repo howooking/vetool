@@ -4,6 +4,7 @@ import CopyChartButton from './copy-chart-button'
 import DeleteChartDialog from './delete-chart-dialog'
 import ExportDioalog from './export-dialog/export-dialog'
 import OutPatientDialog from './out-patient-dialog'
+import { RefreshCcw } from 'lucide-react'
 
 export default function HeaderRightButtons({
   icuChartId,
