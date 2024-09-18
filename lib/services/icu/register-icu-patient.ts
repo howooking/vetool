@@ -2,7 +2,6 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { getDaysSince } from '@/lib/utils'
-import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()

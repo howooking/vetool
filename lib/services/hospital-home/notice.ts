@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { NoticeUserJoined } from '@/types/hospital/notice'
+import { NoticeWithUser } from '@/types/hospital/notice'
 import { redirect } from 'next/navigation'
 
 export const getNotices = async (hosId: string) => {
@@ -11,15 +11,13 @@ export const getNotices = async (hosId: string) => {
     .select(
       `
         id, notice_color, notice_text, notice_order, created_at,
-        user_id (
-          user_id, name, avatar_url
-        )
+        user_id(user_id, name, avatar_url)
       `,
     )
     .match({ hos_id: hosId })
     .order('notice_order', { ascending: true })
     .order('created_at', { ascending: true })
-    .returns<NoticeUserJoined[]>()
+    .returns<NoticeWithUser[]>()
 
   if (noticesDataError) {
     console.error(noticesDataError)

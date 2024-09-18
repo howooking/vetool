@@ -29,7 +29,6 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
   const { hos_id, target_date } = useParams()
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
 
-  // 상세입력 > 사용자선택 으로 넘어오면 자동포커싱이 되지 않음
   const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     if (inputRef.current) {
@@ -54,7 +53,6 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
 
       const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
-      // setIsTxMutating(true)
       setStep('closed')
 
       const txId = await upsertIcuChartTxAndUpdateIcuChartOrder(

@@ -11,8 +11,10 @@ import {
 } from '@/components/ui/sheet'
 import { SIDE_BAR_ITEMS } from '@/constants/hospital/sidebar-items'
 import { cn } from '@/lib/utils'
+import type { UserProfile } from '@/types'
 import { format } from 'date-fns'
 import {
+  BarChart4,
   HeartPulse,
   Home,
   ListChecks,
@@ -31,6 +33,7 @@ const ICON_MAPPER = {
   Slice: <Slice size={18} className="ml-[17px]" />,
   HeartPulse: <HeartPulse size={18} className="ml-[17px]" />,
   ListChecks: <ListChecks size={18} className="ml-[17px]" />,
+  BarChart4: <BarChart4 size={18} className="ml-[17px]" />,
 }
 
 export default function MobileSidebar({
@@ -39,14 +42,7 @@ export default function MobileSidebar({
   hosName,
 }: {
   hosId: string
-  userData: {
-    email: string | null
-    name: string
-    avatar_url: string | null
-    position: string
-    is_admin: boolean
-    user_id: string
-  }
+  userData: UserProfile
   hosName: string
 }) {
   const pathname = usePathname()

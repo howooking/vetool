@@ -5,7 +5,7 @@ import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart
 import Group from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/group/group'
 import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/in-and-out-date/in-and-out-date'
 import { MainSubVet } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/main-sub-vet/main-sub-vet'
-import type { IcuChartJoined, IcuIoJoined, IcuUserList } from '@/types/icu'
+import type { IcuChartJoined, IcuIoJoined, Vet } from '@/types/icu'
 import OwnerName from './owner-name'
 import Cpcr from './cpcr'
 
@@ -18,7 +18,7 @@ export default function ChartInfos({
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   isPatientOut: boolean
   selectedIo: IcuIoJoined
-  vetsList: IcuUserList[]
+  vetsList: Vet[]
 }) {
   return (
     <div className="grid grid-cols-2 gap-2 md:grid-cols-8">
@@ -49,10 +49,7 @@ export default function ChartInfos({
       </div>
 
       <div className="col-span-1">
-        <Cpcr
-          cpcr={chartData.icu_io_id.cpcr}
-          icuIoId={chartData.icu_io_id.icu_io_id}
-        />
+        <Cpcr cpcr={selectedIo.cpcr} icuIoId={selectedIo.icu_io_id} />
       </div>
 
       <div className="col-span-1">

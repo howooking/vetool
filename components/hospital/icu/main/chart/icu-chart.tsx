@@ -11,126 +11,133 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoJoined,
-  IcuUserList,
+  Vet,
 } from '@/types/icu'
 import { useEffect, useMemo } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 import { useParams } from 'next/navigation'
+import React from 'react'
 
-export default function IcuChart({
-  icuIoData,
-  icuChartData,
-  icuChartOrderData,
-  vetListData,
-  orderColors,
-}: {
-  icuIoData: IcuIoJoined[]
-  icuChartData: IcuChartJoined[]
-  icuChartOrderData: IcuChartOrderJoined[]
-  vetListData: IcuUserList[]
-  orderColors: IcuOrderColors
-}) {
-  const { selectedPatientId } = useIcuSelectedPatientIdStore()
-  const { target_date } = useParams()
+const IcuChart = React.memo(
+  ({
+    icuIoData,
+    icuChartData,
+    icuChartOrderData,
+    vetListData,
+    orderColors,
+  }: {
+    icuIoData: IcuIoJoined[]
+    icuChartData: IcuChartJoined[]
+    icuChartOrderData: IcuChartOrderJoined[]
+    vetListData: Vet[]
+    orderColors: IcuOrderColors
+  }) => {
+    const { selectedPatientId } = useIcuSelectedPatientIdStore()
+    const { target_date } = useParams()
 
-  const selectedIo = useMemo(
-    () =>
-      icuIoData.find((io) => io.patient_id.patient_id === selectedPatientId),
-    [icuIoData, selectedPatientId],
-  )
-  const selectedChart = useMemo(
-    () =>
-      icuChartData.find(
-        (chart) => chart.patient_id.patient_id === selectedPatientId,
-      ),
-    [icuChartData, selectedPatientId],
-  )
-  const selectedChartOrders = useMemo(
-    () =>
-      icuChartOrderData
-        .filter(
-          (order) =>
-            order.icu_chart_id.icu_chart_id === selectedChart?.icu_chart_id,
-        )
-        .sort(
-          (prev, next) =>
-            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-              (order) => order === prev.icu_chart_order_type,
-            ) -
-            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-              (order) => order === next.icu_chart_order_type,
-            ),
+    const selectedIo = useMemo(
+      () =>
+        icuIoData.find((io) => io.patient_id.patient_id === selectedPatientId),
+      [icuIoData, selectedPatientId],
+    )
+    const selectedChart = useMemo(
+      () =>
+        icuChartData.find(
+          (chart) => chart.patient_id.patient_id === selectedPatientId,
         ),
-    [icuChartOrderData, selectedChart?.icu_chart_id],
-  )
+      [icuChartData, selectedPatientId],
+    )
+    const selectedChartOrders = useMemo(
+      () =>
+        icuChartOrderData
+          .filter(
+            (order) =>
+              order.icu_chart_id.icu_chart_id === selectedChart?.icu_chart_id,
+          )
+          .sort(
+            (prev, next) =>
+              DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+                (order) => order === prev.icu_chart_order_type,
+              ) -
+              DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+                (order) => order === next.icu_chart_order_type,
+              ),
+          ),
+      [icuChartOrderData, selectedChart?.icu_chart_id],
+    )
 
-  const isFirstChart = useMemo(
-    () => target_date === selectedIo?.in_date,
-    [target_date, selectedIo?.in_date],
-  )
+    const isFirstChart = useMemo(
+      () => target_date === selectedIo?.in_date,
+      [target_date, selectedIo?.in_date],
+    )
 
-  const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
+    const { isChartLoading, setIsChartLoading } = useIsChartLoadingStore()
 
-  useEffect(() => {
-    if (!isFirstChart && selectedChart) {
-      setIsChartLoading(false)
-    } else if (isFirstChart && selectedChartOrders.length) {
-      setIsChartLoading(false)
+    useEffect(() => {
+      if (!isFirstChart && selectedChart) {
+        setIsChartLoading(false)
+      } else if (isFirstChart && selectedChartOrders.length) {
+        setIsChartLoading(false)
+      }
+      return () => setIsChartLoading(false)
+    }, [
+      isFirstChart,
+      selectedChart,
+      selectedChartOrders.length,
+      setIsChartLoading,
+    ])
+
+    if (!selectedPatientId) {
+      return <NoResult title="환자를 선택해주세요" className="h-icu-chart" />
     }
-    return () => setIsChartLoading(false)
-  }, [
-    isFirstChart,
-    selectedChart,
-    selectedChartOrders.length,
-    setIsChartLoading,
-  ])
 
-  if (!selectedPatientId) {
-    return <NoResult title="환자를 선택해주세요" className="h-icu-chart" />
-  }
+    if (isChartLoading) {
+      return <LargeLoaderCircle className="h-icu-chart" />
+    }
 
-  if (isChartLoading) {
-    return <LargeLoaderCircle className="h-icu-chart" />
-  }
+    if (!selectedIo) {
+      return (
+        <NoResult
+          title={
+            <>
+              해당환자는 선택한 날짜의 차트가 없습니다 <br /> 선택한 날짜에 아직
+              입원을 하지 않았거나 이미 퇴원을 하였습니다
+            </>
+          }
+          className="h-icu-chart"
+        />
+      )
+    }
 
-  if (!selectedIo) {
+    if (!selectedChart || (isFirstChart && !selectedChartOrders.length)) {
+      return (
+        <AddChartDialogs
+          isFirstChart={isFirstChart}
+          selectedPatientId={selectedPatientId}
+          selectedChart={selectedChart}
+          orderColors={orderColors}
+          selectedIoId={selectedIo.icu_io_id}
+        />
+      )
+    }
+
+    if (!selectedChartOrders.length) {
+      return <LargeLoaderCircle className="h-icu-chart" />
+    }
+
     return (
-      <NoResult
-        title={
-          <>
-            해당환자는 선택한 날짜의 차트가 없습니다 <br /> 선택한 날짜에 아직
-            입원을 하지 않았거나 이미 퇴원을 하였습니다
-          </>
-        }
-        className="h-icu-chart"
-      />
-    )
-  }
-
-  if (!selectedChart || (isFirstChart && !selectedChartOrders.length)) {
-    return (
-      <AddChartDialogs
-        isFirstChart={isFirstChart}
-        selectedPatientId={selectedPatientId}
-        selectedChart={selectedChart}
+      <SelectedChart
         orderColors={orderColors}
-        selectedIoId={selectedIo.icu_io_id}
+        vetsList={vetListData}
+        isFirstChart={isFirstChart}
+        selectedIo={selectedIo}
+        selectedChart={selectedChart}
+        selectedChartOrders={selectedChartOrders}
       />
     )
-  }
+  },
+)
 
-  if (!selectedChartOrders.length) {
-    return <LargeLoaderCircle className="h-icu-chart" />
-  }
+IcuChart.displayName = 'IcuChart'
 
-  return (
-    <SelectedChart
-      orderColors={orderColors}
-      vetsList={vetListData}
-      isFirstChart={isFirstChart}
-      selectedIo={selectedIo}
-      selectedChart={selectedChart}
-      selectedChartOrders={selectedChartOrders}
-    />
-  )
-}
+export default IcuChart

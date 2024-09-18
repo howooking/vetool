@@ -1,5 +1,6 @@
 'use client'
 
+import { getLogColor } from '@/hooks/use-query-icu-realtime'
 import { createClient } from '@/lib/supabase/client'
 import type {
   IcuChartJoined,
@@ -11,7 +12,10 @@ import { redirect } from 'next/navigation'
 const supabase = createClient()
 
 export const getIcuIo = async (hosId: string, targetDate: string) => {
-  console.log(`%cfetching IO ${targetDate}`, 'background:blue; color:white')
+  console.log(
+    `%cIO refetching`,
+    `background:${getLogColor('icu_io')}; color:white`,
+  )
   const { data: icuIoData, error: icuIoDataError } = await supabase
     .from('icu_io')
     .select(
@@ -24,6 +28,7 @@ export const getIcuIo = async (hosId: string, targetDate: string) => {
         age_in_days,
         icu_io_dx,
         icu_io_cc,
+        cpcr,
         patient_id(name, breed, patient_id),
         hos_id(group_list, icu_memo_names, order_color)
       `,
@@ -32,7 +37,8 @@ export const getIcuIo = async (hosId: string, targetDate: string) => {
     .lte('in_date', targetDate)
     .or(`out_date.is.null, out_date.gte.${targetDate}`)
     .order('out_date', { ascending: false })
-    .order('in_date, created_at', { ascending: true })
+    .order('in_date', { ascending: true })
+    .order('created_at', { ascending: true })
     .returns<IcuIoJoined[]>()
 
   if (icuIoDataError) {
@@ -43,7 +49,10 @@ export const getIcuIo = async (hosId: string, targetDate: string) => {
 }
 
 export const getIcuChart = async (hosId: string, targetDate: string) => {
-  console.log(`%cfetching CHART ${targetDate}`, 'background:red; color:white')
+  console.log(
+    `%cCHART refetching`,
+    `background:${getLogColor('icu_chart')}; color:white`,
+  )
   const { data: icuChartData, error: icuChartDataError } = await supabase
     .from('icu_chart')
     .select(
@@ -55,7 +64,7 @@ export const getIcuChart = async (hosId: string, targetDate: string) => {
         memo_c,
         weight_measured_date,
         weight,
-        icu_io_id!inner(out_date, in_date, created_at, icu_io_id),
+        icu_io_id!inner(out_date, in_date, created_at, icu_io_id, icu_io_dx, icu_io_cc),
         patient_id(name, gender, breed, patient_id, species, owner_name),
         main_vet(name, user_id, avatar_url),
         sub_vet(name, user_id, avatar_url),
@@ -64,7 +73,8 @@ export const getIcuChart = async (hosId: string, targetDate: string) => {
     )
     .match({ hos_id: hosId, target_date: targetDate })
     .order('icu_io_id(out_date)', { ascending: false })
-    .order('icu_io_id(in_date), icu_io_id(created_at)', { ascending: true })
+    .order('icu_io_id(in_date)', { ascending: true })
+    .order('icu_io_id(created_at)', { ascending: true })
     .returns<IcuChartJoined[]>()
 
   if (icuChartDataError) {
@@ -75,7 +85,10 @@ export const getIcuChart = async (hosId: string, targetDate: string) => {
 }
 
 export const getIcuOrder = async (hosId: string, targetDate: string) => {
-  console.log(`%cfetching ORDER ${targetDate}`, 'background:green; color:white')
+  console.log(
+    `%cORDER refetching`,
+    `background:${getLogColor('icu_chart_order')}; color:white`,
+  )
   const { data: icuOrderData, error: icuChartOrderDataError } = await supabase
     .from('icu_chart_order')
     .select(

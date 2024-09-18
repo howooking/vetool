@@ -1,20 +1,14 @@
 import { SIDE_BAR_ITEMS } from '@/constants/hospital/sidebar-items'
 import SidebarItem from './sidebar-item'
 import SidebarUserInfo from './sidebar-user-info'
+import type { UserProfile } from '@/types'
 
 export default async function Sidebar({
   hosId,
   userData,
 }: {
   hosId: string
-  userData: {
-    email: string | null
-    name: string
-    avatar_url: string | null
-    position: string
-    is_admin: boolean
-    user_id: string
-  }
+  userData: UserProfile
 }) {
   return (
     <>

@@ -1,5 +1,5 @@
 import DotLottie from '@/components/common/dot-lottie'
-import ApprovalWaitingContents from '@/components/hospital/admin/approval/approval-waiting-contents'
+import ApprovalWaitingContents from '@/components/on-boarding/approval-waiting-contents'
 import { getUserAppoval } from '@/lib/services/on-boarding/on-boarding'
 
 export default async function ApprovalWaiting() {

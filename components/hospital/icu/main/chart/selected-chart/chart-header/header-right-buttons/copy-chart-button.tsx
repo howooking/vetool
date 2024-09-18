@@ -28,7 +28,6 @@ export default function CopyChartButton({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
-        // 선택한 텍스트가 있는지 확인
         if (!window.getSelection()?.toString()) {
           event.preventDefault()
           handleCopy()

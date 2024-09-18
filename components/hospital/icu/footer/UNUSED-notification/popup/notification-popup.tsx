@@ -1,5 +1,3 @@
-//!!애니매이션
-
 'use client'
 
 import { POPUP_MOTION } from '@/constants/hospital/icu/notification/aniimations'
@@ -26,22 +24,18 @@ export default function NotificationPopup({
   })
 
   return (
-    // 겉 포장지
     <motion.div
       initial={false}
       animate={isPopupOpen ? 'open' : 'closed'}
       ref={containerRef}
       className={cn(
         'fixed bottom-0 right-0 top-1/2 z-20 w-[324px] overflow-y-auto p-3',
-        // 닫혔을 때 뒤에 눌리도록
         !isPopupOpen && 'pointer-events-none',
       )}
     >
-      {/* 움직이는 녹색 포장지 */}
       <motion.div
         className={cn(
           'fixed bottom-0 right-0 top-1/2 w-[324px] rounded-tl-lg bg-primary',
-          // 닫혔을 때 뒤에 눌리도록
           !isPopupOpen && 'pointer-events-none',
         )}
         variants={POPUP_MOTION}

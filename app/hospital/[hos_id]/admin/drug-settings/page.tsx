@@ -1,3 +1,3 @@
 export default function AdminDrugSettingsPage() {
-  return <div>AdminDrugSettingsPage</div>
+  return <div>관리자 약품설정</div>
 }

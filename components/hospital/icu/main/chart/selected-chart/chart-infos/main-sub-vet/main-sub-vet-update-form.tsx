@@ -19,7 +19,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { updateMainSubVet } from '@/lib/services/icu/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
-import type { IcuUserList, MainAndSubVet } from '@/types/icu'
+import type { Vet, MainAndSubVet } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'
@@ -36,7 +36,7 @@ export default function MainSubVetUpdateForm({
 }: {
   mainVet: MainAndSubVet
   subVet: MainAndSubVet | null
-  vetsList: IcuUserList[]
+  vetsList: Vet[]
   icuChartId: string
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {

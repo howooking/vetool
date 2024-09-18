@@ -1,6 +1,6 @@
 'use client'
 
-import Autocomplete from '@/components/hospital/common/auto-complete/auto-complete'
+import Autocomplete from '@/components/common/auto-complete/auto-complete'
 import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/register-icu/icu-schema'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -36,7 +36,7 @@ import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patie
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import type { IcuUserList } from '@/types/icu'
+import type { Vet } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
@@ -56,7 +56,7 @@ export default function RegisterIcuForm({
 }: {
   hosId: string
   groupList: string[]
-  vetsData: IcuUserList[]
+  vetsData: Vet[]
   tab: string
 }) {
   const { setIsRegisterDialogOpen } = usePatientRegisterDialog()

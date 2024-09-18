@@ -3,7 +3,7 @@
 import NoPatients from '@/components/hospital/icu/sidebar/no-patients'
 import PatientList from '@/components/hospital/icu/sidebar/patient-list'
 import { Separator } from '@/components/ui/separator'
-import type { IcuChartJoined, IcuIoJoined, IcuUserList } from '@/types/icu'
+import type { IcuChartJoined, IcuIoJoined, Vet } from '@/types/icu'
 import { useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import Filters from './filters/filters'
@@ -16,7 +16,7 @@ export default function IcuSidebar({
 }: {
   icuIoData: IcuIoJoined[]
   icuChartData: IcuChartJoined[]
-  vetsListData: IcuUserList[]
+  vetsListData: Vet[]
 }) {
   const searchParams = useSearchParams()
 

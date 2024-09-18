@@ -44,7 +44,6 @@ export default function IcuFooter({
     <footer
       className={cn(
         'fixed bottom-0 z-20 flex h-10 w-full items-center justify-between border-t bg-white transition-all duration-200',
-        // position fixed의 한계, 병원사이드바 펼쳤을 때 / 접었을 때 너비
         isExpanded ? 'md:w-[calc(100%-336px)]' : 'md:w-[calc(100%-200px)]',
       )}
     >
