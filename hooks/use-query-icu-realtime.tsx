@@ -31,6 +31,7 @@ export function useQueryIcuRealtime(
   icuChartOrderData: IcuChartOrderJoined[],
 ) {
   const subscriptionRef = useRef<RealtimeChannel | null>(null)
+  const revalidationTimerRef = useRef<NodeJS.Timeout | null>(null)
   const revalidationQueueRef = useRef<Set<TableName>>(new Set())
   const [isSubscriptionReady, setIsSubscriptionReady] = useState(false)
 
@@ -97,9 +98,13 @@ export function useQueryIcuRealtime(
 
       revalidationQueueRef.current.add(payload.table as TableName)
 
-      debouncedProcessRevalidationStack()
+      if (revalidationTimerRef.current) {
+        clearTimeout(revalidationTimerRef.current)
+      }
+
+      revalidationTimerRef.current = setTimeout(processRevalidationQueue, 900)
     },
-    [debouncedProcessRevalidationStack],
+    [processRevalidationQueue],
   )
 
   const subscribeToChannel = useCallback(() => {
