@@ -1,10 +1,10 @@
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { updateOrderTime } from '@/lib/services/icu/orders'
 import type { IcuChartTx } from '@/types'
 import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
 import { useCallback, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import Cell from './cell'
+import { updateOrderTime } from '@/lib/services/icu/order-mutation'
 
 export default function OrderCells({
   preview,
@@ -26,7 +26,7 @@ export default function OrderCells({
 
   const handleUpdateOrderTime = useDebouncedCallback(() => {
     updateOrderTime(order.icu_chart_order_id, orderTimeState)
-  }, 2000)
+  }, 1500)
 
   return (
     <>
