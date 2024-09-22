@@ -70,7 +70,6 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
       // const test = await getTxImageList(txId)
 
       reset()
-
       toast({
         title: '처치 내역이 업데이트 되었습니다',
       })

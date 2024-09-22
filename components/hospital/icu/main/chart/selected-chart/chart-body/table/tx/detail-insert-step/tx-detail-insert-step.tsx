@@ -125,11 +125,12 @@ export default function TxDetailInsertStep() {
             )}
           />
 
-          {/* <IcuChartTxImageInput
-            txId={txLocalState?.txId}
+          <IcuChartTxImageInput
+            chartOrderId={txLocalState?.icuChartOrderId}
+            time={txLocalState?.time}
             images={txImageState ?? []}
             onImagesChange={(newImages) => setTxImageState(newImages)}
-          /> */}
+          />
 
           {txLocalState?.txLog?.length && <TxLog logs={txLocalState?.txLog} />}
 

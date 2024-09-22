@@ -60,7 +60,7 @@ export default function ChartTableCell({
         icuIoId,
         txResult: txData?.icu_chart_tx_result,
         txComment: txData?.icu_chart_tx_comment,
-        // txImages: txData?.icu_chart_tx_images,
+        txImages: txData?.icu_chart_tx_images,
         txId: icuChartTxId,
         time,
         txLog: txData?.icu_chart_tx_log as TxLog[] | null,

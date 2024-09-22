@@ -6,11 +6,13 @@ import Image from 'next/image'
 import { useRef } from 'react'
 
 export default function IcuChartTxImageInput({
-  txId,
+  chartOrderId,
+  time,
   images,
   onImagesChange,
 }: {
-  txId: string | undefined
+  chartOrderId?: string
+  time?: number
   images: File[]
   onImagesChange: (newImages: File[]) => void
 }) {
@@ -19,26 +21,15 @@ export default function IcuChartTxImageInput({
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
 
-    if (files && txId) {
-      const newImages = [...images]
+    if (!files || !chartOrderId || !time) return
 
-      Array.from(files).forEach(async (file) => {
-        const reader = new FileReader()
+    const newImages = [...images, ...Array.from(files)].slice(-5)
 
-        newImages.push(file)
-        if (newImages.length > 5) newImages.shift()
-
-        onImagesChange(newImages)
-
-        reader.readAsDataURL(file)
-      })
-    }
+    onImagesChange(newImages)
   }
 
   const handleDeleteImage = (index: number) => {
-    const newImages = images.filter((_, i) => i !== index)
-
-    onImagesChange(newImages)
+    onImagesChange(images.filter((_, i) => i !== index))
   }
 
   return (

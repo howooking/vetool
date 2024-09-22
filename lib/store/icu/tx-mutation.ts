@@ -7,6 +7,7 @@ export type TxLocalState = {
   txLog?: TxLog[] | null
   time?: number
   txId?: string
+  txImages?: string[] | null
   icuChartOrderId?: string
   icuIoId?: string
   isNotificationChecked?: boolean

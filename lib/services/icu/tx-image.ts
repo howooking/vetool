@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 const supabase = createClient()
 
 export const uploadTxImage = async (txId: string, txImages: File[]) => {
+  console.log(txImages)
   Array.from(txImages).forEach(async (txImage, index) => {
     const { error: deleteIcuChartTxError } = await supabase.storage
       .from('tx_images')
