@@ -14,6 +14,17 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -42,7 +53,7 @@ import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
@@ -59,15 +70,18 @@ export default function RegisterIcuForm({
   vetsData: IcuUserList[]
   tab: string
 }) {
-  const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
-  const { setIsChartLoading } = useIsChartLoadingStore()
-  const { push } = useRouter()
-
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
     to: new Date(),
   })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { push } = useRouter()
+  const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
+  const { setIsChartLoading } = useIsChartLoadingStore()
+  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
+  const { setSelectedIcuMainView } = useSelectedMainViewStore()
+  const { setStep } = usePatientRegisterStep()
   const { registeringPatient } = useIcuRegisteringPatient() as {
     registeringPatient: {
       patientId: string
@@ -75,17 +89,21 @@ export default function RegisterIcuForm({
       patientName: string
     }
   }
-  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
-  const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setStep } = usePatientRegisterStep()
+
+  const normalizeDate = (date?: Date) => {
+    const normalized = new Date(date ?? new Date())
+
+    normalized.setHours(12, 0, 0, 0)
+    return normalized
+  }
 
   const form = useForm<z.infer<typeof registerIcuPatientFormSchema>>({
     resolver: zodResolver(registerIcuPatientFormSchema),
     defaultValues: {
       dx: undefined,
       cc: undefined,
-      in_date: range?.from,
-      out_due_date: range?.to,
+      in_date: normalizeDate(range?.from),
+      out_due_date: normalizeDate(range?.to),
       main_vet: vetsData[0].user_id,
       sub_vet: undefined,
       group_list: [groupList[0]],
@@ -94,8 +112,11 @@ export default function RegisterIcuForm({
 
   useEffect(() => {
     if (range && range.from && range.to) {
-      form.setValue('in_date', range.from)
-      form.setValue('out_due_date', range.to)
+      console.log('Range from:', range.from)
+      console.log('Formatted range from:', format(range.from, 'yyyy-MM-dd'))
+
+      form.setValue('in_date', normalizeDate(range.from))
+      form.setValue('out_due_date', normalizeDate(range.to))
     }
   }, [form, range])
 
@@ -370,13 +391,38 @@ export default function RegisterIcuForm({
           >
             이전
           </Button>
-
           <Button type="submit" disabled={isSubmitting}>
-            등록
+            확인
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />
           </Button>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline">Show Dialog</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>입원 등록</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {format(range?.from ?? new Date(), 'yyyy-MM-dd')} 날짜로
+                  입원하시겠습니까?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <Button type="submit" disabled={isSubmitting}>
+                  확인
+                  <LoaderCircle
+                    className={cn(
+                      isSubmitting ? 'ml-2 animate-spin' : 'hidden',
+                    )}
+                  />
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </form>
     </Form>

@@ -1,9 +1,14 @@
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
+import CopyChartButton from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/copy-chart-button'
+import DeleteChartDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/delete-chart-dialog'
+import ExportDioalog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog/export-dialog'
+import OutPatientDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/out-patient-dialog'
+import type { IcuOrderColors } from '@/types/adimin'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuUserList,
+} from '@/types/icu'
 import React from 'react'
-import CopyChartButton from './copy-chart-button'
-import DeleteChartDialog from './delete-chart-dialog'
-import ExportDioalog from './export-dialog/export-dialog'
-import OutPatientDialog from './out-patient-dialog'
 
 export default function HeaderRightButtons({
   icuChartId,
@@ -12,8 +17,10 @@ export default function HeaderRightButtons({
   isPatientOut,
   selectedChartOrders,
   chartData,
-  pdfRef,
+  captureRef,
   isFirstChart,
+  vetsList,
+  orderColors,
   dx,
   cc,
 }: {
@@ -23,8 +30,10 @@ export default function HeaderRightButtons({
   isPatientOut: boolean
   selectedChartOrders: IcuChartOrderJoined[]
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
-  pdfRef: React.RefObject<HTMLDivElement>
+  captureRef: React.RefObject<HTMLDivElement>
   isFirstChart: boolean
+  vetsList: IcuUserList[]
+  orderColors: IcuOrderColors
   dx: string
   cc: string
 }) {
@@ -43,9 +52,11 @@ export default function HeaderRightButtons({
 
       <ExportDioalog
         name={name}
-        pdfRef={pdfRef}
+        captureRef={captureRef}
         chartData={chartData}
         selectedChartOrders={selectedChartOrders}
+        vetsList={vetsList}
+        orderColors={orderColors}
       />
 
       <DeleteChartDialog

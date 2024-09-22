@@ -15,7 +15,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import MainSubVetUpdateForm from './main-sub-vet-update-form'
 
-export function MainSubVet({
+export default function MainSubVet({
   mainVet,
   subVet,
   icuChartId,

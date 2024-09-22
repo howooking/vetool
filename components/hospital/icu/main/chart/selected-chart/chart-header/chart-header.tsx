@@ -1,4 +1,9 @@
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
+import type { IcuOrderColors } from '@/types/adimin'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuUserList,
+} from '@/types/icu'
 import HeaderCenter from './header-center/bookmark-and-signalments'
 import HeaderRightButtons from './header-right-buttons/header-right-buttons'
 
@@ -9,7 +14,9 @@ export default function ChartHeader({
   chartData,
   selectedChartOrders,
   isFirstChart,
-  pdfRef,
+  captureRef,
+  vetsList,
+  orderColors,
   dx,
   cc,
 }: {
@@ -19,7 +26,9 @@ export default function ChartHeader({
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   selectedChartOrders: IcuChartOrderJoined[]
   isFirstChart: boolean
-  pdfRef: React.RefObject<HTMLDivElement>
+  captureRef: React.RefObject<HTMLDivElement>
+  vetsList: IcuUserList[]
+  orderColors: IcuOrderColors
   dx: string
   cc: string
 }) {
@@ -50,12 +59,14 @@ export default function ChartHeader({
       <HeaderRightButtons
         icuChartId={icu_chart_id}
         chartData={chartData}
-        pdfRef={pdfRef}
+        captureRef={captureRef}
         isFirstChart={isFirstChart}
         icuIoId={icuIoId}
         name={name}
         isPatientOut={isPatientOut}
         selectedChartOrders={selectedChartOrders}
+        vetsList={vetsList}
+        orderColors={orderColors}
         dx={dx}
         cc={cc}
       />

@@ -8,8 +8,7 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { updateCpcr } from '@/lib/services/icu/update-icu-chart-infos'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function Cpcr({
   cpcr,
@@ -19,7 +18,6 @@ export default function Cpcr({
   icuIoId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
-  const { refresh } = useRouter()
 
   const handleUpdateCpcr = async (value: string) => {
     if (cpcr === value) {
@@ -33,7 +31,6 @@ export default function Cpcr({
     })
 
     setIsUpdating(false)
-    refresh()
   }
 
   return (
