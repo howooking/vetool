@@ -1,13 +1,13 @@
 'use client'
 
-import ChiefComplaint from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/chief-complaint'
-import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/diagnosis'
-import Group from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/group/group'
-import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/in-and-out-date/in-and-out-date'
-import { MainSubVet } from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/main-sub-vet/main-sub-vet'
+import ChiefComplaint from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/chief-complaint'
+import Cpcr from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/cpcr'
+import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/diagnosis'
+import Group from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/group/group'
+import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/in-and-out-date/in-and-out-date'
+import MainSubVet from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/main-sub-vet/main-sub-vet'
+import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/owner-name'
 import type { IcuChartJoined, IcuIoJoined, Vet } from '@/types/icu'
-import OwnerName from './owner-name'
-import Cpcr from './cpcr'
 
 export default function ChartInfos({
   chartData,

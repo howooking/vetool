@@ -1,6 +1,6 @@
-import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/table/delete-order-alert-dialog'
-import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/order-schema'
-import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/table/order-time-settings'
+import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/delete-order-alert-dialog'
+import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-schema'
+import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-time-settings'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import {
