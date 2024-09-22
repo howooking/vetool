@@ -1,9 +1,5 @@
 import type { IcuOrderColors } from '@/types/adimin'
-import type {
-  IcuChartJoined,
-  IcuChartOrderJoined,
-  IcuUserList,
-} from '@/types/icu'
+import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/icu'
 import HeaderCenter from './header-center/bookmark-and-signalments'
 import HeaderRightButtons from './header-right-buttons/header-right-buttons'
 
@@ -27,7 +23,7 @@ export default function ChartHeader({
   selectedChartOrders: IcuChartOrderJoined[]
   isFirstChart: boolean
   captureRef: React.RefObject<HTMLDivElement>
-  vetsList: IcuUserList[]
+  vetsList: Vet[]
   orderColors: IcuOrderColors
   dx: string
   cc: string

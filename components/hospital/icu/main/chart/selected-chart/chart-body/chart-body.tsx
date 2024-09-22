@@ -6,7 +6,7 @@ import type {
   IcuChartJoined,
   IcuChartOrderJoined,
   IcuIoJoined,
-  IcuUserList,
+  Vet,
 } from '@/types/icu'
 import { RefObject } from 'react'
 
@@ -21,7 +21,7 @@ export default function ChartBody({
 }: {
   selectedChart: IcuChartJoined
   isPatientOut: boolean
-  vetsList: IcuUserList[]
+  vetsList: Vet[]
   selectedIo: IcuIoJoined
   orderColors: IcuOrderColors
   selectedChartOrders: IcuChartOrderJoined[]

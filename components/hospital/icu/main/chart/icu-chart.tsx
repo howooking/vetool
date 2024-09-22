@@ -2,6 +2,7 @@
 
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import NoResult from '@/components/common/no-result'
+import AddChartDialogs from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-chart-dialogs'
 import SelectedChart from '@/components/hospital/icu/main/chart/selected-chart/selected-chart'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
@@ -14,7 +15,6 @@ import type {
   Vet,
 } from '@/types/icu'
 import { useEffect, useMemo } from 'react'
-import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 import { useParams } from 'next/navigation'
 import React from 'react'
 
