@@ -1,5 +1,6 @@
-import ExportTextButton from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog//export-text-button'
 import ExportPdfButton from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog/export-pdf-button'
+import ExportPngButton from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog/export-png-button'
+import ExportRadioGroup from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog/export-radio-group'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -10,22 +11,31 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
+import type { IcuOrderColors } from '@/types/adimin'
+import type {
+  IcuChartJoined,
+  IcuChartOrderJoined,
+  IcuUserList,
+} from '@/types/icu'
 import { Share } from 'lucide-react'
 import { useState } from 'react'
 
 export default function ExportDioalog({
   name,
-  pdfRef,
+  captureRef,
   chartData,
-  selectedChartOrders,
+  vetsList,
+  orderColors,
 }: {
   name: string
-  pdfRef: React.RefObject<HTMLDivElement>
+  captureRef: React.RefObject<HTMLDivElement>
   chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
   selectedChartOrders: IcuChartOrderJoined[]
+  vetsList: IcuUserList[]
+  orderColors: IcuOrderColors
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isEntireChecked, setIsEntireChecked] = useState(false)
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -35,28 +45,46 @@ export default function ExportDioalog({
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
+        <DialogHeader className="gap-2">
           <DialogTitle>
             {chartData.target_date} {name} 차트 내보내기
           </DialogTitle>
           <DialogDescription className="flex flex-col gap-1">
+            <span>사진 저장 : PNG파일을 저장합니다</span>
             <span>PDF 저장 : PDF파일을 저장합니다</span>
-            <span>텍스트로 복사 : 텍스트형식으로 클립보드에 저장됩니다</span>
+            {/* <span>텍스트로 복사 : 텍스트형식으로 클립보드에 저장됩니다</span> */}
           </DialogDescription>
         </DialogHeader>
 
         <DialogFooter>
-          <ExportPdfButton
-            pdfRef={pdfRef}
-            chartData={chartData}
-            setIsDialogOpen={setIsDialogOpen}
+          <ExportRadioGroup
+            isEntireChecked={isEntireChecked}
+            setIsEntireChecked={setIsEntireChecked}
           />
 
-          <ExportTextButton
+          <ExportPngButton
+            captureRef={captureRef}
+            chartData={chartData}
+            setIsDialogOpen={setIsDialogOpen}
+            isEntireChecked={isEntireChecked}
+            vetsList={vetsList}
+            orderColors={orderColors}
+          />
+
+          <ExportPdfButton
+            captureRef={captureRef}
+            chartData={chartData}
+            setIsDialogOpen={setIsDialogOpen}
+            isEntireChecked={isEntireChecked}
+            vetsList={vetsList}
+            orderColors={orderColors}
+          />
+
+          {/* <ExportTextButton
             chartData={chartData}
             selectedChartOrders={selectedChartOrders}
             setIsDialogOpen={setIsDialogOpen}
-          />
+          /> */}
         </DialogFooter>
       </DialogContent>
     </Dialog>
