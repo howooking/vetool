@@ -1,6 +1,6 @@
-import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/table/order-dialog'
-import OrderTitle from '@/components/hospital/icu/main/chart/selected-chart/table/order-title'
-import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/table/tx/tx-upsert-dialog'
+import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-dialog'
+import OrderTitle from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-title'
+import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
 import {
   Table,
   TableBody,
