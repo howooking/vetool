@@ -59,6 +59,7 @@ export const getIcuChartBodyData = async (
           age_in_days,
           icu_io_dx,
           icu_io_cc,
+          cpcr,
           patient_id(name, breed, patient_id),
           hos_id(group_list, icu_memo_names, order_color)
         `,
