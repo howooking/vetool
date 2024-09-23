@@ -4,6 +4,7 @@ import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patie
 import { cn } from '@/lib/utils'
 import type { IcuOrderColors } from '@/types/adimin'
 import type { IcuChartJoined, Vet } from '@/types/icu'
+import { addDays, format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { Dispatch, RefObject, SetStateAction, useState } from 'react'
@@ -51,7 +52,7 @@ export default function ExportPngButton({
         canvases.forEach((canvas, index) =>
           downloadPng(
             canvas,
-            `${chartData.target_date}_${index + 1}_${name}.png`,
+            `${format(addDays(new Date(chartData.icu_io_id.in_date), index), 'yyyy-MM-dd')}_${name}.png`,
           ),
         ),
     )

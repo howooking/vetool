@@ -12,7 +12,7 @@ export const captureContent = async (element: HTMLElement) => {
   return await html2canvas(element, {
     width: element.scrollWidth,
     height: element.scrollHeight,
-    scale: 2,
+    scale: 1.2,
   })
 }
 

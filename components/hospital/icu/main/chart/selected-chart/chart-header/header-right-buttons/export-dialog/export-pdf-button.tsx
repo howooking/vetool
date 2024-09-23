@@ -35,13 +35,13 @@ export default function ExportPdfButton({
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'px',
-      format: [firstCanvas.width / 4, firstCanvas.height / 4],
+      format: [firstCanvas.width / 2, firstCanvas.height / 2],
     })
 
     canvases.forEach((canvas, index) => {
       if (index > 0) pdf.addPage()
       const imgData = canvas.toDataURL('image/png')
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 4, canvas.height / 4)
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2)
     })
 
     return pdf
@@ -63,7 +63,7 @@ export default function ExportPdfButton({
       },
       (canvases) => {
         const pdf = generatePdf(canvases)
-        pdf.save(`${name}_(입원일_${in_date}).pdf`)
+        pdf.save(`(입원일_${in_date})_${name}.pdf`)
       },
     )
     setIsExporting(false)
