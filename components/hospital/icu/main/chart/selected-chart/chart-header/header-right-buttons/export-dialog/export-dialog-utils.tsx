@@ -27,6 +27,7 @@ export const renderExportChartBody = async (
 ) => {
   const { selectedIoData, selectedChartData, selectedChartOrdersData } =
     await getIcuChartBodyData(hos_id, selectedPatientId, targetDate)
+  const isPatientOut = selectedIoData?.out_date !== null
 
   const containerDiv = document.createElement('div')
   containerDiv.style.position = 'absolute'
@@ -40,7 +41,7 @@ export const renderExportChartBody = async (
       selectedIo={selectedIoData}
       selectedChart={selectedChartData}
       selectedChartOrders={selectedChartOrdersData}
-      isPatientOut={true}
+      isPatientOut={isPatientOut}
       vetsList={vetsList}
       orderColors={orderColors}
       targetDate={targetDate}

@@ -8,12 +8,12 @@ import type {
 import type { IcuOrderColors } from '@/types/adimin'
 import { Badge } from '@/components/ui/badge'
 export default function ExportChartBody({
-  selectedIo,
   selectedChart,
-  selectedChartOrders,
   isPatientOut,
   vetsList,
+  selectedIo,
   orderColors,
+  selectedChartOrders,
   targetDate,
 }: {
   selectedIo: IcuIoJoined
@@ -27,12 +27,13 @@ export default function ExportChartBody({
   return (
     <div className="p-4">
       <Badge className="mb-4">{targetDate}</Badge>
+
       <ChartBody
         selectedChart={selectedChart}
         isPatientOut={isPatientOut}
         vetsList={vetsList}
-        selectedIo={selectedIo}
         orderColors={orderColors}
+        selectedIo={selectedIo}
         selectedChartOrders={selectedChartOrders}
       />
     </div>
