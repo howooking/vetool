@@ -4,12 +4,12 @@ import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patie
 import { cn } from '@/lib/utils'
 import type { IcuOrderColors } from '@/types/adimin'
 import type { IcuChartJoined, Vet } from '@/types/icu'
+import { addDays, format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { Dispatch, RefObject, SetStateAction, useState } from 'react'
-import jsPDF from 'jspdf'
 
-export default function ExportPdfButton({
+export default function ExportPngButton({
   captureRef,
   chartData,
   setIsDialogOpen,
@@ -27,27 +27,17 @@ export default function ExportPdfButton({
   const [isExporting, setIsExporting] = useState(false)
   const { hos_id } = useParams()
   const { selectedPatientId } = useIcuSelectedPatientIdStore()
-  const { icu_io_id, in_date } = chartData.icu_io_id
+  const { icu_io_id } = chartData.icu_io_id
   const { name } = chartData.patient_id
 
-  const generatePdf = (canvases: HTMLCanvasElement[]) => {
-    const firstCanvas = canvases[0]
-    const pdf = new jsPDF({
-      orientation: 'landscape',
-      unit: 'px',
-      format: [firstCanvas.width / 2, firstCanvas.height / 2],
-    })
-
-    canvases.forEach((canvas, index) => {
-      if (index > 0) pdf.addPage()
-      const imgData = canvas.toDataURL('image/png')
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2)
-    })
-
-    return pdf
+  const downloadPng = (canvas: HTMLCanvasElement, fileName: string) => {
+    const link = document.createElement('a')
+    link.download = fileName
+    link.href = canvas.toDataURL('image/png')
+    link.click()
   }
 
-  const handleExportPdf = async () => {
+  const handleExportPng = async () => {
     setIsExporting(true)
     await handleExport(
       isEntireChecked,
@@ -57,22 +47,22 @@ export default function ExportPdfButton({
       vetsList,
       orderColors,
       captureRef,
-      (canvas) => {
-        const pdf = generatePdf([canvas])
-        pdf.save(`${chartData.target_date}_${name}.pdf`)
-      },
-      (canvases) => {
-        const pdf = generatePdf(canvases)
-        pdf.save(`(입원일_${in_date})_${name}.pdf`)
-      },
+      (canvas) => downloadPng(canvas, `${chartData.target_date}_${name}.png`),
+      (canvases) =>
+        canvases.forEach((canvas, index) =>
+          downloadPng(
+            canvas,
+            `${format(addDays(new Date(chartData.icu_io_id.in_date), index), 'yyyy-MM-dd')}_${name}.png`,
+          ),
+        ),
     )
     setIsExporting(false)
     setIsDialogOpen(false)
   }
 
   return (
-    <Button onClick={handleExportPdf} disabled={isExporting}>
-      PDF 저장
+    <Button variant="outline" onClick={handleExportPng} disabled={isExporting}>
+      사진 저장
       <LoaderCircle
         className={cn(isExporting ? 'ml-2 animate-spin' : 'hidden')}
       />

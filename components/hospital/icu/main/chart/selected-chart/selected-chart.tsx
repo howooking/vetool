@@ -1,6 +1,7 @@
-import ChartInfos from '@/components/hospital/icu/main/chart/selected-chart/chart-infos/chart-infos'
-import ChartMemos from '@/components/hospital/icu/main/chart/selected-chart/chart-memos/chart-memos'
-import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/table/chart-table'
+import ChartBody from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-body'
+import ChartHeader from '@/components/hospital/icu/main/chart/selected-chart/chart-header/chart-header'
+import OutPatientCover from '@/components/hospital/icu/main/chart/selected-chart/out-patient-cover'
+import { IcuOrderColors } from '@/types/adimin'
 import type {
   IcuChartJoined,
   IcuChartOrderJoined,
@@ -8,9 +9,6 @@ import type {
   Vet,
 } from '@/types/icu'
 import { useRef } from 'react'
-import ChartHeader from './chart-header/chart-header'
-import OutPatientCover from './out-patient-cover'
-import { IcuOrderColors } from '@/types/adimin'
 import React from 'react'
 
 const SelectedChart = React.memo(
@@ -29,7 +27,7 @@ const SelectedChart = React.memo(
     vetsList: Vet[]
     orderColors: IcuOrderColors
   }) => {
-    const pdfRef = useRef<HTMLDivElement>(null)
+    const captureRef = useRef<HTMLDivElement>(null)
     const isPatientOut = selectedIo?.out_date !== null
     const { memo_a, memo_b, memo_c, ...restChartData } = selectedChart
 
@@ -42,31 +40,21 @@ const SelectedChart = React.memo(
           ageInDays={selectedIo.age_in_days}
           selectedChartOrders={selectedChartOrders}
           isFirstChart={isFirstChart}
-          pdfRef={pdfRef}
+          captureRef={captureRef}
           dx={selectedIo.icu_io_dx}
           cc={selectedIo.icu_io_cc}
+          vetsList={vetsList}
+          orderColors={orderColors}
         />
-        <div className="flex flex-col gap-2" ref={pdfRef}>
-          <ChartInfos
-            vetsList={vetsList}
-            selectedIo={selectedIo}
-            chartData={restChartData}
-            isPatientOut={isPatientOut}
-          />
-
-          <ChartTable
-            selectedChartOrders={selectedChartOrders}
-            orderColors={orderColors}
-          />
-
-          <ChartMemos
-            memoA={memo_a}
-            memoB={memo_b}
-            memoC={memo_c}
-            icuChartId={selectedChart.icu_chart_id}
-            hosIcuMemoNames={selectedIo.hos_id.icu_memo_names}
-          />
-        </div>
+        <ChartBody
+          selectedChart={selectedChart}
+          captureRef={captureRef}
+          isPatientOut={isPatientOut}
+          vetsList={vetsList}
+          selectedIo={selectedIo}
+          orderColors={orderColors}
+          selectedChartOrders={selectedChartOrders}
+        />
         {isPatientOut && <OutPatientCover />}
       </div>
     )

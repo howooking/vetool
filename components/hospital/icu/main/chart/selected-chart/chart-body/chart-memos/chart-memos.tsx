@@ -1,4 +1,4 @@
-import Memo from '@/components/hospital/icu/main/chart/selected-chart/chart-memos/memo'
+import Memo from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/memo'
 import { useState } from 'react'
 import HideAndShowButton from './HideAndShowButton'
 
