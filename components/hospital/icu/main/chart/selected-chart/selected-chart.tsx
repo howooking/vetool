@@ -46,7 +46,6 @@ const SelectedChart = React.memo(
           vetsList={vetsList}
           orderColors={orderColors}
         />
-
         <ChartBody
           selectedChart={selectedChart}
           captureRef={captureRef}
@@ -56,7 +55,6 @@ const SelectedChart = React.memo(
           orderColors={orderColors}
           selectedChartOrders={selectedChartOrders}
         />
-
         {isPatientOut && <OutPatientCover />}
       </div>
     )

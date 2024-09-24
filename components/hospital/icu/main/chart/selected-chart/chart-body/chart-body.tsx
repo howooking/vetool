@@ -41,7 +41,6 @@ export default function ChartBody({
       <ChartTable
         selectedChartOrders={selectedChartOrders}
         orderColors={orderColors}
-        weight={restChartData.weight}
       />
 
       <ChartMemos

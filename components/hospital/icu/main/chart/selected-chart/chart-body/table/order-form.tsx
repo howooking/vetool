@@ -1,8 +1,6 @@
-import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/delete-order-alert-dialog'
-import DrugFormField from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/drug-order/drug-form-field'
-import OrderFormField from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/order-form-field'
-import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/order-schema'
-import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/order-time-settings'
+import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/delete-order-alert-dialog'
+import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-schema'
+import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-time-settings'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import {
@@ -13,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
@@ -20,7 +19,7 @@ import { upsertDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
 import { upsertOrder } from '@/lib/services/icu/orders'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined, SearchedDrugProducts } from '@/types/icu'
+import type { IcuChartOrderJoined } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -32,14 +31,10 @@ export default function OrderForm({
   icuIoId,
   icuChartId,
   isSettingMode,
-  weight,
-  searchedDrugs,
 }: {
   icuIoId?: string
   icuChartId?: string
   isSettingMode?: boolean
-  weight?: string
-  searchedDrugs?: SearchedDrugProducts[]
 }) {
   const { hos_id } = useParams()
   const { refresh } = useRouter()
@@ -63,12 +58,12 @@ export default function OrderForm({
     defaultValues: {
       icu_chart_order_type:
         selectedChartOrder.icu_chart_order_type ?? undefined,
-      icu_chart_order_name: selectedChartOrder.icu_chart_order_name ?? '',
+      icu_chart_order_name:
+        selectedChartOrder.icu_chart_order_name ?? undefined,
       icu_chart_order_comment:
         selectedChartOrder.icu_chart_order_comment ?? undefined,
     },
   })
-  const orderType = form.watch('icu_chart_order_type')
 
   const handleSubmit = async (values: z.infer<typeof orderSchema>) => {
     setIsSubmitting(true)
@@ -85,7 +80,6 @@ export default function OrderForm({
       })
       refresh()
     } else {
-      console.log({ trimmedOrderName, orderComment, orderType })
       await upsertOrder(
         icuChartId!,
         icuIoId!,
@@ -101,7 +95,7 @@ export default function OrderForm({
     }
 
     toast({
-      title: `오더를 추가하였습니다`,
+      title: `${values.icu_chart_order_name} 오더를 추가하였습니다`,
     })
 
     resetState()
@@ -161,15 +155,36 @@ export default function OrderForm({
           )}
         />
 
-        {orderType === 'injection' ? (
-          <DrugFormField
-            form={form}
-            weight={weight}
-            searchedDrugs={searchedDrugs}
-          />
-        ) : (
-          <OrderFormField form={form} />
-        )}
+        <FormField
+          control={form.control}
+          name="icu_chart_order_name"
+          render={({ field }) => (
+            <FormItem className="w-full space-y-2">
+              <FormLabel className="font-semibold">오더명*</FormLabel>
+              <FormControl>
+                <Input placeholder="오더명을 입력해주세요" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="icu_chart_order_comment"
+          render={({ field }) => (
+            <FormItem className="w-full space-y-2">
+              <FormLabel className="font-semibold">오더 설명</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="오더에 대한 설명을 입력해주세요"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {!isSettingMode && (
           <OrderTimeSettings
