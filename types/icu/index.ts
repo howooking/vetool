@@ -9,6 +9,7 @@ import type {
   IcuNotification,
   Patients,
   User,
+  DrugProductRows,
 } from '@/types'
 import { IcuOrderColors } from '../adimin'
 
@@ -178,3 +179,5 @@ export type IcuDefaultChartJoined = Pick<
 > & {
   hos_id: Pick<Hospital, 'order_color'>
 }
+
+export type SearchedDrugProducts = Pick<DrugProductRows, 'name' | 'mass_vol'>

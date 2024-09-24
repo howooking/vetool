@@ -18,6 +18,8 @@ export type IcuNotification =
 export type Todo = Database['public']['Tables']['todos']['Row']
 export type IcuDefaultChart =
   Database['public']['Tables']['icu_default_chart']['Row']
+export type DrugProductRows =
+  Database['public']['Tables']['drug_products_rows']['Row']
 
 // supabase.auth.getUser() 시 return되는 유져타입
 export type AuthUser = {

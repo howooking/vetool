@@ -399,9 +399,6 @@ export default function RegisterIcuForm({
           </Button>
 
           <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="outline">Show Dialog</Button>
-            </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>입원 등록</AlertDialogTitle>

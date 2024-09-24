@@ -41,7 +41,7 @@ export default function DeleteOrderAlertDialog({
     await deleteOrder(selectedChartOrder.icu_chart_order_id)
 
     toast({
-      title: `${selectedChartOrder.icu_chart_order_name} 오더를 삭제하였습니다`,
+      title: `오더를 삭제하였습니다`,
     })
     toggleModal()
   }
@@ -60,9 +60,7 @@ export default function DeleteOrderAlertDialog({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            {selectedChartOrder.icu_chart_order_name} 오더 삭제
-          </AlertDialogTitle>
+          <AlertDialogTitle>오더 삭제</AlertDialogTitle>
           <AlertDialogDescription>
             선택한 오더를 삭제합니다
             <WarningMessage text="해당작업은 실행 후 되될릴 수 없습니다." />

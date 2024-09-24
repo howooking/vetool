@@ -1,3 +1,4 @@
+import OrderCells from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-cells'
 import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-dialog'
 import OrderTitle from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-title'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
@@ -9,20 +10,28 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
+import { getDrugs } from '@/lib/services/icu/get-drugs'
 import { IcuOrderColors } from '@/types/adimin'
-import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
-import OrderCells from './order-cells'
+import type {
+  CopiedOrder,
+  IcuChartOrderJoined,
+  SearchedDrugProducts,
+} from '@/types/icu'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 type ChartTablePropsPreview = {
   selectedChartOrders: CopiedOrder[] | IcuChartOrderJoined[]
   orderColors: IcuOrderColors
   preview: true
+  weight?: string
 }
 
 type ChartTablePropsNonPreview = {
   selectedChartOrders: IcuChartOrderJoined[]
   orderColors: IcuOrderColors
   preview?: false
+  weight?: string
 }
 
 type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview
@@ -31,7 +40,18 @@ export default function DesktopChartTable({
   selectedChartOrders,
   orderColors,
   preview,
+  weight,
 }: ChartTableProps) {
+  const { hos_id } = useParams()
+
+  const [searchedDrugs, setSearchedDrugs] = useState<SearchedDrugProducts[]>([])
+
+  useEffect(() => {
+    getDrugs(hos_id as string).then((data) => {
+      setSearchedDrugs(data.map(({ name, mass_vol }) => ({ name, mass_vol })))
+    })
+  }, [hos_id])
+
   return (
     <Table className="border">
       <TableHeader>
@@ -42,6 +62,8 @@ export default function DesktopChartTable({
               <OrderDialog
                 icuIoId={selectedChartOrders[0].icu_io_id.icu_io_id}
                 icuChartId={selectedChartOrders[0].icu_chart_id.icu_chart_id}
+                weight={weight}
+                searchedDrugs={searchedDrugs}
               />
             )}
           </TableHead>
