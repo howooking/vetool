@@ -38,8 +38,8 @@ export default function OrderForm({
   icuIoId?: string
   icuChartId?: string
   isSettingMode?: boolean
-  weight: string
-  searchedDrugs: SearchedDrugProducts[]
+  weight?: string
+  searchedDrugs?: SearchedDrugProducts[]
 }) {
   const { hos_id } = useParams()
   const { refresh } = useRouter()
