@@ -20,14 +20,14 @@ import { ChevronsUpDown } from 'lucide-react'
 import { Dispatch, SetStateAction, useState } from 'react'
 export default function DrugComboBox({
   drugName,
+  searchedDrugs,
   setDrugName,
   setDrugMassVolume,
-  searchedDrugs,
 }: {
   drugName: string
+  searchedDrugs: SearchedDrugProducts[]
   setDrugName: Dispatch<SetStateAction<string>>
   setDrugMassVolume: Dispatch<SetStateAction<number | null>>
-  searchedDrugs?: SearchedDrugProducts[]
 }) {
   const [isPopoverOpen, setIsPopOverOpen] = useState(false)
   const [value, setValue] = useState(drugName)
@@ -44,7 +44,7 @@ export default function DrugComboBox({
           id="drugName"
         >
           {value
-            ? searchedDrugs?.find((drug) => drug.name === value)?.name
+            ? searchedDrugs.find((drug) => drug.name === value)?.name
             : '약물명 검색'}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -56,7 +56,7 @@ export default function DrugComboBox({
           <CommandList>
             <CommandEmpty>검색된 약물이 존재하지 않습니다</CommandEmpty>
             <CommandGroup>
-              {searchedDrugs?.map((drug) => (
+              {searchedDrugs.map((drug) => (
                 <CommandItem
                   key={drug.name}
                   value={drug.name}

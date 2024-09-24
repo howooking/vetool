@@ -50,7 +50,7 @@ export default function DesktopChartTable({
     getDrugs(hos_id as string).then((data) => {
       setSearchedDrugs(data.map(({ name, mass_vol }) => ({ name, mass_vol })))
     })
-  }, [hos_id])
+  }, [])
 
   return (
     <Table className="border">
