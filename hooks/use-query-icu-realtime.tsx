@@ -12,7 +12,6 @@ import type {
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import { useQueries, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
 
 const supabase = createClient()
 const TABLES = [
@@ -33,6 +32,7 @@ export function useQueryIcuRealtime(
   const subscriptionRef = useRef<RealtimeChannel | null>(null)
   const revalidationQueueRef = useRef<Set<TableName>>(new Set())
   const [isSubscriptionReady, setIsSubscriptionReady] = useState(false)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const queryClient = useQueryClient()
   const [icuIoQuery, icuChartQuery, icuOrderQuery] = useQueries({
@@ -41,21 +41,21 @@ export function useQueryIcuRealtime(
         queryKey: ['icu_io', hosId, targetDate],
         queryFn: () => getIcuIo(hosId, targetDate),
         refetchOnWindowFocus: true,
-        refetchInterval: isSubscriptionReady ? false : 60000,
+        refetchInterval: 4000,
         initialData: icuIoData,
       },
       {
         queryKey: ['icu_chart', hosId, targetDate],
         queryFn: () => getIcuChart(hosId, targetDate),
         refetchOnWindowFocus: true,
-        refetchInterval: isSubscriptionReady ? false : 60000,
+        refetchInterval: 4000,
         initialData: icuChartData,
       },
       {
         queryKey: ['icu_chart_order', hosId, targetDate],
         queryFn: () => getIcuOrder(hosId, targetDate),
         refetchOnWindowFocus: true,
-        refetchInterval: isSubscriptionReady ? false : 60000,
+        refetchInterval: 4000,
         initialData: icuChartOrderData,
       },
     ],
@@ -83,11 +83,6 @@ export function useQueryIcuRealtime(
     revalidationQueueRef.current.clear()
   }, [hosId, queryClient, targetDate])
 
-  const debouncedProcessRevalidationStack = useDebouncedCallback(
-    processRevalidationQueue,
-    700,
-  )
-
   const handleChange = useCallback(
     (payload: any) => {
       console.log(
@@ -97,9 +92,15 @@ export function useQueryIcuRealtime(
 
       revalidationQueueRef.current.add(payload.table as TableName)
 
-      debouncedProcessRevalidationStack()
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        processRevalidationQueue()
+      }, 1000)
     },
-    [debouncedProcessRevalidationStack],
+    [processRevalidationQueue],
   )
 
   const subscribeToChannel = useCallback(() => {
@@ -163,6 +164,9 @@ export function useQueryIcuRealtime(
 
     return () => {
       unsubscribe()
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
     }
   }, [subscribeToChannel, unsubscribe])
 
