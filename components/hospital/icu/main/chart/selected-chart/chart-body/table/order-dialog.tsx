@@ -1,4 +1,4 @@
-import OrderForm from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form'
+import OrderForm from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/order-form'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -9,14 +9,19 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
+import type { SearchedDrugProducts } from '@/types/icu'
 import { Plus } from 'lucide-react'
 
 export default function OrderDialog({
   icuIoId,
   icuChartId,
+  weight,
+  searchedDrugs,
 }: {
   icuIoId: string
   icuChartId: string
+  weight: string
+  searchedDrugs: SearchedDrugProducts[]
 }) {
   const { isModalOpen, isEditMode, toggleModal, setIsEditMode, resetState } =
     useCreateOrderStore()
@@ -42,7 +47,13 @@ export default function OrderDialog({
           <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
           <DialogDescription />
         </DialogHeader>
-        <OrderForm icuIoId={icuIoId} icuChartId={icuChartId} />
+
+        <OrderForm
+          icuIoId={icuIoId}
+          icuChartId={icuChartId}
+          weight={weight}
+          searchedDrugs={searchedDrugs}
+        />
       </DialogContent>
     </Dialog>
   )
