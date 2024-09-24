@@ -24,14 +24,14 @@ type ChartTablePropsPreview = {
   selectedChartOrders: CopiedOrder[] | IcuChartOrderJoined[]
   orderColors: IcuOrderColors
   preview: true
-  weight: string
+  weight?: string
 }
 
 type ChartTablePropsNonPreview = {
   selectedChartOrders: IcuChartOrderJoined[]
   orderColors: IcuOrderColors
   preview?: false
-  weight: string
+  weight?: string
 }
 
 type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview

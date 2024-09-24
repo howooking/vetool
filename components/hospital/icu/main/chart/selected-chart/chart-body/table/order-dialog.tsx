@@ -15,13 +15,13 @@ import { Plus } from 'lucide-react'
 export default function OrderDialog({
   icuIoId,
   icuChartId,
-  weight,
   searchedDrugs,
+  weight,
 }: {
   icuIoId: string
   icuChartId: string
-  weight: string
   searchedDrugs: SearchedDrugProducts[]
+  weight?: string
 }) {
   const { isModalOpen, isEditMode, toggleModal, setIsEditMode, resetState } =
     useCreateOrderStore()
