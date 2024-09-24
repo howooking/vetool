@@ -1,7 +1,6 @@
 import ChartInfos from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/chart-infos'
 import ChartMemos from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/chart-memos'
 import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/chart-table'
-import { searchDrugs } from '@/lib/services/icu/search-drugs'
 import { IcuOrderColors } from '@/types/adimin'
 import type {
   IcuChartJoined,

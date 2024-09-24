@@ -38,6 +38,20 @@ export default function OrderTitle({
     setChartOrder(order as IcuChartOrderJoined)
   }
 
+  const formatOrderName = (name: string, type: string) => {
+    if (type === 'injection') {
+      const parts = name.split('#')
+
+      if (parts.length > 1) {
+        name = parts[0] + '#' + parts[1] + 'ml/kg ' + parts.slice(2).join('#')
+      }
+    }
+
+    return name.replaceAll('#', ' ')
+  }
+
+  const formattedOrderName = formatOrderName(orderName, orderType)
+
   return (
     <TableCell
       className={cn('w-[320px] p-0')}
@@ -56,7 +70,7 @@ export default function OrderTitle({
                 preview ? 'cursor-not-allowed' : 'cursor-pointer',
               )}
             >
-              <span className="truncate">{orderName}</span>
+              <span className="truncate">{formattedOrderName}</span>
               <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
                 {orderComment}
               </span>
@@ -64,7 +78,7 @@ export default function OrderTitle({
           </TooltipTrigger>
           <TooltipContent side="right" className={preview ? 'hidden' : ''}>
             <div className="flex gap-2">
-              <span className="font-bold">{orderName}</span>
+              <span className="font-bold">{formattedOrderName}</span>
               <span className="text-xs">{orderComment}</span>
             </div>
           </TooltipContent>

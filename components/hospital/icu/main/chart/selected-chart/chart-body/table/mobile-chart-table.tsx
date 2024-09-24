@@ -15,9 +15,11 @@ import DesktopChartTable from './desktop-chart-table'
 export default function MobileChartTable({
   selectedChartOrders,
   orderColors,
+  weight,
 }: {
   selectedChartOrders: IcuChartOrderJoined[]
   orderColors: IcuOrderColors
+  weight: string
 }) {
   return (
     <>
@@ -46,6 +48,7 @@ export default function MobileChartTable({
             <DesktopChartTable
               orderColors={orderColors}
               selectedChartOrders={selectedChartOrders}
+              weight={weight}
             />
           </div>
         </DialogContent>
