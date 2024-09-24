@@ -1,10 +1,12 @@
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { updateOrderTime } from '@/lib/services/icu/orders'
 import type { IcuChartTx } from '@/types'
 import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import Cell from './cell'
+import { updateOrderTime } from '@/lib/services/icu/order-mutation'
+import { toast } from '@/components/ui/use-toast'
+import { set } from 'zod'
 
 export default function OrderCells({
   preview,
@@ -16,6 +18,11 @@ export default function OrderCells({
   const [orderTimeState, setOrderTimeState] = useState(
     order.icu_chart_order_time,
   )
+
+  useEffect(() => {
+    setOrderTimeState(order.icu_chart_order_time)
+  }, [order.icu_chart_order_time])
+
   const toggleOrderTime = useCallback((time: number) => {
     setOrderTimeState((prevOrderTime) => {
       const newOrderTime = [...prevOrderTime]
@@ -26,7 +33,10 @@ export default function OrderCells({
 
   const handleUpdateOrderTime = useDebouncedCallback(() => {
     updateOrderTime(order.icu_chart_order_id, orderTimeState)
-  }, 2000)
+    toast({
+      title: '오더 시간을 변경하였습니다.',
+    })
+  }, 1500)
 
   return (
     <>

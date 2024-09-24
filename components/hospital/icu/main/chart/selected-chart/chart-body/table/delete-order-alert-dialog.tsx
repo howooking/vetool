@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { deleteDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
-import { deleteOrder } from '@/lib/services/icu/orders'
+import { deleteOrder } from '@/lib/services/icu/order-mutation'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import type { IcuChartOrderJoined } from '@/types/icu'
 import { useRouter } from 'next/navigation'

@@ -94,7 +94,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       [handleUpdateOrderTime, time, toggleOrderTime],
     )
 
-    const handleUpsertBriefTxResultInput = React.useCallback(async () => {
+    const handleUpsertBriefTxResultInput = useCallback(async () => {
       if ((txData?.icu_chart_tx_result ?? '') === briefTxResultInput.trim()) {
         setBriefTxResultInput('')
         return
@@ -122,7 +122,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       txData?.icu_chart_tx_result,
     ])
 
-    const handleKeyDown = React.useCallback(
+    const handleKeyDown = useCallback(
       (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
           const target = e.currentTarget

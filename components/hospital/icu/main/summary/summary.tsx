@@ -14,7 +14,6 @@ export default function Summary({
         icuChartData={icuChartData}
         icuChartOrderData={icuChartOrderData}
       />
-      {/* <IoRadialChart /> */}
     </div>
   )
 }
