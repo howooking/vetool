@@ -1,17 +1,19 @@
+import DesktopChartTable from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/desktop-chart-table'
+import MobileChartTable from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/mobile-chart-table'
 import useIsMobile from '@/hooks/use-is-mobile'
 import { IcuOrderColors } from '@/types/adimin'
 import type { IcuChartOrderJoined } from '@/types/icu'
-import DesktopChartTable from './desktop-chart-table'
-import MobileChartTable from './mobile-chart-table'
 import React from 'react'
 
 const ChartTable = React.memo(
   ({
     selectedChartOrders,
     orderColors,
+    weight,
   }: {
     selectedChartOrders: IcuChartOrderJoined[]
     orderColors: IcuOrderColors
+    weight: string
   }) => {
     const isMobile = useIsMobile()
 
@@ -20,6 +22,7 @@ const ChartTable = React.memo(
         <MobileChartTable
           orderColors={orderColors}
           selectedChartOrders={selectedChartOrders}
+          weight={weight}
         />
       )
 
@@ -27,6 +30,7 @@ const ChartTable = React.memo(
       <DesktopChartTable
         orderColors={orderColors}
         selectedChartOrders={selectedChartOrders}
+        weight={weight}
       />
     )
   },
