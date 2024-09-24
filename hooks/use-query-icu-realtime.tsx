@@ -31,7 +31,6 @@ export function useQueryIcuRealtime(
   icuChartOrderData: IcuChartOrderJoined[],
 ) {
   const subscriptionRef = useRef<RealtimeChannel | null>(null)
-  const revalidationTimerRef = useRef<NodeJS.Timeout | null>(null)
   const revalidationQueueRef = useRef<Set<TableName>>(new Set())
   const [isSubscriptionReady, setIsSubscriptionReady] = useState(false)
 
@@ -86,7 +85,7 @@ export function useQueryIcuRealtime(
 
   const debouncedProcessRevalidationStack = useDebouncedCallback(
     processRevalidationQueue,
-    500,
+    700,
   )
 
   const handleChange = useCallback(
@@ -98,13 +97,9 @@ export function useQueryIcuRealtime(
 
       revalidationQueueRef.current.add(payload.table as TableName)
 
-      if (revalidationTimerRef.current) {
-        clearTimeout(revalidationTimerRef.current)
-      }
-
-      revalidationTimerRef.current = setTimeout(processRevalidationQueue, 900)
+      debouncedProcessRevalidationStack()
     },
-    [processRevalidationQueue],
+    [debouncedProcessRevalidationStack],
   )
 
   const subscribeToChannel = useCallback(() => {
@@ -163,17 +158,18 @@ export function useQueryIcuRealtime(
     }
   }, [])
 
-  const resubscribe = useCallback(() => {
-    unsubscribe()
-    subscribeToChannel()
-  }, [unsubscribe, subscribeToChannel])
-
   useEffect(() => {
     subscribeToChannel()
 
+    return () => {
+      unsubscribe()
+    }
+  }, [subscribeToChannel, unsubscribe])
+
+  useEffect(() => {
     const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        resubscribe()
+      if (!document.hidden && !subscriptionRef.current) {
+        subscribeToChannel()
       }
     }
 
@@ -182,14 +178,8 @@ export function useQueryIcuRealtime(
     return () => {
       unsubscribe()
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      debouncedProcessRevalidationStack.cancel()
     }
-  }, [
-    subscribeToChannel,
-    unsubscribe,
-    resubscribe,
-    debouncedProcessRevalidationStack,
-  ])
+  }, [subscribeToChannel, unsubscribe])
 
   return {
     icuIoQuery,
