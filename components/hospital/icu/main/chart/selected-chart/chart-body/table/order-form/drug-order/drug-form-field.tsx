@@ -22,8 +22,8 @@ export default function DrugFormField({
   searchedDrugs,
 }: {
   form: UseFormReturn<z.infer<typeof orderSchema>>
-  weight: string
-  searchedDrugs: SearchedDrugProducts[]
+  weight?: string
+  searchedDrugs?: SearchedDrugProducts[]
 }) {
   const drugOrders = form.getValues('icu_chart_order_name')
   const isMicro = form.getValues('icu_chart_order_comment')?.includes('ul')
@@ -54,7 +54,7 @@ export default function DrugFormField({
   ])
 
   useMemo(() => {
-    const drug = searchedDrugs.find((drug) => drug.name === drugName)
+    const drug = searchedDrugs?.find((drug) => drug.name === drugName)
     setDrugMassVolume(drug?.mass_vol ?? null)
   }, [drugName, searchedDrugs])
 
