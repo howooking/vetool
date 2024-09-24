@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import Cell from './cell'
 import { updateOrderTime } from '@/lib/services/icu/order-mutation'
+import { toast } from '@/components/ui/use-toast'
 
 export default function OrderCells({
   preview,
@@ -26,6 +27,9 @@ export default function OrderCells({
 
   const handleUpdateOrderTime = useDebouncedCallback(() => {
     updateOrderTime(order.icu_chart_order_id, orderTimeState)
+    toast({
+      title: '오더 시간을 변경하였습니다.',
+    })
   }, 1500)
 
   return (
