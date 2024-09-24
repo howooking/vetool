@@ -9,121 +9,82 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      diet_products_rows: {
-        Row: {
-          active: boolean | null
-          company: string | null
-          created_at: string
-          description: string | null
-          diet_products_id: string
-          hos_id: string | null
-          mass_vol: number | null
-          name: string
-          product_tag: string | null
-          standard: string | null
-          stock_plan: number | null
-          total_vol: number | null
-          type: string | null
-          unit: string | null
-        }
-        Insert: {
-          active?: boolean | null
-          company?: string | null
-          created_at?: string
-          description?: string | null
-          diet_products_id?: string
-          hos_id?: string | null
-          mass_vol?: number | null
-          name: string
-          product_tag?: string | null
-          standard?: string | null
-          stock_plan?: number | null
-          total_vol?: number | null
-          type?: string | null
-          unit?: string | null
-        }
-        Update: {
-          active?: boolean | null
-          company?: string | null
-          created_at?: string
-          description?: string | null
-          diet_products_id?: string
-          hos_id?: string | null
-          mass_vol?: number | null
-          name?: string
-          product_tag?: string | null
-          standard?: string | null
-          stock_plan?: number | null
-          total_vol?: number | null
-          type?: string | null
-          unit?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "diet_products_rows_duplicate_hos_id_fkey"
-            columns: ["hos_id"]
-            isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
-          },
-        ]
-      }
       drug_products_rows: {
         Row: {
           active: boolean | null
           company: string | null
           created_at: string
           description: string | null
-          drug_ids: string | null
-          drug_names: string | null
+          drug_id: string | null
+          drug_name: string | null
           drug_products_id: string
+          group: string | null
           hos_id: string | null
-          mass_vol: number | null
+          mass_volume: number | null
           name: string
+          name_simple: string | null
           product_tag: string | null
           standard: string | null
           stock_plan: number | null
-          total_vol: number | null
           type: string | null
           unit: string | null
+          volume: number | null
         }
         Insert: {
           active?: boolean | null
           company?: string | null
           created_at?: string
           description?: string | null
-          drug_ids?: string | null
-          drug_names?: string | null
+          drug_id?: string | null
+          drug_name?: string | null
           drug_products_id?: string
+          group?: string | null
           hos_id?: string | null
-          mass_vol?: number | null
+          mass_volume?: number | null
           name: string
+          name_simple?: string | null
           product_tag?: string | null
           standard?: string | null
           stock_plan?: number | null
-          total_vol?: number | null
           type?: string | null
           unit?: string | null
+          volume?: number | null
         }
         Update: {
           active?: boolean | null
           company?: string | null
           created_at?: string
           description?: string | null
-          drug_ids?: string | null
-          drug_names?: string | null
+          drug_id?: string | null
+          drug_name?: string | null
           drug_products_id?: string
+          group?: string | null
           hos_id?: string | null
-          mass_vol?: number | null
+          mass_volume?: number | null
           name?: string
+          name_simple?: string | null
           product_tag?: string | null
           standard?: string | null
           stock_plan?: number | null
-          total_vol?: number | null
           type?: string | null
           unit?: string | null
+          volume?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "drug_products_rows_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "drugs_rows"
+            referencedColumns: ["drug_id"]
+          },
+          {
+            foreignKeyName: "drug_products_rows_drug_name_fkey"
+            columns: ["drug_name"]
+            isOneToOne: false
+            referencedRelation: "drugs_rows"
+            referencedColumns: ["drug_name"]
+          },
           {
             foreignKeyName: "drug_products_rows_hos_id_fkey"
             columns: ["hos_id"]
@@ -138,7 +99,7 @@ export type Database = {
           created_at: string
           description: string | null
           drug_id: string | null
-          drug_name: string | null
+          drug_name: string
           drugs_description_id: string
           hos_id: string | null
           indication: string | null
@@ -148,7 +109,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           drug_id?: string | null
-          drug_name?: string | null
+          drug_name: string
           drugs_description_id?: string
           hos_id?: string | null
           indication?: string | null
@@ -158,7 +119,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           drug_id?: string | null
-          drug_name?: string | null
+          drug_name?: string
           drugs_description_id?: string
           hos_id?: string | null
           indication?: string | null
@@ -171,6 +132,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "drugs_rows"
             referencedColumns: ["drug_id"]
+          },
+          {
+            foreignKeyName: "drugs_description_drug_name_fkey"
+            columns: ["drug_name"]
+            isOneToOne: true
+            referencedRelation: "drugs_rows"
+            referencedColumns: ["drug_name"]
           },
           {
             foreignKeyName: "drugs_description_hos_id_fkey"
