@@ -57,7 +57,7 @@ export default function OutDueDate({
   return (
     <>
       <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-        <PopoverTrigger asChild>
+        <PopoverTrigger defaultValue={outDueDate} asChild>
           <Button
             variant={'outline'}
             className={cn(

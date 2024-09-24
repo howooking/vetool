@@ -16,7 +16,7 @@ import { useState } from 'react'
 import MainSubVetUpdateForm from './main-sub-vet-update-form'
 import { Stethoscope, Users } from 'lucide-react'
 
-export function MainSubVet({
+export default function MainSubVet({
   mainVet,
   subVet,
   icuChartId,

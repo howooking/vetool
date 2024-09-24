@@ -1,4 +1,4 @@
-import { userLogFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/table/tx/tx-schema'
+import { userLogFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-schema'
 import { Button } from '@/components/ui/button'
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import {
