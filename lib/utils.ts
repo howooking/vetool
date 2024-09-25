@@ -203,6 +203,8 @@ export const chageTargetDateInUrl = (
   params?: URLSearchParams,
 ) => {
   const DATE_REGEX = /\/(\d{4}-\d{2}-\d{2})\//
-  const newPath = `${path.replace(DATE_REGEX, `/${newDateString}/`)}?${params?.toString()}`
+  const newPath = params
+    ? `${path.replace(DATE_REGEX, `/${newDateString}/`)}?${params?.toString()}`
+    : `${path.replace(DATE_REGEX, `/${newDateString}/`)}`
   return newPath
 }
