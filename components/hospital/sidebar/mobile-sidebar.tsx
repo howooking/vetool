@@ -69,7 +69,9 @@ export default function MobileSidebar({
               pathname.split('/').at(3) === path ||
               (!pathname.split('/').at(3) && name === '병원 홈')
             const dynamicPath =
-              path === 'icu' ? `icu/${format(new Date(), 'yyyy-MM-dd')}` : path
+              path === 'icu'
+                ? `icu/${format(new Date(), 'yyyy-MM-dd')}/summary`
+                : path
             return (
               <li
                 key={name}

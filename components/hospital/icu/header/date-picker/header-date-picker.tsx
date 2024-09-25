@@ -10,20 +10,25 @@ import {
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarDays } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
+import { DATE_REGEX } from './header-date-selector'
 
 export default function HeaderDatePicker({
   targetDate,
 }: {
   targetDate: string
 }) {
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
   const [open, setOpen] = useState(false)
+  const path = usePathname()
   const { push } = useRouter()
 
   const handleSelectDate = (date: Date | undefined) => {
     const formattedDate = format(date!, 'yyyy-MM-dd')
-    push(`${formattedDate}`)
+    const newPath = `${path.replace(DATE_REGEX, `/${formattedDate}/`)}?${params.toString()}`
+    push(newPath)
     setOpen(false)
   }
 

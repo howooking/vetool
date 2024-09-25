@@ -11,38 +11,40 @@ import {
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
 import { IcuOrderColors } from '@/types/adimin'
-import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
+import type {
+  CopiedOrder,
+  IcuChartOrderJoined,
+  SelectedIcuOrder,
+} from '@/types/icu'
 
 export default function OrderTitle({
   order,
   orderColors,
   preview,
 }: {
-  order: CopiedOrder | IcuChartOrderJoined
+  order: SelectedIcuOrder
   orderColors: IcuOrderColors
   preview?: boolean
 }) {
-  const {
-    icu_chart_order_type: orderType,
-    icu_chart_order_name: orderName,
-    icu_chart_order_comment: orderComment,
-  } = order
+  const { order_comment, order_name, order_type } = order
 
   const { toggleModal, setIsEditMode, setChartOrder } = useCreateOrderStore()
 
-  const handleDialogOpen = () => {
-    if (preview) return
+  // const handleDialogOpen = () => {
+  //   if (preview) return
 
-    toggleModal()
-    setIsEditMode(true)
-    setChartOrder(order as IcuChartOrderJoined)
-  }
+  //   toggleModal()
+  //   setIsEditMode(true)
+  //   setChartOrder({
+
+  //   })
+  // }
 
   return (
     <TableCell
       className={cn('w-[320px] p-0')}
       style={{
-        background: orderColors[orderType as keyof IcuOrderColors],
+        background: orderColors[order_type as keyof IcuOrderColors],
       }}
     >
       <TooltipProvider delayDuration={20}>
@@ -50,22 +52,22 @@ export default function OrderTitle({
           <TooltipTrigger asChild>
             <Button
               variant="ghost"
-              onClick={handleDialogOpen}
+              // onClick={handleDialogOpen}
               className={cn(
                 'flex w-[320px] justify-between rounded-none bg-transparent px-2',
                 preview ? 'cursor-not-allowed' : 'cursor-pointer',
               )}
             >
-              <span className="truncate">{orderName}</span>
+              <span className="truncate">{order_name}</span>
               <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
-                {orderComment}
+                {order_comment}
               </span>
             </Button>
           </TooltipTrigger>
           <TooltipContent side="right" className={preview ? 'hidden' : ''}>
             <div className="flex gap-2">
-              <span className="font-bold">{orderName}</span>
-              <span className="text-xs">{orderComment}</span>
+              <span className="font-bold">{order_name}</span>
+              <span className="text-xs">{order_comment}</span>
             </div>
           </TooltipContent>
         </Tooltip>

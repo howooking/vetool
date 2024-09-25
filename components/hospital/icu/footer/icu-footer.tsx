@@ -1,10 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useSidebarStore } from '@/lib/store/common/sidebar'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import RealtimeStatus from './realtime-status'
+import { usePathname, useRouter } from 'next/navigation'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
@@ -31,20 +29,23 @@ export const FOOTER_MAIN_VIEW_MENUS = [
 
 export default function IcuFooter({
   hosId,
-  isSubscriptionReady,
+  targetDate,
+  // isSubscriptionReady,
 }: {
   hosId: string
-  isSubscriptionReady: boolean
+  targetDate: string
+  // isSubscriptionReady: boolean
 }) {
-  const { selectIcudMainView, setSelectedIcuMainView } =
-    useSelectedMainViewStore()
-  const { isExpanded } = useSidebarStore()
+  // const { isExpanded } = useSidebarStore()
+  const { push } = useRouter()
+  const path = usePathname()
+  const currentIcuPath = path.split('/').at(5)
 
   return (
     <footer
       className={cn(
         'fixed bottom-0 z-20 flex h-10 w-full items-center justify-between border-t bg-white transition-all duration-200',
-        isExpanded ? 'md:w-[calc(100%-336px)]' : 'md:w-[calc(100%-200px)]',
+        // isExpanded ? 'md:w-[calc(100%-336px)]' : 'md:w-[calc(100%-200px)]',
       )}
     >
       <ul className="flex h-full items-center gap-2 pl-1">
@@ -60,8 +61,10 @@ export default function IcuFooter({
             <Button
               size="sm"
               variant="ghost"
-              className={selectIcudMainView === value ? 'bg-muted' : ''}
-              onClick={() => setSelectedIcuMainView(value)}
+              className={currentIcuPath === value ? 'bg-muted' : ''}
+              onClick={() =>
+                push(`/hospital/${hosId}/icu/${targetDate}/${value}`)
+              }
             >
               {label}
             </Button>
@@ -69,7 +72,7 @@ export default function IcuFooter({
         ))}
       </ul>
 
-      <RealtimeStatus isSubscriptionReady={isSubscriptionReady} />
+      {/* <RealtimeStatus isSubscriptionReady={isSubscriptionReady} /> */}
 
       {/* ICU 알림 기능 일단 보류 */}
       {/* <IcuNotification hosId={hosId} /> */}

@@ -1,34 +1,23 @@
 import useIsMobile from '@/hooks/use-is-mobile'
 import { IcuOrderColors } from '@/types/adimin'
-import type { IcuChartOrderJoined } from '@/types/icu'
-import DesktopChartTable from './desktop-chart-table'
-import MobileChartTable from './mobile-chart-table'
+import type { SelectedChart } from '@/types/icu'
 import React from 'react'
+import DesktopChartTable from './desktop-chart-table'
 
 const ChartTable = React.memo(
   ({
-    selectedChartOrders,
+    chartData,
     orderColors,
   }: {
-    selectedChartOrders: IcuChartOrderJoined[]
+    chartData: SelectedChart
     orderColors: IcuOrderColors
   }) => {
-    const isMobile = useIsMobile()
+    // if (isMobile)
+    //   return (
+    //     <MobileChartTable orderColors={orderColors} chartData={chartData} />
+    //   )
 
-    if (isMobile)
-      return (
-        <MobileChartTable
-          orderColors={orderColors}
-          selectedChartOrders={selectedChartOrders}
-        />
-      )
-
-    return (
-      <DesktopChartTable
-        orderColors={orderColors}
-        selectedChartOrders={selectedChartOrders}
-      />
-    )
+    return <DesktopChartTable orderColors={orderColors} chartData={chartData} />
   },
 )
 

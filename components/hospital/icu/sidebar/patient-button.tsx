@@ -4,20 +4,33 @@ import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patie
 import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
 import type { IcuIoJoined } from '@/types/icu'
+import { useParams, useRouter } from 'next/navigation'
 
 type PatientButtonProps = {
   data: IcuIoJoined
 }
 
 const PatientButton: React.FC<PatientButtonProps> = React.memo(({ data }) => {
+  const { push } = useRouter()
+  const { hos_id, target_date } = useParams()
   const { selectedPatientId, setSelectedPatientId } =
     useIcuSelectedPatientIdStore()
   const { setSelectedIcuMainView } = useSelectedMainViewStore()
 
   const handlePatientButtonClick = useCallback(() => {
     setSelectedPatientId(data.patient_id.patient_id)
+    push(
+      `/hospital/${hos_id}/icu/${target_date}/chart/${data.patient_id.patient_id}`,
+    )
     setSelectedIcuMainView('chart')
-  }, [data.patient_id.patient_id, setSelectedPatientId, setSelectedIcuMainView])
+  }, [
+    setSelectedPatientId,
+    data.patient_id.patient_id,
+    push,
+    hos_id,
+    target_date,
+    setSelectedIcuMainView,
+  ])
 
   return (
     <Button

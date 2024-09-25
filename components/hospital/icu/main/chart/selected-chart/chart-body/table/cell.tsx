@@ -3,15 +3,14 @@ import { TableCell } from '@/components/ui/table'
 import { useLongPress } from '@/hooks/use-long-press'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { cn } from '@/lib/utils'
-import type { IcuChartTx } from '@/types'
-import type { TxLog } from '@/types/icu'
+import type { Treatment, TxLog } from '@/types/icu'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import type { DebouncedState } from 'use-debounce'
 import { TxDetailHover } from './tx/tx-detail-hover'
 
 type ChartTableCellProps = {
   time: number
-  txData: IcuChartTx | null
+  treatment?: Treatment
   icuIoId: string
   icuChartOrderId: string
   icuChartOrderName: string
@@ -26,7 +25,7 @@ type ChartTableCellProps = {
 const Cell: React.FC<ChartTableCellProps> = React.memo(
   ({
     time,
-    txData,
+    treatment,
     icuIoId,
     icuChartOrderId,
     icuChartOrderName,
@@ -49,21 +48,21 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     } = useTxMutationStore()
 
     useEffect(() => {
-      if (txData?.icu_chart_tx_result || isMutationCanceled) {
+      if (treatment?.tx_result || isMutationCanceled) {
         setBriefTxResultInput('')
         setIsMutationCanceled(false)
       }
-    }, [isMutationCanceled, setIsMutationCanceled, txData?.icu_chart_tx_result])
+    }, [isMutationCanceled, setIsMutationCanceled, treatment?.tx_result])
 
     const handleOpenTxDetail = useCallback(() => {
       setTxLocalState({
         icuChartOrderId,
         icuIoId,
-        txResult: txData?.icu_chart_tx_result,
-        txComment: txData?.icu_chart_tx_comment,
+        txResult: treatment?.tx_result,
+        txComment: treatment?.tx_comment,
         txId: icuChartTxId,
         time,
-        txLog: txData?.icu_chart_tx_log as TxLog[] | null,
+        txLog: treatment?.tx_log as TxLog[] | null,
         orderName: icuChartOrderName,
       })
       setStep('detailInsert')
@@ -75,9 +74,9 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       setStep,
       setTxLocalState,
       time,
-      txData?.icu_chart_tx_comment,
-      txData?.icu_chart_tx_log,
-      txData?.icu_chart_tx_result,
+      treatment?.tx_comment,
+      treatment?.tx_log,
+      treatment?.tx_result,
     ])
 
     const longPressEvents = useLongPress({
@@ -95,7 +94,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     )
 
     const handleUpsertBriefTxResultInput = useCallback(async () => {
-      if ((txData?.icu_chart_tx_result ?? '') === briefTxResultInput.trim()) {
+      if ((treatment?.tx_result ?? '') === briefTxResultInput.trim()) {
         setBriefTxResultInput('')
         return
       }
@@ -119,7 +118,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       setStep,
       setTxLocalState,
       time,
-      txData?.icu_chart_tx_result,
+      treatment?.tx_result,
     ])
 
     const handleKeyDown = useCallback(
@@ -137,8 +136,8 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     )
 
     const hasComment = useMemo(
-      () => !!txData?.icu_chart_tx_comment,
-      [txData?.icu_chart_tx_comment],
+      () => !!treatment?.tx_comment,
+      [treatment?.tx_comment],
     )
 
     return (
@@ -170,11 +169,9 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
               isFocused && 'opacity-20',
             )}
           >
-            {txData?.icu_chart_tx_result ?? ''}
+            {treatment?.tx_result ?? ''}
           </div>
-          {hasComment && (
-            <TxDetailHover txComment={txData?.icu_chart_tx_comment} />
-          )}
+          {hasComment && <TxDetailHover txComment={treatment?.tx_comment} />}
         </div>
       </TableCell>
     )

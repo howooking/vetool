@@ -1,3 +1,5 @@
+'use client'
+
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
 import { bookmarkColumns } from '@/components/hospital/icu/main/bookmark/bookmark-columns'

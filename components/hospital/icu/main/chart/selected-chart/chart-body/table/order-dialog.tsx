@@ -1,3 +1,5 @@
+'use client'
+
 import OrderForm from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form'
 import { Button } from '@/components/ui/button'
 import {

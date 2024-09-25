@@ -10,17 +10,21 @@ import {
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { IcuOrderColors } from '@/types/adimin'
-import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
+import type {
+  CopiedOrder,
+  IcuChartOrderJoined,
+  SelectedChart,
+} from '@/types/icu'
 import OrderCells from './order-cells'
 
 type ChartTablePropsPreview = {
-  selectedChartOrders: CopiedOrder[] | IcuChartOrderJoined[]
+  chartData: SelectedChart
   orderColors: IcuOrderColors
   preview: true
 }
 
 type ChartTablePropsNonPreview = {
-  selectedChartOrders: IcuChartOrderJoined[]
+  chartData: SelectedChart
   orderColors: IcuOrderColors
   preview?: false
 }
@@ -28,10 +32,11 @@ type ChartTablePropsNonPreview = {
 type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview
 
 export default function DesktopChartTable({
-  selectedChartOrders,
+  chartData,
   orderColors,
   preview,
 }: ChartTableProps) {
+  const { icu_io, icu_chart_id, orders } = chartData
   return (
     <Table className="border">
       <TableHeader>
@@ -40,8 +45,8 @@ export default function DesktopChartTable({
             <span>오더 목록</span>
             {!preview && (
               <OrderDialog
-                icuIoId={selectedChartOrders[0].icu_io_id.icu_io_id}
-                icuChartId={selectedChartOrders[0].icu_chart_id.icu_chart_id}
+                icuIoId={icu_io.icu_io_id}
+                icuChartId={icu_chart_id}
               />
             )}
           </TableHead>
@@ -55,20 +60,20 @@ export default function DesktopChartTable({
       </TableHeader>
 
       <TableBody>
-        {!preview && (
-          <TxUpsertDialog
-            chartId={selectedChartOrders[0].icu_chart_id.icu_chart_id}
-          />
-        )}
+        {!preview && <TxUpsertDialog chartId={icu_chart_id} />}
 
-        {selectedChartOrders.map((order) => (
-          <TableRow className="divide-x" key={order.icu_chart_order_id}>
+        {orders.map((order) => (
+          <TableRow className="divide-x" key={order.order_id}>
             <OrderTitle
               order={order}
               preview={preview}
               orderColors={orderColors}
             />
-            <OrderCells preview={preview} order={order} />
+            <OrderCells
+              preview={preview}
+              order={order}
+              icuIoId={icu_io.icu_io_id}
+            />
           </TableRow>
         ))}
       </TableBody>

@@ -1,7 +1,8 @@
+import IcuFooter from '@/components/hospital/icu/footer/icu-footer'
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
+import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
 import { getInitialIcuData } from '@/lib/services/icu/get-initial-icu-data'
 import { IcuDataProvider } from '@/providers/icu-provider'
-import TanstackQueryProvider from '@/providers/tanstack-query-provider'
 import React from 'react'
 
 export default async function IcuPageLayout({
@@ -17,16 +18,28 @@ export default async function IcuPageLayout({
   )
 
   return (
-    <TanstackQueryProvider>
-      <IcuDataProvider icuData={initialIcuData}>
-        <IcuHeader
-          hosId={params.hos_id}
-          groupList={initialIcuData.groupListData}
-          patientsData={initialIcuData.patientsData}
-          vetsData={initialIcuData.vetsListData}
+    <>
+      <IcuHeader
+        hosId={params.hos_id}
+        groupList={initialIcuData.groupListData}
+        patientsData={initialIcuData.patientsData}
+        vetsData={initialIcuData.vetsListData}
+      />
+      <div className="flex">
+        <IcuSidebar
+          icuIoData={initialIcuData.icuIoData}
+          icuChartData={initialIcuData.icuChartData}
+          vetsListData={initialIcuData.vetsListData}
         />
-        <div>{children}</div>
-      </IcuDataProvider>
-    </TanstackQueryProvider>
+
+        <main className="h-icu-chart w-full overflow-auto">{children}</main>
+
+        <IcuFooter
+          hosId={params.hos_id}
+          targetDate={params.target_date}
+          // isSubscriptionReady={isSubscriptionReady}
+        />
+      </div>
+    </>
   )
 }
