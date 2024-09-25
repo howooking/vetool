@@ -7,12 +7,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { chageTargetDateInUrl } from '@/lib/utils'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarDays } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
-import { DATE_REGEX } from './header-date-selector'
 
 export default function HeaderDatePicker({
   targetDate,
@@ -27,7 +27,7 @@ export default function HeaderDatePicker({
 
   const handleSelectDate = (date: Date | undefined) => {
     const formattedDate = format(date!, 'yyyy-MM-dd')
-    const newPath = `${path.replace(DATE_REGEX, `/${formattedDate}/`)}?${params.toString()}`
+    const newPath = chageTargetDateInUrl(path, formattedDate, params)
     push(newPath)
     setOpen(false)
   }

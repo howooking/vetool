@@ -2,6 +2,7 @@
 
 import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/header-date-picker'
 import { Button } from '@/components/ui/button'
+import { chageTargetDateInUrl } from '@/lib/utils'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import {
@@ -10,8 +11,6 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-
-export const DATE_REGEX = /\/(\d{4}-\d{2}-\d{2})\//
 
 export default function HeaderDateSelector() {
   const searchParams = useSearchParams()
@@ -26,15 +25,14 @@ export default function HeaderDateSelector() {
   const handleUpdateDate = (days: number) => {
     targetDate.setDate(targetDate.getDate() + days)
     const newDateString = format(targetDate, 'yyyy-MM-dd')
-    const newPath = `${path.replace(DATE_REGEX, `/${newDateString}/`)}?${params.toString()}`
+    const newPath = chageTargetDateInUrl(path, newDateString, params)
     push(newPath)
   }
 
   const handleMoveToToday = () => {
     const newDate = new Date()
     const newDateString = format(newDate, 'yyyy-MM-dd')
-    const newPath = `${path.replace(DATE_REGEX, `/${newDateString}/`)}?${params.toString()}`
-
+    const newPath = chageTargetDateInUrl(path, newDateString, params)
     push(newPath)
   }
 
