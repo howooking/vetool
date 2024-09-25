@@ -9,19 +9,21 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import type { SearchedDrugProducts } from '@/types/icu'
+import type { DrugProductsJoined } from '@/types/icu'
 import { Plus } from 'lucide-react'
 
 export default function OrderDialog({
   icuIoId,
   icuChartId,
-  searchedDrugs,
+  drugs,
   weight,
+  species,
 }: {
   icuIoId: string
   icuChartId: string
-  searchedDrugs: SearchedDrugProducts[]
+  drugs: DrugProductsJoined[]
   weight?: string
+  species?: string
 }) {
   const { isModalOpen, isEditMode, toggleModal, setIsEditMode, resetState } =
     useCreateOrderStore()
@@ -52,7 +54,8 @@ export default function OrderDialog({
           icuIoId={icuIoId}
           icuChartId={icuChartId}
           weight={weight}
-          searchedDrugs={searchedDrugs}
+          drugs={drugs}
+          species={species}
         />
       </DialogContent>
     </Dialog>

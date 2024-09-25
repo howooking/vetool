@@ -20,7 +20,7 @@ import { upsertDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
 import { upsertOrder } from '@/lib/services/icu/orders'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined, SearchedDrugProducts } from '@/types/icu'
+import type { IcuChartOrderJoined, DrugProductsJoined } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -33,13 +33,15 @@ export default function OrderForm({
   icuChartId,
   isSettingMode,
   weight,
-  searchedDrugs,
+  species,
+  drugs,
 }: {
   icuIoId?: string
   icuChartId?: string
   isSettingMode?: boolean
   weight?: string
-  searchedDrugs?: SearchedDrugProducts[]
+  species?: string
+  drugs?: DrugProductsJoined[]
 }) {
   const { hos_id } = useParams()
   const { refresh } = useRouter()
@@ -85,7 +87,6 @@ export default function OrderForm({
       })
       refresh()
     } else {
-      console.log({ trimmedOrderName, orderComment, orderType })
       await upsertOrder(
         icuChartId!,
         icuIoId!,
@@ -139,6 +140,10 @@ export default function OrderForm({
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={
+                    isEditMode &&
+                    selectedChartOrder.icu_chart_order_type === 'injection'
+                  }
                   className="flex flex-wrap gap-4"
                 >
                   {DEFAULT_ICU_ORDER_TYPE.map((item) => (
@@ -164,8 +169,9 @@ export default function OrderForm({
         {orderType === 'injection' ? (
           <DrugFormField
             form={form}
+            drugs={drugs}
             weight={weight}
-            searchedDrugs={searchedDrugs}
+            species={species}
           />
         ) : (
           <OrderFormField form={form} />

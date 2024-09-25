@@ -1,41 +1,45 @@
+import HelperTooltip from '@/components/common/helper-tooltip'
 import DrugComboBox from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/drug-order/drug-combo-box'
+import DrugDoseInput from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/drug-order/drug-dose-input'
+import DrugDoseUnitRadio from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/drug-order/drug-dose-unit-radio'
+import DrugSelectField from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/drug-order/drug-select-field'
 import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/order-schema'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import type { SearchedDrugProducts } from '@/types/icu'
-import { useEffect, useMemo, useState } from 'react'
+import { calculateTotalDrugAmount } from '@/lib/utils'
+import type { DrugProductsJoined } from '@/types/icu'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 
 export default function DrugFormField({
   form,
+  drugs,
   weight,
-  searchedDrugs,
+  species,
 }: {
   form: UseFormReturn<z.infer<typeof orderSchema>>
+  drugs?: DrugProductsJoined[]
   weight?: string
-  searchedDrugs?: SearchedDrugProducts[]
+  species?: string
 }) {
   const drugOrders = form.getValues('icu_chart_order_name')
+  const totalAmount = form
+    .getValues('icu_chart_order_comment')
+    ?.replace(/[A-Za-z]/g, '')
   const isMicro = form.getValues('icu_chart_order_comment')?.includes('ul')
 
   const [name, dosage, route, time] = drugOrders.split('#')
   const [drugName, setDrugName] = useState(name ?? '')
-  const [drugDosage, setDrugDosage] = useState(dosage ?? '')
+  const [drugDosage, setDrugDosage] = useState(dosage ?? '0')
   const [drugRoute, setDrugRoute] = useState(route ?? 'IV')
   const [drugTime, setDrugTime] = useState(time ?? 'BID')
-  const [drugTotalAmount, setDrugTotalAmount] = useState('')
+  const [drugTotalAmount, setDrugTotalAmount] = useState(
+    dosage ? totalAmount : '0',
+  )
   const [drugTotalUnit, setDrugTotalUnit] = useState(isMicro ? 'ul' : 'ml')
   const [drugMassVolume, setDrugMassVolume] = useState<number | null>(null)
+  const [isAutoCalculate, setIsAutoCalculate] = useState(Boolean(!totalAmount))
 
   useEffect(() => {
     form.setValue(
@@ -53,106 +57,115 @@ export default function DrugFormField({
     drugTotalUnit,
   ])
 
+  // 약물명 && Species && route가 일치하는 약물을 필터링
   useMemo(() => {
-    const drug = searchedDrugs?.find((drug) => drug.name === drugName)
-    setDrugMassVolume(drug?.mass_vol ?? null)
-  }, [drugName, searchedDrugs])
+    const selectedDrug = drugs?.find((drug) =>
+      drug.drug_products.some((product) => product.name === drugName),
+    )
 
-  useEffect(() => {
+    const drugDoses = selectedDrug?.drug_doses?.filter(
+      (dose) =>
+        dose?.route?.includes(drugRoute) &&
+        (dose?.species === species || dose?.species === 'both'),
+    )
+
+    setDrugDosage(drugDoses?.length ? drugDoses[0].default_dose! : '0')
+  }, [drugName, drugs, species, drugRoute])
+
+  // 약물 총량 계산
+  const getTotalAmount = useCallback(() => {
     if (!drugMassVolume || !weight) return
 
-    let totalAmount = (Number(drugDosage) * Number(weight)) / drugMassVolume
-    setDrugTotalAmount(totalAmount.toFixed(2))
+    return calculateTotalDrugAmount(
+      weight,
+      drugDosage,
+      drugTotalUnit,
+      drugMassVolume,
+    )
+  }, [drugDosage, drugMassVolume, drugTotalUnit, weight])
 
-    if (drugTotalUnit === 'ul') {
-      setDrugTotalAmount((totalAmount * 1000).toFixed(2))
+  useEffect(() => {
+    if (isAutoCalculate && drugMassVolume) {
+      const totalAmount = getTotalAmount()
+
+      if (totalAmount) setDrugTotalAmount(totalAmount)
     }
-  }, [drugDosage, drugMassVolume, drugTotalAmount, drugTotalUnit, weight])
+  }, [drugMassVolume, getTotalAmount, isAutoCalculate])
+
+  const handleTotalAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDrugTotalAmount(e.target.value)
+    setIsAutoCalculate(false)
+  }
+
+  const handleDosageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDrugDosage(e.target.value)
+    setIsAutoCalculate(true)
+  }
+
+  const handleRouteChange = (value: string) => {
+    setDrugRoute(value)
+    setIsAutoCalculate(true)
+  }
 
   return (
     <>
       <DrugComboBox
         drugName={drugName}
-        searchedDrugs={searchedDrugs}
         setDrugName={setDrugName}
         setDrugMassVolume={setDrugMassVolume}
+        drugs={drugs}
       />
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="relative">
-          <Label>약물 용량</Label>
-          <Input
-            id="drugDosage"
-            value={drugDosage || ''}
-            onChange={(e) => setDrugDosage(e.target.value)}
-          />
+        <DrugDoseInput
+          label="약물 용량"
+          value={drugDosage}
+          onChange={handleDosageChange}
+          unit="mg/kg"
+        />
 
-          <span className="absolute right-2 top-8 text-sm text-muted-foreground">
-            mg/kg
-          </span>
-        </div>
-        <div>
-          <Select value={drugRoute} onValueChange={setDrugRoute}>
-            <Label>투여 경로</Label>
-            <SelectTrigger>
-              <SelectValue defaultValue="IV" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="IV">IV</SelectItem>
-                <SelectItem value="SC">SC</SelectItem>
-                <SelectItem value="IM">IM</SelectItem>
-                <SelectItem value="ID">ID</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+        <DrugSelectField
+          label="투여 경로"
+          value={drugRoute}
+          onChange={handleRouteChange}
+          options={[
+            { value: 'IV', label: 'IV' },
+            { value: 'SC', label: 'SC' },
+            { value: 'IM', label: 'IM' },
+            { value: 'ID', label: 'ID' },
+          ]}
+        />
 
-        <div>
-          <Select value={drugTime} onValueChange={setDrugTime}>
-            <Label>투여 횟수</Label>
-            <SelectTrigger>
-              <SelectValue defaultValue="BID" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="SID">SID</SelectItem>
-                <SelectItem value="BID">BID</SelectItem>
-                <SelectItem value="QID">QID</SelectItem>
-                <SelectItem value="PRN">PRN</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+        <DrugSelectField
+          label="투여 횟수"
+          value={drugTime}
+          onChange={setDrugTime}
+          options={[
+            { value: 'SID', label: 'SID' },
+            { value: 'BID', label: 'BID' },
+            { value: 'QID', label: 'QID' },
+            { value: 'PRN', label: 'PRN' },
+          ]}
+        />
 
-        <div className="relative">
-          <Label>약물 총량</Label>
-          <Input
-            value={drugTotalAmount}
-            onChange={(e) => setDrugTotalAmount(e.target.value)}
-          />
-          <span className="absolute right-2 top-8 text-sm text-muted-foreground">
-            {drugTotalUnit}
-          </span>
-        </div>
-        <RadioGroup
-          defaultValue={isMicro ? 'ul' : 'ml'}
-          onValueChange={setDrugTotalUnit}
-          className="mt-6 flex shrink-0"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="ml" id="r1" />
-            <Label className="text-xs" htmlFor="r1">
-              ml
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="ul" id="r2" />
-            <Label className="text-xs" htmlFor="r2">
-              ul
-            </Label>
-          </div>
-        </RadioGroup>
+        <DrugDoseInput
+          label={
+            <div className="mb-1 flex items-center gap-1">
+              약물 총량
+              <HelperTooltip className="w-4" variant="destructive">
+                자동 계산된 총량은 참고용으로만 사용해주세요
+              </HelperTooltip>
+            </div>
+          }
+          value={drugTotalAmount}
+          onChange={handleTotalAmountChange}
+          unit={drugTotalUnit}
+        />
+
+        <DrugDoseUnitRadio
+          drugTotalUnit={drugTotalUnit}
+          setDrugTotalUnit={setDrugTotalUnit}
+        />
       </div>
     </>
   )

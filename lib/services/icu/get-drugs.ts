@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import type { DrugProductsJoined } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
@@ -8,9 +9,10 @@ const supabase = createClient()
 export const getDrugs = async (hosId: string) => {
   const { data: searchedDrugData, error: searchedDrugDataError } =
     await supabase
-      .from('drug_products_rows')
-      .select('*')
-      .or(`hos_id.eq.${hosId},hos_id.is.null`)
+      .rpc('get_drugs', {
+        hos_id_input: hosId,
+      })
+      .returns<DrugProductsJoined[]>()
 
   if (searchedDrugDataError) {
     console.log(searchedDrugDataError)

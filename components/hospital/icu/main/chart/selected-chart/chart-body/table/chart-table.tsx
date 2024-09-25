@@ -10,10 +10,12 @@ const ChartTable = React.memo(
     selectedChartOrders,
     orderColors,
     weight,
+    species,
   }: {
     selectedChartOrders: IcuChartOrderJoined[]
     orderColors: IcuOrderColors
     weight: string
+    species: string
   }) => {
     const isMobile = useIsMobile()
 
@@ -23,6 +25,7 @@ const ChartTable = React.memo(
           orderColors={orderColors}
           selectedChartOrders={selectedChartOrders}
           weight={weight}
+          species={species}
         />
       )
 
@@ -31,6 +34,7 @@ const ChartTable = React.memo(
         orderColors={orderColors}
         selectedChartOrders={selectedChartOrders}
         weight={weight}
+        species={species}
       />
     )
   },

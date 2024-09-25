@@ -15,7 +15,7 @@ import { IcuOrderColors } from '@/types/adimin'
 import type {
   CopiedOrder,
   IcuChartOrderJoined,
-  SearchedDrugProducts,
+  DrugProductsJoined,
 } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -25,6 +25,7 @@ type ChartTablePropsPreview = {
   orderColors: IcuOrderColors
   preview: true
   weight?: string
+  species?: string
 }
 
 type ChartTablePropsNonPreview = {
@@ -32,6 +33,7 @@ type ChartTablePropsNonPreview = {
   orderColors: IcuOrderColors
   preview?: false
   weight?: string
+  species?: string
 }
 
 type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview
@@ -41,15 +43,20 @@ export default function DesktopChartTable({
   orderColors,
   preview,
   weight,
+  species,
 }: ChartTableProps) {
   const { hos_id } = useParams()
 
-  const [searchedDrugs, setSearchedDrugs] = useState<SearchedDrugProducts[]>([])
+  const [drugs, setDrugs] = useState<DrugProductsJoined[]>([])
 
   useEffect(() => {
-    getDrugs(hos_id as string).then((data) => {
-      setSearchedDrugs(data.map(({ name, mass_vol }) => ({ name, mass_vol })))
-    })
+    const fetchDrugs = async () => {
+      const drugs = await getDrugs(hos_id as string)
+      setDrugs(drugs)
+      console.log(drugs)
+    }
+
+    fetchDrugs()
   }, [hos_id])
 
   return (
@@ -63,7 +70,8 @@ export default function DesktopChartTable({
                 icuIoId={selectedChartOrders[0].icu_io_id.icu_io_id}
                 icuChartId={selectedChartOrders[0].icu_chart_id.icu_chart_id}
                 weight={weight}
-                searchedDrugs={searchedDrugs}
+                drugs={drugs}
+                species={species}
               />
             )}
           </TableHead>

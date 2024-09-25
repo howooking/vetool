@@ -68,13 +68,63 @@ export type Database = {
           },
         ]
       }
+      drug_doses: {
+        Row: {
+          bw_unit: string | null
+          created_at: string
+          cri_unit: string | null
+          default_dose: string | null
+          dose_id: string
+          dose_unit: string | null
+          drug_id: string | null
+          max_dose: string | null
+          min_dose: string | null
+          route: string[] | null
+          species: string | null
+        }
+        Insert: {
+          bw_unit?: string | null
+          created_at?: string
+          cri_unit?: string | null
+          default_dose?: string | null
+          dose_id?: string
+          dose_unit?: string | null
+          drug_id?: string | null
+          max_dose?: string | null
+          min_dose?: string | null
+          route?: string[] | null
+          species?: string | null
+        }
+        Update: {
+          bw_unit?: string | null
+          created_at?: string
+          cri_unit?: string | null
+          default_dose?: string | null
+          dose_id?: string
+          dose_unit?: string | null
+          drug_id?: string | null
+          max_dose?: string | null
+          min_dose?: string | null
+          route?: string[] | null
+          species?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drug_doses_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "drugs_rows"
+            referencedColumns: ["drug_id"]
+          },
+        ]
+      }
       drug_products_rows: {
         Row: {
           active: boolean | null
           company: string | null
           created_at: string
           description: string | null
-          drug_ids: string | null
+          drug_id: string | null
           drug_names: string | null
           drug_products_id: string
           hos_id: string | null
@@ -92,7 +142,7 @@ export type Database = {
           company?: string | null
           created_at?: string
           description?: string | null
-          drug_ids?: string | null
+          drug_id?: string | null
           drug_names?: string | null
           drug_products_id?: string
           hos_id?: string | null
@@ -110,7 +160,7 @@ export type Database = {
           company?: string | null
           created_at?: string
           description?: string | null
-          drug_ids?: string | null
+          drug_id?: string | null
           drug_names?: string | null
           drug_products_id?: string
           hos_id?: string | null
@@ -124,6 +174,13 @@ export type Database = {
           unit?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "drug_products_rows_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "drugs_rows"
+            referencedColumns: ["drug_id"]
+          },
           {
             foreignKeyName: "drug_products_rows_hos_id_fkey"
             columns: ["hos_id"]
@@ -1302,6 +1359,12 @@ export type Database = {
           selected_io_id_input: string
         }
         Returns: undefined
+      }
+      get_drugs: {
+        Args: {
+          hos_id_input: string
+        }
+        Returns: Json
       }
       insert_default_chart_orders: {
         Args: {

@@ -42,6 +42,7 @@ export default function ChartBody({
         selectedChartOrders={selectedChartOrders}
         orderColors={orderColors}
         weight={restChartData.weight}
+        species={restChartData.patient_id.species}
       />
 
       <ChartMemos

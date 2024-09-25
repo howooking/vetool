@@ -196,3 +196,15 @@ export const getDateMonthsAgo = (months: string) => {
     ).toString(),
   )
 }
+
+export const calculateTotalDrugAmount = (
+  patientWeight: string,
+  drugDosage: string,
+  drugTotalUnit: string,
+  drugMassVolume: number,
+) => {
+  const base = (Number(drugDosage) * Number(patientWeight)) / drugMassVolume
+  const total = drugTotalUnit === 'ul' ? base * 1000 : base
+
+  return total.toFixed(2)
+}

@@ -16,10 +16,12 @@ export default function MobileChartTable({
   selectedChartOrders,
   orderColors,
   weight,
+  species,
 }: {
   selectedChartOrders: IcuChartOrderJoined[]
   orderColors: IcuOrderColors
   weight: string
+  species: string
 }) {
   return (
     <>
@@ -49,6 +51,7 @@ export default function MobileChartTable({
               orderColors={orderColors}
               selectedChartOrders={selectedChartOrders}
               weight={weight}
+              species={species}
             />
           </div>
         </DialogContent>

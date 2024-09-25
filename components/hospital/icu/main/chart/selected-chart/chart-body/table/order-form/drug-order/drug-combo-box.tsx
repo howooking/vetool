@@ -15,27 +15,35 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import type { SearchedDrugProducts } from '@/types/icu'
+import type { DrugProductsJoined } from '@/types/icu'
 import { ChevronsUpDown } from 'lucide-react'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 export default function DrugComboBox({
   drugName,
   setDrugName,
   setDrugMassVolume,
-  searchedDrugs,
+  drugs,
 }: {
   drugName: string
   setDrugName: Dispatch<SetStateAction<string>>
   setDrugMassVolume: Dispatch<SetStateAction<number | null>>
-  searchedDrugs?: SearchedDrugProducts[]
+  drugs?: DrugProductsJoined[]
 }) {
   const [isPopoverOpen, setIsPopOverOpen] = useState(false)
-  const [value, setValue] = useState(drugName)
+
+  const drugProducts = drugs?.flatMap((drug) => drug.drug_products)
+  const selectedDrug = drugProducts?.find((drug) => drug.name === drugName)
+
+  useEffect(() => {
+    if (selectedDrug) setDrugMassVolume(selectedDrug.mass_vol)
+  }, [selectedDrug, setDrugMassVolume])
 
   return (
     <Popover open={isPopoverOpen} onOpenChange={setIsPopOverOpen}>
-      <Label htmlFor="drugName">약물명*</Label>
-      <PopoverTrigger asChild>
+      <Label htmlFor="drugName" className="h-5">
+        약물명*
+      </Label>
+      <PopoverTrigger asChild style={{ marginTop: 0 }}>
         <Button
           variant="outline"
           role="combobox"
@@ -43,25 +51,22 @@ export default function DrugComboBox({
           className="relative w-full justify-between"
           id="drugName"
         >
-          {value
-            ? searchedDrugs?.find((drug) => drug.name === value)?.name
-            : '약물명 검색'}
+          {selectedDrug ? selectedDrug.name : '약물명 검색'}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="p-0 sm:w-[718px]" defaultValue={drugName}>
+      <PopoverContent className="p-0 sm:w-[718px]">
         <Command className="w-full">
           <CommandInput placeholder="약물명 검색" />
           <CommandList>
             <CommandEmpty>검색된 약물이 존재하지 않습니다</CommandEmpty>
             <CommandGroup>
-              {searchedDrugs?.map((drug) => (
+              {drugProducts?.map((drug) => (
                 <CommandItem
-                  key={drug.name}
+                  key={drug.drug_products_id}
                   value={drug.name}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue)
                     setDrugName(currentValue)
                     setDrugMassVolume(drug.mass_vol)
                     setIsPopOverOpen(false)
