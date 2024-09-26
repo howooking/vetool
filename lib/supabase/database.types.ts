@@ -1665,6 +1665,15 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_icu_patient_weight: {
+        Args: {
+          patient_id_input: string
+          icu_chart_id_input: string
+          weight_input: string
+          weight_measured_date_input: string
+        }
+        Returns: undefined
+      }
       update_user_approval_and_user_hos_id_when_approved: {
         Args: {
           user_id_input: string

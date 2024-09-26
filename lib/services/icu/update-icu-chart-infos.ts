@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
@@ -75,13 +74,17 @@ export const updateWeight = async (
   patientId: string,
   icuChartId: string,
   weight: string,
+  weightMesuredDate: string,
 ) => {
-  const { error: updateWeightError } = await supabase.rpc('update_weight', {
-    icu_chart_id_input: icuChartId,
-    patient_id_input: patientId,
-    weight_input: weight,
-    weight_measured_date_input: format(new Date(), 'yyyy-MM-dd'),
-  })
+  const { error: updateWeightError } = await supabase.rpc(
+    'update_icu_patient_weight',
+    {
+      icu_chart_id_input: icuChartId,
+      patient_id_input: patientId,
+      weight_input: weight,
+      weight_measured_date_input: weightMesuredDate,
+    },
+  )
 
   if (updateWeightError) {
     console.log(updateWeightError)
