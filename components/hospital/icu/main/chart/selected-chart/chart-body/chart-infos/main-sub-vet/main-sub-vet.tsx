@@ -10,24 +10,30 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import type { Vet, MainAndSubVet } from '@/types/icu'
+import { getVetList } from '@/lib/services/icu/get-staffs'
+import type { MainAndSubVet, Vet } from '@/types/icu'
+import { Stethoscope } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import MainSubVetUpdateForm from './main-sub-vet-update-form'
-import { Stethoscope, Users } from 'lucide-react'
 
 export default function MainSubVet({
   mainVet,
   subVet,
   icuChartId,
-  vetsList,
 }: {
   mainVet: MainAndSubVet
   subVet: MainAndSubVet | null
   icuChartId: string
-  vetsList: Vet[]
 }) {
+  const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [vetsList, setVetsList] = useState<Vet[]>([])
+
+  useEffect(() => {
+    getVetList(hos_id as string).then((data) => setVetsList(data))
+  }, [hos_id])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -53,7 +59,7 @@ export default function MainSubVet({
 
             <Separator orientation="vertical" className="h-4" />
 
-            {subVet ? (
+            {subVet?.name ? (
               <div className="flex items-center gap-1">
                 <Image
                   unoptimized

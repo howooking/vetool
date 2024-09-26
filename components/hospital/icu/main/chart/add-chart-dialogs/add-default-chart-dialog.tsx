@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -11,29 +13,26 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { registerDefaultChart } from '@/lib/services/icu/add-icu-chart'
-import type { IcuChartJoined } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu'
 import { File } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function AddDefaultChartDialog({
-  selectedChart,
-  setIsCreatingChart,
+  chartData,
 }: {
-  selectedChart?: IcuChartJoined
-  setIsCreatingChart: (isCreatingChart: boolean) => void
+  chartData: SelectedChart
 }) {
   const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const handleAddDefaultChart = async () => {
-    setIsCreatingChart(true)
     setIsDialogOpen(false)
 
     await registerDefaultChart(
       hos_id as string,
-      selectedChart?.icu_chart_id!,
-      selectedChart?.icu_io_id.icu_io_id!,
+      chartData.icu_chart_id,
+      chartData.icu_io.icu_io_id,
     )
 
     toast({

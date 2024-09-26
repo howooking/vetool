@@ -1078,7 +1078,6 @@ export type Database = {
           icu_chart_order_name: string
           icu_chart_order_time: string[]
           icu_chart_order_type: string
-          icu_io_id: string
           updated_at: string
         }
         Insert: {
@@ -1090,7 +1089,6 @@ export type Database = {
           icu_chart_order_name: string
           icu_chart_order_time?: string[]
           icu_chart_order_type: string
-          icu_io_id: string
           updated_at?: string
         }
         Update: {
@@ -1102,7 +1100,6 @@ export type Database = {
           icu_chart_order_name?: string
           icu_chart_order_time?: string[]
           icu_chart_order_type?: string
-          icu_io_id?: string
           updated_at?: string
         }
         Relationships: [
@@ -1119,13 +1116,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "icu_charts"
             referencedColumns: ["icu_chart_id"]
-          },
-          {
-            foreignKeyName: "icu_orders_icu_io_id_fkey"
-            columns: ["icu_io_id"]
-            isOneToOne: false
-            referencedRelation: "icu_io"
-            referencedColumns: ["icu_io_id"]
           },
         ]
       }
@@ -1579,6 +1569,13 @@ export type Database = {
         }
         Returns: undefined
       }
+      copy_prev_orders: {
+        Args: {
+          prev_chart_id_input: string
+          new_chart_id_input: string
+        }
+        Returns: undefined
+      }
       get_drugs: {
         Args: {
           hos_id_input: string
@@ -1594,6 +1591,14 @@ export type Database = {
         Returns: Json
       }
       insert_default_chart_orders: {
+        Args: {
+          hos_id_input: string
+          icu_chart_id_input: string
+          icu_io_id_input: string
+        }
+        Returns: undefined
+      }
+      insert_default_orders: {
         Args: {
           hos_id_input: string
           icu_chart_id_input: string

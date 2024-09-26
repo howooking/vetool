@@ -204,6 +204,7 @@ export type SelectedChart = Pick<
     | 'age_in_days'
     | 'out_due_date'
     | 'cpcr'
+    | 'group_list'
   >
 } & {
   orders: SelectedIcuOrder[]

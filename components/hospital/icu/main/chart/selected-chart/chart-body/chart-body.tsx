@@ -1,15 +1,8 @@
+import { TEMP_COLOR } from '@/app/hospital/[hos_id]/icu/[target_date]/chart/[patient_id]/page'
 import ChartInfos from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/chart-infos'
 import ChartMemos from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/chart-memos'
 import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/chart-table'
-import { IcuOrderColors } from '@/types/adimin'
-import type {
-  IcuChartJoined,
-  IcuChartOrderJoined,
-  IcuIoJoined,
-  SelectedChart,
-  Vet,
-} from '@/types/icu'
-import { RefObject } from 'react'
+import type { SelectedChart } from '@/types/icu'
 
 export default function ChartBody({ chartData }: { chartData: SelectedChart }) {
   const { memo_a, memo_b, memo_c, icu_chart_id } = chartData
@@ -20,18 +13,7 @@ export default function ChartBody({ chartData }: { chartData: SelectedChart }) {
     >
       <ChartInfos chartData={chartData} />
 
-      <ChartTable
-        chartData={chartData}
-        orderColors={{
-          po: '#faf5ff',
-          feed: '#fdf2f8',
-          test: '#fefce8',
-          fluid: '#eef2ff',
-          manual: '#ecfeff',
-          checklist: '#fff7ed',
-          injection: '#f0fdf4',
-        }}
-      />
+      <ChartTable chartData={chartData} orderColors={TEMP_COLOR} />
 
       <ChartMemos
         memoA={memo_a}

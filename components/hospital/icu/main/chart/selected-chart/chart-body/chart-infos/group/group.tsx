@@ -1,3 +1,5 @@
+'use client'
+
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -18,26 +20,28 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { toast } from '@/components/ui/use-toast'
+import { getHosGroupList } from '@/lib/services/icu/get-hos-data'
 import { updateGroup } from '@/lib/services/icu/update-icu-chart-infos'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Component } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import GroupBadge from './group-badge'
 import { groupCheckFormSchema } from './group-schema'
-import { Boxes, Component } from 'lucide-react'
 
 export default function Group({
-  hosGroupList,
   currentGroups,
   icuIoId,
 }: {
-  hosGroupList: string[]
   currentGroups: string[]
   icuIoId: string
 }) {
+  const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [hosGroupList, setHosGroupList] = useState<string[]>([])
 
   const form = useForm<z.infer<typeof groupCheckFormSchema>>({
     resolver: zodResolver(groupCheckFormSchema),
@@ -45,6 +49,12 @@ export default function Group({
       groupList: currentGroups,
     },
   })
+
+  useEffect(() => {
+    getHosGroupList(hos_id as string).then((data) => {
+      setHosGroupList(data)
+    })
+  }, [hos_id])
 
   useEffect(() => {
     if (!isDialogOpen) {

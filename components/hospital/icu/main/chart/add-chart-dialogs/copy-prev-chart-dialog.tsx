@@ -11,31 +11,25 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { copyPrevChart } from '@/lib/services/icu/add-icu-chart'
+import { SelectedChart } from '@/types/icu'
 import { ClipboardPaste } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function CopyPrevChartDialog({
   targetDate,
-  selectedPatientId,
-  setIsCreatingChart,
-  selectedIoId,
+  chartData,
 }: {
   targetDate: string
-  selectedPatientId: string
-  setIsCreatingChart: (isCreatingChart: boolean) => void
-  selectedIoId: string
+  chartData: SelectedChart
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { patient_id } = useParams()
 
   const handleCopyPrevSelectedChart = async () => {
-    setIsCreatingChart(true)
     setIsDialogOpen(false)
 
-    const { error } = await copyPrevChart(
-      targetDate,
-      selectedPatientId,
-      selectedIoId,
-    )
+    const { error } = await copyPrevChart(targetDate, patient_id as string)
 
     if (error) {
       toast({
@@ -43,7 +37,6 @@ export default function CopyPrevChartDialog({
         description: '전날 차트가 있는지 확인해주세요',
         variant: 'destructive',
       })
-      setIsCreatingChart(false)
       return
     }
 

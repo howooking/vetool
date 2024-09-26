@@ -1,7 +1,6 @@
-import React from 'react'
-import ChartHeader from './selected-chart/chart-header/chart-header'
+import type { SelectedChart } from '@/types/icu'
 import ChartBody from './selected-chart/chart-body/chart-body'
-import type { IcuChartJoined, SelectedChart } from '@/types/icu'
+import ChartHeader from './selected-chart/chart-header/chart-header'
 
 export default function Chart({ chartData }: { chartData: SelectedChart }) {
   return (

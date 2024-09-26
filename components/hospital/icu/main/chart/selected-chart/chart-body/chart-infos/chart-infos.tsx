@@ -1,25 +1,18 @@
-'use client'
-
 import ChiefComplaint from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/chief-complaint'
 import Cpcr from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/cpcr'
 import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/diagnosis'
-import Group from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/group/group'
 import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/in-and-out-date/in-and-out-date'
-import MainSubVet from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/main-sub-vet/main-sub-vet'
 import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/owner-name'
-import type {
-  IcuChartJoined,
-  IcuIoJoined,
-  SelectedChart,
-  Vet,
-} from '@/types/icu'
+import type { SelectedChart } from '@/types/icu'
+import Group from './group/group'
+import MainSubVet from './main-sub-vet/main-sub-vet'
 
 export default function ChartInfos({
   chartData,
 }: {
   chartData: SelectedChart
 }) {
-  const { icu_io, patient } = chartData
+  const { icu_io, patient, main_vet, sub_vet, icu_chart_id } = chartData
 
   const isPatientOut = !!icu_io.out_date
   return (
@@ -35,12 +28,11 @@ export default function ChartInfos({
       </div>
 
       <div className="col-span-2">
-        {/* <MainSubVet
-          vetsList={vetsList}
-          mainVet={chartData.main_vet}
-          subVet={chartData.sub_vet}
-          icuChartId={chartData.icu_chart_id}
-        /> */}
+        <MainSubVet
+          mainVet={main_vet}
+          subVet={sub_vet}
+          icuChartId={icu_chart_id}
+        />
       </div>
 
       <div className="order-last col-span-2 md:order-none md:col-span-4">
@@ -59,11 +51,7 @@ export default function ChartInfos({
       </div>
 
       <div className="col-span-2">
-        {/* <Group
-          hosGroupList={icu_io.hos_id.group_list}
-          currentGroups={icu_io.group_list}
-          icuIoId={icu_io.icu_io_id}
-        /> */}
+        <Group currentGroups={icu_io.group_list} icuIoId={icu_io.icu_io_id} />
       </div>
 
       <div className="order-last col-span-2 md:order-none md:col-span-4">

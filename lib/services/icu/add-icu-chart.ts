@@ -27,18 +27,14 @@ export const hasPrevChart = async (
   return !!prevChartData
 }
 
-export const copyPrevChart = async (
-  targetDate: string,
-  selectedPatientId: string,
-  selectedIoId: string,
-) => {
+export const copyPrevChart = async (targetDate: string, patientId: string) => {
   const supabase = createClient()
 
   const newDate = new Date(targetDate)
   const prevDate = format(newDate.setDate(newDate.getDate() - 1), 'yyyy-MM-dd')
 
   const { data: prevChartData, error: prevChartDataError } = await supabase
-    .from('icu_chart')
+    .from('icu_charts')
     .select(
       `
         icu_io_id,
@@ -53,7 +49,7 @@ export const copyPrevChart = async (
         weight
       `,
     )
-    .match({ patient_id: selectedPatientId, target_date: prevDate })
+    .match({ patient_id: patientId, target_date: prevDate })
     .maybeSingle()
 
   if (prevChartDataError) {
@@ -66,7 +62,7 @@ export const copyPrevChart = async (
   }
 
   const { data: prevChartOrdersData, error: prevChartOrdersDataError } =
-    await supabase.from('icu_chart_order').select('*').match({
+    await supabase.from('icu_orders').select('*').match({
       icu_chart_id: prevChartData.icu_chart_id,
     })
 
@@ -83,7 +79,7 @@ export const copyPrevChart = async (
   // 전날의 차트와 오더가 있다는 것을 모두 확인 후에 target날의 차트 생성
   const { data: newIcuChartId, error: creatingNewIcuChartError } =
     await supabase
-      .from('icu_chart')
+      .from('icu_charts')
       .insert({
         icu_io_id: prevChartData.icu_io_id,
         hos_id: prevChartData.hos_id,
@@ -95,7 +91,7 @@ export const copyPrevChart = async (
         memo_c: prevChartData.memo_c,
         weight_measured_date: prevChartData.weight_measured_date,
         weight: prevChartData.weight,
-        patient_id: selectedPatientId,
+        patient_id: patientId,
       })
       .select('icu_chart_id')
       .single()
@@ -105,10 +101,9 @@ export const copyPrevChart = async (
     redirect(`/error?message=${creatingNewIcuChartError.message}`)
   }
 
-  await supabase.rpc('copy_prev_chart_orders', {
+  await supabase.rpc('copy_prev_orders', {
     prev_chart_id_input: prevChartData.icu_chart_id,
     new_chart_id_input: newIcuChartId.icu_chart_id,
-    selected_io_id_input: selectedIoId,
   })
 
   return { error: null }
@@ -121,7 +116,7 @@ export const registerDefaultChart = async (
 ) => {
   const supabase = createClient()
 
-  await supabase.rpc('insert_default_chart_orders', {
+  await supabase.rpc('insert_default_orders', {
     hos_id_input: hosId,
     icu_chart_id_input: chartId,
     icu_io_id_input: ioId,

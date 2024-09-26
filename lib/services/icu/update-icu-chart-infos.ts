@@ -46,7 +46,7 @@ export const updateMainSubVet = async (
   subVetId?: string,
 ) => {
   const { error: updateMainSubVetError } = await supabase
-    .from('icu_chart')
+    .from('icu_charts')
     .update({
       main_vet: mainVetId,
       sub_vet: subVetId === 'null' ? null : subVetId,
