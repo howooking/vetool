@@ -1,10 +1,10 @@
 'use client'
 
-import type { IcuOrderColors } from '@/types/adimin'
 import { SelectedChart } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import AddDefaultChartDialog from './add-default-chart-dialog'
 import CopyPrevChartDialog from './copy-prev-chart-dialog'
+import PasteCopiedChartDialog from './paste-copied-chart-dialog'
 
 export default function AddChartDialogs({
   chartData,
@@ -20,18 +20,12 @@ export default function AddChartDialogs({
       {isFirstChart ? (
         <AddDefaultChartDialog chartData={chartData} />
       ) : (
-        <CopyPrevChartDialog
-          targetDate={target_date as string}
-          chartData={chartData}
-        />
+        <CopyPrevChartDialog />
       )}
 
-      {/* <PasteCopiedChartDialog
-        targetDate={target_date as string}
-        selectedPatientId={selectedPatientId}
-        selectedIoId={selectedIoId}
-      />
-      <AddBookmarkChartDialog
+      <PasteCopiedChartDialog />
+
+      {/* <AddBookmarkChartDialog
         orderColors={orderColors}
         selectedIoId={selectedIoId}
       /> */}

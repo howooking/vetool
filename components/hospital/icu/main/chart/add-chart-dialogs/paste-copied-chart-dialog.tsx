@@ -12,20 +12,13 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { pasteChart } from '@/lib/services/icu/paste-chart'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
+import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
 import { CopyCheck, LoaderCircle } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-export default function PasteCopiedChartDialog({
-  targetDate,
-  selectedPatientId,
-  setIsCreatingChart,
-  selectedIoId,
-}: {
-  targetDate: string
-  selectedPatientId: string
-  setIsCreatingChart: (isCreatingChart: boolean) => void
-  selectedIoId: string
-}) {
+export default function PasteCopiedChartDialog() {
+  const { target_date, patient_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { copiedChartId, reset } = useCopiedChartStore()
@@ -43,9 +36,8 @@ export default function PasteCopiedChartDialog({
     }
 
     setIsSubmitting(true)
-    setIsCreatingChart(true)
 
-    await pasteChart(selectedPatientId, copiedChartId, targetDate, selectedIoId)
+    await pasteChart(patient_id as string, copiedChartId, target_date as string)
 
     toast({
       title: '차트를 붙여넣었습니다',
@@ -55,14 +47,7 @@ export default function PasteCopiedChartDialog({
     reset()
     setIsDialogOpen(false)
     setIsSubmitting(false)
-  }, [
-    copiedChartId,
-    reset,
-    selectedIoId,
-    selectedPatientId,
-    setIsCreatingChart,
-    targetDate,
-  ])
+  }, [copiedChartId, patient_id, reset, target_date])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
