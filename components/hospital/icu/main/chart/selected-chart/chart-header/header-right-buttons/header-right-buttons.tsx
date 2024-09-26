@@ -1,64 +1,42 @@
 import CopyChartButton from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/copy-chart-button'
 import DeleteChartDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/delete-chart-dialog'
-import ExportDioalog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog/export-dialog'
-import OutPatientDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/out-patient-dialog'
-import type { IcuOrderColors } from '@/types/adimin'
-import type { IcuChartJoined, IcuChartOrderJoined, Vet } from '@/types/icu'
-import { RefObject } from 'react'
+import type { SelectedChart } from '@/types/icu'
+import { useParams } from 'next/navigation'
 
 export default function HeaderRightButtons({
-  icuChartId,
-  icuIoId,
-  name,
-  isPatientOut,
-  selectedChartOrders,
   chartData,
-  captureRef,
-  isFirstChart,
-  vetsList,
-  orderColors,
-  dx,
-  cc,
 }: {
-  icuChartId: string
-  icuIoId: string
-  name: string
-  isPatientOut: boolean
-  selectedChartOrders: IcuChartOrderJoined[]
-  chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
-  captureRef: RefObject<HTMLDivElement>
-  isFirstChart: boolean
-  vetsList: Vet[]
-  orderColors: IcuOrderColors
-  dx: string
-  cc: string
+  chartData: SelectedChart
 }) {
+  const { target_date } = useParams()
+  const { icu_chart_id, icu_io, patient, orders } = chartData
+  const isFirstChart = icu_io.in_date === target_date
   return (
     <div className="absolute right-2 top-1.5 hidden gap-1 md:flex">
-      <CopyChartButton icuChartId={icuChartId} />
+      <CopyChartButton icuChartId={icu_chart_id} />
 
-      <OutPatientDialog
-        icuIoId={icuIoId}
-        name={name}
-        isPatientOut={isPatientOut}
-        selectedChartOrders={selectedChartOrders}
-        dx={dx}
-        cc={cc}
-      />
+      {/* <OutPatientDialog
+        icuIoId={icu_io.icu_io_id}
+        name={patient.name}
+        isPatientOut={!!icu_io.out_date}
+        orders={orders}
+        dx={icu_io.icu_io_dx}
+        cc={icu_io.icu_io_cc}
+      /> */}
 
-      <ExportDioalog
+      {/* <ExportDioalog
         name={name}
         captureRef={captureRef}
         chartData={chartData}
         selectedChartOrders={selectedChartOrders}
         vetsList={vetsList}
         orderColors={orderColors}
-      />
+      /> */}
 
       <DeleteChartDialog
-        icuChartId={icuChartId}
-        name={name}
-        icuIoId={icuIoId}
+        icuChartId={icu_chart_id}
+        name={patient.name}
+        icuIoId={icu_io.icu_io_id}
         isFirstChart={isFirstChart}
       />
     </div>
