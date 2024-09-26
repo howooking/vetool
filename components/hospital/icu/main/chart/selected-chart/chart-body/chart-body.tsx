@@ -1,4 +1,3 @@
-import { TEMP_COLOR } from '@/app/hospital/[hos_id]/icu/[target_date]/chart/[patient_id]/page'
 import ChartInfos from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/chart-infos'
 import ChartMemos from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/chart-memos'
 import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/chart-table'
@@ -13,7 +12,7 @@ export default function ChartBody({ chartData }: { chartData: SelectedChart }) {
     >
       <ChartInfos chartData={chartData} />
 
-      <ChartTable chartData={chartData} orderColors={TEMP_COLOR} />
+      <ChartTable chartData={chartData} />
 
       <ChartMemos
         memoA={memo_a}

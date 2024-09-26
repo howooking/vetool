@@ -2,7 +2,7 @@ import IcuFooter from '@/components/hospital/icu/footer/icu-footer'
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
 import { getInitialIcuData } from '@/lib/services/icu/get-initial-icu-data'
-import { IcuDataProvider } from '@/providers/icu-provider'
+import { BasicHosDataProvider } from '@/providers/icu-provider'
 import React from 'react'
 
 export default async function IcuPageLayout({
@@ -18,7 +18,13 @@ export default async function IcuPageLayout({
   )
 
   return (
-    <>
+    <BasicHosDataProvider
+      basicHosData={{
+        groupListData: initialIcuData.groupListData,
+        orderColorsData: initialIcuData.orderColorsData,
+        vetsListData: initialIcuData.vetsListData,
+      }}
+    >
       <IcuHeader
         hosId={params.hos_id}
         groupList={initialIcuData.groupListData}
@@ -27,8 +33,8 @@ export default async function IcuPageLayout({
       />
       <div className="flex">
         <IcuSidebar
-          icuIoData={initialIcuData.icuIoData}
-          icuChartData={initialIcuData.icuChartData}
+          hosGroupList={initialIcuData.groupListData}
+          icuSidebarData={initialIcuData.icuSidebarData}
           vetsListData={initialIcuData.vetsListData}
         />
 
@@ -40,6 +46,6 @@ export default async function IcuPageLayout({
           // isSubscriptionReady={isSubscriptionReady}
         />
       </div>
-    </>
+    </BasicHosDataProvider>
   )
 }

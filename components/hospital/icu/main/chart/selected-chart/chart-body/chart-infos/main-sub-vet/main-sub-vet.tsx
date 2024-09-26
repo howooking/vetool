@@ -10,12 +10,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { getVetList } from '@/lib/services/icu/get-staffs'
-import type { MainAndSubVet, Vet } from '@/types/icu'
+import { useBasicHosDataContext } from '@/providers/icu-provider'
+import type { MainAndSubVet } from '@/types/icu'
 import { Stethoscope } from 'lucide-react'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import MainSubVetUpdateForm from './main-sub-vet-update-form'
 
 export default function MainSubVet({
@@ -27,13 +26,11 @@ export default function MainSubVet({
   subVet: MainAndSubVet | null
   icuChartId: string
 }) {
-  const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [vetsList, setVetsList] = useState<Vet[]>([])
 
-  useEffect(() => {
-    getVetList(hos_id as string).then((data) => setVetsList(data))
-  }, [hos_id])
+  const {
+    basicHosData: { vetsListData },
+  } = useBasicHosDataContext()
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -86,7 +83,7 @@ export default function MainSubVet({
           setIsDialogOpen={setIsDialogOpen}
           mainVet={mainVet}
           subVet={subVet}
-          vetsList={vetsList}
+          vetsList={vetsListData}
           icuChartId={icuChartId}
         />
       </DialogContent>

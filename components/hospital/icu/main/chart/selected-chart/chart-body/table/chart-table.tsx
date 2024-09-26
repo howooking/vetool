@@ -10,30 +10,23 @@ import {
 } from '@/components/ui/table'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { IcuOrderColors } from '@/types/adimin'
 import type { SelectedChart } from '@/types/icu'
 import { useMemo } from 'react'
 import OrderCells from './order-cells'
 
 type ChartTablePropsPreview = {
   chartData: SelectedChart
-  orderColors: IcuOrderColors
   preview: true
 }
 
 type ChartTablePropsNonPreview = {
   chartData: SelectedChart
-  orderColors: IcuOrderColors
   preview?: false
 }
 
 type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview
 
-export default function ChartTable({
-  chartData,
-  orderColors,
-  preview,
-}: ChartTableProps) {
+export default function ChartTable({ chartData, preview }: ChartTableProps) {
   const { icu_io, icu_chart_id, orders } = chartData
 
   const sortedOrders = useMemo(
@@ -74,11 +67,7 @@ export default function ChartTable({
 
         {sortedOrders.map((order) => (
           <TableRow className="divide-x" key={order.order_id}>
-            <OrderTitle
-              order={order}
-              preview={preview}
-              orderColors={orderColors}
-            />
+            <OrderTitle order={order} preview={preview} />
             <OrderCells
               preview={preview}
               order={order}

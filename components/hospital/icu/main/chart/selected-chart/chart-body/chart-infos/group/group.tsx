@@ -20,11 +20,11 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { toast } from '@/components/ui/use-toast'
-import { getHosGroupList } from '@/lib/services/icu/get-hos-data'
 import { updateGroup } from '@/lib/services/icu/update-icu-chart-infos'
+import { useBasicHosDataContext } from '@/providers/icu-provider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Component } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -41,7 +41,8 @@ export default function Group({
   const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [hosGroupList, setHosGroupList] = useState<string[]>([])
+
+  const { refresh } = useRouter()
 
   const form = useForm<z.infer<typeof groupCheckFormSchema>>({
     resolver: zodResolver(groupCheckFormSchema),
@@ -50,11 +51,9 @@ export default function Group({
     },
   })
 
-  useEffect(() => {
-    getHosGroupList(hos_id as string).then((data) => {
-      setHosGroupList(data)
-    })
-  }, [hos_id])
+  const {
+    basicHosData: { groupListData },
+  } = useBasicHosDataContext()
 
   useEffect(() => {
     if (!isDialogOpen) {
@@ -72,6 +71,7 @@ export default function Group({
     })
 
     setIsSubmitting(false)
+    refresh()
     setIsDialogOpen(false)
   }
 
@@ -102,7 +102,7 @@ export default function Group({
               name="groupList"
               render={() => (
                 <FormItem>
-                  {hosGroupList.map((item) => (
+                  {groupListData.map((item) => (
                     <FormField
                       key={item}
                       control={form.control}

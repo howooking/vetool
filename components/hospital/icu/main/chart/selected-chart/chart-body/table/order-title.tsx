@@ -10,23 +10,22 @@ import {
 } from '@/components/ui/tooltip'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
+import { useBasicHosDataContext } from '@/providers/icu-provider'
 import { IcuOrderColors } from '@/types/adimin'
-import type {
-  CopiedOrder,
-  IcuChartOrderJoined,
-  SelectedIcuOrder,
-} from '@/types/icu'
+import type { SelectedIcuOrder } from '@/types/icu'
 
 export default function OrderTitle({
   order,
-  orderColors,
   preview,
 }: {
   order: SelectedIcuOrder
-  orderColors: IcuOrderColors
   preview?: boolean
 }) {
   const { order_comment, order_name, order_type } = order
+
+  const {
+    basicHosData: { orderColorsData },
+  } = useBasicHosDataContext()
 
   const { toggleModal, setIsEditMode, setChartOrder } = useCreateOrderStore()
 
@@ -42,7 +41,7 @@ export default function OrderTitle({
     <TableCell
       className={cn('w-[320px] p-0')}
       style={{
-        background: orderColors[order_type as keyof IcuOrderColors],
+        background: orderColorsData[order_type as keyof IcuOrderColors],
       }}
     >
       <TooltipProvider delayDuration={20}>

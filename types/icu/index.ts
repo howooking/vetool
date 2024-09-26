@@ -246,3 +246,19 @@ export type Treatment = {
   tx_result: string | null
   tx_comment: string | null
 }
+
+export type IcuSidebarData = {
+  vets: {
+    sub_vet: string
+    main_vet: string
+  }
+  in_date: string
+  patient: {
+    name: string
+    breed: string
+    patient_id: string
+  }
+  out_date: string | null
+  icu_io_id: string
+  group_list: string[]
+}
