@@ -38,15 +38,17 @@ export default function ChartTable({
 
   const sortedOrders = useMemo(
     () =>
-      orders.sort(
-        (prev, next) =>
-          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-            (order) => order === prev.order_type,
-          ) -
-          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-            (order) => order === next.order_type,
-          ),
-      ),
+      orders
+        .sort((prev, next) => prev.order_name.localeCompare(next.order_name))
+        .sort(
+          (prev, next) =>
+            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+              (order) => order === prev.order_type,
+            ) -
+            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+              (order) => order === next.order_type,
+            ),
+        ),
     [orders],
   )
 
@@ -56,12 +58,7 @@ export default function ChartTable({
         <TableRow>
           <TableHead className="relative flex w-[320px] items-center justify-center gap-2 text-center">
             <span>오더 목록</span>
-            {!preview && (
-              <OrderDialog
-                icuIoId={icu_io.icu_io_id}
-                icuChartId={icu_chart_id}
-              />
-            )}
+            {!preview && <OrderDialog icuChartId={icu_chart_id} />}
           </TableHead>
 
           {TIMES.map((time) => (

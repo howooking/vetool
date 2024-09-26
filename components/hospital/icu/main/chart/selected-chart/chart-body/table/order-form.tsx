@@ -30,13 +30,11 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export default function OrderForm({
-  icuIoId,
   icuChartId,
-  isSettingMode,
+  isDefaultOrderSetting,
 }: {
-  icuIoId?: string
   icuChartId?: string
-  isSettingMode?: boolean
+  isDefaultOrderSetting?: boolean
 }) {
   const { hos_id } = useParams()
   const { refresh } = useRouter()
@@ -52,18 +50,15 @@ export default function OrderForm({
   const [startTime, setStartTime] = useState<string>('undefined')
   const [timeTerm, setTimeTerm] = useState<string>('undefined')
   const [orderTime, setOrderTime] = useState<string[]>(
-    selectedChartOrder.icu_chart_order_time || new Array(24).fill('0'),
+    selectedChartOrder.order_times || new Array(24).fill('0'),
   )
 
   const form = useForm<z.infer<typeof orderSchema>>({
     resolver: zodResolver(orderSchema),
     defaultValues: {
-      icu_chart_order_type:
-        selectedChartOrder.icu_chart_order_type ?? undefined,
-      icu_chart_order_name:
-        selectedChartOrder.icu_chart_order_name ?? undefined,
-      icu_chart_order_comment:
-        selectedChartOrder.icu_chart_order_comment ?? undefined,
+      icu_chart_order_type: selectedChartOrder.order_type ?? undefined,
+      icu_chart_order_name: selectedChartOrder.order_name ?? undefined,
+      icu_chart_order_comment: selectedChartOrder.order_comment ?? undefined,
     },
   })
 
@@ -74,7 +69,7 @@ export default function OrderForm({
     const orderComment = values.icu_chart_order_comment ?? ''
     const orderType = values.icu_chart_order_type
 
-    if (isSettingMode) {
+    if (isDefaultOrderSetting) {
       await upsertDefaultChartOrder(hos_id as string, defaultChartId, {
         default_chart_order_name: trimmedOrderName,
         default_chart_order_comment: orderComment,
@@ -84,8 +79,7 @@ export default function OrderForm({
     } else {
       await upsertOrder(
         icuChartId!,
-        icuIoId!,
-        selectedChartOrder.icu_chart_order_id!,
+        selectedChartOrder.order_id!,
         orderTime,
         hos_id as string,
         {
@@ -188,7 +182,7 @@ export default function OrderForm({
           )}
         />
 
-        {!isSettingMode && (
+        {!isDefaultOrderSetting && (
           <OrderTimeSettings
             startTime={startTime}
             timeTerm={timeTerm}
@@ -204,7 +198,7 @@ export default function OrderForm({
             <DeleteOrderAlertDialog
               selectedChartOrder={selectedChartOrder as IcuChartOrderJoined}
               toggleModal={toggleModal}
-              isSettingMode={isSettingMode}
+              isDefaultOrderSetting={isDefaultOrderSetting}
             />
           )}
 

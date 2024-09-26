@@ -1129,7 +1129,6 @@ export type Database = {
           icu_chart_tx_images: string[] | null
           icu_chart_tx_log: Json[] | null
           icu_chart_tx_result: string | null
-          icu_io_id: string | null
           time: number
           updated_at: string | null
         }
@@ -1142,7 +1141,6 @@ export type Database = {
           icu_chart_tx_images?: string[] | null
           icu_chart_tx_log?: Json[] | null
           icu_chart_tx_result?: string | null
-          icu_io_id?: string | null
           time: number
           updated_at?: string | null
         }
@@ -1155,7 +1153,6 @@ export type Database = {
           icu_chart_tx_images?: string[] | null
           icu_chart_tx_log?: Json[] | null
           icu_chart_tx_result?: string | null
-          icu_io_id?: string | null
           time?: number
           updated_at?: string | null
         }
@@ -1173,13 +1170,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "icu_orders"
             referencedColumns: ["icu_chart_order_id"]
-          },
-          {
-            foreignKeyName: "icu_txs_icu_io_id_fkey"
-            columns: ["icu_io_id"]
-            isOneToOne: false
-            referencedRelation: "icu_io"
-            referencedColumns: ["icu_io_id"]
           },
         ]
       }
@@ -1575,6 +1565,12 @@ export type Database = {
           new_chart_id_input: string
         }
         Returns: undefined
+      }
+      get_drug_product_details: {
+        Args: {
+          hos_id_input: string
+        }
+        Returns: Json
       }
       get_drugs: {
         Args: {

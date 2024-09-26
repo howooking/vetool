@@ -16,15 +16,15 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
   updatedLogs?: TxLog[],
 ) => {
   const { data: returningData, error: upsertIcuChartTxError } = await supabase
-    .from('icu_chart_tx')
+    .from('icu_txs')
     .upsert({
       hos_id: hosId,
       icu_chart_tx_id: txLocalState?.txId,
-      icu_io_id: txLocalState?.icuIoId,
       icu_chart_order_id: txLocalState?.icuChartOrderId,
       icu_chart_tx_comment: txLocalState?.txComment,
       icu_chart_tx_result: txLocalState?.txResult,
       icu_chart_tx_log: updatedLogs,
+      time: txLocalState?.time!,
     })
     .select('icu_chart_tx_id')
     .single()
@@ -34,24 +34,24 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
     redirect(`/error?message=${upsertIcuChartTxError.message}`)
   }
 
-  if (txLocalState?.isNotificationChecked) {
-    const { error: notificationError } = await supabase
-      .from('icu_notification')
-      .insert({
-        hos_id: hosId,
-        patient_id: patientId,
-        icu_chart_id: chartId,
-        notification_title: txLocalState.orderName!,
-        notification_content: `${txLocalState?.txResult!} / ${txLocalState?.txComment}`,
-        notification_time: txLocalState.time!,
-        target_date: targetDate,
-      })
+  // if (txLocalState?.isNotificationChecked) {
+  //   const { error: notificationError } = await supabase
+  //     .from('icu_notification')
+  //     .insert({
+  //       hos_id: hosId,
+  //       patient_id: patientId,
+  //       icu_chart_id: chartId,
+  //       notification_title: txLocalState.orderName!,
+  //       notification_content: `${txLocalState?.txResult!} / ${txLocalState?.txComment}`,
+  //       notification_time: txLocalState.time!,
+  //       target_date: targetDate,
+  //     })
 
-    if (notificationError) {
-      console.log(notificationError)
-      redirect(`/error?message=${notificationError.message}`)
-    }
-  }
+  //   if (notificationError) {
+  //     console.log(notificationError)
+  //     redirect(`/error?message=${notificationError.message}`)
+  //   }
+  // }
 
   if (txLocalState?.txId) return returningData.icu_chart_tx_id
 

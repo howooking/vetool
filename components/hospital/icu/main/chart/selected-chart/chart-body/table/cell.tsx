@@ -36,7 +36,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     toggleOrderTime,
     handleUpdateOrderTime,
   }) => {
-    const cellInput = React.useRef<HTMLInputElement>(null)
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
 
@@ -144,7 +143,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       <TableCell className="p-0">
         <div className="relative overflow-hidden">
           <Input
-            ref={cellInput}
             id={`${icuChartOrderId}&${time}`}
             className={cn(
               'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',

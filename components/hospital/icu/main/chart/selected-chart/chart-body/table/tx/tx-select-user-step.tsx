@@ -18,7 +18,7 @@ import type { TxLog } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { format } from 'date-fns'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -66,7 +66,6 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
 
       await uploadTxImage(txId, txImageState ?? [])
       // const test = await getTxImageList(txId)
-
       reset()
 
       toast({

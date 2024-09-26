@@ -30,15 +30,13 @@ export default function OrderTitle({
 
   const { toggleModal, setIsEditMode, setChartOrder } = useCreateOrderStore()
 
-  // const handleDialogOpen = () => {
-  //   if (preview) return
+  const handleDialogOpen = () => {
+    if (preview) return
 
-  //   toggleModal()
-  //   setIsEditMode(true)
-  //   setChartOrder({
-
-  //   })
-  // }
+    toggleModal()
+    setIsEditMode(true)
+    setChartOrder(order)
+  }
 
   return (
     <TableCell
@@ -52,7 +50,7 @@ export default function OrderTitle({
           <TooltipTrigger asChild>
             <Button
               variant="ghost"
-              // onClick={handleDialogOpen}
+              onClick={handleDialogOpen}
               className={cn(
                 'flex w-[320px] justify-between rounded-none bg-transparent px-2',
                 preview ? 'cursor-not-allowed' : 'cursor-pointer',

@@ -21,17 +21,17 @@ import { useRouter } from 'next/navigation'
 export default function DeleteOrderAlertDialog({
   selectedChartOrder,
   toggleModal,
-  isSettingMode,
+  isDefaultOrderSetting,
 }: {
   selectedChartOrder: IcuChartOrderJoined
   toggleModal: () => void
-  isSettingMode?: boolean
+  isDefaultOrderSetting?: boolean
 }) {
   const { refresh } = useRouter()
   const { defaultChartId } = useCreateOrderStore()
 
   const handleDeleteOrderClick = async () => {
-    if (isSettingMode && defaultChartId) {
+    if (isDefaultOrderSetting && defaultChartId) {
       await deleteDefaultChartOrder(defaultChartId)
       toggleModal()
       refresh()

@@ -7,7 +7,7 @@ const supabase = createClient()
 
 export const deleteOrder = async (chartOrderId: string) => {
   const { error: deleteOrderError } = await supabase
-    .from('icu_chart_order')
+    .from('icu_orders')
     .delete()
     .match({ icu_chart_order_id: chartOrderId })
 
@@ -19,7 +19,6 @@ export const deleteOrder = async (chartOrderId: string) => {
 
 export const upsertOrder = async (
   icuChartId: string,
-  icuIoId: string,
   icuChartOrderId: string,
   orderTime: string[],
   hos_id: string,
@@ -29,16 +28,13 @@ export const upsertOrder = async (
     icu_chart_order_type: string
   },
 ) => {
-  const { error: upsertOrderError } = await supabase
-    .from('icu_chart_order')
-    .upsert({
-      icu_chart_order_id: icuChartOrderId,
-      icu_chart_id: icuChartId,
-      icu_io_id: icuIoId,
-      icu_chart_order_time: orderTime,
-      hos_id,
-      ...order,
-    })
+  const { error: upsertOrderError } = await supabase.from('icu_orders').upsert({
+    icu_chart_order_id: icuChartOrderId,
+    icu_chart_id: icuChartId,
+    icu_chart_order_time: orderTime,
+    hos_id,
+    ...order,
+  })
 
   if (upsertOrderError) {
     console.log(upsertOrderError)
@@ -50,7 +46,7 @@ export const updateOrderTime = async (
   orderTime: string[],
 ) => {
   const { error: updateOrderTimeError } = await supabase
-    .from('icu_chart_order')
+    .from('icu_orders')
     .update({ icu_chart_order_time: orderTime })
     .match({ icu_chart_order_id: icuChartOrderId })
 

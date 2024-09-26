@@ -13,13 +13,7 @@ import {
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { Plus } from 'lucide-react'
 
-export default function OrderDialog({
-  icuIoId,
-  icuChartId,
-}: {
-  icuIoId: string
-  icuChartId: string
-}) {
+export default function OrderDialog({ icuChartId }: { icuChartId: string }) {
   const { isModalOpen, isEditMode, toggleModal, setIsEditMode, resetState } =
     useCreateOrderStore()
   const handleDialogOpen = () => {
@@ -44,7 +38,7 @@ export default function OrderDialog({
           <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
           <DialogDescription />
         </DialogHeader>
-        <OrderForm icuIoId={icuIoId} icuChartId={icuChartId} />
+        <OrderForm icuChartId={icuChartId} />
       </DialogContent>
     </Dialog>
   )
