@@ -1,23 +1,24 @@
 'use client'
 
 import { IcuOrderColors } from '@/types/adimin'
-import { IcuData, Vet } from '@/types/icu'
+import type { Vet } from '@/types/icu'
 import React, { createContext, useContext } from 'react'
 
 interface IcuContextType {
-  basicHosData: basicHosData
+  basicHosData: BasicHosData
 }
 
-type basicHosData = {
+type BasicHosData = {
   vetsListData: Vet[]
   groupListData: string[]
   orderColorsData: IcuOrderColors
+  memoNameListData: string[]
 }
 
-const IcuContext = createContext<IcuContextType | undefined>(undefined)
+const BasicHosDataContext = createContext<IcuContextType | undefined>(undefined)
 
 export const useBasicHosDataContext = () => {
-  const context = useContext(IcuContext)
+  const context = useContext(BasicHosDataContext)
   if (context === undefined) {
     throw new Error('useIcuContext must be used within an IcuProvider')
   }
@@ -25,12 +26,12 @@ export const useBasicHosDataContext = () => {
 }
 
 export const BasicHosDataProvider: React.FC<{
-  basicHosData: basicHosData
+  basicHosData: BasicHosData
   children: React.ReactNode
 }> = ({ basicHosData, children }) => {
   return (
-    <IcuContext.Provider value={{ basicHosData }}>
+    <BasicHosDataContext.Provider value={{ basicHosData }}>
       {children}
-    </IcuContext.Provider>
+    </BasicHosDataContext.Provider>
   )
 }

@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/form'
 import { toast } from '@/components/ui/use-toast'
 import { updateGroup } from '@/lib/services/icu/update-icu-chart-infos'
-import { useBasicHosDataContext } from '@/providers/icu-provider'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Component } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -38,7 +38,6 @@ export default function Group({
   currentGroups: string[]
   icuIoId: string
 }) {
-  const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 

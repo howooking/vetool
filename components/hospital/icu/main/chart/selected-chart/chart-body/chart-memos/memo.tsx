@@ -7,12 +7,12 @@ import { useEffect, useState } from 'react'
 export default function Memo({
   memo,
   icuChartId,
-  hosIcuMemoNames,
+  memoNameListData,
   index,
 }: {
   memo: string
   icuChartId: string
-  hosIcuMemoNames: string[]
+  memoNameListData: string[]
   index: number
 }) {
   const [memoInput, setMemoInput] = useState(memo)
@@ -36,7 +36,7 @@ export default function Memo({
     await updateMemo(updateMemoQuery, icuChartId)
 
     toast({
-      title: `${hosIcuMemoNames[index]}을(를) 변경하였습니다`,
+      title: `${memoNameListData[index]}을(를) 변경하였습니다`,
     })
 
     setIsUpdating(false)
@@ -60,7 +60,7 @@ export default function Memo({
           className="text-xs text-muted-foreground"
           htmlFor={`memo-${index}`}
         >
-          {hosIcuMemoNames[index]}
+          {memoNameListData[index]}
         </Label>
       </div>
       <Textarea

@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuOrderColors } from '@/types/adimin'
 import type { IcuSidebarData, Vet } from '@/types/icu'
 import type { PatientData } from '@/types/patients'
 import { redirect } from 'next/navigation'
@@ -26,7 +25,7 @@ export const getInitialIcuData = async (hosId: string, targetDate: string) => {
 
     supabase
       .from('hospitals')
-      .select('order_color')
+      .select('order_color, group_list, icu_memo_names')
       .match({ hos_id: hosId })
       .single(),
 
@@ -37,51 +36,40 @@ export const getInitialIcuData = async (hosId: string, targetDate: string) => {
       .match({ is_alive: true })
       .order('created_at', { ascending: false })
       .returns<PatientData[]>(),
-
-    supabase
-      .from('hospitals')
-      .select('group_list')
-      .match({ hos_id: hosId })
-      .single(),
   ])
 
   const [
     { data: icuSidebarData, error: icuSidebarDataError },
     { data: vetsListData, error: vetsListDataError },
-    { data: orderColorsData, error: orderColorsDataError },
+    { data: basicHosData, error: basicHosDataError },
     { data: patientsData, error: patientsDataError },
-    { data: groupListData, error: groupListDataError },
   ] = await promiseArray
 
   if (
     icuSidebarDataError ||
     vetsListDataError ||
-    orderColorsDataError ||
-    patientsDataError ||
-    groupListDataError
+    basicHosDataError ||
+    patientsDataError
   ) {
     console.error({
       icuSidebarDataError,
       vetsListDataError,
-      orderColorsDataError,
+      basicHosDataError,
       patientsDataError,
-      hosGroupListDataError: groupListDataError,
     })
     redirect(
       `/error?message=${
         icuSidebarDataError?.message ||
         vetsListDataError?.message ||
-        orderColorsDataError?.message ||
-        patientsDataError?.message ||
-        groupListDataError?.message
+        basicHosDataError?.message ||
+        patientsDataError?.message
       }`,
     )
   }
   return {
     icuSidebarData,
     vetsListData,
-    orderColorsData: orderColorsData.order_color as IcuOrderColors,
+    basicHosData,
     patientsData,
-    groupListData: groupListData.group_list,
   }
 }

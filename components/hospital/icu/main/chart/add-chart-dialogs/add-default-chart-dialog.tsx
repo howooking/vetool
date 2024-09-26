@@ -29,11 +29,7 @@ export default function AddDefaultChartDialog({
   const handleAddDefaultChart = async () => {
     setIsDialogOpen(false)
 
-    await registerDefaultChart(
-      hos_id as string,
-      chartData.icu_chart_id,
-      chartData.icu_io.icu_io_id,
-    )
+    await registerDefaultChart(hos_id as string, chartData.icu_chart_id)
 
     toast({
       title: '기본형식의 차트를 생성했습니다',

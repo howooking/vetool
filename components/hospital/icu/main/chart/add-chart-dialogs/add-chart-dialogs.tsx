@@ -8,12 +8,10 @@ import CopyPrevChartDialog from './copy-prev-chart-dialog'
 
 export default function AddChartDialogs({
   chartData,
-  orderColors,
   isFirstChart,
 }: {
   isFirstChart: boolean
   chartData: SelectedChart
-  orderColors: IcuOrderColors
 }) {
   const { target_date } = useParams()
 

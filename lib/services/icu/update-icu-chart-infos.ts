@@ -122,7 +122,7 @@ export const updateMemo = async (
   const supabase = createClient()
 
   const { error: memoError } = await supabase
-    .from('icu_chart')
+    .from('icu_charts')
     .update(query)
     .match({ icu_chart_id: icuChartId })
 

@@ -49,14 +49,14 @@ export default function ExportChartBody({
     <div className="p-4">
       <Badge className="mb-4">{targetDate}</Badge>
 
-      <ChartBody
+      {/* <ChartBody
         selectedChart={selectedChart}
         isPatientOut={isPatientOut}
         vetsList={vetsList}
         orderColors={orderColors}
         selectedIo={selectedIo}
         selectedChartOrders={sortedChartOrders}
-      />
+      /> */}
     </div>
   )
 }

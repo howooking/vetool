@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { useBasicHosDataContext } from '@/providers/icu-provider'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import type { MainAndSubVet } from '@/types/icu'
 import { Stethoscope } from 'lucide-react'
 import Image from 'next/image'

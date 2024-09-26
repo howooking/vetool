@@ -56,7 +56,7 @@ export default function IcuSidebar({
     )
 
     return { filteredIcuIoData, excludedIcuIoData }
-  }, [filters])
+  }, [filters.selectedGroup, filters.selectedVet, icuSidebarData])
 
   if (icuSidebarData.length === 0) {
     return (

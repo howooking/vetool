@@ -36,9 +36,9 @@ export default function OrderTableBody({
     setIsEditMode(true)
     setDefaultChartId(sortedOrder.default_chart_id)
     setChartOrder({
-      icu_chart_order_name: sortedOrder.default_chart_order_name,
-      icu_chart_order_comment: sortedOrder.default_chart_order_comment,
-      icu_chart_order_type: sortedOrder.default_chart_order_type,
+      order_name: sortedOrder.default_chart_order_name,
+      order_comment: sortedOrder.default_chart_order_comment,
+      order_type: sortedOrder.default_chart_order_type,
     })
   }
 

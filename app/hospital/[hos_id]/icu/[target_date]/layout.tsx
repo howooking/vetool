@@ -2,7 +2,8 @@ import IcuFooter from '@/components/hospital/icu/footer/icu-footer'
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
 import { getInitialIcuData } from '@/lib/services/icu/get-initial-icu-data'
-import { BasicHosDataProvider } from '@/providers/icu-provider'
+import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-privider'
+import type { IcuOrderColors } from '@/types/adimin'
 import React from 'react'
 
 export default async function IcuPageLayout({
@@ -20,20 +21,22 @@ export default async function IcuPageLayout({
   return (
     <BasicHosDataProvider
       basicHosData={{
-        groupListData: initialIcuData.groupListData,
-        orderColorsData: initialIcuData.orderColorsData,
         vetsListData: initialIcuData.vetsListData,
+        groupListData: initialIcuData.basicHosData.group_list,
+        orderColorsData: initialIcuData.basicHosData
+          .order_color as IcuOrderColors,
+        memoNameListData: initialIcuData.basicHosData.icu_memo_names,
       }}
     >
       <IcuHeader
         hosId={params.hos_id}
-        groupList={initialIcuData.groupListData}
+        groupList={initialIcuData.basicHosData.group_list}
         patientsData={initialIcuData.patientsData}
         vetsData={initialIcuData.vetsListData}
       />
       <div className="flex">
         <IcuSidebar
-          hosGroupList={initialIcuData.groupListData}
+          hosGroupList={initialIcuData.basicHosData.group_list}
           icuSidebarData={initialIcuData.icuSidebarData}
           vetsListData={initialIcuData.vetsListData}
         />

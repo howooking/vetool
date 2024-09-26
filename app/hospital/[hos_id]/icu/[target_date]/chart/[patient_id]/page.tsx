@@ -2,16 +2,6 @@ import AddChartDialogs from '@/components/hospital/icu/main/chart/add-chart-dial
 import Chart from '@/components/hospital/icu/main/chart/chart'
 import { getIcuChartByPatientId } from '@/lib/services/icu/get-icu-chart-by-patient-id'
 
-export const TEMP_COLOR = {
-  po: '#faf5ff',
-  feed: '#fdf2f8',
-  test: '#fefce8',
-  fluid: '#eef2ff',
-  manual: '#ecfeff',
-  checklist: '#fff7ed',
-  injection: '#f0fdf4',
-}
-
 export default async function PatientChartPage({
   params,
 }: {
@@ -27,24 +17,14 @@ export default async function PatientChartPage({
     params.patient_id,
   )
 
+  // chart가 없는 경우 => 첫날 차트가 아닌 경우
   if (!chartData) {
-    return (
-      <AddChartDialogs
-        orderColors={TEMP_COLOR}
-        chartData={chartData}
-        isFirstChart={false}
-      />
-    )
+    return <AddChartDialogs chartData={chartData} isFirstChart={false} />
   }
 
+  // chart가 있고 order가 없는 경우 => 첫날차트
   if (chartData.orders.length === 0) {
-    return (
-      <AddChartDialogs
-        isFirstChart={true}
-        orderColors={TEMP_COLOR}
-        chartData={chartData}
-      />
-    )
+    return <AddChartDialogs isFirstChart={true} chartData={chartData} />
   }
 
   return <Chart chartData={chartData} />

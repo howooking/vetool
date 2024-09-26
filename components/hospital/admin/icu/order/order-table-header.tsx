@@ -44,7 +44,7 @@ export default function OrderTableHeader() {
                 <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
                 <DialogDescription />
               </DialogHeader>
-              <OrderForm isSettingMode />
+              <OrderForm isDefaultOrderSetting />
             </DialogContent>
           </Dialog>
         </TableHead>

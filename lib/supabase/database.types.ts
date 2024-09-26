@@ -1605,7 +1605,6 @@ export type Database = {
         Args: {
           hos_id_input: string
           icu_chart_id_input: string
-          icu_io_id_input: string
         }
         Returns: undefined
       }

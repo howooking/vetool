@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/tooltip'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
-import { useBasicHosDataContext } from '@/providers/icu-provider'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { IcuOrderColors } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu'
 
