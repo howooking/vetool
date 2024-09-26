@@ -18,7 +18,7 @@ export const registerIcuPatient = async (
   main_vet: string,
   sub_vet?: string,
 ) => {
-  const { error: rpcError } = await supabase.rpc('register_icu_patient', {
+  const { error: rpcError } = await supabase.rpc('register_icu', {
     hos_id_input: hosId,
     icu_io_dx_input: dx,
     icu_io_cc_input: cc,

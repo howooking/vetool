@@ -1585,7 +1585,7 @@ export type Database = {
         }
         Returns: Json
       }
-      get_icu_chart_data_by_patient_id: {
+      get_icu_chart_data: {
         Args: {
           hos_id_input: string
           target_date_input: string
@@ -1617,6 +1617,21 @@ export type Database = {
           birth_input: string
         }
         Returns: string
+      }
+      register_icu: {
+        Args: {
+          hos_id_input: string
+          patient_id_input: string
+          icu_io_dx_input: string
+          icu_io_cc_input: string
+          in_date_input: string
+          out_due_date_input: string
+          main_vet_input: string
+          sub_vet_input: string
+          group_list_input: Json
+          age_in_days_input: number
+        }
+        Returns: undefined
       }
       register_icu_patient: {
         Args: {

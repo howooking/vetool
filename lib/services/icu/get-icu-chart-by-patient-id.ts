@@ -12,7 +12,7 @@ export const getIcuChartByPatientId = async (
   const supabase = createClient()
 
   const { data: icuChartData, error: icuChartDataError } = await supabase
-    .rpc('get_icu_chart_data_by_patient_id', {
+    .rpc('get_icu_chart_data', {
       hos_id_input: hosId,
       target_date_input: targetDate,
       patient_id_input: patient_id,
