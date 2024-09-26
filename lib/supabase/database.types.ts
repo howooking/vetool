@@ -327,6 +327,48 @@ export type Database = {
           },
         ]
       }
+      icu_bookmarks: {
+        Row: {
+          bookmark_comment: string | null
+          bookmark_id: string
+          bookmark_name: string
+          created_at: string
+          hos_id: string
+          icu_chart_id: string
+        }
+        Insert: {
+          bookmark_comment?: string | null
+          bookmark_id?: string
+          bookmark_name?: string
+          created_at?: string
+          hos_id: string
+          icu_chart_id: string
+        }
+        Update: {
+          bookmark_comment?: string | null
+          bookmark_id?: string
+          bookmark_name?: string
+          created_at?: string
+          hos_id?: string
+          icu_chart_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_bookmarks_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "icu_bookmarks_icu_chart_id_fkey"
+            columns: ["icu_chart_id"]
+            isOneToOne: true
+            referencedRelation: "icu_charts"
+            referencedColumns: ["icu_chart_id"]
+          },
+        ]
+      }
       icu_chart: {
         Row: {
           bookmark_id: string | null
@@ -820,7 +862,6 @@ export type Database = {
       }
       icu_charts: {
         Row: {
-          bookmark_id: string | null
           created_at: string
           hos_id: string
           icu_chart_id: string
@@ -836,7 +877,6 @@ export type Database = {
           weight_measured_date: string | null
         }
         Insert: {
-          bookmark_id?: string | null
           created_at?: string
           hos_id: string
           icu_chart_id?: string
@@ -852,7 +892,6 @@ export type Database = {
           weight_measured_date?: string | null
         }
         Update: {
-          bookmark_id?: string | null
           created_at?: string
           hos_id?: string
           icu_chart_id?: string
@@ -868,13 +907,6 @@ export type Database = {
           weight_measured_date?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "icu_charts_bookmark_id_fkey"
-            columns: ["bookmark_id"]
-            isOneToOne: false
-            referencedRelation: "icu_chart_bookmark"
-            referencedColumns: ["bookmark_id"]
-          },
           {
             foreignKeyName: "icu_charts_hos_id_fkey"
             columns: ["hos_id"]

@@ -19,7 +19,7 @@ const pasteOrders = async (prev_chart_id: string, new_chart_id: string) => {
 
 export const pasteChart = async (
   patientId: string,
-  prev_chart_id: string,
+  copiedChartId: string,
   targetDate: string,
 ) => {
   const { data: returningChartData, error: returningChartDataError } =
@@ -53,7 +53,7 @@ export const pasteChart = async (
 
   // 첫 차트인 경우(가장최근의 생성된 차트가 targetDate와 일치) : chart 복사할 필요가 없고 order만 복사
   if (target_date === targetDate) {
-    await pasteOrders(prev_chart_id, icu_chart_id)
+    await pasteOrders(copiedChartId, icu_chart_id)
   }
 
   // 첫차트가 아닌 경우 : 첫차트의 chart data와 order 모두 복사
@@ -82,6 +82,6 @@ export const pasteChart = async (
       redirect(`/error?message=${insertingNewChartError.message}`)
     }
 
-    await pasteOrders(prev_chart_id, createdIcuChartId.icu_chart_id)
+    await pasteOrders(copiedChartId, createdIcuChartId.icu_chart_id)
   }
 }

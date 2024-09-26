@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import AddDefaultChartDialog from './add-default-chart-dialog'
 import CopyPrevChartDialog from './copy-prev-chart-dialog'
 import PasteCopiedChartDialog from './paste-copied-chart-dialog'
+import AddBookmarkChartDialog from './bookmark/add-bookmark-chart-dialog'
 
 export default function AddChartDialogs({
   chartData,
@@ -25,10 +26,7 @@ export default function AddChartDialogs({
 
       <PasteCopiedChartDialog />
 
-      {/* <AddBookmarkChartDialog
-        orderColors={orderColors}
-        selectedIoId={selectedIoId}
-      /> */}
+      <AddBookmarkChartDialog />
     </div>
   )
 }
