@@ -1,10 +1,15 @@
-import ExportChartBody from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog/export-chart-body'
+import ChartBody from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-body'
+import { Badge } from '@/components/ui/badge'
 import { toast } from '@/components/ui/use-toast'
-import { getIcuChartBodyData } from '@/lib/services/icu/get-icu-chart-body-data'
 import { getIoDateRange } from '@/lib/services/icu/get-icu-io-chart'
-import type { IcuOrderColors } from '@/types/adimin'
-import type { Vet } from '@/types/icu'
+import { getInitialIcuData } from '@/lib/services/icu/get-initial-icu-data'
+import { Json } from '@/lib/supabase/database.types'
+import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-privider'
+import { IcuOrderColors } from '@/types/adimin'
+import type { IcuSidebarData, SelectedChart, Vet } from '@/types/icu'
+import { PatientData } from '@/types/patients'
 import html2canvas from 'html2canvas'
+import React, { useEffect, useRef } from 'react'
 import { createRoot } from 'react-dom/client'
 
 // 현재 화면 기준 ScrollWidth & ScrollHeight를 가진 HTMLCanvasElement를 생성
@@ -16,83 +21,95 @@ export const captureContent = async (element: HTMLElement) => {
   })
 }
 
-// 보이지 않는 곳에 DOM 요소 생성, captureContent를 사용하여 캡처 후 언마운트
-export const renderExportChartBody = async (
-  targetDate: string,
-  hos_id: string,
-  selectedPatientId: string,
-  vetsList: Vet[],
-  orderColors: IcuOrderColors,
-  captureRef: React.RefObject<HTMLDivElement>,
-) => {
-  const { selectedIoData, selectedChartData, selectedChartOrdersData } =
-    await getIcuChartBodyData(hos_id, selectedPatientId, targetDate)
-  const isPatientOut = selectedIoData?.out_date !== null
+export const ExportChartBody: React.FC<{
+  chartData: SelectedChart
+  onRender: (element: HTMLDivElement) => void
+}> = ({ chartData, onRender }) => {
+  const ref = useRef<HTMLDivElement>(null)
 
-  const containerDiv = document.createElement('div')
-  containerDiv.style.position = 'absolute'
-  containerDiv.style.left = '-9999px'
-  containerDiv.style.width = `${captureRef.current?.clientWidth}px`
-  containerDiv.style.height = `${captureRef.current?.clientHeight}px`
+  useEffect(() => {
+    if (ref.current) {
+      onRender(ref.current)
+    }
+  }, [onRender])
 
-  const root = createRoot(containerDiv)
-  root.render(
-    <ExportChartBody
-      selectedIo={selectedIoData}
-      selectedChart={selectedChartData}
-      selectedChartOrders={selectedChartOrdersData}
-      isPatientOut={isPatientOut}
-      vetsList={vetsList}
-      orderColors={orderColors}
-      targetDate={targetDate}
-    />,
+  return (
+    <div ref={ref} className="p-4">
+      <Badge className="mb-4">{chartData.target_date}</Badge>
+      <ChartBody chartData={chartData} />
+    </div>
   )
-
-  document.body.appendChild(containerDiv)
-  await new Promise((resolve) => setTimeout(resolve, 100))
-  const canvas = await captureContent(containerDiv)
-  document.body.removeChild(containerDiv)
-  root.unmount()
-
-  return canvas
 }
 
-// isEntireChecked의 boolean 여부에 따라 단일 캡처, 입원일 전체 캡처 로직 수행
+// ExportChartBody를 렌더링하고 캡처하는 함수
+export const renderAndCaptureExportChartBody = (
+  chartData: SelectedChart,
+  initialIcuData: {
+    icuSidebarData: IcuSidebarData[]
+    vetsListData: Vet[]
+    basicHosData: {
+      order_color: Json
+      group_list: string[]
+      icu_memo_names: string[]
+    }
+    patientsData: PatientData[]
+  },
+): Promise<HTMLCanvasElement> => {
+  return new Promise((resolve, reject) => {
+    const container = document.createElement('div')
+    container.style.position = 'absolute'
+    container.style.left = '-9999px'
+    container.style.width = document.body.clientWidth + 'px'
+    container.style.height = document.body.clientHeight + 'px'
+
+    document.body.appendChild(container)
+
+    const handleRender = async (element: HTMLDivElement) => {
+      try {
+        const canvas = await captureContent(element)
+        document.body.removeChild(container)
+        resolve(canvas)
+      } catch (error) {
+        reject(error)
+      }
+    }
+    const root = createRoot(container)
+    root.render(
+      <BasicHosDataProvider
+        basicHosData={{
+          vetsListData: initialIcuData.vetsListData,
+          groupListData: initialIcuData.basicHosData.group_list,
+          orderColorsData: initialIcuData.basicHosData
+            .order_color as IcuOrderColors,
+          memoNameListData: initialIcuData.basicHosData.icu_memo_names,
+        }}
+      >
+        <ExportChartBody chartData={chartData} onRender={handleRender} />,
+      </BasicHosDataProvider>,
+    )
+  })
+}
+
 export const handleExport = async (
-  isEntireChecked: boolean,
-  icu_io_id: string,
-  hos_id: string,
-  selectedPatientId: string,
-  vetsList: Vet[],
-  orderColors: IcuOrderColors,
-  captureRef: React.RefObject<HTMLDivElement>,
-  singleExportFn: (canvas: HTMLCanvasElement) => void,
-  multipleExportFn: (canvases: HTMLCanvasElement[]) => void,
+  chartData: SelectedChart,
+  hosId: string,
+  exportFn: (canvases: HTMLCanvasElement[]) => void,
 ) => {
   try {
-    if (isEntireChecked) {
-      const dateRange = await getIoDateRange(icu_io_id)
+    const dateRange = await getIoDateRange(chartData.icu_io.icu_io_id)
+    const initialIcuData = await getInitialIcuData(hosId, chartData.target_date)
 
-      if (dateRange) {
-        const canvases = await Promise.all(
-          dateRange.map(({ target_date }) =>
-            renderExportChartBody(
-              target_date,
-              hos_id,
-              selectedPatientId,
-              vetsList,
-              orderColors,
-              captureRef,
-            ),
+    if (dateRange) {
+      const canvases = await Promise.all(
+        dateRange.map(({ target_date }) =>
+          renderAndCaptureExportChartBody(
+            { ...chartData, target_date },
+            initialIcuData,
           ),
-        )
-        multipleExportFn(canvases)
-      }
-    } else {
-      if (captureRef.current) {
-        const canvas = await captureContent(captureRef.current)
-        singleExportFn(canvas)
-      }
+        ),
+      )
+
+      exportFn(canvases)
     }
 
     toast({

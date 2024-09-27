@@ -1,34 +1,23 @@
 import { handleExport } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog/export-dialog-utils'
 import { Button } from '@/components/ui/button'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
-import type { IcuOrderColors } from '@/types/adimin'
-import type { IcuChartJoined, Vet } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu'
+import jsPDF from 'jspdf'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { Dispatch, RefObject, SetStateAction, useState } from 'react'
-import jsPDF from 'jspdf'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 export default function ExportPdfButton({
-  captureRef,
   chartData,
   setIsDialogOpen,
-  isEntireChecked,
-  vetsList,
-  orderColors,
 }: {
-  captureRef: RefObject<HTMLDivElement>
-  chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
+  chartData: SelectedChart
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
-  isEntireChecked: boolean
-  vetsList: Vet[]
-  orderColors: IcuOrderColors
 }) {
   const [isExporting, setIsExporting] = useState(false)
+  const { in_date } = chartData.icu_io
+  const { name } = chartData.patient
   const { hos_id } = useParams()
-  const { selectedPatientId } = useIcuSelectedPatientIdStore()
-  const { icu_io_id, in_date } = chartData.icu_io_id
-  const { name } = chartData.patient_id
 
   const generatePdf = (canvases: HTMLCanvasElement[]) => {
     const firstCanvas = canvases[0]
@@ -49,23 +38,13 @@ export default function ExportPdfButton({
 
   const handleExportPdf = async () => {
     setIsExporting(true)
-    await handleExport(
-      isEntireChecked,
-      icu_io_id,
-      hos_id as string,
-      selectedPatientId as string,
-      vetsList,
-      orderColors,
-      captureRef,
-      (canvas) => {
-        const pdf = generatePdf([canvas])
-        pdf.save(`${chartData.target_date}_${name}.pdf`)
-      },
-      (canvases) => {
-        const pdf = generatePdf(canvases)
-        pdf.save(`(입원일_${in_date})_${name}.pdf`)
-      },
-    )
+
+    await handleExport(chartData, hos_id as string, (canvases) => {
+      const pdf = generatePdf(canvases)
+
+      pdf.save(`(입원일_${in_date})_${name}.pdf`)
+    })
+
     setIsExporting(false)
     setIsDialogOpen(false)
   }

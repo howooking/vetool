@@ -3,6 +3,7 @@ import DeleteChartDialog from '@/components/hospital/icu/main/chart/selected-cha
 import type { SelectedChart } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import OutPatientDialog from './out-patient-dialog'
+import ExportDialog from './export-dialog/export-dialog'
 
 export default function HeaderRightButtons({
   chartData,
@@ -10,7 +11,7 @@ export default function HeaderRightButtons({
   chartData: SelectedChart
 }) {
   const { target_date } = useParams()
-  const { icu_chart_id, icu_io, patient, orders } = chartData
+  const { icu_chart_id, icu_io, patient } = chartData
   const isFirstChart = icu_io.in_date === target_date
   return (
     <div className="absolute right-2 top-1.5 hidden gap-1 md:flex">
@@ -18,14 +19,7 @@ export default function HeaderRightButtons({
 
       <OutPatientDialog chartData={chartData} />
 
-      {/* <ExportDioalog
-        name={name}
-        captureRef={captureRef}
-        chartData={chartData}
-        selectedChartOrders={selectedChartOrders}
-        vetsList={vetsList}
-        orderColors={orderColors}
-      /> */}
+      <ExportDialog chartData={chartData} />
 
       <DeleteChartDialog
         icuChartId={icu_chart_id}
