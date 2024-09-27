@@ -1,18 +1,12 @@
 'use client'
 
+import { toast } from '@/components/ui/use-toast'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import type { IcuChartTx } from '@/types'
-import type {
-  CopiedOrder,
-  IcuChartOrderJoined,
-  SelectedIcuOrder,
-} from '@/types/icu'
+import { updateOrderTime } from '@/lib/services/icu/order-mutation'
+import type { SelectedIcuOrder } from '@/types/icu'
 import { useCallback, useEffect, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import Cell from './cell'
-import { updateOrderTime } from '@/lib/services/icu/order-mutation'
-import { toast } from '@/components/ui/use-toast'
-import { set } from 'zod'
 
 export default function OrderCells({
   preview,
@@ -50,7 +44,6 @@ export default function OrderCells({
     <>
       {TIMES.map((time, index) => {
         const isDone =
-          !preview &&
           order_times[index] === '1' &&
           treatments.some((treatment) => treatment.time === time)
 

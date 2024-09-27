@@ -15,26 +15,21 @@ import {
 import { getBookmarkCharts } from '@/lib/services/icu/bookmark'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
+import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { cn } from '@/lib/utils'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { LoaderCircle, Star } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function AddBookmarkChartDialog() {
-  const {
-    basicHosData: { orderColorsData },
-  } = useBasicHosDataContext()
-
   const [isFetching, setIsFetching] = useState(false)
   const [bookmarkCharts, setBookmarkCharts] = useState<
     IcuChartBookmarkJoined[]
   >([])
 
   const { hos_id } = useParams()
-  const { isPreviewModalOpen } = useOrderPreviewStore()
+  const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isBookmarkModalOpen, setBookmarkModalOpen } = useIcuBookmarkStore()
   const { isConfirmCopyDialogOpen } = useCopiedChartStore()
 
@@ -74,7 +69,7 @@ export default function AddBookmarkChartDialog() {
           searchPlaceHolder="즐겨찾기 이름 · 즐겨찾기 설명 · 환자명 검색"
         />
 
-        {isPreviewModalOpen && <PreviewDialog orderColors={orderColorsData} />}
+        {isPreviewDialogOpen && <PreviewDialog />}
         {isConfirmCopyDialogOpen && <ConfirmCopyDialog />}
 
         <DialogFooter>

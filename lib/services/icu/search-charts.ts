@@ -82,6 +82,7 @@ export const getSelectedCharts = async (icuIoId: string) => {
   return selectedIcuChartData
 }
 
+// 삭제
 export const getSelectedChartOrders = async (chartId: string) => {
   const { data: icuChartOrderData, error: icuChartOrderDataError } =
     await supabase

@@ -154,6 +154,7 @@ export type IcuChartBookmarkJoined = {
   }
 } & IcuChartBookmark
 
+// 삭제 예정
 export type CopiedOrder = IcuChartOrder & {
   icu_io_id: IcuIo
 }

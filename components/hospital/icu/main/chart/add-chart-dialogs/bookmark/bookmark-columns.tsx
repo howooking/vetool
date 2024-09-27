@@ -81,7 +81,9 @@ export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
     accessorKey: 'preview',
     header: '미리보기',
     cell: ({ row }) => {
-      return <PreviewButton chartId={row.original.icu_chart_id.icu_chart_id} />
+      const patientId = row.original.icu_chart_id.patient_id.patient_id
+      const targetDate = row.original.icu_chart_id.target_date
+      return <PreviewButton patientId={patientId} targetDate={targetDate} />
     },
   },
   {

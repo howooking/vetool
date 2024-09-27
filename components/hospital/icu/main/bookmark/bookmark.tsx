@@ -5,7 +5,7 @@ import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/prev
 import { bookmarkColumns } from '@/components/hospital/icu/main/bookmark/bookmark-columns'
 import DataTable from '@/components/ui/data-table'
 import { getBookmarkCharts } from '@/lib/services/icu/bookmark'
-import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
+import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import type { IcuOrderColors } from '@/types/adimin'
 import type { IcuChartBookmarkJoined } from '@/types/icu'
 import { useParams } from 'next/navigation'
@@ -16,7 +16,7 @@ export default function Bookmark({
 }: {
   orderColors: IcuOrderColors
 }) {
-  const { isPreviewModalOpen } = useOrderPreviewStore()
+  const { isPreviewDialogOpen } = usePreviewDialogStore()
   const [isFetching, setIsFetching] = useState(true)
   const [bookmarkCharts, setBookmarkCharts] = useState<
     IcuChartBookmarkJoined[]
@@ -49,7 +49,7 @@ export default function Bookmark({
         rowLength={10}
       />
 
-      {isPreviewModalOpen && <PreviewDialog orderColors={orderColors} />}
+      {isPreviewDialogOpen && <PreviewDialog />}
     </div>
   )
 }
