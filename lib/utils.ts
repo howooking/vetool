@@ -208,3 +208,15 @@ export const calculateTotalDrugAmount = (
 
   return total.toFixed(2)
 }
+
+export const formatOrderName = (name: string, type: string) => {
+  if (type === 'injection') {
+    const parts = name.split('#')
+
+    if (parts.length > 1) {
+      name = parts[0] + '#' + parts[1] + 'ml/kg ' + parts.slice(2).join('#')
+    }
+  }
+
+  return name.replaceAll('#', ' ')
+}

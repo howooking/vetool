@@ -4,8 +4,6 @@ import DrugDoseInput from '@/components/hospital/icu/main/chart/selected-chart/c
 import DrugDoseUnitRadio from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/drug-order/drug-dose-unit-radio'
 import DrugSelectField from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/drug-order/drug-select-field'
 import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-form/order-schema'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { calculateTotalDrugAmount } from '@/lib/utils'
 import type { DrugProductsJoined } from '@/types/icu'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -17,11 +15,13 @@ export default function DrugFormField({
   drugs,
   weight,
   species,
+  isSettingMode,
 }: {
   form: UseFormReturn<z.infer<typeof orderSchema>>
   drugs?: DrugProductsJoined[]
   weight?: string
   species?: string
+  isSettingMode?: boolean
 }) {
   const drugOrders = form.getValues('icu_chart_order_name')
   const totalAmount = form
@@ -92,13 +92,13 @@ export default function DrugFormField({
     }
   }, [drugMassVolume, getTotalAmount, isAutoCalculate])
 
-  const handleTotalAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDrugTotalAmount(e.target.value)
+  const handleTotalAmountChange = (value: string) => {
+    setDrugTotalAmount(value)
     setIsAutoCalculate(false)
   }
 
-  const handleDosageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDrugDosage(e.target.value)
+  const handleDosageChange = (value: string) => {
+    setDrugDosage(value)
     setIsAutoCalculate(true)
   }
 
@@ -113,6 +113,7 @@ export default function DrugFormField({
         drugName={drugName}
         setDrugName={setDrugName}
         setDrugMassVolume={setDrugMassVolume}
+        setIsAutoCalculate={setIsAutoCalculate}
         drugs={drugs}
       />
 
@@ -148,24 +149,28 @@ export default function DrugFormField({
           ]}
         />
 
-        <DrugDoseInput
-          label={
-            <div className="mb-1 flex items-center gap-1">
-              약물 총량
-              <HelperTooltip className="w-4" variant="destructive">
-                자동 계산된 총량은 참고용으로만 사용해주세요
-              </HelperTooltip>
-            </div>
-          }
-          value={drugTotalAmount}
-          onChange={handleTotalAmountChange}
-          unit={drugTotalUnit}
-        />
+        {!isSettingMode && (
+          <>
+            <DrugDoseInput
+              label={
+                <div className="mb-1 flex items-center gap-1">
+                  약물 총량
+                  <HelperTooltip className="w-4" variant="destructive">
+                    자동 계산된 총량은 참고용으로만 사용해주세요
+                  </HelperTooltip>
+                </div>
+              }
+              value={drugTotalAmount}
+              onChange={handleTotalAmountChange}
+              unit={drugTotalUnit}
+            />
 
-        <DrugDoseUnitRadio
-          drugTotalUnit={drugTotalUnit}
-          setDrugTotalUnit={setDrugTotalUnit}
-        />
+            <DrugDoseUnitRadio
+              drugTotalUnit={drugTotalUnit}
+              setDrugTotalUnit={setDrugTotalUnit}
+            />
+          </>
+        )}
       </div>
     </>
   )

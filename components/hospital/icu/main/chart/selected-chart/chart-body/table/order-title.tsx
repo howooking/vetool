@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import { cn } from '@/lib/utils'
+import { cn, formatOrderName } from '@/lib/utils'
 import { IcuOrderColors } from '@/types/adimin'
 import type { CopiedOrder, IcuChartOrderJoined } from '@/types/icu'
 
@@ -36,18 +36,6 @@ export default function OrderTitle({
     toggleModal()
     setIsEditMode(true)
     setChartOrder(order as IcuChartOrderJoined)
-  }
-
-  const formatOrderName = (name: string, type: string) => {
-    if (type === 'injection') {
-      const parts = name.split('#')
-
-      if (parts.length > 1) {
-        name = parts[0] + '#' + parts[1] + 'ml/kg ' + parts.slice(2).join('#')
-      }
-    }
-
-    return name.replaceAll('#', ' ')
   }
 
   const formattedOrderName = formatOrderName(orderName, orderType)

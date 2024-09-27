@@ -16,20 +16,31 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import type { DrugProductsJoined } from '@/types/icu'
+import type { DrugProductsJoined } from '@/types/icu'
 import { ChevronsUpDown } from 'lucide-react'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+
 export default function DrugComboBox({
   drugName,
   setDrugName,
   setDrugMassVolume,
+  setIsAutoCalculate,
   drugs,
 }: {
   drugName: string
   setDrugName: Dispatch<SetStateAction<string>>
   setDrugMassVolume: Dispatch<SetStateAction<number | null>>
+  setIsAutoCalculate: Dispatch<SetStateAction<boolean>>
   drugs?: DrugProductsJoined[]
 }) {
   const [isPopoverOpen, setIsPopOverOpen] = useState(false)
+
+  const drugProducts = drugs?.flatMap((drug) => drug.drug_products)
+  const selectedDrug = drugProducts?.find((drug) => drug.name === drugName)
+
+  useEffect(() => {
+    if (selectedDrug) setDrugMassVolume(selectedDrug.mass_vol)
+  }, [selectedDrug, setDrugMassVolume])
 
   const drugProducts = drugs?.flatMap((drug) => drug.drug_products)
   const selectedDrug = drugProducts?.find((drug) => drug.name === drugName)
@@ -69,6 +80,7 @@ export default function DrugComboBox({
                   onSelect={(currentValue) => {
                     setDrugName(currentValue)
                     setDrugMassVolume(drug.mass_vol)
+                    setIsAutoCalculate(true)
                     setIsPopOverOpen(false)
                   }}
                 >

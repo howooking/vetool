@@ -4,9 +4,9 @@ import { createClient } from '@/lib/supabase/server'
 import type { DrugProductsJoined } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const getDrugs = async (hosId: string) => {
+  const supabase = createClient()
+
   const { data: searchedDrugData, error: searchedDrugDataError } =
     await supabase
       .rpc('get_drugs', {

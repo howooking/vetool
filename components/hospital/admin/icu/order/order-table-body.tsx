@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import { cn } from '@/lib/utils'
+import { cn, formatOrderName } from '@/lib/utils'
 import { IcuOrderColors } from '@/types/adimin'
 import type { IcuDefaultChartJoined } from '@/types/icu'
 import { useMemo } from 'react'
@@ -64,7 +64,10 @@ export default function OrderTableBody({
               )}
             >
               <span className="truncate">
-                {sortedOrder.default_chart_order_name}
+                {formatOrderName(
+                  sortedOrder.default_chart_order_name,
+                  sortedOrder.default_chart_order_type,
+                )}
               </span>
               <span className="text-xs text-muted-foreground">
                 {sortedOrder.default_chart_order_comment}

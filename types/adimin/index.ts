@@ -1,4 +1,10 @@
-import { Hospital, User, UserApproval } from '..'
+import type {
+  Hospital,
+  User,
+  UserApproval,
+  DrugProductsRows,
+  DrugDescription,
+} from '@/types'
 
 export type UserHospitalJoined = Omit<
   User,
@@ -38,3 +44,17 @@ export type IcuOrderColors = {
     | 'checklist'
     | 'injection']: string
 }
+
+export type DrugProductDetail = Pick<
+  DrugProductsRows,
+  | 'drug_products_id'
+  | 'name'
+  | 'total_vol'
+  | 'unit'
+  | 'type'
+  | 'description'
+  | 'company'
+  | 'mass_vol'
+  | 'hos_id'
+> &
+  Pick<DrugDescription, 'indication' | 'side_effect' | 'drugs_description_id'>

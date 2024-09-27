@@ -10,9 +10,14 @@ import {
 } from '@/components/ui/dialog'
 import { TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
+import type { DrugProductsJoined } from '@/types/icu'
 import { Plus } from 'lucide-react'
 
-export default function OrderTableHeader() {
+export default function OrderTableHeader({
+  drugs,
+}: {
+  drugs: DrugProductsJoined[]
+}) {
   const { isModalOpen, toggleModal, isEditMode, setIsEditMode, resetState } =
     useCreateOrderStore()
 
@@ -44,7 +49,7 @@ export default function OrderTableHeader() {
                 <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
                 <DialogDescription />
               </DialogHeader>
-              <OrderForm isSettingMode />
+              <OrderForm drugs={drugs} isSettingMode />
             </DialogContent>
           </Dialog>
         </TableHead>

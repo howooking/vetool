@@ -172,6 +172,7 @@ export default function OrderForm({
             drugs={drugs}
             weight={weight}
             species={species}
+            isSettingMode={isSettingMode}
           />
         ) : (
           <OrderFormField form={form} />
