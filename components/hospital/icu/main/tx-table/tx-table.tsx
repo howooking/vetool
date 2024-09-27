@@ -1,3 +1,5 @@
+'use client'
+
 import NoResult from '@/components/common/no-result'
 import {
   Table,

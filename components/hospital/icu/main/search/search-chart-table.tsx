@@ -1,5 +1,3 @@
-'use client'
-
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import NoResult from '@/components/common/no-result'
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
@@ -23,7 +21,6 @@ export default function SearchChartTable({
   isSearching: boolean
 }) {
   const { isPreviewDialogOpen } = usePreviewDialogStore()
-
   return (
     <>
       <Table className="border">

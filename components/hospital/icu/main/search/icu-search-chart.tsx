@@ -87,10 +87,10 @@ export default function IcuSearchChart() {
 
         <SearchTypeRadio setOptions={setSearchOptions} />
         <HelperTooltip>
-          <div className="flex flex-col font-semibold">
-            <span>키워드 검색 : 키워드의 메인키워드를 검색함 </span>
-            <span>단순 검색 : 상위 키워드도 검색 가능하게 되어있음 일단은</span>
-          </div>
+          <span className="flex flex-col font-semibold">
+            <span>키워드 검색: 키워드의 메인키워드를 검색함</span>
+            <span>단순 검색: 상위 키워드도 검색 가능하게 되어있음 일단은</span>
+          </span>
         </HelperTooltip>
         <SearchChartSheet
           searchOptions={searchOptions}

@@ -1,5 +1,5 @@
-import React from 'react'
+import TxTable from '@/components/hospital/icu/main/tx-table/tx-table'
 
-export default function TxTablePage() {
-  return <div>TxTablePage</div>
+export default async function TxTablePage() {
+  return <TxTable />
 }

@@ -1,7 +1,5 @@
-import SearchChartTable from '@/components/hospital/icu/main/search/search-chart-table'
-import React from 'react'
+import IcuSearchChart from '@/components/hospital/icu/main/search/icu-search-chart'
 
 export default function SearchPage() {
-  //   return
-  return <>서치 페이지</>
+  return <IcuSearchChart />
 }
