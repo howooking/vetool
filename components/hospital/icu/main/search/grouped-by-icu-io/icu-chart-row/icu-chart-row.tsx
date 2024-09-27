@@ -15,7 +15,7 @@ export default function IcuChartRow({
       <TableCell className="text-center">{index + 1} 일차</TableCell>
       <TableCell className="text-center">{chart.target_date}</TableCell>
       <TableCell className="text-center">
-        <PreviewButton chartId={chart.icu_chart_id} />
+        {/* <PreviewButton chartId={chart.icu_chart_id} /> */}
       </TableCell>
       <TableCell className="text-center">
         <CopyButton chartId={chart.icu_chart_id} />

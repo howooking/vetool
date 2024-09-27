@@ -92,7 +92,7 @@ export const bookmarkColumns = (
       const icuChartId = row.original.icu_chart_id.icu_chart_id
       return (
         <div className="flex justify-center">
-          <PreviewButton chartId={icuChartId} />
+          {/* <PreviewButton chartId={icuChartId} /> */}
         </div>
       )
     },

@@ -7,7 +7,6 @@ import SearchTypeRadio from '@/components/hospital/icu/main/search/sheet/search-
 import { Input } from '@/components/ui/input'
 import { searchIos } from '@/lib/services/icu/search-charts'
 import { useKeywordTrieStore } from '@/lib/store/hospital/keyword-trie'
-import { IcuOrderColors } from '@/types/adimin'
 import type { SearchedIcuIos } from '@/types/icu'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -19,11 +18,7 @@ export type SearchOptions = {
   searchType: 'simple' | 'keyword'
 }
 
-export default function IcuSearchChart({
-  orderColors,
-}: {
-  orderColors: IcuOrderColors
-}) {
+export default function IcuSearchChart() {
   const { hos_id } = useParams()
   const { trie } = useKeywordTrieStore()
 
@@ -104,7 +99,6 @@ export default function IcuSearchChart({
       </div>
 
       <SearchChartTable
-        orderColors={orderColors}
         searchedIcuIos={searchedIcuIos}
         isSearching={isSearching}
       />
