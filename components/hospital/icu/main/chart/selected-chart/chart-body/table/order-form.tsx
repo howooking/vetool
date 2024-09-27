@@ -17,13 +17,12 @@ import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
-import { upsertDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
 import { upsertOrder } from '@/lib/services/icu/order-mutation'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -35,15 +34,9 @@ export default function OrderForm({
   icuChartId?: string
   isDefaultOrderSetting?: boolean
 }) {
-  const { hos_id } = useParams()
   const { refresh } = useRouter()
-  const {
-    toggleModal,
-    selectedChartOrder,
-    isEditMode,
-    defaultChartId,
-    resetState,
-  } = useCreateOrderStore()
+  const { toggleModal, selectedChartOrder, isEditMode, resetState } =
+    useCreateOrderStore()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime, setStartTime] = useState<string>('undefined')
@@ -69,24 +62,18 @@ export default function OrderForm({
     const orderType = values.icu_chart_order_type
 
     if (isDefaultOrderSetting) {
-      await upsertDefaultChartOrder(hos_id as string, defaultChartId, {
-        default_chart_order_name: trimmedOrderName,
-        default_chart_order_comment: orderComment,
-        default_chart_order_type: orderType,
-      })
+      // await upsertDefaultChartOrder(hos_id as string, defaultChartId, {
+      //   default_chart_order_name: trimmedOrderName,
+      //   default_chart_order_comment: orderComment,
+      //   default_chart_order_type: orderType,
+      // })
       refresh()
     } else {
-      await upsertOrder(
-        icuChartId!,
-        selectedChartOrder.order_id!,
-        orderTime,
-        hos_id as string,
-        {
-          icu_chart_order_name: trimmedOrderName,
-          icu_chart_order_comment: orderComment,
-          icu_chart_order_type: orderType,
-        },
-      )
+      await upsertOrder(icuChartId!, selectedChartOrder.order_id!, orderTime, {
+        icu_chart_order_name: trimmedOrderName,
+        icu_chart_order_comment: orderComment,
+        icu_chart_order_type: orderType,
+      })
     }
 
     toast({

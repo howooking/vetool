@@ -1103,7 +1103,6 @@ export type Database = {
       icu_orders: {
         Row: {
           created_at: string
-          hos_id: string
           icu_chart_id: string
           icu_chart_order_comment: string | null
           icu_chart_order_id: string
@@ -1114,7 +1113,6 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          hos_id: string
           icu_chart_id: string
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
@@ -1125,7 +1123,6 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          hos_id?: string
           icu_chart_id?: string
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
@@ -1135,13 +1132,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "icu_orders_hos_id_fkey"
-            columns: ["hos_id"]
-            isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
-          },
           {
             foreignKeyName: "icu_orders_icu_chart_id_fkey"
             columns: ["icu_chart_id"]
@@ -1154,7 +1144,6 @@ export type Database = {
       icu_txs: {
         Row: {
           created_at: string
-          hos_id: string
           icu_chart_order_id: string | null
           icu_chart_tx_comment: string | null
           icu_chart_tx_id: string
@@ -1166,7 +1155,6 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          hos_id: string
           icu_chart_order_id?: string | null
           icu_chart_tx_comment?: string | null
           icu_chart_tx_id?: string
@@ -1178,7 +1166,6 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          hos_id?: string
           icu_chart_order_id?: string | null
           icu_chart_tx_comment?: string | null
           icu_chart_tx_id?: string
@@ -1189,13 +1176,6 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "icu_txs_hos_id_fkey"
-            columns: ["hos_id"]
-            isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
-          },
           {
             foreignKeyName: "icu_txs_icu_chart_order_id_fkey"
             columns: ["icu_chart_order_id"]

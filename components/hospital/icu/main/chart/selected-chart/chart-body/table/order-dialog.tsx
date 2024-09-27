@@ -16,6 +16,7 @@ import { Plus } from 'lucide-react'
 export default function OrderDialog({ icuChartId }: { icuChartId: string }) {
   const { isModalOpen, isEditMode, toggleModal, setIsEditMode, resetState } =
     useCreateOrderStore()
+
   const handleDialogOpen = () => {
     setIsEditMode(false)
     resetState()

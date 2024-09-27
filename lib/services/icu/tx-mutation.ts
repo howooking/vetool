@@ -2,36 +2,27 @@
 
 import { TxLocalState } from '@/lib/store/icu/tx-mutation'
 import { createClient } from '@/lib/supabase/server'
-import { TxLog } from '@/types/icu'
+import type { TxLog } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
 const supabase = createClient()
 
-export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
-  hosId: string,
-  patientId: string,
-  chartId: string,
-  targetDate: string,
+export const upsertIcuTx = async (
   txLocalState: TxLocalState,
   updatedLogs?: TxLog[],
 ) => {
-  const { data: returningData, error: upsertIcuChartTxError } = await supabase
-    .from('icu_txs')
-    .upsert({
-      hos_id: hosId,
-      icu_chart_tx_id: txLocalState?.txId,
-      icu_chart_order_id: txLocalState?.icuChartOrderId,
-      icu_chart_tx_comment: txLocalState?.txComment,
-      icu_chart_tx_result: txLocalState?.txResult,
-      icu_chart_tx_log: updatedLogs,
-      time: txLocalState?.time!,
-    })
-    .select('icu_chart_tx_id')
-    .single()
+  const { error } = await supabase.from('icu_txs').upsert({
+    icu_chart_tx_id: txLocalState?.txId,
+    icu_chart_order_id: txLocalState?.icuChartOrderId,
+    icu_chart_tx_comment: txLocalState?.txComment,
+    icu_chart_tx_result: txLocalState?.txResult,
+    icu_chart_tx_log: updatedLogs,
+    time: txLocalState?.time!,
+  })
 
-  if (upsertIcuChartTxError) {
-    console.log(upsertIcuChartTxError)
-    redirect(`/error?message=${upsertIcuChartTxError.message}`)
+  if (error) {
+    console.log(error)
+    redirect(`/error?message=${error.message}`)
   }
 
   // if (txLocalState?.isNotificationChecked) {
@@ -52,49 +43,17 @@ export const upsertIcuChartTxAndUpdateIcuChartOrder = async (
   //     redirect(`/error?message=${notificationError.message}`)
   //   }
   // }
-
-  if (txLocalState?.txId) return returningData.icu_chart_tx_id
-
-  // insert인 경우
-  const filedName = `icu_chart_order_tx_${txLocalState?.time}`
-  const { error: icuChartOrderError } = await supabase
-    .from('icu_chart_order')
-    .update({ [filedName]: returningData.icu_chart_tx_id })
-    .match({ icu_chart_order_id: txLocalState?.icuChartOrderId })
-
-  if (icuChartOrderError) {
-    console.log(icuChartOrderError)
-    redirect(`/error?message=${icuChartOrderError.message}`)
-  }
-
-  return returningData.icu_chart_tx_id
 }
 
-export const deleteIcuChartTx = async (
-  icuChartTxId: string,
-  icuChartOrderId: string,
-  time: number,
-) => {
-  const filedName = `icu_chart_order_tx_${time}`
-
-  const { error: updateIcuChartOrderError } = await supabase
-    .from('icu_chart_order')
-    .update({ [filedName]: null })
-    .match({ icu_chart_order_id: icuChartOrderId })
-
-  if (updateIcuChartOrderError) {
-    console.log(updateIcuChartOrderError)
-    redirect(`/error?message=${updateIcuChartOrderError.message}`)
-  }
-
-  const { error: deleteIcuChartTxError } = await supabase
-    .from('icu_chart_tx')
+export const deleteIcuChartTx = async (icuChartTxId: string) => {
+  const { error } = await supabase
+    .from('icu_txs')
     .delete()
     .match({ icu_chart_tx_id: icuChartTxId })
 
-  if (deleteIcuChartTxError) {
-    console.log(deleteIcuChartTxError)
-    redirect(`/error?message=${deleteIcuChartTxError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
   }
 }
 

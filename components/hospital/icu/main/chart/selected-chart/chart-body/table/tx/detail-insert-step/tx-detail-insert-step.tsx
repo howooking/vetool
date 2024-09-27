@@ -1,8 +1,6 @@
-import IcuChartTxImageInput from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/detail-insert-step/tx-image-input'
 import TxLog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/detail-insert-step/tx-log'
 import { txDetailRegisterFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-schema'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import {
   DialogClose,
   DialogDescription,
@@ -27,15 +25,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export default function TxDetailInsertStep() {
-  const {
-    setStep,
-    txLocalState,
-    setTxLocalState,
-    setIsDeleting,
-    txImageState,
-    setTxImageState,
-    reset,
-  } = useTxMutationStore()
+  const { setStep, txLocalState, setTxLocalState, setIsDeleting, reset } =
+    useTxMutationStore()
 
   const form = useForm<z.infer<typeof txDetailRegisterFormSchema>>({
     resolver: zodResolver(txDetailRegisterFormSchema),
@@ -52,7 +43,7 @@ export default function TxDetailInsertStep() {
     setTxLocalState({
       txResult: values.result,
       txComment: values.comment,
-      isNotificationChecked: values.isNotificationChecked,
+      // isNotificationChecked: values.isNotificationChecked,
     })
 
     setStep('seletctUser')
@@ -62,11 +53,7 @@ export default function TxDetailInsertStep() {
     setIsDeleting(true)
     setStep('closed')
 
-    await deleteIcuChartTx(
-      txLocalState?.txId!,
-      txLocalState?.icuChartOrderId!,
-      txLocalState?.time!,
-    )
+    await deleteIcuChartTx(txLocalState?.txId!)
     toast({
       title: '처치내역을 삭제하였습니다',
     })

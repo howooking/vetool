@@ -63,7 +63,7 @@ export default function ChartTable({ chartData, preview }: ChartTableProps) {
       </TableHeader>
 
       <TableBody>
-        {!preview && <TxUpsertDialog chartId={icu_chart_id} />}
+        {!preview && <TxUpsertDialog />}
 
         {sortedOrders.map((order) => (
           <TableRow className="divide-x" key={order.order_id}>

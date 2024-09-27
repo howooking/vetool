@@ -21,7 +21,6 @@ export const upsertOrder = async (
   icuChartId: string,
   icuChartOrderId: string,
   orderTime: string[],
-  hos_id: string,
   order: {
     icu_chart_order_name: string
     icu_chart_order_comment: string | null
@@ -32,7 +31,6 @@ export const upsertOrder = async (
     icu_chart_order_id: icuChartOrderId,
     icu_chart_id: icuChartId,
     icu_chart_order_time: orderTime,
-    hos_id,
     ...order,
   })
 
