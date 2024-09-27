@@ -14,8 +14,12 @@ export default function OrderTableBody({
   defaultChartOrders: IcuDefaultChartJoined[]
   isLoading: boolean
 }) {
-  const { toggleModal, setIsEditMode, setChartOrder, setDefaultChartId } =
-    useCreateOrderStore()
+  const {
+    toggleModal,
+    setIsEditMode,
+    setSelectedChartOrder,
+    setDefaultChartId,
+  } = useCreateOrderStore()
 
   const sortedOrders = useMemo(() => {
     return defaultChartOrders.sort(
@@ -31,16 +35,16 @@ export default function OrderTableBody({
 
   const orderColors = defaultChartOrders[0].hos_id.order_color as IcuOrderColors
 
-  const handleEditDialogOpen = (sortedOrder: IcuDefaultChartJoined) => {
-    toggleModal()
-    setIsEditMode(true)
-    setDefaultChartId(sortedOrder.default_chart_id)
-    setChartOrder({
-      order_name: sortedOrder.default_chart_order_name,
-      order_comment: sortedOrder.default_chart_order_comment,
-      order_type: sortedOrder.default_chart_order_type,
-    })
-  }
+  // const handleEditDialogOpen = (sortedOrder: IcuDefaultChartJoined) => {
+  //   toggleModal()
+  //   setIsEditMode(true)
+  //   setDefaultChartId(sortedOrder.default_chart_id)
+  //   setSelectedChartOrder({
+  //     order_name: sortedOrder.default_chart_order_name,
+  //     order_comment: sortedOrder.default_chart_order_comment,
+  //     order_type: sortedOrder.default_chart_order_type,
+  //   })
+  // }
 
   return (
     <TableBody>
@@ -57,7 +61,7 @@ export default function OrderTableBody({
           >
             <Button
               variant="ghost"
-              onClick={() => handleEditDialogOpen(sortedOrder)}
+              // onClick={() => handleEditDialogOpen(sortedOrder)}
               disabled={isLoading}
               className={cn(
                 'flex w-full justify-between rounded-none bg-transparent px-2',

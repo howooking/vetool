@@ -15,7 +15,7 @@ import { toast } from '@/components/ui/use-toast'
 import { deleteDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
 import { deleteOrder } from '@/lib/services/icu/order-mutation'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import type { IcuChartOrderJoined } from '@/types/icu'
+import type { SelectedIcuOrder } from '@/types/icu'
 import { useRouter } from 'next/navigation'
 
 export default function DeleteOrderAlertDialog({
@@ -23,7 +23,7 @@ export default function DeleteOrderAlertDialog({
   toggleModal,
   isDefaultOrderSetting,
 }: {
-  selectedChartOrder: IcuChartOrderJoined
+  selectedChartOrder: SelectedIcuOrder
   toggleModal: () => void
   isDefaultOrderSetting?: boolean
 }) {
@@ -38,10 +38,10 @@ export default function DeleteOrderAlertDialog({
       return
     }
 
-    await deleteOrder(selectedChartOrder.icu_chart_order_id)
+    await deleteOrder(selectedChartOrder.order_id)
 
     toast({
-      title: `${selectedChartOrder.icu_chart_order_name} 오더를 삭제하였습니다`,
+      title: `${selectedChartOrder.order_name} 오더를 삭제하였습니다`,
     })
     toggleModal()
   }
@@ -61,7 +61,7 @@ export default function DeleteOrderAlertDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {selectedChartOrder.icu_chart_order_name} 오더 삭제
+            {selectedChartOrder.order_name} 오더 삭제
           </AlertDialogTitle>
           <AlertDialogDescription>
             선택한 오더를 삭제합니다

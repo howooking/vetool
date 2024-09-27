@@ -21,7 +21,6 @@ import { upsertDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
 import { upsertOrder } from '@/lib/services/icu/order-mutation'
 import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -196,7 +195,7 @@ export default function OrderForm({
         <DialogFooter className="ml-auto w-full gap-2 md:gap-0">
           {isEditMode && (
             <DeleteOrderAlertDialog
-              selectedChartOrder={selectedChartOrder as IcuChartOrderJoined}
+              selectedChartOrder={selectedChartOrder}
               toggleModal={toggleModal}
               isDefaultOrderSetting={isDefaultOrderSetting}
             />

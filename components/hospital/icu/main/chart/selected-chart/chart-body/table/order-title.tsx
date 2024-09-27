@@ -27,14 +27,15 @@ export default function OrderTitle({
     basicHosData: { orderColorsData },
   } = useBasicHosDataContext()
 
-  const { toggleModal, setIsEditMode, setChartOrder } = useCreateOrderStore()
+  const { toggleModal, setIsEditMode, setSelectedChartOrder } =
+    useCreateOrderStore()
 
   const handleDialogOpen = () => {
     if (preview) return
 
     toggleModal()
     setIsEditMode(true)
-    setChartOrder(order)
+    setSelectedChartOrder(order)
   }
 
   return (
