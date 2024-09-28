@@ -28,7 +28,7 @@ import { cn } from '@/lib/utils'
 import { IcuChartBookmark } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle, Star } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -45,6 +45,7 @@ export default function BookmarkDialog({
   > | null
 }) {
   const { hos_id } = useParams()
+  const { refresh } = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -71,6 +72,7 @@ export default function BookmarkDialog({
       title: '즐겨찾기가 추가되었습니다',
     })
 
+    refresh()
     setIsSubmitting(false)
     setIsDialogOpen(false)
   }
@@ -84,6 +86,7 @@ export default function BookmarkDialog({
       title: '즐겨찾기가 삭제되었습니다',
     })
 
+    refresh()
     setIsDeleting(false)
     setIsDialogOpen(false)
   }
