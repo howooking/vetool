@@ -8,10 +8,12 @@ import { redirect } from 'next/navigation'
 const supabase = createClient()
 
 export const upsertIcuTx = async (
+  hosId: string,
   txLocalState: TxLocalState,
   updatedLogs?: TxLog[],
 ) => {
   const { error } = await supabase.from('icu_txs').upsert({
+    hos_id: hosId,
     icu_chart_tx_id: txLocalState?.txId,
     icu_chart_order_id: txLocalState?.icuChartOrderId,
     icu_chart_tx_comment: txLocalState?.txComment,

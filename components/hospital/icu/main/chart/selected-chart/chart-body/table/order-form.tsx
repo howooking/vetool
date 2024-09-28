@@ -22,7 +22,7 @@ import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -34,6 +34,7 @@ export default function OrderForm({
   icuChartId?: string
   isDefaultOrderSetting?: boolean
 }) {
+  const { hos_id } = useParams()
   const { refresh } = useRouter()
   const { toggleModal, selectedChartOrder, isEditMode, resetState } =
     useCreateOrderStore()
@@ -69,11 +70,17 @@ export default function OrderForm({
       // })
       refresh()
     } else {
-      await upsertOrder(icuChartId!, selectedChartOrder.order_id!, orderTime, {
-        icu_chart_order_name: trimmedOrderName,
-        icu_chart_order_comment: orderComment,
-        icu_chart_order_type: orderType,
-      })
+      await upsertOrder(
+        hos_id as string,
+        icuChartId!,
+        selectedChartOrder.order_id!,
+        orderTime,
+        {
+          icu_chart_order_name: trimmedOrderName,
+          icu_chart_order_comment: orderComment,
+          icu_chart_order_type: orderType,
+        },
+      )
     }
 
     toast({

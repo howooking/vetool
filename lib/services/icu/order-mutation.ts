@@ -18,6 +18,7 @@ export const deleteOrder = async (chartOrderId: string) => {
 }
 
 export const upsertOrder = async (
+  hosId: string,
   icuChartId: string,
   icuChartOrderId: string,
   orderTime: string[],
@@ -28,9 +29,11 @@ export const upsertOrder = async (
   },
 ) => {
   const { error: upsertOrderError } = await supabase.from('icu_orders').upsert({
+    hos_id: hosId,
     icu_chart_order_id: icuChartOrderId,
     icu_chart_id: icuChartId,
     icu_chart_order_time: orderTime,
+
     ...order,
   })
 

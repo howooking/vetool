@@ -16,6 +16,7 @@ import type { TxLog } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { format } from 'date-fns'
+import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -23,6 +24,7 @@ import { z } from 'zod'
 export default function TxSelectUserStep() {
   const { txLocalState, setStep, setIsMutationCanceled, reset } =
     useTxMutationStore()
+  const { hos_id } = useParams()
 
   const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
@@ -50,7 +52,7 @@ export default function TxSelectUserStep() {
 
       setStep('closed')
 
-      await upsertIcuTx(txLocalState, updatedLogs)
+      await upsertIcuTx(hos_id as string, txLocalState, updatedLogs)
 
       // await uploadTxImage(txId, txImageState ?? [])
 
@@ -60,7 +62,7 @@ export default function TxSelectUserStep() {
         title: '처치 내역이 업데이트 되었습니다',
       })
     },
-    [reset, setStep, txLocalState],
+    [hos_id, reset, setStep, txLocalState],
   )
 
   const handleCancel = useCallback(() => {
