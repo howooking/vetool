@@ -3,13 +3,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const updateUserInfo = async (
   userId: string,
   name: string | null,
   avatarUrl: string | null,
 ) => {
+  const supabase = createClient()
   if (name === null) {
     const { error: updateUserError } = await supabase
       .from('users')

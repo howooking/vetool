@@ -9,9 +9,9 @@ import type {
 } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const getIcuIo = async (hosId: string, targetDate: string) => {
+  const supabase = createClient()
+
   console.log(
     `%cIO refetching`,
     `background:${getLogColor('icu_io')}; color:white`,
@@ -49,6 +49,8 @@ export const getIcuIo = async (hosId: string, targetDate: string) => {
 }
 
 export const getIcuChart = async (hosId: string, targetDate: string) => {
+  const supabase = createClient()
+
   console.log(
     `%cCHART refetching`,
     `background:${getLogColor('icu_chart')}; color:white`,
@@ -85,6 +87,8 @@ export const getIcuChart = async (hosId: string, targetDate: string) => {
 }
 
 export const getIcuOrder = async (hosId: string, targetDate: string) => {
+  const supabase = createClient()
+
   console.log(
     `%cORDER refetching`,
     `background:${getLogColor('icu_chart_order')}; color:white`,

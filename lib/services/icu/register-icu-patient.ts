@@ -4,8 +4,6 @@ import { createClient } from '@/lib/supabase/server'
 import { getDaysSince } from '@/lib/utils'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const registerIcuPatient = async (
   hosId: string,
   patientId: string,
@@ -18,6 +16,8 @@ export const registerIcuPatient = async (
   main_vet: string,
   sub_vet?: string,
 ) => {
+  const supabase = createClient()
+
   const { error: rpcError } = await supabase.rpc('register_icu', {
     hos_id_input: hosId,
     icu_io_dx_input: dx,

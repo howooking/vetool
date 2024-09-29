@@ -5,13 +5,13 @@ import { createClient } from '@/lib/supabase/server'
 import type { TxLog } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const upsertIcuTx = async (
   hosId: string,
   txLocalState: TxLocalState,
   updatedLogs?: TxLog[],
 ) => {
+  const supabase = createClient()
+
   const { error } = await supabase.from('icu_txs').upsert({
     hos_id: hosId,
     icu_chart_tx_id: txLocalState?.txId,
@@ -48,6 +48,8 @@ export const upsertIcuTx = async (
 }
 
 export const deleteIcuChartTx = async (icuChartTxId: string) => {
+  const supabase = createClient()
+
   const { error } = await supabase
     .from('icu_txs')
     .delete()
@@ -60,6 +62,8 @@ export const deleteIcuChartTx = async (icuChartTxId: string) => {
 }
 
 export const uploadTxImage = async (icuChartTxId: string, image: File) => {
+  const supabase = createClient()
+
   const { error: deleteIcuChartTxError } = await supabase.storage
     .from('tx_images')
     .upload(`${icuChartTxId}/${image.name}`, image)

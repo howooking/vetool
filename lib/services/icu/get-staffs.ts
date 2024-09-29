@@ -3,9 +3,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const getVetList = async (hosId: string) => {
+  const supabase = createClient()
+
   const { data: vetsData, error: vetsDataError } = await supabase
     .from('users')
     .select('avatar_url, name, position, user_id, is_vet')
@@ -19,6 +19,8 @@ export const getVetList = async (hosId: string) => {
 }
 
 export const getStaffList = async (hosId: string) => {
+  const supabase = createClient()
+
   const { data: vetsData, error: vetsDataError } = await supabase
     .from('users')
     .select('avatar_url, name, position, user_id, is_vet')

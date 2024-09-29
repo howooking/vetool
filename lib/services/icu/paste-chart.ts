@@ -3,9 +3,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 const pasteOrders = async (prev_chart_id: string, new_chart_id: string) => {
+  const supabase = createClient()
+
   const { error: rpcError } = await supabase.rpc('copy_prev_orders', {
     prev_chart_id_input: prev_chart_id,
     new_chart_id_input: new_chart_id,
@@ -22,6 +22,8 @@ export const pasteChart = async (
   copiedChartId: string,
   targetDate: string,
 ) => {
+  const supabase = createClient()
+
   const { data: returningChartData, error: returningChartDataError } =
     await supabase
       .from('icu_charts')

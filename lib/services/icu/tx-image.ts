@@ -1,9 +1,9 @@
 import { createClient } from '@/lib/supabase/client'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const uploadTxImage = async (txId: string, txImages: File[]) => {
+  const supabase = createClient()
+
   Array.from(txImages).forEach(async (txImage, index) => {
     const { error: deleteIcuChartTxError } = await supabase.storage
       .from('tx_images')
@@ -16,6 +16,8 @@ export const uploadTxImage = async (txId: string, txImages: File[]) => {
 }
 
 export const getTxImageList = async (txId: string) => {
+  const supabase = createClient()
+
   const { data: txImageList } = await supabase.storage
     .from('tx_images')
     .list(`${txId}/`)
@@ -23,6 +25,8 @@ export const getTxImageList = async (txId: string) => {
 }
 
 export const getTxImage = async (txId: string, txImageName: string) => {
+  const supabase = createClient()
+
   const { data: txImageUrl } = await supabase.storage
     .from('tx_images')
     .getPublicUrl(`${txId}/${txImageName}`)

@@ -3,8 +3,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
 export const getHosGroupList = async (hosId: string) => {
+  const supabase = createClient()
+
   const { data: hosGroupList, error } = await supabase
     .from('hospitals')
     .select('group_list')

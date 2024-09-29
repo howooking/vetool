@@ -3,9 +3,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const deleteOrder = async (chartOrderId: string) => {
+  const supabase = createClient()
+
   const { error: deleteOrderError } = await supabase
     .from('icu_orders')
     .delete()
@@ -28,6 +28,8 @@ export const upsertOrder = async (
     icu_chart_order_type: string
   },
 ) => {
+  const supabase = createClient()
+
   const { error: upsertOrderError } = await supabase.from('icu_orders').upsert({
     hos_id: hosId,
     icu_chart_order_id: icuChartOrderId,
@@ -46,6 +48,8 @@ export const updateOrderTime = async (
   icuChartOrderId: string,
   orderTime: string[],
 ) => {
+  const supabase = createClient()
+
   const { error: updateOrderTimeError } = await supabase
     .from('icu_orders')
     .update({ icu_chart_order_time: orderTime })

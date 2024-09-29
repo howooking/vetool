@@ -3,12 +3,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const updateDiagnosis = async (
   icuIoId: string,
   diagnosisInput: string,
 ) => {
+  const supabase = createClient()
+
   const { error: updateDiagnosisError } = await supabase
     .from('icu_io')
     .update({
@@ -26,6 +26,8 @@ export const updateChiefComplaint = async (
   icuIoId: string,
   chiefComplaint: string,
 ) => {
+  const supabase = createClient()
+
   const { error: updateChiefComplaintError } = await supabase
     .from('icu_io')
     .update({
@@ -44,6 +46,8 @@ export const updateMainSubVet = async (
   mainVetId: string,
   subVetId?: string,
 ) => {
+  const supabase = createClient()
+
   const { error: updateMainSubVetError } = await supabase
     .from('icu_charts')
     .update({
@@ -58,6 +62,8 @@ export const updateMainSubVet = async (
 }
 
 export const updateGroup = async (icuIoId: string, groupList: string[]) => {
+  const supabase = createClient()
+
   const { error: updateGroupError } = await supabase
     .from('icu_io')
     .update({
@@ -76,6 +82,8 @@ export const updateWeight = async (
   weight: string,
   weightMesuredDate: string,
 ) => {
+  const supabase = createClient()
+
   const { error: updateWeightError } = await supabase.rpc(
     'update_icu_patient_weight',
     {
@@ -92,6 +100,8 @@ export const updateWeight = async (
   }
 }
 export const updateOutDueDate = async (icuIoId: string, outDueDate: string) => {
+  const supabase = createClient()
+
   const { error: updateOutDueDateError } = await supabase
     .from('icu_io')
     .update({ out_due_date: outDueDate })
@@ -107,6 +117,8 @@ export const updateMemoName = async (
   hosId: string,
   hosIcuMemoNamesInput: string[],
 ) => {
+  const supabase = createClient()
+
   const { error: updateMemoNameError } = await supabase
     .from('hospitals')
     .update({ icu_memo_names: hosIcuMemoNamesInput })
@@ -146,7 +158,6 @@ export const toggleOutPatient = async (
   patientName: string,
   ageInDays: number,
 ) => {
-  console.log(hashtaggedDxCc)
   const supabase = createClient()
 
   const { error: updateOutDateError } = await supabase.rpc(
@@ -174,6 +185,8 @@ export const updateOwnerName = async (
   patientId: string,
   ownerNameInput: string,
 ) => {
+  const supabase = createClient()
+
   const { error: updataOwnerNameError } = await supabase
     .from('patients')
     .update({ owner_name: ownerNameInput })
@@ -186,6 +199,8 @@ export const updateOwnerName = async (
 }
 
 export const updateCpcr = async (icuIoId: string, cpcr: string) => {
+  const supabase = createClient()
+
   const { error: updateCpcrError } = await supabase
     .from('icu_io')
     .update({ cpcr })
@@ -198,6 +213,8 @@ export const updateCpcr = async (icuIoId: string, cpcr: string) => {
 }
 
 export const selectIcuIoTags = async (icuIoId: string) => {
+  const supabase = createClient()
+
   const { data: icuIoTagsData, error: icuIoTagsDataError } = await supabase
     .from('icu_io')
     .select('icu_io_tags')
