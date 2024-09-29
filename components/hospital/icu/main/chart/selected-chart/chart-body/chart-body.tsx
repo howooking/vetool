@@ -6,10 +6,7 @@ import type { SelectedChart } from '@/types/icu'
 export default function ChartBody({ chartData }: { chartData: SelectedChart }) {
   const { memo_a, memo_b, memo_c, icu_chart_id } = chartData
   return (
-    <div
-      className="flex flex-col gap-2"
-      // ref={captureRef}
-    >
+    <div className="flex flex-col gap-2">
       <ChartInfos chartData={chartData} />
 
       <ChartTable chartData={chartData} />

@@ -24,6 +24,7 @@ export default async function IcuPageLayout({
         groupListData: basicHosData.group_list,
         orderColorsData: basicHosData.order_color as IcuOrderColors,
         memoNameListData: basicHosData.icu_memo_names,
+        sidebarData: icuSidebarData ?? [],
       }}
     >
       <IcuHeader
