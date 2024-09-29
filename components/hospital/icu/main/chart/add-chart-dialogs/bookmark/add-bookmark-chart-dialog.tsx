@@ -12,21 +12,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { getBookmarkCharts } from '@/lib/services/icu/bookmark'
+import { getBookmarkedCharts } from '@/lib/services/icu/bookmark'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { cn } from '@/lib/utils'
-import type { IcuChartBookmarkJoined } from '@/types/icu'
+import { BookmarkedChart } from '@/types/icu/bookmark'
 import { LoaderCircle, Star } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function AddBookmarkChartDialog() {
   const [isFetching, setIsFetching] = useState(false)
-  const [bookmarkCharts, setBookmarkCharts] = useState<
-    IcuChartBookmarkJoined[]
-  >([])
+  const [bookmarkCharts, setBookmarkCharts] = useState<BookmarkedChart[]>([])
 
   const { hos_id } = useParams()
   const { isPreviewDialogOpen } = usePreviewDialogStore()
@@ -35,7 +33,7 @@ export default function AddBookmarkChartDialog() {
 
   const handleOpenBookmarkDialog = async () => {
     setIsFetching(true)
-    getBookmarkCharts(hos_id as string)
+    getBookmarkedCharts(hos_id as string)
       .then(setBookmarkCharts)
       .then(() => setBookmarkModalOpen(true))
       .then(() => setIsFetching(false))

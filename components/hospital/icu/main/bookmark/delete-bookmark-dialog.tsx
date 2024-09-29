@@ -15,31 +15,26 @@ import {
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { deleteBookmarkChart } from '@/lib/services/icu/bookmark'
-import { LoaderCircle, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 export default function DeleteBookmarkDialog({
   bookmarkId,
   bookmarkName,
-  refreshData,
 }: {
   bookmarkId: string
   bookmarkName: string
-  refreshData: () => Promise<void>
 }) {
-  const [isDeleting, setIsDeleting] = useState(false)
+  const { refresh } = useRouter()
 
   const handleDelete = async () => {
-    setIsDeleting(true)
-
     await deleteBookmarkChart(bookmarkId)
 
     toast({
       title: '즐겨찾기가 삭제되었습니다',
     })
 
-    setIsDeleting(false)
-    refreshData()
+    refresh()
   }
 
   return (
@@ -67,7 +62,6 @@ export default function DeleteBookmarkDialog({
             className="bg-destructive hover:bg-destructive/90"
           >
             삭제
-            {isDeleting && <LoaderCircle className="ml-2 h-4 w-4" />}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

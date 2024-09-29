@@ -6,8 +6,9 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import PreviewButton from '../../../../common-dialogs/preview/preview-button'
 import PasteBookmarkButton from './paste-bookmark-button'
+import { BookmarkedChart } from '@/types/icu/bookmark'
 
-export const bookmarkColumns: ColumnDef<IcuChartBookmarkJoined>[] = [
+export const bookmarkColumns: ColumnDef<BookmarkedChart>[] = [
   {
     accessorKey: 'bookmark_name',
     header: ({ column }) => {

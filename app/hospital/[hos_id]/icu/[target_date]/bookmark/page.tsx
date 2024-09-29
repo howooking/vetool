@@ -1,6 +1,15 @@
 import Bookmark from '@/components/hospital/icu/main/bookmark/bookmark'
+import { getBookmarkedCharts } from '@/lib/services/icu/bookmark'
 
-export default function BookmarkPage() {
-  //   return <Bookmark />
-  return <>북마크 페이지</>
+export default async function BookmarkPage({
+  params,
+}: {
+  params: {
+    hos_id: string
+    target_date: string
+  }
+}) {
+  const bookmarkedCharts = await getBookmarkedCharts(params.hos_id as string)
+
+  return <Bookmark bookmarkedCharts={bookmarkedCharts} />
 }

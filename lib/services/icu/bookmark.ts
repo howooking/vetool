@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuChartBookmarkJoined } from '@/types/icu'
+import { BookmarkedChart } from '@/types/icu/bookmark'
 import { redirect } from 'next/navigation'
 
 export const upsertBookmarkChart = async (
@@ -45,7 +45,7 @@ export const deleteBookmarkChart = async (bookmarkId: string) => {
   }
 }
 
-export const getBookmarkCharts = async (hosId: string) => {
+export const getBookmarkedCharts = async (hosId: string) => {
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -71,7 +71,7 @@ export const getBookmarkCharts = async (hosId: string) => {
     .order('created_at', {
       ascending: false,
     })
-    .returns<IcuChartBookmarkJoined[]>()
+    .returns<BookmarkedChart[]>()
 
   if (error) {
     console.error(error)
