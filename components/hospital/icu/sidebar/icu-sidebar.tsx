@@ -52,7 +52,7 @@ export default function IcuSidebar({
 
     const filteredIcuIoData = filterByVet(filterByGroup(icuSidebarData))
     const excludedIcuIoData = icuSidebarData.filter(
-      (item) => !filteredIcuIoData.includes(item),
+      (item) => !filteredIcuIoData.includes(item) ?? [],
     )
 
     return { filteredIcuIoData, excludedIcuIoData }
