@@ -64,7 +64,7 @@ export default function GroupFilter({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex h-auto w-full px-1 py-1">
+        <Button variant="outline" className="flex h-auto w-full px-1 py-[5px]">
           {selectedGroup.length ? (
             <GroupBadge currentGroups={selectedGroup} />
           ) : (
