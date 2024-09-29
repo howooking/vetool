@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -15,13 +16,14 @@ import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
 import { CopyCheck, LoaderCircle } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 export default function PasteCopiedChartDialog() {
   const { target_date, patient_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { copiedChartId, reset } = useCopiedChartStore()
+  const { refresh } = useRouter()
 
   const handlePasteCopiedChart = useCallback(async () => {
     if (!copiedChartId) {

@@ -24,7 +24,6 @@ import { updateGroup } from '@/lib/services/icu/update-icu-chart-infos'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Component } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -40,8 +39,6 @@ export default function Group({
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const { refresh } = useRouter()
 
   const form = useForm<z.infer<typeof groupCheckFormSchema>>({
     resolver: zodResolver(groupCheckFormSchema),
@@ -70,7 +67,6 @@ export default function Group({
     })
 
     setIsSubmitting(false)
-    refresh()
     setIsDialogOpen(false)
   }
 

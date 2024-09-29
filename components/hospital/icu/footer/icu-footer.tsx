@@ -1,8 +1,10 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { useIcuRealtime } from '@/hooks/use-icu-realtime'
 import { cn } from '@/lib/utils'
 import { usePathname, useRouter } from 'next/navigation'
+import RealtimeStatus from './realtime-status'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
@@ -30,13 +32,11 @@ export const FOOTER_MAIN_VIEW_MENUS = [
 export default function IcuFooter({
   hosId,
   targetDate,
-  // isSubscriptionReady,
 }: {
   hosId: string
   targetDate: string
-  // isSubscriptionReady: boolean
 }) {
-  // const { isExpanded } = useSidebarStore()
+  const isSubscriptionReady = useIcuRealtime(hosId, targetDate)
   const { push } = useRouter()
   const path = usePathname()
   const currentIcuPath = path.split('/').at(5)
@@ -45,10 +45,11 @@ export default function IcuFooter({
     <footer
       className={cn(
         'fixed bottom-0 z-20 flex h-10 w-full items-center justify-between border-t bg-white transition-all duration-200',
-        // isExpanded ? 'md:w-[calc(100%-336px)]' : 'md:w-[calc(100%-200px)]',
       )}
     >
       <ul className="flex h-full items-center gap-2 pl-1">
+        <RealtimeStatus isSubscriptionReady={isSubscriptionReady} />
+
         {FOOTER_MAIN_VIEW_MENUS.map(({ label, value }) => (
           <li
             key={value}
@@ -71,8 +72,6 @@ export default function IcuFooter({
           </li>
         ))}
       </ul>
-
-      {/* <RealtimeStatus isSubscriptionReady={isSubscriptionReady} /> */}
 
       {/* ICU 알림 기능 일단 보류 */}
       {/* <IcuNotification hosId={hosId} /> */}

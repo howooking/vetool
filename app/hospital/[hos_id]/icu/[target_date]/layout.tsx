@@ -43,11 +43,7 @@ export default async function IcuPageLayout({
 
         <main className="h-icu-chart w-full overflow-auto">{children}</main>
 
-        <IcuFooter
-          hosId={params.hos_id}
-          targetDate={params.target_date}
-          // isSubscriptionReady={isSubscriptionReady}
-        />
+        <IcuFooter hosId={params.hos_id} targetDate={params.target_date} />
       </div>
     </BasicHosDataProvider>
   )
