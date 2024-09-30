@@ -1618,6 +1618,13 @@ export type Database = {
         }
         Returns: Json
       }
+      get_icu_tx_table_data: {
+        Args: {
+          hos_id_input: string
+          target_date_input: string
+        }
+        Returns: Json
+      }
       insert_default_chart_orders: {
         Args: {
           hos_id_input: string

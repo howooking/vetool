@@ -27,6 +27,10 @@ export const FOOTER_MAIN_VIEW_MENUS = [
     label: '즐겨찾기',
     value: 'bookmark',
   },
+  {
+    label: '입원 통계',
+    value: 'analysis',
+  },
 ] as const
 
 export default function IcuFooter({

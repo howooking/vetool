@@ -64,15 +64,18 @@ export const renderAndCaptureExportChartBody = (
 
     document.body.appendChild(container)
 
-    const handleRender = async (element: HTMLDivElement) => {
-      try {
-        const canvas = await captureContent(element)
-        document.body.removeChild(container)
-        resolve(canvas)
-      } catch (error) {
-        reject(error)
-      }
+    const handleRender = (element: HTMLDivElement) => {
+      setTimeout(async () => {
+        try {
+          const canvas = await captureContent(element)
+          document.body.removeChild(container)
+          resolve(canvas)
+        } catch (error) {
+          reject(error)
+        }
+      }, 100)
     }
+
     const root = createRoot(container)
     root.render(
       <BasicHosDataProvider

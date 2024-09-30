@@ -30,12 +30,9 @@ export default function ExportDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="gap-2">
-          <DialogTitle>
-            {chartData.target_date} {chartData.patient.name} 차트 내보내기
-          </DialogTitle>
+          <DialogTitle>{chartData.patient.name} 차트 내보내기</DialogTitle>
           <DialogDescription className="flex flex-col gap-1">
-            <span>사진 저장 : PNG파일을 저장합니다</span>
-            <span>PDF 저장 : PDF파일을 저장합니다</span>
+            <span>입원 기간 동안의 차트를 저장합니다</span>
           </DialogDescription>
         </DialogHeader>
 

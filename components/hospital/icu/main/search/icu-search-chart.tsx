@@ -1,5 +1,6 @@
 'use client'
 
+import Autocomplete from '@/components/common/auto-complete/auto-complete'
 import HelperTooltip from '@/components/common/helper-tooltip'
 import SearchChartTable from '@/components/hospital/icu/main/search/search-chart-table'
 import SearchChartSheet from '@/components/hospital/icu/main/search/sheet/search-chart-sheet'
@@ -46,6 +47,7 @@ export default function IcuSearchChart() {
 
   const performSearch = useDebouncedCallback(async (searchValue: string) => {
     setIsSearching(true)
+
     if (searchValue) {
       const searchResult = await searchIos(
         searchValue,
@@ -59,11 +61,11 @@ export default function IcuSearchChart() {
     setIsSearching(false)
   }, 600)
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim()
-    const searchedValue = getSearchValue(value)
+  const handleInputChange = (value: string) => {
+    const trimmedValue = value.trim()
+    const searchedValue = getSearchValue(trimmedValue)
 
-    setInputValue(value)
+    setInputValue(trimmedValue)
     performSearch(searchedValue)
   }
 
@@ -79,11 +81,12 @@ export default function IcuSearchChart() {
       <div className="flex items-center gap-4 pr-2">
         <Input
           placeholder="환자명, 종(canine, feline), 품종, DX, CC, 처치명, 사용약물명"
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e.target.value)}
           id="search-chart"
-          autoComplete="off"
           className="w-full"
         />
+
+        {/* <Autocomplete label="DX" handleUpdate={handleInputChange} /> */}
 
         <SearchTypeRadio setOptions={setSearchOptions} />
         <HelperTooltip>
