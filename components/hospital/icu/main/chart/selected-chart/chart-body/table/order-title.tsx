@@ -8,7 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { useCreateOrderStore } from '@/lib/store/icu/create-order'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { cn } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { IcuOrderColors } from '@/types/adimin'
@@ -28,7 +28,7 @@ export default function OrderTitle({
   } = useBasicHosDataContext()
 
   const { toggleModal, setIsEditMode, setSelectedChartOrder } =
-    useCreateOrderStore()
+    useIcuOrderStore()
 
   const handleDialogOpen = () => {
     if (preview) return

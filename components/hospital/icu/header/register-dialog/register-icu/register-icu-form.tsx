@@ -36,13 +36,7 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { registerIcuPatient } from '@/lib/services/icu/register-icu-patient'
-import {
-  useIcuRegisteringPatient,
-  usePatientRegisterDialog,
-  usePatientRegisterStep,
-} from '@/lib/store/icu/icu-register'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
+import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
 import { chageTargetDateInUrl, cn } from '@/lib/utils'
 import type { Vet } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -61,11 +55,13 @@ export default function RegisterIcuForm({
   groupList,
   vetsData,
   tab,
+  setIsRegisterDialogOpen,
 }: {
   hosId: string
   groupList: string[]
   vetsData: Vet[]
   tab: string
+  setIsRegisterDialogOpen: (isRegisterDialogOpen: boolean) => void
 }) {
   const path = usePathname()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -75,17 +71,7 @@ export default function RegisterIcuForm({
   })
 
   const { push } = useRouter()
-  const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
-  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
-  const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setStep } = usePatientRegisterStep()
-  const { registeringPatient } = useIcuRegisteringPatient() as {
-    registeringPatient: {
-      patientId: string
-      birth: string
-      patientName: string
-    }
-  }
+  const { setStep, registeringPatient } = useIcuRegisterStore()
 
   const form = useForm<z.infer<typeof registerIcuPatientFormSchema>>({
     resolver: zodResolver(registerIcuPatientFormSchema),
@@ -116,8 +102,8 @@ export default function RegisterIcuForm({
 
     await registerIcuPatient(
       hosId,
-      registeringPatient.patientId,
-      registeringPatient.birth,
+      registeringPatient!.patientId,
+      registeringPatient!.birth,
       dx,
       cc,
       format(in_date, 'yyyy-MM-dd'),
@@ -132,7 +118,6 @@ export default function RegisterIcuForm({
     })
     setIsRegisterDialogOpen(false)
     setIsSubmitting(false)
-    setSelectedPatientId(registeringPatient.patientId)
     const newPath = chageTargetDateInUrl(path, format(in_date, 'yyyy-MM-dd'))
     push(newPath)
   }

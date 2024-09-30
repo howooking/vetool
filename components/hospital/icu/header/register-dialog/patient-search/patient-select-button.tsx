@@ -1,10 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { getIcuIoByPatientId } from '@/lib/services/icu/chart/get-icu-io-by-patient-id'
-import {
-  useIcuRegisteringPatient,
-  usePatientRegisterStep,
-} from '@/lib/store/icu/icu-register'
+import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
 import { cn, getDaysSince } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
@@ -20,8 +17,7 @@ export default function PatientSelectButton({
   birth: string
   patientName: string
 }) {
-  const { setStep } = usePatientRegisterStep()
-  const { setRegisteringPatient } = useIcuRegisteringPatient()
+  const { setStep, setRegisteringPatient } = useIcuRegisterStore()
   const [isLoading, setIsLoading] = useState(false)
 
   const handlePatientClick = async () => {

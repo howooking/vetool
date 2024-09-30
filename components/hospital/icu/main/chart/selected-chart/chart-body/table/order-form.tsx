@@ -18,7 +18,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
-import { useCreateOrderStore } from '@/lib/store/icu/create-order'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
@@ -30,7 +30,7 @@ import { z } from 'zod'
 export default function OrderForm({ icuChartId }: { icuChartId?: string }) {
   const { hos_id } = useParams()
   const { toggleModal, selectedChartOrder, isEditMode, resetState } =
-    useCreateOrderStore()
+    useIcuOrderStore()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime, setStartTime] = useState<string>('undefined')

@@ -18,13 +18,13 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
-import { useCreateOrderStore } from '@/lib/store/icu/create-order'
 import { cn } from '@/lib/utils'
 import type { IcuOrderColors } from '@/types/adimin'
 import { IcuDefaultChartJoined } from '@/types/icu'
 import { Plus } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 import DefaultOrderForm from './default-order-form'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 
 export default function DefaultOrdersSetting({
   defaultChartOrders,
@@ -40,7 +40,7 @@ export default function DefaultOrdersSetting({
     isEditMode,
     setIsEditMode,
     resetState,
-  } = useCreateOrderStore()
+  } = useIcuOrderStore()
 
   const handleAddDialogOpen = useCallback(() => {
     setIsEditMode(false)

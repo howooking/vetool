@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { getBookmarkedCharts } from '@/lib/services/icu/bookmark/bookmark'
-import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
+import { useBookmarkDialogStore } from '@/lib/store/icu/bookmark-dialog'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { cn } from '@/lib/utils'
@@ -28,19 +28,20 @@ export default function AddBookmarkChartDialog() {
 
   const { hos_id } = useParams()
   const { isPreviewDialogOpen } = usePreviewDialogStore()
-  const { isBookmarkModalOpen, setBookmarkModalOpen } = useIcuBookmarkStore()
+  const { isBookmarkDialogOpen, setBookmarkDilaogOpen } =
+    useBookmarkDialogStore()
   const { isConfirmCopyDialogOpen } = useCopiedChartStore()
 
   const handleOpenBookmarkDialog = async () => {
     setIsFetching(true)
     getBookmarkedCharts(hos_id as string)
       .then(setBookmarkCharts)
-      .then(() => setBookmarkModalOpen(true))
+      .then(() => setBookmarkDilaogOpen(true))
       .then(() => setIsFetching(false))
   }
 
   return (
-    <Dialog open={isBookmarkModalOpen} onOpenChange={setBookmarkModalOpen}>
+    <Dialog open={isBookmarkDialogOpen} onOpenChange={setBookmarkDilaogOpen}>
       <Button
         variant="outline"
         className="hidden h-[200px] w-full items-center justify-center gap-2 md:flex md:h-1/3 md:w-1/4"

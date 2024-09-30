@@ -6,10 +6,7 @@ import PatientForm from '@/components/hospital/patients/patient-form'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import {
-  usePatientRegisterDialog,
-  usePatientRegisterStep,
-} from '@/lib/store/icu/icu-register'
+import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
 import { cn } from '@/lib/utils'
 import type { Vet } from '@/types/icu'
 import type { PatientData } from '@/types/patients'
@@ -27,9 +24,8 @@ export default function RegisterDialog({
   groupList: string[]
   vetsData: Vet[]
 }) {
-  const { isRegisterDialogOpen, setIsRegisterDialogOpen } =
-    usePatientRegisterDialog()
-  const { step, setStep } = usePatientRegisterStep()
+  const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false)
+  const { step, setStep } = useIcuRegisterStore()
   const [tab, setTab] = useState('search')
 
   useEffect(() => {
@@ -91,6 +87,7 @@ export default function RegisterDialog({
             )}
             {step === 'icuRegister' && (
               <RegisterIcuForm
+                setIsRegisterDialogOpen={setIsRegisterDialogOpen}
                 hosId={hosId}
                 groupList={groupList}
                 vetsData={vetsData}
@@ -110,6 +107,7 @@ export default function RegisterDialog({
             )}
             {step === 'icuRegister' && (
               <RegisterIcuForm
+                setIsRegisterDialogOpen={setIsRegisterDialogOpen}
                 hosId={hosId}
                 groupList={groupList}
                 vetsData={vetsData}
