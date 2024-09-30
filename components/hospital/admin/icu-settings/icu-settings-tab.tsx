@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Suspense } from 'react'
-import MemoTabContent from './memo-name/memo-name-tab'
+import MemoNameTab from './memo-name/memo-name-tab'
 import DefaultOrdersTab from './default-orders/default-orders-tab'
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import OrderColorTab from './order-color/order-color-tab'
@@ -28,7 +28,7 @@ export default function IcuSettingsTab({ hosId }: { hosId: string }) {
 
       <TabsContent value="memo">
         <Suspense fallback={<LargeLoaderCircle className="h-96" />}>
-          <MemoTabContent hosId={hosId} />
+          <MemoNameTab hosId={hosId} />
         </Suspense>
       </TabsContent>
     </Tabs>
