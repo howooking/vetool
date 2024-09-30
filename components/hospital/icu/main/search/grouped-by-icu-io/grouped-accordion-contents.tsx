@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { SearchedIcuCharts } from '@/types/icu'
+import type { SearchedIcuCharts } from '@/types/icu/search'
 import IcuChartRow from './icu-chart-row/icu-chart-row'
 
 export default function GroupedAccordionContents({

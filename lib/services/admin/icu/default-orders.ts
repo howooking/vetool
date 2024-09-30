@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuDefaultChartJoined } from '@/types/icu'
+import type { IcuDefaultChartJoined } from '@/types/adimin'
 import { redirect } from 'next/navigation'
 
 export const getDefaultChartOrders = async (hosId: string) => {

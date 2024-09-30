@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
-import type { MainAndSubVet } from '@/types/icu'
+import type { MainAndSubVet } from '@/types/icu/chart'
 import { Stethoscope } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'

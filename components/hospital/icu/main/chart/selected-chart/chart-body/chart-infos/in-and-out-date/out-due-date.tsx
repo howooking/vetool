@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { toast } from '@/components/ui/use-toast'
-import { updateOutDueDate } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateOutDueDate } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
 import { format, parseISO } from 'date-fns'
 import { ko } from 'date-fns/locale'

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import type { SearchedIcuCharts } from '@/types/icu'
+import type { SearchedIcuCharts } from '@/types/icu/search'
 import { SquareArrowRight } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 

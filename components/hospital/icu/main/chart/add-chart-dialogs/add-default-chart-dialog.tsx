@@ -12,8 +12,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { registerDefaultChart } from '@/lib/services/icu/add-icu-chart'
-import type { SelectedChart } from '@/types/icu'
+import { registerDefaultChart } from '@/lib/services/icu/chart/add-icu-chart'
+import type { SelectedChart } from '@/types/icu/chart'
 import { File } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'

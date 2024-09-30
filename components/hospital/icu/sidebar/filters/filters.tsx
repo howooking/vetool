@@ -1,6 +1,6 @@
 import GroupFilter from '@/components/hospital/icu/sidebar/filters/group-filter'
 import VetFilter from '@/components/hospital/icu/sidebar/filters/vet-filter'
-import type { Vet } from '@/types/icu'
+import type { Vet } from '@/types/icu/chart'
 import { RotateCcw } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useCallback } from 'react'

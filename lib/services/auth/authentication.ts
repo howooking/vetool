@@ -16,7 +16,7 @@ export async function googleLogin(formData: FormData) {
   })
 
   if (error) {
-    console.log(error)
+    console.error(error)
     throw new Error(`구글 로그인 중 에러 발생 : ${error.message}`)
   }
 
@@ -31,7 +31,7 @@ export async function logout() {
   const { error } = await supabase.auth.signOut()
 
   if (error) {
-    console.log(error)
+    console.error(error)
     throw new Error(`로그아웃 중 에러 발생 : ${error.message}`)
   }
 

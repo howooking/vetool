@@ -1,7 +1,7 @@
 'use client'
 
 import { IcuOrderColors } from '@/types/adimin'
-import type { IcuSidebarData, Vet } from '@/types/icu'
+import type { IcuSidebarData, Vet } from '@/types/icu/chart'
 import React, { createContext, useContext } from 'react'
 
 interface IcuContextType {

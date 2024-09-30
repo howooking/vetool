@@ -1,6 +1,6 @@
 import CopyChartButton from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/copy-chart-button'
 import DeleteChartDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/delete-chart-dialog'
-import type { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import { useParams } from 'next/navigation'
 import OutPatientDialog from './out-patient-dialog'
 import ExportDialog from './export-dialog/export-dialog'

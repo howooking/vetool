@@ -17,14 +17,14 @@ export function createClient() {
           try {
             cookieStore.set({ name, value, ...options })
           } catch (error) {
-            console.log(error)
+            console.error(error)
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options })
           } catch (error) {
-            console.log(error)
+            console.error(error)
           }
         },
       },

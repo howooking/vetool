@@ -1,7 +1,7 @@
-import { SelectedIcuOrder } from '@/types/icu'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { create } from 'zustand'
 
-type IcuCreateOrderState = {
+type IcuOrderState = {
   isModalOpen: boolean
   toggleModal: () => void
 
@@ -14,7 +14,7 @@ type IcuCreateOrderState = {
   resetState: () => void
 }
 
-export const useCreateOrderStore = create<IcuCreateOrderState>((set) => ({
+export const useIcuOrderStore = create<IcuOrderState>((set) => ({
   isModalOpen: false,
   toggleModal: () => set((state) => ({ isModalOpen: !state.isModalOpen })),
 

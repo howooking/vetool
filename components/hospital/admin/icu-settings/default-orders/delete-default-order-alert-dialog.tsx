@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { deleteDefaultChartOrder } from '@/lib/services/admin/icu/default-orders'
-import type { SelectedIcuOrder } from '@/types/icu'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useRouter } from 'next/navigation'
 
 export default function DeleteDefaultOrderAlertDialog({

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useSidebarStore } from '@/lib/store/common/sidebar'
+import { useSidebarStore } from '@/lib/store/hospital/sidebar'
 import { cn } from '@/lib/utils'
 import { ArrowLeft } from 'lucide-react'
 import React from 'react'

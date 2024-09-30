@@ -1,8 +1,6 @@
 import { LI_MOTION } from '@/constants/hospital/icu/notification/aniimations'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn, getTimeSince, isDaysBehind } from '@/lib/utils'
-import { IcuNotificationJoined } from '@/types/icu'
+import type { IcuNotificationJoined } from '@/types/icu/chart'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction } from 'react'
@@ -26,12 +24,8 @@ export default function SingleNotification({
   localReadStatus,
 }: MenuItemProps) {
   const { push } = useRouter()
-  const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
 
   const handleClick = () => {
-    setSelectedIcuMainView('chart')
-    setSelectedPatientId(notification.patient_id.patient_id)
     push(`${notification.target_date}`)
     setIsPopupOpen(false)
 

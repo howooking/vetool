@@ -1,7 +1,7 @@
 import IcuFooter from '@/components/hospital/icu/footer/icu-footer'
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
-import { getInitialIcuData } from '@/lib/services/icu/get-initial-icu-data'
+import { getIcuData } from '@/lib/services/icu/get-icu-data'
 import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-privider'
 import type { IcuOrderColors } from '@/types/adimin'
 import React from 'react'
@@ -14,8 +14,7 @@ export default async function IcuPageLayout({
   params: { target_date: string; hos_id: string }
 }) {
   const { basicHosData, icuSidebarData, patientsData, vetsListData } =
-    // todo: 함수 명 getIcuData로  변경
-    await getInitialIcuData(params.hos_id, params.target_date)
+    await getIcuData(params.hos_id, params.target_date)
 
   return (
     <BasicHosDataProvider

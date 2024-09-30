@@ -1,6 +1,6 @@
 'use client'
 
-import type { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import HeaderCenter from './header-center/bookmark-and-signalments'
 import HeaderRightButtons from './header-right-buttons/header-right-buttons'
 

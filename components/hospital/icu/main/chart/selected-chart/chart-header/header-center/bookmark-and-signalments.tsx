@@ -1,5 +1,5 @@
 import { getAgeFromAgeInDays } from '@/lib/utils'
-import type { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import { Cat, Dog } from 'lucide-react'
 import BookmarkDialog from './bookmark-dialog'
 import UpdateWeightDialog from './update-weight-dialog'

@@ -1,6 +1,6 @@
 'use client'
 
-import { useSidebarStore } from '@/lib/store/common/sidebar'
+import { useSidebarStore } from '@/lib/store/hospital/sidebar'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import {

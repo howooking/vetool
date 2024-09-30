@@ -1,8 +1,8 @@
 import AddChartDialogs from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-chart-dialogs'
 import Chart from '@/components/hospital/icu/main/chart/chart'
 import CheckBeforeIndate from '@/components/hospital/icu/main/chart/check-before-in-date'
-import { getIcuChartByPatientId } from '@/lib/services/icu/get-icu-chart-by-patient-id'
-import { SelectedChart } from '@/types/icu'
+import { getIcuChart } from '@/lib/services/icu/chart/get-icu-chart'
+import type { SelectedChart } from '@/types/icu/chart'
 
 export default async function PatientChartPage({
   params,
@@ -13,7 +13,7 @@ export default async function PatientChartPage({
     patient_id: string
   }
 }) {
-  const chartData = await getIcuChartByPatientId(
+  const chartData = await getIcuChart(
     params.hos_id,
     params.target_date,
     params.patient_id,

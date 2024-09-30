@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { deleteBookmarkChart } from '@/lib/services/icu/bookmark'
+import { deleteBookmarkChart } from '@/lib/services/icu/bookmark/bookmark'
 import { Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 

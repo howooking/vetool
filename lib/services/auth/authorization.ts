@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { UserProfile } from '@/types'
 import { redirect } from 'next/navigation'
 
 export async function getUser() {
@@ -12,7 +11,7 @@ export async function getUser() {
   } = await supabase.auth.getUser()
 
   if (error) {
-    console.log(error)
+    console.error(error)
     redirect('/login')
   }
 
@@ -22,17 +21,17 @@ export async function getUser() {
 export async function checkIsAdmin(hosId: string, userId: string) {
   const supabase = createClient()
 
-  const { data: userAdminData, error: userAdminDataError } = await supabase
+  const { data, error } = await supabase
     .from('users')
     .select('is_admin')
     .match({ user_id: userId })
 
-  if (userAdminDataError) {
-    console.log(userAdminDataError)
-    redirect(`/error?message=${userAdminDataError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
   }
 
-  const isAdmin = userAdminData[0].is_admin ?? false
+  const isAdmin = data[0].is_admin ?? false
 
   if (!isAdmin) {
     redirect(`/hospital/${hosId}`)
@@ -47,7 +46,7 @@ export const getUserData = async () => {
   } = await supabase.auth.getUser()
 
   if (userError) {
-    console.log(userError)
+    console.error(userError)
     redirect(`/error?message=${userError.message}`)
   }
 
@@ -58,7 +57,7 @@ export const getUserData = async () => {
     .single()
 
   if (userDataError) {
-    console.log(userDataError)
+    console.error(userDataError)
     redirect(`/error?message=${userDataError.message}`)
   }
 

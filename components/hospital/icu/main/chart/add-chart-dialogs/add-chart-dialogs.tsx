@@ -1,6 +1,6 @@
 'use client'
 
-import { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import AddDefaultChartDialog from './add-default-chart-dialog'
 import AddBookmarkChartDialog from './bookmark/add-bookmark-chart-dialog'
 import CopyPrevChartDialog from './copy-prev-chart-dialog'

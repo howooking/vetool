@@ -1,7 +1,7 @@
 import IcuHeaderDateSelector from '@/components/hospital/icu/header/date-picker/header-date-selector'
 import RegisterDialog from './register-dialog/register-dialog'
 import type { PatientData } from '@/types/patients'
-import type { Vet } from '@/types/icu'
+import type { Vet } from '@/types/icu/chart'
 import RefreshButton from './refresh-button'
 
 export default async function IcuHeader({

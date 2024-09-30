@@ -1,5 +1,5 @@
 import Bookmark from '@/components/hospital/icu/main/bookmark/bookmark'
-import { getBookmarkedCharts } from '@/lib/services/icu/bookmark'
+import { getBookmarkedCharts } from '@/lib/services/icu/bookmark/bookmark'
 
 export default async function BookmarkPage({
   params,

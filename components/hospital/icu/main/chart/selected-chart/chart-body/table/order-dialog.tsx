@@ -10,12 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { useCreateOrderStore } from '@/lib/store/icu/create-order'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+
 import { Plus } from 'lucide-react'
 
 export default function OrderDialog({ icuChartId }: { icuChartId: string }) {
   const { isModalOpen, isEditMode, toggleModal, setIsEditMode, resetState } =
-    useCreateOrderStore()
+    useIcuOrderStore()
 
   const handleDialogOpen = () => {
     setIsEditMode(false)

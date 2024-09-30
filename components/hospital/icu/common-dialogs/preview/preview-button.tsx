@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { getIcuChartByPatientId } from '@/lib/services/icu/get-icu-chart-by-patient-id'
+import { getIcuChart } from '@/lib/services/icu/chart/get-icu-chart'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { Eye, LoaderCircle } from 'lucide-react'
@@ -21,7 +21,7 @@ export default function PreviewButton({
   const handleOpenPreviewDialog = async () => {
     setIsPreviewing(true)
 
-    const previewChart = await getIcuChartByPatientId(
+    const previewChart = await getIcuChart(
       hos_id as string,
       targetDate,
       patientId,

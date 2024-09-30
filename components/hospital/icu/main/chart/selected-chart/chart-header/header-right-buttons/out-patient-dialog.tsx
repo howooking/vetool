@@ -10,9 +10,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { toggleOutPatient } from '@/lib/services/icu/update-icu-chart-infos'
+import { toggleOutPatient } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { cn, hashtagKeyword } from '@/lib/utils'
-import type { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import { LoaderCircle, LogOut, Undo2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'

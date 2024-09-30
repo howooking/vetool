@@ -1,12 +1,12 @@
 import ChartBody from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-body'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/components/ui/use-toast'
-import { getIoDateRange } from '@/lib/services/icu/get-icu-io-chart'
-import { getInitialIcuData } from '@/lib/services/icu/get-initial-icu-data'
+import { getIoDateRange } from '@/lib/services/icu/chart/get-io-date-range'
+import { getIcuData } from '@/lib/services/icu/get-icu-data'
 import { Json } from '@/lib/supabase/database.types'
 import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-privider'
 import { IcuOrderColors } from '@/types/adimin'
-import type { IcuSidebarData, SelectedChart, Vet } from '@/types/icu'
+import type { IcuSidebarData, SelectedChart, Vet } from '@/types/icu/chart'
 import { PatientData } from '@/types/patients'
 import html2canvas from 'html2canvas'
 import React, { useEffect, useRef } from 'react'
@@ -101,7 +101,7 @@ export const handleExport = async (
 ) => {
   try {
     const dateRange = await getIoDateRange(chartData.icu_io.icu_io_id)
-    const initialIcuData = await getInitialIcuData(hosId, chartData.target_date)
+    const initialIcuData = await getIcuData(hosId, chartData.target_date)
 
     if (dateRange) {
       const canvases = await Promise.all(

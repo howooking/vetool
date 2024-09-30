@@ -6,14 +6,14 @@ import { redirect } from 'next/navigation'
 export const deleteOrder = async (chartOrderId: string) => {
   const supabase = createClient()
 
-  const { error: deleteOrderError } = await supabase
+  const { error } = await supabase
     .from('icu_orders')
     .delete()
     .match({ icu_chart_order_id: chartOrderId })
 
-  if (deleteOrderError) {
-    console.log(deleteOrderError)
-    redirect(`/error?message=${deleteOrderError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
   }
 }
 
@@ -30,18 +30,17 @@ export const upsertOrder = async (
 ) => {
   const supabase = createClient()
 
-  const { error: upsertOrderError } = await supabase.from('icu_orders').upsert({
+  const { error } = await supabase.from('icu_orders').upsert({
     hos_id: hosId,
     icu_chart_order_id: icuChartOrderId,
     icu_chart_id: icuChartId,
     icu_chart_order_time: orderTime,
-
     ...order,
   })
 
-  if (upsertOrderError) {
-    console.log(upsertOrderError)
-    redirect(`/error?message=${upsertOrderError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
   }
 }
 export const updateOrderTime = async (
@@ -50,13 +49,13 @@ export const updateOrderTime = async (
 ) => {
   const supabase = createClient()
 
-  const { error: updateOrderTimeError } = await supabase
+  const { error } = await supabase
     .from('icu_orders')
     .update({ icu_chart_order_time: orderTime })
     .match({ icu_chart_order_id: icuChartOrderId })
 
-  if (updateOrderTimeError) {
-    console.log(updateOrderTimeError)
-    redirect(`/error?message=${updateOrderTimeError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
   }
 }
