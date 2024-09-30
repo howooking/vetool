@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import type { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import { Share } from 'lucide-react'
 import { useState } from 'react'
 

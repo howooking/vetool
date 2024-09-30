@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
-import type { SearchedIcuIos } from '@/types/icu'
+import type { SearchedIcuIos } from '@/types/icu/search'
 
 export default function SearchChartTable({
   searchedIcuIos,

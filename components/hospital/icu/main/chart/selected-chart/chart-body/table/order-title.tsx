@@ -12,7 +12,7 @@ import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { cn } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { IcuOrderColors } from '@/types/adimin'
-import type { SelectedIcuOrder } from '@/types/icu'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 
 export default function OrderTitle({
   order,

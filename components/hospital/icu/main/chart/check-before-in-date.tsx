@@ -2,7 +2,7 @@
 
 import NoResult from '@/components/common/no-result'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
-import { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import { useMemo } from 'react'
 
 export default function CheckBeforeIndate({

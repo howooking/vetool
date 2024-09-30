@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 
 const HOSPITAL_HOME_TABLES = ['notices', 'todos']
 
-export function useHomeRealtimeSubscription(hosId: string) {
+export function useHospitalHomeRealtime(hosId: string) {
   const supabase = createClient()
   const { refresh } = useRouter()
 

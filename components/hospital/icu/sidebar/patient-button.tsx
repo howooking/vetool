@@ -1,8 +1,6 @@
-// todo: 필터 동기화
-
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import type { IcuSidebarData } from '@/types/icu'
+import type { IcuSidebarData } from '@/types/icu/chart'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 

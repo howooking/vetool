@@ -7,17 +7,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { IcuOrderColors } from '@/types/adimin'
-import { IcuChartOrderJoined } from '@/types/icu'
 import { Fullscreen } from 'lucide-react'
 
-export default function MobileChartTable({
-  selectedChartOrders,
-  orderColors,
-}: {
-  selectedChartOrders: IcuChartOrderJoined[]
-  orderColors: IcuOrderColors
-}) {
+export default function MobileChartTable() {
   return (
     <>
       <Dialog>

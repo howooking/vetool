@@ -1,6 +1,6 @@
 import { LI_MOTION } from '@/constants/hospital/icu/notification/aniimations'
 import { cn, getTimeSince, isDaysBehind } from '@/lib/utils'
-import { IcuNotificationJoined } from '@/types/icu'
+import type { IcuNotificationJoined } from '@/types/icu/chart'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction } from 'react'

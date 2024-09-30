@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import type { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import { useMemo } from 'react'
 import OrderCells from './order-cells'
 

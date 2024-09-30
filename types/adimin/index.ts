@@ -1,4 +1,11 @@
-import { Hospital, User, UserApproval } from '..'
+import type {
+  Hospital,
+  IcuDefaultChart,
+  IcuIo,
+  Patients,
+  User,
+  UserApproval,
+} from '..'
 
 export type UserHospitalJoined = Omit<
   User,
@@ -37,4 +44,14 @@ export type IcuOrderColors = {
     | 'manual'
     | 'checklist'
     | 'injection']: string
+}
+
+export type IcuDefaultChartJoined = Pick<
+  IcuDefaultChart,
+  | 'default_chart_id'
+  | 'default_chart_order_name'
+  | 'default_chart_order_comment'
+  | 'default_chart_order_type'
+> & {
+  hos_id: Pick<Hospital, 'order_color'>
 }

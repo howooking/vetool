@@ -2,7 +2,7 @@ import AddChartDialogs from '@/components/hospital/icu/main/chart/add-chart-dial
 import Chart from '@/components/hospital/icu/main/chart/chart'
 import CheckBeforeIndate from '@/components/hospital/icu/main/chart/check-before-in-date'
 import { getIcuChart } from '@/lib/services/icu/chart/get-icu-chart'
-import { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 
 export default async function PatientChartPage({
   params,

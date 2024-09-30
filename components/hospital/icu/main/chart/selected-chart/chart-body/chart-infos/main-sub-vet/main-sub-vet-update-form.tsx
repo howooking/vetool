@@ -19,7 +19,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { updateMainSubVet } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
-import type { Vet, MainAndSubVet } from '@/types/icu'
+import type { MainAndSubVet, Vet } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'

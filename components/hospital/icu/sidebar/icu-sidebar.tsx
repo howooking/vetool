@@ -3,7 +3,7 @@
 import NoPatients from '@/components/hospital/icu/sidebar/no-patients'
 import PatientList from '@/components/hospital/icu/sidebar/patient-list'
 import { Separator } from '@/components/ui/separator'
-import type { IcuSidebarData, Vet } from '@/types/icu'
+import type { IcuSidebarData, Vet } from '@/types/icu/chart'
 import { useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import Filters from './filters/filters'

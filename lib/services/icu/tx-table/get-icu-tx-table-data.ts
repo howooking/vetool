@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { IcuTxTableData } from '@/types/icu'
+import type { IcuTxTableData } from '@/types/icu/tx-table'
 
 export const getIcuTxTableData = async (hosId: string, targetDate: string) => {
   const supabase = createClient()

@@ -1,12 +1,11 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import type { IcuChartBookmarkJoined } from '@/types/icu'
+import type { BookmarkedChart } from '@/types/icu/bookmark'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import PreviewButton from '../../../../common-dialogs/preview/preview-button'
 import PasteBookmarkButton from './paste-bookmark-button'
-import { BookmarkedChart } from '@/types/icu/bookmark'
 
 export const bookmarkColumns: ColumnDef<BookmarkedChart>[] = [
   {

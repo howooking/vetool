@@ -3,7 +3,7 @@ import Cpcr from '@/components/hospital/icu/main/chart/selected-chart/chart-body
 import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/diagnosis'
 import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/in-and-out-date/in-and-out-date'
 import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/owner-name'
-import type { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import Group from './group/group'
 import MainSubVet from './main-sub-vet/main-sub-vet'
 

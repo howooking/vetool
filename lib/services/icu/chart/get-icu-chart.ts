@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { SelectedChart } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import { redirect } from 'next/navigation'
 
 export const getIcuChart = async (

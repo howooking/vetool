@@ -4,7 +4,7 @@ const SPECIAL_CHAR_REGEX = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]+/g
 
 import { createClient } from '@/lib/supabase/server'
 import { getDateMonthsAgo } from '@/lib/utils'
-import type { SearchedIcuIos } from '@/types/icu'
+import type { SearchedIcuIos } from '@/types/icu/search'
 import { redirect } from 'next/navigation'
 
 export const searchIos = async (

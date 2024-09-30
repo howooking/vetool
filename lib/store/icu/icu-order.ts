@@ -1,4 +1,4 @@
-import { SelectedIcuOrder } from '@/types/icu'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { create } from 'zustand'
 
 type IcuOrderState = {

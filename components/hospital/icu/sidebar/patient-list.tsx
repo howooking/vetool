@@ -1,6 +1,6 @@
 import PatientButton from '@/components/hospital/icu/sidebar/patient-button'
 import { Separator } from '@/components/ui/separator'
-import type { IcuSidebarData } from '@/types/icu'
+import type { IcuSidebarData } from '@/types/icu/chart'
 
 type IcuSidebarContentProps = {
   filteredIcuIoData: IcuSidebarData[]

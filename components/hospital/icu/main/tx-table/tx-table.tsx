@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { cn } from '@/lib/utils'
-import { IcuTxTableData } from '@/types/icu'
+import type { IcuTxTableData } from '@/types/icu/tx-table'
 import { Cat, Dog } from 'lucide-react'
 import { useMemo } from 'react'
 

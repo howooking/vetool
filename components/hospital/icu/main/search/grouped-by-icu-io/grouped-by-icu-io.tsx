@@ -1,6 +1,6 @@
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import { TableCell, TableRow } from '@/components/ui/table'
-import type { SearchedIcuCharts, SearchedIcuIos } from '@/types/icu'
+import type { SearchedIcuCharts, SearchedIcuIos } from '@/types/icu/search'
 import { useEffect, useState } from 'react'
 import GroupedAccordionContents from './grouped-accordion-contents'
 import GroupedAccordionTrigger from './grouped-accordion-trigger'

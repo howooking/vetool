@@ -7,19 +7,19 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import type { IcuIoJoined } from '@/types/icu'
 import { Menu } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
-import PatientList from './patient-list'
 
-export function MobilePatientList({
-  filteredIcuIoData,
-  excludedIcuIoData,
-}: {
-  filteredIcuIoData: IcuIoJoined[]
-  excludedIcuIoData: IcuIoJoined[]
-}) {
+export function MobilePatientList(
+  {
+    // filteredIcuIoData,
+    // excludedIcuIoData,
+  }: {
+    // filteredIcuIoData: IcuIoJoined[]
+    // excludedIcuIoData: IcuIoJoined[]
+  },
+) {
   const { target_date } = useParams()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const handleCloseMobileDrawer = () => setIsSheetOpen(false)

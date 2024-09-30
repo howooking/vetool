@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuNotificationJoined } from '@/types/icu'
+import type { IcuNotificationJoined } from '@/types/icu/chart'
 import { redirect } from 'next/navigation'
 
 export const getIcuNotification = async (hosId: string, page: number = 1) => {

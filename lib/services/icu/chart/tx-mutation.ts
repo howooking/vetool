@@ -2,7 +2,7 @@
 
 import { TxLocalState } from '@/lib/store/icu/tx-mutation'
 import { createClient } from '@/lib/supabase/server'
-import type { TxLog } from '@/types/icu'
+import type { TxLog } from '@/types/icu/chart'
 import { redirect } from 'next/navigation'
 
 export const upsertIcuTx = async (

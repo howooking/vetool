@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuSidebarData, Vet } from '@/types/icu'
+import type { IcuSidebarData, Vet } from '@/types/icu/chart'
 import type { PatientData } from '@/types/patients'
 import { redirect } from 'next/navigation'
 
