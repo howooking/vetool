@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { useSidebarStore } from '@/lib/store/hospital/sidebar'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
@@ -11,8 +12,7 @@ import {
   Slice,
   Syringe,
 } from 'lucide-react'
-import Link from 'next/link'
-import { useParams, usePathname } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 
 // server component에서 props로 전달이 안됨
 const ICON_MAPPER = {
@@ -28,10 +28,12 @@ export default function SidebarItem({
   name,
   path,
   iconName,
+  isReady,
 }: {
   name: string
   path: string
   iconName: string
+  isReady: boolean
 }) {
   const { isExpanded } = useSidebarStore()
   const pathname = usePathname()
@@ -44,23 +46,29 @@ export default function SidebarItem({
   const dynamicPath =
     path === 'icu' ? `icu/${format(new Date(), 'yyyy-MM-dd')}/summary` : path
 
+  const { push } = useRouter()
+
   return (
-    <li key={name} className="transition-all hover:bg-muted">
-      <Link
-        href={`/hospital/${hos_id}/${dynamicPath}`}
+    <li key={name}>
+      <Button
+        onClick={() => push(`/hospital/${hos_id}/${dynamicPath}`)}
         className={cn(
-          'flex h-12 items-center',
           isActive && 'bg-primary text-white',
+          'relative flex h-12 w-full items-center rounded-none p-0',
         )}
+        variant="ghost"
+        disabled={!isReady}
       >
-        {ICON_MAPPER[iconName as keyof typeof ICON_MAPPER]}
+        <div className="absolute left-0.5">
+          {ICON_MAPPER[iconName as keyof typeof ICON_MAPPER]}
+        </div>
 
         <span
           className={cn('absolute left-12', isExpanded ? 'block' : 'hidden')}
         >
           {name}
         </span>
-      </Link>
+      </Button>
     </li>
   )
 }
