@@ -8,11 +8,8 @@ type IcuCreateOrderState = {
   isEditMode?: boolean
   setIsEditMode: (isEditMode: boolean) => void
 
-  selectedChartOrder: SelectedIcuOrder
-  setSelectedChartOrder: (chartOrder: SelectedIcuOrder) => void
-
-  defaultChartId: string | undefined
-  setDefaultChartId: (defaultChartId: string) => void
+  selectedChartOrder: Partial<SelectedIcuOrder>
+  setSelectedChartOrder: (chartOrder: Partial<SelectedIcuOrder>) => void
 
   resetState: () => void
 }
@@ -24,16 +21,12 @@ export const useCreateOrderStore = create<IcuCreateOrderState>((set) => ({
   isEditMode: false,
   setIsEditMode: (isEditMode) => set({ isEditMode }),
 
-  selectedChartOrder: {} as SelectedIcuOrder,
+  selectedChartOrder: {} as Partial<SelectedIcuOrder>,
   setSelectedChartOrder: (selectedChartOrder) => set({ selectedChartOrder }),
-
-  defaultChartId: undefined,
-  setDefaultChartId: (defaultChartId) => set({ defaultChartId }),
 
   resetState: () =>
     set({
       isEditMode: false,
-      selectedChartOrder: {} as SelectedIcuOrder,
-      defaultChartId: undefined,
+      selectedChartOrder: {} as Partial<SelectedIcuOrder>,
     }),
 }))

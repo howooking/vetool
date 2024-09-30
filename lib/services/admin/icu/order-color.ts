@@ -20,3 +20,20 @@ export const getHosOrderColor = async (hosId: string) => {
 
   return data.order_color
 }
+
+export const updateOrderColor = async (
+  hosId: string,
+  orderTypeColorsInput: IcuOrderColors,
+) => {
+  const supabase = createClient()
+
+  const { error } = await supabase
+    .from('hospitals')
+    .update({ order_color: orderTypeColorsInput })
+    .match({ hos_id: hosId })
+
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
+  }
+}

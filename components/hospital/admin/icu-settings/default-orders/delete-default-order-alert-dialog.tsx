@@ -12,23 +12,27 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { deleteOrder } from '@/lib/services/icu/order-mutation'
+import { deleteDefaultChartOrder } from '@/lib/services/admin/icu/default-orders'
 import type { SelectedIcuOrder } from '@/types/icu'
+import { useRouter } from 'next/navigation'
 
-export default function DeleteOrderAlertDialog({
+export default function DeleteDefaultOrderAlertDialog({
   selectedChartOrder,
   toggleModal,
 }: {
   selectedChartOrder: Partial<SelectedIcuOrder>
   toggleModal: () => void
 }) {
+  const { refresh } = useRouter()
   const handleDeleteOrderClick = async () => {
-    await deleteOrder(selectedChartOrder.order_id!)
+    await deleteDefaultChartOrder(selectedChartOrder.order_id!)
 
     toast({
       title: `${selectedChartOrder.order_name} 오더를 삭제하였습니다`,
     })
+
     toggleModal()
+    refresh()
   }
 
   return (

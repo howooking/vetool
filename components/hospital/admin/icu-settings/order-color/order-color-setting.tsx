@@ -3,12 +3,12 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
-import { updateOrderColor } from '@/lib/services/icu/hospital-orders'
+import { updateOrderColor } from '@/lib/services/admin/icu/order-color'
 import { cn } from '@/lib/utils'
 import type { IcuOrderColors } from '@/types/adimin'
 import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import OrderColorPicker from './order-color-picker'
 
 export default function OrderColorSetting({
@@ -21,11 +21,14 @@ export default function OrderColorSetting({
   const [locatColorState, setLocalColorState] = useState(orderColor)
   const [isUpdating, setIsUpdating] = useState(false)
 
-  const handleOrderColor = async (orderType: string, color: string) => {
-    setLocalColorState({ ...locatColorState, [orderType]: color })
-  }
+  const handleOrderColor = useCallback(
+    async (orderType: string, color: string) => {
+      setLocalColorState({ ...locatColorState, [orderType]: color })
+    },
+    [locatColorState],
+  )
 
-  const handleUpdateOrderColor = async () => {
+  const handleUpdateOrderColor = useCallback(async () => {
     setIsUpdating(true)
 
     await updateOrderColor(hos_id as string, locatColorState)
@@ -35,18 +38,22 @@ export default function OrderColorSetting({
 
     setIsUpdating(false)
     refresh()
-  }
+  }, [hos_id, locatColorState, refresh])
 
-  const sortedOrders = Object.entries(locatColorState).sort((a, b) => {
-    return (
-      DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-        (order) => order === a[0],
-      ) -
-      DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-        (order) => order === b[0],
-      )
-    )
-  })
+  const sortedOrders = useMemo(
+    () =>
+      Object.entries(locatColorState).sort((a, b) => {
+        return (
+          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+            (order) => order === a[0],
+          ) -
+          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+            (order) => order === b[0],
+          )
+        )
+      }),
+    [locatColorState],
+  )
 
   return (
     <div className="flex flex-col gap-4">
