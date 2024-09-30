@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { useIcuRealtime } from '@/hooks/use-icu-realtime'
 import { cn } from '@/lib/utils'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import RealtimeStatus from './realtime-status'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
@@ -44,6 +44,8 @@ export default function IcuFooter({
   const { push } = useRouter()
   const path = usePathname()
   const currentIcuPath = path.split('/').at(5)
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
 
   return (
     <footer
@@ -68,7 +70,7 @@ export default function IcuFooter({
               variant="ghost"
               className={currentIcuPath === value ? 'bg-muted' : ''}
               onClick={() =>
-                push(`/hospital/${hosId}/icu/${targetDate}/${value}`)
+                push(`/hospital/${hosId}/icu/${targetDate}/${value}?${params}`)
               }
             >
               {label}

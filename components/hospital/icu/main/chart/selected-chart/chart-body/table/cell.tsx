@@ -7,6 +7,7 @@ import type { Treatment, TxLog } from '@/types/icu/chart'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import type { DebouncedState } from 'use-debounce'
 import { TxDetailHover } from './tx/tx-detail-hover'
+import { useSearchParams } from 'next/navigation'
 
 type ChartTableCellProps = {
   time: number
@@ -45,6 +46,17 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       setStep,
       setTxLocalState,
     } = useTxMutationStore()
+
+    const searchParams = useSearchParams()
+    const params = new URLSearchParams(searchParams)
+    const orderId = params.get('order-id')
+    const orderTime = params.get('time')
+
+    useEffect(() => {
+      const cellInputId = document.getElementById(`${orderId}&${orderTime}`)
+
+      if (cellInputId) cellInputId.focus()
+    }, [orderId, orderTime])
 
     useEffect(() => {
       if (treatment?.tx_result || isMutationCanceled) {

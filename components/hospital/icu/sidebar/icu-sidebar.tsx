@@ -1,12 +1,12 @@
 'use client'
 
+import Filters from '@/components/hospital/icu/sidebar/filters/filters'
 import NoPatients from '@/components/hospital/icu/sidebar/no-patients'
 import PatientList from '@/components/hospital/icu/sidebar/patient-list'
 import { Separator } from '@/components/ui/separator'
 import type { IcuSidebarData, Vet } from '@/types/icu/chart'
 import { useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
-import Filters from './filters/filters'
 
 export default function IcuSidebar({
   icuSidebarData,
@@ -36,13 +36,12 @@ export default function IcuSidebar({
 
     const filterByVet = (data: IcuSidebarData[]) => {
       if (filters.selectedVet === '') return data
-
       const vetFilteredIds = new Set(
         icuSidebarData
           .filter(
             (chart) =>
-              chart.vets.main_vet === filters.selectedVet ||
-              chart.vets.sub_vet === filters.selectedVet,
+              chart.vets?.main_vet === filters.selectedVet ||
+              chart.vets?.sub_vet === filters.selectedVet,
           )
           .map((chart) => chart.icu_io_id),
       )
@@ -52,7 +51,7 @@ export default function IcuSidebar({
 
     const filteredIcuIoData = filterByVet(filterByGroup(icuSidebarData))
     const excludedIcuIoData = icuSidebarData.filter(
-      (item) => !filteredIcuIoData.includes(item) ?? [],
+      (item) => !filteredIcuIoData.includes(item),
     )
 
     return { filteredIcuIoData, excludedIcuIoData }
