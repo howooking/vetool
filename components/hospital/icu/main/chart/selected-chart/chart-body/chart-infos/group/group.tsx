@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { toast } from '@/components/ui/use-toast'
-import { updateGroup } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateGroup } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Component } from 'lucide-react'

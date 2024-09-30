@@ -1,7 +1,7 @@
 import { staffColumns } from '@/components/hospital/admin/staff/staff-columns'
 import DataTable from '@/components/ui/data-table'
-import { checkIsAdmin, getUser } from '@/lib/services/auth/authorization'
-import { getStaffs } from '@/lib/services/settings/staff-settings'
+import { getStaffs } from '@/lib/services/admin/staff/staff'
+import { getUser } from '@/lib/services/auth/authorization'
 import type { HospitalUserDataTable } from '@/types/adimin'
 
 export default async function AdminStaffPage({

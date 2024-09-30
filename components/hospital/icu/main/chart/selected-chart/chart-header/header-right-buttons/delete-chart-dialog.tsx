@@ -15,7 +15,7 @@ import {
   deleteAllCharts,
   deleteChart,
   deleteOrders,
-} from '@/lib/services/icu/delete-icu-chart'
+} from '@/lib/services/icu/chart/delete-icu-chart'
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { Trash2 } from 'lucide-react'

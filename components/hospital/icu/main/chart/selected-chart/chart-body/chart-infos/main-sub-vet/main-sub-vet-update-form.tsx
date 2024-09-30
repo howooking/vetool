@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { updateMainSubVet } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateMainSubVet } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
 import type { Vet, MainAndSubVet } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'

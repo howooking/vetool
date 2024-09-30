@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { getIcuIoByPatientId } from '@/lib/services/icu/get-icu-io-by-patient-id'
+import { getIcuIoByPatientId } from '@/lib/services/icu/chart/get-icu-io-by-patient-id'
 import {
   useIcuRegisteringPatient,
   usePatientRegisterStep,

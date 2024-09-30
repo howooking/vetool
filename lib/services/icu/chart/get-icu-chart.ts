@@ -4,14 +4,14 @@ import { createClient } from '@/lib/supabase/server'
 import { SelectedChart } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
-export const getIcuChartByPatientId = async (
+export const getIcuChart = async (
   hosId: string,
   targetDate: string,
   patient_id: string,
 ) => {
   const supabase = createClient()
 
-  const { data: icuChartData, error: icuChartDataError } = await supabase
+  const { data, error } = await supabase
     .rpc('get_icu_chart_data', {
       hos_id_input: hosId,
       target_date_input: targetDate,
@@ -19,9 +19,9 @@ export const getIcuChartByPatientId = async (
     })
     .returns<SelectedChart>()
 
-  if (icuChartDataError) {
-    console.error(icuChartDataError)
-    redirect(`/error?message=${icuChartDataError?.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error?.message}`)
   }
-  return icuChartData
+  return data
 }

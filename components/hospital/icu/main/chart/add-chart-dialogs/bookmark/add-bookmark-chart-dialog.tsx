@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { getBookmarkedCharts } from '@/lib/services/icu/bookmark'
+import { getBookmarkedCharts } from '@/lib/services/icu/bookmark/bookmark'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'

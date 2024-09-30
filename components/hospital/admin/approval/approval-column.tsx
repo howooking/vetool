@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { approveStaff } from '@/lib/services/settings/staff-settings'
+import { approveStaff } from '@/lib/services/admin/approval/approval'
 import { cn } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'

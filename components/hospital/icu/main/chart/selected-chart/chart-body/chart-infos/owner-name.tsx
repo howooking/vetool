@@ -3,7 +3,7 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
-import { updateOwnerName } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateOwnerName } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 

@@ -61,7 +61,7 @@ export async function middleware(request: NextRequest) {
           .match({ user_id: authUser?.id })
 
       if (userApprovalDataError) {
-        console.log(userApprovalDataError)
+        console.error(userApprovalDataError)
         return NextResponse.redirect(
           new URL(
             `/error?message=${userApprovalDataError.message}`,

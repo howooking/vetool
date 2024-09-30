@@ -11,9 +11,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { pasteChart } from '@/lib/services/icu/paste-chart'
+import { pasteChart } from '@/lib/services/icu/chart/paste-chart'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
 import { CopyCheck, LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'

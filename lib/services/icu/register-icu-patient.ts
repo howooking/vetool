@@ -18,7 +18,7 @@ export const registerIcuPatient = async (
 ) => {
   const supabase = createClient()
 
-  const { error: rpcError } = await supabase.rpc('register_icu', {
+  const { error } = await supabase.rpc('register_icu', {
     hos_id_input: hosId,
     icu_io_dx_input: dx,
     icu_io_cc_input: cc,
@@ -31,8 +31,8 @@ export const registerIcuPatient = async (
     sub_vet_input: sub_vet ?? '',
   })
 
-  if (rpcError) {
-    console.log(rpcError)
-    redirect(`/error?message=${rpcError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
   }
 }

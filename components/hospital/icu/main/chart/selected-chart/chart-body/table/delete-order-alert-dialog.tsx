@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { deleteOrder } from '@/lib/services/icu/order-mutation'
+import { deleteOrder } from '@/lib/services/icu/chart/order-mutation'
 import type { SelectedIcuOrder } from '@/types/icu'
 
 export default function DeleteOrderAlertDialog({

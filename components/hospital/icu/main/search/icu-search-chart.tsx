@@ -6,7 +6,7 @@ import SearchChartTable from '@/components/hospital/icu/main/search/search-chart
 import SearchChartSheet from '@/components/hospital/icu/main/search/sheet/search-chart-sheet'
 import SearchTypeRadio from '@/components/hospital/icu/main/search/sheet/search-type-radio'
 import { Input } from '@/components/ui/input'
-import { searchIos } from '@/lib/services/icu/search-charts'
+import { searchIos } from '@/lib/services/icu/search/search-charts'
 import { useKeywordTrieStore } from '@/lib/store/hospital/keyword-trie'
 import type { SearchedIcuIos } from '@/types/icu'
 import { useParams } from 'next/navigation'

@@ -4,29 +4,6 @@ import { createClient } from '@/lib/supabase/server'
 import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 
-export const hasPrevChart = async (
-  targetDate: string,
-  selectedPatientId: string,
-) => {
-  const supabase = createClient()
-
-  const newDate = new Date(targetDate)
-  const prevDate = format(newDate.setDate(newDate.getDate() - 1), 'yyyy-MM-dd')
-
-  const { data: prevChartData, error } = await supabase
-    .from('icu_chart')
-    .select('icu_chart_id')
-    .match({ patient_id: selectedPatientId, target_date: prevDate })
-    .maybeSingle()
-
-  if (error) {
-    console.log(error)
-    redirect(`/error?message=${error.message}`)
-  }
-
-  return !!prevChartData
-}
-
 export const copyPrevChart = async (targetDate: string, patientId: string) => {
   const supabase = createClient()
 
@@ -53,7 +30,7 @@ export const copyPrevChart = async (targetDate: string, patientId: string) => {
     .maybeSingle()
 
   if (prevChartDataError) {
-    console.log(prevChartDataError)
+    console.error(prevChartDataError)
     redirect(`/error?message=${prevChartDataError.message}`)
   }
   //  전일 차트 데이터가 없으면 클라이언트에서 토스트 띄우기 위해
@@ -67,7 +44,7 @@ export const copyPrevChart = async (targetDate: string, patientId: string) => {
     })
 
   if (prevChartOrdersDataError) {
-    console.log(prevChartOrdersDataError)
+    console.error(prevChartOrdersDataError)
     redirect(`/error?message=${prevChartOrdersDataError.message}`)
   }
 
@@ -97,7 +74,7 @@ export const copyPrevChart = async (targetDate: string, patientId: string) => {
       .single()
 
   if (creatingNewIcuChartError) {
-    console.log(creatingNewIcuChartError)
+    console.error(creatingNewIcuChartError)
     redirect(`/error?message=${creatingNewIcuChartError.message}`)
   }
 
@@ -112,8 +89,13 @@ export const copyPrevChart = async (targetDate: string, patientId: string) => {
 export const registerDefaultChart = async (hosId: string, chartId: string) => {
   const supabase = createClient()
 
-  await supabase.rpc('insert_default_orders', {
+  const { error } = await supabase.rpc('insert_default_orders', {
     hos_id_input: hosId,
     icu_chart_id_input: chartId,
   })
+
+  if (error) {
+    console.error(error)
+    redirect(`/error/?message=${error.message}`)
+  }
 }

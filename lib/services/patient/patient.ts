@@ -23,36 +23,33 @@ export const insertPatient = async (
 ) => {
   const supabase = createClient()
 
-  const { data: patientId, error: rpcError } = await supabase.rpc(
-    'insert_patient_when_register',
-    {
-      birth_input: format(newPatient.birth, 'yyyy-MM-dd'),
-      body_weight_input: newPatient.weight,
-      breed_input: newPatient.breed,
-      gender_input: newPatient.gender,
-      hos_id_input: hosId,
-      hos_patient_id_input: newPatient.hos_patient_id,
-      memo_input: newPatient.memo,
-      microchip_no_input: newPatient.microchip_no,
-      name_input: newPatient.name,
-      species_input: newPatient.species,
-      owner_name_input: newPatient.owner_name,
-      owner_id_input: newPatient.owner_id,
-    },
-  )
+  const { data, error } = await supabase.rpc('insert_patient_when_register', {
+    birth_input: format(newPatient.birth, 'yyyy-MM-dd'),
+    body_weight_input: newPatient.weight,
+    breed_input: newPatient.breed,
+    gender_input: newPatient.gender,
+    hos_id_input: hosId,
+    hos_patient_id_input: newPatient.hos_patient_id,
+    memo_input: newPatient.memo,
+    microchip_no_input: newPatient.microchip_no,
+    name_input: newPatient.name,
+    species_input: newPatient.species,
+    owner_name_input: newPatient.owner_name,
+    owner_id_input: newPatient.owner_id,
+  })
 
-  if (rpcError) {
-    console.log(rpcError)
-    redirect(`/error?message=${rpcError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
   }
 
-  return patientId
+  return data
 }
 
 export const getPatients = async (hosId: string) => {
   const supabase = createClient()
 
-  const { data: patientsData, error: patientsDataError } = await supabase
+  const { data, error } = await supabase
     .from('patients')
     .select('*')
     .match({ hos_id: hosId })
@@ -60,12 +57,12 @@ export const getPatients = async (hosId: string) => {
     .order('created_at', { ascending: false })
     .returns<PatientData[]>()
 
-  if (patientsDataError) {
-    console.log(patientsDataError.message)
-    redirect(`/error/?message=${patientsDataError.message}`)
+  if (error) {
+    console.error(error.message)
+    redirect(`/error/?message=${error.message}`)
   }
 
-  return patientsData.map((patient) => ({
+  return data.map((patient) => ({
     birth: patient.birth,
     name: patient.name,
     gender: patient.gender,
@@ -88,14 +85,14 @@ export const getPatients = async (hosId: string) => {
 export const deletePatient = async (patientId: string) => {
   const supabase = createClient()
 
-  const { error: deletePatientError } = await supabase
+  const { error } = await supabase
     .from('patients')
     .delete()
     .match({ patient_id: patientId })
 
-  if (deletePatientError) {
-    console.log(deletePatientError.message)
-    redirect(`/error/?message=${deletePatientError.message}`)
+  if (error) {
+    console.error(error.message)
+    redirect(`/error/?message=${error.message}`)
   }
 }
 
@@ -117,7 +114,7 @@ export const updatePatient = async (
 ) => {
   const supabase = createClient()
 
-  const { error: updatePatientError } = await supabase
+  const { error } = await supabase
     .from('patients')
     .update({
       birth: format(updatePatient.birth, 'yyyy-MM-dd'),
@@ -134,8 +131,8 @@ export const updatePatient = async (
     })
     .match({ patient_id: patientId })
 
-  if (updatePatientError) {
-    console.log(updatePatientError)
-    redirect(`/error?message=${updatePatientError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
   }
 }

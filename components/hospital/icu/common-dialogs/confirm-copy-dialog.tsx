@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { pasteChart } from '@/lib/services/icu/paste-chart'
+import { pasteChart } from '@/lib/services/icu/chart/paste-chart'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'

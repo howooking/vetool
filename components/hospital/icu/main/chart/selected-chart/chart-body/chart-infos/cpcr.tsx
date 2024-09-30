@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { updateCpcr } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateCpcr } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { Activity } from 'lucide-react'
 import { useState } from 'react'
 

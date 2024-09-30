@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { updateWeight } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateWeight } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'

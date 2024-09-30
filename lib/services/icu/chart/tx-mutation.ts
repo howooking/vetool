@@ -23,28 +23,9 @@ export const upsertIcuTx = async (
   })
 
   if (error) {
-    console.log(error)
+    console.error(error)
     redirect(`/error?message=${error.message}`)
   }
-
-  // if (txLocalState?.isNotificationChecked) {
-  //   const { error: notificationError } = await supabase
-  //     .from('icu_notification')
-  //     .insert({
-  //       hos_id: hosId,
-  //       patient_id: patientId,
-  //       icu_chart_id: chartId,
-  //       notification_title: txLocalState.orderName!,
-  //       notification_content: `${txLocalState?.txResult!} / ${txLocalState?.txComment}`,
-  //       notification_time: txLocalState.time!,
-  //       target_date: targetDate,
-  //     })
-
-  //   if (notificationError) {
-  //     console.log(notificationError)
-  //     redirect(`/error?message=${notificationError.message}`)
-  //   }
-  // }
 }
 
 export const deleteIcuChartTx = async (icuChartTxId: string) => {
@@ -58,17 +39,5 @@ export const deleteIcuChartTx = async (icuChartTxId: string) => {
   if (error) {
     console.error(error)
     redirect(`/error?message=${error.message}`)
-  }
-}
-
-export const uploadTxImage = async (icuChartTxId: string, image: File) => {
-  const supabase = createClient()
-
-  const { error: deleteIcuChartTxError } = await supabase.storage
-    .from('tx_images')
-    .upload(`${icuChartTxId}/${image.name}`, image)
-  if (deleteIcuChartTxError) {
-    console.log(deleteIcuChartTxError)
-    redirect(`/error?message=${deleteIcuChartTxError.message}`)
   }
 }

@@ -71,10 +71,10 @@ CC: ${chartData.icu_io_id.icu_io_cc}
 
       toast({
         title: '클립보드에 복사되었습니다',
-        description: '메인차트로 이동하여 붙여넣기 해주세요',
+        description: '차트로 이동하여 붙여넣기 해주세요',
       })
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         title: '텍스트 복사 실패',
         description: '관리자에게 문의하세요',

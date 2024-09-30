@@ -1,7 +1,7 @@
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
-import { updateMemo } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateMemo } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { useEffect, useState } from 'react'
 
 export default function Memo({

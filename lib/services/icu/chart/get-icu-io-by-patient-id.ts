@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 
 export const getIcuIoByPatientId = async (patientId: string) => {
   const supabase = createClient()
-  const { data: icuIoData, error: icuIoError } = await supabase
+  const { data, error } = await supabase
     .from('icu_io')
     .select('in_date, out_date')
     .match({ patient_id: patientId })
@@ -13,10 +13,10 @@ export const getIcuIoByPatientId = async (patientId: string) => {
     .limit(1)
     .maybeSingle()
 
-  if (icuIoError) {
-    console.log(icuIoError)
-    redirect(`/error?message=${icuIoError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
   }
 
-  return icuIoData
+  return data
 }

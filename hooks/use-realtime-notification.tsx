@@ -1,4 +1,4 @@
-import { getIcuNotification } from '@/lib/services/icu/get-icu-notification'
+import { getIcuNotification } from '@/lib/services/icu/chart/get-icu-notification'
 import { createClient } from '@/lib/supabase/client'
 import type { IcuNotificationJoined } from '@/types/icu'
 import { useCallback, useEffect, useState } from 'react'

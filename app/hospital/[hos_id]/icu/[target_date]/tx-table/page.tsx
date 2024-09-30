@@ -1,5 +1,5 @@
 import TxTable from '@/components/hospital/icu/main/tx-table/tx-table'
-import { getIcuTxTableData } from '@/lib/services/icu/get-icu-tx-table-data'
+import { getIcuTxTableData } from '@/lib/services/icu/tx-table/get-icu-tx-table-data'
 
 export default async function TxTablePage({
   params,

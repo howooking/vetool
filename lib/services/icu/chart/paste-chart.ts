@@ -6,14 +6,14 @@ import { redirect } from 'next/navigation'
 const pasteOrders = async (prev_chart_id: string, new_chart_id: string) => {
   const supabase = createClient()
 
-  const { error: rpcError } = await supabase.rpc('copy_prev_orders', {
+  const { error } = await supabase.rpc('copy_prev_orders', {
     prev_chart_id_input: prev_chart_id,
     new_chart_id_input: new_chart_id,
   })
 
-  if (rpcError) {
-    console.log(rpcError)
-    redirect(`/error?message=${rpcError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
   }
 }
 
@@ -34,7 +34,7 @@ export const pasteChart = async (
       .single()
 
   if (returningChartDataError) {
-    console.log(returningChartDataError)
+    console.error(returningChartDataError)
     redirect(`/error?message=${returningChartDataError.message}`)
   }
 
@@ -80,7 +80,7 @@ export const pasteChart = async (
         .single()
 
     if (insertingNewChartError) {
-      console.log(insertingNewChartError)
+      console.error(insertingNewChartError)
       redirect(`/error?message=${insertingNewChartError.message}`)
     }
 

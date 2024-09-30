@@ -2,7 +2,7 @@
 
 import Autocomplete from '@/components/common/auto-complete/auto-complete'
 import { toast } from '@/components/ui/use-toast'
-import { updateDiagnosis } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateDiagnosis } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { useState } from 'react'
 
 export default function Diagnosis({
