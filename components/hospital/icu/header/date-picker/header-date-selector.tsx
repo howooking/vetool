@@ -4,40 +4,49 @@ import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/he
 import { Button } from '@/components/ui/button'
 import { changeTargetDateInUrl } from '@/lib/utils'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
-import { format } from 'date-fns'
+import { addDays, format, isToday } from 'date-fns'
 import {
   useParams,
   usePathname,
   useRouter,
   useSearchParams,
 } from 'next/navigation'
+import { useCallback, useState } from 'react'
 
 export default function HeaderDateSelector() {
   const searchParams = useSearchParams()
-  const params = new URLSearchParams(searchParams)
+  const params = useParams()
+  const pathname = usePathname()
+  const router = useRouter()
 
-  const { target_date } = useParams()
-  const path = usePathname()
-  const targetDate = new Date(target_date as string)
+  const [targetDate, setTargetDate] = useState(
+    new Date(params.target_date as string),
+  )
 
-  const { push } = useRouter()
+  const updateDate = useCallback(
+    (newDate: Date) => {
+      const newDateString = format(newDate, 'yyyy-MM-dd')
+      const newPath = changeTargetDateInUrl(
+        pathname,
+        newDateString,
+        new URLSearchParams(searchParams),
+      )
+      router.push(newPath)
+      setTargetDate(newDate)
+    },
+    [pathname, router, searchParams],
+  )
 
-  const handleUpdateDate = (days: number) => {
-    targetDate.setDate(targetDate.getDate() + days)
+  const handleUpdateDate = useCallback(
+    (days: number) => {
+      updateDate(addDays(targetDate, days))
+    },
+    [targetDate, updateDate],
+  )
 
-    const newDateString = format(targetDate, 'yyyy-MM-dd')
-    const newPath = changeTargetDateInUrl(path, newDateString, params)
-    push(newPath)
-  }
-
-  const handleMoveToToday = () => {
-    const newDate = new Date()
-    const newDateString = format(newDate, 'yyyy-MM-dd')
-    const newPath = changeTargetDateInUrl(path, newDateString, params)
-    push(newPath)
-  }
-
-  const isToday = format(new Date(), 'yyyy-MM-dd') === target_date
+  const handleMoveToToday = useCallback(() => {
+    updateDate(new Date())
+  }, [updateDate])
 
   return (
     <div className="flex h-8 items-center gap-2">
@@ -50,8 +59,10 @@ export default function HeaderDateSelector() {
         <ArrowLeftIcon />
       </Button>
       <div className="flex items-center gap-1">
-        <span className="min-w-20 text-sm">{target_date}</span>
-        <IcuHeaderDatePicker targetDate={target_date as string} />
+        <span className="min-w-20 text-sm">
+          {format(targetDate, 'yyyy-MM-dd')}
+        </span>
+        <IcuHeaderDatePicker targetDate={format(targetDate, 'yyyy-MM-dd')} />
       </div>
       <Button
         onClick={() => handleUpdateDate(1)}
@@ -61,8 +72,7 @@ export default function HeaderDateSelector() {
       >
         <ArrowRightIcon />
       </Button>
-
-      {!isToday && (
+      {!isToday(targetDate) && (
         <Button
           onClick={handleMoveToToday}
           type="button"
