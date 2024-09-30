@@ -1,19 +1,9 @@
-import SettingTabs from '@/components/hospital/admin/icu/setting-tabs'
-import { getMemoNames } from '@/lib/services/admin/icu'
-import { getDefaultChartOrders } from '@/lib/services/icu/hospital-orders'
+import IcuSettingsTab from '@/components/hospital/admin/icu-settings/icu-settings-tab'
 
 export default async function AdminIcuSettingsPage({
   params,
 }: {
   params: { hos_id: string }
 }) {
-  const memoNames = await getMemoNames(params.hos_id)
-  const defaultChartOrders = await getDefaultChartOrders(params.hos_id)
-
-  return (
-    <SettingTabs
-      memoNames={memoNames}
-      defaultChartOrders={defaultChartOrders}
-    />
-  )
+  return <IcuSettingsTab hosId={params.hos_id} />
 }
