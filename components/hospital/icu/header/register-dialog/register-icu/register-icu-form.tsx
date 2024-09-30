@@ -118,7 +118,15 @@ export default function RegisterIcuForm({
     })
     setIsRegisterDialogOpen(false)
     setIsSubmitting(false)
-    const newPath = changeTargetDateInUrl(path, format(in_date, 'yyyy-MM-dd'))
+
+    const splittedPath = path.split('/')
+    splittedPath[splittedPath.length - 1] = registeringPatient!.patientId
+    const newPatientPath = splittedPath.join('/')
+
+    const newPath = changeTargetDateInUrl(
+      newPatientPath,
+      format(in_date, 'yyyy-MM-dd'),
+    )
     push(newPath)
   }
 
