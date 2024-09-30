@@ -99,4 +99,5 @@ export type IcuSidebarData = {
   out_date: string | null
   icu_io_id: string
   group_list: string[]
+  created_at: string
 }
