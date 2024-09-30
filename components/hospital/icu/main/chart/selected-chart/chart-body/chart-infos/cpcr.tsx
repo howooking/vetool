@@ -1,5 +1,6 @@
 'use client'
 
+import CustomTooltip from '@/components/ui/custom-tooltip'
 import {
   Select,
   SelectContent,
@@ -42,7 +43,13 @@ export default function Cpcr({
       <SelectTrigger className="relative pl-8">
         <SelectValue />
         <span className="absolute left-2">
-          <Activity className="text-muted-foreground" size={16} />
+          <CustomTooltip
+            contents="심폐소생여부"
+            side="left"
+            variant="secondary"
+          >
+            <Activity className="text-muted-foreground" size={16} />
+          </CustomTooltip>
         </span>
       </SelectTrigger>
 

@@ -16,6 +16,7 @@ import { Stethoscope } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import MainSubVetUpdateForm from './main-sub-vet-update-form'
+import CustomTooltip from '@/components/ui/custom-tooltip'
 
 export default function MainSubVet({
   mainVet,
@@ -39,7 +40,18 @@ export default function MainSubVet({
           variant="outline"
           className="flex w-full items-center justify-start gap-2 px-2"
         >
-          <Stethoscope size={16} className="text-muted-foreground" />
+          <CustomTooltip
+            contents={
+              <div className="flex items-center gap-2">
+                주치의 <Separator orientation="vertical" className="h-4" />{' '}
+                부주치의
+              </div>
+            }
+            side="left"
+            variant="secondary"
+          >
+            <Stethoscope size={16} className="text-muted-foreground" />
+          </CustomTooltip>
 
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">

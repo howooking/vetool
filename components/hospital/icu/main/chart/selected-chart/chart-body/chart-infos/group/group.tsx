@@ -29,6 +29,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import GroupBadge from './group-badge'
 import { groupCheckFormSchema } from './group-schema'
+import CustomTooltip from '@/components/ui/custom-tooltip'
 
 export default function Group({
   currentGroups,
@@ -77,7 +78,9 @@ export default function Group({
           variant="outline"
           className="flex w-full justify-start overflow-x-auto px-2"
         >
-          <Component size={16} className="mr-2 text-muted-foreground" />
+          <CustomTooltip contents="그룹" side="left" variant="secondary">
+            <Component size={16} className="mr-2 text-muted-foreground" />
+          </CustomTooltip>
 
           <GroupBadge currentGroups={currentGroups} />
         </Button>
