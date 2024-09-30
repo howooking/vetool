@@ -1,5 +1,5 @@
+import SummaryTable from '@/components/hospital/icu/main/summary/table/summary-table'
 import type { SummaryData } from '@/types/icu/summary'
-import SummaryTable from './table/summary-table'
 
 export default function Summary({
   summaryData,

@@ -1,3 +1,4 @@
+import OrderCells from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table//order-cells'
 import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-dialog'
 import OrderTitle from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-title'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
@@ -12,7 +13,6 @@ import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import type { SelectedChart } from '@/types/icu/chart'
 import { useMemo } from 'react'
-import OrderCells from './order-cells'
 
 type ChartTablePropsPreview = {
   chartData: SelectedChart

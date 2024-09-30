@@ -1,3 +1,4 @@
+import SummaryTableRow from '@/components/hospital/icu/main/summary/table/summary-table-row'
 import {
   Table,
   TableBody,
@@ -8,7 +9,6 @@ import {
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { cn } from '@/lib/utils'
 import type { SummaryData } from '@/types/icu/summary'
-import SummaryTableRow from './summary-table-row'
 
 export default function SummaryTable({
   summaryData,
