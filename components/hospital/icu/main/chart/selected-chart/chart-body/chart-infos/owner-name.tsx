@@ -1,9 +1,10 @@
 'use client'
 
+import CustomTooltip from '@/components/ui/custom-tooltip'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
-import { updateOwnerName } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateOwnerName } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -43,7 +44,9 @@ export default function OwnerName({
         className="absolute left-2 text-xs text-muted-foreground"
         htmlFor="ownerName"
       >
-        <User size={16} className="text-muted-foreground" />
+        <CustomTooltip contents="보호자 이름" variant="secondary" side="left">
+          <User size={16} className="text-muted-foreground" />
+        </CustomTooltip>
       </Label>
       <Input
         placeholder="보호자"

@@ -3,36 +3,35 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const updateUserInfo = async (
   userId: string,
   name: string | null,
   avatarUrl: string | null,
 ) => {
+  const supabase = createClient()
   if (name === null) {
-    const { error: updateUserError } = await supabase
+    const { error } = await supabase
       .from('users')
       .update({
         avatar_url: avatarUrl,
       })
       .match({ user_id: userId })
 
-    if (updateUserError) {
-      console.log(updateUserError)
-      redirect(`/error/?message=${updateUserError.message}`)
+    if (error) {
+      console.error(error)
+      redirect(`/error/?message=${error.message}`)
     }
   } else {
-    const { error: updateUserError } = await supabase
+    const { error } = await supabase
       .from('users')
       .update({
         name,
       })
       .match({ user_id: userId })
 
-    if (updateUserError) {
-      console.log(updateUserError)
-      redirect(`/error/?message=${updateUserError.message}`)
+    if (error) {
+      console.error(error)
+      redirect(`/error/?message=${error.message}`)
     }
   }
 }

@@ -1,6 +1,6 @@
 import PreviewButton from '@/components/hospital/icu/common-dialogs/preview/preview-button'
 import { TableCell, TableRow } from '@/components/ui/table'
-import type { SearchedIcuCharts } from '@/types/icu'
+import type { SearchedIcuCharts } from '@/types/icu/search'
 import CopyButton from './copy-button'
 import GotoButton from './goto-button'
 export default function IcuChartRow({
@@ -15,7 +15,10 @@ export default function IcuChartRow({
       <TableCell className="text-center">{index + 1} 일차</TableCell>
       <TableCell className="text-center">{chart.target_date}</TableCell>
       <TableCell className="text-center">
-        <PreviewButton chartId={chart.icu_chart_id} />
+        <PreviewButton
+          patientId={chart.patient_id}
+          targetDate={chart.target_date}
+        />
       </TableCell>
       <TableCell className="text-center">
         <CopyButton chartId={chart.icu_chart_id} />

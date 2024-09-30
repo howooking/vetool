@@ -1,76 +1,63 @@
-'use client'
-
 import ChiefComplaint from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/chief-complaint'
 import Cpcr from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/cpcr'
 import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/diagnosis'
-import Group from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/group/group'
 import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/in-and-out-date/in-and-out-date'
-import MainSubVet from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/main-sub-vet/main-sub-vet'
 import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/owner-name'
-import type { IcuChartJoined, IcuIoJoined, Vet } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
+import Group from './group/group'
+import MainSubVet from './main-sub-vet/main-sub-vet'
 
 export default function ChartInfos({
   chartData,
-  isPatientOut,
-  selectedIo,
-  vetsList,
 }: {
-  chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
-  isPatientOut: boolean
-  selectedIo: IcuIoJoined
-  vetsList: Vet[]
+  chartData: SelectedChart
 }) {
+  const { icu_io, patient, main_vet, sub_vet, icu_chart_id } = chartData
+
+  const isPatientOut = !!icu_io.out_date
   return (
     <div className="grid grid-cols-2 gap-2 md:grid-cols-8">
       <div className="col-span-2">
         <InAndOutDate
-          icuIoId={selectedIo.icu_io_id}
-          inDate={selectedIo.in_date}
-          outDueDate={selectedIo.out_due_date}
+          icuIoId={icu_io.icu_io_id}
+          inDate={icu_io.in_date}
+          outDueDate={icu_io.out_due_date}
           isPatientOut={isPatientOut}
-          outDate={selectedIo.out_date}
+          outDate={icu_io.out_date}
         />
       </div>
 
       <div className="col-span-2">
         <MainSubVet
-          vetsList={vetsList}
-          mainVet={chartData.main_vet}
-          subVet={chartData.sub_vet}
-          icuChartId={chartData.icu_chart_id}
+          mainVet={main_vet}
+          subVet={sub_vet}
+          icuChartId={icu_chart_id}
         />
       </div>
 
       <div className="order-last col-span-2 md:order-none md:col-span-4">
-        <Diagnosis
-          diagnosis={selectedIo.icu_io_dx}
-          icuIoId={selectedIo.icu_io_id}
-        />
+        <Diagnosis diagnosis={icu_io.icu_io_dx} icuIoId={icu_io.icu_io_id} />
       </div>
 
       <div className="col-span-1">
-        <Cpcr cpcr={selectedIo.cpcr} icuIoId={selectedIo.icu_io_id} />
+        <Cpcr cpcr={icu_io.cpcr} icuIoId={icu_io.icu_io_id} />
       </div>
 
       <div className="col-span-1">
         <OwnerName
-          ownerName={chartData.patient_id.owner_name}
-          patientId={chartData.patient_id.patient_id}
+          ownerName={patient.owner_name}
+          patientId={patient.patient_id}
         />
       </div>
 
       <div className="col-span-2">
-        <Group
-          hosGroupList={selectedIo.hos_id.group_list}
-          currentGroups={selectedIo.group_list}
-          icuIoId={selectedIo.icu_io_id}
-        />
+        <Group currentGroups={icu_io.group_list} icuIoId={icu_io.icu_io_id} />
       </div>
 
       <div className="order-last col-span-2 md:order-none md:col-span-4">
         <ChiefComplaint
-          chiefComplaint={selectedIo.icu_io_cc}
-          icuIoId={selectedIo.icu_io_id}
+          chiefComplaint={icu_io.icu_io_cc}
+          icuIoId={icu_io.icu_io_id}
         />
       </div>
     </div>

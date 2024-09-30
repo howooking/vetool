@@ -10,11 +10,9 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { uploadTxImage } from '@/lib/services/icu/tx-image'
-import { upsertIcuChartTxAndUpdateIcuChartOrder } from '@/lib/services/icu/tx-mutation'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
+import { upsertIcuTx } from '@/lib/services/icu/chart/tx-mutation'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
-import type { TxLog } from '@/types/icu'
+import type { TxLog } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { format } from 'date-fns'
@@ -23,11 +21,10 @@ import { useCallback, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function TxSelectUserStep({ chartId }: { chartId: string }) {
-  const { txLocalState, txImageState, setStep, setIsMutationCanceled, reset } =
+export default function TxSelectUserStep() {
+  const { txLocalState, setStep, setIsMutationCanceled, reset } =
     useTxMutationStore()
-  const { hos_id, target_date } = useParams()
-  const { selectedPatientId } = useIcuSelectedPatientIdStore()
+  const { hos_id } = useParams()
 
   const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
@@ -55,17 +52,9 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
 
       setStep('closed')
 
-      const txId = await upsertIcuChartTxAndUpdateIcuChartOrder(
-        hos_id as string,
-        selectedPatientId as string,
-        chartId,
-        target_date as string,
-        txLocalState,
-        updatedLogs,
-      )
+      await upsertIcuTx(hos_id as string, txLocalState, updatedLogs)
 
-      await uploadTxImage(txId, txImageState ?? [])
-      // const test = await getTxImageList(txId)
+      // await uploadTxImage(txId, txImageState ?? [])
 
       reset()
 
@@ -73,16 +62,7 @@ export default function TxSelectUserStep({ chartId }: { chartId: string }) {
         title: '처치 내역이 업데이트 되었습니다',
       })
     },
-    [
-      chartId,
-      hos_id,
-      reset,
-      selectedPatientId,
-      setStep,
-      target_date,
-      txImageState,
-      txLocalState,
-    ],
+    [hos_id, reset, setStep, txLocalState],
   )
 
   const handleCancel = useCallback(() => {

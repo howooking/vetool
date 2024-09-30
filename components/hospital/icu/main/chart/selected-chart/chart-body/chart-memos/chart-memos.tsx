@@ -1,4 +1,7 @@
+'use client'
+
 import Memo from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/memo'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { useState } from 'react'
 import HideAndShowButton from './HideAndShowButton'
 
@@ -7,15 +10,16 @@ export default function ChartMemos({
   memoB,
   memoC,
   icuChartId,
-  hosIcuMemoNames,
 }: {
   memoA: string
   memoB: string
   memoC: string
   icuChartId: string
-  hosIcuMemoNames: string[]
 }) {
   const [isShow, setIsShow] = useState(true)
+  const {
+    basicHosData: { memoNameListData },
+  } = useBasicHosDataContext()
   return (
     <div className="relative">
       {isShow && (
@@ -23,19 +27,19 @@ export default function ChartMemos({
           <Memo
             memo={memoA}
             icuChartId={icuChartId}
-            hosIcuMemoNames={hosIcuMemoNames}
+            memoNameListData={memoNameListData}
             index={0}
           />
           <Memo
             memo={memoB}
             icuChartId={icuChartId}
-            hosIcuMemoNames={hosIcuMemoNames}
+            memoNameListData={memoNameListData}
             index={1}
           />
           <Memo
             memo={memoC}
             icuChartId={icuChartId}
-            hosIcuMemoNames={hosIcuMemoNames}
+            memoNameListData={memoNameListData}
             index={2}
           />
         </div>

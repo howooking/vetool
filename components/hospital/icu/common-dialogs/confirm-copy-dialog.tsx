@@ -8,21 +8,17 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { pasteChart } from '@/lib/services/icu/paste-chart'
-import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
+import { pasteChart } from '@/lib/services/icu/chart/paste-chart'
+import { useBookmarkDialogStore } from '@/lib/store/icu/bookmark-dialog'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { cn } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
-export function ConfirmCopyDialog({ selectedIoId }: { selectedIoId: string }) {
-  const { target_date } = useParams()
-  const { selectedPatientId } = useIcuSelectedPatientIdStore()
-  const { setBookmarkModalOpen } = useIcuBookmarkStore()
-  const { setIsChartLoading } = useIsChartLoadingStore()
+export function ConfirmCopyDialog() {
+  const { target_date, patient_id } = useParams()
+  const { setBookmarkDilaogOpen } = useBookmarkDialogStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const {
     isConfirmCopyDialogOpen,
@@ -33,13 +29,11 @@ export function ConfirmCopyDialog({ selectedIoId }: { selectedIoId: string }) {
 
   const handleConfirmCopy = async () => {
     setIsSubmitting(true)
-    setIsChartLoading(true)
 
     await pasteChart(
-      selectedPatientId!,
+      patient_id as string,
       copiedChartId!,
       target_date as string,
-      selectedIoId,
     )
 
     toast({
@@ -48,7 +42,7 @@ export function ConfirmCopyDialog({ selectedIoId }: { selectedIoId: string }) {
 
     reset()
     setIsSubmitting(false)
-    setBookmarkModalOpen(false)
+    setBookmarkDilaogOpen(false)
     setIsConfirmCopyDialogOpen(false)
   }
   return (

@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { updateStaffIsAdmin } from '@/lib/services/settings/staff-settings'
+import { updateStaffIsAdmin } from '@/lib/services/admin/staff/staff'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 

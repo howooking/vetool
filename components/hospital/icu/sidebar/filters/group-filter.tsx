@@ -22,7 +22,7 @@ export default function GroupFilter({
   selectedGroup: string[]
   setSelectedGroup: (group: string[]) => void
 }) {
-  const pathname = usePathname()
+  const path = usePathname()
   const searchParams = useSearchParams()
   const currentParams = new URLSearchParams(searchParams.toString())
 
@@ -43,7 +43,7 @@ export default function GroupFilter({
     setTempSelectedGroup([])
 
     currentParams.delete('group')
-    const newUrl = `${pathname}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
+    const newUrl = `${path}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
 
     push(newUrl)
   }
@@ -52,7 +52,7 @@ export default function GroupFilter({
     setSelectedGroup(tempSelectedGroup)
     setIsDialogOpen(false)
     currentParams.set('group', tempSelectedGroup.join(','))
-    const newUrl = `${pathname}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
+    const newUrl = `${path}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
 
     push(newUrl)
   }
@@ -64,7 +64,7 @@ export default function GroupFilter({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex h-auto w-full px-1 py-1">
+        <Button variant="outline" className="flex h-auto w-full px-1 py-[5px]">
           {selectedGroup.length ? (
             <GroupBadge currentGroups={selectedGroup} />
           ) : (

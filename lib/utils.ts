@@ -196,3 +196,21 @@ export const getDateMonthsAgo = (months: string) => {
     ).toString(),
   )
 }
+
+export const changeTargetDateInUrl = (
+  path: string,
+  newDateString: string,
+  params?: URLSearchParams,
+) => {
+  const DATE_REGEX = /\/(\d{4}-\d{2}-\d{2})\//
+
+  if (params?.has('order-id') || params?.has('time')) {
+    params.delete('order-id')
+    params.delete('time')
+  }
+
+  const newPath = params
+    ? `${path.replace(DATE_REGEX, `/${newDateString}/`)}?${params?.toString()}`
+    : `${path.replace(DATE_REGEX, `/${newDateString}/`)}`
+  return newPath
+}

@@ -4,9 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { FormLabel } from '@/components/ui/form'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
-import type { TxLog } from '@/types/icu'
+import type { TxLog } from '@/types/icu/chart'
 
 export default function TxLog({ logs }: { logs: TxLog[] }) {
   return (

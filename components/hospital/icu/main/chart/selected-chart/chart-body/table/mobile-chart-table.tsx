@@ -7,18 +7,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { IcuOrderColors } from '@/types/adimin'
-import { IcuChartOrderJoined } from '@/types/icu'
 import { Fullscreen } from 'lucide-react'
-import DesktopChartTable from './desktop-chart-table'
 
-export default function MobileChartTable({
-  selectedChartOrders,
-  orderColors,
-}: {
-  selectedChartOrders: IcuChartOrderJoined[]
-  orderColors: IcuOrderColors
-}) {
+export default function MobileChartTable() {
   return (
     <>
       <Dialog>
@@ -43,10 +34,10 @@ export default function MobileChartTable({
             <DialogDescription />
           </DialogHeader>
           <div className="min-h-[calc(70vh)] overflow-auto">
-            <DesktopChartTable
+            {/* <DesktopChartTable
               orderColors={orderColors}
               selectedChartOrders={selectedChartOrders}
-            />
+            /> */}
           </div>
         </DialogContent>
       </Dialog>

@@ -1,10 +1,10 @@
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import { TableCell, TableRow } from '@/components/ui/table'
-import { getSelectedCharts } from '@/lib/services/icu/search-charts'
-import type { SearchedIcuCharts, SearchedIcuIos } from '@/types/icu'
+import type { SearchedIcuCharts, SearchedIcuIos } from '@/types/icu/search'
 import { useEffect, useState } from 'react'
 import GroupedAccordionContents from './grouped-accordion-contents'
 import GroupedAccordionTrigger from './grouped-accordion-trigger'
+import { getSelectedCharts } from '@/lib/services/icu/search/search-charts'
 
 export default function GroupedByIcuIo({ icuIo }: { icuIo: SearchedIcuIos }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false)

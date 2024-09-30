@@ -1,31 +1,25 @@
-import React, { useCallback } from 'react'
 import { Button } from '@/components/ui/button'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import type { IcuIoJoined } from '@/types/icu'
+import type { IcuSidebarData } from '@/types/icu/chart'
+import { useParams, useRouter } from 'next/navigation'
+import { useCallback } from 'react'
 
-type PatientButtonProps = {
-  data: IcuIoJoined
-}
-
-const PatientButton: React.FC<PatientButtonProps> = React.memo(({ data }) => {
-  const { selectedPatientId, setSelectedPatientId } =
-    useIcuSelectedPatientIdStore()
-  const { setSelectedIcuMainView } = useSelectedMainViewStore()
+export default function PatientButton({ data }: { data: IcuSidebarData }) {
+  const { push } = useRouter()
+  const { hos_id, target_date, patient_id } = useParams()
 
   const handlePatientButtonClick = useCallback(() => {
-    setSelectedPatientId(data.patient_id.patient_id)
-    setSelectedIcuMainView('chart')
-  }, [data.patient_id.patient_id, setSelectedPatientId, setSelectedIcuMainView])
-
+    push(
+      `/hospital/${hos_id}/icu/${target_date}/chart/${data.patient.patient_id}`,
+    )
+  }, [data.patient.patient_id, push, hos_id, target_date])
   return (
     <Button
       variant="outline"
       size="sm"
       className={cn(
         'w-full',
-        selectedPatientId === data.patient_id.patient_id && 'bg-muted',
+        patient_id === data.patient.patient_id && 'bg-muted',
       )}
       onClick={handlePatientButtonClick}
     >
@@ -35,13 +29,9 @@ const PatientButton: React.FC<PatientButtonProps> = React.memo(({ data }) => {
           data.out_date && 'text-muted-foreground line-through',
         )}
       >
-        <span>{data.patient_id.name}</span>
-        <span className="truncate text-[10px]">{data.patient_id.breed}</span>
+        <span>{data.patient.name}</span>
+        <span className="truncate text-[10px]">{data.patient.breed}</span>
       </div>
     </Button>
   )
-})
-
-PatientButton.displayName = 'PatientButton'
-
-export default PatientButton
+}

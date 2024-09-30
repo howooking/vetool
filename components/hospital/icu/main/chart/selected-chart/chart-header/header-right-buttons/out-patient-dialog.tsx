@@ -10,56 +10,50 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import { toggleOutPatient } from '@/lib/services/icu/update-icu-chart-infos'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
+import { toggleOutPatient } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { cn, hashtagKeyword } from '@/lib/utils'
-import type { IcuChartOrderJoined } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu/chart'
 import { LoaderCircle, LogOut, Undo2 } from 'lucide-react'
-import { useParams } from 'next/navigation'
 import { useState } from 'react'
 export default function OutPatientDialog({
-  icuIoId,
-  name,
-  isPatientOut,
-  selectedChartOrders,
-  dx,
-  cc,
+  chartData,
 }: {
-  icuIoId: string
-  name: string
-  isPatientOut: boolean
-  selectedChartOrders: IcuChartOrderJoined[]
-  dx: string
-  cc: string
+  chartData: SelectedChart
 }) {
+  const { icu_io, orders, patient } = chartData
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { selectedPatientId } = useIcuSelectedPatientIdStore()
-  const { target_date } = useParams()
+  const isPatientOut = icu_io.out_date !== null
 
   const handleOutPatient = async () => {
     setIsSubmitting(true)
 
-    const hashtaggedDxCc = hashtagKeyword(`${dx}, ${cc}`)
+    const hashtaggedDxCc = hashtagKeyword(
+      `${icu_io.icu_io_dx}, ${icu_io.icu_io_cc}`,
+    )
 
-    const hashtaggedStringifiedOrderNames = selectedChartOrders
-      .filter((order) => order.icu_chart_order_type !== 'checklist')
-      .map((order) => `#${order.icu_chart_order_name.trim()}`)
+    const hashtaggedStringifiedOrderNames = orders
+      .filter((order) => order.order_type !== 'checklist')
+      .map((order) => `#${order.order_name.trim()}`)
       .join('')
 
     await toggleOutPatient(
-      icuIoId,
+      icu_io.icu_io_id,
       isPatientOut,
       hashtaggedStringifiedOrderNames,
-      selectedPatientId!,
+      patient.patient_id,
       hashtaggedDxCc,
+      patient.species,
+      patient.breed,
+      patient.name,
+      icu_io.age_in_days,
     )
 
     toast({
       title: isPatientOut
-        ? `${name}의 퇴원을 취소하였습니다`
-        : `${name}을(를) 퇴원처리 하였습니다`,
+        ? `${patient.name}의 퇴원을 취소하였습니다`
+        : `${patient.name}을(를) 퇴원처리 하였습니다`,
     })
 
     setIsSubmitting(false)
@@ -77,8 +71,8 @@ export default function OutPatientDialog({
         <DialogHeader>
           <DialogTitle>
             {isPatientOut
-              ? `${name}의 퇴원을 취소하시겠습니까?`
-              : `${name}을(를) ${target_date}에 퇴원시키시겠습니까?`}
+              ? `${patient.name}의 퇴원을 취소하시겠습니까?`
+              : `${patient.name}을(를) 퇴원시키시겠습니까?`}
           </DialogTitle>
           <DialogDescription>해당 작업은 되돌릴 수 있습니다</DialogDescription>
         </DialogHeader>

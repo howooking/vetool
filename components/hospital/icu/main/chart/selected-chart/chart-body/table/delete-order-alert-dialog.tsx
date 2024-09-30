@@ -12,36 +12,21 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { deleteDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
-import { deleteOrder } from '@/lib/services/icu/order-mutation'
-import { useCreateOrderStore } from '@/lib/store/icu/create-order'
-import type { IcuChartOrderJoined } from '@/types/icu'
-import { useRouter } from 'next/navigation'
+import { deleteOrder } from '@/lib/services/icu/chart/order-mutation'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 
 export default function DeleteOrderAlertDialog({
   selectedChartOrder,
   toggleModal,
-  isSettingMode,
 }: {
-  selectedChartOrder: IcuChartOrderJoined
+  selectedChartOrder: Partial<SelectedIcuOrder>
   toggleModal: () => void
-  isSettingMode?: boolean
 }) {
-  const { refresh } = useRouter()
-  const { defaultChartId } = useCreateOrderStore()
-
   const handleDeleteOrderClick = async () => {
-    if (isSettingMode && defaultChartId) {
-      await deleteDefaultChartOrder(defaultChartId)
-      toggleModal()
-      refresh()
-      return
-    }
-
-    await deleteOrder(selectedChartOrder.icu_chart_order_id)
+    await deleteOrder(selectedChartOrder.order_id!)
 
     toast({
-      title: `${selectedChartOrder.icu_chart_order_name} 오더를 삭제하였습니다`,
+      title: `${selectedChartOrder.order_name} 오더를 삭제하였습니다`,
     })
     toggleModal()
   }
@@ -61,7 +46,7 @@ export default function DeleteOrderAlertDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {selectedChartOrder.icu_chart_order_name} 오더 삭제
+            {selectedChartOrder.order_name} 오더 삭제
           </AlertDialogTitle>
           <AlertDialogDescription>
             선택한 오더를 삭제합니다

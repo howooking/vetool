@@ -1,3 +1,6 @@
+'use client'
+
+import CustomTooltip from '@/components/ui/custom-tooltip'
 import {
   Select,
   SelectContent,
@@ -7,9 +10,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { updateCpcr } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateCpcr } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { Activity } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function Cpcr({
   cpcr,
@@ -19,7 +22,6 @@ export default function Cpcr({
   icuIoId: string
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
-  const [cpcrState, setCpcrState] = useState(cpcr)
 
   const handleUpdateCpcr = async (value: string) => {
     if (cpcr === value) {
@@ -27,7 +29,6 @@ export default function Cpcr({
     }
 
     setIsUpdating(true)
-    setCpcrState(value)
     await updateCpcr(icuIoId, value)
 
     toast({
@@ -37,20 +38,18 @@ export default function Cpcr({
     setIsUpdating(false)
   }
 
-  useEffect(() => {
-    setCpcrState(cpcr)
-  }, [cpcr])
-
   return (
-    <Select
-      onValueChange={handleUpdateCpcr}
-      disabled={isUpdating}
-      value={cpcrState}
-    >
+    <Select onValueChange={handleUpdateCpcr} disabled={isUpdating} value={cpcr}>
       <SelectTrigger className="relative pl-8">
         <SelectValue />
         <span className="absolute left-2">
-          <Activity className="text-muted-foreground" size={16} />
+          <CustomTooltip
+            contents="심폐소생여부"
+            side="left"
+            variant="secondary"
+          >
+            <Activity className="text-muted-foreground" size={16} />
+          </CustomTooltip>
         </span>
       </SelectTrigger>
 

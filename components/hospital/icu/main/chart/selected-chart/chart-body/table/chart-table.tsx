@@ -1,37 +1,81 @@
-import useIsMobile from '@/hooks/use-is-mobile'
-import { IcuOrderColors } from '@/types/adimin'
-import type { IcuChartOrderJoined } from '@/types/icu'
-import DesktopChartTable from './desktop-chart-table'
-import MobileChartTable from './mobile-chart-table'
-import React from 'react'
+import OrderCells from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table//order-cells'
+import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-dialog'
+import OrderTitle from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-title'
+import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
+import { TIMES } from '@/constants/hospital/icu/chart/time'
+import type { SelectedChart } from '@/types/icu/chart'
+import { useMemo } from 'react'
 
-const ChartTable = React.memo(
-  ({
-    selectedChartOrders,
-    orderColors,
-  }: {
-    selectedChartOrders: IcuChartOrderJoined[]
-    orderColors: IcuOrderColors
-  }) => {
-    const isMobile = useIsMobile()
+type ChartTablePropsPreview = {
+  chartData: SelectedChart
+  preview: true
+}
 
-    if (isMobile)
-      return (
-        <MobileChartTable
-          orderColors={orderColors}
-          selectedChartOrders={selectedChartOrders}
-        />
-      )
+type ChartTablePropsNonPreview = {
+  chartData: SelectedChart
+  preview?: false
+}
 
-    return (
-      <DesktopChartTable
-        orderColors={orderColors}
-        selectedChartOrders={selectedChartOrders}
-      />
-    )
-  },
-)
+type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview
 
-ChartTable.displayName = 'ChartTable'
+export default function ChartTable({ chartData, preview }: ChartTableProps) {
+  const { icu_io, icu_chart_id, orders } = chartData
 
-export default ChartTable
+  const sortedOrders = useMemo(
+    () =>
+      orders
+        .sort((prev, next) => prev.order_name.localeCompare(next.order_name))
+        .sort(
+          (prev, next) =>
+            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+              (order) => order === prev.order_type,
+            ) -
+            DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+              (order) => order === next.order_type,
+            ),
+        ),
+    [orders],
+  )
+
+  return (
+    <Table className="border">
+      <TableHeader>
+        <TableRow>
+          <TableHead className="relative flex w-[320px] items-center justify-center gap-2 text-center">
+            <span>오더 목록</span>
+            {!preview && <OrderDialog icuChartId={icu_chart_id} />}
+          </TableHead>
+
+          {TIMES.map((time) => (
+            <TableHead className="border text-center" key={time}>
+              {time.toString().padStart(2, '0')}
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+
+      <TableBody>
+        {!preview && <TxUpsertDialog />}
+
+        {sortedOrders.map((order) => (
+          <TableRow className="divide-x" key={order.order_id}>
+            <OrderTitle order={order} preview={preview} />
+            <OrderCells
+              preview={preview}
+              order={order}
+              icuIoId={icu_io.icu_io_id}
+            />
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}

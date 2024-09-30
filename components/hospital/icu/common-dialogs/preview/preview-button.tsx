@@ -1,22 +1,35 @@
 import { Button } from '@/components/ui/button'
-import { getSelectedChartOrders } from '@/lib/services/icu/search-charts'
+import { getIcuChart } from '@/lib/services/icu/chart/get-icu-chart'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
+import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { Eye, LoaderCircle } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
-export default function PreviewButton({ chartId }: { chartId: string }) {
-  const { setCopiedOrders } = useCopiedChartStore()
-  const { setPreviewModalOpen } = useOrderPreviewStore()
+export default function PreviewButton({
+  patientId,
+  targetDate,
+}: {
+  patientId: string
+  targetDate: string
+}) {
+  const { hos_id } = useParams()
+  const { setCopiedChart } = useCopiedChartStore()
+  const { setPreviewDialogOpen } = usePreviewDialogStore()
   const [isPreviewing, setIsPreviewing] = useState(false)
 
   const handleOpenPreviewDialog = async () => {
     setIsPreviewing(true)
 
-    const sortedChartOrders = await getSelectedChartOrders(chartId)
-    setCopiedOrders(sortedChartOrders)
+    const previewChart = await getIcuChart(
+      hos_id as string,
+      targetDate,
+      patientId,
+    )
 
-    setPreviewModalOpen(true)
+    setCopiedChart(previewChart)
+
+    setPreviewDialogOpen(true)
     setIsPreviewing(false)
   }
 

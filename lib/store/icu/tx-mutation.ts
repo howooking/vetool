@@ -1,4 +1,4 @@
-import type { TxLog } from '@/types/icu'
+import type { TxLog } from '@/types/icu/chart'
 import { create } from 'zustand'
 
 export type TxLocalState = {

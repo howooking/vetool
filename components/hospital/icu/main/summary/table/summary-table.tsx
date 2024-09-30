@@ -1,3 +1,4 @@
+import SummaryTableRow from '@/components/hospital/icu/main/summary/table/summary-table-row'
 import {
   Table,
   TableBody,
@@ -6,27 +7,14 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import type { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
-import SummaryTableRow from './summary-table-row'
+import type { SummaryData } from '@/types/icu/summary'
 
 export default function SummaryTable({
-  icuChartData,
-  icuChartOrderData,
+  summaryData,
 }: {
-  icuChartData: IcuChartJoined[]
-  icuChartOrderData: IcuChartOrderJoined[]
+  summaryData: SummaryData[]
 }) {
-  const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
-
-  const handleClickRow = (patientId: string) => {
-    setSelectedIcuMainView('chart')
-    setSelectedPatientId(patientId)
-  }
-
   return (
     <Table className="border">
       <TableHeader>
@@ -42,15 +30,8 @@ export default function SummaryTable({
       </TableHeader>
 
       <TableBody>
-        {icuChartData.map((chart) => (
-          <SummaryTableRow
-            key={chart.patient_id.patient_id}
-            chart={chart}
-            handleClickRow={handleClickRow}
-            orders={icuChartOrderData.filter(
-              (order) => order.icu_chart_id.icu_chart_id === chart.icu_chart_id,
-            )}
-          />
+        {summaryData.map((summary) => (
+          <SummaryTableRow key={summary.icu_chart_id} summary={summary} />
         ))}
       </TableBody>
     </Table>

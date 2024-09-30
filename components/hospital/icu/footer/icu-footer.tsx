@@ -1,9 +1,9 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useSidebarStore } from '@/lib/store/common/sidebar'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
+import { useIcuRealtime } from '@/hooks/use-icu-realtime'
 import { cn } from '@/lib/utils'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import RealtimeStatus from './realtime-status'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
@@ -27,27 +27,35 @@ export const FOOTER_MAIN_VIEW_MENUS = [
     label: '즐겨찾기',
     value: 'bookmark',
   },
+  {
+    label: '입원 통계',
+    value: 'analysis',
+  },
 ] as const
 
 export default function IcuFooter({
   hosId,
-  isSubscriptionReady,
+  targetDate,
 }: {
   hosId: string
-  isSubscriptionReady: boolean
+  targetDate: string
 }) {
-  const { selectIcudMainView, setSelectedIcuMainView } =
-    useSelectedMainViewStore()
-  const { isExpanded } = useSidebarStore()
+  const isSubscriptionReady = useIcuRealtime(hosId, targetDate)
+  const { push } = useRouter()
+  const path = usePathname()
+  const currentIcuPath = path.split('/').at(5)
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
 
   return (
     <footer
       className={cn(
         'fixed bottom-0 z-20 flex h-10 w-full items-center justify-between border-t bg-white transition-all duration-200',
-        isExpanded ? 'md:w-[calc(100%-336px)]' : 'md:w-[calc(100%-200px)]',
       )}
     >
       <ul className="flex h-full items-center gap-2 pl-1">
+        <RealtimeStatus isSubscriptionReady={isSubscriptionReady} />
+
         {FOOTER_MAIN_VIEW_MENUS.map(({ label, value }) => (
           <li
             key={value}
@@ -60,16 +68,16 @@ export default function IcuFooter({
             <Button
               size="sm"
               variant="ghost"
-              className={selectIcudMainView === value ? 'bg-muted' : ''}
-              onClick={() => setSelectedIcuMainView(value)}
+              className={currentIcuPath === value ? 'bg-muted' : ''}
+              onClick={() =>
+                push(`/hospital/${hosId}/icu/${targetDate}/${value}?${params}`)
+              }
             >
               {label}
             </Button>
           </li>
         ))}
       </ul>
-
-      <RealtimeStatus isSubscriptionReady={isSubscriptionReady} />
 
       {/* ICU 알림 기능 일단 보류 */}
       {/* <IcuNotification hosId={hosId} /> */}

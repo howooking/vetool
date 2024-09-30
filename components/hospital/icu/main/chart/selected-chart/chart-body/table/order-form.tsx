@@ -1,3 +1,5 @@
+'use client'
+
 import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/delete-order-alert-dialog'
 import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-schema'
 import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-time-settings'
@@ -15,53 +17,34 @@ import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
-import { upsertDefaultChartOrder } from '@/lib/services/icu/hospital-orders'
-import { upsertOrder } from '@/lib/services/icu/order-mutation'
-import { useCreateOrderStore } from '@/lib/store/icu/create-order'
+import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { cn } from '@/lib/utils'
-import type { IcuChartOrderJoined } from '@/types/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function OrderForm({
-  icuIoId,
-  icuChartId,
-  isSettingMode,
-}: {
-  icuIoId?: string
-  icuChartId?: string
-  isSettingMode?: boolean
-}) {
+export default function OrderForm({ icuChartId }: { icuChartId?: string }) {
   const { hos_id } = useParams()
-  const { refresh } = useRouter()
-  const {
-    toggleModal,
-    selectedChartOrder,
-    isEditMode,
-    defaultChartId,
-    resetState,
-  } = useCreateOrderStore()
+  const { toggleModal, selectedChartOrder, isEditMode, resetState } =
+    useIcuOrderStore()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime, setStartTime] = useState<string>('undefined')
   const [timeTerm, setTimeTerm] = useState<string>('undefined')
   const [orderTime, setOrderTime] = useState<string[]>(
-    selectedChartOrder.icu_chart_order_time || new Array(24).fill('0'),
+    selectedChartOrder.order_times || new Array(24).fill('0'),
   )
 
   const form = useForm<z.infer<typeof orderSchema>>({
     resolver: zodResolver(orderSchema),
     defaultValues: {
-      icu_chart_order_type:
-        selectedChartOrder.icu_chart_order_type ?? undefined,
-      icu_chart_order_name:
-        selectedChartOrder.icu_chart_order_name ?? undefined,
-      icu_chart_order_comment:
-        selectedChartOrder.icu_chart_order_comment ?? undefined,
+      icu_chart_order_type: selectedChartOrder.order_type ?? undefined,
+      icu_chart_order_name: selectedChartOrder.order_name ?? undefined,
+      icu_chart_order_comment: selectedChartOrder.order_comment ?? undefined,
     },
   })
 
@@ -72,27 +55,17 @@ export default function OrderForm({
     const orderComment = values.icu_chart_order_comment ?? ''
     const orderType = values.icu_chart_order_type
 
-    if (isSettingMode) {
-      await upsertDefaultChartOrder(hos_id as string, defaultChartId, {
-        default_chart_order_name: trimmedOrderName,
-        default_chart_order_comment: orderComment,
-        default_chart_order_type: orderType,
-      })
-      refresh()
-    } else {
-      await upsertOrder(
-        icuChartId!,
-        icuIoId!,
-        selectedChartOrder.icu_chart_order_id!,
-        orderTime,
-        hos_id as string,
-        {
-          icu_chart_order_name: trimmedOrderName,
-          icu_chart_order_comment: orderComment,
-          icu_chart_order_type: orderType,
-        },
-      )
-    }
+    await upsertOrder(
+      hos_id as string,
+      icuChartId!,
+      selectedChartOrder.order_id!,
+      orderTime,
+      {
+        icu_chart_order_name: trimmedOrderName,
+        icu_chart_order_comment: orderComment,
+        icu_chart_order_type: orderType,
+      },
+    )
 
     toast({
       title: `${values.icu_chart_order_name} 오더를 추가하였습니다`,
@@ -186,23 +159,20 @@ export default function OrderForm({
           )}
         />
 
-        {!isSettingMode && (
-          <OrderTimeSettings
-            startTime={startTime}
-            timeTerm={timeTerm}
-            orderTime={orderTime}
-            setStartTime={setStartTime}
-            setTimeTerm={setTimeTerm}
-            setOrderTime={setOrderTime}
-          />
-        )}
+        <OrderTimeSettings
+          startTime={startTime}
+          timeTerm={timeTerm}
+          orderTime={orderTime}
+          setStartTime={setStartTime}
+          setTimeTerm={setTimeTerm}
+          setOrderTime={setOrderTime}
+        />
 
         <DialogFooter className="ml-auto w-full gap-2 md:gap-0">
           {isEditMode && (
             <DeleteOrderAlertDialog
-              selectedChartOrder={selectedChartOrder as IcuChartOrderJoined}
+              selectedChartOrder={selectedChartOrder}
               toggleModal={toggleModal}
-              isSettingMode={isSettingMode}
             />
           )}
 

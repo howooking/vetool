@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { toast } from '@/components/ui/use-toast'
-import { updateStaffGroup } from '@/lib/services/settings/staff-settings'
+import { updateStaffGroup } from '@/lib/services/admin/staff/staff'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { useRouter } from 'next/navigation'

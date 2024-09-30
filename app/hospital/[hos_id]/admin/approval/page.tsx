@@ -1,6 +1,6 @@
 import { columns } from '@/components/hospital/admin/approval/column'
 import DataTable from '@/components/ui/data-table'
-import { getStaffApprovals } from '@/lib/services/settings/staff-settings'
+import { getStaffApprovals } from '@/lib/services/admin/approval/approval'
 import type { ApprovalDataTable } from '@/types/adimin'
 
 export default async function AdminApprovalPage({

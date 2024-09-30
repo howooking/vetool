@@ -2,13 +2,14 @@
 
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
+import CustomTooltip from '@/components/ui/custom-tooltip'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { toast } from '@/components/ui/use-toast'
-import { updateOutDueDate } from '@/lib/services/icu/update-icu-chart-infos'
+import { updateOutDueDate } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
 import { format, parseISO } from 'date-fns'
 import { ko } from 'date-fns/locale'
@@ -65,7 +66,13 @@ export default function OutDueDate({
               !outDueDateInput && 'text-muted-foreground',
             )}
           >
-            <LogOut className="text-muted-foreground" size={16} />
+            <CustomTooltip
+              contents="퇴원예정일"
+              variant="secondary"
+              side="left"
+            >
+              <LogOut className="text-muted-foreground" size={16} />
+            </CustomTooltip>
 
             {outDueDateInput ? (
               <span className="text-sm font-normal">

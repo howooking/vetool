@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { updateStaffPosition } from '@/lib/services/settings/staff-settings'
+import { updateStaffPosition } from '@/lib/services/admin/staff/staff'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 

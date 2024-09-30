@@ -7,28 +7,26 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-import type { IcuIoJoined } from '@/types/icu'
 import { Menu } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
-import PatientList from './patient-list'
 
-export function MobilePatientList({
-  filteredIcuIoData,
-  excludedIcuIoData,
-}: {
-  filteredIcuIoData: IcuIoJoined[]
-  excludedIcuIoData: IcuIoJoined[]
-}) {
+export function MobilePatientList(
+  {
+    // filteredIcuIoData,
+    // excludedIcuIoData,
+  }: {
+    // filteredIcuIoData: IcuIoJoined[]
+    // excludedIcuIoData: IcuIoJoined[]
+  },
+) {
   const { target_date } = useParams()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const handleCloseMobileDrawer = () => setIsSheetOpen(false)
-  const { selectedPatientId } = useIcuSelectedPatientIdStore()
 
-  const selectedPatient = filteredIcuIoData.find(
-    (el) => el.patient_id.patient_id === selectedPatientId,
-  )?.patient_id
+  // const selectedPatient = filteredIcuIoData.find(
+  //   (el) => el.patient_id.patient_id === selectedPatientId,
+  // )?.patient_id
 
   return (
     <div className="flex items-center border-b md:hidden">
@@ -43,17 +41,17 @@ export function MobilePatientList({
             <SheetTitle>{target_date}</SheetTitle>
             <SheetDescription />
           </SheetHeader>
-          <PatientList
+          {/* <PatientList
             filteredIcuIoData={filteredIcuIoData}
             excludedIcuIoData={excludedIcuIoData}
             handleCloseMobileDrawer={handleCloseMobileDrawer}
-          />
+          /> */}
         </SheetContent>
       </Sheet>
 
       <div className="flex w-full items-center justify-center gap-1 pr-[36px] text-sm">
-        <span className="font-semibold">{selectedPatient?.name}</span>
-        <span className="text-muted-foreground">{selectedPatient?.breed}</span>
+        {/* <span className="font-semibold">{selectedPatient?.name}</span>
+        <span className="text-muted-foreground">{selectedPatient?.breed}</span> */}
       </div>
     </div>
   )

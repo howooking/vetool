@@ -2,6 +2,15 @@
 
 import Autocomplete from '@/components/common/auto-complete/auto-complete'
 import { registerIcuPatientFormSchema } from '@/components/hospital/icu/header/register-dialog/register-icu/icu-schema'
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -13,17 +22,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
 import {
   Popover,
   PopoverContent,
@@ -38,22 +36,15 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { registerIcuPatient } from '@/lib/services/icu/register-icu-patient'
-import {
-  useIcuRegisteringPatient,
-  usePatientRegisterDialog,
-  usePatientRegisterStep,
-} from '@/lib/store/icu/icu-register'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
-import { cn } from '@/lib/utils'
-import type { Vet } from '@/types/icu'
+import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
+import { changeTargetDateInUrl, cn } from '@/lib/utils'
+import type { Vet } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
-import { useParams, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
@@ -64,12 +55,15 @@ export default function RegisterIcuForm({
   groupList,
   vetsData,
   tab,
+  setIsRegisterDialogOpen,
 }: {
   hosId: string
   groupList: string[]
   vetsData: Vet[]
   tab: string
+  setIsRegisterDialogOpen: (isRegisterDialogOpen: boolean) => void
 }) {
+  const path = usePathname()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
@@ -77,33 +71,15 @@ export default function RegisterIcuForm({
   })
 
   const { push } = useRouter()
-  const { setIsRegisterDialogOpen } = usePatientRegisterDialog()
-  const { setIsChartLoading } = useIsChartLoadingStore()
-  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
-  const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setStep } = usePatientRegisterStep()
-  const { registeringPatient } = useIcuRegisteringPatient() as {
-    registeringPatient: {
-      patientId: string
-      birth: string
-      patientName: string
-    }
-  }
-
-  const normalizeDate = (date?: Date) => {
-    const normalized = new Date(date ?? new Date())
-
-    normalized.setHours(12, 0, 0, 0)
-    return normalized
-  }
+  const { setStep, registeringPatient } = useIcuRegisterStore()
 
   const form = useForm<z.infer<typeof registerIcuPatientFormSchema>>({
     resolver: zodResolver(registerIcuPatientFormSchema),
     defaultValues: {
       dx: undefined,
       cc: undefined,
-      in_date: normalizeDate(range?.from),
-      out_due_date: normalizeDate(range?.to),
+      in_date: range?.from,
+      out_due_date: range?.to,
       main_vet: vetsData[0].user_id,
       sub_vet: undefined,
       group_list: [groupList[0]],
@@ -112,11 +88,8 @@ export default function RegisterIcuForm({
 
   useEffect(() => {
     if (range && range.from && range.to) {
-      console.log('Range from:', range.from)
-      console.log('Formatted range from:', format(range.from, 'yyyy-MM-dd'))
-
-      form.setValue('in_date', normalizeDate(range.from))
-      form.setValue('out_due_date', normalizeDate(range.to))
+      form.setValue('in_date', range.from)
+      form.setValue('out_due_date', range.to)
     }
   }, [form, range])
 
@@ -126,12 +99,11 @@ export default function RegisterIcuForm({
     const { dx, cc, in_date, out_due_date, main_vet, sub_vet, group_list } =
       values
     setIsSubmitting(true)
-    setIsChartLoading(true)
 
     await registerIcuPatient(
       hosId,
-      registeringPatient.patientId,
-      registeringPatient.birth,
+      registeringPatient!.patientId,
+      registeringPatient!.birth,
       dx,
       cc,
       format(in_date, 'yyyy-MM-dd'),
@@ -146,9 +118,16 @@ export default function RegisterIcuForm({
     })
     setIsRegisterDialogOpen(false)
     setIsSubmitting(false)
-    setSelectedPatientId(registeringPatient.patientId)
-    setSelectedIcuMainView('chart')
-    push(`${format(in_date, 'yyyy-MM-dd')}`)
+
+    const splittedPath = path.split('/')
+    splittedPath[splittedPath.length - 1] = registeringPatient!.patientId
+    const newPatientPath = splittedPath.join('/')
+
+    const newPath = changeTargetDateInUrl(
+      newPatientPath,
+      format(in_date, 'yyyy-MM-dd'),
+    )
+    push(newPath)
   }
 
   const handlePreviousButtonClick = () => {

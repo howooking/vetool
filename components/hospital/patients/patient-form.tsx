@@ -41,7 +41,7 @@ import {
   SEX,
 } from '@/constants/hospital/register/breed'
 import { insertPatient, updatePatient } from '@/lib/services/patient/patient'
-import { useIcuRegisteringPatient } from '@/lib/store/icu/icu-register'
+import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
 import { cn, getDaysSince } from '@/lib/utils'
 import type { PatientDataTable } from '@/types/patients'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -107,7 +107,7 @@ export default function PatientForm({
     edit ? editingPatient?.species! : '',
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { setRegisteringPatient } = useIcuRegisteringPatient()
+  const { setRegisteringPatient } = useIcuRegisterStore()
   const { refresh } = useRouter()
 
   const BREEDS = selectedSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS

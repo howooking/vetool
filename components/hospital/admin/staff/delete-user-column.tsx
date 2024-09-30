@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { deleteStaff } from '@/lib/services/settings/staff-settings'
+import { deleteStaff } from '@/lib/services/admin/staff/staff'
 import { cn } from '@/lib/utils'
 import { LoaderCircle, UserRoundMinus } from 'lucide-react'
 import { useRouter } from 'next/navigation'

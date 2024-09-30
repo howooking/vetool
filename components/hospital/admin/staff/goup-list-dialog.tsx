@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { updateHosGroupList } from '@/lib/services/settings/staff-settings'
+import { updateHosGroupList } from '@/lib/services/admin/staff/staff'
 import { cn } from '@/lib/utils'
 import { Edit, LoaderCircle, X } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'

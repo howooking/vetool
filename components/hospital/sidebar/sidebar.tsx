@@ -19,6 +19,7 @@ export default async function Sidebar({
             path={item.path}
             iconName={item.iconName}
             key={item.name}
+            isReady={item.isReady}
           />
         ))}
       </ul>

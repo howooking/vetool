@@ -1,6 +1,6 @@
-import { getIcuNotification } from '@/lib/services/icu/get-icu-notification'
+import { getIcuNotification } from '@/lib/services/icu/chart/get-icu-notification'
 import { createClient } from '@/lib/supabase/client'
-import type { IcuNotificationJoined } from '@/types/icu'
+import type { IcuNotificationJoined } from '@/types/icu/chart'
 import { useCallback, useEffect, useState } from 'react'
 
 const supabase = createClient()

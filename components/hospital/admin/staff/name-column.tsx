@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { updateStaffName } from '@/lib/services/settings/staff-settings'
+import { updateStaffName } from '@/lib/services/admin/staff/staff'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
