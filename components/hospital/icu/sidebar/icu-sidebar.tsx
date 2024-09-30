@@ -59,7 +59,7 @@ export default function IcuSidebar({
 
   if (icuSidebarData.length === 0) {
     return (
-      <aside className="flex h-icu-chart w-[144px] shrink-0 flex-col gap-3 overflow-y-auto border-r p-2">
+      <aside className="flex h-[calc(100vh-88px)] w-[144px] shrink-0 flex-col gap-3 overflow-y-auto border-r p-2">
         <NoPatients />
       </aside>
     )
@@ -67,7 +67,7 @@ export default function IcuSidebar({
 
   return (
     <>
-      <aside className="hidden h-icu-chart w-[144px] shrink-0 flex-col gap-3 border-r p-2 md:flex">
+      <aside className="hidden h-[calc(100vh-88px)] w-[144px] shrink-0 flex-col gap-3 border-r p-2 md:flex">
         <Filters
           hosGroupList={hosGroupList}
           setFilters={setFilters}
