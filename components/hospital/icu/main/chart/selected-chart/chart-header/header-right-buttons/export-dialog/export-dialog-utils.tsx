@@ -82,6 +82,7 @@ export const renderAndCaptureExportChartBody = (
         basicHosData={{
           vetsListData: initialIcuData.vetsListData,
           groupListData: initialIcuData.basicHosData.group_list,
+          sidebarData: initialIcuData.icuSidebarData ?? [],
           orderColorsData: initialIcuData.basicHosData
             .order_color as IcuOrderColors,
           memoNameListData: initialIcuData.basicHosData.icu_memo_names,
