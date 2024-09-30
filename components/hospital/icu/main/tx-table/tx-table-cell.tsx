@@ -1,6 +1,6 @@
 import { TableCell } from '@/components/ui/table'
 import { IcuOrders, IcuTxs } from '@/types'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 type TxTableCellOrder = Pick<
   IcuOrders,
@@ -23,6 +23,9 @@ export default function TxTableCell({
 }) {
   const { hos_id, target_date } = useParams()
   const { push } = useRouter()
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
+
   const isOrderScheduled = (order: TxTableCellOrder, time: number) => {
     return order.icu_chart_order_time[time - 1] === '1'
   }
@@ -32,22 +35,22 @@ export default function TxTableCell({
   }
 
   const renderOrderContent = () => {
-    if (isTxCompleted(order, time) || isOrderScheduled(order, time)) {
+    if (!isTxCompleted(order, time) && isOrderScheduled(order, time)) {
       return (
         <div className="flex flex-col gap-1">
-          <span>{order.icu_chart_order_name}</span>
+          <span className="text-sm">{order.icu_chart_order_name}</span>
           <span className="text-xs text-muted-foreground">
             {order.icu_chart_order_comment}
           </span>
         </div>
       )
     }
-
-    return null
   }
 
   const handleCellClick = () => {
-    push(`/hospital/${hos_id}/icu/${target_date}/chart/${patientId}`)
+    push(
+      `/hospital/${hos_id}/icu/${target_date}/chart/${patientId}?order-id=${order.icu_chart_order_id}&time=${time}&${params}`,
+    )
   }
 
   return (

@@ -86,10 +86,6 @@ export default function TxTable({
     [txTableData],
   )
 
-  if (!txTableData) {
-    return <NoResult title="실행할 처치가 없습니다" className="h-icu-chart" />
-  }
-
   return (
     <div className="h-icu-chart overflow-auto p-2 pb-[48px]">
       <Table className="border">
