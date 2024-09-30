@@ -28,8 +28,10 @@ export default function Filters({
 
   const resetFilters = useCallback(() => {
     setFilters({ selectedGroup: [], selectedVet: '' })
+
     push(pathname)
   }, [setFilters, push, pathname])
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
@@ -40,6 +42,7 @@ export default function Filters({
           className="cursor-pointer transition hover:text-primary"
         />
       </div>
+
       <GroupFilter
         hosGroupList={hosGroupList}
         selectedGroup={filters.selectedGroup}
