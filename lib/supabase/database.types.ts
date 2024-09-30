@@ -1112,6 +1112,12 @@ export type Database = {
         }
         Returns: Json
       }
+      get_icu_analysis_data: {
+        Args: {
+          hos_id_input: string
+        }
+        Returns: Json
+      }
       get_icu_chart_data: {
         Args: {
           hos_id_input: string

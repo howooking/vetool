@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import type { IcuSidebarData } from '@/types/icu/chart'
+import type { IcuSidebarIoData } from '@/types/icu/chart'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 
-export default function PatientButton({ data }: { data: IcuSidebarData }) {
+export default function PatientButton({ data }: { data: IcuSidebarIoData }) {
   const { push } = useRouter()
   const { hos_id, target_date, patient_id } = useParams()
 

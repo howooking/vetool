@@ -1,10 +1,10 @@
 import PatientButton from '@/components/hospital/icu/sidebar/patient-button'
 import { Separator } from '@/components/ui/separator'
-import type { IcuSidebarData } from '@/types/icu/chart'
+import type { IcuSidebarIoData } from '@/types/icu/chart'
 
 type IcuSidebarContentProps = {
-  filteredIcuIoData: IcuSidebarData[]
-  excludedIcuIoData: IcuSidebarData[]
+  filteredIcuIoData: IcuSidebarIoData[]
+  excludedIcuIoData: IcuSidebarIoData[]
   handleCloseMobileDrawer?: () => void
 }
 

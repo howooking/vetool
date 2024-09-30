@@ -85,7 +85,7 @@ export type Treatment = {
   tx_comment: string | null
 }
 
-export type IcuSidebarData = {
+export type IcuSidebarIoData = {
   vets: {
     sub_vet: string
     main_vet: string

@@ -6,7 +6,7 @@ import { getIcuData } from '@/lib/services/icu/get-icu-data'
 import { Json } from '@/lib/supabase/database.types'
 import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-privider'
 import { IcuOrderColors } from '@/types/adimin'
-import type { IcuSidebarData, SelectedChart, Vet } from '@/types/icu/chart'
+import type { IcuSidebarIoData, SelectedChart, Vet } from '@/types/icu/chart'
 import { PatientData } from '@/types/patients'
 import html2canvas from 'html2canvas'
 import React, { useEffect, useRef } from 'react'
@@ -45,7 +45,7 @@ export const ExportChartBody: React.FC<{
 export const renderAndCaptureExportChartBody = (
   chartData: SelectedChart,
   initialIcuData: {
-    icuSidebarData: IcuSidebarData[]
+    icuSidebarData: IcuSidebarIoData[]
     vetsListData: Vet[]
     basicHosData: {
       order_color: Json
