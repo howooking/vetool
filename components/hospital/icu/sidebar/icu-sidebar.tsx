@@ -3,20 +3,19 @@
 import NoPatients from '@/components/hospital/icu/sidebar/no-patients'
 import PatientList from '@/components/hospital/icu/sidebar/patient-list'
 import { Separator } from '@/components/ui/separator'
-import type { IcuChartJoined, IcuIoJoined, Vet } from '@/types/icu'
+import type { IcuSidebarData, Vet } from '@/types/icu'
 import { useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import Filters from './filters/filters'
-import { MobilePatientList } from './mobile-patient-list'
 
 export default function IcuSidebar({
-  icuIoData,
-  icuChartData,
+  icuSidebarData,
   vetsListData,
+  hosGroupList,
 }: {
-  icuIoData: IcuIoJoined[]
-  icuChartData: IcuChartJoined[]
+  icuSidebarData: IcuSidebarData[]
   vetsListData: Vet[]
+  hosGroupList: string[]
 }) {
   const searchParams = useSearchParams()
 
@@ -26,7 +25,7 @@ export default function IcuSidebar({
   })
 
   const filteredData = useMemo(() => {
-    const filterByGroup = (data: IcuIoJoined[]) =>
+    const filterByGroup = (data: IcuSidebarData[]) =>
       filters.selectedGroup.length === 0
         ? data
         : data.filter((item) =>
@@ -35,31 +34,31 @@ export default function IcuSidebar({
             ),
           )
 
-    const filterByVet = (data: IcuIoJoined[]) => {
+    const filterByVet = (data: IcuSidebarData[]) => {
       if (filters.selectedVet === '') return data
 
       const vetFilteredIds = new Set(
-        icuChartData
+        icuSidebarData
           .filter(
             (chart) =>
-              chart.main_vet.user_id === filters.selectedVet ||
-              chart.sub_vet?.user_id === filters.selectedVet,
+              chart.vets.main_vet === filters.selectedVet ||
+              chart.vets.sub_vet === filters.selectedVet,
           )
-          .map((chart) => chart.icu_io_id.icu_io_id),
+          .map((chart) => chart.icu_io_id),
       )
 
       return data.filter((item) => vetFilteredIds.has(item.icu_io_id))
     }
 
-    const filteredIcuIoData = filterByVet(filterByGroup(icuIoData))
-    const excludedIcuIoData = icuIoData.filter(
-      (item) => !filteredIcuIoData.includes(item),
+    const filteredIcuIoData = filterByVet(filterByGroup(icuSidebarData))
+    const excludedIcuIoData = icuSidebarData.filter(
+      (item) => !filteredIcuIoData.includes(item) ?? [],
     )
 
     return { filteredIcuIoData, excludedIcuIoData }
-  }, [icuIoData, icuChartData, filters])
+  }, [filters.selectedGroup, filters.selectedVet, icuSidebarData])
 
-  if (icuIoData.length === 0) {
+  if (icuSidebarData.length === 0) {
     return (
       <aside className="flex h-icu-chart w-[144px] shrink-0 flex-col gap-3 overflow-y-auto border-r p-2">
         <NoPatients />
@@ -71,9 +70,9 @@ export default function IcuSidebar({
     <>
       <aside className="hidden h-icu-chart w-[144px] shrink-0 flex-col gap-3 border-r p-2 md:flex">
         <Filters
+          hosGroupList={hosGroupList}
           setFilters={setFilters}
           filters={filters}
-          icuIoData={icuIoData}
           vetsListData={vetsListData}
         />
 
@@ -85,10 +84,10 @@ export default function IcuSidebar({
         />
       </aside>
 
-      <MobilePatientList
+      {/* <MobilePatientList
         filteredIcuIoData={filteredData.filteredIcuIoData}
         excludedIcuIoData={filteredData.excludedIcuIoData}
-      />
+      /> */}
     </>
   )
 }

@@ -33,7 +33,7 @@ const SelectedChart = React.memo(
 
     return (
       <div className="relative flex flex-col gap-2 p-2 pb-[48px]">
-        <ChartHeader
+        {/* <ChartHeader
           isPatientOut={isPatientOut}
           chartData={restChartData}
           icuIoId={selectedIo.icu_io_id}
@@ -54,7 +54,7 @@ const SelectedChart = React.memo(
           selectedIo={selectedIo}
           orderColors={orderColors}
           selectedChartOrders={selectedChartOrders}
-        />
+        /> */}
         {isPatientOut && <OutPatientCover />}
       </div>
     )

@@ -43,11 +43,11 @@ export function MobilePatientList({
             <SheetTitle>{target_date}</SheetTitle>
             <SheetDescription />
           </SheetHeader>
-          <PatientList
+          {/* <PatientList
             filteredIcuIoData={filteredIcuIoData}
             excludedIcuIoData={excludedIcuIoData}
             handleCloseMobileDrawer={handleCloseMobileDrawer}
-          />
+          /> */}
         </SheetContent>
       </Sheet>
 

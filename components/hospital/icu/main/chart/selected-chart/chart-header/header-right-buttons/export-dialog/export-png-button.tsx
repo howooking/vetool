@@ -1,34 +1,21 @@
 import { handleExport } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog/export-dialog-utils'
 import { Button } from '@/components/ui/button'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { cn } from '@/lib/utils'
-import type { IcuOrderColors } from '@/types/adimin'
-import type { IcuChartJoined, Vet } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu'
 import { addDays, format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { Dispatch, RefObject, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 export default function ExportPngButton({
-  captureRef,
   chartData,
   setIsDialogOpen,
-  isEntireChecked,
-  vetsList,
-  orderColors,
 }: {
-  captureRef: RefObject<HTMLDivElement>
-  chartData: Omit<IcuChartJoined, 'memo_a' | 'memo_b' | 'memo_c'>
+  chartData: SelectedChart
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>
-  isEntireChecked: boolean
-  vetsList: Vet[]
-  orderColors: IcuOrderColors
 }) {
   const [isExporting, setIsExporting] = useState(false)
   const { hos_id } = useParams()
-  const { selectedPatientId } = useIcuSelectedPatientIdStore()
-  const { icu_io_id } = chartData.icu_io_id
-  const { name } = chartData.patient_id
 
   const downloadPng = (canvas: HTMLCanvasElement, fileName: string) => {
     const link = document.createElement('a')
@@ -39,23 +26,16 @@ export default function ExportPngButton({
 
   const handleExportPng = async () => {
     setIsExporting(true)
-    await handleExport(
-      isEntireChecked,
-      icu_io_id,
-      hos_id as string,
-      selectedPatientId as string,
-      vetsList,
-      orderColors,
-      captureRef,
-      (canvas) => downloadPng(canvas, `${chartData.target_date}_${name}.png`),
-      (canvases) =>
-        canvases.forEach((canvas, index) =>
-          downloadPng(
-            canvas,
-            `${format(addDays(new Date(chartData.icu_io_id.in_date), index), 'yyyy-MM-dd')}_${name}.png`,
-          ),
+
+    await handleExport(chartData, hos_id as string, (canvases) =>
+      canvases.forEach((canvas, index) =>
+        downloadPng(
+          canvas,
+          `${format(addDays(new Date(chartData.icu_io.in_date), index), 'yyyy-MM-dd')}_${chartData.patient.name}.png`,
         ),
+      ),
     )
+
     setIsExporting(false)
     setIsDialogOpen(false)
   }

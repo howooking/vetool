@@ -1,23 +1,21 @@
 import { TableCell } from '@/components/ui/table'
 import { CELL_COLORS } from '@/constants/hospital/icu/chart/colors'
-import { IcuChartOrderJoined } from '@/types/icu'
+import type { SummaryOrder } from '@/types/icu/summary'
 import { useMemo } from 'react'
 
-const countPendingOrders = (orders: IcuChartOrderJoined[], time: number) => {
-  return orders.filter((order) => {
-    const orderTime = order.icu_chart_order_time[time - 1]
-    const orderTx =
-      order[`icu_chart_order_tx_${time}` as keyof IcuChartOrderJoined]
-    return orderTime === '1' && orderTx === null
+const countPendingOrders = (orders: SummaryOrder[], time: number): number =>
+  orders.filter((order) => {
+    const orderTime = order.order_times[time - 1]
+    const hasTx = order.treatments.some((tx) => tx.time === time)
+    return orderTime === '1' && !hasTx
   }).length
-}
 
 export default function SummaryTableCell({
   time,
   orders,
 }: {
   time: number
-  orders: IcuChartOrderJoined[]
+  orders: SummaryOrder[]
 }) {
   const pendingCount = useMemo(
     () => countPendingOrders(orders, time),

@@ -4,9 +4,9 @@ import { createClient } from '@/lib/supabase/server'
 import type { IcuNotificationJoined } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const getIcuNotification = async (hosId: string, page: number = 1) => {
+  const supabase = createClient()
+
   const itemsPerPage = 10
   const startRange = (page - 1) * itemsPerPage
   const endRange = startRange + itemsPerPage - 1

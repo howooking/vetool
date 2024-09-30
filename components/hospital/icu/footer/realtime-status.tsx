@@ -15,7 +15,7 @@ export default function RealtimeStatus({
     <TooltipProvider delayDuration={30}>
       <Tooltip>
         <TooltipTrigger asChild className="cursor-pointer">
-          <div className="mr-3 flex items-center gap-2">
+          <div className="ml-2 flex items-center gap-1">
             <span className="text-xs text-muted-foreground">실시간</span>
             <div
               className={cn(
@@ -30,8 +30,8 @@ export default function RealtimeStatus({
         <TooltipContent>
           <p className="font-semibold">
             {isSubscriptionReady
-              ? '실시간 차트의 변경을 감지하고 있습니다'
-              : '차트의 변경을 감지하지 못하고 있습니다. 새로고침을 해주세요.'}
+              ? '실시간 변경을 감지하고 있습니다'
+              : '실시간 변경을 감지하지 못하고 있습니다. 새로고침을 해주세요.'}
           </p>
         </TooltipContent>
       </Tooltip>

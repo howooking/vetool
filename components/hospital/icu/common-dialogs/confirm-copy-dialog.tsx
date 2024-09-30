@@ -11,16 +11,14 @@ import { toast } from '@/components/ui/use-toast'
 import { pasteChart } from '@/lib/services/icu/paste-chart'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useIsChartLoadingStore } from '@/lib/store/icu/is-chart-loading'
 import { cn } from '@/lib/utils'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
-export function ConfirmCopyDialog({ selectedIoId }: { selectedIoId: string }) {
-  const { target_date } = useParams()
-  const { selectedPatientId } = useIcuSelectedPatientIdStore()
+export function ConfirmCopyDialog() {
+  const { target_date, patient_id } = useParams()
   const { setBookmarkModalOpen } = useIcuBookmarkStore()
   const { setIsChartLoading } = useIsChartLoadingStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -36,10 +34,9 @@ export function ConfirmCopyDialog({ selectedIoId }: { selectedIoId: string }) {
     setIsChartLoading(true)
 
     await pasteChart(
-      selectedPatientId!,
+      patient_id as string,
       copiedChartId!,
       target_date as string,
-      selectedIoId,
     )
 
     toast({

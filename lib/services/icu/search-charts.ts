@@ -8,14 +8,14 @@ import { getDateMonthsAgo } from '@/lib/utils'
 import { CopiedOrder, SearchedIcuIos } from '@/types/icu'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
-
 export const searchIos = async (
   searchInput: string,
   hosId: string,
   timeRange: string,
   order: string,
 ) => {
+  const supabase = createClient()
+
   const safeWords = searchInput
     .trim()
     .replace(SPECIAL_CHAR_REGEX, ' ')
@@ -67,9 +67,11 @@ export const searchIos = async (
 }
 
 export const getSelectedCharts = async (icuIoId: string) => {
+  const supabase = createClient()
+
   const { data: selectedIcuChartData, error: selectedIcuChartDataError } =
     await supabase
-      .from('icu_chart')
+      .from('icu_charts')
       .select('icu_chart_id, target_date, patient_id')
       .order('target_date', { ascending: true })
       .match({ icu_io_id: icuIoId })
@@ -82,7 +84,10 @@ export const getSelectedCharts = async (icuIoId: string) => {
   return selectedIcuChartData
 }
 
+// 삭제
 export const getSelectedChartOrders = async (chartId: string) => {
+  const supabase = createClient()
+
   const { data: icuChartOrderData, error: icuChartOrderDataError } =
     await supabase
       .from('icu_chart_order')

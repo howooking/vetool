@@ -1,12 +1,13 @@
-import type { CopiedOrder } from '@/types/icu'
+import type { SelectedChart } from '@/types/icu'
 import { create } from 'zustand'
 
 type CopiedChartState = {
   copiedChartId?: string
   setCopiedChartId: (icuChartId?: string) => void
 
-  copiedOrders?: CopiedOrder[]
-  setCopiedOrders: (copiedOrders: CopiedOrder[]) => void
+  // 명칭 바꿔야 할듯?
+  copiedChart?: SelectedChart
+  setCopiedChart: (copiedChart: SelectedChart) => void
 
   isConfirmCopyDialogOpen: boolean
   setIsConfirmCopyDialogOpen: (isCopyDialogOpen: boolean) => void
@@ -18,9 +19,9 @@ export const useCopiedChartStore = create<CopiedChartState>((set) => ({
   copiedChartId: undefined,
   setCopiedChartId: (icuChartId?: string) => set({ copiedChartId: icuChartId }),
 
-  copiedOrders: undefined,
-  setCopiedOrders: (selectedOrders) => {
-    set({ copiedOrders: selectedOrders })
+  copiedChart: undefined,
+  setCopiedChart: (copiedChart) => {
+    set({ copiedChart })
   },
 
   isConfirmCopyDialogOpen: false,
@@ -30,6 +31,6 @@ export const useCopiedChartStore = create<CopiedChartState>((set) => ({
   reset: () =>
     set({
       copiedChartId: undefined,
-      copiedOrders: undefined,
+      copiedChart: undefined,
     }),
 }))

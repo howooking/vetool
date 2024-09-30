@@ -3,17 +3,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-const supabase = createClient()
+const pasteOrders = async (prev_chart_id: string, new_chart_id: string) => {
+  const supabase = createClient()
 
-const pasteOrders = async (
-  prev_chart_id: string,
-  new_chart_id: string,
-  selectedIoId: string,
-) => {
-  const { error: rpcError } = await supabase.rpc('copy_prev_chart_orders', {
+  const { error: rpcError } = await supabase.rpc('copy_prev_orders', {
     prev_chart_id_input: prev_chart_id,
     new_chart_id_input: new_chart_id,
-    selected_io_id_input: selectedIoId,
   })
 
   if (rpcError) {
@@ -24,21 +19,23 @@ const pasteOrders = async (
 
 export const pasteChart = async (
   patientId: string,
-  prev_chart_id: string,
+  copiedChartId: string,
   targetDate: string,
-  selectedIoId: string,
 ) => {
-  const { data: returningData, error: returningDataError } = await supabase
-    .from('icu_chart')
-    .select('*')
-    .match({ patient_id: patientId })
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single()
+  const supabase = createClient()
 
-  if (returningDataError) {
-    console.log(returningDataError)
-    redirect(`/error?message=${returningDataError.message}`)
+  const { data: returningChartData, error: returningChartDataError } =
+    await supabase
+      .from('icu_charts')
+      .select('*')
+      .match({ patient_id: patientId })
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+
+  if (returningChartDataError) {
+    console.log(returningChartDataError)
+    redirect(`/error?message=${returningChartDataError.message}`)
   }
 
   const {
@@ -54,18 +51,18 @@ export const pasteChart = async (
     memo_c,
     weight_measured_date,
     weight,
-  } = returningData
+  } = returningChartData
 
-  // 첫 차트인 경우 : chart 복사할 필요가 없고 order만 복사
+  // 첫 차트인 경우(가장최근의 생성된 차트가 targetDate와 일치) : chart 복사할 필요가 없고 order만 복사
   if (target_date === targetDate) {
-    await pasteOrders(prev_chart_id, icu_chart_id, selectedIoId)
+    await pasteOrders(copiedChartId, icu_chart_id)
   }
 
   // 첫차트가 아닌 경우 : 첫차트의 chart data와 order 모두 복사
   if (target_date !== targetDate) {
-    const { data: returningIcuChartId, error: insertingNewChartError } =
+    const { data: createdIcuChartId, error: insertingNewChartError } =
       await supabase
-        .from('icu_chart')
+        .from('icu_charts')
         .insert({
           hos_id,
           patient_id,
@@ -87,10 +84,6 @@ export const pasteChart = async (
       redirect(`/error?message=${insertingNewChartError.message}`)
     }
 
-    await pasteOrders(
-      prev_chart_id,
-      returningIcuChartId.icu_chart_id,
-      selectedIoId,
-    )
+    await pasteOrders(copiedChartId, createdIcuChartId.icu_chart_id)
   }
 }

@@ -1,20 +1,18 @@
 import { Button } from '@/components/ui/button'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import type { SearchedIcuCharts } from '@/types/icu'
 import { SquareArrowRight } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 export default function GotoButton({ chart }: { chart: SearchedIcuCharts }) {
-  const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
   const { push } = useRouter()
+  const { hos_id } = useParams()
 
   const handleGoto = () => {
-    push(`${chart.target_date}`)
-    setSelectedIcuMainView('chart')
-    setSelectedPatientId(chart.patient_id)
+    push(
+      `/hospital/${hos_id}/icu/${chart.target_date}/chart/${chart.patient_id}`,
+    )
   }
+
   return (
     <Button onClick={handleGoto} size="icon" variant="ghost">
       <SquareArrowRight size={18} />

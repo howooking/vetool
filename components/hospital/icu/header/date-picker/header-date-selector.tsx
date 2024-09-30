@@ -2,32 +2,37 @@
 
 import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/header-date-picker'
 import { Button } from '@/components/ui/button'
+import { chageTargetDateInUrl } from '@/lib/utils'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 
 export default function HeaderDateSelector() {
   const searchParams = useSearchParams()
-  const { target_date, hos_id } = useParams()
+  const params = new URLSearchParams(searchParams)
+
+  const { target_date, hos_id, patient_id } = useParams()
+  const path = usePathname()
+  const targetDate = new Date(target_date as string)
+
   const { push } = useRouter()
 
   const handleUpdateDate = (days: number) => {
-    const newDate = new Date(target_date as string)
-    newDate.setDate(newDate.getDate() + days)
-
-    const newDateString = format(newDate, 'yyyy-MM-dd')
-    const params = new URLSearchParams(searchParams)
-    const newPath = `/hospital/${hos_id}/icu/${newDateString}?${params.toString()}`
-
+    targetDate.setDate(targetDate.getDate() + days)
+    const newDateString = format(targetDate, 'yyyy-MM-dd')
+    const newPath = chageTargetDateInUrl(path, newDateString, params)
     push(newPath)
   }
 
   const handleMoveToToday = () => {
     const newDate = new Date()
     const newDateString = format(newDate, 'yyyy-MM-dd')
-    const params = new URLSearchParams(searchParams)
-    const newPath = `/hospital/${hos_id}/icu/${newDateString}?${params.toString()}`
-
+    const newPath = chageTargetDateInUrl(path, newDateString, params)
     push(newPath)
   }
 

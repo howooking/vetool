@@ -12,29 +12,19 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { copyPrevChart } from '@/lib/services/icu/add-icu-chart'
 import { ClipboardPaste } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
-export default function CopyPrevChartDialog({
-  targetDate,
-  selectedPatientId,
-  setIsCreatingChart,
-  selectedIoId,
-}: {
-  targetDate: string
-  selectedPatientId: string
-  setIsCreatingChart: (isCreatingChart: boolean) => void
-  selectedIoId: string
-}) {
+export default function CopyPrevChartDialog() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { patient_id, target_date } = useParams()
 
   const handleCopyPrevSelectedChart = async () => {
-    setIsCreatingChart(true)
     setIsDialogOpen(false)
 
     const { error } = await copyPrevChart(
-      targetDate,
-      selectedPatientId,
-      selectedIoId,
+      target_date as string,
+      patient_id as string,
     )
 
     if (error) {
@@ -43,7 +33,6 @@ export default function CopyPrevChartDialog({
         description: '전날 차트가 있는지 확인해주세요',
         variant: 'destructive',
       })
-      setIsCreatingChart(false)
       return
     }
 
@@ -68,7 +57,7 @@ export default function CopyPrevChartDialog({
         <DialogHeader>
           <DialogTitle>전일차트복사</DialogTitle>
           <DialogDescription>
-            전일차트를 복사하여 {targetDate} 차트가 생성됩니다
+            전일차트를 복사하여 {target_date} 차트가 생성됩니다
           </DialogDescription>
         </DialogHeader>
 

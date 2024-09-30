@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuChartBookmarkJoined } from '@/types/icu'
+import { BookmarkedChart } from '@/types/icu/bookmark'
 import { redirect } from 'next/navigation'
 
 export const upsertBookmarkChart = async (
@@ -12,57 +12,71 @@ export const upsertBookmarkChart = async (
 ) => {
   const supabase = createClient()
 
-  const { error: rpcError } = await supabase.rpc('upsert_icu_bookmark', {
-    bookmark_name_input: name,
-    bookmark_comment_input: comment,
-    icu_chart_id_input: icuChartId,
-    hos_id_input: hosId,
-  })
+  const { error } = await supabase.from('icu_bookmarks').upsert(
+    {
+      hos_id: hosId,
+      bookmark_name: name,
+      bookmark_comment: comment,
+      icu_chart_id: icuChartId,
+    },
+    {
+      onConflict: 'icu_chart_id',
+      ignoreDuplicates: false,
+    },
+  )
 
-  if (rpcError) {
-    console.log(rpcError)
-    redirect(`/error/?message=${rpcError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error/?message=${error.message}`)
   }
 }
 
 export const deleteBookmarkChart = async (bookmarkId: string) => {
   const supabase = createClient()
 
-  const { error: deleteBookmarkError } = await supabase
-    .from('icu_chart_bookmark')
+  const { error } = await supabase
+    .from('icu_bookmarks')
     .delete()
     .match({ bookmark_id: bookmarkId })
 
-  if (deleteBookmarkError) {
-    console.log(deleteBookmarkError)
-    redirect(`/error/?message=${deleteBookmarkError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error/?message=${error.message}`)
   }
 }
 
-export const getBookmarkCharts = async (hosId: string) => {
+export const getBookmarkedCharts = async (hosId: string) => {
   const supabase = createClient()
 
-  const { data: selectedBookmarkChart, error: selectedBookmarkChartError } =
-    await supabase
-      .from('icu_chart_bookmark')
-      .select(
-        `
+  const { data, error } = await supabase
+    .from('icu_bookmarks')
+    .select(
+      `
           bookmark_id,
           bookmark_name,
           bookmark_comment,
-          icu_chart_id(icu_chart_id, target_date, patient_id(name, patient_id))
+          icu_chart_id
+          (
+            icu_chart_id, 
+            target_date, 
+            patient_id
+            (
+              name, 
+              patient_id
+            )
+          )
         `,
-      )
-      .match({ hos_id: hosId })
-      .order('created_at', {
-        ascending: false,
-      })
-      .returns<IcuChartBookmarkJoined[]>()
+    )
+    .match({ hos_id: hosId })
+    .order('created_at', {
+      ascending: false,
+    })
+    .returns<BookmarkedChart[]>()
 
-  if (selectedBookmarkChartError) {
-    console.error(selectedBookmarkChartError)
-    redirect(`/error/?message=${selectedBookmarkChartError.message}`)
+  if (error) {
+    console.error(error)
+    redirect(`/error/?message=${error.message}`)
   }
 
-  return selectedBookmarkChart
+  return data
 }

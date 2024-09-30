@@ -1,3 +1,5 @@
+'use client'
+
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -19,20 +21,19 @@ import {
 } from '@/components/ui/form'
 import { toast } from '@/components/ui/use-toast'
 import { updateGroup } from '@/lib/services/icu/update-icu-chart-infos'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Component } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import GroupBadge from './group-badge'
 import { groupCheckFormSchema } from './group-schema'
-import { Boxes, Component } from 'lucide-react'
 
 export default function Group({
-  hosGroupList,
   currentGroups,
   icuIoId,
 }: {
-  hosGroupList: string[]
   currentGroups: string[]
   icuIoId: string
 }) {
@@ -45,6 +46,10 @@ export default function Group({
       groupList: currentGroups,
     },
   })
+
+  const {
+    basicHosData: { groupListData },
+  } = useBasicHosDataContext()
 
   useEffect(() => {
     if (!isDialogOpen) {
@@ -92,7 +97,7 @@ export default function Group({
               name="groupList"
               render={() => (
                 <FormItem>
-                  {hosGroupList.map((item) => (
+                  {groupListData.map((item) => (
                     <FormField
                       key={item}
                       control={form.control}

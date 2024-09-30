@@ -12,37 +12,28 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { getBookmarkCharts } from '@/lib/services/icu/bookmark'
+import { getBookmarkedCharts } from '@/lib/services/icu/bookmark'
 import { useIcuBookmarkStore } from '@/lib/store/icu/bookmark'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { useOrderPreviewStore } from '@/lib/store/icu/order-preview'
+import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { cn } from '@/lib/utils'
-import type { IcuOrderColors } from '@/types/adimin'
-import type { IcuChartBookmarkJoined } from '@/types/icu'
+import { BookmarkedChart } from '@/types/icu/bookmark'
 import { LoaderCircle, Star } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
-export default function AddBookmarkChartDialog({
-  orderColors,
-  selectedIoId,
-}: {
-  orderColors: IcuOrderColors
-  selectedIoId: string
-}) {
+export default function AddBookmarkChartDialog() {
   const [isFetching, setIsFetching] = useState(false)
-  const [bookmarkCharts, setBookmarkCharts] = useState<
-    IcuChartBookmarkJoined[]
-  >([])
+  const [bookmarkCharts, setBookmarkCharts] = useState<BookmarkedChart[]>([])
 
   const { hos_id } = useParams()
-  const { isPreviewModalOpen } = useOrderPreviewStore()
+  const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isBookmarkModalOpen, setBookmarkModalOpen } = useIcuBookmarkStore()
   const { isConfirmCopyDialogOpen } = useCopiedChartStore()
 
   const handleOpenBookmarkDialog = async () => {
     setIsFetching(true)
-    getBookmarkCharts(hos_id as string)
+    getBookmarkedCharts(hos_id as string)
       .then(setBookmarkCharts)
       .then(() => setBookmarkModalOpen(true))
       .then(() => setIsFetching(false))
@@ -76,10 +67,8 @@ export default function AddBookmarkChartDialog({
           searchPlaceHolder="즐겨찾기 이름 · 즐겨찾기 설명 · 환자명 검색"
         />
 
-        {isPreviewModalOpen && <PreviewDialog orderColors={orderColors} />}
-        {isConfirmCopyDialogOpen && (
-          <ConfirmCopyDialog selectedIoId={selectedIoId} />
-        )}
+        {isPreviewDialogOpen && <PreviewDialog />}
+        {isConfirmCopyDialogOpen && <ConfirmCopyDialog />}
 
         <DialogFooter>
           <DialogClose asChild>

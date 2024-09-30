@@ -21,7 +21,7 @@ export default function VetFilter({
   selectedVet: string
   setSelectedVet: (vet: string) => void
 }) {
-  const pathname = usePathname()
+  const path = usePathname()
   const searchParams = useSearchParams()
   const currentParams = new URLSearchParams(searchParams.toString())
 
@@ -38,7 +38,7 @@ export default function VetFilter({
       setSelectedVet(value)
     }
 
-    const newUrl = `${pathname}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
+    const newUrl = `${path}${currentParams.toString() ? '?' : ''}${currentParams.toString()}`
 
     push(newUrl)
   }

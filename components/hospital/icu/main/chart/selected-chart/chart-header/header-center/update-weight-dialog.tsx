@@ -20,6 +20,7 @@ import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { updateWeight } from '@/lib/services/icu/update-icu-chart-infos'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -57,7 +58,12 @@ export default function UpdateWeightDialog({
   ) => {
     setIsSubmitting(true)
 
-    await updateWeight(patientId, icuChartId, values.weight)
+    await updateWeight(
+      patientId,
+      icuChartId,
+      values.weight,
+      format(new Date(), 'yyyy-MM-dd'),
+    )
 
     toast({
       title: '체중을 입력하였습니다',

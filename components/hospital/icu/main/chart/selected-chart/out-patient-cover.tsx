@@ -1,3 +1,5 @@
+'use client'
+
 import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
 import { useEffect, useState } from 'react'
 

@@ -19,6 +19,11 @@ export type Todo = Database['public']['Tables']['todos']['Row']
 export type IcuDefaultChart =
   Database['public']['Tables']['icu_default_chart']['Row']
 
+// restructuring
+export type IcuCharts = Database['public']['Tables']['icu_charts']['Row']
+export type IcuOrders = Database['public']['Tables']['icu_orders']['Row']
+export type IcuTxs = Database['public']['Tables']['icu_txs']['Row']
+
 // supabase.auth.getUser() 시 return되는 유져타입
 export type AuthUser = {
   id: string

@@ -1,4 +1,5 @@
-import { memoNameFormSchema } from '@/components/hospital/admin/icu/memo/memo-name-schema'
+'use client'
+
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -11,13 +12,18 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { updateMemoNames } from '@/lib/services/admin/icu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useParams, useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { memoNameFormSchema } from './memo-name-schema'
+import { updateMemoNames } from '@/lib/services/admin/icu/memo-name'
 
-export default function ChangeMemoName({ memoNames }: { memoNames: string[] }) {
+export default function MemoNameSetting({
+  memoNames,
+}: {
+  memoNames: string[]
+}) {
   const { hos_id } = useParams()
   const { refresh } = useRouter()
 
@@ -66,12 +72,12 @@ export default function ChangeMemoName({ memoNames }: { memoNames: string[] }) {
           name="memoA"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>메모 A</FormLabel>
+              <FormLabel>첫번째 메모이름</FormLabel>
               <FormControl>
-                <Input placeholder="메모 A" {...field} />
+                <Input placeholder="입원차트 첫번째 메모이름" {...field} />
               </FormControl>
               <FormDescription>
-                입원 차트의 메모 A에 해당하는 메모명입니다.
+                입원 차트의 첫번째 메모입력란의 이름에 해당합니다
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -83,12 +89,12 @@ export default function ChangeMemoName({ memoNames }: { memoNames: string[] }) {
           name="memoB"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>메모 B</FormLabel>
+              <FormLabel>두번째 메모이름</FormLabel>
               <FormControl>
                 <Input placeholder="메모 B" {...field} />
               </FormControl>
               <FormDescription>
-                입원 차트의 메모 B에 해당하는 메모명입니다.
+                입원 차트의 두번째 메모입력란의 이름에 해당합니다
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -100,12 +106,12 @@ export default function ChangeMemoName({ memoNames }: { memoNames: string[] }) {
           name="memoC"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>메모 C</FormLabel>
+              <FormLabel>세번째 메모이름</FormLabel>
               <FormControl>
                 <Input placeholder="메모 C" {...field} />
               </FormControl>
               <FormDescription>
-                입원 차트의 메모 C에 해당하는 메모명입니다.
+                입원 차트의 세번째 메모입력란의 이름에 해당합니다
               </FormDescription>
               <FormMessage />
             </FormItem>

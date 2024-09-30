@@ -10,24 +10,27 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import type { Vet, MainAndSubVet } from '@/types/icu'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
+import type { MainAndSubVet } from '@/types/icu'
+import { Stethoscope } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import MainSubVetUpdateForm from './main-sub-vet-update-form'
-import { Stethoscope, Users } from 'lucide-react'
 
 export default function MainSubVet({
   mainVet,
   subVet,
   icuChartId,
-  vetsList,
 }: {
   mainVet: MainAndSubVet
   subVet: MainAndSubVet | null
   icuChartId: string
-  vetsList: Vet[]
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const {
+    basicHosData: { vetsListData },
+  } = useBasicHosDataContext()
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -53,7 +56,7 @@ export default function MainSubVet({
 
             <Separator orientation="vertical" className="h-4" />
 
-            {subVet ? (
+            {subVet?.name ? (
               <div className="flex items-center gap-1">
                 <Image
                   unoptimized
@@ -80,7 +83,7 @@ export default function MainSubVet({
           setIsDialogOpen={setIsDialogOpen}
           mainVet={mainVet}
           subVet={subVet}
-          vetsList={vetsList}
+          vetsList={vetsListData}
           icuChartId={icuChartId}
         />
       </DialogContent>

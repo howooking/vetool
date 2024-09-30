@@ -1,3 +1,5 @@
+// 삭제 예정
+
 'use client'
 
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
@@ -111,13 +113,14 @@ const IcuChart = React.memo(
 
     if (!selectedChart || (isFirstChart && !selectedChartOrders.length)) {
       return (
-        <AddChartDialogs
-          isFirstChart={isFirstChart}
-          selectedPatientId={selectedPatientId}
-          selectedChart={selectedChart}
-          orderColors={orderColors}
-          selectedIoId={selectedIo.icu_io_id}
-        />
+        // <AddChartDialogs
+        //   isFirstChart={isFirstChart}
+        //   selectedPatientId={selectedPatientId}
+        //   selectedChart={selectedChart}
+        //   orderColors={orderColors}
+        //   selectedIoId={selectedIo.icu_io_id}
+        // />
+        <></>
       )
     }
 

@@ -1,4 +1,7 @@
+'use client'
+
 import NoResult from '@/components/common/no-result'
+import TxTableCell from '@/components/hospital/icu/main/tx-table/tx-table-cell'
 import {
   Table,
   TableBody,
@@ -8,12 +11,10 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { useIcuSelectedPatientIdStore } from '@/lib/store/icu/icu-selected-patient'
-import { useSelectedMainViewStore } from '@/lib/store/icu/selected-main-view'
 import { cn } from '@/lib/utils'
-import { IcuChartJoined, IcuChartOrderJoined } from '@/types/icu'
-import { useCallback, useMemo } from 'react'
-import TxTableCell from './tx-table-cell'
+import { IcuTxTableData } from '@/types/icu'
+import { Cat, Dog } from 'lucide-react'
+import { useMemo } from 'react'
 
 const TODO_BACKGROUD_COLORS = [
   '#fef2f2',
@@ -36,89 +37,56 @@ const TODO_BACKGROUD_COLORS = [
   '#fdf2f8',
 ]
 export default function TxTable({
-  icuChartData,
-  icuChartOrderData,
+  txTableData,
 }: {
-  icuChartData: IcuChartJoined[]
-  icuChartOrderData: IcuChartOrderJoined[]
+  txTableData: IcuTxTableData[]
 }) {
-  const { setSelectedIcuMainView } = useSelectedMainViewStore()
-  const { setSelectedPatientId } = useIcuSelectedPatientIdStore()
+  const filterAndSortTxData = (
+    txTableData: IcuTxTableData[],
+  ): IcuTxTableData[] => {
+    return txTableData
+      .filter((data) => !data.icu_io.out_date)
+      .map((data) => ({
+        ...data,
+        orders: data.orders
+          .filter((order) => order.icu_chart_order_time.includes('1'))
+          .filter(
+            (order) =>
+              order.icu_chart_order_time.filter((time) => time === '1')
+                .length !== order.treatments.length,
+          ),
+      }))
+      .filter((data) => data.orders.length > 0)
+      .sort(
+        (a, b) =>
+          new Date(b.icu_io.created_at).getTime() -
+          new Date(a.icu_io.created_at).getTime(),
+      )
+  }
 
-  const filteredAndSortedOrder = useMemo(
-    () =>
-      icuChartOrderData
-        // 퇴원완료 제거
-        .filter((order) => !order.icu_io_id.out_date)
-        // 시간 지정하지 않은 오더 제거 (예: 구토, 배변, 배뇨)
-        .filter(
-          (order) =>
-            order.icu_chart_order_time.reduce(
-              (acc, time) => Number(acc) + Number(time),
-              0,
-            ) > 0,
-        )
-        // 모든 처치를 완료한 오더 제거
-        .filter((order) => {
-          let hasOrderLeft = false
-          order.icu_chart_order_time.forEach((time, index) => {
-            if (
-              time === '1' &&
-              order[`icu_chart_order_tx_${index + 1}` as keyof typeof order] ===
-                null
-            ) {
-              hasOrderLeft = true
-              return
-            }
-          })
-          return hasOrderLeft
-        })
-        // 입원일 기준 정렬
-        .sort(
-          (a, b) =>
-            new Date(a.icu_io_id.in_date).getTime() -
-            new Date(b.icu_io_id.in_date).getTime(),
-        )
-        // 입원일이 같은 경우도 있으므로 생성일 순으로 정렬
-        .sort(
-          (a, b) =>
-            new Date(a.icu_io_id.created_at).getTime() -
-            new Date(b.icu_io_id.created_at).getTime(),
-        ),
-    [icuChartOrderData],
-  )
+  const createChartBackgroundMap = (
+    txTableData: IcuTxTableData[],
+  ): {
+    [key: string]: string
+  } => {
+    return txTableData.reduce<{ [key: string]: string }>((acc, item, index) => {
+      acc[item.icu_charts.icu_chart_id] =
+        TODO_BACKGROUD_COLORS[index % TODO_BACKGROUD_COLORS.length]
+      return acc
+    }, {})
+  }
 
-  const handleClickRow = useCallback(
-    (patientId: string) => {
-      setSelectedIcuMainView('chart')
-      setSelectedPatientId(patientId)
-    },
-    [setSelectedIcuMainView, setSelectedPatientId],
+  const filteredTxData = useMemo(
+    () => filterAndSortTxData(txTableData),
+    [txTableData],
   )
 
   const chartBackgroundMap = useMemo(
-    () =>
-      icuChartData.reduce<{
-        [key: string]: string
-      }>((acc, item, index) => {
-        acc[item.icu_chart_id] =
-          TODO_BACKGROUD_COLORS[index % TODO_BACKGROUD_COLORS.length]
-        return acc
-      }, {}),
-    [icuChartData],
+    () => createChartBackgroundMap(txTableData),
+    [txTableData],
   )
 
-  const findChartByPatientId = useCallback(
-    (patientId: string) => {
-      const chart = icuChartData.find(
-        (chart) => chart.patient_id.patient_id === patientId,
-      )
-      return chart
-    },
-    [icuChartData],
-  )
-
-  if (!filteredAndSortedOrder.length) {
+  if (!txTableData) {
     return <NoResult title="실행할 처치가 없습니다" className="h-icu-chart" />
   }
 
@@ -140,38 +108,44 @@ export default function TxTable({
         </TableHeader>
 
         <TableBody>
-          {filteredAndSortedOrder.map((order) => {
-            const foundChart = findChartByPatientId(order.icu_io_id.patient_id)
-            return (
+          {filteredTxData.flatMap((txData) =>
+            txData.orders.map((order) => (
               <TableRow
+                key={order.icu_chart_order_id}
                 style={{
                   background:
-                    chartBackgroundMap[order.icu_chart_id.icu_chart_id],
+                    chartBackgroundMap[txData.icu_charts.icu_chart_id],
                 }}
-                className="cursor-pointer divide-x transition-all hover:opacity-60"
-                key={order.icu_chart_order_id}
-                onClick={() =>
-                  handleClickRow(foundChart?.patient_id.patient_id!)
-                }
+                className="divide-x"
               >
                 <TableCell
                   className={cn('flex w-[200px] items-center justify-between')}
                 >
-                  <div>
-                    <span>{foundChart?.patient_id.name}</span>
-                    <span className="text-xs">
-                      ({foundChart?.patient_id.breed})
-                    </span>
+                  <div className="flex items-center gap-1">
+                    {txData.patient.breed === 'canine' ? (
+                      <Dog size={20} />
+                    ) : (
+                      <Cat size={20} />
+                    )}
+                    <div>
+                      <span>{txData.patient.name}</span>
+                      <span className="text-xs">({txData.patient.breed})</span>
+                    </div>
                   </div>
-                  <span className="text-xs">{foundChart?.weight}kg</span>
+                  <span className="text-xs">{txData.icu_charts.weight}kg</span>
                 </TableCell>
 
                 {TIMES.map((time) => (
-                  <TxTableCell key={time} time={time} order={order} />
+                  <TxTableCell
+                    key={time}
+                    time={time}
+                    order={order}
+                    patientId={txData.patient_id}
+                  />
                 ))}
               </TableRow>
-            )
-          })}
+            )),
+          )}
         </TableBody>
       </Table>
     </div>
