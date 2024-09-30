@@ -14,14 +14,12 @@ import { toggleOutPatient } from '@/lib/services/icu/chart/update-icu-chart-info
 import { cn, hashtagKeyword } from '@/lib/utils'
 import type { SelectedChart } from '@/types/icu/chart'
 import { LoaderCircle, LogOut, Undo2 } from 'lucide-react'
-import { useParams } from 'next/navigation'
 import { useState } from 'react'
 export default function OutPatientDialog({
   chartData,
 }: {
   chartData: SelectedChart
 }) {
-  const { target_date } = useParams()
   const { icu_io, orders, patient } = chartData
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)

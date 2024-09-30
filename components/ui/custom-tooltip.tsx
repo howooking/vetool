@@ -23,7 +23,9 @@ export default function CustomTooltip({
   return (
     <TooltipProvider delayDuration={10}>
       <Tooltip>
-        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipTrigger asChild className="cursor-pointer">
+          {children}
+        </TooltipTrigger>
         <TooltipContent
           side={side}
           sideOffset={sideOffset}
