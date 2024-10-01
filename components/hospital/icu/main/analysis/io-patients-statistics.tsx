@@ -25,7 +25,7 @@ import {
 import { useMemo, useState } from 'react'
 import { IcuAnalysisData } from '@/types/icu/analysis'
 
-interface ChartData {
+type ChartData = {
   date: string
   all: number
   canine: number
@@ -55,7 +55,7 @@ const transformData = (originalData: IcuAnalysisData[]) => {
 
 const chartConfig = {
   views: {
-    label: 'Page Views',
+    label: '입원 환자 수',
   },
   all: {
     label: '전체',
@@ -71,7 +71,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function IoStatistics({
+export default function IoPatientsStatistics({
   analysisData,
 }: {
   analysisData: IcuAnalysisData[]

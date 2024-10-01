@@ -1,8 +1,8 @@
-import { IcuAnalysisData } from '@/types/icu/analysis'
-import IoStatistics from '@/components/hospital/icu/main/analysis/io-statistics'
-import Chart2 from '@/components/hospital/icu/main/analysis/chart-2'
-
-export const description = 'An interactive line chart'
+import GroupByStatistics from '@/components/hospital/icu/main/analysis/group-by-statistics'
+import IoDurationStatistics from '@/components/hospital/icu/main/analysis/io-duration-statistics'
+import IoPatientsStatistics from '@/components/hospital/icu/main/analysis/io-patients-statistics'
+import VetAssignmentStatistics from '@/components/hospital/icu/main/analysis/vet-assignment-statistics'
+import type { IcuAnalysisData } from '@/types/icu/analysis'
 
 export default function Analysis({
   analysisData,
@@ -11,8 +11,14 @@ export default function Analysis({
 }) {
   return (
     <div>
-      <IoStatistics analysisData={analysisData} />
-      <Chart2 analysisData={analysisData} />
+      <IoPatientsStatistics analysisData={analysisData} />
+
+      <div className="grid grid-cols-2">
+        <VetAssignmentStatistics analysisData={analysisData} />
+        <GroupByStatistics analysisData={analysisData} />
+      </div>
+
+      <IoDurationStatistics analysisData={analysisData} />
     </div>
   )
 }
