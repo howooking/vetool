@@ -32,6 +32,7 @@ export default async function IcuPageLayout({
         patientsData={patientsData}
         vetsData={vetsListData}
       />
+
       <div className="flex">
         <IcuSidebar
           hosGroupList={basicHosData.group_list}
@@ -39,10 +40,12 @@ export default async function IcuPageLayout({
           vetsListData={vetsListData}
         />
 
-        <main className="h-icu-chart w-full overflow-auto">{children}</main>
-
-        <IcuFooter hosId={params.hos_id} targetDate={params.target_date} />
+        <main className="h-icu-chart w-full overflow-auto md:w-[calc(100vw-198px)]">
+          {children}
+        </main>
       </div>
+
+      <IcuFooter hosId={params.hos_id} targetDate={params.target_date} />
     </BasicHosDataProvider>
   )
 }

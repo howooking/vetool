@@ -1,3 +1,4 @@
+import CustomTooltip from '@/components/ui/custom-tooltip'
 import { TableCell } from '@/components/ui/table'
 import { IcuOrders, IcuTxs } from '@/types'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
@@ -16,10 +17,12 @@ export default function TxTableCell({
   time,
   order,
   patientId,
+  patientName,
 }: {
   time: number
   order: TxTableCellOrder
   patientId: string
+  patientName: string
 }) {
   const { hos_id, target_date } = useParams()
   const { push } = useRouter()
@@ -37,7 +40,7 @@ export default function TxTableCell({
   const renderOrderContent = () => {
     if (!isTxCompleted(order, time) && isOrderScheduled(order, time)) {
       return (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col whitespace-nowrap py-4">
           <span className="text-sm">{order.icu_chart_order_name}</span>
           <span className="text-xs text-muted-foreground">
             {order.icu_chart_order_comment}
@@ -56,9 +59,17 @@ export default function TxTableCell({
   return (
     <TableCell
       onClick={handleCellClick}
-      className="cursor-pointer text-center transition-all hover:opacity-60"
+      className="cursor-pointer text-center ring-inset ring-primary transition-all hover:ring"
     >
-      {renderOrderContent()}
+      <CustomTooltip
+        contents={
+          <>
+            {patientName} / {time}
+          </>
+        }
+      >
+        {renderOrderContent()}
+      </CustomTooltip>
     </TableCell>
   )
 }
