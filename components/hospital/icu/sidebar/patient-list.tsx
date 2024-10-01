@@ -14,12 +14,10 @@ export default function PatientList({
   handleCloseMobileDrawer,
 }: IcuSidebarContentProps) {
   return (
-    <div className="flex-col gap-3 overflow-y-auto">
+    <div className="h-[calc(100vh-210px)] flex-col gap-3 overflow-y-auto md:h-auto">
       {filteredIcuIoData.length > 0 ? (
         <ul className="flex flex-col gap-2">
-          <span className="hidden text-xs font-bold text-gray-500 md:block">
-            입원환자
-          </span>
+          <span className="text-xs font-bold text-gray-500">입원환자</span>
           {filteredIcuIoData.map((data) => (
             <li
               key={data.icu_io_id}

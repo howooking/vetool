@@ -95,12 +95,8 @@ export default function GroupFilter({
           ))}
         </div>
 
-        <DialogFooter>
-          <Button
-            variant="destructive"
-            onClick={handleResetClick}
-            className="mr-auto"
-          >
+        <DialogFooter className="flex gap-2 md:gap-0">
+          <Button variant="outline" onClick={handleResetClick}>
             초기화
           </Button>
           <Button type="button" onClick={handleOkButtonClick}>

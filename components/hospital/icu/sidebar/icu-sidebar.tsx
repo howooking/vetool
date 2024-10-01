@@ -1,12 +1,15 @@
 'use client'
 
-import Filters from '@/components/hospital/icu/sidebar/filters/filters'
-import NoPatients from '@/components/hospital/icu/sidebar/no-patients'
-import PatientList from '@/components/hospital/icu/sidebar/patient-list'
-import { Separator } from '@/components/ui/separator'
+import useIcuSidebarFilter from '@/hooks/useIcuSidebarFilter'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
-import { useSearchParams } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
+import { MobileSidebarSheet } from './mobile/mobile-sidebar-sheet'
+import NormalSidebar from './normal-sidebar'
+
+export type Filter = {
+  selectedGroup: string[]
+  selectedVet: string
+}
 
 export default function IcuSidebar({
   icuSidebarData,
@@ -17,76 +20,74 @@ export default function IcuSidebar({
   vetsListData: Vet[]
   hosGroupList: string[]
 }) {
-  const searchParams = useSearchParams()
+  const { filters, setFilters } = useIcuSidebarFilter()
 
-  const [filters, setFilters] = useState({
-    selectedGroup: searchParams.get('group')?.split(',') || [],
-    selectedVet: searchParams.get('vet') || '',
-  })
+  const filterData = useCallback(
+    (
+      data: IcuSidebarIoData[],
+      filters: {
+        selectedGroup: string[]
+        selectedVet: string
+      },
+    ) => {
+      const filterByGroup = (items: IcuSidebarIoData[]) =>
+        filters.selectedGroup.length === 0
+          ? items
+          : items.filter((item) =>
+              filters.selectedGroup.some((group) =>
+                item.group_list.includes(group),
+              ),
+            )
 
-  const filteredData = useMemo(() => {
-    const filterByGroup = (data: IcuSidebarIoData[]) =>
-      filters.selectedGroup.length === 0
-        ? data
-        : data.filter((item) =>
-            filters.selectedGroup.some((group) =>
-              item.group_list.includes(group),
-            ),
-          )
+      const filterByVet = (items: IcuSidebarIoData[]) => {
+        if (filters.selectedVet === '') return items
+        const vetFilteredIds = new Set(
+          data
+            .filter(
+              (chart) =>
+                chart.vets?.main_vet === filters.selectedVet ||
+                chart.vets?.sub_vet === filters.selectedVet,
+            )
+            .map((chart) => chart.icu_io_id),
+        )
 
-    const filterByVet = (data: IcuSidebarIoData[]) => {
-      if (filters.selectedVet === '') return data
-      const vetFilteredIds = new Set(
-        icuSidebarData
-          .filter(
-            (chart) =>
-              chart.vets?.main_vet === filters.selectedVet ||
-              chart.vets?.sub_vet === filters.selectedVet,
-          )
-          .map((chart) => chart.icu_io_id),
+        return items.filter((item) => vetFilteredIds.has(item.icu_io_id))
+      }
+
+      const filteredIcuIoData = filterByVet(filterByGroup(data))
+      const excludedIcuIoData = data.filter(
+        (item) => !filteredIcuIoData.includes(item),
       )
 
-      return data.filter((item) => vetFilteredIds.has(item.icu_io_id))
-    }
+      return { filteredIcuIoData, excludedIcuIoData }
+    },
+    [],
+  )
 
-    const filteredIcuIoData = filterByVet(filterByGroup(icuSidebarData))
-    const excludedIcuIoData = icuSidebarData.filter(
-      (item) => !filteredIcuIoData.includes(item),
-    )
-
-    return { filteredIcuIoData, excludedIcuIoData }
-  }, [filters.selectedGroup, filters.selectedVet, icuSidebarData])
-
-  if (icuSidebarData.length === 0) {
-    return (
-      <aside className="flex h-[calc(100vh-88px)] w-[144px] shrink-0 flex-col gap-3 overflow-y-auto border-r p-2">
-        <NoPatients />
-      </aside>
-    )
-  }
+  const filteredData = useMemo(
+    () => filterData(icuSidebarData, filters),
+    [filterData, filters, icuSidebarData],
+  )
 
   return (
     <>
-      <aside className="hidden h-[calc(100vh-88px)] w-[144px] shrink-0 flex-col gap-3 border-r p-2 md:flex">
-        <Filters
-          hosGroupList={hosGroupList}
-          setFilters={setFilters}
-          filters={filters}
-          vetsListData={vetsListData}
-        />
+      <NormalSidebar
+        hosGroupList={hosGroupList}
+        vetsListData={vetsListData}
+        filteredData={filteredData}
+        isEmpty={icuSidebarData.length === 0}
+        setFilters={setFilters}
+        filters={filters}
+      />
 
-        <Separator />
-
-        <PatientList
-          filteredIcuIoData={filteredData.filteredIcuIoData}
-          excludedIcuIoData={filteredData.excludedIcuIoData}
-        />
-      </aside>
-
-      {/* <MobilePatientList
-        filteredIcuIoData={filteredData.filteredIcuIoData}
-        excludedIcuIoData={filteredData.excludedIcuIoData}
-      /> */}
+      <MobileSidebarSheet
+        hosGroupList={hosGroupList}
+        vetsListData={vetsListData}
+        filteredData={filteredData}
+        isEmpty={icuSidebarData.length === 0}
+        setFilters={setFilters}
+        filters={filters}
+      />
     </>
   )
 }
