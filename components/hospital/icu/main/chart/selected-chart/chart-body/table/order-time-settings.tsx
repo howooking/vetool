@@ -1,3 +1,4 @@
+import HelperTooltip from '@/components/common/helper-tooltip'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -12,7 +13,7 @@ import {
   TIMES,
   TX_ORDER_TIME_INTERVALS,
 } from '@/constants/hospital/icu/chart/time'
-import React, { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 type OrderTimeSettingsProps = {
   startTime: string
@@ -55,8 +56,13 @@ export default function OrderTimeSettings({
   }
 
   return (
-    <div className="flex flex-col gap-2 md:hidden">
-      <span className="text-sm font-semibold">오더 시간 설정</span>
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-semibold">오더 시간 설정</span>
+        <HelperTooltip>
+          차트 표에서 우클릭으로도 설정이 가능합니다
+        </HelperTooltip>
+      </div>
       <div className="flex flex-col justify-between gap-2 md:flex-row">
         <div className="flex gap-2">
           <Select onValueChange={setStartTime} value={startTime}>
