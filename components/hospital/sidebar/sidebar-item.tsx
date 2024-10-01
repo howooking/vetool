@@ -55,7 +55,12 @@ export default function SidebarItem({
 
   return (
     <li key={name}>
-      <CustomTooltip contents={name} side="right" sideOffset={4}>
+      <CustomTooltip
+        contents={name}
+        side="right"
+        sideOffset={4}
+        delayDuration={300}
+      >
         <Button
           onClick={() => push(`/hospital/${hos_id}/${dynamicPath}`)}
           className={cn(
