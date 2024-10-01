@@ -60,7 +60,7 @@ export default function IcuFooter({
           <li
             key={value}
             className={cn(
-              value === 'search' || value === 'bookmark'
+              value === 'search' || value === 'bookmark' || value === 'analysis'
                 ? 'hidden md:block'
                 : '',
             )}
