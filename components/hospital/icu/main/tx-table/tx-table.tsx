@@ -14,7 +14,7 @@ import type { IcuTxTableData } from '@/types/icu/tx-table'
 import { Cat, Dog } from 'lucide-react'
 import { useMemo } from 'react'
 
-const TODO_BACKGROUD_COLORS = [
+const TX_TABLE_BACKGROUD_COLORS = [
   '#fef2f2',
   '#fffbeb',
   '#f7fee7',
@@ -66,7 +66,7 @@ export default function TxTable({
     () =>
       txTableData.reduce<{ [key: string]: string }>((acc, item, index) => {
         acc[item.icu_charts.icu_chart_id] =
-          TODO_BACKGROUD_COLORS[index % TODO_BACKGROUD_COLORS.length]
+          TX_TABLE_BACKGROUD_COLORS[index % TX_TABLE_BACKGROUD_COLORS.length]
         return acc
       }, {}),
     [txTableData],
@@ -77,9 +77,7 @@ export default function TxTable({
       <Table className="border">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[200px] text-center">
-              <span>환자목록</span>
-            </TableHead>
+            <TableHead className="w-[200px] text-center">환자목록</TableHead>
 
             {TIMES.map((time) => (
               <TableHead className="border text-center" key={time}>

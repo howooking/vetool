@@ -27,15 +27,12 @@ export default function TxTableCell({
   const { hos_id, target_date } = useParams()
   const { push } = useRouter()
   const searchParams = useSearchParams()
-  const params = new URLSearchParams(searchParams)
 
-  const isOrderScheduled = (order: TxTableCellOrder, time: number) => {
-    return order.icu_chart_order_time[time - 1] === '1'
-  }
+  const isOrderScheduled = (order: TxTableCellOrder, time: number) =>
+    order.icu_chart_order_time[time - 1] === '1'
 
-  const isTxCompleted = (order: TxTableCellOrder, time: number) => {
-    return order.treatments.some((tx) => tx.time === time)
-  }
+  const isTxCompleted = (order: TxTableCellOrder, time: number) =>
+    order.treatments.some((tx) => tx.time === time)
 
   const renderOrderContent = () => {
     if (!isTxCompleted(order, time) && isOrderScheduled(order, time)) {
@@ -48,9 +45,11 @@ export default function TxTableCell({
         </div>
       )
     }
+    return null
   }
 
   const handleCellClick = () => {
+    const params = new URLSearchParams(searchParams)
     push(
       `/hospital/${hos_id}/icu/${target_date}/chart/${patientId}?order-id=${order.icu_chart_order_id}&time=${time}&${params}`,
     )
