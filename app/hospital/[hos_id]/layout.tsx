@@ -28,9 +28,7 @@ export default async function Layout({
 
   return (
     <div className="flex">
-      <SidebarWrapper>
-        <Sidebar hosId={params.hos_id} userData={userData} />
-      </SidebarWrapper>
+      <Sidebar hosId={params.hos_id} userData={userData} />
 
       <MobileSidebar
         hosId={params.hos_id}
@@ -40,7 +38,7 @@ export default async function Layout({
 
       <div className="relative w-full">
         <HospitalHeader />
-        <main>{children}</main>
+        <main className="w-full">{children}</main>
       </div>
     </div>
   )

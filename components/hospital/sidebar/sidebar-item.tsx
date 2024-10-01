@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useSidebarStore } from '@/lib/store/hospital/sidebar'
+import CustomTooltip from '@/components/ui/custom-tooltip'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import {
@@ -13,15 +13,16 @@ import {
   Syringe,
 } from 'lucide-react'
 import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useMemo } from 'react'
 
 // server component에서 props로 전달이 안됨
 const ICON_MAPPER = {
-  Home: <Home size={18} className="ml-[17px]" />,
-  Syringe: <Syringe size={18} className="ml-[17px]" />,
-  Slice: <Slice size={18} className="ml-[17px]" />,
-  HeartPulse: <HeartPulse size={18} className="ml-[17px]" />,
-  ListChecks: <ListChecks size={18} className="ml-[17px]" />,
-  BarChart4: <BarChart4 size={18} className="ml-[17px]" />,
+  Home: <Home size={18} />,
+  Syringe: <Syringe size={18} />,
+  Slice: <Slice size={18} />,
+  HeartPulse: <HeartPulse size={18} />,
+  ListChecks: <ListChecks size={18} />,
+  BarChart4: <BarChart4 size={18} />,
 }
 
 export default function SidebarItem({
@@ -35,40 +36,38 @@ export default function SidebarItem({
   iconName: string
   isReady: boolean
 }) {
-  const { isExpanded } = useSidebarStore()
   const pathname = usePathname()
   const { hos_id } = useParams()
-
-  const isActive =
-    pathname.split('/').at(3) === path ||
-    (!pathname.split('/').at(3) && name === '병원 홈')
-
-  const dynamicPath =
-    path === 'icu' ? `icu/${format(new Date(), 'yyyy-MM-dd')}/summary` : path
-
   const { push } = useRouter()
+
+  const isActive = useMemo(
+    () =>
+      pathname.split('/').at(3) === path ||
+      (!pathname.split('/').at(3) && name === '병원 홈'),
+    [name, path, pathname],
+  )
+
+  const dynamicPath = useMemo(
+    () =>
+      path === 'icu' ? `icu/${format(new Date(), 'yyyy-MM-dd')}/summary` : path,
+    [path],
+  )
 
   return (
     <li key={name}>
-      <Button
-        onClick={() => push(`/hospital/${hos_id}/${dynamicPath}`)}
-        className={cn(
-          isActive && 'bg-primary text-white',
-          'relative flex h-12 w-full items-center rounded-none p-0',
-        )}
-        variant="ghost"
-        disabled={!isReady}
-      >
-        <div className="absolute left-0.5">
-          {ICON_MAPPER[iconName as keyof typeof ICON_MAPPER]}
-        </div>
-
-        <span
-          className={cn('absolute left-12', isExpanded ? 'block' : 'hidden')}
+      <CustomTooltip contents={name} side="right" sideOffset={4}>
+        <Button
+          onClick={() => push(`/hospital/${hos_id}/${dynamicPath}`)}
+          className={cn(
+            isActive && 'bg-primary text-white',
+            'h-12 w-full rounded-none',
+          )}
+          variant="ghost"
+          disabled={!isReady}
         >
-          {name}
-        </span>
-      </Button>
+          {ICON_MAPPER[iconName as keyof typeof ICON_MAPPER]}
+        </Button>
+      </CustomTooltip>
     </li>
   )
 }
