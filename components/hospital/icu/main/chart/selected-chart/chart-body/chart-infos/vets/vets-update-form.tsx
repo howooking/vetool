@@ -1,6 +1,7 @@
 'use client'
 
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
+import { vetsFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/vets/vets-schema'
 import {
   Form,
   FormControl,
@@ -25,9 +26,8 @@ import Image from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { mainSubVetFormSchema } from './vet-schema'
 
-export default function MainSubVetUpdateForm({
+export default function VetsUpdateForm({
   mainVet,
   subVet,
   vetsList,
@@ -43,21 +43,21 @@ export default function MainSubVetUpdateForm({
   const [isUpdating, setIsUpdating] = useState(false)
 
   const handleUpdateMainAndSubVet = async (
-    values: z.infer<typeof mainSubVetFormSchema>,
+    values: z.infer<typeof vetsFormSchema>,
   ) => {
     setIsUpdating(true)
     await updateMainSubVet(icuChartId, values.main_vet, values.sub_vet)
 
     toast({
-      title: '주치의 / 부주치의를 변경하였습니다',
+      title: '담당의를 변경하였습니다',
     })
 
     setIsUpdating(false)
     setIsDialogOpen(false)
   }
 
-  const form = useForm<z.infer<typeof mainSubVetFormSchema>>({
-    resolver: zodResolver(mainSubVetFormSchema),
+  const form = useForm<z.infer<typeof vetsFormSchema>>({
+    resolver: zodResolver(vetsFormSchema),
     defaultValues: {
       main_vet: mainVet.user_id,
       sub_vet: subVet?.user_id ?? 'null',

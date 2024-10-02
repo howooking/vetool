@@ -1,6 +1,8 @@
 'use client'
 
+import VetsUpdateForm from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/vets/vets-update-form'
 import { Button } from '@/components/ui/button'
+import CustomTooltip from '@/components/ui/custom-tooltip'
 import {
   Dialog,
   DialogContent,
@@ -9,16 +11,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import type { MainAndSubVet } from '@/types/icu/chart'
 import { Stethoscope } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
-import MainSubVetUpdateForm from './main-sub-vet-update-form'
-import CustomTooltip from '@/components/ui/custom-tooltip'
+import VetName from './vet-name'
 
-export default function MainSubVet({
+export default function Vets({
   mainVet,
   subVet,
   icuChartId,
@@ -54,44 +56,54 @@ export default function MainSubVet({
           </CustomTooltip>
 
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              <Image
-                unoptimized
-                src={mainVet.avatar_url ?? ''}
-                alt={mainVet.name}
-                width={20}
-                height={20}
-                className="rounded-full"
-              />
-              <span>{mainVet.name}</span>
-            </div>
+            <VetName
+              label="주치의"
+              name={mainVet.name}
+              avatarUrl={mainVet.avatar_url}
+            />
 
             <Separator orientation="vertical" className="h-4" />
 
             {subVet?.name ? (
-              <div className="flex items-center gap-1">
-                <Image
-                  unoptimized
-                  src={subVet.avatar_url ?? ''}
-                  alt={subVet.name}
-                  width={20}
-                  height={20}
-                  className="rounded-full"
-                />
-                {`${subVet.name}`}
-              </div>
+              <VetName
+                label="부주치의"
+                name={subVet.name}
+                avatarUrl={subVet.avatar_url}
+              />
             ) : (
               '미선택'
             )}
+
+            <Separator orientation="vertical" className="h-4" />
+
+            <VetName
+              label="당일"
+              name={mainVet.name}
+              avatarUrl={mainVet.avatar_url}
+            />
+            <Separator orientation="vertical" className="h-4" />
+
+            <VetName
+              label="오전"
+              name={mainVet.name}
+              avatarUrl={mainVet.avatar_url}
+            />
+            <Separator orientation="vertical" className="h-4" />
+
+            <VetName
+              label="오후"
+              name={mainVet.name}
+              avatarUrl={mainVet.avatar_url}
+            />
           </div>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[640px]">
         <DialogHeader>
-          <DialogTitle>주치의 / 부주치의 변경</DialogTitle>
+          <DialogTitle>담당의 변경</DialogTitle>
           <DialogDescription />
         </DialogHeader>
-        <MainSubVetUpdateForm
+        <VetsUpdateForm
           setIsDialogOpen={setIsDialogOpen}
           mainVet={mainVet}
           subVet={subVet}
