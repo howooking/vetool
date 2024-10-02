@@ -1,6 +1,7 @@
 'use client'
 
 import TxTableCell from '@/components/hospital/icu/main/tx-table/tx-table-cell'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
   Table,
   TableBody,
@@ -74,60 +75,63 @@ export default function TxTable({
 
   return (
     <div className="h-icu-chart overflow-auto p-2 pb-[48px]">
-      <Table className="border">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[200px] text-center">환자목록</TableHead>
+      <ScrollArea className="h-full w-full">
+        <Table className="border">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[200px] text-center">환자목록</TableHead>
 
-            {TIMES.map((time) => (
-              <TableHead className="border text-center" key={time}>
-                {time.toString().padStart(2, '0')}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
+              {TIMES.map((time) => (
+                <TableHead className="border text-center" key={time}>
+                  {time.toString().padStart(2, '0')}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
 
-        <TableBody>
-          {filteredTxData.flatMap((txData) =>
-            txData.orders.map((order) => (
-              <TableRow
-                key={order.icu_chart_order_id}
-                style={{
-                  background:
-                    chartBackgroundMap[txData.icu_charts.icu_chart_id],
-                }}
-                className="divide-x"
-              >
-                <TableCell className="flex w-[120px] flex-col items-center justify-center">
-                  <div className="flex items-center gap-1">
-                    {txData.patient.species === 'canine' ? (
-                      <Dog size={18} />
-                    ) : (
-                      <Cat size={18} />
-                    )}
-                    <div>{txData.patient.name}</div>
-                  </div>
+          <TableBody>
+            {filteredTxData.flatMap((txData) =>
+              txData.orders.map((order) => (
+                <TableRow
+                  key={order.icu_chart_order_id}
+                  style={{
+                    background:
+                      chartBackgroundMap[txData.icu_charts.icu_chart_id],
+                  }}
+                  className="divide-x"
+                >
+                  <TableCell className="flex w-[120px] flex-col items-center justify-center">
+                    <div className="flex items-center gap-1">
+                      {txData.patient.species === 'canine' ? (
+                        <Dog size={18} />
+                      ) : (
+                        <Cat size={18} />
+                      )}
+                      <div>{txData.patient.name}</div>
+                    </div>
 
-                  <div className="line-clamp-1 text-[10px] text-muted-foreground">
-                    {txData.patient.breed}
-                  </div>
-                  <div className="text-xs">{txData.icu_charts.weight}kg</div>
-                </TableCell>
+                    <div className="line-clamp-1 text-[10px] text-muted-foreground">
+                      {txData.patient.breed}
+                    </div>
+                    <div className="text-xs">{txData.icu_charts.weight}kg</div>
+                  </TableCell>
 
-                {TIMES.map((time) => (
-                  <TxTableCell
-                    patientName={txData.patient.name}
-                    key={time}
-                    time={time}
-                    order={order}
-                    patientId={txData.patient_id}
-                  />
-                ))}
-              </TableRow>
-            )),
-          )}
-        </TableBody>
-      </Table>
+                  {TIMES.map((time) => (
+                    <TxTableCell
+                      patientName={txData.patient.name}
+                      key={time}
+                      time={time}
+                      order={order}
+                      patientId={txData.patient_id}
+                    />
+                  ))}
+                </TableRow>
+              )),
+            )}
+          </TableBody>
+        </Table>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   )
 }
