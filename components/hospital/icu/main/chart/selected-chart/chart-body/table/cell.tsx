@@ -99,9 +99,8 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault()
         toggleOrderTime(time)
-        handleUpdateOrderTime()
       },
-      [handleUpdateOrderTime, time, toggleOrderTime],
+      [time, toggleOrderTime],
     )
 
     const handleUpsertBriefTxResultInput = useCallback(async () => {
