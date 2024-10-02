@@ -6,6 +6,12 @@ export const SIDE_BAR_ITEMS = [
     isReady: true,
   },
   {
+    name: '환자관리',
+    path: 'patients',
+    iconName: 'PawPrint',
+    isReady: true,
+  },
+  {
     name: '입원차트',
     path: 'icu',
     iconName: 'Syringe',

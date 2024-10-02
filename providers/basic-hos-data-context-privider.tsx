@@ -1,7 +1,7 @@
 'use client'
 
 import { IcuOrderColors } from '@/types/adimin'
-import type { IcuSidebarData, Vet } from '@/types/icu/chart'
+import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
 import React, { createContext, useContext } from 'react'
 
 interface IcuContextType {
@@ -13,7 +13,7 @@ type BasicHosData = {
   groupListData: string[]
   orderColorsData: IcuOrderColors
   memoNameListData: string[]
-  sidebarData: IcuSidebarData[]
+  sidebarData: IcuSidebarIoData[]
 }
 
 const BasicHosDataContext = createContext<IcuContextType | undefined>(undefined)

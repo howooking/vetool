@@ -13,15 +13,17 @@ export default function CustomTooltip({
   sideOffset = 10,
   variant = 'primary',
   side = 'top',
+  delayDuration = 10,
 }: {
   contents: React.ReactNode
   children: React.ReactNode
   sideOffset?: number
   variant?: 'primary' | 'secondary'
   side?: 'top' | 'bottom' | 'left' | 'right'
+  delayDuration?: number
 }) {
   return (
-    <TooltipProvider delayDuration={10}>
+    <TooltipProvider delayDuration={delayDuration}>
       <Tooltip>
         <TooltipTrigger asChild className="cursor-pointer">
           {children}

@@ -21,6 +21,7 @@ import { toast } from '@/components/ui/use-toast'
 import { updateWeight } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
+import { Edit2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -76,12 +77,16 @@ export default function UpdateWeightDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="h-6 px-2 py-1 text-xs md:text-sm">
+        <Button
+          variant="outline"
+          className="flex h-6 items-center gap-2 px-2 py-1 text-xs md:text-sm"
+        >
           {weightMesuredDate ? (
             <span>{`${weight}kg (${weightMesuredDate})`}</span>
           ) : (
             <span>체중 미측정</span>
           )}
+          <Edit2 size={12} />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[320px]">

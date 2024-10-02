@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuSidebarData, Vet } from '@/types/icu/chart'
+import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
 import type { PatientData } from '@/types/patients'
 import { redirect } from 'next/navigation'
 
@@ -15,7 +15,7 @@ export const getIcuData = async (hosId: string, targetDate: string) => {
         hos_id_input: hosId,
         target_date_input: targetDate,
       })
-      .returns<IcuSidebarData[]>(),
+      .returns<IcuSidebarIoData[]>(),
 
     supabase
       .from('users')
