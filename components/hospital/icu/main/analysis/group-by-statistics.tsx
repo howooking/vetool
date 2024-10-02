@@ -42,7 +42,7 @@ export default function GroupByStatistics({
     const data = Object.entries(groupCounts).map(([group, counts], index) => ({
       group,
       counts,
-      fill: colors[index % colors.length], // 색상 순환
+      fill: colors[index % colors.length],
     }))
 
     const config = Object.fromEntries(
@@ -59,7 +59,7 @@ export default function GroupByStatistics({
   }, [analysisData])
 
   return (
-    <Card className="flex flex-col">
+    <Card className="ml-1 mr-2 flex flex-col">
       <CardHeader className="pb-0">
         <CardTitle>병과별 환자 통계</CardTitle>
         {/* <CardDescription>January - June 2024</CardDescription> */}
@@ -67,7 +67,7 @@ export default function GroupByStatistics({
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[400px]"
+          className="mx-auto aspect-square max-h-[500px]"
         >
           <PieChart>
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />

@@ -125,7 +125,7 @@ export type Database = {
           created_at: string
           description: string | null
           drug_id: string | null
-          drug_names: string | null
+          drug_name: string | null
           drug_products_id: string
           hos_id: string | null
           mass_vol: number | null
@@ -143,7 +143,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           drug_id?: string | null
-          drug_names?: string | null
+          drug_name?: string | null
           drug_products_id?: string
           hos_id?: string | null
           mass_vol?: number | null
@@ -161,7 +161,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           drug_id?: string | null
-          drug_names?: string | null
+          drug_name?: string | null
           drug_products_id?: string
           hos_id?: string | null
           mass_vol?: number | null
@@ -1113,6 +1113,13 @@ export type Database = {
         Returns: Json
       }
       get_icu_analysis_data: {
+        Args: {
+          hos_id_input: string
+          target_date_input: string
+        }
+        Returns: Json
+      }
+      get_icu_analysis_data_old: {
         Args: {
           hos_id_input: string
         }

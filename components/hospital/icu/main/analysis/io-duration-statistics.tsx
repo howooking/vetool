@@ -37,8 +37,14 @@ const calculateStayDurations = (
   IcuAnalysisData: IcuAnalysisData[],
 ): ChartData[] => {
   const stayDurations: number[] = []
+  const durationCounts: Record<number, number> = {}
 
-  IcuAnalysisData.forEach((data) => {
+  // io_id 기준으로 중복 제거
+  IcuAnalysisData.filter(
+    (data, index, self) =>
+      index ===
+      self.findIndex((t) => t.icu_io.icu_io_id === data.icu_io.icu_io_id),
+  ).forEach((data) => {
     const { icu_io } = data
     if (icu_io.out_date) {
       const inDate = new Date(icu_io.in_date)
@@ -53,7 +59,6 @@ const calculateStayDurations = (
     }
   })
 
-  const durationCounts: Record<number, number> = {}
   stayDurations.forEach((duration) => {
     durationCounts[duration] = (durationCounts[duration] || 0) + 1
   })
@@ -74,7 +79,7 @@ export default function IoDurationStatistics({
   const chartData = calculateStayDurations(analysisData)
 
   return (
-    <Card className="ml-2 mr-1">
+    <Card className="ml-2 mr-1 mt-2">
       <CardHeader>
         <CardTitle>입원 환자 통계</CardTitle>
         <CardDescription>

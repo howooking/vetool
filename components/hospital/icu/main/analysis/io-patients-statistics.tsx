@@ -1,6 +1,6 @@
 'use client'
 
-import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
 
 import {
   Card,
@@ -178,7 +178,12 @@ export default function IoPatientsStatistics({
                 })
               }}
             />
-
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tickMargin={10}
+              tickFormatter={(value) => value.toLocaleString()}
+            />
             <ChartTooltip
               content={
                 <ChartTooltipContent

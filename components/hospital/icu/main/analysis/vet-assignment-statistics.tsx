@@ -65,13 +65,13 @@ export default function VetAssignmentStatistics({
   }, [analysisData])
 
   return (
-    <Card className="ml-1 mr-2">
+    <Card className="ml-2 mr-1">
       <CardHeader>
         <CardTitle>환자 담당 통계</CardTitle>
         <CardDescription>주치의별 주치의-부주치의 담당 통계</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig} className="max-h-[500px]">
           <BarChart
             accessibilityLayer
             data={chartData}
