@@ -9,6 +9,7 @@ import {
   HeartPulse,
   Home,
   ListChecks,
+  PawPrint,
   Slice,
   Syringe,
 } from 'lucide-react'
@@ -23,6 +24,7 @@ const ICON_MAPPER = {
   HeartPulse: <HeartPulse size={18} />,
   ListChecks: <ListChecks size={18} />,
   BarChart4: <BarChart4 size={18} />,
+  PawPrint: <PawPrint size={18} />,
 }
 
 export default function SidebarItem({
