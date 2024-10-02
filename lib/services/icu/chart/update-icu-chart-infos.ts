@@ -192,12 +192,16 @@ export const updateOwnerName = async (
   }
 }
 
-export const updateCpcr = async (icuIoId: string, cpcr: string) => {
+export const updateCpcrEtTube = async (
+  icuIoId: string,
+  cpcr: string,
+  etTube: string,
+) => {
   const supabase = createClient()
 
   const { error } = await supabase
     .from('icu_io')
-    .update({ cpcr })
+    .update({ cpcr: `${cpcr},${etTube}` })
     .match({ icu_io_id: icuIoId })
 
   if (error) {

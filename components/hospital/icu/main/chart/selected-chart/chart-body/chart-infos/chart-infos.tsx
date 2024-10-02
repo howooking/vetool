@@ -1,5 +1,5 @@
 import ChiefComplaint from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/chief-complaint'
-import Cpcr from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/cpcr'
+import CpcrEtTube from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/cpcr-et-tube/cpcr-et-tube'
 import Diagnosis from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/diagnosis'
 import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/in-and-out-date/in-and-out-date'
 import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/owner-name'
@@ -40,7 +40,7 @@ export default function ChartInfos({
       </div>
 
       <div className="col-span-1">
-        <Cpcr cpcr={icu_io.cpcr} icuIoId={icu_io.icu_io_id} />
+        <CpcrEtTube cpcrEtTube={icu_io.cpcr} icuIoId={icu_io.icu_io_id} />
       </div>
 
       <div className="col-span-1">
