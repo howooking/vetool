@@ -1,7 +1,9 @@
 import CustomTooltip from '@/components/ui/custom-tooltip'
 import { TableCell } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 import { IcuOrders, IcuTxs } from '@/types'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useMemo } from 'react'
 
 type TxTableCellOrder = Pick<
   IcuOrders,
@@ -28,14 +30,18 @@ export default function TxTableCell({
   const { push } = useRouter()
   const searchParams = useSearchParams()
 
-  const isOrderScheduled = (order: TxTableCellOrder, time: number) =>
-    order.icu_chart_order_time[time - 1] === '1'
+  const isOrderScheduled = useMemo(
+    () => order.icu_chart_order_time[time - 1] === '1',
+    [order.icu_chart_order_time, time],
+  )
 
-  const isTxCompleted = (order: TxTableCellOrder, time: number) =>
-    order.treatments.some((tx) => tx.time === time)
+  const isTxCompleted = useMemo(
+    () => order.treatments.some((tx) => tx.time === time),
+    [order.treatments, time],
+  )
 
   const renderOrderContent = () => {
-    if (!isTxCompleted(order, time) && isOrderScheduled(order, time)) {
+    if (!isTxCompleted && isOrderScheduled) {
       return (
         <div className="flex flex-col whitespace-nowrap py-4">
           <span className="text-sm">{order.icu_chart_order_name}</span>
@@ -49,6 +55,7 @@ export default function TxTableCell({
   }
 
   const handleCellClick = () => {
+    if (!isOrderScheduled) return
     const params = new URLSearchParams(searchParams)
     push(
       `/hospital/${hos_id}/icu/${target_date}/chart/${patientId}?order-id=${order.icu_chart_order_id}&time=${time}&${params}`,
@@ -58,7 +65,10 @@ export default function TxTableCell({
   return (
     <TableCell
       onClick={handleCellClick}
-      className="cursor-pointer text-center ring-inset ring-primary transition-all hover:ring"
+      className={cn(
+        'text-center ring-inset ring-primary transition-all',
+        isOrderScheduled && 'cursor-pointer hover:ring',
+      )}
     >
       <CustomTooltip
         contents={

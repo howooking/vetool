@@ -120,13 +120,20 @@ export default function RegisterIcuForm({
     setIsSubmitting(false)
 
     const splittedPath = path.split('/')
-    splittedPath[splittedPath.length - 1] = registeringPatient!.patientId
+    if (splittedPath[6]) {
+      splittedPath[splittedPath.length - 1] = registeringPatient!.patientId
+    } else {
+      splittedPath[5] = 'chart'
+      splittedPath.push(registeringPatient!.patientId)
+    }
+
     const newPatientPath = splittedPath.join('/')
 
     const newPath = changeTargetDateInUrl(
       newPatientPath,
       format(in_date, 'yyyy-MM-dd'),
     )
+
     push(newPath)
   }
 

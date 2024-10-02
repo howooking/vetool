@@ -54,12 +54,7 @@ export default function TxTable({
                   .length !== order.treatments.length,
             ),
         }))
-        .filter((data) => data.orders.length > 0)
-        .sort(
-          (a, b) =>
-            new Date(b.icu_io.created_at).getTime() -
-            new Date(a.icu_io.created_at).getTime(),
-        ),
+        .filter((data) => data.orders.length > 0),
     [txTableData],
   )
 
