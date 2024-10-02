@@ -20,7 +20,7 @@ export default function SidebarUserInfo({
   hosId,
   userData,
   mobile,
-  setIsSheetOpen,
+  handleCloseMobileDrawer,
 }: {
   hosId: string
   userData: {
@@ -32,7 +32,7 @@ export default function SidebarUserInfo({
     user_id: string
   }
   mobile?: boolean
-  setIsSheetOpen?: React.Dispatch<React.SetStateAction<boolean>>
+  handleCloseMobileDrawer?: () => void
 }) {
   return (
     <div className={cn('absolute bottom-0', mobile ? 'right-2' : 'left-2')}>
@@ -61,7 +61,9 @@ export default function SidebarUserInfo({
             {userData.is_admin && (
               <DropdownMenuItem
                 asChild
-                onClick={() => setIsSheetOpen && setIsSheetOpen(false)}
+                onClick={() =>
+                  handleCloseMobileDrawer && handleCloseMobileDrawer()
+                }
               >
                 <Link
                   href={`/hospital/${hosId}/admin/staff`}
@@ -74,7 +76,9 @@ export default function SidebarUserInfo({
             )}
             <DropdownMenuItem
               asChild
-              onClick={() => setIsSheetOpen && setIsSheetOpen(false)}
+              onClick={() =>
+                handleCloseMobileDrawer && handleCloseMobileDrawer()
+              }
             >
               <Link
                 href={`/hospital/${hosId}/my-page`}

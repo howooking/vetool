@@ -10,31 +10,11 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { SIDE_BAR_ITEMS } from '@/constants/hospital/sidebar-items'
-import { cn } from '@/lib/utils'
 import type { UserProfile } from '@/types'
-import { format } from 'date-fns'
-import {
-  BarChart4,
-  HeartPulse,
-  Home,
-  ListChecks,
-  Menu,
-  Slice,
-  Syringe,
-} from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { Menu } from 'lucide-react'
 import { useState } from 'react'
+import MobileSidebarItem from './mobile-sidebar-item'
 import SidebarUserInfo from './sidebar-user-info'
-
-const ICON_MAPPER = {
-  Home: <Home size={18} className="ml-[17px]" />,
-  Syringe: <Syringe size={18} className="ml-[17px]" />,
-  Slice: <Slice size={18} className="ml-[17px]" />,
-  HeartPulse: <HeartPulse size={18} className="ml-[17px]" />,
-  ListChecks: <ListChecks size={18} className="ml-[17px]" />,
-  BarChart4: <BarChart4 size={18} className="ml-[17px]" />,
-}
 
 export default function MobileSidebar({
   hosId,
@@ -45,8 +25,8 @@ export default function MobileSidebar({
   userData: UserProfile
   hosName: string
 }) {
-  const pathname = usePathname()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const handleCloseMobileDrawer = () => setIsSheetOpen(false)
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -64,32 +44,14 @@ export default function MobileSidebar({
         </SheetHeader>
 
         <ul className="z-50">
-          {SIDE_BAR_ITEMS.map(({ path, name, iconName }) => {
-            const isActive =
-              pathname.split('/').at(3) === path ||
-              (!pathname.split('/').at(3) && name === '병원 홈')
-            const dynamicPath =
-              path === 'icu'
-                ? `icu/${format(new Date(), 'yyyy-MM-dd')}/summary`
-                : path
+          {SIDE_BAR_ITEMS.map((item) => {
             return (
-              <li
-                key={name}
-                className="transition-all hover:bg-muted"
-                onClick={() => setIsSheetOpen(false)}
-              >
-                <Link
-                  href={`/hospital/${hosId}/${dynamicPath}`}
-                  className={cn(
-                    'flex h-12 items-center',
-                    isActive && 'bg-primary text-white',
-                  )}
-                >
-                  {ICON_MAPPER[iconName as keyof typeof ICON_MAPPER]}
-
-                  <span className={cn('absolute left-12')}>{name}</span>
-                </Link>
-              </li>
+              <MobileSidebarItem
+                key={item.name}
+                hosId={hosId}
+                item={item}
+                handleCloseMobileDrawer={handleCloseMobileDrawer}
+              />
             )
           })}
         </ul>
@@ -98,7 +60,7 @@ export default function MobileSidebar({
           hosId={hosId}
           userData={userData}
           mobile
-          setIsSheetOpen={setIsSheetOpen}
+          handleCloseMobileDrawer={handleCloseMobileDrawer}
         />
       </SheetContent>
     </Sheet>
