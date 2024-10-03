@@ -13,23 +13,27 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { Json } from '@/lib/supabase/database.types'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import type { MainAndSubVet } from '@/types/icu/chart'
 import { Stethoscope } from 'lucide-react'
-import Image from 'next/image'
 import { useState } from 'react'
 import VetName from './vet-name'
+import type { IcuChartsInCharge } from '@/types/adimin'
 
 export default function Vets({
   mainVet,
   subVet,
   icuChartId,
+  inCharge,
 }: {
   mainVet: MainAndSubVet
   subVet: MainAndSubVet | null
   icuChartId: string
+  inCharge: Json | null
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { today } = (inCharge as IcuChartsInCharge) || {}
 
   const {
     basicHosData: { vetsListData },
@@ -56,45 +60,25 @@ export default function Vets({
           </CustomTooltip>
 
           <div className="flex items-center gap-2">
-            <VetName
-              label="주치의"
-              name={mainVet.name}
-              avatarUrl={mainVet.avatar_url}
-            />
+            <VetName label="주치의" name={mainVet.name} />
 
             <Separator orientation="vertical" className="h-4" />
 
             {subVet?.name ? (
-              <VetName
-                label="부주치의"
-                name={subVet.name}
-                avatarUrl={subVet.avatar_url}
-              />
+              <VetName label="부주치의" name={subVet.name} />
             ) : (
               '미선택'
             )}
 
             <Separator orientation="vertical" className="h-4" />
 
-            <VetName
-              label="당일"
-              name={mainVet.name}
-              avatarUrl={mainVet.avatar_url}
-            />
+            <VetName label="당일" name={today?.all} />
             <Separator orientation="vertical" className="h-4" />
 
-            <VetName
-              label="오전"
-              name={mainVet.name}
-              avatarUrl={mainVet.avatar_url}
-            />
+            <VetName label="오전" name={today?.am} />
             <Separator orientation="vertical" className="h-4" />
 
-            <VetName
-              label="오후"
-              name={mainVet.name}
-              avatarUrl={mainVet.avatar_url}
-            />
+            <VetName label="오후" name={today?.pm} />
           </div>
         </Button>
       </DialogTrigger>
@@ -109,6 +93,7 @@ export default function Vets({
           subVet={subVet}
           vetsList={vetsListData}
           icuChartId={icuChartId}
+          inCharge={inCharge}
         />
       </DialogContent>
     </Dialog>

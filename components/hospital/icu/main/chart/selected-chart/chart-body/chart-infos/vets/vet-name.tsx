@@ -1,18 +1,14 @@
 import { Label } from '@/components/ui/label'
-import Image from 'next/image'
-import React from 'react'
 
 export default function VetName({
   label,
   name,
-  avatarUrl,
 }: {
   label: string
   name: string
-  avatarUrl: string | null
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       <Label className="hidden text-[10px] leading-3 text-muted-foreground md:block">
         {label}
       </Label>

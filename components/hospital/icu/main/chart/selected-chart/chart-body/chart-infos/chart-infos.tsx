@@ -12,7 +12,8 @@ export default function ChartInfos({
 }: {
   chartData: SelectedChart
 }) {
-  const { icu_io, patient, main_vet, sub_vet, icu_chart_id } = chartData
+  const { icu_io, patient, main_vet, sub_vet, icu_chart_id, in_charge } =
+    chartData
 
   const isPatientOut = !!icu_io.out_date
   return (
@@ -28,7 +29,12 @@ export default function ChartInfos({
       </div>
 
       <div className="order-last col-span-2 md:order-none md:col-span-3">
-        <Vets mainVet={main_vet} subVet={sub_vet} icuChartId={icu_chart_id} />
+        <Vets
+          mainVet={main_vet}
+          subVet={sub_vet}
+          icuChartId={icu_chart_id}
+          inCharge={in_charge}
+        />
       </div>
 
       <div className="order-last col-span-2 md:order-none md:col-span-3">

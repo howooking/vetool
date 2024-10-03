@@ -30,6 +30,7 @@ export type SelectedChart = Pick<
   | 'weight_measured_date'
   | 'target_date'
   | 'icu_chart_id'
+  | 'in_charge'
 > & {
   icu_io: Pick<
     IcuIo,
