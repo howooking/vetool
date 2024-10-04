@@ -85,12 +85,12 @@ export default function VetsUpdateForm({
     defaultValues: {
       main_vet: mainVet.user_id,
       sub_vet: subVet?.user_id ?? 'null',
-      today_vet: today ? today.all : 'null',
-      today_am_vet: today ? today.am : 'null',
-      today_pm_vet: today ? today.pm : 'null',
-      tommorow_vet: tomorrow ? tomorrow.all : 'null',
-      tommorow_am_vet: tomorrow ? tomorrow.am : 'null',
-      tommorow_pm_vet: tomorrow ? tomorrow.pm : 'null',
+      today_vet: today ? today.all : '미선택',
+      today_am_vet: today ? today.am : '미선택',
+      today_pm_vet: today ? today.pm : '미선택',
+      tommorow_vet: tomorrow ? tomorrow.all : '미선택',
+      tommorow_am_vet: tomorrow ? tomorrow.am : '미선택',
+      tommorow_pm_vet: tomorrow ? tomorrow.pm : '미선택',
     },
   })
 

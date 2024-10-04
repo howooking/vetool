@@ -11,15 +11,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Json } from '@/lib/supabase/database.types'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
+import type { IcuChartsInCharge } from '@/types/adimin'
 import type { MainAndSubVet } from '@/types/icu/chart'
 import { Stethoscope } from 'lucide-react'
 import { useState } from 'react'
 import VetName from './vet-name'
-import type { IcuChartsInCharge } from '@/types/adimin'
 
 export default function Vets({
   mainVet,
@@ -64,21 +63,17 @@ export default function Vets({
 
             <Separator orientation="vertical" className="h-4" />
 
-            {subVet?.name ? (
-              <VetName label="부주치의" name={subVet.name} />
-            ) : (
-              '미선택'
-            )}
+            <VetName label="부주치의" name={subVet?.name ?? '미선택'} />
 
             <Separator orientation="vertical" className="h-4" />
 
-            <VetName label="당일" name={today?.all} />
+            <VetName label="당일" name={today?.all ?? '미선택'} />
             <Separator orientation="vertical" className="h-4" />
 
-            <VetName label="오전" name={today?.am} />
+            <VetName label="오전" name={today?.am ?? '미선택'} />
             <Separator orientation="vertical" className="h-4" />
 
-            <VetName label="오후" name={today?.pm} />
+            <VetName label="오후" name={today?.pm ?? '미선택'} />
           </div>
         </Button>
       </DialogTrigger>
