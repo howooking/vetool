@@ -21,6 +21,7 @@ import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { cn } from '@/lib/utils'
 import type { IcuDefaultChartJoined, IcuOrderColors } from '@/types/adimin'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 import DefaultOrderForm from './default-order-form'
@@ -33,18 +34,18 @@ export default function DefaultOrdersSetting({
   orderColor: IcuOrderColors
 }) {
   const {
-    isModalOpen,
-    toggleModal,
+    step,
+    setStep,
     setSelectedChartOrder,
     isEditMode,
     setIsEditMode,
-    resetState,
+    reset,
   } = useIcuOrderStore()
 
   const handleAddDialogOpen = useCallback(() => {
     setIsEditMode(false)
-    resetState()
-  }, [resetState, setIsEditMode])
+    reset()
+  }, [reset, setIsEditMode])
 
   const sortedOrders = useMemo(() => {
     return defaultChartOrders.sort(
@@ -58,19 +59,20 @@ export default function DefaultOrdersSetting({
     )
   }, [defaultChartOrders])
 
-  const handleEditDialogOpen = useCallback(
-    (sortedOrder: IcuDefaultChartJoined) => {
-      toggleModal()
-      setIsEditMode(true)
-      setSelectedChartOrder({
-        order_name: sortedOrder.default_chart_order_name,
-        order_comment: sortedOrder.default_chart_order_comment,
-        order_type: sortedOrder.default_chart_order_type,
-        order_id: sortedOrder.default_chart_id,
-      })
-    },
-    [setIsEditMode, setSelectedChartOrder, toggleModal],
-  )
+  const handleOpenChange = useCallback(() => {
+    if (step === 'closed') {
+      setStep('upsert')
+    } else {
+      setStep('closed')
+    }
+    reset()
+  }, [step, setStep, reset])
+
+  const handleEditOrderDialogOpen = (order: Partial<SelectedIcuOrder>) => {
+    setStep('upsert')
+    setIsEditMode(true)
+    setSelectedChartOrder(order)
+  }
 
   return (
     <Table className="h-full max-w-3xl border">
@@ -79,7 +81,7 @@ export default function DefaultOrdersSetting({
           <TableHead className="relative flex items-center justify-center gap-2 text-center">
             <span>오더 목록</span>
 
-            <Dialog open={isModalOpen} onOpenChange={toggleModal}>
+            <Dialog open={step !== 'closed'} onOpenChange={handleOpenChange}>
               <DialogTrigger asChild>
                 <Button
                   variant="ghost"
@@ -97,7 +99,7 @@ export default function DefaultOrdersSetting({
                   <DialogDescription />
                 </DialogHeader>
 
-                <DefaultOrderForm />
+                {step === 'upsert' && <DefaultOrderForm />}
               </DialogContent>
             </Dialog>
           </TableHead>
@@ -105,32 +107,36 @@ export default function DefaultOrdersSetting({
       </TableHeader>
 
       <TableBody>
-        {sortedOrders.map((sortedOrder) => (
-          <TableRow
-            className={cn('divide-x')}
-            key={sortedOrder.default_chart_id}
-          >
+        {sortedOrders.map((order) => (
+          <TableRow className={cn('divide-x')} key={order.default_chart_id}>
             <TableCell
               className={cn('p-0')}
               style={{
                 background:
                   orderColor[
-                    sortedOrder.default_chart_order_type as keyof IcuOrderColors
+                    order.default_chart_order_type as keyof IcuOrderColors
                   ],
               }}
             >
               <Button
                 variant="ghost"
-                onClick={() => handleEditDialogOpen(sortedOrder)}
+                onClick={() =>
+                  handleEditOrderDialogOpen({
+                    order_id: order.default_chart_id,
+                    order_comment: order.default_chart_order_comment,
+                    order_name: order.default_chart_order_name,
+                    order_type: order.default_chart_order_type,
+                  })
+                }
                 className={cn(
                   'flex w-full justify-between rounded-none bg-transparent px-2',
                 )}
               >
                 <span className="truncate">
-                  {sortedOrder.default_chart_order_name}
+                  {order.default_chart_order_name}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  {sortedOrder.default_chart_order_comment}
+                  {order.default_chart_order_comment}
                 </span>
               </Button>
             </TableCell>

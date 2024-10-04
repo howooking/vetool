@@ -14,8 +14,7 @@ export const getDefaultChartOrders = async (hosId: string) => {
         default_chart_id,
         default_chart_order_name,
         default_chart_order_comment,
-        default_chart_order_type,
-        hos_id(order_color)
+        default_chart_order_type
       `,
     )
     .match({ hos_id: hosId })
