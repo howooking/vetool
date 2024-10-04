@@ -2,6 +2,7 @@
 
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
 import { vetsFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/vets/vets-schema'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -24,6 +25,7 @@ import { cn } from '@/lib/utils'
 import { IcuChartsInCharge } from '@/types/adimin'
 import type { MainAndSubVet, Vet } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -98,13 +100,13 @@ export default function VetsUpdateForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleUpdateMainAndSubVet)}
-        className="grid grid-cols-2 gap-4"
+        className="grid grid-cols-6 gap-4"
       >
         <FormField
           control={form.control}
           name="main_vet"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="col-span-3">
               <FormLabel>주치의*</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
@@ -145,7 +147,7 @@ export default function VetsUpdateForm({
           control={form.control}
           name="sub_vet"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="col-span-3">
               <FormLabel>부주치의</FormLabel>
               <Select
                 onValueChange={field.onChange}
@@ -206,8 +208,124 @@ export default function VetsUpdateForm({
           control={form.control}
           name="today_vet"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="col-span-2">
               <FormLabel>당일 담당자</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger
+                    className={cn(
+                      'h-8 text-sm',
+                      !field.value && 'text-muted-foreground',
+                    )}
+                  >
+                    <SelectValue placeholder="주치의를 선택해주세요" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {[
+                    ...vetsList,
+                    {
+                      user_id: 'null',
+                      name: '미선택',
+                      position: '',
+                      avatar_url: '',
+                    },
+                  ].map((vet) => (
+                    <SelectItem
+                      key={vet.user_id}
+                      value={vet.name}
+                      className="w-full"
+                    >
+                      <div className="flex items-center gap-2">
+                        {vet.avatar_url && (
+                          <Image
+                            unoptimized
+                            src={vet.avatar_url ?? ''}
+                            alt={vet.name}
+                            width={20}
+                            height={20}
+                            className="rounded-full"
+                          />
+                        )}
+
+                        <span>{vet.name}</span>
+                        {vet.position && (
+                          <span className="text-xs">({vet.position})</span>
+                        )}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage className="text-xs" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="today_am_vet"
+          render={({ field }) => (
+            <FormItem className="col-span-2">
+              <FormLabel>당일 오전 담당자</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger
+                    className={cn(
+                      'h-8 text-sm',
+                      !field.value && 'text-muted-foreground',
+                    )}
+                  >
+                    <SelectValue placeholder="주치의를 선택해주세요" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {[
+                    ...vetsList,
+                    {
+                      user_id: 'null',
+                      name: '미선택',
+                      position: '',
+                      avatar_url: '',
+                    },
+                  ].map((vet) => (
+                    <SelectItem
+                      key={vet.user_id}
+                      value={vet.name}
+                      className="w-full"
+                    >
+                      <div className="flex items-center gap-2">
+                        {vet.avatar_url && (
+                          <Image
+                            unoptimized
+                            src={vet.avatar_url ?? ''}
+                            alt={vet.name}
+                            width={20}
+                            height={20}
+                            className="rounded-full"
+                          />
+                        )}
+
+                        <span>{vet.name}</span>
+                        {vet.position && (
+                          <span className="text-xs">({vet.position})</span>
+                        )}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage className="text-xs" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="today_pm_vet"
+          render={({ field }) => (
+            <FormItem className="col-span-2">
+              <FormLabel>당일 오후 담당자</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger
@@ -264,7 +382,7 @@ export default function VetsUpdateForm({
           control={form.control}
           name="tommorow_vet"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="col-span-2">
               <FormLabel>익일 담당자</FormLabel>
               <Select
                 onValueChange={field.onChange}
@@ -323,67 +441,9 @@ export default function VetsUpdateForm({
 
         <FormField
           control={form.control}
-          name="today_am_vet"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>당일 오전 담당자</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger
-                    className={cn(
-                      'h-8 text-sm',
-                      !field.value && 'text-muted-foreground',
-                    )}
-                  >
-                    <SelectValue placeholder="주치의를 선택해주세요" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {[
-                    ...vetsList,
-                    {
-                      user_id: 'null',
-                      name: '미선택',
-                      position: '',
-                      avatar_url: '',
-                    },
-                  ].map((vet) => (
-                    <SelectItem
-                      key={vet.user_id}
-                      value={vet.name}
-                      className="w-full"
-                    >
-                      <div className="flex items-center gap-2">
-                        {vet.avatar_url && (
-                          <Image
-                            unoptimized
-                            src={vet.avatar_url ?? ''}
-                            alt={vet.name}
-                            width={20}
-                            height={20}
-                            className="rounded-full"
-                          />
-                        )}
-
-                        <span>{vet.name}</span>
-                        {vet.position && (
-                          <span className="text-xs">({vet.position})</span>
-                        )}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage className="text-xs" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="tommorow_am_vet"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="col-span-2">
               <FormLabel>익일 오전 담당자</FormLabel>
               <Select
                 onValueChange={field.onChange}
@@ -442,67 +502,9 @@ export default function VetsUpdateForm({
 
         <FormField
           control={form.control}
-          name="today_pm_vet"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>당일 오후 담당자</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger
-                    className={cn(
-                      'h-8 text-sm',
-                      !field.value && 'text-muted-foreground',
-                    )}
-                  >
-                    <SelectValue placeholder="주치의를 선택해주세요" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {[
-                    ...vetsList,
-                    {
-                      user_id: 'null',
-                      name: '미선택',
-                      position: '',
-                      avatar_url: '',
-                    },
-                  ].map((vet) => (
-                    <SelectItem
-                      key={vet.user_id}
-                      value={vet.name}
-                      className="w-full"
-                    >
-                      <div className="flex items-center gap-2">
-                        {vet.avatar_url && (
-                          <Image
-                            unoptimized
-                            src={vet.avatar_url ?? ''}
-                            alt={vet.name}
-                            width={20}
-                            height={20}
-                            className="rounded-full"
-                          />
-                        )}
-
-                        <span>{vet.name}</span>
-                        {vet.position && (
-                          <span className="text-xs">({vet.position})</span>
-                        )}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage className="text-xs" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="tommorow_pm_vet"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="col-span-2">
               <FormLabel>익일 오후 담당자</FormLabel>
               <Select
                 onValueChange={field.onChange}
@@ -559,11 +561,22 @@ export default function VetsUpdateForm({
           )}
         />
 
-        <DialogFooterButtons
-          buttonName="변경"
-          isLoading={isUpdating}
-          setIsDialogOpen={setIsDialogOpen}
-        />
+        <div className="col-span-6 ml-auto font-semibold">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsDialogOpen(false)}
+          >
+            취소
+          </Button>
+
+          <Button type="submit" className="ml-2" disabled={isUpdating}>
+            변경
+            <LoaderCircle
+              className={cn(isUpdating ? 'ml-2 animate-spin' : 'hidden')}
+            />
+          </Button>
+        </div>
       </form>
     </Form>
   )
