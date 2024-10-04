@@ -47,7 +47,7 @@ export default function OrderTimeSettings({
   const handleTimeToggle = (index: number) => () => {
     setOrderTime((prevOrderTime) => {
       const newOrderTime = [...prevOrderTime]
-      newOrderTime[index] = newOrderTime[index] === '1' ? '0' : '1'
+      newOrderTime[index] = newOrderTime[index] !== '0' ? '0' : '1'
       return newOrderTime
     })
 
@@ -135,7 +135,7 @@ export default function OrderTimeSettings({
             className="h-6 w-7 px-3 py-2 text-xs"
             style={{
               background:
-                orderTime[index] === '1' ? CELL_COLORS.NOT_DONE : 'transparent',
+                orderTime[index] !== '0' ? CELL_COLORS.NOT_DONE : 'transparent',
             }}
             onClick={handleTimeToggle(index)}
           >

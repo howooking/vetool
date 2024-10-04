@@ -4,38 +4,33 @@ import { useLongPress } from '@/hooks/use-long-press'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { cn } from '@/lib/utils'
 import type { Treatment, TxLog } from '@/types/icu/chart'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import type { DebouncedState } from 'use-debounce'
-import { TxDetailHover } from './tx/tx-detail-hover'
 import { useSearchParams } from 'next/navigation'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { TxDetailHover } from './tx/tx-detail-hover'
 
 type ChartTableCellProps = {
   time: number
   treatment?: Treatment
-  icuIoId: string
   icuChartOrderId: string
   icuChartOrderName: string
   isDone: boolean
   icuChartTxId?: string
   preview?: boolean
-  hasOrder: boolean
-  toggleOrderTime: (time: number) => void
-  handleUpdateOrderTime: DebouncedState<() => void>
+  orderer: string
+  toggleOrderTime: (orderId: string, time: number) => void
 }
 
 const Cell: React.FC<ChartTableCellProps> = React.memo(
   ({
     time,
     treatment,
-    icuIoId,
     icuChartOrderId,
     icuChartOrderName,
     isDone,
     icuChartTxId,
     preview,
-    hasOrder,
+    orderer,
     toggleOrderTime,
-    handleUpdateOrderTime,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
@@ -68,7 +63,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     const handleOpenTxDetail = useCallback(() => {
       setTxLocalState({
         icuChartOrderId,
-        icuIoId,
         txResult: treatment?.tx_result,
         txComment: treatment?.tx_comment,
         txId: icuChartTxId,
@@ -81,7 +75,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       icuChartOrderId,
       icuChartOrderName,
       icuChartTxId,
-      icuIoId,
       setStep,
       setTxLocalState,
       time,
@@ -98,9 +91,9 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     const handleRightClick = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault()
-        toggleOrderTime(time)
+        toggleOrderTime(icuChartOrderId, time)
       },
-      [time, toggleOrderTime],
+      [icuChartOrderId, time, toggleOrderTime],
     )
 
     const handleUpsertBriefTxResultInput = useCallback(async () => {
@@ -116,7 +109,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
         time,
         txResult: briefTxResultInput.trim(),
         icuChartOrderId,
-        icuIoId,
         txId: icuChartTxId,
       })
       setStep('seletctUser')
@@ -124,7 +116,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       briefTxResultInput,
       icuChartOrderId,
       icuChartTxId,
-      icuIoId,
       setStep,
       setTxLocalState,
       time,
@@ -150,13 +141,15 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       [treatment?.tx_comment],
     )
 
+    const hasOrder = useMemo(() => orderer !== '0', [orderer])
+
     return (
       <TableCell className="p-0">
         <div className="relative overflow-hidden">
           <Input
             id={`${icuChartOrderId}&${time}`}
             className={cn(
-              'rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
+              'h-11 rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
               hasOrder && 'bg-rose-500/10',
               isDone && 'bg-emerald-400/10',
             )}
@@ -180,6 +173,17 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
           >
             {treatment?.tx_result ?? ''}
           </div>
+
+          {hasOrder && (
+            <div
+              className={cn(
+                'absolute bottom-0.5 right-0.5 -z-10 text-[10px] leading-none text-muted-foreground',
+              )}
+            >
+              {orderer}
+            </div>
+          )}
+
           {hasComment && <TxDetailHover txComment={treatment?.tx_comment} />}
         </div>
       </TableCell>

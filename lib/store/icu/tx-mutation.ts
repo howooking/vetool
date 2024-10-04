@@ -8,7 +8,6 @@ export type TxLocalState = {
   time?: number
   txId?: string
   icuChartOrderId?: string
-  icuIoId?: string
   isNotificationChecked?: boolean
   orderName?: string
 } | null
