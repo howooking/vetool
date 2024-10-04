@@ -2,8 +2,8 @@ import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { create } from 'zustand'
 
 type IcuOrderState = {
-  isModalOpen: boolean
-  toggleModal: () => void
+  step: 'closed' | 'upsert' | 'selectOrderer'
+  setStep: (step: 'closed' | 'upsert' | 'selectOrderer') => void
 
   isEditMode?: boolean
   setIsEditMode: (isEditMode: boolean) => void
@@ -11,12 +11,12 @@ type IcuOrderState = {
   selectedChartOrder: Partial<SelectedIcuOrder>
   setSelectedChartOrder: (chartOrder: Partial<SelectedIcuOrder>) => void
 
-  resetState: () => void
+  reset: () => void
 }
 
 export const useIcuOrderStore = create<IcuOrderState>((set) => ({
-  isModalOpen: false,
-  toggleModal: () => set((state) => ({ isModalOpen: !state.isModalOpen })),
+  step: 'closed',
+  setStep: (step) => set({ step }),
 
   isEditMode: false,
   setIsEditMode: (isEditMode) => set({ isEditMode }),
@@ -24,7 +24,7 @@ export const useIcuOrderStore = create<IcuOrderState>((set) => ({
   selectedChartOrder: {} as Partial<SelectedIcuOrder>,
   setSelectedChartOrder: (selectedChartOrder) => set({ selectedChartOrder }),
 
-  resetState: () =>
+  reset: () =>
     set({
       isEditMode: false,
       selectedChartOrder: {} as Partial<SelectedIcuOrder>,

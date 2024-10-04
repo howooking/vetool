@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import Cell from './cell'
 
-export default function OrderCells({
+export default function CellsRow({
   preview,
   order,
   icuIoId,
@@ -51,11 +51,9 @@ export default function OrderCells({
     <>
       {TIMES.map((time, index) => {
         const isDone =
-          order_times[index] === '1' &&
+          order_times[index] !== '0' &&
           treatments.some((treatment) => treatment.time === time)
-
-        const hasOrder = orderTimeState[time - 1] === '1'
-
+        const orderer = orderTimeState[time - 1]
         const selectedTx = treatments.find(
           (treatment) => treatment.time === time,
         )
@@ -68,11 +66,10 @@ export default function OrderCells({
             icuIoId={icuIoId}
             icuChartOrderId={order_id}
             isDone={isDone}
-            hasOrder={hasOrder}
+            orderer={orderer}
             icuChartOrderName={order_name}
             icuChartTxId={selectedTx?.tx_id}
             toggleOrderTime={toggleOrderTime}
-            handleUpdateOrderTime={handleUpdateOrderTime}
           />
         )
       })}

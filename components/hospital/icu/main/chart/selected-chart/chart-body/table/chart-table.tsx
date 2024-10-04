@@ -1,6 +1,4 @@
-import OrderCells from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table//order-cells'
-import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-dialog'
-import OrderTitle from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-title'
+import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-dialog'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
 import {
   Table,
@@ -13,20 +11,16 @@ import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import type { SelectedChart } from '@/types/icu/chart'
 import { useMemo } from 'react'
+import CellsRow from './cells-row'
+import CellsRowTitle from './cells-row-title'
 
-type ChartTablePropsPreview = {
+export default function ChartTable({
+  chartData,
+  preview,
+}: {
   chartData: SelectedChart
-  preview: true
-}
-
-type ChartTablePropsNonPreview = {
-  chartData: SelectedChart
-  preview?: false
-}
-
-type ChartTableProps = ChartTablePropsPreview | ChartTablePropsNonPreview
-
-export default function ChartTable({ chartData, preview }: ChartTableProps) {
+  preview?: boolean
+}) {
   const { icu_io, icu_chart_id, orders } = chartData
 
   const sortedOrders = useMemo(
@@ -67,8 +61,8 @@ export default function ChartTable({ chartData, preview }: ChartTableProps) {
 
         {sortedOrders.map((order) => (
           <TableRow className="divide-x" key={order.order_id}>
-            <OrderTitle order={order} preview={preview} />
-            <OrderCells
+            <CellsRowTitle order={order} preview={preview} />
+            <CellsRow
               preview={preview}
               order={order}
               icuIoId={icu_io.icu_io_id}

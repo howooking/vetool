@@ -1,8 +1,8 @@
 'use client'
 
-import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/delete-order-alert-dialog'
-import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-schema'
-import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-time-settings'
+import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/delete-order-alert-dialog'
+import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-schema'
+import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-time-settings'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import {
@@ -15,24 +15,17 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
-import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
-import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LoaderCircle } from 'lucide-react'
-import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function OrderForm({ icuChartId }: { icuChartId?: string }) {
-  const { hos_id } = useParams()
-  const { toggleModal, selectedChartOrder, isEditMode, resetState } =
+export default function OrderForm() {
+  const { setStep, selectedChartOrder, isEditMode, setSelectedChartOrder } =
     useIcuOrderStore()
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime, setStartTime] = useState<string>('undefined')
   const [timeTerm, setTimeTerm] = useState<string>('undefined')
   const [orderTime, setOrderTime] = useState<string[]>(
@@ -48,32 +41,16 @@ export default function OrderForm({ icuChartId }: { icuChartId?: string }) {
     },
   })
 
-  const handleSubmit = async (values: z.infer<typeof orderSchema>) => {
-    setIsSubmitting(true)
-
-    const trimmedOrderName = values.icu_chart_order_name.trim()
-    const orderComment = values.icu_chart_order_comment ?? ''
-    const orderType = values.icu_chart_order_type
-
-    await upsertOrder(
-      hos_id as string,
-      icuChartId!,
-      selectedChartOrder.order_id!,
-      orderTime,
-      {
-        icu_chart_order_name: trimmedOrderName,
-        icu_chart_order_comment: orderComment,
-        icu_chart_order_type: orderType,
-      },
-    )
-
-    toast({
-      title: `${values.icu_chart_order_name} 오더를 추가하였습니다`,
+  const handleNextStep = async (values: z.infer<typeof orderSchema>) => {
+    setSelectedChartOrder({
+      order_name: values.icu_chart_order_name,
+      order_comment: values.icu_chart_order_comment,
+      order_type: values.icu_chart_order_type,
+      order_times: orderTime,
+      order_id: selectedChartOrder.order_id,
     })
 
-    resetState()
-    toggleModal()
-    setIsSubmitting(false)
+    setStep('selectOrderer')
   }
 
   useEffect(() => {
@@ -93,7 +70,7 @@ export default function OrderForm({ icuChartId }: { icuChartId?: string }) {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={form.handleSubmit(handleNextStep)}
         className="flex flex-col space-y-4"
       >
         <FormField
@@ -172,7 +149,7 @@ export default function OrderForm({ icuChartId }: { icuChartId?: string }) {
           {isEditMode && (
             <DeleteOrderAlertDialog
               selectedChartOrder={selectedChartOrder}
-              toggleModal={toggleModal}
+              setStep={setStep}
             />
           )}
 
@@ -182,12 +159,7 @@ export default function OrderForm({ icuChartId }: { icuChartId?: string }) {
             </Button>
           </DialogClose>
 
-          <Button type="submit" disabled={isSubmitting}>
-            {isEditMode ? '변경' : '추가'}
-            <LoaderCircle
-              className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-            />
-          </Button>
+          <Button type="submit">{isEditMode ? '변경' : '추가'}</Button>
         </DialogFooter>
       </form>
     </Form>
