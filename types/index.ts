@@ -16,6 +16,7 @@ export type IcuCharts = Database['public']['Tables']['icu_charts']['Row']
 export type IcuOrders = Database['public']['Tables']['icu_orders']['Row']
 export type IcuTxs = Database['public']['Tables']['icu_txs']['Row']
 export type IcuBookmark = Database['public']['Tables']['icu_bookmarks']['Row']
+export type IcuOut = Database['public']['Tables']['icu_out']['Row']
 
 // supabase.auth.getUser() 시 return되는 유져타입
 export type AuthUser = {

@@ -656,6 +656,70 @@ export type Database = {
           },
         ]
       }
+      icu_out: {
+        Row: {
+          basic_care: string
+          belongings: string
+          created_at: string
+          etc: string | null
+          hos_id: string | null
+          icu_io_id: string | null
+          icu_out_id: string
+          medication: string
+          out_time: string | null
+          patient_id: string | null
+          prescription: string
+        }
+        Insert: {
+          basic_care?: string
+          belongings?: string
+          created_at?: string
+          etc?: string | null
+          hos_id?: string | null
+          icu_io_id?: string | null
+          icu_out_id?: string
+          medication?: string
+          out_time?: string | null
+          patient_id?: string | null
+          prescription?: string
+        }
+        Update: {
+          basic_care?: string
+          belongings?: string
+          created_at?: string
+          etc?: string | null
+          hos_id?: string | null
+          icu_io_id?: string | null
+          icu_out_id?: string
+          medication?: string
+          out_time?: string | null
+          patient_id?: string | null
+          prescription?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_out_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "icu_out_icu_io_id_fkey"
+            columns: ["icu_io_id"]
+            isOneToOne: false
+            referencedRelation: "icu_io"
+            referencedColumns: ["icu_io_id"]
+          },
+          {
+            foreignKeyName: "icu_out_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
+          },
+        ]
+      }
       icu_txs: {
         Row: {
           created_at: string
@@ -1127,6 +1191,13 @@ export type Database = {
           hos_id_input: string
           target_date_input: string
           patient_id_input: string
+        }
+        Returns: Json
+      }
+      get_icu_out_due_patients: {
+        Args: {
+          hos_id_input: string
+          target_date_input: string
         }
         Returns: Json
       }

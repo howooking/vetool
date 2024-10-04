@@ -28,6 +28,10 @@ export const FOOTER_MAIN_VIEW_MENUS = [
     value: 'bookmark',
   },
   {
+    label: '퇴원 관리',
+    value: 'out-due',
+  },
+  {
     label: '입원 통계',
     value: 'analysis',
   },
