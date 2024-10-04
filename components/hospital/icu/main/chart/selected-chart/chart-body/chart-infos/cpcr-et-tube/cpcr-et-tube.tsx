@@ -53,7 +53,7 @@ export default function CpcrEtTube({
 
             <Separator orientation="vertical" className="h-4" />
 
-            <span>{etTube}</span>
+            <span>{etTube ?? ''}</span>
           </div>
         </Button>
       </DialogTrigger>

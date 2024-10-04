@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { IcuChartsInCharge } from '@/types/adimin'
 import { redirect } from 'next/navigation'
 
 export const updateDiagnosis = async (
@@ -44,6 +45,7 @@ export const updateChiefComplaint = async (
 export const updateMainSubVet = async (
   icuChartId: string,
   mainVetId: string,
+  inCharge: IcuChartsInCharge,
   subVetId?: string,
 ) => {
   const supabase = createClient()
@@ -53,6 +55,7 @@ export const updateMainSubVet = async (
     .update({
       main_vet: mainVetId,
       sub_vet: subVetId === 'null' ? null : subVetId,
+      in_charge: inCharge,
     })
     .match({ icu_chart_id: icuChartId })
   if (error) {
@@ -195,13 +198,13 @@ export const updateOwnerName = async (
 export const updateCpcrEtTube = async (
   icuIoId: string,
   cpcr: string,
-  etTube: string,
+  etTube: string | null | undefined,
 ) => {
   const supabase = createClient()
 
   const { error } = await supabase
     .from('icu_io')
-    .update({ cpcr: `${cpcr},${etTube}` })
+    .update({ cpcr: etTube ? `${cpcr},${etTube}` : cpcr })
     .match({ icu_io_id: icuIoId })
 
   if (error) {

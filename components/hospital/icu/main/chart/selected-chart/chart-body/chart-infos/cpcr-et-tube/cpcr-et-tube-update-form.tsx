@@ -22,7 +22,7 @@ import { toast } from '@/components/ui/use-toast'
 import { updateCpcrEtTube } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -43,11 +43,13 @@ export default function CpcrEtTubeUpdateForm({
 
   const [isUpdating, setIsUpdating] = useState(false)
 
-  const handleUpdateMainAndSubVet = async (
+  const handleUpdateCpcrEtTube = async (
     values: z.infer<typeof cpcrEtTubeSchema>,
   ) => {
     setIsUpdating(true)
-    await updateCpcrEtTube(icuIoId, values.cpcr, values.etTube)
+
+    const etTube = values.cpcr === 'CPCR' ? values.etTube : null
+    await updateCpcrEtTube(icuIoId, values.cpcr, etTube)
 
     toast({
       title: 'CPCR / ET Tube를 변경하였습니다',
@@ -65,10 +67,12 @@ export default function CpcrEtTubeUpdateForm({
     },
   })
 
+  const cpcrValue = form.watch('cpcr')
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleUpdateMainAndSubVet)}
+        onSubmit={form.handleSubmit(handleUpdateCpcrEtTube)}
         className="grid grid-cols-2 gap-4"
       >
         <FormField
@@ -92,7 +96,7 @@ export default function CpcrEtTubeUpdateForm({
                   <SelectGroup>
                     <SelectItem value="CPCR">CPCR</SelectItem>
                     <SelectItem value="DNR">DNR</SelectItem>
-                    <SelectItem value="unspecified">미지정</SelectItem>
+                    <SelectItem value="미지정">미지정</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -107,7 +111,11 @@ export default function CpcrEtTubeUpdateForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>ET Tube</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value ?? ''}
+                disabled={cpcrValue !== 'CPCR'}
+              >
                 <FormControl>
                   <SelectTrigger
                     className={cn(
