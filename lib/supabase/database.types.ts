@@ -375,6 +375,7 @@ export type Database = {
           hos_id: string
           icu_chart_id: string
           icu_io_id: string
+          in_charge: Json | null
           main_vet: string
           memo_a: string
           memo_b: string
@@ -390,6 +391,7 @@ export type Database = {
           hos_id: string
           icu_chart_id?: string
           icu_io_id: string
+          in_charge?: Json | null
           main_vet: string
           memo_a?: string
           memo_b?: string
@@ -405,6 +407,7 @@ export type Database = {
           hos_id?: string
           icu_chart_id?: string
           icu_io_id?: string
+          in_charge?: Json | null
           main_vet?: string
           memo_a?: string
           memo_b?: string
@@ -1116,12 +1119,6 @@ export type Database = {
         Args: {
           hos_id_input: string
           target_date_input: string
-        }
-        Returns: Json
-      }
-      get_icu_analysis_data_old: {
-        Args: {
-          hos_id_input: string
         }
         Returns: Json
       }
