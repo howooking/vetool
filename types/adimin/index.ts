@@ -55,3 +55,16 @@ export type IcuDefaultChartJoined = Pick<
 > & {
   hos_id: Pick<Hospital, 'order_color'>
 }
+
+export type IcuChartsInCharge = {
+  today: {
+    all: string
+    am: string
+    pm: string
+  }
+  tomorrow: {
+    all: string
+    am: string
+    pm: string
+  }
+}
