@@ -11,17 +11,31 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import OrdererSelectStep from './orderer/orderer-select-step'
 
-export default function OrderDialog({ icuChartId }: { icuChartId: string }) {
+export default function OrderDialog({
+  icuChartId,
+  orders,
+}: {
+  icuChartId: string
+  orders: SelectedIcuOrder[]
+}) {
   const { step, isEditMode, setStep, reset } = useIcuOrderStore()
+  const { refresh } = useRouter()
 
   const handleOpenChange = useCallback(() => {
-    step === 'closed' ? setStep('upsert') : setStep('closed')
+    if (step === 'closed') {
+      setStep('upsert')
+    } else {
+      setStep('closed')
+      refresh()
+    }
     reset()
-  }, [step, reset, setStep])
+  }, [step, setStep, reset, refresh])
 
   return (
     <Dialog open={step !== 'closed'} onOpenChange={handleOpenChange}>
@@ -45,7 +59,7 @@ export default function OrderDialog({ icuChartId }: { icuChartId: string }) {
         </DialogHeader>
         {step === 'upsert' && <OrderForm />}
         {step === 'selectOrderer' && (
-          <OrdererSelectStep icuChartId={icuChartId} />
+          <OrdererSelectStep icuChartId={icuChartId} orders={orders} />
         )}
       </DialogContent>
     </Dialog>

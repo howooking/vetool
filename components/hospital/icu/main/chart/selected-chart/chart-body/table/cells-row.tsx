@@ -1,21 +1,20 @@
 'use client'
 
-import { toast } from '@/components/ui/use-toast'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { updateOrderTime } from '@/lib/services/icu/chart/order-mutation'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useState } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
+import { DebouncedState } from 'use-debounce'
 import Cell from './cell'
 
 export default function CellsRow({
   preview,
   order,
-  icuIoId,
+  debouncedSetOrdererSelectStep,
 }: {
   preview?: boolean
   order: SelectedIcuOrder
-  icuIoId: string
+  debouncedSetOrdererSelectStep: DebouncedState<() => void>
 }) {
   const { order_times, order_id, treatments, order_name } = order
 
@@ -25,26 +24,27 @@ export default function CellsRow({
     setOrderTimeState(order_times)
   }, [order_times])
 
-  const handleUpdateOrderTime = useDebouncedCallback(
-    (newOrderTime: string[]) => {
-      updateOrderTime(order_id, newOrderTime)
-      toast({
-        title: '오더 시간을 변경하였습니다.',
-      })
-    },
-    3000,
-  )
+  const { setOrderTimePendingQueue } = useIcuOrderStore()
 
   const toggleOrderTime = useCallback(
-    (time: number) => {
+    (orderId: string, time: number) => {
       setOrderTimeState((prevOrderTime) => {
         const newOrderTime = [...prevOrderTime]
-        newOrderTime[time - 1] = newOrderTime[time - 1] === '1' ? '0' : '1'
-        handleUpdateOrderTime(newOrderTime)
+        newOrderTime[time - 1] = newOrderTime[time - 1] !== '0' ? '0' : '...'
         return newOrderTime
       })
+
+      setOrderTimePendingQueue((prev) => [
+        ...prev,
+        {
+          orderId: orderId,
+          orderTime: time,
+        },
+      ])
+
+      debouncedSetOrdererSelectStep()
     },
-    [handleUpdateOrderTime],
+    [debouncedSetOrdererSelectStep, setOrderTimePendingQueue],
   )
 
   return (
@@ -63,7 +63,6 @@ export default function CellsRow({
             key={time}
             time={time}
             treatment={selectedTx}
-            icuIoId={icuIoId}
             icuChartOrderId={order_id}
             isDone={isDone}
             orderer={orderer}

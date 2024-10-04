@@ -41,7 +41,7 @@ export default function CellsRowTitle({
         variant="ghost"
         onClick={handleEditOrderDialogOpen}
         className={cn(
-          'flex w-[320px] justify-between rounded-none bg-transparent px-2',
+          'flex h-11 w-[320px] justify-between rounded-none bg-transparent px-2',
           preview ? 'cursor-not-allowed' : 'cursor-pointer',
         )}
       >

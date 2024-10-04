@@ -1,3 +1,5 @@
+'use client'
+
 import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-dialog'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
 import {
@@ -9,8 +11,10 @@ import {
 } from '@/components/ui/table'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import type { SelectedChart } from '@/types/icu/chart'
 import { useMemo } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
 
@@ -21,7 +25,8 @@ export default function ChartTable({
   chartData: SelectedChart
   preview?: boolean
 }) {
-  const { icu_io, icu_chart_id, orders } = chartData
+  const { icu_chart_id, orders } = chartData
+  const { setStep } = useIcuOrderStore()
 
   const sortedOrders = useMemo(
     () =>
@@ -39,13 +44,20 @@ export default function ChartTable({
     [orders],
   )
 
+  const debouncedSetOrdererSelectStep = useDebouncedCallback(
+    () => setStep('selectOrderer'),
+    2000,
+  )
+
   return (
     <Table className="border">
       <TableHeader>
         <TableRow>
           <TableHead className="relative flex w-[320px] items-center justify-center gap-2 text-center">
             <span>오더 목록</span>
-            {!preview && <OrderDialog icuChartId={icu_chart_id} />}
+            {!preview && (
+              <OrderDialog icuChartId={icu_chart_id} orders={orders} />
+            )}
           </TableHead>
 
           {TIMES.map((time) => (
@@ -65,7 +77,7 @@ export default function ChartTable({
             <CellsRow
               preview={preview}
               order={order}
-              icuIoId={icu_io.icu_io_id}
+              debouncedSetOrdererSelectStep={debouncedSetOrdererSelectStep}
             />
           </TableRow>
         ))}

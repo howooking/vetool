@@ -18,60 +18,168 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
-import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import {
+  OrderTimePendingQueue,
+  useIcuOrderStore,
+} from '@/lib/store/icu/icu-order'
 import { cn } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { ordererSchema } from './orderer-schema'
 
+type FormattedOrder = {
+  orderId: string
+  orderTimes: number[]
+}
+
 export default function OrdererSelectStep({
   icuChartId,
+  orders,
 }: {
   icuChartId: string
+  orders: SelectedIcuOrder[]
 }) {
   const { hos_id } = useParams()
   const {
     basicHosData: { vetsListData },
   } = useBasicHosDataContext()
 
-  const { reset, selectedChartOrder, isEditMode, setStep } = useIcuOrderStore()
+  const {
+    reset,
+    selectedChartOrder,
+    orderTimePendingQueue,
+    isEditMode,
+    setStep,
+  } = useIcuOrderStore()
 
   const [isUpdating, setIsUpdating] = useState(false)
+  const isSingleOrder = useMemo(
+    () => orderTimePendingQueue.length === 0,
+    [orderTimePendingQueue],
+  )
 
-  const handleUpsertOrder = async (values: z.infer<typeof ordererSchema>) => {
-    setIsUpdating(true)
+  const formatOrders = useCallback(
+    (originalArray: OrderTimePendingQueue[]): FormattedOrder[] => {
+      const result: { [key: string]: FormattedOrder } = {}
+      for (const order of originalArray) {
+        if (result[order.orderId]) {
+          result[order.orderId].orderTimes.push(order.orderTime)
+        } else {
+          result[order.orderId] = {
+            orderId: order.orderId,
+            orderTimes: [order.orderTime],
+          }
+        }
+      }
+      return Object.values(result)
+    },
+    [],
+  )
 
-    await upsertOrder(
-      hos_id as string,
+  const handleUpsertSingleOrder = useCallback(
+    async (values: z.infer<typeof ordererSchema>) => {
+      setIsUpdating(true)
+
+      await upsertOrder(
+        hos_id as string,
+        icuChartId,
+        selectedChartOrder.order_id!,
+        selectedChartOrder.order_times!.map((time) =>
+          time === '1' ? values.orderer : time,
+        ),
+        {
+          icu_chart_order_name: selectedChartOrder.order_name!,
+          icu_chart_order_comment: selectedChartOrder.order_comment!,
+          icu_chart_order_type: selectedChartOrder.order_type!,
+        },
+      )
+
+      toast({
+        title: `${selectedChartOrder.order_name!} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+      })
+
+      reset()
+      setStep('closed')
+      setIsUpdating(false)
+    },
+    [
+      hos_id,
       icuChartId,
-      selectedChartOrder.order_id!,
-      selectedChartOrder.order_times!.map((time) =>
-        time === '1' ? values.orderer : time,
-      ),
-      {
-        icu_chart_order_name: selectedChartOrder.order_name!,
-        icu_chart_order_comment: selectedChartOrder.order_comment!,
-        icu_chart_order_type: selectedChartOrder.order_type!,
-      },
-    )
+      isEditMode,
+      reset,
+      selectedChartOrder.order_comment,
+      selectedChartOrder.order_id,
+      selectedChartOrder.order_name,
+      selectedChartOrder.order_times,
+      selectedChartOrder.order_type,
+      setStep,
+    ],
+  )
 
-    toast({
-      title: `${selectedChartOrder.order_name!} 오더를 
-      ${isEditMode ? '수정' : '추가'}
-      하였습니다`,
-    })
+  const handleUpsertMultipleOrders = useCallback(
+    async (values: z.infer<typeof ordererSchema>) => {
+      setIsUpdating(true)
+      const formattedOrders = formatOrders(orderTimePendingQueue)
 
-    reset()
-    setStep('closed')
+      for (const order of formattedOrders) {
+        const currentOrder = orders.find((o) => o.order_id === order.orderId)
+        if (!currentOrder) continue
 
-    setIsUpdating(false)
-  }
+        const updatedOrderTimes = [...currentOrder.order_times]
+        for (const time of order.orderTimes) {
+          updatedOrderTimes[time - 1] =
+            updatedOrderTimes[time - 1] === '0' ? values.orderer : '0'
+        }
+
+        await upsertOrder(
+          hos_id as string,
+          icuChartId,
+          order.orderId,
+          updatedOrderTimes,
+          {
+            icu_chart_order_name: currentOrder.order_name,
+            icu_chart_order_comment: currentOrder.order_comment,
+            icu_chart_order_type: currentOrder.order_type,
+          },
+        )
+      }
+
+      toast({
+        title: '오더시간을 변경하였습니다',
+      })
+
+      reset()
+      setStep('closed')
+      setIsUpdating(false)
+    },
+    [
+      formatOrders,
+      hos_id,
+      icuChartId,
+      orderTimePendingQueue,
+      orders,
+      reset,
+      setStep,
+    ],
+  )
+
+  const handleSubmit = useCallback(
+    async (values: z.infer<typeof ordererSchema>) => {
+      if (isSingleOrder) {
+        await handleUpsertSingleOrder(values)
+      } else {
+        await handleUpsertMultipleOrders(values)
+      }
+    },
+    [isSingleOrder, handleUpsertSingleOrder, handleUpsertMultipleOrders],
+  )
 
   const form = useForm<z.infer<typeof ordererSchema>>({
     resolver: zodResolver(ordererSchema),
@@ -79,10 +187,7 @@ export default function OrdererSelectStep({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleUpsertOrder)}
-        className="space-y-4"
-      >
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="orderer"
@@ -121,7 +226,6 @@ export default function OrdererSelectStep({
                             className="rounded-full"
                           />
                         )}
-
                         <span>{vet.name}</span>
                         {vet.position && (
                           <span className="text-xs">({vet.position})</span>
@@ -141,10 +245,11 @@ export default function OrdererSelectStep({
             onClick={() => setStep('upsert')}
             variant="outline"
             type="button"
+            className={isSingleOrder ? '' : 'hidden'}
           >
             뒤로
           </Button>
-          <Button type="submit" disabled={isUpdating}>
+          <Button type="submit" disabled={isUpdating} className="ml-auto">
             확인
             <LoaderCircle
               className={cn(isUpdating ? 'ml-2 animate-spin' : 'hidden')}

@@ -11,21 +11,19 @@ import { TxDetailHover } from './tx/tx-detail-hover'
 type ChartTableCellProps = {
   time: number
   treatment?: Treatment
-  icuIoId: string
   icuChartOrderId: string
   icuChartOrderName: string
   isDone: boolean
   icuChartTxId?: string
   preview?: boolean
   orderer: string
-  toggleOrderTime: (time: number) => void
+  toggleOrderTime: (orderId: string, time: number) => void
 }
 
 const Cell: React.FC<ChartTableCellProps> = React.memo(
   ({
     time,
     treatment,
-    icuIoId,
     icuChartOrderId,
     icuChartOrderName,
     isDone,
@@ -77,7 +75,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       icuChartOrderId,
       icuChartOrderName,
       icuChartTxId,
-      icuIoId,
       setStep,
       setTxLocalState,
       time,
@@ -94,9 +91,9 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     const handleRightClick = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault()
-        toggleOrderTime(time)
+        toggleOrderTime(icuChartOrderId, time)
       },
-      [time, toggleOrderTime],
+      [icuChartOrderId, time, toggleOrderTime],
     )
 
     const handleUpsertBriefTxResultInput = useCallback(async () => {
@@ -119,7 +116,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       briefTxResultInput,
       icuChartOrderId,
       icuChartTxId,
-      icuIoId,
       setStep,
       setTxLocalState,
       time,
