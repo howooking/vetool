@@ -1,21 +1,20 @@
 'use client'
 
-import { toast } from '@/components/ui/use-toast'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { updateOrderTime } from '@/lib/services/icu/chart/order-mutation'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useState } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
+import { DebouncedState } from 'use-debounce'
 import Cell from './cell'
 
-export default function OrderCells({
+export default function CellsRow({
   preview,
   order,
-  icuIoId,
+  debouncedSetOrdererSelectStep,
 }: {
   preview?: boolean
   order: SelectedIcuOrder
-  icuIoId: string
+  debouncedSetOrdererSelectStep: DebouncedState<() => void>
 }) {
   const { order_times, order_id, treatments, order_name } = order
 
@@ -25,37 +24,36 @@ export default function OrderCells({
     setOrderTimeState(order_times)
   }, [order_times])
 
-  const handleUpdateOrderTime = useDebouncedCallback(
-    (newOrderTime: string[]) => {
-      updateOrderTime(order_id, newOrderTime)
-      toast({
-        title: '오더 시간을 변경하였습니다.',
-      })
-    },
-    3000,
-  )
+  const { setOrderTimePendingQueue } = useIcuOrderStore()
 
   const toggleOrderTime = useCallback(
-    (time: number) => {
+    (orderId: string, time: number) => {
       setOrderTimeState((prevOrderTime) => {
         const newOrderTime = [...prevOrderTime]
-        newOrderTime[time - 1] = newOrderTime[time - 1] === '1' ? '0' : '1'
-        handleUpdateOrderTime(newOrderTime)
+        newOrderTime[time - 1] = newOrderTime[time - 1] !== '0' ? '0' : '...'
         return newOrderTime
       })
+
+      setOrderTimePendingQueue((prev) => [
+        ...prev,
+        {
+          orderId: orderId,
+          orderTime: time,
+        },
+      ])
+
+      debouncedSetOrdererSelectStep()
     },
-    [handleUpdateOrderTime],
+    [debouncedSetOrdererSelectStep, setOrderTimePendingQueue],
   )
 
   return (
     <>
       {TIMES.map((time, index) => {
         const isDone =
-          order_times[index] === '1' &&
+          order_times[index] !== '0' &&
           treatments.some((treatment) => treatment.time === time)
-
-        const hasOrder = orderTimeState[time - 1] === '1'
-
+        const orderer = orderTimeState[time - 1]
         const selectedTx = treatments.find(
           (treatment) => treatment.time === time,
         )
@@ -65,14 +63,12 @@ export default function OrderCells({
             key={time}
             time={time}
             treatment={selectedTx}
-            icuIoId={icuIoId}
             icuChartOrderId={order_id}
             isDone={isDone}
-            hasOrder={hasOrder}
+            orderer={orderer}
             icuChartOrderName={order_name}
             icuChartTxId={selectedTx?.tx_id}
             toggleOrderTime={toggleOrderTime}
-            handleUpdateOrderTime={handleUpdateOrderTime}
           />
         )
       })}

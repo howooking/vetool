@@ -1,6 +1,6 @@
 'use client'
 
-import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order-schema'
+import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-schema'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import {
@@ -16,6 +16,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { upsertDefaultChartOrder } from '@/lib/services/admin/icu/default-orders'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
@@ -24,13 +25,11 @@ import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import DeleteDefaultOrderAlertDialog from './delete-default-order-alert-dialog'
-import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 
 export default function DefaultOrderForm() {
   const { hos_id } = useParams()
   const { refresh } = useRouter()
-  const { toggleModal, selectedChartOrder, isEditMode, resetState } =
-    useIcuOrderStore()
+  const { setStep, selectedChartOrder, isEditMode, reset } = useIcuOrderStore()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -66,11 +65,11 @@ export default function DefaultOrderForm() {
         title: `${values.icu_chart_order_name} 오더를 추가하였습니다`,
       })
 
-      resetState()
+      reset()
       setIsSubmitting(false)
-      toggleModal()
+      setStep('closed')
     },
-    [hos_id, refresh, resetState, selectedChartOrder.order_id, toggleModal],
+    [hos_id, selectedChartOrder.order_id, refresh, reset, setStep],
   )
 
   return (
@@ -146,7 +145,7 @@ export default function DefaultOrderForm() {
           {isEditMode && (
             <DeleteDefaultOrderAlertDialog
               selectedChartOrder={selectedChartOrder}
-              toggleModal={toggleModal}
+              setStep={setStep}
             />
           )}
 
