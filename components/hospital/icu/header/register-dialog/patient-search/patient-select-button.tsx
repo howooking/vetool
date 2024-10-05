@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { getIcuIoByPatientId } from '@/lib/services/icu/chart/get-icu-io-by-patient-id'
+import { getLatestIoByPatientId } from '@/lib/services/icu/chart/get-icu-io-by-patient-id'
 import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
 import { cn, getDaysSince } from '@/lib/utils'
-import { LoaderCircle } from 'lucide-react'
+import { Check, LoaderCircle } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function PatientSelectButton({
@@ -19,17 +20,33 @@ export default function PatientSelectButton({
 }) {
   const { setStep, setRegisteringPatient } = useIcuRegisterStore()
   const [isLoading, setIsLoading] = useState(false)
+  const { target_date } = useParams()
 
   const handlePatientClick = async () => {
     setIsLoading(true)
-    const icuIoData = await getIcuIoByPatientId(patientId)
+    const icuIoData = await getLatestIoByPatientId(patientId)
     setIsLoading(false)
 
-    if (icuIoData?.in_date && !icuIoData?.out_date) {
+    // 입원일이 있고 퇴원일이 없음 === 입원중
+    if (icuIoData?.in_date && !icuIoData.out_date) {
       toast({
         variant: 'destructive',
         title: '입원중인 환자',
         description: '이미 입원중인 환자입니다',
+      })
+      return
+    }
+
+    // 입원일이 있고 퇴원일이 있으며 퇴원일이 선택일보다 같거나 이후 === 퇴원완료함, 같은날 동일 환자 차트가 2개 있으면 안되기 때문에 입원 방지
+    if (
+      icuIoData?.in_date &&
+      icuIoData.out_date &&
+      icuIoData.out_date >= (target_date as string)
+    ) {
+      toast({
+        variant: 'destructive',
+        title: '선택일에 이미 퇴원한 환자입니다.',
+        description: '퇴원을 취소해주세요',
       })
       return
     }
@@ -46,12 +63,17 @@ export default function PatientSelectButton({
   return (
     <Button
       type="button"
-      size="sm"
+      size="icon"
+      variant="ghost"
       onClick={handlePatientClick}
-      className={cn(isIcu ? 'flex' : 'hidden', 'w-11')}
+      className={cn(isIcu ? 'flex' : 'hidden')}
       disabled={isLoading}
     >
-      {isLoading ? <LoaderCircle size={16} className="animate-spin" /> : '선택'}
+      {isLoading ? (
+        <LoaderCircle size={16} className="animate-spin" />
+      ) : (
+        <Check size={16} />
+      )}
     </Button>
   )
 }
