@@ -60,11 +60,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "diet_products_rows_duplicate_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'diet_products_rows_duplicate_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
         ]
       }
@@ -110,11 +110,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "drug_doses_drug_id_fkey"
-            columns: ["drug_id"]
+            foreignKeyName: 'drug_doses_drug_id_fkey'
+            columns: ['drug_id']
             isOneToOne: false
-            referencedRelation: "drugs_rows"
-            referencedColumns: ["drug_id"]
+            referencedRelation: 'drugs_rows'
+            referencedColumns: ['drug_id']
           },
         ]
       }
@@ -175,18 +175,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "drug_products_rows_drug_id_fkey"
-            columns: ["drug_id"]
+            foreignKeyName: 'drug_products_rows_drug_id_fkey'
+            columns: ['drug_id']
             isOneToOne: false
-            referencedRelation: "drugs_rows"
-            referencedColumns: ["drug_id"]
+            referencedRelation: 'drugs_rows'
+            referencedColumns: ['drug_id']
           },
           {
-            foreignKeyName: "drug_products_rows_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'drug_products_rows_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
         ]
       }
@@ -223,18 +223,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "drugs_description_drug_id_fkey"
-            columns: ["drug_id"]
+            foreignKeyName: 'drugs_description_drug_id_fkey'
+            columns: ['drug_id']
             isOneToOne: false
-            referencedRelation: "drugs_rows"
-            referencedColumns: ["drug_id"]
+            referencedRelation: 'drugs_rows'
+            referencedColumns: ['drug_id']
           },
           {
-            foreignKeyName: "drugs_description_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'drugs_description_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
         ]
       }
@@ -319,11 +319,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "hospitals_master_user_id_fkey"
-            columns: ["master_user_id"]
+            foreignKeyName: 'hospitals_master_user_id_fkey'
+            columns: ['master_user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["user_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['user_id']
           },
         ]
       }
@@ -354,18 +354,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "icu_bookmarks_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'icu_bookmarks_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "icu_bookmarks_icu_chart_id_fkey"
-            columns: ["icu_chart_id"]
+            foreignKeyName: 'icu_bookmarks_icu_chart_id_fkey'
+            columns: ['icu_chart_id']
             isOneToOne: true
-            referencedRelation: "icu_charts"
-            referencedColumns: ["icu_chart_id"]
+            referencedRelation: 'icu_charts'
+            referencedColumns: ['icu_chart_id']
           },
         ]
       }
@@ -420,39 +420,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "icu_charts_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'icu_charts_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "icu_charts_icu_io_id_fkey"
-            columns: ["icu_io_id"]
+            foreignKeyName: 'icu_charts_icu_io_id_fkey'
+            columns: ['icu_io_id']
             isOneToOne: false
-            referencedRelation: "icu_io"
-            referencedColumns: ["icu_io_id"]
+            referencedRelation: 'icu_io'
+            referencedColumns: ['icu_io_id']
           },
           {
-            foreignKeyName: "icu_charts_main_vet_fkey"
-            columns: ["main_vet"]
+            foreignKeyName: 'icu_charts_main_vet_fkey'
+            columns: ['main_vet']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["user_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['user_id']
           },
           {
-            foreignKeyName: "icu_charts_patient_id_fkey"
-            columns: ["patient_id"]
+            foreignKeyName: 'icu_charts_patient_id_fkey'
+            columns: ['patient_id']
             isOneToOne: false
-            referencedRelation: "patients"
-            referencedColumns: ["patient_id"]
+            referencedRelation: 'patients'
+            referencedColumns: ['patient_id']
           },
           {
-            foreignKeyName: "icu_charts_sub_vet_fkey"
-            columns: ["sub_vet"]
+            foreignKeyName: 'icu_charts_sub_vet_fkey'
+            columns: ['sub_vet']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["user_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['user_id']
           },
         ]
       }
@@ -483,11 +483,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "icu_default_chart_temp_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'icu_default_chart_temp_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
         ]
       }
@@ -539,18 +539,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "icu_io_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'icu_io_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "icu_io_patient_id_fkey"
-            columns: ["patient_id"]
+            foreignKeyName: 'icu_io_patient_id_fkey'
+            columns: ['patient_id']
             isOneToOne: false
-            referencedRelation: "patients"
-            referencedColumns: ["patient_id"]
+            referencedRelation: 'patients'
+            referencedColumns: ['patient_id']
           },
         ]
       }
@@ -590,18 +590,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "icu_notification_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'icu_notification_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "icu_notification_patient_id_fkey"
-            columns: ["patient_id"]
+            foreignKeyName: 'icu_notification_patient_id_fkey'
+            columns: ['patient_id']
             isOneToOne: false
-            referencedRelation: "patients"
-            referencedColumns: ["patient_id"]
+            referencedRelation: 'patients'
+            referencedColumns: ['patient_id']
           },
         ]
       }
@@ -641,18 +641,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "icu_orders_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'icu_orders_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "icu_orders_icu_chart_id_fkey"
-            columns: ["icu_chart_id"]
+            foreignKeyName: 'icu_orders_icu_chart_id_fkey'
+            columns: ['icu_chart_id']
             isOneToOne: false
-            referencedRelation: "icu_charts"
-            referencedColumns: ["icu_chart_id"]
+            referencedRelation: 'icu_charts'
+            referencedColumns: ['icu_chart_id']
           },
         ]
       }
@@ -661,12 +661,12 @@ export type Database = {
           basic_care: string
           belongings: string
           created_at: string
-          etc: string | null
+          etc: string
           hos_id: string | null
           icu_io_id: string | null
           icu_out_id: string
           medication: string
-          out_time: string | null
+          out_time: string
           patient_id: string | null
           prescription: string
         }
@@ -674,12 +674,12 @@ export type Database = {
           basic_care?: string
           belongings?: string
           created_at?: string
-          etc?: string | null
+          etc?: string
           hos_id?: string | null
           icu_io_id?: string | null
           icu_out_id?: string
           medication?: string
-          out_time?: string | null
+          out_time?: string
           patient_id?: string | null
           prescription?: string
         }
@@ -687,36 +687,36 @@ export type Database = {
           basic_care?: string
           belongings?: string
           created_at?: string
-          etc?: string | null
+          etc?: string
           hos_id?: string | null
           icu_io_id?: string | null
           icu_out_id?: string
           medication?: string
-          out_time?: string | null
+          out_time?: string
           patient_id?: string | null
           prescription?: string
         }
         Relationships: [
           {
-            foreignKeyName: "icu_out_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'icu_out_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "icu_out_icu_io_id_fkey"
-            columns: ["icu_io_id"]
+            foreignKeyName: 'icu_out_icu_io_id_fkey'
+            columns: ['icu_io_id']
             isOneToOne: false
-            referencedRelation: "icu_io"
-            referencedColumns: ["icu_io_id"]
+            referencedRelation: 'icu_io'
+            referencedColumns: ['icu_io_id']
           },
           {
-            foreignKeyName: "icu_out_patient_id_fkey"
-            columns: ["patient_id"]
+            foreignKeyName: 'icu_out_patient_id_fkey'
+            columns: ['patient_id']
             isOneToOne: false
-            referencedRelation: "patients"
-            referencedColumns: ["patient_id"]
+            referencedRelation: 'patients'
+            referencedColumns: ['patient_id']
           },
         ]
       }
@@ -759,18 +759,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "icu_txs_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'icu_txs_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "icu_txs_icu_chart_order_id_fkey"
-            columns: ["icu_chart_order_id"]
+            foreignKeyName: 'icu_txs_icu_chart_order_id_fkey'
+            columns: ['icu_chart_order_id']
             isOneToOne: false
-            referencedRelation: "icu_orders"
-            referencedColumns: ["icu_chart_order_id"]
+            referencedRelation: 'icu_orders'
+            referencedColumns: ['icu_chart_order_id']
           },
         ]
       }
@@ -831,18 +831,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "hos_notice_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'hos_notice_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "notices_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'notices_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["user_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['user_id']
           },
         ]
       }
@@ -853,7 +853,7 @@ export type Database = {
           hos_owner_id: string
           owner_address: string | null
           owner_id: string
-          owner_level: Database["public"]["Enums"]["owner_level_enum"]
+          owner_level: Database['public']['Enums']['owner_level_enum']
           owner_memo: string | null
           owner_name: string
           owner_phone_number: string | null
@@ -864,7 +864,7 @@ export type Database = {
           hos_owner_id: string
           owner_address?: string | null
           owner_id?: string
-          owner_level?: Database["public"]["Enums"]["owner_level_enum"]
+          owner_level?: Database['public']['Enums']['owner_level_enum']
           owner_memo?: string | null
           owner_name?: string
           owner_phone_number?: string | null
@@ -875,18 +875,18 @@ export type Database = {
           hos_owner_id?: string
           owner_address?: string | null
           owner_id?: string
-          owner_level?: Database["public"]["Enums"]["owner_level_enum"]
+          owner_level?: Database['public']['Enums']['owner_level_enum']
           owner_memo?: string | null
           owner_name?: string
           owner_phone_number?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "owners_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'owners_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
         ]
       }
@@ -944,18 +944,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "patients_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'patients_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "patients_owner_id_fkey"
-            columns: ["owner_id"]
+            foreignKeyName: 'patients_owner_id_fkey'
+            columns: ['owner_id']
             isOneToOne: false
-            referencedRelation: "owners"
-            referencedColumns: ["owner_id"]
+            referencedRelation: 'owners'
+            referencedColumns: ['owner_id']
           },
         ]
       }
@@ -989,11 +989,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "todos_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'todos_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
         ]
       }
@@ -1024,18 +1024,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "user_approval_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'user_approval_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "user_approval_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'user_approval_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["user_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['user_id']
           },
         ]
       }
@@ -1084,18 +1084,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "users_hos_id_fkey"
-            columns: ["hos_id"]
+            foreignKeyName: 'users_hos_id_fkey'
+            columns: ['hos_id']
             isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
+            referencedRelation: 'hospitals'
+            referencedColumns: ['hos_id']
           },
           {
-            foreignKeyName: "users_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'users_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: 'users'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1132,11 +1132,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "vitals_patient_id_fkey"
-            columns: ["patient_id"]
+            foreignKeyName: 'vitals_patient_id_fkey'
+            columns: ['patient_id']
             isOneToOne: false
-            referencedRelation: "patients"
-            referencedColumns: ["patient_id"]
+            referencedRelation: 'patients'
+            referencedColumns: ['patient_id']
           },
         ]
       }
@@ -1145,21 +1145,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      copy_prev_chart: {
-        Args: {
-          target_date_input: string
-          patient_id_input: string
-        }
-        Returns: Json
-      }
-      copy_prev_chart_orders: {
-        Args: {
-          prev_chart_id_input: string
-          new_chart_id_input: string
-          selected_io_id_input: string
-        }
-        Returns: undefined
-      }
       copy_prev_orders: {
         Args: {
           prev_chart_id_input: string
@@ -1284,16 +1269,6 @@ export type Database = {
         }
         Returns: undefined
       }
-      toggle_out_patient: {
-        Args: {
-          icu_io_id_input: string
-          patient_id_input: string
-          is_patient_out_input: boolean
-          chart_orders_input: string
-          keywords_input: string
-        }
-        Returns: undefined
-      }
       toggle_patient_out: {
         Args: {
           icu_io_id_input: string
@@ -1371,7 +1346,7 @@ export type Database = {
       }
     }
     Enums: {
-      owner_level_enum: "S" | "A" | "B" | "C"
+      owner_level_enum: 'S' | 'A' | 'B' | 'C'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1379,27 +1354,27 @@ export type Database = {
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type PublicSchema = Database[Extract<keyof Database, 'public'>]
 
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
+    | keyof (PublicSchema['Tables'] & PublicSchema['Views'])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+        Database[PublicTableNameOrOptions['schema']]['Views'])
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof (PublicSchema['Tables'] &
+        PublicSchema['Views'])
+    ? (PublicSchema['Tables'] &
+        PublicSchema['Views'])[PublicTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -1408,19 +1383,19 @@ export type Tables<
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
+    | keyof PublicSchema['Tables']
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
+    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -1429,19 +1404,19 @@ export type TablesInsert<
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
+    | keyof PublicSchema['Tables']
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
+    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -1450,13 +1425,13 @@ export type TablesUpdate<
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof PublicSchema["Enums"]
+    | keyof PublicSchema['Enums']
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
     : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
+    ? PublicSchema['Enums'][PublicEnumNameOrOptions]
     : never

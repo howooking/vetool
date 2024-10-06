@@ -29,7 +29,7 @@ export const FOOTER_MAIN_VIEW_MENUS = [
   },
   {
     label: '퇴원 관리',
-    value: 'out-due',
+    value: 'movement',
   },
   {
     label: '입원 통계',
