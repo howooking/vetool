@@ -135,7 +135,10 @@ export default function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="text-center">
+                    <TableHead
+                      key={header.id}
+                      className="text-center text-xs md:text-sm"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
