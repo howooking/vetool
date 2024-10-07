@@ -3,12 +3,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-export const getShowOrderer = async (hosId: string) => {
+export const getMaintenaceRateCalcMethod = async (hosId: string) => {
   const supabase = createClient()
 
   const { data, error } = await supabase
     .from('hospitals')
-    .select('show_orderer')
+    .select('maintenance_rate_calc_method')
     .match({ hos_id: hosId })
     .single()
 
@@ -17,18 +17,18 @@ export const getShowOrderer = async (hosId: string) => {
     redirect(`/error/?message=${error.message}`)
   }
 
-  return data.show_orderer
+  return data.maintenance_rate_calc_method
 }
 
-export const updateShowOrderer = async (
+export const updateMaintenanceRateCalcMethod = async (
   hosId: string,
-  showOrderInput: boolean,
+  maintenanceRateCalcMethodInput: string,
 ) => {
   const supabase = createClient()
 
   const { error } = await supabase
     .from('hospitals')
-    .update({ show_orderer: showOrderInput })
+    .update({ maintenance_rate_calc_method: maintenanceRateCalcMethodInput })
     .match({ hos_id: hosId })
 
   if (error) {

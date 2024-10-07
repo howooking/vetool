@@ -30,8 +30,6 @@ export default function TxTableCell({
   const { push } = useRouter()
   const searchParams = useSearchParams()
 
-  console.log(order)
-
   const isOrderScheduled = useMemo(
     () => order.icu_chart_order_time[time - 1] !== '0',
     [order.icu_chart_order_time, time],
@@ -46,7 +44,9 @@ export default function TxTableCell({
     if (!isTxCompleted && isOrderScheduled) {
       return (
         <div className="flex flex-col whitespace-nowrap py-4">
-          <span className="text-sm">{order.icu_chart_order_name}</span>
+          <span className="text-sm">
+            {order.icu_chart_order_name.split('#')[0]}
+          </span>
           <span className="text-xs text-muted-foreground">
             {order.icu_chart_order_comment}
           </span>

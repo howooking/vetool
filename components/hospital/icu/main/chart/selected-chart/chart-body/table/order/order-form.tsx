@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
@@ -26,13 +25,21 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import FluidOrderFiled from './fluid-order/fluid-order-filed'
+import OrderFormField from './order-form-field'
 
 export default function OrderForm({
   showOrderer,
   icuChartId,
+  weight,
+  species,
+  ageInDays,
 }: {
   showOrderer: boolean
   icuChartId: string
+  weight: string
+  species: string
+  ageInDays: number
 }) {
   const {
     setStep,
@@ -62,6 +69,8 @@ export default function OrderForm({
     },
   })
 
+  const orderType = form.watch('icu_chart_order_type')
+
   const handleNextStep = async (values: z.infer<typeof orderSchema>) => {
     setSelectedChartOrder({
       order_name: values.icu_chart_order_name,
@@ -90,7 +99,7 @@ export default function OrderForm({
     )
 
     toast({
-      title: `${selectedChartOrder.order_name!} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+      title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
     })
 
     reset()
@@ -131,6 +140,7 @@ export default function OrderForm({
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   className="flex flex-wrap gap-4"
+                  disabled={isEditMode}
                 >
                   {DEFAULT_ICU_ORDER_TYPE.map((item) => (
                     <FormItem
@@ -152,36 +162,15 @@ export default function OrderForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="icu_chart_order_name"
-          render={({ field }) => (
-            <FormItem className="w-full space-y-2">
-              <FormLabel className="font-semibold">오더명*</FormLabel>
-              <FormControl>
-                <Input placeholder="오더명을 입력해주세요" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="icu_chart_order_comment"
-          render={({ field }) => (
-            <FormItem className="w-full space-y-2">
-              <FormLabel className="font-semibold">오더 설명</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="오더에 대한 설명을 입력해주세요"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {orderType === 'fluid' && (
+          <FluidOrderFiled
+            form={form}
+            species={species}
+            ageInDays={ageInDays}
+            weight={weight}
+          />
+        )}
+        {orderType !== 'fluid' && <OrderFormField form={form} />}
 
         <OrderTimeSettings
           startTime={startTime}

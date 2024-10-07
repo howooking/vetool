@@ -31,7 +31,13 @@ export default function ChartTable({
   chartData: SelectedChart
   preview?: boolean
 }) {
-  const { icu_chart_id, orders } = chartData
+  const {
+    icu_chart_id,
+    orders,
+    patient,
+    weight,
+    icu_io: { age_in_days },
+  } = chartData
   const { hos_id } = useParams()
   const { setStep, reset, orderTimePendingQueue } = useIcuOrderStore()
   const [isSorting, setIsSorting] = useState(true)
@@ -112,6 +118,9 @@ export default function ChartTable({
                 icuChartId={icu_chart_id}
                 orders={orders}
                 showOrderer={showOrderer}
+                patient={patient}
+                weight={weight}
+                ageInDays={age_in_days}
               />
             )}
           </TableHead>

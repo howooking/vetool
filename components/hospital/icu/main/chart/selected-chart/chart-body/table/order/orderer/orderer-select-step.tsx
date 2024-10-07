@@ -76,7 +76,7 @@ export default function OrdererSelectStep({
       )
 
       toast({
-        title: `${selectedChartOrder.order_name!} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+        title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
       })
 
       reset()
