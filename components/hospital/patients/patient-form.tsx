@@ -180,7 +180,7 @@ export default function PatientForm({
     values: z.infer<typeof registerPatientFormSchema>,
   ) => {
     if (isDuplicateId) {
-      return // Prevent form submission if ID is duplicate
+      return
     }
     setIsSubmitting(true)
 
@@ -211,7 +211,7 @@ export default function PatientForm({
     values: z.infer<typeof registerPatientFormSchema>,
   ) => {
     if (isDuplicateId) {
-      return // Prevent form submission if ID is duplicate
+      return
     }
     setIsSubmitting(true)
 
@@ -255,11 +255,11 @@ export default function PatientForm({
           control={form.control}
           name="hos_patient_id"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="flex items-center gap-2">
-                <span>환자 번호*</span>
+            <FormItem className="flex flex-col justify-end">
+              <div className="flex items-center gap-2">
+                <FormLabel>환자 번호*</FormLabel>
                 <HelperTooltip>메인차트에 등록되어있는 환자번호</HelperTooltip>
-              </FormLabel>
+              </div>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
               </FormControl>

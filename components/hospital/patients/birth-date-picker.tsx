@@ -28,7 +28,6 @@ export default function BirthDatePicker({
   form: UseFormReturn<z.infer<typeof registerPatientFormSchema>>
 }) {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-  const [isInputDisabled, setIsInputDisabled] = useState(false)
   const [yearInput, setYearInput] = useState('')
   const [monthInput, setMonthInput] = useState('')
   const [dateInput, setDateInput] = useState('')
@@ -46,13 +45,6 @@ export default function BirthDatePicker({
 
     if (yearInput) currentDate = subYears(currentDate, Number(yearInput))
     if (monthInput) currentDate = subMonths(currentDate, Number(monthInput))
-
-    if (yearInput && monthInput) {
-      setIsInputDisabled(true)
-    } else {
-      setIsInputDisabled(false)
-      updateBirthDate(new Date())
-    }
 
     if (currentDate.toString() !== new Date().toString()) {
       updateBirthDate(currentDate)
@@ -122,7 +114,6 @@ export default function BirthDatePicker({
               type="text"
               value={dateInput}
               onChange={handleDateInputChange}
-              disabled={isInputDisabled}
               className="h-8 text-sm"
               placeholder="생년월일 (YYYYMMDD)"
             />
