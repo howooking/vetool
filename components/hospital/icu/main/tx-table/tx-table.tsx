@@ -1,5 +1,6 @@
 'use client'
 
+import PatientInfo from '@/components/hospital/common/patient-info'
 import TxTableCell from '@/components/hospital/icu/main/tx-table/tx-table-cell'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
@@ -82,7 +83,7 @@ export default function TxTable({
         <Table className="border">
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[200px] text-center">환자목록</TableHead>
+              <TableHead className="w-[120px] text-center">환자목록</TableHead>
 
               {TIMES.map((time) => (
                 <TableHead className="border text-center" key={time}>
@@ -103,19 +104,15 @@ export default function TxTable({
                   }}
                   className="divide-x"
                 >
-                  <TableCell className="flex w-[120px] flex-col items-center justify-center">
-                    <div className="flex items-center gap-1">
-                      {txData.patient.species === 'canine' ? (
-                        <Dog size={18} />
-                      ) : (
-                        <Cat size={18} />
-                      )}
-                      <div>{txData.patient.name}</div>
-                    </div>
+                  <TableCell className="min-w-[120px] text-center">
+                    <PatientInfo
+                      name={txData.patient.name}
+                      breed={txData.patient.breed}
+                      species={txData.patient.species}
+                      size={18}
+                      col
+                    />
 
-                    <div className="line-clamp-1 text-[10px] text-muted-foreground">
-                      {txData.patient.breed}
-                    </div>
                     <div className="text-xs">{txData.icu_charts.weight}kg</div>
                   </TableCell>
 
