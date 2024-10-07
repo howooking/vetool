@@ -46,17 +46,25 @@ export default function TxTable({
         .filter((data) => !data.icu_io.out_date)
         .map((data) => ({
           ...data,
-          orders: data.orders
-            .filter((order) => order.icu_chart_order_time.includes('1'))
-            .filter(
-              (order) =>
-                order.icu_chart_order_time.filter((time) => time === '1')
-                  .length !== order.treatments.length,
-            ),
+          orders: data.orders.filter((order) => {
+            const orderTimes = order.icu_chart_order_time
+              .map((time, index) => (time !== '0' ? index + 1 : null))
+              .filter((time): time is number => time !== null)
+
+            const treatmentTimes = order.treatments.map((t) => t.time)
+
+            const pendingOrderTimes = orderTimes.filter(
+              (time) => !treatmentTimes.includes(time),
+            )
+
+            return pendingOrderTimes.length > 0
+          }),
         }))
         .filter((data) => data.orders.length > 0),
     [txTableData],
   )
+
+  console.log(filteredTxData)
 
   const chartBackgroundMap = useMemo(
     () =>
