@@ -18,6 +18,8 @@ export const registerIcuPatient = async (
 ) => {
   const supabase = createClient()
 
+  console.log(hosId)
+
   const { error } = await supabase.rpc('register_icu', {
     hos_id_input: hosId,
     icu_io_dx_input: dx,

@@ -8,6 +8,7 @@ export default function PatientInfo({
   size = 16,
   className,
   col = false,
+  isDone = false,
 }: {
   name: string
   species: string
@@ -15,6 +16,7 @@ export default function PatientInfo({
   size?: number
   className?: string
   col?: boolean
+  isDone?: boolean
 }) {
   const Icon = species === 'canine' ? Dog : Cat
 
@@ -26,9 +28,16 @@ export default function PatientInfo({
         <Icon size={size} />
 
         <div className={cn('flex items-center gap-1', !col && 'line-clamp-1')}>
-          <span>{name}</span>
+          <span className={cn(isDone && 'line-through')}>{name}</span>
           {!col && (
-            <span className="pl-1 text-xs text-muted-foreground">{breed}</span>
+            <span
+              className={cn(
+                'pl-1 text-xs text-muted-foreground',
+                isDone && 'line-through',
+              )}
+            >
+              {breed}
+            </span>
           )}
         </div>
       </div>

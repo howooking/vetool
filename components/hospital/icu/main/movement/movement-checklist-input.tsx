@@ -3,27 +3,21 @@
 import CustomTooltip from '@/components/ui/custom-tooltip'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { updateIcuOutDuePatient } from '@/lib/services/icu/movement/update-icu-out-due-patient'
-import { useState } from 'react'
+import { updatePatientMovement } from '@/lib/services/icu/movement/update-patient-movement'
+import { useEffect, useState } from 'react'
 
-export default function OutDueChecklistInput({
-  hosId,
+export default function MovementChecklistInput({
   icuIoId,
-  isDischarged,
   value,
   checkType,
+  isDischarged,
+  visitId,
 }: {
-  hosId: string
   icuIoId: string
-  isDischarged: boolean
   value: string
-  checkType:
-    | 'basic_care'
-    | 'belongings'
-    | 'prescription'
-    | 'medication'
-    | 'out_time'
-    | 'etc'
+  checkType: string
+  isDischarged: boolean
+  visitId?: string
 }) {
   const [inputValue, setInputValue] = useState(value)
 
@@ -33,15 +27,19 @@ export default function OutDueChecklistInput({
     if (trimmedValue.length <= 50) setInputValue(trimmedValue)
   }
 
-  const updateOutDueChecklist = async () => {
+  const handleUpdateChecklist = async () => {
     if (value === inputValue) return
 
-    await updateIcuOutDuePatient(hosId, icuIoId, inputValue, checkType)
+    await updatePatientMovement(icuIoId, inputValue, checkType, visitId)
 
     toast({
-      title: `퇴원 관리 사항이 변경되었습니다`,
+      title: `관리 사항이 변경되었습니다`,
     })
   }
+
+  useEffect(() => {
+    setInputValue(value)
+  }, [value])
 
   return (
     <CustomTooltip
@@ -55,8 +53,8 @@ export default function OutDueChecklistInput({
         disabled={isDischarged}
         value={inputValue}
         onChange={handleValueChange}
-        onBlur={updateOutDueChecklist}
-        className="mx-auto w-16 text-center md:w-auto md:max-w-24"
+        onBlur={handleUpdateChecklist}
+        className="mx-auto w-16 text-center md:w-auto md:max-w-32"
       />
     </CustomTooltip>
   )

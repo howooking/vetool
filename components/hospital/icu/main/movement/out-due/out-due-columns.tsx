@@ -1,25 +1,32 @@
 'use client'
 
 import PatientInfo from '@/components/hospital/common/patient-info'
-import OutDueChecklistInput from '@/components/hospital/icu/main/movement/out-due-checklist-input'
-import { Button } from '@/components/ui/button'
-import type { OutDuePatientsData } from '@/types/icu/out-due'
+import MovementChecklistInput from '@/components/hospital/icu/main/movement/movement-checklist-input'
+import type { OutDuePatientsData } from '@/types/icu/movement'
 import { ColumnDef } from '@tanstack/react-table'
+import AddOutDuePatientDialog from './add-out-due-patient-dialog'
+import MoveChartButton from './move-chart-button'
 
 export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
   {
-    accessorKey: 'patient.name',
-    header: '환자명',
+    accessorKey: 'patientName',
+    header: () => {
+      return <AddOutDuePatientDialog />
+    },
+
     cell: ({ row }) => {
       const name = row.original.patient.name
       const breed = row.original.patient.breed
       const species = row.original.patient.species
+      const isDischarged = row.original.out_date !== null
+
       return (
-        <div className="w-[200px] md:w-auto">
+        <div className="mx-auto">
           <PatientInfo
             name={name}
             species={species}
             breed={breed}
+            isDone={isDischarged}
             className="justify-center"
           />
         </div>
@@ -27,17 +34,15 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
     },
   },
   {
-    accessorKey: 'out_time',
+    accessorKey: 'outTime',
     header: '퇴원 시각',
     cell: ({ row }) => {
       const outTime = row.original.out_time
       const isDischarged = row.original.out_date !== null
-      const hosId = row.original.hos_id
       const icuIoId = row.original.icu_io_id
 
       return (
-        <OutDueChecklistInput
-          hosId={hosId as string}
+        <MovementChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           checkType="out_time"
@@ -47,17 +52,15 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
     },
   },
   {
-    accessorKey: 'basic_care',
+    accessorKey: 'basicCare',
     header: '기본 관리',
     cell: ({ row }) => {
       const basicCare = row.original.basic_care
       const isDischarged = row.original.out_date !== null
-      const hosId = row.original.hos_id
       const icuIoId = row.original.icu_io_id
 
       return (
-        <OutDueChecklistInput
-          hosId={hosId as string}
+        <MovementChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           checkType="basic_care"
@@ -72,12 +75,10 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
     cell: ({ row }) => {
       const belongings = row.original.belongings
       const isDischarged = row.original.out_date !== null
-      const hosId = row.original.hos_id
       const icuIoId = row.original.icu_io_id
 
       return (
-        <OutDueChecklistInput
-          hosId={hosId as string}
+        <MovementChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           checkType="belongings"
@@ -92,12 +93,11 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
     cell: ({ row }) => {
       const prescription = row.original.prescription
       const isDischarged = row.original.out_date !== null
-      const hosId = row.original.hos_id
+
       const icuIoId = row.original.icu_io_id
 
       return (
-        <OutDueChecklistInput
-          hosId={hosId as string}
+        <MovementChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           value={prescription}
@@ -112,12 +112,11 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
     cell: ({ row }) => {
       const medication = row.original.medication
       const isDischarged = row.original.out_date !== null
-      const hosId = row.original.hos_id
+
       const icuIoId = row.original.icu_io_id
 
       return (
-        <OutDueChecklistInput
-          hosId={hosId as string}
+        <MovementChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           checkType="medication"
@@ -132,12 +131,10 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
     cell: ({ row }) => {
       const etc = row.original.etc
       const isDischarged = row.original.out_date !== null
-      const hosId = row.original.hos_id
       const icuIoId = row.original.icu_io_id
 
       return (
-        <OutDueChecklistInput
-          hosId={hosId as string}
+        <MovementChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           checkType="etc"
@@ -148,15 +145,11 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
   },
   {
     accessorKey: 'active',
-    header: '퇴원',
+    header: '차트 이동',
     cell: ({ row }) => {
-      const isDischarged = row.original.out_date !== null
+      const patientId = row.original.patient.patient_id
 
-      return (
-        <Button variant="outline" disabled={isDischarged}>
-          {isDischarged ? '퇴원 완료' : '퇴원'}
-        </Button>
-      )
+      return <MoveChartButton patientId={patientId} />
     },
   },
 ]

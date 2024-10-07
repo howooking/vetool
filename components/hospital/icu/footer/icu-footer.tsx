@@ -28,7 +28,7 @@ export const FOOTER_MAIN_VIEW_MENUS = [
     value: 'bookmark',
   },
   {
-    label: '퇴원 관리',
+    label: '퇴원 / 면회',
     value: 'movement',
   },
   {
