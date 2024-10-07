@@ -429,7 +429,10 @@ export default function PatientForm({
           )}
         />
 
-        <BirthDatePicker form={form} />
+        <BirthDatePicker
+          form={form}
+          birth={edit ? new Date(editingPatient?.birth!) : undefined}
+        />
 
         <FormField
           control={form.control}
