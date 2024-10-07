@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from 'clsx'
 import { differenceInDays, isValid, parseISO } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
+import { OrderTimePendingQueue } from './store/icu/icu-order'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -213,4 +214,26 @@ export const changeTargetDateInUrl = (
     ? `${path.replace(DATE_REGEX, `/${newDateString}/`)}?${params?.toString()}`
     : `${path.replace(DATE_REGEX, `/${newDateString}/`)}`
   return newPath
+}
+
+// 우클릭 오더 시간 변경시 큐에 저장된 오더 id와 시간 데이터를 formatting
+type FormattedOrder = {
+  orderId: string
+  orderTimes: number[]
+}
+export function formatOrders(
+  originalArray: OrderTimePendingQueue[],
+): FormattedOrder[] {
+  const result: { [key: string]: FormattedOrder } = {}
+  for (const order of originalArray) {
+    if (result[order.orderId]) {
+      result[order.orderId].orderTimes.push(order.orderTime)
+    } else {
+      result[order.orderId] = {
+        orderId: order.orderId,
+        orderTimes: [order.orderTime],
+      }
+    }
+  }
+  return Object.values(result)
 }

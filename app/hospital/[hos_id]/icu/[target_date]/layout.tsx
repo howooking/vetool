@@ -23,6 +23,8 @@ export default async function IcuPageLayout({
         groupListData: basicHosData.group_list,
         orderColorsData: basicHosData.order_color as IcuOrderColors,
         memoNameListData: basicHosData.icu_memo_names,
+        showOrderer: basicHosData.show_orderer,
+        maintenanceRateCalcMethod: basicHosData.maintenance_rate_calc_method,
         sidebarData: icuSidebarData ?? [],
       }}
     >

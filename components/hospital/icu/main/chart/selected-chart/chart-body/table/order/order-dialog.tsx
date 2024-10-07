@@ -20,9 +20,11 @@ import OrdererSelectStep from './orderer/orderer-select-step'
 export default function OrderDialog({
   icuChartId,
   orders,
+  showOrderer,
 }: {
   icuChartId: string
   orders: SelectedIcuOrder[]
+  showOrderer: boolean
 }) {
   const { step, isEditMode, setStep, reset } = useIcuOrderStore()
   const { refresh } = useRouter()
@@ -57,7 +59,9 @@ export default function OrderDialog({
           {step === 'selectOrderer' && <DialogTitle>수의사 선택</DialogTitle>}
           <DialogDescription />
         </DialogHeader>
-        {step === 'upsert' && <OrderForm />}
+        {step === 'upsert' && (
+          <OrderForm showOrderer={showOrderer} icuChartId={icuChartId} />
+        )}
         {step === 'selectOrderer' && (
           <OrdererSelectStep icuChartId={icuChartId} orders={orders} />
         )}
