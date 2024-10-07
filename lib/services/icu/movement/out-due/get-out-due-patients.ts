@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { OutDuePatientsData } from '@/types/icu/out-due'
+import type { OutDuePatientsData } from '@/types/icu/movement'
 import { redirect } from 'next/navigation'
 
 export const getIcuOutDuePatients = async (

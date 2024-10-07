@@ -46,7 +46,7 @@ export default function AddOutDuePatientDialog() {
 
       getNotOutDueIoPatients()
     }
-  }, [hos_id, target_date])
+  }, [isDialogOpen, hos_id, target_date])
 
   const handleUpdatePatientOutDueDate = async (icuIoId: string) => {
     setIsDialogOpen(false)
