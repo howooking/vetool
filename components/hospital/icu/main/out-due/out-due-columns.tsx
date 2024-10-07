@@ -1,11 +1,11 @@
 'use client'
 
 import PatientInfo from '@/components/hospital/common/patient-info'
+import OutDueToggleButton from '@/components/hospital/icu/main/out-due/out-due-toggle'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { OutDuePatientsData } from '@/types/icu/out-due'
+import type { OutDuePatientsData } from '@/types/icu/movement'
 import { ColumnDef } from '@tanstack/react-table'
-import OutDueToggleButton from './out-due-toggle'
 
 export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
   {
