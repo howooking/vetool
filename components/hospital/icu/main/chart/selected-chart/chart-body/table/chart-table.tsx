@@ -49,7 +49,7 @@ export default function ChartTable({
 
   const debouncedSetOrdererSelectStep = useDebouncedCallback(
     () => setStep('selectOrderer'),
-    1000,
+    1500,
   )
 
   if (isSorting) {

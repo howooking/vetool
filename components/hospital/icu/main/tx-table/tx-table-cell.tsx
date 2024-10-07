@@ -30,8 +30,10 @@ export default function TxTableCell({
   const { push } = useRouter()
   const searchParams = useSearchParams()
 
+  console.log(order)
+
   const isOrderScheduled = useMemo(
-    () => order.icu_chart_order_time[time - 1] === '1',
+    () => order.icu_chart_order_time[time - 1] !== '0',
     [order.icu_chart_order_time, time],
   )
 
