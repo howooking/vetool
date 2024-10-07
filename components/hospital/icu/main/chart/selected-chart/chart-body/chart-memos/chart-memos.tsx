@@ -3,7 +3,7 @@
 import Memo from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/memo'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { useState } from 'react'
-import HideAndShowButton from './HideAndShowButton'
+import HideAndShowButton from './hide-and-show-button'
 
 export default function ChartMemos({
   memoA,
