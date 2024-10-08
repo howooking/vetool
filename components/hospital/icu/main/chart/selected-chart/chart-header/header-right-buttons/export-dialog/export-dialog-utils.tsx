@@ -80,6 +80,9 @@ export const renderAndCaptureExportChartBody = (
     root.render(
       <BasicHosDataProvider
         basicHosData={{
+          //todo
+          maintenanceRateCalcMethod: 'b',
+          showOrderer: true,
           vetsListData: initialIcuData.vetsListData,
           groupListData: initialIcuData.basicHosData.group_list,
           sidebarData: initialIcuData.icuSidebarData ?? [],

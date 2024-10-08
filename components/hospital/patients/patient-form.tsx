@@ -121,7 +121,15 @@ export default function PatientForm({
   const form = useForm<z.infer<typeof registerPatientFormSchema>>({
     resolver: zodResolver(
       registerPatientFormSchema.refine(
-        (data) => !hosPatientIds.includes(data.hos_patient_id),
+        (data) => {
+          if (edit) {
+            return (
+              data.hos_patient_id === editingPatient?.hos_patient_id ||
+              !hosPatientIds.includes(data.hos_patient_id)
+            )
+          }
+          return !hosPatientIds.includes(data.hos_patient_id)
+        },
         {
           message: '이 환자번호는 이미 존재합니다',
           path: ['hos_patient_id'],
@@ -159,7 +167,11 @@ export default function PatientForm({
 
   const watchHosPatientId = form.watch('hos_patient_id')
   useEffect(() => {
-    if (watchHosPatientId && hosPatientIds.includes(watchHosPatientId)) {
+    const isDuplicate = hosPatientIds.includes(watchHosPatientId)
+    const hasChanged =
+      edit && watchHosPatientId !== editingPatient?.hos_patient_id
+
+    if ((!edit && isDuplicate) || (edit && hasChanged && isDuplicate)) {
       setIsDuplicateId(true)
       form.setError('hos_patient_id', {
         type: 'manual',
@@ -169,7 +181,7 @@ export default function PatientForm({
       setIsDuplicateId(false)
       form.clearErrors('hos_patient_id')
     }
-  }, [watchHosPatientId, hosPatientIds, form])
+  }, [watchHosPatientId, hosPatientIds, form, edit, editingPatient])
 
   const handleSpeciesChange = (selected: string) => {
     form.setValue('species', selected)
