@@ -11,6 +11,7 @@ type TxTableCellOrder = Pick<
   | 'icu_chart_order_time'
   | 'icu_chart_order_name'
   | 'icu_chart_order_comment'
+  | 'icu_chart_order_type'
 > & {
   treatments: Pick<IcuTxs, 'time'>[]
 }
@@ -48,7 +49,8 @@ export default function TxTableCell({
             {order.icu_chart_order_name.split('#')[0]}
           </span>
           <span className="text-xs text-muted-foreground">
-            {order.icu_chart_order_comment}
+            {order.icu_chart_order_comment}{' '}
+            {order.icu_chart_order_type === 'fluid' && 'ml/hr'}
           </span>
         </div>
       )
