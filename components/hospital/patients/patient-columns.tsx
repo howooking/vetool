@@ -189,12 +189,15 @@ export const patientsColumns: ColumnDef<PatientDataTable>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const patient = row.original
       const isIcu = row.original.isIcu
+      const hosPatientIds = table.options.data.map(
+        (patient) => patient.hos_patient_id,
+      )
       return (
         <div className={cn('flex justify-center', isIcu && 'hidden')}>
-          <PatientActions patient={patient} />
+          <PatientActions patient={patient} hosPatientIds={hosPatientIds} />
         </div>
       )
     },

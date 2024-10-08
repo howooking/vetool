@@ -13,6 +13,8 @@ type BasicHosData = {
   groupListData: string[]
   orderColorsData: IcuOrderColors
   memoNameListData: string[]
+  showOrderer: boolean
+  maintenanceRateCalcMethod: string
   sidebarData: IcuSidebarIoData[]
 }
 

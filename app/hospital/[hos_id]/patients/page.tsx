@@ -12,7 +12,10 @@ export default async function HospitalPatientsPage({
 
   return (
     <div className="p-2">
-      <PatientRegisterDialog hosId={params.hos_id} />
+      <PatientRegisterDialog
+        hosId={params.hos_id}
+        hosPatientIds={patientsData.map((patient) => patient.hos_patient_id)}
+      />
 
       <DataTable
         columns={patientsColumns}

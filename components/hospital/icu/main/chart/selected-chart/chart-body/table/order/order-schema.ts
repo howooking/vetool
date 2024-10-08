@@ -8,7 +8,7 @@ export const orderSchema = z.object({
     .string({
       required_error: '오더명을 입력해주세요',
     })
-    .trim()
-    .min(1, { message: '오더명을 입력해주세요' }),
+    .transform((val) => val.split('#')[0])
+    .pipe(z.string().trim().min(1, { message: '오더명을 입력해주세요' })),
   icu_chart_order_comment: z.string().optional(),
 })

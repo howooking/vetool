@@ -18,6 +18,7 @@ type ChartTableCellProps = {
   preview?: boolean
   orderer: string
   toggleOrderTime: (orderId: string, time: number) => void
+  showOrderer: boolean
 }
 
 const Cell: React.FC<ChartTableCellProps> = React.memo(
@@ -31,6 +32,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     preview,
     orderer,
     toggleOrderTime,
+    showOrderer,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
@@ -174,7 +176,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
             {treatment?.tx_result ?? ''}
           </div>
 
-          {hasOrder && (
+          {hasOrder && showOrderer && (
             <div
               className={cn(
                 'absolute bottom-0.5 right-0.5 -z-10 text-[10px] leading-none text-muted-foreground',
