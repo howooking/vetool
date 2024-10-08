@@ -4,6 +4,7 @@ import CustomTooltip from '@/components/ui/custom-tooltip'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { updatePatientMovement } from '@/lib/services/icu/movement/update-patient-movement'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function MovementChecklistInput({
@@ -20,6 +21,7 @@ export default function MovementChecklistInput({
   visitId?: string
 }) {
   const [inputValue, setInputValue] = useState(value)
+  const { refresh } = useRouter()
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const trimmedValue = e.target.value.trim()
@@ -35,6 +37,7 @@ export default function MovementChecklistInput({
     toast({
       title: `관리 사항이 변경되었습니다`,
     })
+    refresh()
   }
 
   useEffect(() => {

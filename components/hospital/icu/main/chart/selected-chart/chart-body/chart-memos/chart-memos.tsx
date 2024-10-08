@@ -6,7 +6,6 @@ import { Separator } from '@/components/ui/separator'
 import { Json } from '@/lib/supabase/database.types'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { useState } from 'react'
-import HideAndShowButton from './hide-and-show-button'
 
 export default function ChartMemos({
   memoA,
