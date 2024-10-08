@@ -25,6 +25,7 @@ export default function PatientUpdateDialog({
 }) {
   const [isPatientUpdateDialogOpen, setIsPatientUpdateDialogOpen] =
     useState(false)
+
   return (
     <Dialog
       open={isPatientUpdateDialogOpen}

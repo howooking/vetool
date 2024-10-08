@@ -38,7 +38,6 @@ export default function ChartTable({
     weight,
     icu_io: { age_in_days },
   } = chartData
-  const { hos_id } = useParams()
   const { setStep, reset, orderTimePendingQueue } = useIcuOrderStore()
   const [isSorting, setIsSorting] = useState(true)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
@@ -77,7 +76,7 @@ export default function ChartTable({
       }
 
       await upsertOrder(
-        hos_id as string,
+        chartData.patient.hos_id,
         icu_chart_id,
         order.orderId,
         updatedOrderTimes,
@@ -94,7 +93,7 @@ export default function ChartTable({
     })
 
     reset()
-  }, [hos_id, icu_chart_id, orderTimePendingQueue, orders, reset, vetsListData])
+  }, [icu_chart_id, orderTimePendingQueue, orders, reset, vetsListData])
 
   const debouncedUpsertingOrderTimes = useDebouncedCallback(
     showOrderer

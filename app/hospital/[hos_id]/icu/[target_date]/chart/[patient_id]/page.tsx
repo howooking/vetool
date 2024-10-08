@@ -3,6 +3,7 @@ import Chart from '@/components/hospital/icu/main/chart/chart'
 import CheckBeforeIndate from '@/components/hospital/icu/main/chart/check-before-in-date'
 import { getIcuChart } from '@/lib/services/icu/chart/get-icu-chart'
 import type { SelectedChart } from '@/types/icu/chart'
+import type { PatientData } from '@/types/patients'
 
 export default async function PatientChartPage({
   params,
@@ -13,20 +14,29 @@ export default async function PatientChartPage({
     patient_id: string
   }
 }) {
-  const chartData = await getIcuChart(
+  const { selectedChartData, patientsData } = await getIcuChart(
     params.hos_id,
     params.target_date,
     params.patient_id,
   )
 
   return (
-    <CheckBeforeIndate chartData={chartData} patientId={params.patient_id}>
-      <ChartEntry chartData={chartData} />
+    <CheckBeforeIndate
+      chartData={selectedChartData}
+      patientId={params.patient_id}
+    >
+      <ChartEntry chartData={selectedChartData} patientsData={patientsData} />
     </CheckBeforeIndate>
   )
 }
 
-const ChartEntry = ({ chartData }: { chartData: SelectedChart }) => {
+const ChartEntry = ({
+  chartData,
+  patientsData,
+}: {
+  chartData: SelectedChart
+  patientsData: PatientData[]
+}) => {
   // chart가 없는 경우 => 첫날 차트가 아님
   if (!chartData) {
     return <AddChartDialogs chartData={chartData} isFirstChart={false} />
@@ -37,5 +47,5 @@ const ChartEntry = ({ chartData }: { chartData: SelectedChart }) => {
     return <AddChartDialogs isFirstChart={true} chartData={chartData} />
   }
 
-  return <Chart chartData={chartData} />
+  return <Chart chartData={chartData} patientsData={patientsData} />
 }
