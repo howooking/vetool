@@ -9,24 +9,31 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { getAgeFromAgeInDays } from '@/lib/utils'
-import type { PatientDataTable } from '@/types/patients'
+import type { PatientData, PatientDataTable } from '@/types/patients'
 import { Cat, Dog, Edit } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 export default function UpdatePatientDialog({
   hosId,
   patientData,
+  patientsData,
   ageInDays,
   isPatientOut,
 }: {
   hosId: string
   patientData: PatientDataTable
+  patientsData: PatientData[]
   ageInDays: number
   isPatientOut: boolean
 }) {
   const { name, breed, gender, species } = patientData
   const [isPatientUpdateDialogOpen, setIsPatientUpdateDialogOpen] =
     useState(false)
+
+  const hosPatientIds = useMemo(
+    () => patientsData.map((patient) => patient.hos_patient_id),
+    [patientsData],
+  )
 
   return (
     <Dialog
@@ -56,6 +63,7 @@ export default function UpdatePatientDialog({
           edit
           editingPatient={patientData}
           setIsPatientUpdateDialogOpen={setIsPatientUpdateDialogOpen}
+          hosPatientIds={hosPatientIds}
         />
       </DialogContent>
     </Dialog>

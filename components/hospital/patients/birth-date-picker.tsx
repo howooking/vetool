@@ -35,6 +35,7 @@ export default function BirthDatePicker({
 }) {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [yearInput, setYearInput] = useState('')
+  const [isInputDisabled, setIsInputDisabled] = useState(false)
   const [monthInput, setMonthInput] = useState('')
   const [dateInput, setDateInput] = useState('')
   const [isManualInput, setIsManualInput] = useState(false)
