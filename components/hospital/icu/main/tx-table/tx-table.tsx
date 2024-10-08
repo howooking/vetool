@@ -65,8 +65,6 @@ export default function TxTable({
     [txTableData],
   )
 
-  console.log(filteredTxData)
-
   const chartBackgroundMap = useMemo(
     () =>
       txTableData.reduce<{ [key: string]: string }>((acc, item, index) => {
