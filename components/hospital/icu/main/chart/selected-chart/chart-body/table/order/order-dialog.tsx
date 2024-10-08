@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useCallback } from 'react'
 import OrderForm from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-form'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,8 +14,6 @@ import {
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import type { Patient, SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
 import OrdererSelectStep from './orderer/orderer-select-step'
 
 export default function OrderDialog({
@@ -33,17 +32,15 @@ export default function OrderDialog({
   ageInDays: number
 }) {
   const { step, isEditMode, setStep, reset } = useIcuOrderStore()
-  const { refresh } = useRouter()
 
   const handleOpenChange = useCallback(() => {
     if (step === 'closed') {
       setStep('upsert')
     } else {
       setStep('closed')
-      refresh()
     }
     reset()
-  }, [step, setStep, reset, refresh])
+  }, [step, setStep, reset])
 
   return (
     <Dialog open={step !== 'closed'} onOpenChange={handleOpenChange}>
