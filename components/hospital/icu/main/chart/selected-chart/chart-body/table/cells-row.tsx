@@ -19,14 +19,12 @@ export default function CellsRow({
   showOrderer: boolean
 }) {
   const { order_times, order_id, treatments, order_name } = order
-
+  const { setOrderTimePendingQueue, step } = useIcuOrderStore()
   const [orderTimeState, setOrderTimeState] = useState(order_times)
 
   useEffect(() => {
     setOrderTimeState(order_times)
-  }, [order_times])
-
-  const { setOrderTimePendingQueue } = useIcuOrderStore()
+  }, [order_times, step])
 
   const toggleOrderTime = useCallback(
     (orderId: string, time: number) => {

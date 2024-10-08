@@ -9,7 +9,7 @@ import { IcuOrderColors } from '@/types/adimin'
 import type { IcuSidebarIoData, SelectedChart, Vet } from '@/types/icu/chart'
 import { PatientData } from '@/types/patients'
 import html2canvas from 'html2canvas'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
 // 현재 화면 기준 ScrollWidth & ScrollHeight를 가진 HTMLCanvasElement를 생성
@@ -18,6 +18,9 @@ export const captureContent = async (element: HTMLElement) => {
     width: element.scrollWidth,
     height: element.scrollHeight,
     scale: 1.2,
+    useCORS: true,
+    allowTaint: true,
+    logging: false,
   })
 }
 
@@ -77,6 +80,7 @@ export const renderAndCaptureExportChartBody = (
     }
 
     const root = createRoot(container)
+
     root.render(
       <BasicHosDataProvider
         basicHosData={{

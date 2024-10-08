@@ -21,13 +21,13 @@ export default function PreviewButton({
   const handleOpenPreviewDialog = async () => {
     setIsPreviewing(true)
 
-    const previewChart = await getIcuChart(
+    const { selectedChartData } = await getIcuChart(
       hos_id as string,
       targetDate,
       patientId,
     )
 
-    setCopiedChart(previewChart)
+    setCopiedChart(selectedChartData)
 
     setPreviewDialogOpen(true)
     setIsPreviewing(false)
