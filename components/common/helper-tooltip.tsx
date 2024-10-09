@@ -20,7 +20,7 @@ export default function HelperTooltip({
           <CircleHelp className="cursor-pointer text-primary" size={18} />
         </TooltipTrigger>
         <TooltipContent>
-          <p>{children}</p>
+          <div>{children}</div>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
