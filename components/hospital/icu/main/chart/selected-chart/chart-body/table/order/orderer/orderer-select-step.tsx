@@ -162,7 +162,7 @@ export default function OrdererSelectStep({
               <FormLabel>오더결정 수의사</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                defaultValue={field.value ?? undefined}
+                defaultValue={field.value ?? vetsListData[0].name}
               >
                 <FormControl>
                   <SelectTrigger
@@ -212,6 +212,7 @@ export default function OrdererSelectStep({
             variant="outline"
             type="button"
             className={isSingleOrder ? '' : 'hidden'}
+            tabIndex={-1}
           >
             뒤로
           </Button>
