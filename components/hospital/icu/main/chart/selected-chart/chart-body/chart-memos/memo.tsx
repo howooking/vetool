@@ -29,12 +29,14 @@ export default function Memo({
   const [memoEntries, setMemoEntries] = useState<MemoEntry[]>([])
   const [isUpdating, setIsUpdating] = useState(false)
   const lastMemoRef = useRef<HTMLLIElement>(null)
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
 
   useEffect(() => {
-    if (lastMemoRef.current) {
+    if (shouldScrollToBottom && lastMemoRef.current) {
       lastMemoRef.current.scrollIntoView({ behavior: 'smooth' })
+      setShouldScrollToBottom(false)
     }
-  }, [memoEntries])
+  }, [memoEntries, shouldScrollToBottom])
 
   useEffect(() => {
     if (Array.isArray(memo)) setMemoEntries(memo as MemoEntry[])
@@ -71,6 +73,8 @@ export default function Memo({
     setMemoInput('')
 
     await updateMemoEntry(updatedEntries)
+
+    setShouldScrollToBottom(true)
 
     toast({
       title: `${memoNameListData[memoIndex]}에 새 메모를 추가했습니다`,
