@@ -284,10 +284,12 @@ export type Database = {
           hos_id: string
           icu_memo_names: string[]
           is_personal: boolean
+          maintenance_rate_calc_method: string
           master_user_id: string
           name: string
           order_color: Json | null
           plan: string
+          show_orderer: boolean
         }
         Insert: {
           business_number?: string
@@ -298,10 +300,12 @@ export type Database = {
           hos_id?: string
           icu_memo_names?: string[]
           is_personal?: boolean
+          maintenance_rate_calc_method?: string
           master_user_id: string
           name: string
           order_color?: Json | null
           plan?: string
+          show_orderer?: boolean
         }
         Update: {
           business_number?: string
@@ -312,10 +316,12 @@ export type Database = {
           hos_id?: string
           icu_memo_names?: string[]
           is_personal?: boolean
+          maintenance_rate_calc_method?: string
           master_user_id?: string
           name?: string
           order_color?: Json | null
           plan?: string
+          show_orderer?: boolean
         }
         Relationships: [
           {
@@ -377,9 +383,9 @@ export type Database = {
           icu_io_id: string
           in_charge: Json | null
           main_vet: string
-          memo_a: string
-          memo_b: string
-          memo_c: string
+          memo_a: Json | null
+          memo_b: Json | null
+          memo_c: Json | null
           patient_id: string
           sub_vet: string | null
           target_date: string
@@ -393,9 +399,9 @@ export type Database = {
           icu_io_id: string
           in_charge?: Json | null
           main_vet: string
-          memo_a?: string
-          memo_b?: string
-          memo_c?: string
+          memo_a?: Json | null
+          memo_b?: Json | null
+          memo_c?: Json | null
           patient_id: string
           sub_vet?: string | null
           target_date: string
@@ -409,9 +415,9 @@ export type Database = {
           icu_io_id?: string
           in_charge?: Json | null
           main_vet?: string
-          memo_a?: string
-          memo_b?: string
-          memo_c?: string
+          memo_a?: Json | null
+          memo_b?: Json | null
+          memo_c?: Json | null
           patient_id?: string
           sub_vet?: string | null
           target_date?: string
@@ -656,6 +662,60 @@ export type Database = {
           },
         ]
       }
+      icu_out: {
+        Row: {
+          basic_care: string
+          belongings: string
+          created_at: string
+          etc: string
+          icu_io_id: string | null
+          icu_out_id: string
+          medication: string
+          out_time: string
+          patient_id: string | null
+          prescription: string
+        }
+        Insert: {
+          basic_care?: string
+          belongings?: string
+          created_at?: string
+          etc?: string
+          icu_io_id?: string | null
+          icu_out_id?: string
+          medication?: string
+          out_time?: string
+          patient_id?: string | null
+          prescription?: string
+        }
+        Update: {
+          basic_care?: string
+          belongings?: string
+          created_at?: string
+          etc?: string
+          icu_io_id?: string | null
+          icu_out_id?: string
+          medication?: string
+          out_time?: string
+          patient_id?: string | null
+          prescription?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_out_icu_io_id_fkey"
+            columns: ["icu_io_id"]
+            isOneToOne: false
+            referencedRelation: "icu_io"
+            referencedColumns: ["icu_io_id"]
+          },
+          {
+            foreignKeyName: "icu_out_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
+          },
+        ]
+      }
       icu_txs: {
         Row: {
           created_at: string
@@ -707,6 +767,76 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "icu_orders"
             referencedColumns: ["icu_chart_order_id"]
+          },
+        ]
+      }
+      icu_visit: {
+        Row: {
+          consultation_status: string
+          created_at: string
+          hos_id: string | null
+          icu_io_id: string | null
+          icu_visit_id: string
+          is_done: boolean
+          main_vet: string
+          patient_id: string | null
+          place: string
+          preparation: string
+          target_date: string
+          time: string
+          visit_etc: string
+        }
+        Insert: {
+          consultation_status?: string
+          created_at?: string
+          hos_id?: string | null
+          icu_io_id?: string | null
+          icu_visit_id?: string
+          is_done?: boolean
+          main_vet: string
+          patient_id?: string | null
+          place?: string
+          preparation?: string
+          target_date: string
+          time?: string
+          visit_etc?: string
+        }
+        Update: {
+          consultation_status?: string
+          created_at?: string
+          hos_id?: string | null
+          icu_io_id?: string | null
+          icu_visit_id?: string
+          is_done?: boolean
+          main_vet?: string
+          patient_id?: string | null
+          place?: string
+          preparation?: string
+          target_date?: string
+          time?: string
+          visit_etc?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_visit_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "icu_visit_icu_io_id_fkey"
+            columns: ["icu_io_id"]
+            isOneToOne: false
+            referencedRelation: "icu_io"
+            referencedColumns: ["icu_io_id"]
+          },
+          {
+            foreignKeyName: "icu_visit_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
           },
         ]
       }
@@ -1081,21 +1211,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      copy_prev_chart: {
-        Args: {
-          target_date_input: string
-          patient_id_input: string
-        }
-        Returns: Json
-      }
-      copy_prev_chart_orders: {
-        Args: {
-          prev_chart_id_input: string
-          new_chart_id_input: string
-          selected_io_id_input: string
-        }
-        Returns: undefined
-      }
       copy_prev_orders: {
         Args: {
           prev_chart_id_input: string
@@ -1130,6 +1245,13 @@ export type Database = {
         }
         Returns: Json
       }
+      get_icu_out_due_patients: {
+        Args: {
+          hos_id_input: string
+          target_date_input: string
+        }
+        Returns: Json
+      }
       get_icu_sidebar_data: {
         Args: {
           hos_id_input: string
@@ -1145,6 +1267,27 @@ export type Database = {
         Returns: Json
       }
       get_icu_tx_table_data: {
+        Args: {
+          hos_id_input: string
+          target_date_input: string
+        }
+        Returns: Json
+      }
+      get_icu_visit_patients: {
+        Args: {
+          hos_id_input: string
+          target_date_input: string
+        }
+        Returns: Json
+      }
+      get_icu_visitable_patients: {
+        Args: {
+          hos_id_input: string
+          target_date_input: string
+        }
+        Returns: Json
+      }
+      get_not_out_due_patients: {
         Args: {
           hos_id_input: string
           target_date_input: string
@@ -1210,16 +1353,6 @@ export type Database = {
           sub_vet_input: string
           group_list_input: Json
           age_in_days_input: number
-        }
-        Returns: undefined
-      }
-      toggle_out_patient: {
-        Args: {
-          icu_io_id_input: string
-          patient_id_input: string
-          is_patient_out_input: boolean
-          chart_orders_input: string
-          keywords_input: string
         }
         Returns: undefined
       }

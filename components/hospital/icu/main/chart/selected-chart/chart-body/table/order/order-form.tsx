@@ -13,19 +13,47 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { toast } from '@/components/ui/use-toast'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
+import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { LoaderCircle } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import FluidOrderFiled from './fluid-order/fluid-order-filed'
+import OrderFormField from './order-form-field'
 
-export default function OrderForm() {
-  const { setStep, selectedChartOrder, isEditMode, setSelectedChartOrder } =
-    useIcuOrderStore()
+export default function OrderForm({
+  showOrderer,
+  icuChartId,
+  weight,
+  species,
+  ageInDays,
+}: {
+  showOrderer: boolean
+  icuChartId: string
+  weight: string
+  species: string
+  ageInDays: number
+}) {
+  const {
+    setStep,
+    selectedChartOrder,
+    isEditMode,
+    setSelectedChartOrder,
+    reset,
+  } = useIcuOrderStore()
 
+  const { hos_id } = useParams()
+  const {
+    basicHosData: { vetsListData },
+  } = useBasicHosDataContext()
+  const [isUpdating, setIsUpdating] = useState(false)
   const [startTime, setStartTime] = useState<string>('undefined')
   const [timeTerm, setTimeTerm] = useState<string>('undefined')
   const [orderTime, setOrderTime] = useState<string[]>(
@@ -41,6 +69,8 @@ export default function OrderForm() {
     },
   })
 
+  const orderType = form.watch('icu_chart_order_type')
+
   const handleNextStep = async (values: z.infer<typeof orderSchema>) => {
     setSelectedChartOrder({
       order_name: values.icu_chart_order_name,
@@ -49,9 +79,35 @@ export default function OrderForm() {
       order_times: orderTime,
       order_id: selectedChartOrder.order_id,
     })
-
     setStep('selectOrderer')
   }
+  const handleSubmitWithoutOrderer = async (
+    values: z.infer<typeof orderSchema>,
+  ) => {
+    setIsUpdating(true)
+
+    await upsertOrder(
+      hos_id as string,
+      icuChartId,
+      selectedChartOrder.order_id!,
+      orderTime.map((time) => (time === '1' ? vetsListData[0].name : '0')),
+      {
+        icu_chart_order_name: values.icu_chart_order_name,
+        icu_chart_order_comment: values.icu_chart_order_comment!,
+        icu_chart_order_type: values.icu_chart_order_type!,
+      },
+    )
+
+    toast({
+      title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+    })
+
+    reset()
+    setStep('closed')
+    setIsUpdating(false)
+  }
+
+  const handleSubmit = showOrderer ? handleNextStep : handleSubmitWithoutOrderer
 
   useEffect(() => {
     if (startTime !== 'undefined' && timeTerm !== 'undefined') {
@@ -70,7 +126,7 @@ export default function OrderForm() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleNextStep)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col space-y-4"
       >
         <FormField
@@ -84,6 +140,7 @@ export default function OrderForm() {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   className="flex flex-wrap gap-4"
+                  disabled={isEditMode}
                 >
                   {DEFAULT_ICU_ORDER_TYPE.map((item) => (
                     <FormItem
@@ -105,36 +162,15 @@ export default function OrderForm() {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="icu_chart_order_name"
-          render={({ field }) => (
-            <FormItem className="w-full space-y-2">
-              <FormLabel className="font-semibold">오더명*</FormLabel>
-              <FormControl>
-                <Input placeholder="오더명을 입력해주세요" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="icu_chart_order_comment"
-          render={({ field }) => (
-            <FormItem className="w-full space-y-2">
-              <FormLabel className="font-semibold">오더 설명</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="오더에 대한 설명을 입력해주세요"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {orderType === 'fluid' && (
+          <FluidOrderFiled
+            form={form}
+            species={species}
+            ageInDays={ageInDays}
+            weight={weight}
+          />
+        )}
+        {orderType !== 'fluid' && <OrderFormField form={form} />}
 
         <OrderTimeSettings
           startTime={startTime}
@@ -159,7 +195,13 @@ export default function OrderForm() {
             </Button>
           </DialogClose>
 
-          <Button type="submit">{isEditMode ? '변경' : '추가'}</Button>
+          <Button type="submit" disabled={isUpdating}>
+            {isUpdating ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              <>{isEditMode ? '변경' : '추가'}</>
+            )}
+          </Button>
         </DialogFooter>
       </form>
     </Form>

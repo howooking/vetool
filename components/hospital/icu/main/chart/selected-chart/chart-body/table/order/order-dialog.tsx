@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useCallback } from 'react'
 import OrderForm from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-form'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,31 +12,35 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
-import type { SelectedIcuOrder } from '@/types/icu/chart'
+import type { Patient, SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
 import OrdererSelectStep from './orderer/orderer-select-step'
 
 export default function OrderDialog({
   icuChartId,
   orders,
+  showOrderer,
+  patient,
+  weight,
+  ageInDays,
 }: {
   icuChartId: string
   orders: SelectedIcuOrder[]
+  showOrderer: boolean
+  patient: Patient
+  weight: string
+  ageInDays: number
 }) {
   const { step, isEditMode, setStep, reset } = useIcuOrderStore()
-  const { refresh } = useRouter()
 
   const handleOpenChange = useCallback(() => {
     if (step === 'closed') {
       setStep('upsert')
     } else {
       setStep('closed')
-      refresh()
     }
     reset()
-  }, [step, setStep, reset, refresh])
+  }, [step, setStep, reset])
 
   return (
     <Dialog open={step !== 'closed'} onOpenChange={handleOpenChange}>
@@ -57,7 +62,15 @@ export default function OrderDialog({
           {step === 'selectOrderer' && <DialogTitle>수의사 선택</DialogTitle>}
           <DialogDescription />
         </DialogHeader>
-        {step === 'upsert' && <OrderForm />}
+        {step === 'upsert' && (
+          <OrderForm
+            showOrderer={showOrderer}
+            icuChartId={icuChartId}
+            species={patient.species}
+            weight={weight}
+            ageInDays={ageInDays}
+          />
+        )}
         {step === 'selectOrderer' && (
           <OrdererSelectStep icuChartId={icuChartId} orders={orders} />
         )}

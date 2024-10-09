@@ -10,21 +10,21 @@ import Cell from './cell'
 export default function CellsRow({
   preview,
   order,
-  debouncedSetOrdererSelectStep,
+  debouncedUpsertingOrderTimes,
+  showOrderer,
 }: {
   preview?: boolean
   order: SelectedIcuOrder
-  debouncedSetOrdererSelectStep: DebouncedState<() => void>
+  debouncedUpsertingOrderTimes: DebouncedState<() => void>
+  showOrderer: boolean
 }) {
   const { order_times, order_id, treatments, order_name } = order
-
+  const { setOrderTimePendingQueue, step } = useIcuOrderStore()
   const [orderTimeState, setOrderTimeState] = useState(order_times)
 
   useEffect(() => {
     setOrderTimeState(order_times)
-  }, [order_times])
-
-  const { setOrderTimePendingQueue } = useIcuOrderStore()
+  }, [order_times, step])
 
   const toggleOrderTime = useCallback(
     (orderId: string, time: number) => {
@@ -42,9 +42,9 @@ export default function CellsRow({
         },
       ])
 
-      debouncedSetOrdererSelectStep()
+      debouncedUpsertingOrderTimes()
     },
-    [debouncedSetOrdererSelectStep, setOrderTimePendingQueue],
+    [debouncedUpsertingOrderTimes, setOrderTimePendingQueue],
   )
 
   return (
@@ -69,6 +69,7 @@ export default function CellsRow({
             icuChartOrderName={order_name}
             icuChartTxId={selectedTx?.tx_id}
             toggleOrderTime={toggleOrderTime}
+            showOrderer={showOrderer}
           />
         )
       })}

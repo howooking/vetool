@@ -44,7 +44,7 @@ import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarIcon, LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
-import { usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
@@ -65,9 +65,10 @@ export default function RegisterIcuForm({
 }) {
   const path = usePathname()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { target_date } = useParams()
   const [range, setRange] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: new Date(),
+    from: new Date(target_date as string),
+    to: new Date(target_date as string),
   })
 
   const { push } = useRouter()

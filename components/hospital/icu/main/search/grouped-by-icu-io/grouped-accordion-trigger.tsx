@@ -1,3 +1,4 @@
+import PatientInfo from '@/components/hospital/common/patient-info'
 import { AccordionTrigger } from '@/components/ui/accordion'
 import { getAgeFromAgeInDays } from '@/lib/utils'
 import { Cat, Dog } from 'lucide-react'
@@ -23,10 +24,13 @@ export default function GroupedAccordionTrigger({
 }) {
   return (
     <AccordionTrigger className="h-10 w-full hover:bg-muted/50 [&[data-state=open]]:bg-muted">
-      <div className="flex w-1/6 items-center justify-center gap-1">
-        {species === 'canine' ? <Dog /> : <Cat />}
-        {name}
-        <span className="text-xs text-muted-foreground">({breed})</span>
+      <div className="flex w-1/6 justify-center">
+        <PatientInfo
+          name={name}
+          species={species}
+          breed={breed}
+          className="justify-center"
+        />
       </div>
       <div className="w-1/6 text-center">{owner_name || '미등록'}</div>
       <div className="w-1/6 text-center">{inAndOutDate}</div>

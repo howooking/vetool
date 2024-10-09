@@ -12,7 +12,13 @@ import {
 } from '@/components/ui/dialog'
 import { useState } from 'react'
 
-export function PatientRegisterDialog({ hosId }: { hosId: string }) {
+export function PatientRegisterDialog({
+  hosId,
+  hosPatientIds,
+}: {
+  hosId: string
+  hosPatientIds: string[]
+}) {
   const [isPatientRegisterDialogOpen, setIsPatientRegisterDialogOpen] =
     useState(false)
 
@@ -37,6 +43,7 @@ export function PatientRegisterDialog({ hosId }: { hosId: string }) {
         </DialogHeader>
 
         <PatientForm
+          hosPatientIds={hosPatientIds}
           hosId={hosId}
           setIsPatientRegisterDialogOpen={setIsPatientRegisterDialogOpen}
         />

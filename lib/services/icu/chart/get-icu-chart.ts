@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import type { SelectedChart } from '@/types/icu/chart'
+import type { PatientData } from '@/types/patients'
 import { redirect } from 'next/navigation'
 
 export const getIcuChart = async (
@@ -11,17 +12,42 @@ export const getIcuChart = async (
 ) => {
   const supabase = createClient()
 
-  const { data, error } = await supabase
-    .rpc('get_icu_chart_data', {
-      hos_id_input: hosId,
-      target_date_input: targetDate,
-      patient_id_input: patient_id,
-    })
-    .returns<SelectedChart>()
+  const promiseArray = Promise.all([
+    supabase
+      .rpc('get_icu_chart_data', {
+        hos_id_input: hosId,
+        target_date_input: targetDate,
+        patient_id_input: patient_id,
+      })
+      .returns<SelectedChart>(),
 
-  if (error) {
-    console.error(error)
-    redirect(`/error?message=${error?.message}`)
+    supabase
+      .from('patients')
+      .select('*')
+      .match({ hos_id: hosId })
+      .match({ is_alive: true })
+      .order('created_at', { ascending: false })
+      .returns<PatientData[]>(),
+  ])
+
+  const [
+    { data: selectedChartData, error: selectedChartDataError },
+    { data: patientsData, error: patientsDataError },
+  ] = await promiseArray
+
+  if (selectedChartDataError || patientsDataError) {
+    console.error({
+      selectedChartDataError,
+      patientsDataError,
+    })
+    redirect(
+      `/error?message=${
+        selectedChartDataError?.message || patientsDataError?.message
+      }`,
+    )
   }
-  return data
+  return {
+    selectedChartData,
+    patientsData,
+  }
 }

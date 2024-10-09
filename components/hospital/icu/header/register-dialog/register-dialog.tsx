@@ -10,7 +10,7 @@ import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
 import { cn } from '@/lib/utils'
 import type { Vet } from '@/types/icu/chart'
 import type { PatientData } from '@/types/patients'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import PatientSearchTable from './patient-search/patient-search-table'
 
 export default function RegisterDialog({
@@ -51,6 +51,11 @@ export default function RegisterDialog({
     }
   }
 
+  const hosPatientIds = useMemo(
+    () => patientsData.map((patient) => patient.hos_patient_id),
+    [patientsData],
+  )
+
   return (
     <Dialog open={isRegisterDialogOpen} onOpenChange={setIsRegisterDialogOpen}>
       <DialogTrigger asChild className="hidden md:block">
@@ -81,7 +86,7 @@ export default function RegisterDialog({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="search" className="h-full">
+          <TabsContent value="search">
             {step === 'patientSearch' && (
               <PatientSearchTable patientData={patientsData} />
             )}
@@ -103,6 +108,7 @@ export default function RegisterDialog({
                 hosId={hosId}
                 icu
                 setIsIcuDialogOpen={setIsRegisterDialogOpen}
+                hosPatientIds={hosPatientIds}
               />
             )}
             {step === 'icuRegister' && (

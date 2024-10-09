@@ -17,12 +17,15 @@ import { useState } from 'react'
 export default function PatientUpdateDialog({
   hosId,
   editingPatient,
+  hosPatientIds,
 }: {
   hosId: string
   editingPatient: PatientDataTable
+  hosPatientIds: string[]
 }) {
   const [isPatientUpdateDialogOpen, setIsPatientUpdateDialogOpen] =
     useState(false)
+
   return (
     <Dialog
       open={isPatientUpdateDialogOpen}
@@ -41,6 +44,7 @@ export default function PatientUpdateDialog({
         </DialogHeader>
 
         <PatientForm
+          hosPatientIds={hosPatientIds}
           hosId={hosId}
           edit
           editingPatient={editingPatient}

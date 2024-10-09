@@ -45,9 +45,9 @@ export default function CellsRowTitle({
           preview ? 'cursor-not-allowed' : 'cursor-pointer',
         )}
       >
-        <span className="truncate">{order_name}</span>
+        <span className="truncate">{order.order_name.split('#')[0]}</span>
         <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
-          {order_comment}
+          {order_comment} {order_type === 'fluid' && 'ml/hr'}
         </span>
       </Button>
     </TableCell>

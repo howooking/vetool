@@ -28,7 +28,7 @@ export default function ChartInfos({
         />
       </div>
 
-      <div className="order-last col-span-2 md:order-none md:col-span-3">
+      <div className="order-last col-span-2 md:order-none">
         <Vets
           mainVet={main_vet}
           subVet={sub_vet}
@@ -37,7 +37,7 @@ export default function ChartInfos({
         />
       </div>
 
-      <div className="order-last col-span-2 md:order-none md:col-span-3">
+      <div className="order-last col-span-2 md:order-none md:col-span-4">
         <Diagnosis diagnosis={icu_io.icu_io_dx} icuIoId={icu_io.icu_io_id} />
       </div>
 
@@ -52,11 +52,11 @@ export default function ChartInfos({
         />
       </div>
 
-      <div className="order-last col-span-2 md:order-none md:col-span-3">
+      <div className="col-span-2 md:order-none">
         <Group currentGroups={icu_io.group_list} icuIoId={icu_io.icu_io_id} />
       </div>
 
-      <div className="order-last col-span-2 md:order-none md:col-span-3">
+      <div className="order-last col-span-2 md:order-none md:col-span-4">
         <ChiefComplaint
           chiefComplaint={icu_io.icu_io_cc}
           icuIoId={icu_io.icu_io_id}

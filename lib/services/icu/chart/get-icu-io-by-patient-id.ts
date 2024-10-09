@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-export const getIcuIoByPatientId = async (patientId: string) => {
+export const getLatestIoByPatientId = async (patientId: string) => {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('icu_io')

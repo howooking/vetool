@@ -1,5 +1,6 @@
 'use client'
 
+import HelperTooltip from '@/components/common/helper-tooltip'
 import BirthDatePicker from '@/components/hospital/patients/birth-date-picker'
 import { registerPatientFormSchema } from '@/components/hospital/patients/patient-schema'
 import { Button } from '@/components/ui/button'
@@ -49,7 +50,7 @@ import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -63,6 +64,7 @@ type PatientFormRegisterProps = {
   setIsPatientRegisterDialogOpen: Dispatch<SetStateAction<boolean>>
   setIsPatientUpdateDialogOpen?: null
   setIsIcuDialogOpen?: null
+  hosPatientIds: string[]
 }
 type PatientFormIcuRegisterProps = {
   hosId: string
@@ -74,6 +76,7 @@ type PatientFormIcuRegisterProps = {
   setIsPatientUpdateDialogOpen?: null
   setIsIcuDialogOpen: (isRegisterDialogOpen: boolean) => void
   isRegister?: null
+  hosPatientIds: string[]
 }
 type PatientFormEditProps = {
   hosId: string
@@ -85,6 +88,7 @@ type PatientFormEditProps = {
   setIsPatientUpdateDialogOpen: Dispatch<SetStateAction<boolean>>
   setIsIcuDialogOpen?: null
   isRegister?: null
+  hosPatientIds: string[]
 }
 
 type PatientFormProps =
@@ -101,6 +105,7 @@ export default function PatientForm({
   setIsPatientRegisterDialogOpen,
   setIsPatientUpdateDialogOpen,
   setIsIcuDialogOpen,
+  hosPatientIds,
 }: PatientFormProps) {
   const [breedOpen, setBreedOpen] = useState(false)
   const [selectedSpecies, setSelectedSpecies] = useState<string>(
@@ -108,12 +113,29 @@ export default function PatientForm({
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { setRegisteringPatient } = useIcuRegisterStore()
+  const [isDuplicateId, setIsDuplicateId] = useState(false)
   const { refresh } = useRouter()
 
   const BREEDS = selectedSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS
 
   const form = useForm<z.infer<typeof registerPatientFormSchema>>({
-    resolver: zodResolver(registerPatientFormSchema),
+    resolver: zodResolver(
+      registerPatientFormSchema.refine(
+        (data) => {
+          if (edit) {
+            return (
+              data.hos_patient_id === editingPatient?.hos_patient_id ||
+              !hosPatientIds.includes(data.hos_patient_id)
+            )
+          }
+          return !hosPatientIds.includes(data.hos_patient_id)
+        },
+        {
+          message: '이 환자번호는 이미 존재합니다',
+          path: ['hos_patient_id'],
+        },
+      ),
+    ),
     defaultValues: edit
       ? {
           name: editingPatient?.name,
@@ -143,6 +165,24 @@ export default function PatientForm({
         },
   })
 
+  const watchHosPatientId = form.watch('hos_patient_id')
+  useEffect(() => {
+    const isDuplicate = hosPatientIds.includes(watchHosPatientId)
+    const hasChanged =
+      edit && watchHosPatientId !== editingPatient?.hos_patient_id
+
+    if ((!edit && isDuplicate) || (edit && hasChanged && isDuplicate)) {
+      setIsDuplicateId(true)
+      form.setError('hos_patient_id', {
+        type: 'manual',
+        message: '이 환자 번호는 이미 존재합니다',
+      })
+    } else {
+      setIsDuplicateId(false)
+      form.clearErrors('hos_patient_id')
+    }
+  }, [watchHosPatientId, hosPatientIds, form, edit, editingPatient])
+
   const handleSpeciesChange = (selected: string) => {
     form.setValue('species', selected)
     setSelectedSpecies(selected)
@@ -151,6 +191,9 @@ export default function PatientForm({
   const handleRegister = async (
     values: z.infer<typeof registerPatientFormSchema>,
   ) => {
+    if (isDuplicateId) {
+      return
+    }
     setIsSubmitting(true)
 
     const patientId = await insertPatient(values, hosId)
@@ -179,6 +222,9 @@ export default function PatientForm({
   const handleUpdate = async (
     values: z.infer<typeof registerPatientFormSchema>,
   ) => {
+    if (isDuplicateId) {
+      return
+    }
     setIsSubmitting(true)
 
     await updatePatient(values, hosId, editingPatient?.patient_id!)
@@ -221,8 +267,11 @@ export default function PatientForm({
           control={form.control}
           name="hos_patient_id"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>환자 번호*</FormLabel>
+            <FormItem className="flex flex-col justify-end">
+              <div className="flex items-center gap-2">
+                <FormLabel>환자 번호*</FormLabel>
+                <HelperTooltip>메인차트에 등록되어있는 환자번호</HelperTooltip>
+              </div>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
               </FormControl>
@@ -380,7 +429,10 @@ export default function PatientForm({
           )}
         />
 
-        <BirthDatePicker form={form} />
+        <BirthDatePicker
+          form={form}
+          birth={edit ? new Date(editingPatient?.birth!) : undefined}
+        />
 
         <FormField
           control={form.control}

@@ -18,11 +18,8 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
-import {
-  OrderTimePendingQueue,
-  useIcuOrderStore,
-} from '@/lib/store/icu/icu-order'
-import { cn } from '@/lib/utils'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { cn, formatOrders } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -33,11 +30,6 @@ import { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { ordererSchema } from './orderer-schema'
-
-type FormattedOrder = {
-  orderId: string
-  orderTimes: number[]
-}
 
 export default function OrdererSelectStep({
   icuChartId,
@@ -65,24 +57,6 @@ export default function OrdererSelectStep({
     [orderTimePendingQueue],
   )
 
-  const formatOrders = useCallback(
-    (originalArray: OrderTimePendingQueue[]): FormattedOrder[] => {
-      const result: { [key: string]: FormattedOrder } = {}
-      for (const order of originalArray) {
-        if (result[order.orderId]) {
-          result[order.orderId].orderTimes.push(order.orderTime)
-        } else {
-          result[order.orderId] = {
-            orderId: order.orderId,
-            orderTimes: [order.orderTime],
-          }
-        }
-      }
-      return Object.values(result)
-    },
-    [],
-  )
-
   const handleUpsertSingleOrder = useCallback(
     async (values: z.infer<typeof ordererSchema>) => {
       setIsUpdating(true)
@@ -102,7 +76,7 @@ export default function OrdererSelectStep({
       )
 
       toast({
-        title: `${selectedChartOrder.order_name!} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+        title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
       })
 
       reset()
@@ -159,15 +133,7 @@ export default function OrdererSelectStep({
       setStep('closed')
       setIsUpdating(false)
     },
-    [
-      formatOrders,
-      hos_id,
-      icuChartId,
-      orderTimePendingQueue,
-      orders,
-      reset,
-      setStep,
-    ],
+    [hos_id, icuChartId, orderTimePendingQueue, orders, reset, setStep],
   )
 
   const handleSubmit = useCallback(
