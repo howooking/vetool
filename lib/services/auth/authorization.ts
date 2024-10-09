@@ -52,7 +52,7 @@ export const getUserData = async () => {
 
   const { data: userData, error: userDataError } = await supabase
     .from('users')
-    .select('email, name, avatar_url, position, is_admin, user_id')
+    .select('email, name, avatar_url, position, is_admin, user_id, hos_id')
     .match({ user_id: user?.id })
     .single()
 

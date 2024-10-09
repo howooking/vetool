@@ -18,14 +18,14 @@ export default function ChartMemos({
   memoC: Json
   icuChartId: string
 }) {
-  const [isShow, setIsShow] = useState(true)
+  const [showMemos, setShowMemos] = useState(true)
   const {
     basicHosData: { memoNameListData },
   } = useBasicHosDataContext()
 
   return (
     <div className="relative">
-      {isShow && (
+      {showMemos && (
         <div className="flex flex-col gap-2 md:flex-row">
           <Memo
             memo={memoA}
@@ -50,7 +50,7 @@ export default function ChartMemos({
         </div>
       )}
 
-      <HideAndShowButton setIsShow={setIsShow} isShow={isShow} />
+      <HideAndShowButton setShowMemos={setShowMemos} showMemos={showMemos} />
     </div>
   )
 }
