@@ -26,7 +26,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { ordererSchema } from './orderer-schema'
@@ -56,6 +56,14 @@ export default function OrdererSelectStep({
     () => orderTimePendingQueue.length === 0,
     [orderTimePendingQueue],
   )
+
+  const selectRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (selectRef.current) {
+      selectRef.current.focus()
+    }
+  }, [])
 
   const handleUpsertSingleOrder = useCallback(
     async (values: z.infer<typeof ordererSchema>) => {
@@ -149,6 +157,9 @@ export default function OrdererSelectStep({
 
   const form = useForm<z.infer<typeof ordererSchema>>({
     resolver: zodResolver(ordererSchema),
+    defaultValues: {
+      orderer: vetsListData[0].name,
+    },
   })
 
   return (
@@ -162,7 +173,7 @@ export default function OrdererSelectStep({
               <FormLabel>오더결정 수의사</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                defaultValue={field.value ?? vetsListData[0].name}
+                defaultValue={field.value ?? undefined}
               >
                 <FormControl>
                   <SelectTrigger
@@ -170,6 +181,7 @@ export default function OrdererSelectStep({
                       'h-8 text-sm',
                       !field.value && 'text-muted-foreground',
                     )}
+                    ref={selectRef}
                   >
                     <SelectValue placeholder="수의사를 선택해주세요" />
                   </SelectTrigger>
