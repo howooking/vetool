@@ -11,9 +11,10 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Textarea } from '@/components/ui/textarea'
-import { cn, getTimeSince } from '@/lib/utils'
-import { Check, Pencil, Trash2, X } from 'lucide-react'
-import { useState } from 'react'
+import { useOutsideClick } from '@/hooks/use-outside-click'
+import { getTimeSince } from '@/lib/utils'
+import { Pencil, Trash2 } from 'lucide-react'
+import React, { useRef, useState } from 'react'
 
 type MemoEntry = {
   memo: string
@@ -21,77 +22,62 @@ type MemoEntry = {
   edit_timestamp: string | null
 }
 
-export default function MemoItem({
-  entry,
-  memoIndex,
-  onEdit,
-  onDelete,
-}: {
+type MemoItemProps = {
   entry: MemoEntry
-  memoIndex: number
   onEdit: (updatedEntry: MemoEntry) => void
   onDelete: () => void
-}) {
-  const bgColor = cn({
-    'bg-green-50 border-green-100': memoIndex === 0,
-    'bg-yellow-100 border-yellow-200': memoIndex === 1,
-    'bg-sky-50': memoIndex === 2,
-  })
+}
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [editedMemo, setEditedMemo] = useState(entry.memo)
+const MemoItem = React.forwardRef<HTMLLIElement, MemoItemProps>(
+  ({ entry, onEdit, onDelete }, ref) => {
+    const [isEditing, setIsEditing] = useState(false)
+    const [editedMemo, setEditedMemo] = useState(entry.memo)
+    const editingTextAreaRef = useRef<HTMLTextAreaElement>(null)
+    useOutsideClick(editingTextAreaRef, () => setIsEditing(false))
 
-  const handleEditMemo = () => {
-    onEdit({ ...entry, memo: editedMemo })
-    setIsEditing(false)
-  }
+    const handleEditMemo = () => {
+      onEdit({ ...entry, memo: editedMemo })
+      setIsEditing(false)
+    }
 
-  return (
-    <li className={cn('mb-2 flex flex-col rounded-md border p-3', bgColor)}>
-      <div className="flex items-center justify-between pb-1">
-        <div className="flex gap-2">
-          <span className="text-[12px] text-gray-500">
-            {new Date(entry.create_timestamp)
-              .toLocaleString('ko-KR')
-              .slice(0, 20)}
-          </span>
-          {entry.edit_timestamp && (
-            <span className="text-[12px] text-gray-500">
-              ({getTimeSince(entry.edit_timestamp)} 수정됨)
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        const target = e.currentTarget
+        setTimeout(() => {
+          if (target) {
+            target.blur()
+          }
+        }, 0)
+      }
+    }
+
+    return (
+      <li
+        ref={ref}
+        className="group relative flex flex-col rounded-sm bg-yellow-200 p-2 pt-1"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex gap-1 text-[10px] text-muted-foreground">
+            <span>
+              {new Date(entry.create_timestamp)
+                .toLocaleString('ko-KR')
+                .slice(0, 20)}
             </span>
-          )}
-        </div>
+            {entry.edit_timestamp && (
+              <span>({getTimeSince(entry.edit_timestamp)} 수정됨)</span>
+            )}
+          </div>
 
-        <div>
-          {isEditing ? (
-            <div className="flex gap-3">
-              {/* 메모 수정 완료 */}
-              <Check
-                size={14}
-                onClick={handleEditMemo}
-                className="cursor-pointer"
-              />
-
-              {/* 메모 수정 취소 */}
-              <X
-                size={14}
-                onClick={() => setIsEditing(false)}
-                className="cursor-pointer"
-              />
-            </div>
-          ) : (
-            <div className="flex gap-3">
-              {/* 메모 수정 트리거 */}
+          {!isEditing && (
+            <div className="absolute right-1.5 top-1.5 flex cursor-pointer items-center gap-1.5 text-muted-foreground opacity-0 transition duration-300 group-hover:opacity-100 group-focus:opacity-100">
               <Pencil
                 size={12}
                 onClick={() => setIsEditing(true)}
-                className="cursor-pointer"
+                className="hover:opacity-70"
               />
-
-              {/* 메모 삭제 트리거 */}
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Trash2 size={12} className="cursor-pointer" />
+                  <Trash2 size={12} className="hover:opacity-70" />
                 </AlertDialogTrigger>
 
                 <AlertDialogContent>
@@ -118,16 +104,29 @@ export default function MemoItem({
             </div>
           )}
         </div>
-      </div>
-      {isEditing ? (
-        <Textarea
-          value={editedMemo}
-          onChange={(e) => setEditedMemo(e.target.value)}
-          className="mt-1"
-        />
-      ) : (
-        <span className="mt-1 whitespace-pre-wrap text-sm">{entry.memo}</span>
-      )}
-    </li>
-  )
-}
+
+        {isEditing ? (
+          <Textarea
+            value={editedMemo}
+            onChange={(e) => setEditedMemo(e.target.value)}
+            className="px-1 py-0.5 text-sm"
+            rows={2}
+            ref={editingTextAreaRef}
+            onBlur={handleEditMemo}
+            onKeyDown={handleKeyDown}
+          />
+        ) : (
+          <div className="flex items-end">
+            <span className="mr-2 whitespace-pre-wrap text-sm">
+              {entry.memo}
+            </span>
+          </div>
+        )}
+      </li>
+    )
+  },
+)
+
+MemoItem.displayName = 'MemoItem'
+
+export default MemoItem

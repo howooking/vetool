@@ -1,10 +1,12 @@
 import MemoItem from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/memo-item'
 import { Label } from '@/components/ui/label'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
 import { updateMemo } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { Json } from '@/lib/supabase/database.types'
-import { useEffect, useState } from 'react'
+import { Squirrel } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
 type MemoEntry = {
   memo: string
@@ -26,6 +28,13 @@ export default function Memo({
   const [memoInput, setMemoInput] = useState('')
   const [memoEntries, setMemoEntries] = useState<MemoEntry[]>([])
   const [isUpdating, setIsUpdating] = useState(false)
+  const lastMemoRef = useRef<HTMLLIElement>(null)
+
+  useEffect(() => {
+    if (lastMemoRef.current) {
+      lastMemoRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [memoEntries])
 
   useEffect(() => {
     if (Array.isArray(memo)) setMemoEntries(memo as MemoEntry[])
@@ -64,7 +73,7 @@ export default function Memo({
     await updateMemoEntry(updatedEntries)
 
     toast({
-      title: `${memoNameListData[memoIndex]}에 새 항목을 추가했습니다`,
+      title: `${memoNameListData[memoIndex]}에 새 메모를 추가했습니다`,
     })
   }
 
@@ -100,41 +109,56 @@ export default function Memo({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleInsertMemo()
+      const target = e.currentTarget
+      setTimeout(() => {
+        if (target) {
+          target.blur()
+        }
+      }, 0)
     }
   }
 
   return (
-    <div className="relative flex w-full flex-col">
+    <div className="relative flex w-full flex-col gap-2">
       <Label
-        className="my-2 ml-2 text-xs text-muted-foreground"
+        className="ml-2 text-xs text-muted-foreground"
         htmlFor={`memo-${memoIndex}`}
       >
-        {memoNameListData[memoIndex]}
+        {memoNameListData[memoIndex]} ({memoEntries.length})
       </Label>
 
-      <ul>
-        {memoEntries.map((entry, index) => (
-          <MemoItem
-            key={entry.create_timestamp}
-            entry={entry}
-            memoIndex={memoIndex}
-            onEdit={(updatedEntry) => handleEditMemo(updatedEntry, index)}
-            onDelete={() => handleDeleteMemo(index)}
-          />
-        ))}
-      </ul>
+      <ScrollArea className="h-60 rounded-md border p-2">
+        <ul className="space-y-2">
+          {memoEntries.length === 0 && (
+            <li className="group flex h-52 items-center justify-center gap-2 text-sm text-muted-foreground">
+              <Squirrel className="group-hover:scale-x-[-1]" />
+              <span>메모 없음</span>
+            </li>
+          )}
+
+          {memoEntries.map((entry, index) => (
+            <MemoItem
+              key={entry.create_timestamp}
+              entry={entry}
+              onEdit={(updatedEntry) => handleEditMemo(updatedEntry, index)}
+              onDelete={() => handleDeleteMemo(index)}
+              ref={index === memoEntries.length - 1 ? lastMemoRef : null}
+            />
+          ))}
+        </ul>
+        <ScrollBar orientation="vertical" />
+      </ScrollArea>
 
       <Textarea
         disabled={isUpdating}
-        placeholder={`Enter를 눌러 새 항목을 추가합니다.\nShift + Enter를 눌러 줄을 추가할 수 있습니다.`}
+        placeholder="Shift + Enter를 눌러 줄을 추가할 수 있습니다"
         id={`memo-${memoIndex}`}
         value={memoInput}
         onChange={(e) => setMemoInput(e.target.value)}
+        onBlur={() => handleInsertMemo()}
         onKeyDown={handleKeyDown}
-        className="mt-2 w-full resize-none"
-        rows={10}
+        className="w-full resize-none text-sm placeholder:text-xs"
+        rows={2}
       />
     </div>
   )
