@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { TableCell } from '@/components/ui/table'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { cn } from '@/lib/utils'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { IcuOrderColors } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 

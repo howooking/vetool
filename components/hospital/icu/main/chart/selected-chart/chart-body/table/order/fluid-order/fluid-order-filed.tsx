@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/select'
 import { calculatedMaintenaceRate } from '@/lib/calculators/maintenace-rate'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { Calculator } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'

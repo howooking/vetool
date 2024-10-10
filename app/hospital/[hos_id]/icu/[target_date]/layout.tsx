@@ -2,7 +2,7 @@ import IcuFooter from '@/components/hospital/icu/footer/icu-footer'
 import IcuHeader from '@/components/hospital/icu/header/icu-header'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
 import { getIcuData } from '@/lib/services/icu/get-icu-data'
-import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-privider'
+import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-provider'
 import type { IcuOrderColors } from '@/types/adimin'
 import React from 'react'
 
