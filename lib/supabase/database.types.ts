@@ -510,7 +510,7 @@ export type Database = {
           icu_io_tags: string | null
           in_date: string
           out_date: string | null
-          out_due_date: string
+          out_due_date: string | null
           patient_id: string
         }
         Insert: {
@@ -525,7 +525,7 @@ export type Database = {
           icu_io_tags?: string | null
           in_date: string
           out_date?: string | null
-          out_due_date: string
+          out_due_date?: string | null
           patient_id: string
         }
         Update: {
@@ -540,7 +540,7 @@ export type Database = {
           icu_io_tags?: string | null
           in_date?: string
           out_date?: string | null
-          out_due_date?: string
+          out_due_date?: string | null
           patient_id?: string
         }
         Relationships: [
