@@ -93,7 +93,14 @@ export default function ChartTable({
     })
 
     reset()
-  }, [icu_chart_id, orderTimePendingQueue, orders, reset, vetsListData])
+  }, [
+    chartData.patient.hos_id,
+    icu_chart_id,
+    orderTimePendingQueue,
+    orders,
+    reset,
+    vetsListData,
+  ])
 
   const debouncedUpsertingOrderTimes = useDebouncedCallback(
     showOrderer
@@ -108,7 +115,7 @@ export default function ChartTable({
 
   return (
     <Table className="border">
-      <TableHeader>
+      <TableHeader className="sticky top-0 z-10 bg-white shadow-sm">
         <TableRow>
           <TableHead className="relative flex w-[320px] items-center justify-center gap-2 text-center">
             <span>오더 목록</span>
