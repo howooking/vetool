@@ -1,4 +1,5 @@
-import ChartBody from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-body'
+import ChartInfos from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/chart-infos'
+import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/chart-table'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/components/ui/use-toast'
 import { getIoDateRange } from '@/lib/services/icu/chart/get-io-date-range'
@@ -9,7 +10,7 @@ import { IcuOrderColors } from '@/types/adimin'
 import type { IcuSidebarIoData, SelectedChart, Vet } from '@/types/icu/chart'
 import { PatientData } from '@/types/patients'
 import html2canvas from 'html2canvas'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { createRoot } from 'react-dom/client'
 
 // 현재 화면 기준 ScrollWidth & ScrollHeight를 가진 HTMLCanvasElement를 생성
@@ -39,7 +40,10 @@ export const ExportChartBody: React.FC<{
   return (
     <div ref={ref} className="p-4">
       <Badge className="mb-4">{chartData.target_date}</Badge>
-      <ChartBody chartData={chartData} />
+      <div className="flex flex-col gap-2">
+        <ChartInfos chartData={chartData} />
+        <ChartTable chartData={chartData} />
+      </div>
     </div>
   )
 }

@@ -68,7 +68,7 @@ export default function RegisterIcuForm({
   const { target_date } = useParams()
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(target_date as string),
-    to: new Date(target_date as string),
+    to: undefined,
   })
 
   const { push } = useRouter()
@@ -108,7 +108,7 @@ export default function RegisterIcuForm({
       dx,
       cc,
       format(in_date, 'yyyy-MM-dd'),
-      format(out_due_date, 'yyyy-MM-dd'),
+      out_due_date ? format(out_due_date, 'yyyy-MM-dd') : '',
       group_list,
       main_vet,
       sub_vet,
@@ -208,8 +208,8 @@ export default function RegisterIcuForm({
                         !field.value && 'text-muted-foreground',
                       )}
                     >
-                      {range && range.from && range.to ? (
-                        <>{`${format(range.from, 'yyyy-MM-dd')} ~ ${format(range.to, 'yyyy-MM-dd')}`}</>
+                      {range && range.from ? (
+                        <>{`${format(range.from, 'yyyy-MM-dd')} ~ ${range.to ? format(range.to, 'yyyy-MM-dd') : '미정'}`}</>
                       ) : (
                         <span className="overflow-hidden whitespace-nowrap">
                           입원일을 선택해주세요
