@@ -1,5 +1,3 @@
-'use client'
-
 import type { SelectedChart } from '@/types/icu/chart'
 import AddDefaultChartDialog from './add-default-chart-dialog'
 import AddBookmarkChartDialog from './bookmark/add-bookmark-chart-dialog'

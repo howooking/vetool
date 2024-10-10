@@ -1,3 +1,5 @@
+'use client'
+
 import { ConfirmCopyDialog } from '@/components/hospital/icu/common-dialogs/confirm-copy-dialog'
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
 import { bookmarkColumns } from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/bookmark-columns'
