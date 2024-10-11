@@ -1,5 +1,3 @@
-import { Label } from '@/components/ui/label'
-
 export default function VetName({
   label,
   name,
@@ -8,21 +6,11 @@ export default function VetName({
   name: string
 }) {
   return (
-    <div className="flex items-center gap-1">
-      <Label className="hidden text-[10px] leading-3 text-muted-foreground md:block">
+    <div className="flex gap-2">
+      <span className="hidden text-xs text-muted-foreground md:block">
         {label}
-      </Label>
-      <div className="flex items-center gap-1">
-        {/* <Image
-          unoptimized
-          src={avatarUrl ?? ''}
-          alt={name}
-          width={16}
-          height={16}
-          className="rounded-full"
-        /> */}
-        <span className="text-xs">{name}</span>
-      </div>
+      </span>
+      <span>{name}</span>
     </div>
   )
 }

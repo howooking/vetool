@@ -1,6 +1,5 @@
 import BookmarkDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/bookmark-dialog'
 import UpdatePatientDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/update-patient-dialog'
-import UpdateWeightDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/update-weight-dialog'
 import type { SelectedChart } from '@/types/icu/chart'
 import type { PatientData } from '@/types/patients'
 
@@ -11,8 +10,7 @@ export default function HeaderCenter({
   chartData: SelectedChart
   patientsData: PatientData[]
 }) {
-  const { patient, icu_io, weight, weight_measured_date, icu_chart_id } =
-    chartData
+  const { patient, icu_io } = chartData
   const isPatientOut = !!icu_io.out_date
 
   return (
@@ -22,17 +20,10 @@ export default function HeaderCenter({
         bookmarkData={chartData.bookmark}
       />
       <UpdatePatientDialog
-        hosId={patient.hos_id as string}
         patientData={{ ...patient, isIcu: true }}
         ageInDays={icu_io.age_in_days}
         isPatientOut={isPatientOut}
         patientsData={patientsData}
-      />
-      <UpdateWeightDialog
-        weightMesuredDate={weight_measured_date}
-        weight={weight}
-        patientId={patient.patient_id}
-        icuChartId={icu_chart_id}
       />
     </div>
   )

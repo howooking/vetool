@@ -2,7 +2,6 @@
 
 import VetsUpdateForm from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/vets/vets-update-form'
 import { Button } from '@/components/ui/button'
-import CustomTooltip from '@/components/ui/custom-tooltip'
 import {
   Dialog,
   DialogContent,
@@ -45,18 +44,7 @@ export default function Vets({
           variant="outline"
           className="flex w-full items-center justify-start gap-2 px-2"
         >
-          <CustomTooltip
-            contents={
-              <div className="flex items-center gap-2">
-                주치의 <Separator orientation="vertical" className="h-4" />{' '}
-                부주치의
-              </div>
-            }
-            side="left"
-            variant="secondary"
-          >
-            <Stethoscope size={16} className="text-muted-foreground" />
-          </CustomTooltip>
+          <Stethoscope size={16} className="text-muted-foreground" />
 
           <div className="flex items-center gap-2">
             <VetName label="주치의" name={mainVet.name} />
@@ -68,9 +56,11 @@ export default function Vets({
             <Separator orientation="vertical" className="h-4" />
 
             <VetName label="당일" name={today?.all ?? '미선택'} />
+
             <Separator orientation="vertical" className="h-4" />
 
             <VetName label="오전" name={today?.am ?? '미선택'} />
+
             <Separator orientation="vertical" className="h-4" />
 
             <VetName label="오후" name={today?.pm ?? '미선택'} />

@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import CustomTooltip from '@/components/ui/custom-tooltip'
 import {
   Dialog,
   DialogContent,
@@ -11,6 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
 import { Activity } from 'lucide-react'
 import { useState } from 'react'
 import CpcrEtTubeUpdateForm from './cpcr-et-tube-update-form'
@@ -32,26 +32,15 @@ export default function CpcrEtTube({
           variant="outline"
           className="flex w-full items-center justify-start gap-2 px-2"
         >
-          <CustomTooltip
-            contents={
-              <div className="flex items-center gap-2">
-                심폐소생 여부
-                <Separator orientation="vertical" className="h-4" />
-                ET Tube
-              </div>
-            }
-            side="left"
-            variant="secondary"
-          >
-            <Activity className="text-muted-foreground" size={16} />
-          </CustomTooltip>
+          <Activity className="text-muted-foreground" size={16} />
 
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              <span>{cpcr}</span>
-            </div>
+            <span>{cpcr}</span>
 
-            <Separator orientation="vertical" className="h-4" />
+            <Separator
+              orientation="vertical"
+              className={cn(cpcr !== 'CPCR' && 'hidden', 'h-4')}
+            />
 
             <span>{etTube ?? ''}</span>
           </div>

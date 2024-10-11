@@ -10,22 +10,22 @@ import {
 } from '@/components/ui/dialog'
 import { getAgeFromAgeInDays } from '@/lib/utils'
 import type { PatientData, PatientDataTable } from '@/types/patients'
-import { Cat, Dog, Edit } from 'lucide-react'
+import { Cat, Dog } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 
 export default function UpdatePatientDialog({
-  hosId,
   patientData,
   patientsData,
   ageInDays,
   isPatientOut,
 }: {
-  hosId: string
   patientData: PatientDataTable
   patientsData: PatientData[]
   ageInDays: number
   isPatientOut: boolean
 }) {
+  const { hos_id } = useParams()
   const { name, breed, gender, species } = patientData
   const [isPatientUpdateDialogOpen, setIsPatientUpdateDialogOpen] =
     useState(false)
@@ -41,14 +41,14 @@ export default function UpdatePatientDialog({
       onOpenChange={setIsPatientUpdateDialogOpen}
     >
       <DialogTrigger asChild>
-        <Button variant="ghost" className="flex gap-2 p-0">
+        <Button variant="ghost" className="flex gap-2">
           {species === 'canine' ? <Dog size={20} /> : <Cat size={20} />}
           <span>
             {name}
             {isPatientOut && '(퇴원)'}
           </span>{' '}
           ·<span>{breed}</span> ·<span className="uppercase">{gender}</span> ·
-          <span>{getAgeFromAgeInDays(ageInDays)} </span> ·
+          <span>{getAgeFromAgeInDays(ageInDays)} </span>
         </Button>
       </DialogTrigger>
 
@@ -59,7 +59,7 @@ export default function UpdatePatientDialog({
         </DialogHeader>
 
         <PatientForm
-          hosId={hosId}
+          hosId={hos_id as string}
           edit
           editingPatient={patientData}
           setIsPatientUpdateDialogOpen={setIsPatientUpdateDialogOpen}

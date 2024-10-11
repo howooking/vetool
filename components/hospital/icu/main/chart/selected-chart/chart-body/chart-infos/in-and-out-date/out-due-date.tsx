@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
-import CustomTooltip from '@/components/ui/custom-tooltip'
 import {
   Popover,
   PopoverContent,
@@ -67,20 +66,14 @@ export default function OutDueDate({
               !outDueDateInput && 'text-muted-foreground',
             )}
           >
-            <CustomTooltip
-              contents="퇴원예정일"
-              variant="secondary"
-              side="left"
-            >
-              <LogOut className="text-muted-foreground" size={16} />
-            </CustomTooltip>
+            <LogOut className="text-muted-foreground" size={16} />
 
             {outDueDateInput ? (
               <span className="text-sm font-normal">
                 {format(outDueDateInput, 'yyyy-MM-dd')}
               </span>
             ) : (
-              <span>퇴원 예정일 선택</span>
+              <span>퇴원 예정일</span>
             )}
           </Button>
         </PopoverTrigger>

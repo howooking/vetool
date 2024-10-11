@@ -17,27 +17,29 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import { toast } from '@/components/ui/use-toast'
 import { updateWeight } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { Edit2 } from 'lucide-react'
+import { Weight as WeightIcon } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { weightFormSchema } from './weght-bookmark-schema'
+import { weightFormSchema } from './weight-form-schema'
 
-export default function UpdateWeightDialog({
+export default function IconWeightIcon({
   weight,
-  patientId,
+  weightMeasuredDate,
   icuChartId,
-  weightMesuredDate,
 }: {
-  patientId: string
-  icuChartId: string
   weight: string
-  weightMesuredDate: string | null
+  weightMeasuredDate: string | null
+  icuChartId: string
 }) {
+  const { patientId } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -60,7 +62,7 @@ export default function UpdateWeightDialog({
     setIsSubmitting(true)
 
     await updateWeight(
-      patientId,
+      patientId as string,
       icuChartId,
       values.weight,
       format(new Date(), 'yyyy-MM-dd'),
@@ -79,14 +81,20 @@ export default function UpdateWeightDialog({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="flex h-6 items-center gap-2 px-2 py-1 text-xs md:text-sm"
+          className="flex w-full items-center justify-start gap-2 p-2"
         >
-          {weightMesuredDate ? (
-            <span>{`${weight}kg (${weightMesuredDate})`}</span>
+          <Label className="text-xs text-muted-foreground" htmlFor="ownerName">
+            <WeightIcon size={16} className="text-muted-foreground" />
+          </Label>
+          {weightMeasuredDate ? (
+            <div className="flex items-center gap-2">
+              <span>{weight}kg</span>
+              <Separator orientation="vertical" className="h-4" />
+              <span>{weightMeasuredDate}</span>
+            </div>
           ) : (
             <span>체중 미측정</span>
           )}
-          <Edit2 size={12} />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[320px]">

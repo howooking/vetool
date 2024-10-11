@@ -6,15 +6,14 @@ export default function InAndOutDate({
   icuIoId,
   inDate,
   outDueDate,
-  isPatientOut,
   outDate,
 }: {
   icuIoId: string
   inDate: string
   outDueDate: string | null
-  isPatientOut: boolean
   outDate: string | null
 }) {
+  const isPatientOut = outDate !== null
   return (
     <div className="flex w-full gap-2">
       <Indate inDate={inDate} />
