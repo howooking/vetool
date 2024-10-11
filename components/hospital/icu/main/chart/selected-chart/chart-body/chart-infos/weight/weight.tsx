@@ -39,7 +39,7 @@ export default function IconWeightIcon({
   weightMeasuredDate: string | null
   icuChartId: string
 }) {
-  const { patientId } = useParams()
+  const { patient_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -62,7 +62,7 @@ export default function IconWeightIcon({
     setIsSubmitting(true)
 
     await updateWeight(
-      patientId as string,
+      patient_id as string,
       icuChartId,
       values.weight,
       format(new Date(), 'yyyy-MM-dd'),
