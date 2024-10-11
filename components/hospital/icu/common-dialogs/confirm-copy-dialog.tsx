@@ -9,12 +9,9 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { pasteChart } from '@/lib/services/icu/chart/paste-chart'
-import { useBookmarkDialogStore } from '@/lib/store/icu/bookmark-dialog'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { cn } from '@/lib/utils'
-import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { Dispatch, SetStateAction, useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 export function ConfirmCopyDialog({
   setIsChartLoading,

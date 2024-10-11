@@ -5,7 +5,7 @@ import type { SelectedChart } from '@/types/icu/chart'
 import { addDays, format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { type Dispatch, type SetStateAction, useState } from 'react'
 
 export default function ExportPngButton({
   chartData,

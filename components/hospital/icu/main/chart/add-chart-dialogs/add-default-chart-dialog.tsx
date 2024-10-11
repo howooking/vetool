@@ -14,7 +14,7 @@ import { registerDefaultChart } from '@/lib/services/icu/chart/add-icu-chart'
 import type { SelectedChart } from '@/types/icu/chart'
 import { File } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { type Dispatch, type SetStateAction, useState } from 'react'
 
 export default function AddDefaultChartDialog({
   chartData,
