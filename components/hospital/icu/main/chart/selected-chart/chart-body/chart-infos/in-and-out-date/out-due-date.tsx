@@ -22,23 +22,24 @@ export default function OutDueDate({
   icuIoId,
 }: {
   inDate: string
-  outDueDate: string
+  outDueDate: string | null
   icuIoId: string
 }) {
+  const transformedOutDueDate = outDueDate ? new Date(outDueDate) : undefined
   const [outDueDateInput, setOutDueDateInput] = useState<Date | undefined>(
-    new Date(outDueDate),
+    transformedOutDueDate,
   )
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [isUpdating, setIsUpdating] = useState(false)
 
   useEffect(() => {
-    setOutDueDateInput(new Date(outDueDate))
+    setOutDueDateInput(transformedOutDueDate)
   }, [outDueDate])
 
   const handleUpdateOutDueDate = async (date: Date | undefined) => {
     if (!date) {
-      setOutDueDateInput(new Date(outDueDate))
+      setOutDueDateInput(transformedOutDueDate)
       setIsPopoverOpen(false)
       return
     }
@@ -58,7 +59,7 @@ export default function OutDueDate({
   return (
     <>
       <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-        <PopoverTrigger defaultValue={outDueDate} asChild>
+        <PopoverTrigger defaultValue={outDueDate ? outDueDate : '미정'} asChild>
           <Button
             variant={'outline'}
             className={cn(
@@ -79,7 +80,7 @@ export default function OutDueDate({
                 {format(outDueDateInput, 'yyyy-MM-dd')}
               </span>
             ) : (
-              <span>예정일 선택</span>
+              <span>퇴원 예정일 선택</span>
             )}
           </Button>
         </PopoverTrigger>

@@ -11,7 +11,7 @@ export default function InAndOutDate({
 }: {
   icuIoId: string
   inDate: string
-  outDueDate: string
+  outDueDate: string | null
   isPatientOut: boolean
   outDate: string | null
 }) {

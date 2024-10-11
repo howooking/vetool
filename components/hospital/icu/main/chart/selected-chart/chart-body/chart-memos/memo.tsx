@@ -7,8 +7,10 @@ import { updateMemo } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { Json } from '@/lib/supabase/database.types'
 import { Squirrel } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { ReactSortable, Sortable } from 'react-sortablejs'
 
 type MemoEntry = {
+  id: string
   memo: string
   create_timestamp: string
   edit_timestamp: string | null
@@ -39,8 +41,13 @@ export default function Memo({
   }, [memoEntries, shouldScrollToBottom])
 
   useEffect(() => {
-    if (Array.isArray(memo)) setMemoEntries(memo as MemoEntry[])
-    else setMemoEntries([])
+    if (Array.isArray(memo)) {
+      const entries = memo as MemoEntry[]
+
+      setMemoEntries(entries)
+    } else {
+      setMemoEntries([])
+    }
   }, [memo])
 
   const updateMemoEntry = async (updatedEntries: MemoEntry[]) => {
@@ -61,15 +68,18 @@ export default function Memo({
 
   const handleInsertMemo = async () => {
     if (memoInput.trim() === '') return
+    const createdAt = new Date().toISOString()
 
     const newEntry = {
+      id: createdAt,
       memo: memoInput.trim(),
-      create_timestamp: new Date().toISOString(),
+      create_timestamp: createdAt,
       edit_timestamp: null,
     }
 
     const updatedEntries = [...memoEntries, newEntry]
     setMemoEntries(updatedEntries)
+
     setMemoInput('')
 
     await updateMemoEntry(updatedEntries)
@@ -85,7 +95,6 @@ export default function Memo({
     updatedEntry: MemoEntry,
     entryIndex: number,
   ) => {
-    // updatedEntry를 해당 index의 값으로 수정 (얕은 복사)
     const updatedEntries = [...memoEntries]
     updatedEntries[entryIndex] = {
       ...updatedEntry,
@@ -113,13 +122,18 @@ export default function Memo({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      const target = e.currentTarget
-      setTimeout(() => {
-        if (target) {
-          target.blur()
-        }
-      }, 0)
+      e.preventDefault()
+      handleInsertMemo()
     }
+  }
+
+  const handleReorder = async (event: Sortable.SortableEvent) => {
+    let newOrder = [...memoEntries]
+    const [movedItem] = newOrder.splice(event.oldIndex as number, 1)
+    newOrder.splice(event.newIndex as number, 0, movedItem)
+
+    setMemoEntries(newOrder)
+    await updateMemoEntry(newOrder)
   }
 
   return (
@@ -132,24 +146,31 @@ export default function Memo({
       </Label>
 
       <ScrollArea className="h-60 rounded-md border p-2">
-        <ul className="space-y-2">
-          {memoEntries.length === 0 && (
+        <ReactSortable
+          list={memoEntries}
+          setList={setMemoEntries}
+          className="space-y-2"
+          animation={250}
+          handle=".handle"
+          onEnd={handleReorder}
+        >
+          {memoEntries.length === 0 ? (
             <li className="group flex h-52 items-center justify-center gap-2 text-sm text-muted-foreground">
               <Squirrel className="group-hover:scale-x-[-1]" />
               <span>메모 없음</span>
             </li>
+          ) : (
+            memoEntries.map((entry, index) => (
+              <MemoItem
+                key={entry.id}
+                entry={entry}
+                onEdit={(updatedEntry) => handleEditMemo(updatedEntry, index)}
+                onDelete={() => handleDeleteMemo(index)}
+                ref={index === memoEntries.length - 1 ? lastMemoRef : null}
+              />
+            ))
           )}
-
-          {memoEntries.map((entry, index) => (
-            <MemoItem
-              key={entry.create_timestamp}
-              entry={entry}
-              onEdit={(updatedEntry) => handleEditMemo(updatedEntry, index)}
-              onDelete={() => handleDeleteMemo(index)}
-              ref={index === memoEntries.length - 1 ? lastMemoRef : null}
-            />
-          ))}
-        </ul>
+        </ReactSortable>
         <ScrollBar orientation="vertical" />
       </ScrollArea>
 
@@ -159,7 +180,6 @@ export default function Memo({
         id={`memo-${memoIndex}`}
         value={memoInput}
         onChange={(e) => setMemoInput(e.target.value)}
-        onBlur={() => handleInsertMemo()}
         onKeyDown={handleKeyDown}
         className="w-full resize-none text-sm placeholder:text-xs"
         rows={1}
