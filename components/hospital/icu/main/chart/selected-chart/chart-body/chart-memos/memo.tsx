@@ -162,7 +162,7 @@ export default function Memo({
           ) : (
             memoEntries.map((entry, index) => (
               <MemoItem
-                key={entry.id}
+                key={entry.create_timestamp}
                 entry={entry}
                 onEdit={(updatedEntry) => handleEditMemo(updatedEntry, index)}
                 onDelete={() => handleDeleteMemo(index)}

@@ -16,8 +16,8 @@ import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { formatOrders, sortOrders } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
-import type { SelectedChart } from '@/types/icu/chart'
-import { useCallback, useMemo, useState } from 'react'
+import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
@@ -37,15 +37,17 @@ export default function ChartTable({
     icu_io: { age_in_days },
   } = chartData
   const { setStep, reset, orderTimePendingQueue } = useIcuOrderStore()
+  const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
   const [isSorting, setIsSorting] = useState(true)
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
 
-  const sortedOrders = useMemo(() => {
+  useEffect(() => {
+    setIsSorting(true)
     const sorted = sortOrders([...orders])
+    setSortedOrders(sorted)
     setIsSorting(false)
-    return sorted
   }, [orders])
 
   const handleUpsertMultipleOrderTimesWithoutOrderer = useCallback(async () => {
