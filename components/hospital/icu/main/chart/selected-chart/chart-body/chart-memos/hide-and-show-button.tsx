@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Eye, EyeOff } from 'lucide-react'
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 export default function HideAndShowButton({
   showMemos,

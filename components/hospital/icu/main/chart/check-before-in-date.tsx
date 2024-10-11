@@ -1,7 +1,7 @@
 'use client'
 
 import NoResult from '@/components/common/no-result'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart } from '@/types/icu/chart'
 import { useMemo } from 'react'
 

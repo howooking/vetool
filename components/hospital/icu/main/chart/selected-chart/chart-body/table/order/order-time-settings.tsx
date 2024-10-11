@@ -13,7 +13,7 @@ import {
   TIMES,
   TX_ORDER_TIME_INTERVALS,
 } from '@/constants/hospital/icu/chart/time'
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 type OrderTimeSettingsProps = {
   startTime: string

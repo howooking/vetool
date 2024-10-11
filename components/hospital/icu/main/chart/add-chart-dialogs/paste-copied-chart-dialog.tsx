@@ -1,4 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+'use client'
+
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -13,16 +14,23 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { pasteChart } from '@/lib/services/icu/chart/paste-chart'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { cn } from '@/lib/utils'
-import { CopyCheck, LoaderCircle } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
-export default function PasteCopiedChartDialog() {
+import { CopyCheck } from 'lucide-react'
+import { useParams } from 'next/navigation'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
+export default function PasteCopiedChartDialog({
+  setIsChartLoading,
+}: {
+  setIsChartLoading: Dispatch<SetStateAction<boolean>>
+}) {
   const { target_date, patient_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const { copiedChartId, reset } = useCopiedChartStore()
-  const { refresh } = useRouter()
 
   const handlePasteCopiedChart = useCallback(async () => {
     if (!copiedChartId) {
@@ -36,8 +44,7 @@ export default function PasteCopiedChartDialog() {
       return
     }
 
-    setIsSubmitting(true)
-
+    setIsChartLoading(true)
     await pasteChart(patient_id as string, copiedChartId, target_date as string)
 
     toast({
@@ -46,9 +53,7 @@ export default function PasteCopiedChartDialog() {
     })
 
     reset()
-    setIsDialogOpen(false)
-    setIsSubmitting(false)
-  }, [copiedChartId, patient_id, reset, target_date])
+  }, [copiedChartId, patient_id, reset, setIsChartLoading, target_date])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -90,12 +95,7 @@ export default function PasteCopiedChartDialog() {
               취소
             </Button>
           </DialogClose>
-          <Button disabled={isSubmitting} onClick={handlePasteCopiedChart}>
-            붙여넣기
-            <LoaderCircle
-              className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-            />
-          </Button>
+          <Button onClick={handlePasteCopiedChart}>붙여넣기</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

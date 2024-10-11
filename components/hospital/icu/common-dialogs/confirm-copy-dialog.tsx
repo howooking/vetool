@@ -9,17 +9,16 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { pasteChart } from '@/lib/services/icu/chart/paste-chart'
-import { useBookmarkDialogStore } from '@/lib/store/icu/bookmark-dialog'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { cn } from '@/lib/utils'
-import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
-export function ConfirmCopyDialog() {
+export function ConfirmCopyDialog({
+  setIsChartLoading,
+}: {
+  setIsChartLoading: Dispatch<SetStateAction<boolean>>
+}) {
   const { target_date, patient_id } = useParams()
-  const { setBookmarkDilaogOpen } = useBookmarkDialogStore()
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const {
     isConfirmCopyDialogOpen,
     setIsConfirmCopyDialogOpen,
@@ -28,7 +27,7 @@ export function ConfirmCopyDialog() {
   } = useCopiedChartStore()
 
   const handleConfirmCopy = async () => {
-    setIsSubmitting(true)
+    setIsChartLoading(true)
 
     await pasteChart(
       patient_id as string,
@@ -41,9 +40,6 @@ export function ConfirmCopyDialog() {
     })
 
     reset()
-    setIsSubmitting(false)
-    setBookmarkDilaogOpen(false)
-    setIsConfirmCopyDialogOpen(false)
   }
   return (
     <Dialog
@@ -61,12 +57,7 @@ export function ConfirmCopyDialog() {
             >
               취소
             </Button>
-            <Button onClick={handleConfirmCopy} disabled={isSubmitting}>
-              확인
-              <LoaderCircle
-                className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-              />
-            </Button>
+            <Button onClick={handleConfirmCopy}>확인</Button>
           </DialogFooter>
         </DialogHeader>
       </DialogContent>

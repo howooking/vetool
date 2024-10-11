@@ -11,15 +11,13 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { toast } from '@/components/ui/use-toast'
-import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
-import { formatOrders } from '@/lib/utils'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
-import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
-import { useParams } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { formatOrders, sortOrders } from '@/lib/utils'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
+import type { SelectedChart } from '@/types/icu/chart'
+import { useCallback, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
@@ -40,26 +38,14 @@ export default function ChartTable({
   } = chartData
   const { setStep, reset, orderTimePendingQueue } = useIcuOrderStore()
   const [isSorting, setIsSorting] = useState(true)
-  const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
 
-  // useMemo 사용시 hydration error 발생
-  useEffect(() => {
-    const sorted = [...orders]
-      .sort((prev, next) => prev.order_name.localeCompare(next.order_name))
-      .sort(
-        (prev, next) =>
-          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-            (order) => order === prev.order_type,
-          ) -
-          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-            (order) => order === next.order_type,
-          ),
-      )
-    setSortedOrders(sorted)
+  const sortedOrders = useMemo(() => {
+    const sorted = sortOrders([...orders])
     setIsSorting(false)
+    return sorted
   }, [orders])
 
   const handleUpsertMultipleOrderTimesWithoutOrderer = useCallback(async () => {

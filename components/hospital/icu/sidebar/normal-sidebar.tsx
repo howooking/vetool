@@ -6,6 +6,7 @@ import PatientList from '@/components/hospital/icu/sidebar/patient-list'
 import { Separator } from '@/components/ui/separator'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
 import { Filter } from './icu-sidebar'
+import type { Dispatch, SetStateAction } from 'react'
 
 export default function NormalSidebar({
   filteredData,
@@ -23,7 +24,7 @@ export default function NormalSidebar({
   vetsListData: Vet[]
   hosGroupList: string[]
   isEmpty: boolean
-  setFilters: React.Dispatch<React.SetStateAction<Filter>>
+  setFilters: Dispatch<SetStateAction<Filter>>
   filters: Filter
   handleCloseMobileDrawer?: () => void
 }) {

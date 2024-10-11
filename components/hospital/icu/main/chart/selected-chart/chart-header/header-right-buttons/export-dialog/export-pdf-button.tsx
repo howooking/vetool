@@ -5,7 +5,7 @@ import type { SelectedChart } from '@/types/icu/chart'
 import jsPDF from 'jspdf'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { type Dispatch, type SetStateAction, useState } from 'react'
 
 export default function ExportPdfButton({
   chartData,

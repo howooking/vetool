@@ -1,5 +1,5 @@
 import { Label } from '@/components/ui/label'
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 import type { SearchOptions } from '@/components/hospital/icu/main/search/icu-search-chart'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 

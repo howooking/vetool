@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -13,14 +15,18 @@ import { toast } from '@/components/ui/use-toast'
 import { copyPrevChart } from '@/lib/services/icu/chart/add-icu-chart'
 import { ClipboardPaste } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
-export default function CopyPrevChartDialog() {
+export default function CopyPrevChartDialog({
+  setIsChartLoading,
+}: {
+  setIsChartLoading: Dispatch<SetStateAction<boolean>>
+}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { patient_id, target_date } = useParams()
 
   const handleCopyPrevSelectedChart = async () => {
-    setIsDialogOpen(false)
+    setIsChartLoading(true)
 
     const { error } = await copyPrevChart(
       target_date as string,
