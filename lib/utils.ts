@@ -1,3 +1,5 @@
+import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
+import { SelectedIcuOrder } from '@/types/icu/chart'
 import { type ClassValue, clsx } from 'clsx'
 import { differenceInDays, isValid, parseISO } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
@@ -236,4 +238,18 @@ export function formatOrders(
     }
   }
   return Object.values(result)
+}
+
+export const sortOrders = (orders: SelectedIcuOrder[]): SelectedIcuOrder[] => {
+  return [...orders]
+    .sort((prev, next) => prev.order_name.localeCompare(next.order_name))
+    .sort(
+      (prev, next) =>
+        DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+          (order) => order === prev.order_type,
+        ) -
+        DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
+          (order) => order === next.order_type,
+        ),
+    )
 }

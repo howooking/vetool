@@ -1,8 +1,8 @@
 import type { SelectedChart } from '@/types/icu/chart'
+import type { PatientData } from '@/types/patients'
 import ChartBody from './selected-chart/chart-body/chart-body'
 import ChartHeader from './selected-chart/chart-header/chart-header'
 import OutPatientCover from './selected-chart/out-patient-cover'
-import type { PatientData } from '@/types/patients'
 
 export default function Chart({
   chartData,

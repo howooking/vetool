@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { deleteNotice } from '@/lib/services/hospital-home/notice'
 import { LoaderCircle } from 'lucide-react'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { type Dispatch, type SetStateAction, useState } from 'react'
 
 export default function DeleteNoticeButton({
   noticeId,

@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Json } from '@/lib/supabase/database.types'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { IcuChartsInCharge } from '@/types/adimin'
 import type { MainAndSubVet } from '@/types/icu/chart'
 import { Stethoscope } from 'lucide-react'

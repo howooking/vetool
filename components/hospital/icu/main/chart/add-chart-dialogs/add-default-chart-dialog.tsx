@@ -1,5 +1,3 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -16,18 +14,20 @@ import { registerDefaultChart } from '@/lib/services/icu/chart/add-icu-chart'
 import type { SelectedChart } from '@/types/icu/chart'
 import { File } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { type Dispatch, type SetStateAction, useState } from 'react'
 
 export default function AddDefaultChartDialog({
   chartData,
+  setIsChartLoading,
 }: {
   chartData: SelectedChart
+  setIsChartLoading: Dispatch<SetStateAction<boolean>>
 }) {
   const { hos_id } = useParams()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const handleAddDefaultChart = async () => {
-    setIsDialogOpen(false)
+    setIsChartLoading(true)
 
     await registerDefaultChart(hos_id as string, chartData.icu_chart_id)
 

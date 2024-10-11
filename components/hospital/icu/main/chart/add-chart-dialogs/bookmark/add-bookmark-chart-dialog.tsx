@@ -1,3 +1,5 @@
+'use client'
+
 import { ConfirmCopyDialog } from '@/components/hospital/icu/common-dialogs/confirm-copy-dialog'
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
 import { bookmarkColumns } from '@/components/hospital/icu/main/chart/add-chart-dialogs/bookmark/bookmark-columns'
@@ -20,9 +22,13 @@ import { cn } from '@/lib/utils'
 import { BookmarkedChart } from '@/types/icu/bookmark'
 import { LoaderCircle, Star } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
-export default function AddBookmarkChartDialog() {
+export default function AddBookmarkChartDialog({
+  setIsChartLoading,
+}: {
+  setIsChartLoading: Dispatch<SetStateAction<boolean>>
+}) {
   const [isFetching, setIsFetching] = useState(false)
   const [bookmarkCharts, setBookmarkCharts] = useState<BookmarkedChart[]>([])
 
@@ -69,7 +75,9 @@ export default function AddBookmarkChartDialog() {
         />
 
         {isPreviewDialogOpen && <PreviewDialog />}
-        {isConfirmCopyDialogOpen && <ConfirmCopyDialog />}
+        {isConfirmCopyDialogOpen && (
+          <ConfirmCopyDialog setIsChartLoading={setIsChartLoading} />
+        )}
 
         <DialogFooter>
           <DialogClose asChild>

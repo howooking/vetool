@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
-import React from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 import Filters from '../filters/filters'
 import type { Filter } from '../icu-sidebar'
 import NoPatients from '../no-patients'
@@ -16,7 +16,7 @@ export default function MobileSidebar({
   vetsListData,
 }: {
   isEmpty: boolean
-  setFilters: React.Dispatch<React.SetStateAction<Filter>>
+  setFilters: Dispatch<SetStateAction<Filter>>
   filters: Filter
   hosGroupList: string[]
   handleCloseMobileDrawer?: () => void

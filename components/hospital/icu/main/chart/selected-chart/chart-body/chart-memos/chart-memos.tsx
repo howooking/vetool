@@ -4,7 +4,7 @@ import HideAndShowButton from '@/components/hospital/icu/main/chart/selected-cha
 import Memo from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/memo'
 import { Separator } from '@/components/ui/separator'
 import { Json } from '@/lib/supabase/database.types'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-privider'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { useState } from 'react'
 
 export default function ChartMemos({
