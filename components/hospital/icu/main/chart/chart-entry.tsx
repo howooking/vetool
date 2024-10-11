@@ -17,9 +17,7 @@ export default function ChartEntry({
   const [isChartLoading, setIsChartLoading] = useState(false)
 
   useEffect(() => {
-    if (chartData) {
-      setIsChartLoading(false)
-    }
+    setIsChartLoading(false)
   }, [chartData])
 
   if (isChartLoading) {

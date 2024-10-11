@@ -123,7 +123,7 @@ export default function Memo({
   }
 
   return (
-    <div className="relative flex w-full flex-col gap-2">
+    <div className="relative flex w-full flex-col gap-1">
       <Label
         className="ml-2 text-xs text-muted-foreground"
         htmlFor={`memo-${memoIndex}`}
@@ -162,7 +162,7 @@ export default function Memo({
         onBlur={() => handleInsertMemo()}
         onKeyDown={handleKeyDown}
         className="w-full resize-none text-sm placeholder:text-xs"
-        rows={2}
+        rows={1}
       />
     </div>
   )
