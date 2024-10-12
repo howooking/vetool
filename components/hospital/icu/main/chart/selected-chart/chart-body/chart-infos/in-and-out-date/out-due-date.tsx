@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 import { format, parseISO } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { LogOut } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 export default function OutDueDate({
   inDate,
@@ -24,73 +24,73 @@ export default function OutDueDate({
   outDueDate: string | null
   icuIoId: string
 }) {
-  const transformedOutDueDate = outDueDate ? new Date(outDueDate) : undefined
+  const transformedOutDueDate = useMemo(
+    () => (outDueDate ? new Date(outDueDate) : undefined),
+    [outDueDate],
+  )
   const [outDueDateInput, setOutDueDateInput] = useState<Date | undefined>(
     transformedOutDueDate,
   )
-
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-  const [isUpdating, setIsUpdating] = useState(false)
 
-  useEffect(() => {
-    setOutDueDateInput(transformedOutDueDate)
-  }, [outDueDate])
-
-  const handleUpdateOutDueDate = async (date: Date | undefined) => {
-    if (!date) {
-      setOutDueDateInput(transformedOutDueDate)
+  const handleUpdateOutDueDate = useCallback(
+    async (date?: Date) => {
       setIsPopoverOpen(false)
-      return
-    }
+      setOutDueDateInput(date)
 
-    setIsUpdating(true)
+      await updateOutDueDate(icuIoId, date ? format(date!, 'yyyy-MM-dd') : null)
 
-    await updateOutDueDate(icuIoId, format(date, 'yyyy-MM-dd'))
+      toast({
+        title: '퇴원예정일을 변경하였습니다',
+      })
+    },
+    [icuIoId],
+  )
 
-    toast({
-      title: '퇴원예정일을 변경하였습니다',
-    })
-
-    setIsUpdating(false)
-    setIsPopoverOpen(false)
-  }
+  const disabledDates = useCallback(
+    (date: Date) => date < parseISO(inDate),
+    [inDate],
+  )
 
   return (
-    <>
-      <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-        <PopoverTrigger defaultValue={outDueDate ? outDueDate : '미정'} asChild>
-          <Button
-            variant={'outline'}
-            className={cn(
-              'flex w-full items-center justify-start gap-2 px-2',
-              !outDueDateInput && 'text-muted-foreground',
-            )}
-          >
-            <LogOut className="text-muted-foreground" size={16} />
+    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant={'outline'}
+          className={cn(
+            'flex w-full items-center justify-start gap-2 px-2',
+            !outDueDateInput && 'text-muted-foreground',
+          )}
+        >
+          <LogOut className="text-muted-foreground" size={16} />
 
-            {outDueDateInput ? (
-              <span className="text-sm font-normal">
-                {format(outDueDateInput, 'yyyy-MM-dd')}
-              </span>
-            ) : (
-              <span>퇴원 예정일</span>
-            )}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            locale={ko}
-            mode="single"
-            selected={outDueDateInput}
-            onSelect={(date) => {
-              setOutDueDateInput(date)
-              handleUpdateOutDueDate(date)
-            }}
-            className="rounded-md border"
-            disabled={(date) => date < parseISO(inDate) || isUpdating}
-          />
-        </PopoverContent>
-      </Popover>
-    </>
+          {outDueDateInput ? (
+            <span className="text-sm font-normal">
+              {format(outDueDateInput, 'yyyy-MM-dd')}
+            </span>
+          ) : (
+            <span>퇴원 예정일</span>
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          locale={ko}
+          mode="single"
+          selected={outDueDateInput}
+          onSelect={handleUpdateOutDueDate}
+          className="rounded-b-none rounded-t-md border"
+          disabled={disabledDates}
+        />
+        <Button
+          className="w-full rounded-t-none border-t-0"
+          size="sm"
+          variant="outline"
+          onClick={() => handleUpdateOutDueDate(undefined)}
+        >
+          미정
+        </Button>
+      </PopoverContent>
+    </Popover>
   )
 }
