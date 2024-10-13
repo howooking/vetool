@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useCallback } from 'react'
 
-export default function MoveChartButton({ patientId }: { patientId: string }) {
+export default function GoToChartButton({ patientId }: { patientId: string }) {
   const { hos_id, target_date } = useParams()
   const { push } = useRouter()
 

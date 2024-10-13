@@ -1,11 +1,11 @@
 'use client'
 
 import PatientInfo from '@/components/hospital/common/patient-info'
-import MovementChecklistInput from '@/components/hospital/icu/main/movement/movement-checklist-input'
 import type { OutDuePatientsData } from '@/types/icu/movement'
 import { ColumnDef } from '@tanstack/react-table'
 import AddOutDuePatientDialog from './add-out-due-patient-dialog'
-import MoveChartButton from './move-chart-button'
+import GoToChartButton from './go-to-chart-button'
+import MovementChecklistInput from '../movement-checklist-input'
 
 export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
   {
@@ -149,7 +149,7 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
     cell: ({ row }) => {
       const patientId = row.original.patient.patient_id
 
-      return <MoveChartButton patientId={patientId} />
+      return <GoToChartButton patientId={patientId} />
     },
   },
 ]

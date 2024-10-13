@@ -1,11 +1,11 @@
 'use client'
 
 import PatientInfo from '@/components/hospital/common/patient-info'
-import MovementChecklistInput from '@/components/hospital/icu/main/movement/movement-checklist-input'
-import AddVisitPatientDialog from '@/components/hospital/icu/main/movement/visit/add-visit-patient-dialog'
-import CompleteVisitButton from '@/components/hospital/icu/main/movement/visit/complete-visit-button'
 import type { VisitPatientData } from '@/types/icu/movement'
 import { ColumnDef } from '@tanstack/react-table'
+import AddVisitPatientDialog from './add-visit-patient-dialog'
+import MovementChecklistInput from '../movement-checklist-input'
+import CompleteVisitButton from './complete-visit-button'
 
 export const visitColumns: ColumnDef<VisitPatientData>[] = [
   {
