@@ -14,7 +14,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useOutsideClick } from '@/hooks/use-outside-click'
 import { getTimeSince } from '@/lib/utils'
 import { Pencil, Trash2 } from 'lucide-react'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 type MemoEntry = {
   id: string
@@ -36,6 +36,14 @@ const MemoItem = React.forwardRef<HTMLLIElement, MemoItemProps>(
     const editingTextAreaRef = useRef<HTMLTextAreaElement>(null)
     useOutsideClick(editingTextAreaRef, () => setIsEditing(false))
 
+    useEffect(() => {
+      if (isEditing && editingTextAreaRef.current) {
+        const textarea = editingTextAreaRef.current
+        textarea.style.height = 'auto'
+        textarea.style.height = `${textarea.scrollHeight}px`
+      }
+    }, [isEditing, editedMemo])
+
     const handleEditMemo = () => {
       onEdit({ ...entry, memo: editedMemo })
       setIsEditing(false)
@@ -43,12 +51,8 @@ const MemoItem = React.forwardRef<HTMLLIElement, MemoItemProps>(
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
-        const target = e.currentTarget
-        setTimeout(() => {
-          if (target) {
-            target.blur()
-          }
-        }, 0)
+        e.preventDefault()
+        handleEditMemo()
       }
     }
 
@@ -57,7 +61,7 @@ const MemoItem = React.forwardRef<HTMLLIElement, MemoItemProps>(
         ref={ref}
         className="handle group relative flex cursor-grab gap-2 rounded-sm bg-yellow-200 p-2 pt-1"
       >
-        <div className="flex flex-col gap-1">
+        <div className="flex w-full flex-col gap-1">
           <div className="flex items-center justify-between">
             <div className="flex gap-1 text-[10px] text-muted-foreground">
               <span>
@@ -70,7 +74,7 @@ const MemoItem = React.forwardRef<HTMLLIElement, MemoItemProps>(
             </div>
 
             {!isEditing && (
-              <div className="absolute right-1.5 top-1.5 flex cursor-pointer items-center gap-3 text-muted-foreground opacity-0 transition duration-300 group-hover:opacity-100 group-focus:opacity-100">
+              <div className="absolute right-1.5 top-1.5 flex cursor-pointer items-center gap-2 text-muted-foreground opacity-0 transition duration-300 group-hover:opacity-100 group-focus:opacity-100">
                 <Pencil
                   size={14}
                   onClick={() => setIsEditing(true)}
@@ -111,10 +115,9 @@ const MemoItem = React.forwardRef<HTMLLIElement, MemoItemProps>(
             <Textarea
               value={editedMemo}
               onChange={(e) => setEditedMemo(e.target.value)}
-              className="px-1 py-0.5 text-sm"
-              rows={2}
+              className="min-h-8 overflow-hidden px-1 py-0.5 text-sm"
+              rows={1}
               ref={editingTextAreaRef}
-              onBlur={handleEditMemo}
               onKeyDown={handleKeyDown}
             />
           ) : (

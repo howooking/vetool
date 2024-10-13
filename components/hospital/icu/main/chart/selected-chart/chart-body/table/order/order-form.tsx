@@ -127,7 +127,7 @@ export default function OrderForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col space-y-4"
+        className="flex flex-col gap-4"
       >
         <FormField
           control={form.control}
@@ -140,17 +140,16 @@ export default function OrderForm({
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   className="flex flex-wrap gap-4"
-                  disabled={isEditMode}
                 >
                   {DEFAULT_ICU_ORDER_TYPE.map((item) => (
                     <FormItem
                       key={item.value}
-                      className="flex items-center space-x-1 space-y-0"
+                      className="flex cursor-pointer items-center space-x-1 space-y-0"
                     >
                       <FormControl>
                         <RadioGroupItem value={item.value} />
                       </FormControl>
-                      <FormLabel className="font-normal">
+                      <FormLabel className="cursor-pointer font-normal">
                         {item.label}
                       </FormLabel>
                     </FormItem>
