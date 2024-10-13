@@ -2,6 +2,7 @@
 
 import { IcuOrderColors } from '@/types/adimin'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
+import type { PatientData } from '@/types/patients'
 import React, { createContext, useContext } from 'react'
 
 interface IcuContextType {
@@ -16,6 +17,7 @@ type BasicHosData = {
   showOrderer: boolean
   maintenanceRateCalcMethod: string
   sidebarData: IcuSidebarIoData[]
+  patientsData: PatientData[]
 }
 
 const BasicHosDataContext = createContext<IcuContextType | undefined>(undefined)

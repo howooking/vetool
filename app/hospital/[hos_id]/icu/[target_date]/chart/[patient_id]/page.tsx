@@ -11,7 +11,7 @@ export default async function PatientChartPage({
     patient_id: string
   }
 }) {
-  const { selectedChartData, patientsData } = await getIcuChart(
+  const selectedChartData = await getIcuChart(
     params.hos_id,
     params.target_date,
     params.patient_id,
@@ -22,7 +22,7 @@ export default async function PatientChartPage({
       chartData={selectedChartData}
       patientId={params.patient_id}
     >
-      <ChartEntry chartData={selectedChartData} patientsData={patientsData} />
+      <ChartEntry chartData={selectedChartData} />
     </CheckBeforeIndate>
   )
 }

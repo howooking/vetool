@@ -6,7 +6,7 @@ export default function VetName({
   name: string
 }) {
   return (
-    <div className="flex gap-2">
+    <div className="flex items-center gap-2">
       <span className="hidden text-xs text-muted-foreground md:block">
         {label}
       </span>

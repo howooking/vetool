@@ -9,19 +9,18 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { getAgeFromAgeInDays } from '@/lib/utils'
-import type { PatientData, PatientDataTable } from '@/types/patients'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
+import type { PatientDataTable } from '@/types/patients'
 import { Cat, Dog } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 
 export default function UpdatePatientDialog({
   patientData,
-  patientsData,
   ageInDays,
   isPatientOut,
 }: {
   patientData: PatientDataTable
-  patientsData: PatientData[]
   ageInDays: number
   isPatientOut: boolean
 }) {
@@ -29,6 +28,9 @@ export default function UpdatePatientDialog({
   const { name, breed, gender, species } = patientData
   const [isPatientUpdateDialogOpen, setIsPatientUpdateDialogOpen] =
     useState(false)
+  const {
+    basicHosData: { patientsData },
+  } = useBasicHosDataContext()
 
   const hosPatientIds = useMemo(
     () => patientsData.map((patient) => patient.hos_patient_id),

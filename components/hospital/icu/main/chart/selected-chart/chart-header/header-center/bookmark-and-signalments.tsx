@@ -1,14 +1,11 @@
 import BookmarkDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/bookmark-dialog'
 import UpdatePatientDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/update-patient-dialog'
 import type { SelectedChart } from '@/types/icu/chart'
-import type { PatientData } from '@/types/patients'
 
 export default function HeaderCenter({
   chartData,
-  patientsData,
 }: {
   chartData: SelectedChart
-  patientsData: PatientData[]
 }) {
   const { patient, icu_io } = chartData
   const isPatientOut = !!icu_io.out_date
@@ -23,7 +20,6 @@ export default function HeaderCenter({
         patientData={{ ...patient, isIcu: true }}
         ageInDays={icu_io.age_in_days}
         isPatientOut={isPatientOut}
-        patientsData={patientsData}
       />
     </div>
   )
