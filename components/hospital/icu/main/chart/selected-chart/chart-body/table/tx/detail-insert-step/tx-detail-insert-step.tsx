@@ -145,6 +145,7 @@ export default function TxDetailInsertStep() {
               <Button
                 variant="destructive"
                 onClick={handleDeleteTx}
+                tabIndex={-1}
                 type="button"
               >
                 삭제

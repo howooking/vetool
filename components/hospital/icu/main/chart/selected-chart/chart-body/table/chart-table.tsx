@@ -21,6 +21,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
+import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 
 export default function ChartTable({
   chartData,
@@ -37,6 +38,7 @@ export default function ChartTable({
     icu_io: { age_in_days },
   } = chartData
   const { setStep, reset, orderTimePendingQueue } = useIcuOrderStore()
+  const { setStep: setTxStep, reset: resetTx } = useTxMutationStore()
   const [isSorting, setIsSorting] = useState(true)
   const {
     basicHosData: { showOrderer, vetsListData },
@@ -95,6 +97,11 @@ export default function ChartTable({
     1500,
   )
 
+  const debouncedMulitpleTreatments = useDebouncedCallback(
+    () => setTxStep('detailInsert'),
+    1500,
+  )
+
   if (isSorting) {
     return <LargeLoaderCircle className="h-icu-chart" />
   }
@@ -135,6 +142,7 @@ export default function ChartTable({
               preview={preview}
               order={order}
               debouncedUpsertingOrderTimes={debouncedUpsertingOrderTimes}
+              debouncedMulitpleTreatments={debouncedMulitpleTreatments}
               showOrderer={showOrderer}
             />
           </TableRow>
