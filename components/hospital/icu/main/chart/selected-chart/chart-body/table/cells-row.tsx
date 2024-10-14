@@ -20,7 +20,7 @@ export default function CellsRow({
   debouncedMulitpleTreatments: DebouncedState<() => void>
   showOrderer: boolean
 }) {
-  const { order_times, order_id, treatments, order_name } = order
+  const { order_times, order_id, treatments } = order
   const { setOrderTimePendingQueue, step } = useIcuOrderStore()
   const [orderTimeState, setOrderTimeState] = useState(order_times)
 
@@ -68,7 +68,6 @@ export default function CellsRow({
             icuChartOrderId={order_id}
             isDone={isDone}
             orderer={orderer}
-            icuChartOrderName={order_name}
             icuChartTxId={selectedTx?.tx_id}
             toggleOrderTime={toggleOrderTime}
             showOrderer={showOrderer}

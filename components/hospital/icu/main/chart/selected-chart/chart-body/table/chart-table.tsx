@@ -97,10 +97,9 @@ export default function ChartTable({
     1500,
   )
 
-  const debouncedMulitpleTreatments = useDebouncedCallback(
-    () => setTxStep('detailInsert'),
-    1500,
-  )
+  const debouncedMulitpleTreatments = useDebouncedCallback(() => {
+    if (orderTimePendingQueue.length >= 2) setTxStep('detailInsert')
+  }, 1000)
 
   if (isSorting) {
     return <LargeLoaderCircle className="h-icu-chart" />

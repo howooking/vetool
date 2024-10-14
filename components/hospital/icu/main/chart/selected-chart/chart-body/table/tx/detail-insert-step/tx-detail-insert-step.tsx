@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
 import { deleteIcuChartTx } from '@/lib/services/icu/chart/tx-mutation'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -27,6 +28,7 @@ import { z } from 'zod'
 export default function TxDetailInsertStep() {
   const { setStep, txLocalState, setTxLocalState, setIsDeleting, reset } =
     useTxMutationStore()
+  const { reset: queueReset } = useIcuOrderStore()
 
   const form = useForm<z.infer<typeof txDetailRegisterFormSchema>>({
     resolver: zodResolver(txDetailRegisterFormSchema),
@@ -57,11 +59,14 @@ export default function TxDetailInsertStep() {
     toast({
       title: '처치내역을 삭제하였습니다',
     })
+
+    reset()
   }
 
   const handleCloseClick = () => {
     setStep('closed')
     reset()
+    queueReset()
   }
 
   return (

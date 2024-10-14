@@ -9,7 +9,6 @@ export type TxLocalState = {
   txId?: string
   icuChartOrderId?: string
   isNotificationChecked?: boolean
-  orderName?: string
 } | null
 
 type IcuUpsertTxState = {

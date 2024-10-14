@@ -9,12 +9,12 @@ import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { DebouncedState } from 'use-debounce'
 import { TxDetailHover } from './tx/tx-detail-hover'
+import useIsCommandPressed from '@/hooks/use-is-command-pressed'
 
 type ChartTableCellProps = {
   time: number
   treatment?: Treatment
   icuChartOrderId: string
-  icuChartOrderName: string
   isDone: boolean
   icuChartTxId?: string
   preview?: boolean
@@ -29,7 +29,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     time,
     treatment,
     icuChartOrderId,
-    icuChartOrderName,
     isDone,
     icuChartTxId,
     preview,
@@ -41,7 +40,8 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
 
-    const { orderTimePendingQueue, setOrderTimePendingQueue } =
+    const isCommandPressed = useIsCommandPressed()
+    const { orderTimePendingQueue, setOrderTimePendingQueue, reset } =
       useIcuOrderStore()
     const {
       isMutationCanceled,
@@ -76,12 +76,10 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
         txId: icuChartTxId,
         time,
         txLog: treatment?.tx_log as TxLog[] | null,
-        orderName: icuChartOrderName,
       })
       setStep('detailInsert')
     }, [
       icuChartOrderId,
-      icuChartOrderName,
       icuChartTxId,
       setStep,
       setTxLocalState,
@@ -147,18 +145,48 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     const handleClick = (e: React.MouseEvent) => {
       if (e.metaKey || e.ctrlKey) {
         e.preventDefault()
+
         setOrderTimePendingQueue((prev) => [
           ...prev,
           {
+            txId: icuChartTxId,
+            orderId: icuChartOrderId,
+            orderTime: time,
+          },
+        ])
+
+        debouncedMulitpleTreatments()
+      }
+    }
+
+    const handleOnFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      setIsFocused(true)
+
+      if (orderTimePendingQueue.length === 1 && isCommandPressed) {
+        setOrderTimePendingQueue((prev) => [
+          ...prev,
+          {
+            txId: icuChartTxId,
             orderId: icuChartOrderId,
             orderTime: time,
           },
         ])
       }
 
-      debouncedMulitpleTreatments()
+      if (!orderTimePendingQueue.length) {
+        setOrderTimePendingQueue((prev) => [
+          ...prev,
+          {
+            txId: icuChartTxId,
+            orderId: icuChartOrderId,
+            orderTime: time,
+          },
+        ])
+      }
 
-      console.log(orderTimePendingQueue)
+      if (orderTimePendingQueue.length === 1 && !isCommandPressed) {
+        reset()
+      }
     }
 
     const hasComment = useMemo(
@@ -186,7 +214,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
               isDone && 'bg-emerald-400/10',
               isInPendingQueue && 'ring-2',
             )}
-            onFocus={() => setIsFocused(true)}
+            onFocus={handleOnFocus}
             disabled={preview}
             value={briefTxResultInput}
             onChange={(e) => setBriefTxResultInput(e.target.value)}

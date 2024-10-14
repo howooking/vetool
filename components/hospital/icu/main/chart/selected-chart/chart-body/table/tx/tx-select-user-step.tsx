@@ -53,13 +53,29 @@ export default function TxSelectUserStep() {
       const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
       if (orderTimePendingQueue.length) {
+        console.log(orderTimePendingQueue)
         orderTimePendingQueue.forEach(
-          async (item) => await upsertIcuTx(hos_id as string, {}, updatedLogs),
+          async (item) =>
+            await upsertIcuTx(
+              hos_id as string,
+              {
+                txId: item.txId,
+                txResult: txLocalState?.txResult,
+                txComment: txLocalState?.txComment,
+                time: item.orderTime,
+                icuChartOrderId: item.orderId,
+              },
+              updatedLogs,
+            ),
         )
+        setStep('closed')
 
         queueReset()
-        setStep('closed')
         reset()
+
+        return toast({
+          title: '처치 내역이 업데이트 되었습니다',
+        })
       }
 
       setStep('closed')

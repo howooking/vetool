@@ -4,6 +4,7 @@ import { create } from 'zustand'
 export type OrderTimePendingQueue = {
   orderTime: number
   orderId: string
+  txId?: string
 }
 
 type IcuOrderState = {
