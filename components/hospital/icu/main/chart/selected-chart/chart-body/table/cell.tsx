@@ -21,7 +21,7 @@ type ChartTableCellProps = {
   orderer: string
   toggleOrderTime: (orderId: string, time: number) => void
   showOrderer: boolean
-  debouncedMulitpleTreatments: DebouncedState<() => void>
+  debouncedMultipleTreatments: DebouncedState<() => void>
 }
 
 const Cell: React.FC<ChartTableCellProps> = React.memo(
@@ -35,7 +35,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     orderer,
     toggleOrderTime,
     showOrderer,
-    debouncedMulitpleTreatments,
+    debouncedMultipleTreatments,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
@@ -155,7 +155,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
           },
         ])
 
-        debouncedMulitpleTreatments()
+        debouncedMultipleTreatments()
       }
     }
 

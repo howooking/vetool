@@ -11,13 +11,13 @@ export default function CellsRow({
   preview,
   order,
   debouncedUpsertingOrderTimes,
-  debouncedMulitpleTreatments,
+  debouncedMultipleTreatments,
   showOrderer,
 }: {
   preview?: boolean
   order: SelectedIcuOrder
   debouncedUpsertingOrderTimes: DebouncedState<() => void>
-  debouncedMulitpleTreatments: DebouncedState<() => void>
+  debouncedMultipleTreatments: DebouncedState<() => void>
   showOrderer: boolean
 }) {
   const { order_times, order_id, treatments } = order
@@ -71,7 +71,7 @@ export default function CellsRow({
             icuChartTxId={selectedTx?.tx_id}
             toggleOrderTime={toggleOrderTime}
             showOrderer={showOrderer}
-            debouncedMulitpleTreatments={debouncedMulitpleTreatments}
+            debouncedMultipleTreatments={debouncedMultipleTreatments}
           />
         )
       })}

@@ -17,7 +17,7 @@ import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { formatOrders, sortOrders } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart } from '@/types/icu/chart'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
@@ -37,8 +37,9 @@ export default function ChartTable({
     weight,
     icu_io: { age_in_days },
   } = chartData
-  const { setStep, reset, orderTimePendingQueue } = useIcuOrderStore()
-  const { setStep: setTxStep, reset: resetTx } = useTxMutationStore()
+  const { setStep, reset, orderTimePendingQueue, orderPendingQueue } =
+    useIcuOrderStore()
+  const { setStep: setTxStep } = useTxMutationStore()
   const [isSorting, setIsSorting] = useState(true)
   const {
     basicHosData: { showOrderer, vetsListData },
@@ -97,9 +98,28 @@ export default function ChartTable({
     1500,
   )
 
-  const debouncedMulitpleTreatments = useDebouncedCallback(() => {
+  const debouncedMultipleTreatments = useDebouncedCallback(() => {
     if (orderTimePendingQueue.length >= 2) setTxStep('detailInsert')
   }, 1000)
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key === 'v' &&
+        orderPendingQueue.length > 0
+      ) {
+        event.preventDefault()
+        setStep('selectOrderer')
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [setStep, orderPendingQueue])
 
   if (isSorting) {
     return <LargeLoaderCircle className="h-icu-chart" />
@@ -141,7 +161,7 @@ export default function ChartTable({
               preview={preview}
               order={order}
               debouncedUpsertingOrderTimes={debouncedUpsertingOrderTimes}
-              debouncedMulitpleTreatments={debouncedMulitpleTreatments}
+              debouncedMultipleTreatments={debouncedMultipleTreatments}
               showOrderer={showOrderer}
             />
           </TableRow>

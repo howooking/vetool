@@ -8,14 +8,23 @@ export type OrderTimePendingQueue = {
 }
 
 type IcuOrderState = {
-  step: 'closed' | 'upsert' | 'selectOrderer'
-  setStep: (step: 'closed' | 'upsert' | 'selectOrderer') => void
+  step: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
+  setStep: (
+    step: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
+  ) => void
 
   isEditMode?: boolean
   setIsEditMode: (isEditMode: boolean) => void
 
   selectedChartOrder: Partial<SelectedIcuOrder>
   setSelectedChartOrder: (chartOrder: Partial<SelectedIcuOrder>) => void
+
+  orderPendingQueue: Partial<SelectedIcuOrder>[]
+  setOrderPendingQueue: (
+    updater:
+      | Partial<SelectedIcuOrder>[]
+      | ((prev: Partial<SelectedIcuOrder>[]) => Partial<SelectedIcuOrder>[]),
+  ) => void
 
   orderTimePendingQueue: OrderTimePendingQueue[]
   setOrderTimePendingQueue: (
@@ -37,6 +46,15 @@ export const useIcuOrderStore = create<IcuOrderState>((set) => ({
   selectedChartOrder: {} as Partial<SelectedIcuOrder>,
   setSelectedChartOrder: (selectedChartOrder) => set({ selectedChartOrder }),
 
+  orderPendingQueue: [],
+  setOrderPendingQueue: (updater) =>
+    set((state) => ({
+      orderPendingQueue:
+        typeof updater === 'function'
+          ? updater(state.orderPendingQueue)
+          : updater,
+    })),
+
   orderTimePendingQueue: [],
   setOrderTimePendingQueue: (updater) =>
     set((state) => ({
@@ -51,5 +69,6 @@ export const useIcuOrderStore = create<IcuOrderState>((set) => ({
       isEditMode: false,
       selectedChartOrder: {} as Partial<SelectedIcuOrder>,
       orderTimePendingQueue: [],
+      orderPendingQueue: [],
     }),
 }))

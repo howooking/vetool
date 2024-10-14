@@ -53,7 +53,6 @@ export default function TxSelectUserStep() {
       const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
       if (orderTimePendingQueue.length) {
-        console.log(orderTimePendingQueue)
         orderTimePendingQueue.forEach(
           async (item) =>
             await upsertIcuTx(

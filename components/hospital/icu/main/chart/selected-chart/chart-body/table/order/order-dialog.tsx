@@ -59,6 +59,9 @@ export default function OrderDialog({
           {step === 'upsert' && (
             <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
           )}
+          {step === 'multipleEdit' && (
+            <DialogTitle>오더 복사 / 오더 삭제</DialogTitle>
+          )}
           {step === 'selectOrderer' && <DialogTitle>수의사 선택</DialogTitle>}
           <DialogDescription />
         </DialogHeader>
