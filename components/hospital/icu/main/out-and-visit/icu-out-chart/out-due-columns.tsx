@@ -4,7 +4,7 @@ import PatientInfo from '@/components/hospital/common/patient-info'
 import type { OutDuePatientsData } from '@/types/icu/movement'
 import { ColumnDef } from '@tanstack/react-table'
 import AddOutDuePatientDialog from './add-out-due-patient-dialog'
-import GoToChartButton from './go-to-chart-button'
+import GoToButton from './go-to-button'
 import MovementChecklistInput from '../movement-checklist-input'
 
 export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
@@ -145,11 +145,11 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
   },
   {
     accessorKey: 'active',
-    header: '차트 이동',
+    header: '이동',
     cell: ({ row }) => {
       const patientId = row.original.patient.patient_id
 
-      return <GoToChartButton patientId={patientId} />
+      return <GoToButton patientId={patientId} />
     },
   },
 ]

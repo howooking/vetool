@@ -23,7 +23,7 @@ import { updatePatientOutDueDate } from '@/lib/services/icu/movement/out-due/upd
 import type { NotOutDuePatientsData } from '@/types/icu/movement'
 import { Plus } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export default function AddOutDuePatientDialog() {
   const [selectedIoId, setSelectedIoId] = useState('')
@@ -40,8 +40,7 @@ export default function AddOutDuePatientDialog() {
           hos_id as string,
           target_date as string,
         )
-
-        setNotOutDuePatients(patients)
+        setNotOutDuePatients(patients ?? [])
       }
 
       getNotOutDueIoPatients()
@@ -64,6 +63,11 @@ export default function AddOutDuePatientDialog() {
     setIsDialogOpen(false)
   }
 
+  const noPatientToAdd = useMemo(
+    () => notOutDuePatients.length === 0,
+    [notOutDuePatients],
+  )
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <div className="relative mx-auto flex w-[180px] items-center justify-center gap-2 text-center">
@@ -83,8 +87,12 @@ export default function AddOutDuePatientDialog() {
         </DialogHeader>
 
         <Select onValueChange={setSelectedIoId}>
-          <SelectTrigger>
-            <SelectValue placeholder="환자 선택" />
+          <SelectTrigger disabled={noPatientToAdd}>
+            <SelectValue
+              placeholder={
+                noPatientToAdd ? '추가할 환자가 없습니다' : '환자선택'
+              }
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>

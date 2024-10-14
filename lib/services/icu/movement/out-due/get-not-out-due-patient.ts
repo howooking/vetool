@@ -15,12 +15,12 @@ export const getNotOutDuePatients = async (
       hos_id_input: hosId,
       target_date_input: targetDate,
     })
-    .returns<NotOutDuePatientsData[]>()
+    .returns<NotOutDuePatientsData[] | null>()
 
   if (error) {
     console.error(error)
     redirect(`/error?message=${error?.message}`)
   }
 
-  return data || []
+  return data
 }

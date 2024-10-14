@@ -14,17 +14,21 @@ export default async function OutAndVisitPage({
 }) {
   return (
     <div className="p-2">
-      <h4>퇴원차트</h4>
-      <Suspense fallback={<OutAndVisitSkeleton />}>
-        <IcuOutChart hosId={params.hos_id} targetDate={params.target_date} />
-      </Suspense>
+      <div className="min-h-[360px]">
+        <h4 className="mb-1 font-semibold">퇴원차트</h4>
+        <Suspense fallback={<OutAndVisitSkeleton />}>
+          <IcuOutChart hosId={params.hos_id} targetDate={params.target_date} />
+        </Suspense>
+      </div>
 
       <Separator className="my-8" />
 
-      <h4>면회차트</h4>
-      <Suspense fallback={<OutAndVisitSkeleton />}>
-        <VisitChart hosId={params.hos_id} targetDate={params.target_date} />
-      </Suspense>
+      <div className="min-h-[360px]">
+        <h4 className="mb-1 font-semibold">면회리스트</h4>
+        <Suspense fallback={<OutAndVisitSkeleton />}>
+          <VisitChart hosId={params.hos_id} targetDate={params.target_date} />
+        </Suspense>
+      </div>
     </div>
   )
 }
