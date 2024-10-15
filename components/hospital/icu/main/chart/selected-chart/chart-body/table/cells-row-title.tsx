@@ -19,11 +19,9 @@ export default function CellsRowTitle({
   preview?: boolean
 }) {
   const { order_comment, order_type, order_id } = order
-
   const {
     basicHosData: { orderColorsData },
   } = useBasicHosDataContext()
-
   const {
     setStep,
     setIsEditMode,
@@ -38,7 +36,6 @@ export default function CellsRowTitle({
 
   const debouncedMultipleOrders = useDebouncedCallback(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      console.log(event.key)
       if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
         event.preventDefault()
 
@@ -62,7 +59,18 @@ export default function CellsRowTitle({
 
       if (e.metaKey || e.ctrlKey) {
         e.preventDefault()
-        setOrderPendingQueue((prev) => [...prev, order])
+
+        setOrderPendingQueue((prev) => {
+          const existingIndex = prev.findIndex(
+            (item) => item.order_id === order.order_id,
+          )
+
+          if (existingIndex !== -1) {
+            return prev.filter((_, index) => index !== existingIndex)
+          } else {
+            return [...prev, order]
+          }
+        })
 
         return debouncedMultipleOrders()
       }

@@ -22,6 +22,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
+import DeleteOrdersAlertDialog from './order/delete-orders-alert-dialog'
 
 export default function ChartTable({
   chartData,
@@ -40,10 +41,12 @@ export default function ChartTable({
   const { setStep, reset, orderTimePendingQueue, orderPendingQueue } =
     useIcuOrderStore()
   const { setStep: setTxStep } = useTxMutationStore()
-  const [isSorting, setIsSorting] = useState(true)
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
+
+  const [isSorting, setIsSorting] = useState(true)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const sortedOrders = useMemo(() => {
     const sorted = sortOrders([...orders])
@@ -104,6 +107,7 @@ export default function ChartTable({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // 다중 오더 붙여넣기
       if (
         (event.ctrlKey || event.metaKey) &&
         event.key === 'v' &&
@@ -111,6 +115,16 @@ export default function ChartTable({
       ) {
         event.preventDefault()
         setStep('selectOrderer')
+      }
+
+      // 다중 오더 삭제
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        (event.key === 'Backspace' || event.key === 'Delete') &&
+        orderPendingQueue.length > 0
+      ) {
+        event.preventDefault()
+        setIsDialogOpen(true)
       }
     }
 
@@ -150,7 +164,6 @@ export default function ChartTable({
           ))}
         </TableRow>
       </TableHeader>
-
       <TableBody>
         {!preview && <TxUpsertDialog />}
 
@@ -167,6 +180,11 @@ export default function ChartTable({
           </TableRow>
         ))}
       </TableBody>
+
+      <DeleteOrdersAlertDialog
+        isDialogOpen={isDialogOpen}
+        setDialogOpen={setIsDialogOpen}
+      />
     </Table>
   )
 }

@@ -36,13 +36,23 @@ export default function CellsRow({
         return newOrderTime
       })
 
-      setOrderTimePendingQueue((prev) => [
-        ...prev,
-        {
-          orderId: orderId,
-          orderTime: time,
-        },
-      ])
+      setOrderTimePendingQueue((prev) => {
+        const existingIndex = prev.findIndex(
+          (item) => item.orderId === orderId && item.orderTime === time,
+        )
+
+        if (existingIndex !== -1) {
+          return prev.filter((_, index) => index !== existingIndex)
+        } else {
+          return [
+            ...prev,
+            {
+              orderId: orderId,
+              orderTime: time,
+            },
+          ]
+        }
+      })
 
       debouncedUpsertingOrderTimes()
     },
