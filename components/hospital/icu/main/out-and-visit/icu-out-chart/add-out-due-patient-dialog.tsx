@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -32,9 +34,11 @@ export default function AddOutDuePatientDialog() {
   >([])
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { hos_id, target_date } = useParams()
+  const [isFetching, setIsFetching] = useState(false)
 
   useEffect(() => {
     if (isDialogOpen) {
+      setIsFetching(true)
       const getNotOutDueIoPatients = async () => {
         const patients = await getNotOutDuePatients(
           hos_id as string,
@@ -42,6 +46,7 @@ export default function AddOutDuePatientDialog() {
         )
         setNotOutDuePatients(patients ?? [])
       }
+      setIsFetching(false)
 
       getNotOutDueIoPatients()
     }
@@ -57,7 +62,7 @@ export default function AddOutDuePatientDialog() {
     )
 
     toast({
-      title: '퇴원 예정 환자를 추가하였습니다',
+      title: '퇴원예정 환자를 추가하였습니다',
     })
 
     setIsDialogOpen(false)
@@ -70,14 +75,11 @@ export default function AddOutDuePatientDialog() {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <div className="relative mx-auto flex w-[180px] items-center justify-center gap-2 text-center">
-        <span>환자명</span>
-        <DialogTrigger asChild>
-          <Button size="icon" variant="ghost" className="absolute right-4">
-            <Plus size={18} />
-          </Button>
-        </DialogTrigger>
-      </div>
+      <DialogTrigger asChild>
+        <Button size="icon" variant="ghost">
+          <Plus size={18} />
+        </Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>퇴원 예정 환자 추가</DialogTitle>
@@ -90,7 +92,11 @@ export default function AddOutDuePatientDialog() {
           <SelectTrigger disabled={noPatientToAdd}>
             <SelectValue
               placeholder={
-                noPatientToAdd ? '추가할 환자가 없습니다' : '환자선택'
+                isFetching
+                  ? '입원중인 환자목록 가져오는 중...'
+                  : noPatientToAdd
+                    ? '추가할 환자가 없습니다'
+                    : '환자선택'
               }
             />
           </SelectTrigger>

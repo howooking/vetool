@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { SquareArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 
@@ -13,7 +13,7 @@ export default function GoToButton({ patientId }: { patientId: string }) {
 
   return (
     <Button onClick={handleGoto} size="icon" variant="ghost">
-      <SquareArrowRight size={18} />
+      <ArrowRight size={18} />
     </Button>
   )
 }

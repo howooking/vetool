@@ -1,13 +1,12 @@
 'use client'
 
-import CustomTooltip from '@/components/ui/custom-tooltip'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { updatePatientMovement } from '@/lib/services/icu/movement/update-patient-movement'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export default function MovementChecklistInput({
+export default function ChecklistInput({
   icuIoId,
   value,
   checkType,
@@ -23,10 +22,23 @@ export default function MovementChecklistInput({
   const [inputValue, setInputValue] = useState(value)
   const { refresh } = useRouter()
 
+  useEffect(() => {
+    setInputValue(value)
+  }, [value])
+
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const trimmedValue = e.target.value.trim()
 
     if (trimmedValue.length <= 50) setInputValue(trimmedValue)
+  }
+
+  const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const target = e.currentTarget
+      setTimeout(() => {
+        target.blur()
+      }, 0)
+    }
   }
 
   const handleUpdateChecklist = async () => {
@@ -35,7 +47,7 @@ export default function MovementChecklistInput({
     await updatePatientMovement(icuIoId, inputValue, checkType, visitId)
 
     toast({
-      title: `관리 사항이 변경되었습니다`,
+      title: '관리 사항을 변경하였습니다',
     })
     refresh()
   }
@@ -45,20 +57,12 @@ export default function MovementChecklistInput({
   }, [value])
 
   return (
-    <CustomTooltip
-      side="top"
-      sideOffset={4}
-      delayDuration={300}
-      contents={inputValue}
-      variant="secondary"
-    >
-      <Input
-        disabled={isDischarged}
-        value={inputValue}
-        onChange={handleValueChange}
-        onBlur={handleUpdateChecklist}
-        className="mx-auto w-16 text-center md:w-auto md:max-w-32"
-      />
-    </CustomTooltip>
+    <Input
+      disabled={isDischarged}
+      value={inputValue}
+      onChange={handleValueChange}
+      onBlur={handleUpdateChecklist}
+      onKeyDown={handlePressEnter}
+    />
   )
 }

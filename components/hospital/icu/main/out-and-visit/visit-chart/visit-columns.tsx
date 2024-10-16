@@ -3,16 +3,15 @@
 import PatientInfo from '@/components/hospital/common/patient-info'
 import type { VisitPatientData } from '@/types/icu/movement'
 import { ColumnDef } from '@tanstack/react-table'
-import AddVisitPatientDialog from './add-visit-patient-dialog'
-import MovementChecklistInput from '../movement-checklist-input'
+import ChecklistInput from '../checklist-input'
+import ChecklistTime from '../checklist-time'
+import { CancelVisit } from './cancel-visit'
 import CompleteVisitButton from './complete-visit-button'
 
 export const visitColumns: ColumnDef<VisitPatientData>[] = [
   {
     accessorKey: 'patientName',
-    header: () => {
-      return <AddVisitPatientDialog />
-    },
+    header: '환자 이름',
     cell: ({ row }) => {
       const name = row.original.patient.name
       const breed = row.original.patient.breed
@@ -20,15 +19,13 @@ export const visitColumns: ColumnDef<VisitPatientData>[] = [
       const isDone = row.original.is_done
 
       return (
-        <div className="mx-auto">
-          <PatientInfo
-            name={name}
-            species={species}
-            breed={breed}
-            isDone={isDone}
-            className="justify-center"
-          />
-        </div>
+        <PatientInfo
+          name={name}
+          species={species}
+          breed={breed}
+          isDone={isDone}
+          className="justify-center"
+        />
       )
     },
   },
@@ -43,10 +40,10 @@ export const visitColumns: ColumnDef<VisitPatientData>[] = [
       const visitId = row.original.icu_visit_id
 
       return (
-        <MovementChecklistInput
-          icuIoId={icuIoId}
+        <ChecklistTime
           checkType="time"
-          value={visitTime}
+          icuIoId={icuIoId}
+          time={visitTime}
           isDischarged={isDone}
           visitId={visitId}
         />
@@ -63,7 +60,7 @@ export const visitColumns: ColumnDef<VisitPatientData>[] = [
       const visitId = row.original.icu_visit_id
 
       return (
-        <MovementChecklistInput
+        <ChecklistInput
           icuIoId={icuIoId}
           checkType="place"
           value={place}
@@ -83,7 +80,7 @@ export const visitColumns: ColumnDef<VisitPatientData>[] = [
       const visitId = row.original.icu_visit_id
 
       return (
-        <MovementChecklistInput
+        <ChecklistInput
           icuIoId={icuIoId}
           checkType="preparation"
           value={preparation}
@@ -104,7 +101,7 @@ export const visitColumns: ColumnDef<VisitPatientData>[] = [
       const visitId = row.original.icu_visit_id
 
       return (
-        <MovementChecklistInput
+        <ChecklistInput
           icuIoId={icuIoId}
           checkType="consultation_status"
           value={consultationStatus}
@@ -124,7 +121,7 @@ export const visitColumns: ColumnDef<VisitPatientData>[] = [
       const visitId = row.original.icu_visit_id
 
       return (
-        <MovementChecklistInput
+        <ChecklistInput
           icuIoId={icuIoId}
           checkType="visit_etc"
           value={etc}
@@ -143,7 +140,6 @@ export const visitColumns: ColumnDef<VisitPatientData>[] = [
       return <div className="min-w-12 md:min-w-32">{mainVet}</div>
     },
   },
-
   {
     accessorKey: 'action',
     header: '완료',
@@ -152,6 +148,16 @@ export const visitColumns: ColumnDef<VisitPatientData>[] = [
       const isDone = row.original.is_done
 
       return <CompleteVisitButton visitId={visitId} isDone={isDone} />
+    },
+  },
+  {
+    accessorKey: 'cancel',
+    header: '취소',
+    cell: ({ row }) => {
+      const visitId = row.original.icu_visit_id
+      const isDone = row.original.is_done
+
+      return <CancelVisit visitId={visitId} isDone={isDone} />
     },
   },
 ]

@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from '@/components/ui/use-toast'
 import { updateIsVisitDone } from '@/lib/services/icu/movement/visit/update-is-visit-done'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function CompleteVisitButton({
   visitId,
@@ -21,7 +21,7 @@ export default function CompleteVisitButton({
     await updateIsVisitDone(visitId, !isDone)
 
     toast({
-      title: `면회 완료 여부를 변경하였습니다`,
+      title: `${isDone ? '면회완료를 취소하였습니다' : '면회를 완료하였습니다'}`,
     })
 
     setIsUpdating(false)
@@ -29,15 +29,16 @@ export default function CompleteVisitButton({
     refresh()
   }
 
+  useEffect(() => {
+    setIsDoneState(isDone)
+  }, [isDone])
+
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      className="w-12 md:min-w-20"
+    <Checkbox
+      checked={isDoneState}
       onClick={handleCompleteVisitButton}
       disabled={isUpdating}
-    >
-      {isDoneState ? '완료' : '미완료'}
-    </Button>
+      className="mr-2"
+    />
   )
 }

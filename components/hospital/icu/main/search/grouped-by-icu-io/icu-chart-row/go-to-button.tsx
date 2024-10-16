@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import type { SearchedIcuCharts } from '@/types/icu/search'
-import { SquareArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 
 export default function GotoButton({ chart }: { chart: SearchedIcuCharts }) {
@@ -15,7 +15,7 @@ export default function GotoButton({ chart }: { chart: SearchedIcuCharts }) {
 
   return (
     <Button onClick={handleGoto} size="icon" variant="ghost">
-      <SquareArrowRight size={18} />
+      <ArrowRight size={18} />
     </Button>
   )
 }

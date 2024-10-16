@@ -24,3 +24,16 @@ export const getVisitablePatients = async (
 
   return data || []
 }
+
+export const deleteVisitPatient = async (visitId: string) => {
+  const supabase = createClient()
+
+  const { error } = await supabase.from('icu_visit').delete().match({
+    icu_visit_id: visitId,
+  })
+
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error?.message}`)
+  }
+}
