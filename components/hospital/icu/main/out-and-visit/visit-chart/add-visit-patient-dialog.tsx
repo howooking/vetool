@@ -51,8 +51,8 @@ export default function AddVisitPatientDialog() {
         )
 
         setVisitablePatients(patients)
+        setIsFetching(false)
       }
-      setIsFetching(false)
 
       fetchVisitablePatients()
     }
@@ -106,13 +106,13 @@ export default function AddVisitPatientDialog() {
             setSelectedPatient(parsedValue)
           }}
         >
-          <SelectTrigger disabled={noPatientToAdd}>
+          <SelectTrigger disabled={noPatientToAdd || isFetching}>
             <SelectValue
               placeholder={
                 isFetching
                   ? '입원중인 환자목록 가져오는 중...'
                   : noPatientToAdd
-                    ? '추가할 환자가 없습니다'
+                    ? '면회할 환자가 없습니다'
                     : '환자선택'
               }
             />

@@ -120,8 +120,8 @@ export default function ChartTable({
 
       // 다중 오더 삭제
       if (
-        (event.ctrlKey || event.metaKey) &&
-        (event.key === 'Backspace' || event.key === 'Delete') &&
+        ((event.metaKey && event.key === 'Backspace') ||
+          event.key === 'Delete') &&
         orderPendingQueue.length > 0
       ) {
         event.preventDefault()
