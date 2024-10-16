@@ -2,17 +2,14 @@
 
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import type { SelectedChart } from '@/types/icu/chart'
-import type { PatientData } from '@/types/patients'
 import { useEffect, useState } from 'react'
 import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
 import Chart from './chart'
 
 export default function ChartEntry({
   chartData,
-  patientsData,
 }: {
   chartData: SelectedChart
-  patientsData: PatientData[]
 }) {
   const [isChartLoading, setIsChartLoading] = useState(false)
 
@@ -46,5 +43,5 @@ export default function ChartEntry({
     )
   }
 
-  return <Chart chartData={chartData} patientsData={patientsData} />
+  return <Chart chartData={chartData} />
 }

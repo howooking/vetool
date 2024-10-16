@@ -107,8 +107,6 @@ export default function Autocomplete({
   )
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (suggestions.length === 0) return
-
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
@@ -129,9 +127,12 @@ export default function Autocomplete({
         setSuggestions([])
         break
       case 'Enter':
+        if (suggestions.length === 0) {
+          inputRef.current?.blur()
+          return
+        }
         e.preventDefault()
         e.stopPropagation()
-
         setTimeout(() => {
           insertSuggestion(suggestions[selectedIndex].mainKeyword)
         }, 0)

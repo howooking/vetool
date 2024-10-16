@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -18,14 +20,14 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { getVisitablePatients } from '@/lib/services/icu/movement/visit/get-visitable-patients'
-import { insertVisitPatient } from '@/lib/services/icu/movement/visit/insert-visit-patient'
+import { getVisitablePatients } from '@/lib/services/icu/out-and-visit/icu-out-chart'
+import { insertVisitPatient } from '@/lib/services/icu/out-and-visit/visit-chart'
 import { VisitablePatientsData } from '@/types/icu/movement'
 import { Plus } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-export default function AddVisitPatientDialog({}) {
+export default function AddVisitPatientDialog() {
   const [selectedPatient, setSelectedPatient] = useState<{
     icu_io_id: string
     main_vet: string
@@ -37,19 +39,24 @@ export default function AddVisitPatientDialog({}) {
   >([])
   const { hos_id, target_date } = useParams()
   const { refresh } = useRouter()
+  const [isFetching, setIsFetching] = useState(false)
 
   useEffect(() => {
-    const fetchVisitablePatients = async () => {
-      const patients = await getVisitablePatients(
-        hos_id as string,
-        target_date as string,
-      )
+    if (isDialogOpen) {
+      setIsFetching(true)
+      const fetchVisitablePatients = async () => {
+        const patients = await getVisitablePatients(
+          hos_id as string,
+          target_date as string,
+        )
 
-      setVisitablePatients(patients)
+        setVisitablePatients(patients)
+      }
+      setIsFetching(false)
+
+      fetchVisitablePatients()
     }
-
-    fetchVisitablePatients()
-  }, [hos_id, target_date])
+  }, [hos_id, isDialogOpen, target_date])
 
   const handleInsertVisitPatient = async () => {
     if (!selectedPatient) return
@@ -74,16 +81,19 @@ export default function AddVisitPatientDialog({}) {
     setIsDialogOpen(false)
   }
 
+  const noPatientToAdd = useMemo(
+    () => visitablePatients.length === 0,
+    [visitablePatients],
+  )
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <div className="relative mx-auto flex w-[180px] items-center justify-center gap-2 text-center">
-        <span>환자명</span>
-        <DialogTrigger asChild>
-          <Button size="icon" variant="ghost" className="absolute right-4">
-            <Plus size={18} />
-          </Button>
-        </DialogTrigger>
-      </div>
+      <DialogTrigger asChild>
+        <Button size="icon" variant="ghost">
+          <Plus size={18} />
+        </Button>
+      </DialogTrigger>
+
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>면회 환자 추가</DialogTitle>
@@ -96,8 +106,16 @@ export default function AddVisitPatientDialog({}) {
             setSelectedPatient(parsedValue)
           }}
         >
-          <SelectTrigger>
-            <SelectValue placeholder="환자 선택" />
+          <SelectTrigger disabled={noPatientToAdd}>
+            <SelectValue
+              placeholder={
+                isFetching
+                  ? '입원중인 환자목록 가져오는 중...'
+                  : noPatientToAdd
+                    ? '추가할 환자가 없습니다'
+                    : '환자선택'
+              }
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>

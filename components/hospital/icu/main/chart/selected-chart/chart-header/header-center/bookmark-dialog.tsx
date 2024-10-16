@@ -20,20 +20,19 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-
+import {
+  deleteBookmarkChart,
+  upsertBookmarkChart,
+} from '@/lib/services/icu/bookmark/bookmark'
 import { cn } from '@/lib/utils'
+import { IcuBookmark } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle, Star } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { bookmarkFormSchema } from './weght-bookmark-schema'
-import {
-  deleteBookmarkChart,
-  upsertBookmarkChart,
-} from '@/lib/services/icu/bookmark/bookmark'
-import { IcuBookmark } from '@/types'
+import { bookmarkFormSchema } from './bookmark-form-schema'
 
 export default function BookmarkDialog({
   icuChartId,
@@ -111,7 +110,7 @@ export default function BookmarkDialog({
       <DialogTrigger>
         <Star
           className={cn(
-            'text-amber-300',
+            'text-amber-300 transition hover:scale-110',
             bookmarkData?.bookmark_id!! && 'fill-amber-300',
           )}
         />
