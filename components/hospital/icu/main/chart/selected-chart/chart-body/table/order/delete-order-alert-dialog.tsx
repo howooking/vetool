@@ -54,7 +54,7 @@ export default function DeleteOrderAlertDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>취소</AlertDialogCancel>
+          <AlertDialogCancel tabIndex={-1}>취소</AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive hover:bg-destructive/80"
             onClick={handleDeleteOrderClick}
