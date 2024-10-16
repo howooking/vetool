@@ -34,7 +34,7 @@ export default function AddBookmarkChartDialog({
 
   const { hos_id } = useParams()
   const { isPreviewDialogOpen } = usePreviewDialogStore()
-  const { isBookmarkDialogOpen, setBookmarkDilaogOpen } =
+  const { isBookmarkDialogOpen, setBookmarkDialogOpen } =
     useBookmarkDialogStore()
   const { isConfirmCopyDialogOpen } = useCopiedChartStore()
 
@@ -42,12 +42,12 @@ export default function AddBookmarkChartDialog({
     setIsFetching(true)
     getBookmarkedCharts(hos_id as string)
       .then(setBookmarkCharts)
-      .then(() => setBookmarkDilaogOpen(true))
+      .then(() => setBookmarkDialogOpen(true))
       .then(() => setIsFetching(false))
   }
 
   return (
-    <Dialog open={isBookmarkDialogOpen} onOpenChange={setBookmarkDilaogOpen}>
+    <Dialog open={isBookmarkDialogOpen} onOpenChange={setBookmarkDialogOpen}>
       <Button
         variant="outline"
         className="hidden h-[200px] w-full items-center justify-center gap-2 md:flex md:h-1/3 md:w-1/4"
@@ -76,7 +76,10 @@ export default function AddBookmarkChartDialog({
 
         {isPreviewDialogOpen && <PreviewDialog />}
         {isConfirmCopyDialogOpen && (
-          <ConfirmCopyDialog setIsChartLoading={setIsChartLoading} />
+          <ConfirmCopyDialog
+            setIsChartLoading={setIsChartLoading}
+            setBookmarkDialogOpen={setBookmarkDialogOpen}
+          />
         )}
 
         <DialogFooter>

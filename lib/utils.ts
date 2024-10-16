@@ -226,18 +226,23 @@ type FormattedOrder = {
 export function formatOrders(
   originalArray: OrderTimePendingQueue[],
 ): FormattedOrder[] {
-  const result: { [key: string]: FormattedOrder } = {}
+  const uniqueOrders = new Map<string, Set<number>>()
+
   for (const order of originalArray) {
-    if (result[order.orderId]) {
-      result[order.orderId].orderTimes.push(order.orderTime)
-    } else {
-      result[order.orderId] = {
-        orderId: order.orderId,
-        orderTimes: [order.orderTime],
-      }
+    const key = order.orderId
+
+    if (!uniqueOrders.has(key)) {
+      uniqueOrders.set(key, new Set())
     }
+
+    // 중복된 orderId & orderTime
+    uniqueOrders.get(key)!.add(order.orderTime)
   }
-  return Object.values(result)
+
+  return Array.from(uniqueOrders).map(([orderId, orderTimes]) => ({
+    orderId,
+    orderTimes: Array.from(orderTimes),
+  }))
 }
 
 export const sortOrders = (orders: SelectedIcuOrder[]): SelectedIcuOrder[] => {

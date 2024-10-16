@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { Copy, CopyCheck, LoaderCircle } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -11,6 +12,7 @@ export default function CopyChartButton({
 }) {
   const [isCopying, setIsCopying] = useState(false)
   const { copiedChartId, setCopiedChartId } = useCopiedChartStore()
+  const { orderPendingQueue } = useIcuOrderStore()
 
   const handleCopy = useCallback(async () => {
     setIsCopying(true)
@@ -26,6 +28,8 @@ export default function CopyChartButton({
   }, [icuChartId, setCopiedChartId])
 
   useEffect(() => {
+    if (orderPendingQueue.length) return
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
         if (!window.getSelection()?.toString()) {
@@ -40,7 +44,7 @@ export default function CopyChartButton({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [handleCopy, icuChartId])
+  }, [orderPendingQueue, handleCopy])
 
   const isCopied = copiedChartId === icuChartId
 

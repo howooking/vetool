@@ -20,7 +20,7 @@ export const deleteOrder = async (chartOrderId: string) => {
 export const upsertOrder = async (
   hosId: string,
   icuChartId: string,
-  icuChartOrderId: string,
+  icuChartOrderId: string | undefined,
   orderTime: string[],
   order: {
     icu_chart_order_name: string
