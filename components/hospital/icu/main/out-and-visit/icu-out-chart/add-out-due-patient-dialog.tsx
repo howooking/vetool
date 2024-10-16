@@ -40,15 +40,15 @@ export default function AddOutDuePatientDialog() {
 
   useEffect(() => {
     if (isDialogOpen) {
-      setIsFetching(true)
       const getNotOutDueIoPatients = async () => {
+        setIsFetching(true)
         const patients = await getNotOutDuePatients(
           hos_id as string,
           target_date as string,
         )
         setNotOutDuePatients(patients ?? [])
+        setIsFetching(false)
       }
-      setIsFetching(false)
 
       getNotOutDueIoPatients()
     }
@@ -91,13 +91,13 @@ export default function AddOutDuePatientDialog() {
         </DialogHeader>
 
         <Select onValueChange={setSelectedIoId}>
-          <SelectTrigger disabled={noPatientToAdd}>
+          <SelectTrigger disabled={noPatientToAdd || isFetching}>
             <SelectValue
               placeholder={
                 isFetching
                   ? '입원중인 환자목록 가져오는 중...'
                   : noPatientToAdd
-                    ? '추가할 환자가 없습니다'
+                    ? '퇴원할 환자가 없습니다'
                     : '환자선택'
               }
             />
