@@ -8,8 +8,7 @@ import { cn } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { IcuOrderColors } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
-import { useCallback, useMemo } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
+import { useCallback, useEffect, useMemo } from 'react'
 
 export default function CellsRowTitle({
   order,
@@ -26,24 +25,32 @@ export default function CellsRowTitle({
     setStep,
     setIsEditMode,
     setSelectedChartOrder,
-    orderPendingQueue,
-    setOrderPendingQueue,
+    selectedOrderPendingQueue,
+    setSelectedOrderPendingQueue,
+    setCopiedOrderPendingQueue,
     reset,
   } = useIcuOrderStore()
 
   const isInPendingQueue = useMemo(() => {
-    return orderPendingQueue.some((order) => order.order_id === order_id)
-  }, [order_id, orderPendingQueue])
+    return selectedOrderPendingQueue.some(
+      (order) => order.order_id === order_id,
+    )
+  }, [order_id, selectedOrderPendingQueue])
 
-  const debouncedMultipleOrders = useDebouncedCallback(() => {
+  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
         event.preventDefault()
 
-        toast({
-          title: '오더 복사 완료',
-          description: '붙여넣기 할 차트로 이동해주세요',
-        })
+        if (selectedOrderPendingQueue.length > 0) {
+          setCopiedOrderPendingQueue(selectedOrderPendingQueue)
+          setSelectedOrderPendingQueue([])
+
+          toast({
+            title: '오더 복사 완료',
+            description: '붙여넣기 할 차트로 이동해주세요',
+          })
+        }
       }
     }
 
@@ -52,7 +59,11 @@ export default function CellsRowTitle({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, 1000)
+  }, [
+    selectedOrderPendingQueue,
+    setCopiedOrderPendingQueue,
+    setSelectedOrderPendingQueue,
+  ])
 
   const handleEditOrderDialogOpen = useCallback(
     (e: React.MouseEvent) => {
@@ -61,7 +72,7 @@ export default function CellsRowTitle({
       if (e.metaKey || e.ctrlKey) {
         e.preventDefault()
 
-        setOrderPendingQueue((prev) => {
+        setSelectedOrderPendingQueue((prev) => {
           const existingIndex = prev.findIndex(
             (item) => item.order_id === order.order_id,
           )
@@ -73,7 +84,7 @@ export default function CellsRowTitle({
           }
         })
 
-        return debouncedMultipleOrders()
+        return
       }
 
       reset()
@@ -83,13 +94,12 @@ export default function CellsRowTitle({
     },
     [
       preview,
+      order,
+      setSelectedOrderPendingQueue,
+      setSelectedChartOrder,
       setStep,
       setIsEditMode,
-      setSelectedChartOrder,
-      order,
-      setOrderPendingQueue,
       reset,
-      debouncedMultipleOrders,
     ],
   )
 
