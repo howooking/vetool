@@ -28,6 +28,7 @@ export default function CellsRowTitle({
     setSelectedChartOrder,
     orderPendingQueue,
     setOrderPendingQueue,
+    reset,
   } = useIcuOrderStore()
 
   const isInPendingQueue = useMemo(() => {
@@ -75,6 +76,7 @@ export default function CellsRowTitle({
         return debouncedMultipleOrders()
       }
 
+      reset()
       setStep('upsert')
       setIsEditMode(true)
       setSelectedChartOrder(order)
@@ -86,6 +88,7 @@ export default function CellsRowTitle({
       setSelectedChartOrder,
       order,
       setOrderPendingQueue,
+      reset,
       debouncedMultipleOrders,
     ],
   )
