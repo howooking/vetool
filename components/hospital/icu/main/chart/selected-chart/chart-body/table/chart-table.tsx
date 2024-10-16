@@ -40,8 +40,13 @@ export default function ChartTable({
   } = chartData
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
   const [isSorting, setIsSorting] = useState(true)
-  const { setStep, reset, orderTimePendingQueue, orderPendingQueue } =
-    useIcuOrderStore()
+  const {
+    setStep,
+    reset,
+    orderTimePendingQueue,
+    selectedOrderPendingQueue,
+    copiedOrderPendingQueue,
+  } = useIcuOrderStore()
   const { setStep: setTxStep } = useTxMutationStore()
   const {
     basicHosData: { showOrderer, vetsListData },
@@ -108,21 +113,19 @@ export default function ChartTable({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // 다중 오더 붙여넣기
       if (
         (event.ctrlKey || event.metaKey) &&
         event.key === 'v' &&
-        orderPendingQueue.length > 0
+        copiedOrderPendingQueue.length > 0
       ) {
         event.preventDefault()
         setStep('selectOrderer')
       }
 
-      // 다중 오더 삭제
       if (
-        (event.ctrlKey || event.metaKey) &&
-        (event.key === 'Backspace' || event.key === 'Delete') &&
-        orderPendingQueue.length > 0
+        ((event.metaKey && event.key === 'Backspace') ||
+          event.key === 'Delete') &&
+        selectedOrderPendingQueue.length > 0
       ) {
         event.preventDefault()
         setIsDialogOpen(true)
@@ -134,7 +137,13 @@ export default function ChartTable({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [setStep, orderPendingQueue])
+  }, [
+    copiedOrderPendingQueue,
+    orderTimePendingQueue,
+    reset,
+    selectedOrderPendingQueue,
+    setStep,
+  ])
 
   if (isSorting) {
     return <LargeLoaderCircle className="h-icu-chart" />
