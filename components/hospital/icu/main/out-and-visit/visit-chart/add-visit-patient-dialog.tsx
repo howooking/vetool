@@ -20,8 +20,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { getVisitablePatients } from '@/lib/services/icu/movement/visit/get-visitable-patients'
-import { insertVisitPatient } from '@/lib/services/icu/movement/visit/insert-visit-patient'
+import { getVisitablePatients } from '@/lib/services/icu/out-and-visit/icu-out-chart'
+import { insertVisitPatient } from '@/lib/services/icu/out-and-visit/visit-chart'
 import { VisitablePatientsData } from '@/types/icu/movement'
 import { Plus } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'

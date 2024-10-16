@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { deleteVisitPatient } from '@/lib/services/icu/movement/visit/get-visitable-patients'
+import { deleteVisitPatient } from '@/lib/services/icu/out-and-visit/icu-out-chart'
 import { X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'

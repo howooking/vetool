@@ -1,6 +1,6 @@
 import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from '@/components/ui/use-toast'
-import { updateIsVisitDone } from '@/lib/services/icu/movement/visit/update-is-visit-done'
+import { updateIsVisitDone } from '@/lib/services/icu/out-and-visit/visit-chart'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 

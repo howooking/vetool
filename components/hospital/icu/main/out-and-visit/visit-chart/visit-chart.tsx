@@ -1,7 +1,7 @@
 import NoResultSquirrel from '@/components/common/no-result-squirrel'
 import DataTable from '@/components/ui/data-table'
-import { getVisitPatients } from '@/lib/services/icu/movement/visit/get-visit-patients'
 import { visitColumns } from './visit-columns'
+import { getVisitPatients } from '@/lib/services/icu/out-and-visit/icu-out-chart'
 
 export default async function VisitChart({
   hosId,

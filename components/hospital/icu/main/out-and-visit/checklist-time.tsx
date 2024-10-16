@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { updatePatientMovement } from '@/lib/services/icu/movement/update-patient-movement'
+import { updatePatientMovement } from '@/lib/services/icu/out-and-visit/update-checklist'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 

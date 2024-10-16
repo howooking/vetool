@@ -20,8 +20,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { getNotOutDuePatients } from '@/lib/services/icu/movement/out-due/get-not-out-due-patient'
-import { updatePatientOutDueDate } from '@/lib/services/icu/movement/out-due/update-patient-out-due-date'
+import {
+  getNotOutDuePatients,
+  updatePatientOutDueDate,
+} from '@/lib/services/icu/out-and-visit/icu-out-chart'
 import type { NotOutDuePatientsData } from '@/types/icu/movement'
 import { Plus } from 'lucide-react'
 import { useParams } from 'next/navigation'
