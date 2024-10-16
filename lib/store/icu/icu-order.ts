@@ -19,8 +19,15 @@ type IcuOrderState = {
   selectedChartOrder: Partial<SelectedIcuOrder>
   setSelectedChartOrder: (chartOrder: Partial<SelectedIcuOrder>) => void
 
-  orderPendingQueue: Partial<SelectedIcuOrder>[]
-  setOrderPendingQueue: (
+  selectedOrderPendingQueue: Partial<SelectedIcuOrder>[]
+  setSelectedOrderPendingQueue: (
+    updater:
+      | Partial<SelectedIcuOrder>[]
+      | ((prev: Partial<SelectedIcuOrder>[]) => Partial<SelectedIcuOrder>[]),
+  ) => void
+
+  copiedOrderPendingQueue: Partial<SelectedIcuOrder>[]
+  setCopiedOrderPendingQueue: (
     updater:
       | Partial<SelectedIcuOrder>[]
       | ((prev: Partial<SelectedIcuOrder>[]) => Partial<SelectedIcuOrder>[]),
@@ -46,12 +53,21 @@ export const useIcuOrderStore = create<IcuOrderState>((set) => ({
   selectedChartOrder: {} as Partial<SelectedIcuOrder>,
   setSelectedChartOrder: (selectedChartOrder) => set({ selectedChartOrder }),
 
-  orderPendingQueue: [],
-  setOrderPendingQueue: (updater) =>
+  selectedOrderPendingQueue: [],
+  setSelectedOrderPendingQueue: (updater) =>
     set((state) => ({
-      orderPendingQueue:
+      selectedOrderPendingQueue:
         typeof updater === 'function'
-          ? updater(state.orderPendingQueue)
+          ? updater(state.selectedOrderPendingQueue)
+          : updater,
+    })),
+
+  copiedOrderPendingQueue: [],
+  setCopiedOrderPendingQueue: (updater) =>
+    set((state) => ({
+      copiedOrderPendingQueue:
+        typeof updater === 'function'
+          ? updater(state.copiedOrderPendingQueue)
           : updater,
     })),
 
@@ -69,6 +85,7 @@ export const useIcuOrderStore = create<IcuOrderState>((set) => ({
       isEditMode: false,
       selectedChartOrder: {} as Partial<SelectedIcuOrder>,
       orderTimePendingQueue: [],
-      orderPendingQueue: [],
+      copiedOrderPendingQueue: [],
+      selectedOrderPendingQueue: [],
     }),
 }))

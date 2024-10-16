@@ -12,7 +12,7 @@ export default function CopyChartButton({
 }) {
   const [isCopying, setIsCopying] = useState(false)
   const { copiedChartId, setCopiedChartId } = useCopiedChartStore()
-  const { orderPendingQueue } = useIcuOrderStore()
+  const { selectedOrderPendingQueue } = useIcuOrderStore()
 
   const handleCopy = useCallback(async () => {
     setIsCopying(true)
@@ -28,7 +28,7 @@ export default function CopyChartButton({
   }, [icuChartId, setCopiedChartId])
 
   useEffect(() => {
-    if (orderPendingQueue.length) return
+    if (selectedOrderPendingQueue.length) return
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
@@ -44,7 +44,7 @@ export default function CopyChartButton({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [orderPendingQueue, handleCopy])
+  }, [selectedOrderPendingQueue, handleCopy])
 
   const isCopied = copiedChartId === icuChartId
 

@@ -41,7 +41,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     const {
       orderTimePendingQueue,
       setOrderTimePendingQueue,
-      setOrderPendingQueue,
+      setSelectedOrderPendingQueue,
     } = useIcuOrderStore()
     const {
       isMutationCanceled,
@@ -132,7 +132,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
 
     const handleClick = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
-        setOrderPendingQueue([])
+        setSelectedOrderPendingQueue([])
 
         if (e.metaKey || e.ctrlKey) {
           e.preventDefault()
@@ -142,7 +142,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
           toggleCellInQueue(icuChartOrderId, time)
         }
       },
-      [icuChartOrderId, time, toggleCellInQueue, setOrderPendingQueue],
+      [icuChartOrderId, time, toggleCellInQueue, setSelectedOrderPendingQueue],
     )
 
     const handleUpsertBriefTxResultInput = useCallback(async () => {
