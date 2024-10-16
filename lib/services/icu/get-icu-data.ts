@@ -27,7 +27,13 @@ export const getIcuData = async (hosId: string, targetDate: string) => {
     supabase
       .from('hospitals')
       .select(
-        'order_color, group_list, icu_memo_names, maintenance_rate_calc_method, show_orderer',
+        `
+          order_color,
+          group_list,
+          icu_memo_names,
+          maintenance_rate_calc_method,
+          show_orderer
+        `,
       )
       .match({ hos_id: hosId })
       .single(),

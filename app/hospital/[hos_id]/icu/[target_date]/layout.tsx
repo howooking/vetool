@@ -19,6 +19,7 @@ export default async function IcuPageLayout({
   return (
     <BasicHosDataProvider
       basicHosData={{
+        patientsData: patientsData,
         vetsListData: vetsListData,
         groupListData: basicHosData.group_list,
         orderColorsData: basicHosData.order_color as IcuOrderColors,

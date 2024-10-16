@@ -1421,15 +1421,6 @@ export type Database = {
         }
         Returns: undefined
       }
-      update_weight: {
-        Args: {
-          patient_id_input: string
-          icu_chart_id_input: string
-          weight_input: string
-          weight_measured_date_input: string
-        }
-        Returns: undefined
-      }
       upsert_icu_bookmark: {
         Args: {
           icu_chart_id_input: string

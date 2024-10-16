@@ -1,19 +1,17 @@
 'use client'
 
 import PatientInfo from '@/components/hospital/common/patient-info'
-import MovementChecklistInput from '@/components/hospital/icu/main/movement/movement-checklist-input'
 import type { OutDuePatientsData } from '@/types/icu/movement'
 import { ColumnDef } from '@tanstack/react-table'
-import AddOutDuePatientDialog from './add-out-due-patient-dialog'
-import MoveChartButton from './move-chart-button'
+import ChecklistInput from '../checklist-input'
+import ChecklistTime from '../checklist-time'
+import { CancelOutDue } from './cancel-out-due'
+import GoToButton from './go-to-button'
 
 export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
   {
     accessorKey: 'patientName',
-    header: () => {
-      return <AddOutDuePatientDialog />
-    },
-
+    header: '환자 이름',
     cell: ({ row }) => {
       const name = row.original.patient.name
       const breed = row.original.patient.breed
@@ -21,15 +19,13 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
       const isDischarged = row.original.out_date !== null
 
       return (
-        <div className="mx-auto">
-          <PatientInfo
-            name={name}
-            species={species}
-            breed={breed}
-            isDone={isDischarged}
-            className="justify-center"
-          />
-        </div>
+        <PatientInfo
+          name={name}
+          species={species}
+          breed={breed}
+          isDone={isDischarged}
+          className="justify-center"
+        />
       )
     },
   },
@@ -42,11 +38,11 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
       const icuIoId = row.original.icu_io_id
 
       return (
-        <MovementChecklistInput
+        <ChecklistTime
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           checkType="out_time"
-          value={outTime}
+          time={outTime}
         />
       )
     },
@@ -60,7 +56,7 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
       const icuIoId = row.original.icu_io_id
 
       return (
-        <MovementChecklistInput
+        <ChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           checkType="basic_care"
@@ -78,7 +74,7 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
       const icuIoId = row.original.icu_io_id
 
       return (
-        <MovementChecklistInput
+        <ChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           checkType="belongings"
@@ -97,7 +93,7 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
       const icuIoId = row.original.icu_io_id
 
       return (
-        <MovementChecklistInput
+        <ChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           value={prescription}
@@ -116,7 +112,7 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
       const icuIoId = row.original.icu_io_id
 
       return (
-        <MovementChecklistInput
+        <ChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           checkType="medication"
@@ -134,7 +130,7 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
       const icuIoId = row.original.icu_io_id
 
       return (
-        <MovementChecklistInput
+        <ChecklistInput
           icuIoId={icuIoId}
           isDischarged={isDischarged}
           checkType="etc"
@@ -145,11 +141,21 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
   },
   {
     accessorKey: 'active',
-    header: '차트 이동',
+    header: '이동',
     cell: ({ row }) => {
       const patientId = row.original.patient.patient_id
 
-      return <MoveChartButton patientId={patientId} />
+      return <GoToButton patientId={patientId} />
+    },
+  },
+  {
+    accessorKey: 'cancel',
+    header: '취소',
+    cell: ({ row }) => {
+      const icuIoId = row.original.icu_io_id
+      const isDischarged = row.original.out_date !== null
+
+      return <CancelOutDue icuIoId={icuIoId} isDischarged={isDischarged} />
     },
   },
 ]

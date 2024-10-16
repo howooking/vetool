@@ -20,16 +20,16 @@ export const FOOTER_MAIN_VIEW_MENUS = [
     value: 'chart',
   },
   {
+    label: '퇴원 / 면회',
+    value: 'out-and-visit',
+  },
+  {
     label: '차트 검색',
     value: 'search',
   },
   {
     label: '즐겨찾기',
     value: 'bookmark',
-  },
-  {
-    label: '퇴원 / 면회',
-    value: 'movement',
   },
   {
     label: '입원 통계',

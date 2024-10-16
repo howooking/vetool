@@ -99,7 +99,10 @@ export const updateWeight = async (
     redirect(`/error/?message=${error.message}`)
   }
 }
-export const updateOutDueDate = async (icuIoId: string, outDueDate: string) => {
+export const updateOutDueDate = async (
+  icuIoId: string,
+  outDueDate: string | null,
+) => {
   const supabase = createClient()
 
   const { error } = await supabase

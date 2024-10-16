@@ -1,18 +1,19 @@
 import { Button } from '@/components/ui/button'
+import { ArrowRight } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 
-export default function MoveChartButton({ patientId }: { patientId: string }) {
+export default function GoToButton({ patientId }: { patientId: string }) {
   const { hos_id, target_date } = useParams()
   const { push } = useRouter()
 
-  const handlePatientButtonClick = useCallback(() => {
+  const handleGoto = useCallback(() => {
     push(`/hospital/${hos_id}/icu/${target_date}/chart/${patientId}`)
   }, [hos_id, target_date, patientId, push])
 
   return (
-    <Button variant="outline" size="sm" onClick={handlePatientButtonClick}>
-      이동
+    <Button onClick={handleGoto} size="icon" variant="ghost">
+      <ArrowRight size={18} />
     </Button>
   )
 }
