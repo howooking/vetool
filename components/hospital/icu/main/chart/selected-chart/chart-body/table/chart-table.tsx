@@ -24,6 +24,7 @@ import { useCallback, useEffect, useState } from 'react'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
 import DeleteOrdersAlertDialog from './order/delete-orders-alert-dialog'
+import useIsCommandPressed from '@/hooks/use-is-command-pressed'
 
 export default function ChartTable({
   chartData,

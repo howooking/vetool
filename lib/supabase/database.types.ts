@@ -74,6 +74,7 @@ export type Database = {
           created_at: string
           cri_unit: string | null
           default_dose: string | null
+          description: string | null
           dose_id: string
           dose_unit: string | null
           drug_id: string | null
@@ -87,6 +88,7 @@ export type Database = {
           created_at?: string
           cri_unit?: string | null
           default_dose?: string | null
+          description?: string | null
           dose_id?: string
           dose_unit?: string | null
           drug_id?: string | null
@@ -100,6 +102,7 @@ export type Database = {
           created_at?: string
           cri_unit?: string | null
           default_dose?: string | null
+          description?: string | null
           dose_id?: string
           dose_unit?: string | null
           drug_id?: string | null
@@ -380,13 +383,13 @@ export type Database = {
           created_at: string
           hos_id: string
           icu_chart_id: string
-          icu_io_id: string
+          icu_io_id: string | null
           in_charge: Json | null
-          main_vet: string
+          main_vet: string | null
           memo_a: Json | null
           memo_b: Json | null
           memo_c: Json | null
-          patient_id: string
+          patient_id: string | null
           sub_vet: string | null
           target_date: string
           weight: string
@@ -396,13 +399,13 @@ export type Database = {
           created_at?: string
           hos_id: string
           icu_chart_id?: string
-          icu_io_id: string
+          icu_io_id?: string | null
           in_charge?: Json | null
-          main_vet: string
+          main_vet?: string | null
           memo_a?: Json | null
           memo_b?: Json | null
           memo_c?: Json | null
-          patient_id: string
+          patient_id?: string | null
           sub_vet?: string | null
           target_date: string
           weight?: string
@@ -412,13 +415,13 @@ export type Database = {
           created_at?: string
           hos_id?: string
           icu_chart_id?: string
-          icu_io_id?: string
+          icu_io_id?: string | null
           in_charge?: Json | null
-          main_vet?: string
+          main_vet?: string | null
           memo_a?: Json | null
           memo_b?: Json | null
           memo_c?: Json | null
-          patient_id?: string
+          patient_id?: string | null
           sub_vet?: string | null
           target_date?: string
           weight?: string
@@ -713,6 +716,48 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "patients"
             referencedColumns: ["patient_id"]
+          },
+        ]
+      }
+      icu_templates: {
+        Row: {
+          created_at: string
+          hos_id: string
+          icu_chart_id: string
+          template_comment: string | null
+          template_id: string
+          template_name: string
+        }
+        Insert: {
+          created_at?: string
+          hos_id: string
+          icu_chart_id: string
+          template_comment?: string | null
+          template_id?: string
+          template_name: string
+        }
+        Update: {
+          created_at?: string
+          hos_id?: string
+          icu_chart_id?: string
+          template_comment?: string | null
+          template_id?: string
+          template_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_templates_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "icu_templates_icu_chart_id_fkey"
+            columns: ["icu_chart_id"]
+            isOneToOne: true
+            referencedRelation: "icu_charts"
+            referencedColumns: ["icu_chart_id"]
           },
         ]
       }
@@ -1156,13 +1201,6 @@ export type Database = {
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
           },
-          {
-            foreignKeyName: "users_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
       vitals: {
@@ -1274,6 +1312,12 @@ export type Database = {
         }
         Returns: Json
       }
+      get_icu_templates_data: {
+        Args: {
+          hos_id_input: string
+        }
+        Returns: Json
+      }
       get_icu_tx_table_data: {
         Args: {
           hos_id_input: string
@@ -1334,6 +1378,16 @@ export type Database = {
         }
         Returns: string
       }
+      insert_template_orders: {
+        Args: {
+          hos_id_input: string
+          target_date_input: string
+          template_name_input: string
+          template_comment_input: string
+          template_orders_input: Json
+        }
+        Returns: undefined
+      }
       register_icu: {
         Args: {
           hos_id_input: string
@@ -1363,6 +1417,13 @@ export type Database = {
           age_in_days_input: number
         }
         Returns: undefined
+      }
+      search_icu_templates_data: {
+        Args: {
+          hos_id_input: string
+          search_value: string
+        }
+        Returns: Json
       }
       toggle_patient_out: {
         Args: {
@@ -1520,4 +1581,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
