@@ -11,14 +11,16 @@ export default function CellsRow({
   preview,
   order,
   debouncedUpsertingOrderTimes,
+  debouncedMultipleTreatments,
   showOrderer,
 }: {
   preview?: boolean
   order: SelectedIcuOrder
   debouncedUpsertingOrderTimes: DebouncedState<() => void>
+  debouncedMultipleTreatments: DebouncedState<() => void>
   showOrderer: boolean
 }) {
-  const { order_times, order_id, treatments, order_name } = order
+  const { order_times, order_id, treatments } = order
   const { setOrderTimePendingQueue, step } = useIcuOrderStore()
   const [orderTimeState, setOrderTimeState] = useState(order_times)
 
@@ -34,13 +36,23 @@ export default function CellsRow({
         return newOrderTime
       })
 
-      setOrderTimePendingQueue((prev) => [
-        ...prev,
-        {
-          orderId: orderId,
-          orderTime: time,
-        },
-      ])
+      setOrderTimePendingQueue((prev) => {
+        const existingIndex = prev.findIndex(
+          (item) => item.orderId === orderId && item.orderTime === time,
+        )
+
+        if (existingIndex !== -1) {
+          return prev.filter((_, index) => index !== existingIndex)
+        } else {
+          return [
+            ...prev,
+            {
+              orderId: orderId,
+              orderTime: time,
+            },
+          ]
+        }
+      })
 
       debouncedUpsertingOrderTimes()
     },
@@ -66,10 +78,10 @@ export default function CellsRow({
             icuChartOrderId={order_id}
             isDone={isDone}
             orderer={orderer}
-            icuChartOrderName={order_name}
             icuChartTxId={selectedTx?.tx_id}
             toggleOrderTime={toggleOrderTime}
             showOrderer={showOrderer}
+            debouncedMultipleTreatments={debouncedMultipleTreatments}
           />
         )
       })}

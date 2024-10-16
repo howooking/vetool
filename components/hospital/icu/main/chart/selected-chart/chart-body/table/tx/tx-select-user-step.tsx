@@ -11,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { upsertIcuTx } from '@/lib/services/icu/chart/tx-mutation'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import type { TxLog } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -24,6 +25,7 @@ import { z } from 'zod'
 export default function TxSelectUserStep() {
   const { txLocalState, setStep, setIsMutationCanceled, reset } =
     useTxMutationStore()
+  const { orderTimePendingQueue, reset: queueReset } = useIcuOrderStore()
   const { hos_id } = useParams()
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -50,19 +52,41 @@ export default function TxSelectUserStep() {
 
       const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
+      if (orderTimePendingQueue.length) {
+        orderTimePendingQueue.forEach(
+          async (item) =>
+            await upsertIcuTx(
+              hos_id as string,
+              {
+                txId: item.txId,
+                txResult: txLocalState?.txResult,
+                txComment: txLocalState?.txComment,
+                time: item.orderTime,
+                icuChartOrderId: item.orderId,
+              },
+              updatedLogs,
+            ),
+        )
+        setStep('closed')
+
+        queueReset()
+        reset()
+
+        return toast({
+          title: '처치 내역이 업데이트 되었습니다',
+        })
+      }
+
       setStep('closed')
 
       await upsertIcuTx(hos_id as string, txLocalState, updatedLogs)
 
-      // await uploadTxImage(txId, txImageState ?? [])
-
       reset()
-
       toast({
         title: '처치 내역이 업데이트 되었습니다',
       })
     },
-    [hos_id, reset, setStep, txLocalState],
+    [hos_id, orderTimePendingQueue, reset, setStep, txLocalState, queueReset],
   )
 
   const handleCancel = useCallback(() => {
@@ -104,7 +128,12 @@ export default function TxSelectUserStep() {
           />
 
           <div className="col-span-2 ml-auto font-semibold">
-            <Button type="button" variant="outline" onClick={handleCancel}>
+            <Button
+              type="button"
+              variant="outline"
+              tabIndex={-1}
+              onClick={handleCancel}
+            >
               취소
             </Button>
 

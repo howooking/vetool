@@ -21,6 +21,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
+import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
+import DeleteOrdersAlertDialog from './order/delete-orders-alert-dialog'
 
 export default function ChartTable({
   chartData,
@@ -36,16 +38,19 @@ export default function ChartTable({
     weight,
     icu_io: { age_in_days },
   } = chartData
-  const { setStep, reset, orderTimePendingQueue } = useIcuOrderStore()
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
   const [isSorting, setIsSorting] = useState(true)
+  const { setStep, reset, orderTimePendingQueue, orderPendingQueue } =
+    useIcuOrderStore()
+  const { setStep: setTxStep } = useTxMutationStore()
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   useEffect(() => {
     setIsSorting(true)
-    const sorted = sortOrders([...orders])
+    const sorted = sortOrders(orders)
     setSortedOrders(sorted)
     setIsSorting(false)
   }, [orders])
@@ -97,6 +102,40 @@ export default function ChartTable({
     1500,
   )
 
+  const debouncedMultipleTreatments = useDebouncedCallback(() => {
+    if (orderTimePendingQueue.length >= 2) setTxStep('detailInsert')
+  }, 1000)
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // 다중 오더 붙여넣기
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key === 'v' &&
+        orderPendingQueue.length > 0
+      ) {
+        event.preventDefault()
+        setStep('selectOrderer')
+      }
+
+      // 다중 오더 삭제
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        (event.key === 'Backspace' || event.key === 'Delete') &&
+        orderPendingQueue.length > 0
+      ) {
+        event.preventDefault()
+        setIsDialogOpen(true)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [setStep, orderPendingQueue])
+
   if (isSorting) {
     return <LargeLoaderCircle className="h-icu-chart" />
   }
@@ -126,7 +165,6 @@ export default function ChartTable({
           ))}
         </TableRow>
       </TableHeader>
-
       <TableBody>
         {!preview && <TxUpsertDialog />}
 
@@ -137,11 +175,17 @@ export default function ChartTable({
               preview={preview}
               order={order}
               debouncedUpsertingOrderTimes={debouncedUpsertingOrderTimes}
+              debouncedMultipleTreatments={debouncedMultipleTreatments}
               showOrderer={showOrderer}
             />
           </TableRow>
         ))}
       </TableBody>
+
+      <DeleteOrdersAlertDialog
+        isDialogOpen={isDialogOpen}
+        setDialogOpen={setIsDialogOpen}
+      />
     </Table>
   )
 }

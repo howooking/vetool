@@ -13,21 +13,20 @@ import {
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { deleteOrder } from '@/lib/services/icu/chart/order-mutation'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 
-export default function DeleteOrderAlertDialog({
-  selectedChartOrder,
-  setStep,
-}: {
-  selectedChartOrder: Partial<SelectedIcuOrder>
-  setStep: (step: 'closed' | 'upsert' | 'selectOrderer') => void
-}) {
+export default function DeleteMultipleOrderDialog() {
+  const { setStep, reset, orderPendingQueue } = useIcuOrderStore()
+
   const handleDeleteOrderClick = async () => {
-    await deleteOrder(selectedChartOrder.order_id!)
+    // await deleteOrder(selectedChartOrder.order_id!)
 
     toast({
-      title: `${selectedChartOrder.order_name} 오더를 삭제하였습니다`,
+      title: `오더를 모두 삭제하였습니다`,
     })
+
+    reset()
     setStep('closed')
   }
 
@@ -40,21 +39,19 @@ export default function DeleteOrderAlertDialog({
           variant="destructive"
           tabIndex={-1}
         >
-          삭제
+          모두 삭제
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            {selectedChartOrder.order_name} 오더 삭제
-          </AlertDialogTitle>
+          <AlertDialogTitle>오더 모두 삭제</AlertDialogTitle>
           <AlertDialogDescription>
-            선택한 오더를 삭제합니다
+            선택한 오더 전부를 삭제합니다
             <WarningMessage text="해당작업은 실행 후 되될릴 수 없습니다." />
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel tabIndex={-1}>취소</AlertDialogCancel>
+          <AlertDialogCancel>취소</AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive hover:bg-destructive/80"
             onClick={handleDeleteOrderClick}
