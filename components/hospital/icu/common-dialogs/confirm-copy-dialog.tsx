@@ -25,10 +25,10 @@ import { useState, type Dispatch, type SetStateAction } from 'react'
 
 export function ConfirmCopyDialog({
   setIsChartLoading,
-  setBookmarkDialogOpen,
+  setTemplateDialogOpen,
 }: {
   setIsChartLoading: Dispatch<SetStateAction<boolean>>
-  setBookmarkDialogOpen: (isBookmarkModalOpen: boolean) => void
+  setTemplateDialogOpen: (isTemplateDialogOpen: boolean) => void
 }) {
   const { target_date, patient_id } = useParams()
   const {
@@ -57,7 +57,7 @@ export function ConfirmCopyDialog({
     })
 
     reset()
-    setBookmarkDialogOpen(false)
+    setTemplateDialogOpen(false)
   }
 
   const handleOrdererChange = (value: string) => {

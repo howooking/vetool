@@ -28,8 +28,8 @@ export const FOOTER_MAIN_VIEW_MENUS = [
     value: 'search',
   },
   {
-    label: '즐겨찾기',
-    value: 'bookmark',
+    label: '템플릿',
+    value: 'template',
   },
   {
     label: '입원 통계',
@@ -64,7 +64,7 @@ export default function IcuFooter({
           <li
             key={value}
             className={cn(
-              value === 'search' || value === 'bookmark' || value === 'analysis'
+              value === 'search' || value === 'template' || value === 'analysis'
                 ? 'hidden md:block'
                 : '',
             )}

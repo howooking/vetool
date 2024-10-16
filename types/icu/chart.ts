@@ -1,10 +1,11 @@
 import type {
-  IcuBookmark,
+  IcuTemplate,
   IcuCharts,
   IcuIo,
   IcuNotification,
   Patients,
   User,
+  IcuOrders,
 } from '@/types'
 
 export type MainAndSubVet = Pick<User, 'name' | 'avatar_url' | 'user_id'>
@@ -54,9 +55,9 @@ export type SelectedChart = Pick<
 } & {
   sub_vet: Pick<Vet, 'avatar_url' | 'name' | 'user_id'>
 } & {
-  bookmark: Pick<
-    IcuBookmark,
-    'bookmark_id' | 'bookmark_name' | 'bookmark_comment'
+  template: Pick<
+    IcuTemplate,
+    'template_id' | 'template_name' | 'template_comment'
   >
 }
 
@@ -110,3 +111,12 @@ export type IcuSidebarIoData = {
   group_list: string[]
   created_at: string
 }
+
+export type IcuReadOnlyOrderData = Pick<
+  IcuOrders,
+  | 'icu_chart_order_id'
+  | 'icu_chart_order_time'
+  | 'icu_chart_order_name'
+  | 'icu_chart_order_comment'
+  | 'icu_chart_order_type'
+>

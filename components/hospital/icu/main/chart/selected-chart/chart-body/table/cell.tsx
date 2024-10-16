@@ -9,6 +9,7 @@ import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { DebouncedState } from 'use-debounce'
 import { TxDetailHover } from './tx/tx-detail-hover'
+import useIsCommandPressed from '@/hooks/use-is-command-pressed'
 
 type ChartTableCellProps = {
   time: number
@@ -36,6 +37,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     showOrderer,
     debouncedMultipleTreatments,
   }) => {
+    const isCommandPressed = useIsCommandPressed()
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
     const {
@@ -113,7 +115,12 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
 
         debouncedMultipleTreatments()
       },
-      [debouncedMultipleTreatments, icuChartTxId, setOrderTimePendingQueue],
+      [
+        debouncedMultipleTreatments,
+        icuChartTxId,
+        setOrderTimePendingQueue,
+        isCommandPressed,
+      ],
     )
 
     const longPressEvents = useLongPress({

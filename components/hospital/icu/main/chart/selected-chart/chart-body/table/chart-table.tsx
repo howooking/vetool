@@ -23,6 +23,7 @@ import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import DeleteOrdersAlertDialog from './order/delete-orders-alert-dialog'
+import useIsCommandPressed from '@/hooks/use-is-command-pressed'
 
 export default function ChartTable({
   chartData,
@@ -51,6 +52,7 @@ export default function ChartTable({
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
+  const isCommandPressed = useIsCommandPressed()
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   useEffect(() => {
@@ -107,9 +109,11 @@ export default function ChartTable({
     1500,
   )
 
-  const debouncedMultipleTreatments = useDebouncedCallback(() => {
-    if (orderTimePendingQueue.length >= 2) setTxStep('detailInsert')
-  }, 1000)
+  const debouncedMultipleTreatments = useCallback(() => {
+    if (orderTimePendingQueue.length >= 2 && !isCommandPressed) {
+      setTxStep('detailInsert')
+    }
+  }, [orderTimePendingQueue, setTxStep, isCommandPressed])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

@@ -17,7 +17,7 @@ export default function CellsRow({
   preview?: boolean
   order: SelectedIcuOrder
   debouncedUpsertingOrderTimes: DebouncedState<() => void>
-  debouncedMultipleTreatments: DebouncedState<() => void>
+  debouncedMultipleTreatments: (isCommandPressed: boolean) => void
   showOrderer: boolean
 }) {
   const { order_times, order_id, treatments } = order
