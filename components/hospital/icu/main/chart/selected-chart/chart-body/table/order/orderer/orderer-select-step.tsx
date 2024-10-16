@@ -122,8 +122,6 @@ export default function OrdererSelectStep({
             updatedOrderTimes[time - 1] === '0' ? values.orderer : '0'
         }
 
-        console.log(orderTimePendingQueue, formattedOrders, updatedOrderTimes)
-
         await upsertOrder(
           hos_id as string,
           icuChartId,
