@@ -1,5 +1,6 @@
 'use client'
 
+import { ordererSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/orderer/orderer-schema'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -29,7 +30,6 @@ import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { ordererSchema } from './orderer-schema'
 
 export default function OrdererSelectStep({
   icuChartId,
@@ -38,23 +38,26 @@ export default function OrdererSelectStep({
   icuChartId: string
   orders: SelectedIcuOrder[]
 }) {
+  const [isUpdating, setIsUpdating] = useState(false)
   const { hos_id } = useParams()
   const {
     basicHosData: { vetsListData },
   } = useBasicHosDataContext()
-
   const {
     reset,
     selectedChartOrder,
     orderTimePendingQueue,
+    orderPendingQueue,
     isEditMode,
     setStep,
   } = useIcuOrderStore()
-
-  const [isUpdating, setIsUpdating] = useState(false)
-  const isSingleOrder = useMemo(
+  const isSingleTx = useMemo(
     () => orderTimePendingQueue.length === 0,
     [orderTimePendingQueue],
+  )
+  const isPendingOrder = useMemo(
+    () => orderPendingQueue.length > 0,
+    [orderPendingQueue],
   )
 
   const selectRef = useRef<HTMLButtonElement>(null)
@@ -65,7 +68,7 @@ export default function OrdererSelectStep({
     }
   }, [])
 
-  const handleUpsertSingleOrder = useCallback(
+  const handleUpsertSingleTx = useCallback(
     async (values: z.infer<typeof ordererSchema>) => {
       setIsUpdating(true)
 
@@ -86,7 +89,6 @@ export default function OrdererSelectStep({
       toast({
         title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
       })
-
       reset()
       setStep('closed')
       setIsUpdating(false)
@@ -105,7 +107,7 @@ export default function OrdererSelectStep({
     ],
   )
 
-  const handleUpsertMultipleOrders = useCallback(
+  const handleUpsertMultipleTxs = useCallback(
     async (values: z.infer<typeof ordererSchema>) => {
       setIsUpdating(true)
       const formattedOrders = formatOrders(orderTimePendingQueue)
@@ -136,7 +138,6 @@ export default function OrdererSelectStep({
       toast({
         title: '오더시간을 변경하였습니다',
       })
-
       reset()
       setStep('closed')
       setIsUpdating(false)
@@ -144,15 +145,59 @@ export default function OrdererSelectStep({
     [hos_id, icuChartId, orderTimePendingQueue, orders, reset, setStep],
   )
 
+  const handleUpsertOrder = useCallback(
+    async (values: z.infer<typeof ordererSchema>) => {
+      setIsUpdating(true)
+      for (const order of orderPendingQueue) {
+        const updatedOrderTimes = [...order.order_times!]
+
+        order.order_times!.forEach((time, index) => {
+          updatedOrderTimes[index] = time === '0' ? '0' : values.orderer
+        })
+
+        await upsertOrder(
+          hos_id as string,
+          icuChartId,
+          undefined,
+          updatedOrderTimes,
+          {
+            icu_chart_order_name: order.order_name!,
+            icu_chart_order_comment: order.order_comment!,
+            icu_chart_order_type: order.order_type!,
+          },
+        )
+      }
+
+      toast({
+        title: '오더를 붙여넣었습니다',
+      })
+      reset()
+      setStep('closed')
+      setIsUpdating(false)
+    },
+    [hos_id, icuChartId, orderPendingQueue, reset, setStep],
+  )
+
   const handleSubmit = useCallback(
     async (values: z.infer<typeof ordererSchema>) => {
-      if (isSingleOrder) {
-        await handleUpsertSingleOrder(values)
-      } else {
-        await handleUpsertMultipleOrders(values)
+      if (isSingleTx && !isPendingOrder) {
+        await handleUpsertSingleTx(values)
+      }
+      if (!isSingleTx && !isPendingOrder) {
+        await handleUpsertMultipleTxs(values)
+      }
+
+      if (isPendingOrder) {
+        await handleUpsertOrder(values)
       }
     },
-    [isSingleOrder, handleUpsertSingleOrder, handleUpsertMultipleOrders],
+    [
+      handleUpsertMultipleTxs,
+      handleUpsertOrder,
+      handleUpsertSingleTx,
+      isPendingOrder,
+      isSingleTx,
+    ],
   )
 
   const form = useForm<z.infer<typeof ordererSchema>>({
@@ -223,7 +268,7 @@ export default function OrdererSelectStep({
             onClick={() => setStep('upsert')}
             variant="outline"
             type="button"
-            className={isSingleOrder ? '' : 'hidden'}
+            className={isSingleTx ? '' : 'hidden'}
             tabIndex={-1}
           >
             뒤로

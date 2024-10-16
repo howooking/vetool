@@ -32,5 +32,6 @@ export const useCopiedChartStore = create<CopiedChartState>((set) => ({
     set({
       copiedChartId: undefined,
       copiedChart: undefined,
+      isConfirmCopyDialogOpen: false,
     }),
 }))

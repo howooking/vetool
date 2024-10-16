@@ -13,40 +13,36 @@ import {
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { deleteOrder } from '@/lib/services/icu/chart/order-mutation'
-import type { SelectedIcuOrder } from '@/types/icu/chart'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { Dispatch, SetStateAction } from 'react'
 
-export default function DeleteOrderAlertDialog({
-  selectedChartOrder,
-  setStep,
+export default function DeleteOrdersAlertDialog({
+  isDialogOpen,
+  setDialogOpen,
 }: {
-  selectedChartOrder: Partial<SelectedIcuOrder>
-  setStep: (step: 'closed' | 'upsert' | 'selectOrderer') => void
+  isDialogOpen: boolean
+  setDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
+  const { reset, orderPendingQueue } = useIcuOrderStore()
+
   const handleDeleteOrderClick = async () => {
-    await deleteOrder(selectedChartOrder.order_id!)
+    orderPendingQueue.forEach(async (order) => {
+      await deleteOrder(order.order_id!)
+    })
 
     toast({
-      title: `${selectedChartOrder.order_name} 오더를 삭제하였습니다`,
+      title: `오더를 삭제하였습니다`,
     })
-    setStep('closed')
+
+    reset()
   }
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button
-          type="button"
-          className="mr-auto"
-          variant="destructive"
-          tabIndex={-1}
-        >
-          삭제
-        </Button>
-      </AlertDialogTrigger>
+    <AlertDialog open={isDialogOpen} onOpenChange={setDialogOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {selectedChartOrder.order_name} 오더 삭제
+            {orderPendingQueue.length}개의 오더 삭제
           </AlertDialogTitle>
           <AlertDialogDescription>
             선택한 오더를 삭제합니다

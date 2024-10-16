@@ -115,7 +115,7 @@ export const visitColumns: ColumnDef<VisitPatientData>[] = [
     },
   },
   {
-    accessorKey: 'etc',
+    accessorKey: 'visit_etc',
     header: '기타',
     cell: ({ row }) => {
       const etc = row.original.visit_etc

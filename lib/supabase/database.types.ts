@@ -1218,6 +1218,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      copy_selected_orders: {
+        Args: {
+          selected_chart_id_input: string
+          new_chart_id_input: string
+          orderer_name_input: string
+        }
+        Returns: undefined
+      }
       get_drug_product_details: {
         Args: {
           hos_id_input: string
