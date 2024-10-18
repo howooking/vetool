@@ -41,7 +41,8 @@ export default function ChartTable({
   } = chartData
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
   const [isSorting, setIsSorting] = useState(true)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
+    useState(false)
 
   const { setStep, reset, orderTimePendingQueue, orderPendingQueue } =
     useIcuOrderStore()
@@ -143,7 +144,7 @@ export default function ChartTable({
         orderPendingQueue.length > 0
       ) {
         event.preventDefault()
-        setIsDialogOpen(true)
+        setIsDeleteOrdersDialogOpen(true)
       }
     }
     window.addEventListener('keydown', handleKeyDown)
@@ -205,8 +206,8 @@ export default function ChartTable({
       </TableBody>
 
       <DeleteOrdersAlertDialog
-        isDialogOpen={isDialogOpen}
-        setDialogOpen={setIsDialogOpen}
+        isDeleteOrdersDialogOpen={isDeleteOrdersDialogOpen}
+        setIsDeleteOrdersDialogOpen={setIsDeleteOrdersDialogOpen}
       />
     </Table>
   )
