@@ -12,8 +12,10 @@ import {
 } from '@/components/ui/table'
 import { toast } from '@/components/ui/use-toast'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
+import useIsCommandPressed from '@/hooks/use-is-command-pressed'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { formatOrders, sortOrders } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
@@ -21,7 +23,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
-import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import DeleteOrdersAlertDialog from './order/delete-orders-alert-dialog'
 
 export default function ChartTable({
@@ -40,6 +41,9 @@ export default function ChartTable({
   } = chartData
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
   const [isSorting, setIsSorting] = useState(true)
+  const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
+    useState(false)
+
   const {
     setStep,
     reset,
@@ -51,14 +55,22 @@ export default function ChartTable({
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
+  const isCommandPressed = useIsCommandPressed()
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
   useEffect(() => {
     setIsSorting(true)
-    const sorted = sortOrders(orders)
-    setSortedOrders(sorted)
+    setSortedOrders(sortOrders(orders))
     setIsSorting(false)
   }, [orders])
+
+  // -----표에서 수직안내선-----
+  const [hoveredColumn, setHoveredColumn] = useState<number | null>(null)
+  const handleColumnHover = useCallback(
+    (columnIndex: number) => setHoveredColumn(columnIndex),
+    [],
+  )
+  const handleColumnLeave = useCallback(() => setHoveredColumn(null), [])
+  // -----표에서 수직안내선-----
 
   const handleUpsertMultipleOrderTimesWithoutOrderer = useCallback(async () => {
     const formattedOrders = formatOrders(orderTimePendingQueue)
@@ -67,11 +79,13 @@ export default function ChartTable({
       const currentOrder = orders.find((o) => o.order_id === order.orderId)
       if (!currentOrder) continue
 
-      const updatedOrderTimes = [...currentOrder.order_times]
-      for (const time of order.orderTimes) {
-        updatedOrderTimes[time - 1] =
-          updatedOrderTimes[time - 1] === '0' ? vetsListData[0].name : '0'
-      }
+      const updatedOrderTimes = currentOrder.order_times.map((time, index) =>
+        order.orderTimes.includes(index + 1)
+          ? time === '0'
+            ? vetsListData[0].name
+            : '0'
+          : time,
+      )
 
       await upsertOrder(
         chartData.patient.hos_id,
@@ -100,17 +114,24 @@ export default function ChartTable({
     vetsListData,
   ])
 
-  const debouncedUpsertingOrderTimes = useDebouncedCallback(
+  const debouncedUpsertOrderTimes = useDebouncedCallback(
     showOrderer
       ? () => setStep('selectOrderer')
       : handleUpsertMultipleOrderTimesWithoutOrderer,
     1500,
   )
 
-  const debouncedMultipleTreatments = useDebouncedCallback(() => {
+  const handleMultipleTreatments = useCallback(() => {
     if (orderTimePendingQueue.length >= 2) setTxStep('detailInsert')
-  }, 1000)
+  }, [orderTimePendingQueue.length, setTxStep])
 
+  useEffect(() => {
+    if (!isCommandPressed && orderTimePendingQueue.length > 0) {
+      handleMultipleTreatments()
+    }
+  }, [isCommandPressed, orderTimePendingQueue, handleMultipleTreatments])
+
+  // -----다중 오더 붙여넣기, 삭제 기능-----
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
@@ -128,22 +149,21 @@ export default function ChartTable({
         selectedOrderPendingQueue.length > 0
       ) {
         event.preventDefault()
-        setIsDialogOpen(true)
+        setIsDeleteOrdersDialogOpen(true)
       }
     }
-
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [
-    copiedOrderPendingQueue,
-    orderTimePendingQueue,
-    reset,
-    selectedOrderPendingQueue,
     setStep,
+    orderTimePendingQueue,
+    copiedOrderPendingQueue.length,
+    selectedOrderPendingQueue.length,
   ])
+  // -----다중 오더 붙여넣기, 삭제 기능-----
 
   if (isSorting) {
     return <LargeLoaderCircle className="h-icu-chart" />
@@ -183,17 +203,21 @@ export default function ChartTable({
             <CellsRow
               preview={preview}
               order={order}
-              debouncedUpsertingOrderTimes={debouncedUpsertingOrderTimes}
-              debouncedMultipleTreatments={debouncedMultipleTreatments}
+              debouncedUpsertOrderTimes={debouncedUpsertOrderTimes}
+              // debouncedMultipleTreatments={debouncedMultipleTreatments}
+              handleMultipleTreatments={handleMultipleTreatments}
               showOrderer={showOrderer}
+              hoveredColumn={hoveredColumn}
+              handleColumnHover={handleColumnHover}
+              handleColumnLeave={handleColumnLeave}
             />
           </TableRow>
         ))}
       </TableBody>
 
       <DeleteOrdersAlertDialog
-        isDialogOpen={isDialogOpen}
-        setDialogOpen={setIsDialogOpen}
+        isDeleteOrdersDialogOpen={isDeleteOrdersDialogOpen}
+        setIsDeleteOrdersDialogOpen={setIsDeleteOrdersDialogOpen}
       />
     </Table>
   )
