@@ -12,16 +12,23 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { deleteOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react'
 
 export default function DeleteOrdersAlertDialog({
-  isDialogOpen,
-  setDialogOpen,
+  isDeleteOrdersDialogOpen,
+  setIsDeleteOrdersDialogOpen,
 }: {
-  isDialogOpen: boolean
-  setDialogOpen: Dispatch<SetStateAction<boolean>>
+  isDeleteOrdersDialogOpen: boolean
+  setIsDeleteOrdersDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
   const { reset, selectedOrderPendingQueue } = useIcuOrderStore()
+  const deleteButtonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (isDeleteOrdersDialogOpen) {
+      setTimeout(() => deleteButtonRef.current?.focus(), 0)
+    }
+  }, [isDeleteOrdersDialogOpen])
 
   const handleDeleteOrderClick = async () => {
     selectedOrderPendingQueue.forEach(async (order) => {
@@ -31,12 +38,15 @@ export default function DeleteOrdersAlertDialog({
     toast({
       title: `오더를 삭제하였습니다`,
     })
-
+    setIsDeleteOrdersDialogOpen(false)
     reset()
   }
 
   return (
-    <AlertDialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+    <AlertDialog
+      open={isDeleteOrdersDialogOpen}
+      onOpenChange={setIsDeleteOrdersDialogOpen}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
@@ -52,6 +62,7 @@ export default function DeleteOrdersAlertDialog({
           <AlertDialogAction
             className="bg-destructive hover:bg-destructive/80"
             onClick={handleDeleteOrderClick}
+            ref={deleteButtonRef}
           >
             삭제
           </AlertDialogAction>

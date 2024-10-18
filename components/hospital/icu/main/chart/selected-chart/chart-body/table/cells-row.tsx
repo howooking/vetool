@@ -7,19 +7,27 @@ import { useCallback, useEffect, useState } from 'react'
 import { DebouncedState } from 'use-debounce'
 import Cell from './cell'
 
+type CellProps = {
+  preview?: boolean
+  order: SelectedIcuOrder
+  debouncedUpsertOrderTimes: DebouncedState<() => void>
+  handleMultipleTreatments: () => void
+  showOrderer: boolean
+  hoveredColumn: number | null
+  handleColumnHover: (columnIndex: number) => void
+  handleColumnLeave: () => void
+}
+
 export default function CellsRow({
   preview,
   order,
-  debouncedUpsertingOrderTimes,
-  debouncedMultipleTreatments,
+  debouncedUpsertOrderTimes,
+  handleMultipleTreatments,
   showOrderer,
-}: {
-  preview?: boolean
-  order: SelectedIcuOrder
-  debouncedUpsertingOrderTimes: DebouncedState<() => void>
-  debouncedMultipleTreatments: DebouncedState<() => void>
-  showOrderer: boolean
-}) {
+  hoveredColumn,
+  handleColumnHover,
+  handleColumnLeave,
+}: CellProps) {
   const { order_times, order_id, treatments } = order
   const { setOrderTimePendingQueue, step } = useIcuOrderStore()
   const [orderTimeState, setOrderTimeState] = useState(order_times)
@@ -44,19 +52,13 @@ export default function CellsRow({
         if (existingIndex !== -1) {
           return prev.filter((_, index) => index !== existingIndex)
         } else {
-          return [
-            ...prev,
-            {
-              orderId: orderId,
-              orderTime: time,
-            },
-          ]
+          return [...prev, { orderId, orderTime: time }]
         }
       })
 
-      debouncedUpsertingOrderTimes()
+      debouncedUpsertOrderTimes()
     },
-    [debouncedUpsertingOrderTimes, setOrderTimePendingQueue],
+    [debouncedUpsertOrderTimes, setOrderTimePendingQueue],
   )
 
   return (
@@ -69,6 +71,8 @@ export default function CellsRow({
         const selectedTx = treatments.find(
           (treatment) => treatment.time === time,
         )
+        const isHovered = hoveredColumn === index + 1
+
         return (
           <Cell
             preview={preview}
@@ -81,7 +85,10 @@ export default function CellsRow({
             icuChartTxId={selectedTx?.tx_id}
             toggleOrderTime={toggleOrderTime}
             showOrderer={showOrderer}
-            debouncedMultipleTreatments={debouncedMultipleTreatments}
+            handleMultipleTreatments={handleMultipleTreatments}
+            isHovered={isHovered}
+            onMouseEnter={handleColumnHover}
+            onMouseLeave={handleColumnLeave}
           />
         )
       })}
