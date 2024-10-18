@@ -21,6 +21,9 @@ type ChartTableCellProps = {
   toggleOrderTime: (orderId: string, time: number) => void
   showOrderer: boolean
   debouncedMultipleTreatments: DebouncedState<() => void>
+  isHovered: boolean
+  onMouseEnter: (columnIndex: number) => void
+  onMouseLeave: () => void
 }
 
 const Cell: React.FC<ChartTableCellProps> = React.memo(
@@ -35,6 +38,9 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     toggleOrderTime,
     showOrderer,
     debouncedMultipleTreatments,
+    isHovered,
+    onMouseEnter,
+    onMouseLeave,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
@@ -203,10 +209,11 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
           <Input
             id={`${icuChartOrderId}&${time}`}
             className={cn(
-              'h-11 rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
+              isHovered && 'bg-muted/50',
               hasOrder && 'bg-rose-500/10',
               isDone && 'bg-emerald-400/10',
               isInPendingQueue && 'ring-2',
+              'h-11 rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
             )}
             disabled={preview}
             value={briefTxResultInput}
@@ -219,6 +226,8 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
             onClick={handleClick}
             onContextMenu={handleRightClick}
             {...longPressEvents}
+            onMouseEnter={() => onMouseEnter(time)}
+            onMouseLeave={() => onMouseLeave()}
           />
           <div
             className={cn(

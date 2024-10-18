@@ -14,6 +14,7 @@ import { toast } from '@/components/ui/use-toast'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { formatOrders, sortOrders } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
@@ -21,7 +22,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
-import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import DeleteOrdersAlertDialog from './order/delete-orders-alert-dialog'
 
 export default function ChartTable({
@@ -40,6 +40,9 @@ export default function ChartTable({
   } = chartData
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
   const [isSorting, setIsSorting] = useState(true)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [hoveredColumn, setHoveredColumn] = useState<number | null>(null)
+
   const { setStep, reset, orderTimePendingQueue, orderPendingQueue } =
     useIcuOrderStore()
   const { setStep: setTxStep } = useTxMutationStore()
@@ -47,11 +50,9 @@ export default function ChartTable({
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
   useEffect(() => {
     setIsSorting(true)
-    const sorted = sortOrders(orders)
-    setSortedOrders(sorted)
+    setSortedOrders(sortOrders(orders))
     setIsSorting(false)
   }, [orders])
 
@@ -62,11 +63,13 @@ export default function ChartTable({
       const currentOrder = orders.find((o) => o.order_id === order.orderId)
       if (!currentOrder) continue
 
-      const updatedOrderTimes = [...currentOrder.order_times]
-      for (const time of order.orderTimes) {
-        updatedOrderTimes[time - 1] =
-          updatedOrderTimes[time - 1] === '0' ? vetsListData[0].name : '0'
-      }
+      const updatedOrderTimes = currentOrder.order_times.map((time, index) =>
+        order.orderTimes.includes(index + 1)
+          ? time === '0'
+            ? vetsListData[0].name
+            : '0'
+          : time,
+      )
 
       await upsertOrder(
         chartData.patient.hos_id,
@@ -95,7 +98,7 @@ export default function ChartTable({
     vetsListData,
   ])
 
-  const debouncedUpsertingOrderTimes = useDebouncedCallback(
+  const debouncedUpsertOrderTimes = useDebouncedCallback(
     showOrderer
       ? () => setStep('selectOrderer')
       : handleUpsertMultipleOrderTimesWithoutOrderer,
@@ -136,6 +139,12 @@ export default function ChartTable({
     }
   }, [setStep, orderPendingQueue])
 
+  const handleColumnHover = useCallback(
+    (columnIndex: number) => setHoveredColumn(columnIndex),
+    [],
+  )
+  const handleColumnLeave = useCallback(() => setHoveredColumn(null), [])
+
   if (isSorting) {
     return <LargeLoaderCircle className="h-icu-chart" />
   }
@@ -174,9 +183,12 @@ export default function ChartTable({
             <CellsRow
               preview={preview}
               order={order}
-              debouncedUpsertingOrderTimes={debouncedUpsertingOrderTimes}
+              debouncedUpsertOrderTimes={debouncedUpsertOrderTimes}
               debouncedMultipleTreatments={debouncedMultipleTreatments}
               showOrderer={showOrderer}
+              hoveredColumn={hoveredColumn}
+              handleColumnHover={handleColumnHover}
+              handleColumnLeave={handleColumnLeave}
             />
           </TableRow>
         ))}
