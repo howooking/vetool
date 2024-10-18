@@ -11,7 +11,7 @@ type CellProps = {
   preview?: boolean
   order: SelectedIcuOrder
   debouncedUpsertOrderTimes: DebouncedState<() => void>
-  debouncedMultipleTreatments: DebouncedState<() => void>
+  handleMultipleTreatments: () => void
   showOrderer: boolean
   hoveredColumn: number | null
   handleColumnHover: (columnIndex: number) => void
@@ -22,7 +22,7 @@ export default function CellsRow({
   preview,
   order,
   debouncedUpsertOrderTimes,
-  debouncedMultipleTreatments,
+  handleMultipleTreatments,
   showOrderer,
   hoveredColumn,
   handleColumnHover,
@@ -85,7 +85,7 @@ export default function CellsRow({
             icuChartTxId={selectedTx?.tx_id}
             toggleOrderTime={toggleOrderTime}
             showOrderer={showOrderer}
-            debouncedMultipleTreatments={debouncedMultipleTreatments}
+            handleMultipleTreatments={handleMultipleTreatments}
             isHovered={isHovered}
             onMouseEnter={handleColumnHover}
             onMouseLeave={handleColumnLeave}

@@ -1,5 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
+import useIsCommandPressed from '@/hooks/use-is-command-pressed'
 import { useLongPress } from '@/hooks/use-long-press'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
@@ -7,7 +8,6 @@ import { cn } from '@/lib/utils'
 import type { Treatment, TxLog } from '@/types/icu/chart'
 import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { DebouncedState } from 'use-debounce'
 import { TxDetailHover } from './tx/tx-detail-hover'
 
 type ChartTableCellProps = {
@@ -20,7 +20,7 @@ type ChartTableCellProps = {
   orderer: string
   toggleOrderTime: (orderId: string, time: number) => void
   showOrderer: boolean
-  debouncedMultipleTreatments: DebouncedState<() => void>
+  handleMultipleTreatments: () => void
   isHovered: boolean
   onMouseEnter: (columnIndex: number) => void
   onMouseLeave: () => void
@@ -37,7 +37,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     orderer,
     toggleOrderTime,
     showOrderer,
-    debouncedMultipleTreatments,
+    handleMultipleTreatments,
     isHovered,
     onMouseEnter,
     onMouseLeave,
@@ -55,6 +55,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       setStep,
       setTxLocalState,
     } = useTxMutationStore()
+    const isCommandPressed = useIsCommandPressed()
 
     const searchParams = useSearchParams()
     const params = new URLSearchParams(searchParams)
@@ -102,7 +103,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
           const existingIndex = prev.findIndex(
             (item) => item.orderId === orderId && item.orderTime === time,
           )
-
           if (existingIndex !== -1) {
             return prev.filter((_, index) => index !== existingIndex)
           } else {
@@ -116,10 +116,27 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
             ]
           }
         })
-
-        debouncedMultipleTreatments()
+        !isCommandPressed && handleMultipleTreatments()
       },
-      [debouncedMultipleTreatments, icuChartTxId, setOrderTimePendingQueue],
+      [
+        icuChartTxId,
+        handleMultipleTreatments,
+        isCommandPressed,
+        setOrderTimePendingQueue,
+      ],
+    )
+
+    const handleClick = useCallback(
+      (e: React.MouseEvent<HTMLInputElement>) => {
+        setOrderPendingQueue([])
+
+        if (e.metaKey || e.ctrlKey) {
+          e.preventDefault()
+          e.currentTarget.blur()
+          toggleCellInQueue(icuChartOrderId, time)
+        }
+      },
+      [icuChartOrderId, time, toggleCellInQueue, setOrderPendingQueue],
     )
 
     const longPressEvents = useLongPress({
@@ -134,21 +151,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
         toggleOrderTime(icuChartOrderId, time)
       },
       [icuChartOrderId, time, toggleOrderTime],
-    )
-
-    const handleClick = useCallback(
-      (e: React.MouseEvent<HTMLInputElement>) => {
-        setOrderPendingQueue([])
-
-        if (e.metaKey || e.ctrlKey) {
-          e.preventDefault()
-
-          e.currentTarget.blur()
-
-          toggleCellInQueue(icuChartOrderId, time)
-        }
-      },
-      [icuChartOrderId, time, toggleCellInQueue, setOrderPendingQueue],
     )
 
     const handleUpsertBriefTxResultInput = useCallback(async () => {
@@ -227,7 +229,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
             onContextMenu={handleRightClick}
             {...longPressEvents}
             onMouseEnter={() => onMouseEnter(time)}
-            onMouseLeave={() => onMouseLeave()}
+            onMouseLeave={onMouseLeave}
           />
           <div
             className={cn(
