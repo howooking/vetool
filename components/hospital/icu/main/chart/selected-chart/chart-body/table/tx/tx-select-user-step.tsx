@@ -23,9 +23,13 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export default function TxSelectUserStep() {
-  const { txLocalState, setStep, setIsMutationCanceled, reset } =
-    useTxMutationStore()
-  const { orderTimePendingQueue, reset: queueReset } = useIcuOrderStore()
+  const {
+    txLocalState,
+    setStep,
+    setIsMutationCanceled,
+    reset: txLocalStateReset,
+  } = useTxMutationStore()
+  const { orderTimePendingQueue, reset: orderQueueReset } = useIcuOrderStore()
   const { hos_id } = useParams()
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -69,8 +73,8 @@ export default function TxSelectUserStep() {
         )
         setStep('closed')
 
-        queueReset()
-        reset()
+        orderQueueReset()
+        txLocalStateReset()
 
         return toast({
           title: '처치 내역이 업데이트 되었습니다',
@@ -81,19 +85,26 @@ export default function TxSelectUserStep() {
 
       await upsertIcuTx(hos_id as string, txLocalState, updatedLogs)
 
-      reset()
+      txLocalStateReset()
       toast({
         title: '처치 내역이 업데이트 되었습니다',
       })
     },
-    [hos_id, orderTimePendingQueue, reset, setStep, txLocalState, queueReset],
+    [
+      hos_id,
+      orderTimePendingQueue,
+      txLocalStateReset,
+      setStep,
+      txLocalState,
+      orderQueueReset,
+    ],
   )
 
   const handleCancel = useCallback(() => {
     setStep('closed')
     setIsMutationCanceled(true)
-    reset()
-  }, [reset, setIsMutationCanceled, setStep])
+    txLocalStateReset()
+  }, [txLocalStateReset, setIsMutationCanceled, setStep])
 
   return (
     <>

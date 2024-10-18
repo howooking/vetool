@@ -44,8 +44,13 @@ export default function ChartTable({
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
     useState(false)
 
-  const { setStep, reset, orderTimePendingQueue, orderPendingQueue } =
-    useIcuOrderStore()
+  const {
+    setStep,
+    reset,
+    orderTimePendingQueue,
+    selectedOrderPendingQueue,
+    copiedOrderPendingQueue,
+  } = useIcuOrderStore()
   const { setStep: setTxStep } = useTxMutationStore()
   const {
     basicHosData: { showOrderer, vetsListData },
@@ -132,7 +137,7 @@ export default function ChartTable({
       if (
         (event.ctrlKey || event.metaKey) &&
         event.key === 'v' &&
-        orderPendingQueue.length > 0
+        copiedOrderPendingQueue.length > 0
       ) {
         event.preventDefault()
         setStep('selectOrderer')
@@ -141,7 +146,7 @@ export default function ChartTable({
       if (
         ((event.metaKey && event.key === 'Backspace') ||
           event.key === 'Delete') &&
-        orderPendingQueue.length > 0
+        selectedOrderPendingQueue.length > 0
       ) {
         event.preventDefault()
         setIsDeleteOrdersDialogOpen(true)
@@ -152,7 +157,12 @@ export default function ChartTable({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [setStep, orderPendingQueue])
+  }, [
+    setStep,
+    orderTimePendingQueue,
+    copiedOrderPendingQueue.length,
+    selectedOrderPendingQueue.length,
+  ])
   // -----다중 오더 붙여넣기, 삭제 기능-----
 
   if (isSorting) {

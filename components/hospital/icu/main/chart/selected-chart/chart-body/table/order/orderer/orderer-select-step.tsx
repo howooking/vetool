@@ -47,7 +47,7 @@ export default function OrdererSelectStep({
     reset,
     selectedChartOrder,
     orderTimePendingQueue,
-    orderPendingQueue,
+    copiedOrderPendingQueue,
     isEditMode,
     setStep,
   } = useIcuOrderStore()
@@ -56,8 +56,8 @@ export default function OrdererSelectStep({
     [orderTimePendingQueue],
   )
   const isPendingOrder = useMemo(
-    () => orderPendingQueue.length > 0,
-    [orderPendingQueue],
+    () => copiedOrderPendingQueue.length > 0,
+    [copiedOrderPendingQueue],
   )
 
   const selectRef = useRef<HTMLButtonElement>(null)
@@ -148,7 +148,7 @@ export default function OrdererSelectStep({
   const handleUpsertOrder = useCallback(
     async (values: z.infer<typeof ordererSchema>) => {
       setIsUpdating(true)
-      for (const order of orderPendingQueue) {
+      for (const order of copiedOrderPendingQueue) {
         const updatedOrderTimes = [...order.order_times!]
 
         order.order_times!.forEach((time, index) => {
@@ -175,7 +175,7 @@ export default function OrdererSelectStep({
       setStep('closed')
       setIsUpdating(false)
     },
-    [hos_id, icuChartId, orderPendingQueue, reset, setStep],
+    [hos_id, icuChartId, copiedOrderPendingQueue, reset, setStep],
   )
 
   const handleSubmit = useCallback(

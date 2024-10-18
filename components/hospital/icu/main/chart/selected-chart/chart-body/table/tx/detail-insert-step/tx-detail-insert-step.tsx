@@ -22,13 +22,19 @@ import { deleteIcuChartTx } from '@/lib/services/icu/chart/tx-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export default function TxDetailInsertStep() {
-  const { setStep, txLocalState, setTxLocalState, setIsDeleting, reset } =
-    useTxMutationStore()
-  const { reset: queueReset } = useIcuOrderStore()
+  const {
+    setStep,
+    txLocalState,
+    setTxLocalState,
+    setIsDeleting,
+    reset: txLocalStateReset,
+  } = useTxMutationStore()
+  const { orderTimePendingQueue, reset: orderQueueReset } = useIcuOrderStore()
 
   const form = useForm<z.infer<typeof txDetailRegisterFormSchema>>({
     resolver: zodResolver(txDetailRegisterFormSchema),
@@ -38,6 +44,10 @@ export default function TxDetailInsertStep() {
       isNotificationChecked: false,
     },
   })
+
+  const hasTxOrder = useMemo(() => {
+    return orderTimePendingQueue.some((order) => order.txId)
+  }, [orderTimePendingQueue])
 
   const handleNextStep = async (
     values: z.infer<typeof txDetailRegisterFormSchema>,
@@ -51,22 +61,30 @@ export default function TxDetailInsertStep() {
     setStep('seletctUser')
   }
 
+  const handleCloseClick = () => {
+    setStep('closed')
+    txLocalStateReset()
+    orderQueueReset()
+  }
+
   const handleDeleteTx = async () => {
     setIsDeleting(true)
     setStep('closed')
 
-    await deleteIcuChartTx(txLocalState?.txId!)
+    if (hasTxOrder) {
+      orderTimePendingQueue.forEach(async (order) => {
+        if (order.txId) await deleteIcuChartTx(order.txId)
+      })
+    } else {
+      await deleteIcuChartTx(txLocalState?.txId!)
+    }
+
     toast({
       title: '처치내역을 삭제하였습니다',
     })
 
-    reset()
-  }
-
-  const handleCloseClick = () => {
-    setStep('closed')
-    reset()
-    queueReset()
+    txLocalStateReset()
+    orderQueueReset()
   }
 
   return (
@@ -146,7 +164,7 @@ export default function TxDetailInsertStep() {
           /> */}
 
           <div className="flex justify-between">
-            {txLocalState?.txId && (
+            {(txLocalState?.txId || hasTxOrder) && (
               <Button
                 variant="destructive"
                 onClick={handleDeleteTx}

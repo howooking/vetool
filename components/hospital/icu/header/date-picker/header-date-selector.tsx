@@ -2,6 +2,7 @@
 
 import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/header-date-picker'
 import { Button } from '@/components/ui/button'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { changeTargetDateInUrl } from '@/lib/utils'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
 import { addDays, format, isToday } from 'date-fns'
@@ -18,6 +19,7 @@ export default function HeaderDateSelector() {
   const params = useParams()
   const pathname = usePathname()
   const router = useRouter()
+  const { setSelectedOrderPendingQueue } = useIcuOrderStore()
 
   const [targetDate, setTargetDate] = useState(
     new Date(params.target_date as string),
@@ -33,6 +35,7 @@ export default function HeaderDateSelector() {
       )
       router.push(newPath)
       setTargetDate(newDate)
+      setSelectedOrderPendingQueue([])
     },
     [pathname, router, searchParams],
   )

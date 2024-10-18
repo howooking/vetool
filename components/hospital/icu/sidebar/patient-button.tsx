@@ -11,12 +11,10 @@ export default function PatientButton({ data }: { data: IcuSidebarIoData }) {
   const { reset: orderQueueReset } = useIcuOrderStore()
 
   const handlePatientButtonClick = useCallback(() => {
-    orderQueueReset()
-
     push(
       `/hospital/${hos_id}/icu/${target_date}/chart/${data.patient.patient_id}`,
     )
-  }, [hos_id, target_date, data, orderQueueReset, push])
+  }, [hos_id, target_date, data.patient.patient_id, push, orderQueueReset])
   return (
     <Button
       variant="outline"

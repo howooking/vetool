@@ -21,7 +21,7 @@ export default function DeleteOrdersAlertDialog({
   isDeleteOrdersDialogOpen: boolean
   setIsDeleteOrdersDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
-  const { reset, orderPendingQueue } = useIcuOrderStore()
+  const { reset, selectedOrderPendingQueue } = useIcuOrderStore()
   const deleteButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function DeleteOrdersAlertDialog({
   }, [isDeleteOrdersDialogOpen])
 
   const handleDeleteOrderClick = async () => {
-    orderPendingQueue.forEach(async (order) => {
+    selectedOrderPendingQueue.forEach(async (order) => {
       await deleteOrder(order.order_id!)
     })
 
@@ -50,7 +50,7 @@ export default function DeleteOrdersAlertDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {orderPendingQueue.length}개의 오더 삭제
+            {selectedOrderPendingQueue.length}개의 오더 삭제
           </AlertDialogTitle>
           <AlertDialogDescription>
             선택한 오더를 삭제합니다
