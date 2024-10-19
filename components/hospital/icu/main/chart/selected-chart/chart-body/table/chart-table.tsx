@@ -20,7 +20,6 @@ import { formatOrders, sortOrders } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useState } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
 import CellsRow from './cells-row'
 import CellsRowTitle from './cells-row-title'
 import DeleteOrdersAlertDialog from './order/delete-orders-alert-dialog'
@@ -47,11 +46,14 @@ export default function ChartTable({
   const {
     setStep,
     reset,
+    selectedTxPendingQueue,
     orderTimePendingQueue,
     selectedOrderPendingQueue,
     copiedOrderPendingQueue,
   } = useIcuOrderStore()
+
   const { setStep: setTxStep } = useTxMutationStore()
+
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
@@ -63,16 +65,16 @@ export default function ChartTable({
     setIsSorting(false)
   }, [orders])
 
-  // -----표에서 수직안내선-----
+  // ----- 표에서 수직 안내선 -----
   const [hoveredColumn, setHoveredColumn] = useState<number | null>(null)
   const handleColumnHover = useCallback(
     (columnIndex: number) => setHoveredColumn(columnIndex),
     [],
   )
   const handleColumnLeave = useCallback(() => setHoveredColumn(null), [])
-  // -----표에서 수직안내선-----
+  // ------------------------
 
-  const handleUpsertMultipleOrderTimesWithoutOrderer = useCallback(async () => {
+  const handleUpsertOrderTimesWithoutOrderer = useCallback(async () => {
     const formattedOrders = formatOrders(orderTimePendingQueue)
 
     for (const order of formattedOrders) {
@@ -114,22 +116,25 @@ export default function ChartTable({
     vetsListData,
   ])
 
-  const debouncedUpsertOrderTimes = useDebouncedCallback(
-    showOrderer
-      ? () => setStep('selectOrderer')
-      : handleUpsertMultipleOrderTimesWithoutOrderer,
-    1500,
-  )
-
-  const handleMultipleTreatments = useCallback(() => {
-    if (orderTimePendingQueue.length >= 2) setTxStep('detailInsert')
-  }, [orderTimePendingQueue.length, setTxStep])
-
   useEffect(() => {
-    if (!isCommandPressed && orderTimePendingQueue.length > 0) {
-      handleMultipleTreatments()
+    if (!isCommandPressed && orderTimePendingQueue.length >= 1) {
+      showOrderer
+        ? setStep('selectOrderer')
+        : handleUpsertOrderTimesWithoutOrderer()
     }
-  }, [isCommandPressed, orderTimePendingQueue, handleMultipleTreatments])
+    if (!isCommandPressed && selectedTxPendingQueue.length >= 1) {
+      setTxStep('detailInsert')
+    }
+  }, [
+    handleUpsertOrderTimesWithoutOrderer,
+    isCommandPressed,
+    orderTimePendingQueue,
+    selectedTxPendingQueue,
+    selectedTxPendingQueue.length,
+    setStep,
+    setTxStep,
+    showOrderer,
+  ])
 
   // -----다중 오더 붙여넣기, 삭제 기능-----
   useEffect(() => {
@@ -163,7 +168,7 @@ export default function ChartTable({
     copiedOrderPendingQueue.length,
     selectedOrderPendingQueue.length,
   ])
-  // -----다중 오더 붙여넣기, 삭제 기능-----
+  // ------------------------------------
 
   if (isSorting) {
     return <LargeLoaderCircle className="h-icu-chart" />
@@ -203,9 +208,6 @@ export default function ChartTable({
             <CellsRow
               preview={preview}
               order={order}
-              debouncedUpsertOrderTimes={debouncedUpsertOrderTimes}
-              // debouncedMultipleTreatments={debouncedMultipleTreatments}
-              handleMultipleTreatments={handleMultipleTreatments}
               showOrderer={showOrderer}
               hoveredColumn={hoveredColumn}
               handleColumnHover={handleColumnHover}
