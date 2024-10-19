@@ -34,7 +34,7 @@ export default function TxDetailInsertStep() {
     setIsDeleting,
     reset: txLocalStateReset,
   } = useTxMutationStore()
-  const { orderTimePendingQueue, reset: orderQueueReset } = useIcuOrderStore()
+  const { selectedTxPendingQueue, reset: orderQueueReset } = useIcuOrderStore()
 
   const form = useForm<z.infer<typeof txDetailRegisterFormSchema>>({
     resolver: zodResolver(txDetailRegisterFormSchema),
@@ -46,8 +46,8 @@ export default function TxDetailInsertStep() {
   })
 
   const hasTxOrder = useMemo(() => {
-    return orderTimePendingQueue.some((order) => order.txId)
-  }, [orderTimePendingQueue])
+    return selectedTxPendingQueue.some((order) => order.txId)
+  }, [selectedTxPendingQueue])
 
   const handleNextStep = async (
     values: z.infer<typeof txDetailRegisterFormSchema>,
@@ -72,7 +72,7 @@ export default function TxDetailInsertStep() {
     setStep('closed')
 
     if (hasTxOrder) {
-      orderTimePendingQueue.forEach(async (order) => {
+      selectedTxPendingQueue.forEach(async (order) => {
         if (order.txId) await deleteIcuChartTx(order.txId)
       })
     } else {

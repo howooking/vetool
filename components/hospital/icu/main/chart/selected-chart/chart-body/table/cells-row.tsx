@@ -4,14 +4,11 @@ import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useState } from 'react'
-import { DebouncedState } from 'use-debounce'
 import Cell from './cell'
 
-type CellProps = {
+type CellsRowProps = {
   preview?: boolean
   order: SelectedIcuOrder
-  debouncedUpsertOrderTimes: DebouncedState<() => void>
-  handleMultipleTreatments: () => void
   showOrderer: boolean
   hoveredColumn: number | null
   handleColumnHover: (columnIndex: number) => void
@@ -21,13 +18,11 @@ type CellProps = {
 export default function CellsRow({
   preview,
   order,
-  debouncedUpsertOrderTimes,
-  handleMultipleTreatments,
   showOrderer,
   hoveredColumn,
   handleColumnHover,
   handleColumnLeave,
-}: CellProps) {
+}: CellsRowProps) {
   const { order_times, order_id, treatments } = order
   const { setOrderTimePendingQueue, step } = useIcuOrderStore()
   const [orderTimeState, setOrderTimeState] = useState(order_times)
@@ -55,10 +50,8 @@ export default function CellsRow({
           return [...prev, { orderId, orderTime: time }]
         }
       })
-
-      debouncedUpsertOrderTimes()
     },
-    [debouncedUpsertOrderTimes, setOrderTimePendingQueue],
+    [setOrderTimePendingQueue],
   )
 
   return (
@@ -68,9 +61,7 @@ export default function CellsRow({
           order_times[index] !== '0' &&
           treatments.some((treatment) => treatment.time === time)
         const orderer = orderTimeState[time - 1]
-        const selectedTx = treatments.find(
-          (treatment) => treatment.time === time,
-        )
+        const tx = treatments.find((treatment) => treatment.time === time)
         const isHovered = hoveredColumn === index + 1
 
         return (
@@ -78,14 +69,13 @@ export default function CellsRow({
             preview={preview}
             key={time}
             time={time}
-            treatment={selectedTx}
+            treatment={tx}
             icuChartOrderId={order_id}
             isDone={isDone}
             orderer={orderer}
-            icuChartTxId={selectedTx?.tx_id}
+            icuChartTxId={tx?.tx_id}
             toggleOrderTime={toggleOrderTime}
             showOrderer={showOrderer}
-            handleMultipleTreatments={handleMultipleTreatments}
             isHovered={isHovered}
             onMouseEnter={handleColumnHover}
             onMouseLeave={handleColumnLeave}

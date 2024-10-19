@@ -26,7 +26,6 @@ export default function ChartEntry({
     return (
       <AddChartDialogs
         chartData={chartData}
-        isFirstChart={false}
         setIsChartLoading={setIsChartLoading}
       />
     )
@@ -36,7 +35,7 @@ export default function ChartEntry({
   if (chartData.orders.length === 0) {
     return (
       <AddChartDialogs
-        isFirstChart={true}
+        isFirstChart
         chartData={chartData}
         setIsChartLoading={setIsChartLoading}
       />

@@ -10,7 +10,7 @@ export default function AddChartDialogs({
   isFirstChart,
   setIsChartLoading,
 }: {
-  isFirstChart: boolean
+  isFirstChart?: boolean
   chartData: SelectedChart
   setIsChartLoading: Dispatch<SetStateAction<boolean>>
 }) {

@@ -29,7 +29,7 @@ export default function TxSelectUserStep() {
     setIsMutationCanceled,
     reset: txLocalStateReset,
   } = useTxMutationStore()
-  const { orderTimePendingQueue, reset: orderQueueReset } = useIcuOrderStore()
+  const { selectedTxPendingQueue, reset: orderQueueReset } = useIcuOrderStore()
   const { hos_id } = useParams()
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -56,8 +56,8 @@ export default function TxSelectUserStep() {
 
       const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
-      if (orderTimePendingQueue.length) {
-        orderTimePendingQueue.forEach(
+      if (selectedTxPendingQueue.length) {
+        selectedTxPendingQueue.forEach(
           async (item) =>
             await upsertIcuTx(
               hos_id as string,
@@ -72,7 +72,6 @@ export default function TxSelectUserStep() {
             ),
         )
         setStep('closed')
-
         orderQueueReset()
         txLocalStateReset()
 
@@ -92,7 +91,7 @@ export default function TxSelectUserStep() {
     },
     [
       hos_id,
-      orderTimePendingQueue,
+      selectedTxPendingQueue,
       txLocalStateReset,
       setStep,
       txLocalState,
