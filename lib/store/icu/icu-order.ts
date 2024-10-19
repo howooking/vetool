@@ -40,6 +40,13 @@ type IcuOrderState = {
       | ((prev: OrderTimePendingQueue[]) => OrderTimePendingQueue[]),
   ) => void
 
+  selectedTxPendingQueue: OrderTimePendingQueue[]
+  setSelectedTxPendingQueue: (
+    updater:
+      | OrderTimePendingQueue[]
+      | ((prev: OrderTimePendingQueue[]) => OrderTimePendingQueue[]),
+  ) => void
+
   reset: () => void
 }
 
@@ -80,11 +87,21 @@ export const useIcuOrderStore = create<IcuOrderState>((set) => ({
           : updater,
     })),
 
+  selectedTxPendingQueue: [],
+  setSelectedTxPendingQueue: (updater) =>
+    set((state) => ({
+      selectedTxPendingQueue:
+        typeof updater === 'function'
+          ? updater(state.selectedTxPendingQueue)
+          : updater,
+    })),
+
   reset: () =>
     set({
       isEditMode: false,
       selectedChartOrder: {} as Partial<SelectedIcuOrder>,
       orderTimePendingQueue: [],
+      selectedTxPendingQueue: [],
       copiedOrderPendingQueue: [],
       selectedOrderPendingQueue: [],
     }),

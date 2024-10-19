@@ -1,6 +1,5 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
-import useIsCommandPressed from '@/hooks/use-is-command-pressed'
 import { useLongPress } from '@/hooks/use-long-press'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
@@ -10,7 +9,7 @@ import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { TxDetailHover } from './tx/tx-detail-hover'
 
-type ChartTableCellProps = {
+type CellProps = {
   time: number
   treatment?: Treatment
   icuChartOrderId: string
@@ -20,13 +19,12 @@ type ChartTableCellProps = {
   orderer: string
   toggleOrderTime: (orderId: string, time: number) => void
   showOrderer: boolean
-  handleMultipleTreatments: () => void
   isHovered: boolean
   onMouseEnter: (columnIndex: number) => void
   onMouseLeave: () => void
 }
 
-const Cell: React.FC<ChartTableCellProps> = React.memo(
+const Cell: React.FC<CellProps> = React.memo(
   ({
     time,
     treatment,
@@ -37,36 +35,34 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
     orderer,
     toggleOrderTime,
     showOrderer,
-    handleMultipleTreatments,
     isHovered,
     onMouseEnter,
     onMouseLeave,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
-    const {
-      orderTimePendingQueue,
-      setOrderTimePendingQueue,
-      setSelectedOrderPendingQueue,
-    } = useIcuOrderStore()
+
+    const { setSelectedTxPendingQueue, selectedTxPendingQueue } =
+      useIcuOrderStore()
     const {
       isMutationCanceled,
       setIsMutationCanceled,
       setStep,
       setTxLocalState,
     } = useTxMutationStore()
-    const isCommandPressed = useIsCommandPressed()
 
-    const searchParams = useSearchParams()
-    const params = new URLSearchParams(searchParams)
-    const orderId = params.get('order-id')
-    const orderTime = params.get('time')
-
-    useEffect(() => {
-      const cellInputId = document.getElementById(`${orderId}&${orderTime}`)
-
-      if (cellInputId) cellInputId.focus()
-    }, [orderId, orderTime])
+    const hasOrder = useMemo(() => orderer !== '0', [orderer])
+    const hasComment = useMemo(
+      () => !!treatment?.tx_comment,
+      [treatment?.tx_comment],
+    )
+    const isInPendingQueue = useMemo(
+      () =>
+        selectedTxPendingQueue.some(
+          (item) => item.orderId === icuChartOrderId && item.orderTime === time,
+        ),
+      [icuChartOrderId, selectedTxPendingQueue, time],
+    )
 
     useEffect(() => {
       if (treatment?.tx_result || isMutationCanceled) {
@@ -75,6 +71,19 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       }
     }, [isMutationCanceled, setIsMutationCanceled, treatment?.tx_result])
 
+    // ---- 처치표에서 이동해 왔을 때 auto focus ----
+    const searchParams = useSearchParams()
+    const params = new URLSearchParams(searchParams)
+    const orderId = params.get('order-id')
+    const orderTime = params.get('time')
+
+    useEffect(() => {
+      const cellInputId = document.getElementById(`${orderId}&${orderTime}`)
+      if (cellInputId) cellInputId.focus()
+    }, [orderId, orderTime])
+    // ----------------------------------------
+
+    // -------- 상세 처치 입력 --------
     const handleOpenTxDetail = useCallback(() => {
       setTxLocalState({
         icuChartOrderId,
@@ -97,9 +106,15 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       treatment?.tx_result,
     ])
 
+    const longPressEvents = useLongPress({
+      onLongPress: handleOpenTxDetail,
+      delay: 800,
+    })
+    // ---------------------------
+
     const toggleCellInQueue = useCallback(
       (orderId: string, time: number) => {
-        setOrderTimePendingQueue((prev) => {
+        setSelectedTxPendingQueue((prev) => {
           const existingIndex = prev.findIndex(
             (item) => item.orderId === orderId && item.orderTime === time,
           )
@@ -110,45 +125,35 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
               ...prev,
               {
                 txId: icuChartTxId,
-                orderId: orderId,
+                orderId,
                 orderTime: time,
               },
             ]
           }
         })
-        !isCommandPressed && handleMultipleTreatments()
       },
-      [
-        icuChartTxId,
-        handleMultipleTreatments,
-        isCommandPressed,
-        setOrderTimePendingQueue,
-      ],
+      [setSelectedTxPendingQueue, icuChartTxId],
     )
 
     const handleClick = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
-        setSelectedOrderPendingQueue([])
-
+        setIsFocused(true)
+        e.preventDefault()
         if (e.metaKey || e.ctrlKey) {
-          e.preventDefault()
           e.currentTarget.blur()
           toggleCellInQueue(icuChartOrderId, time)
         }
       },
-      [setSelectedOrderPendingQueue, toggleCellInQueue, icuChartOrderId, time],
+      [icuChartOrderId, time, toggleCellInQueue],
     )
-
-    const longPressEvents = useLongPress({
-      onLongPress: handleOpenTxDetail,
-      delay: 800,
-    })
 
     const handleRightClick = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault()
-
-        toggleOrderTime(icuChartOrderId, time)
+        if (e.metaKey || e.ctrlKey) {
+          e.currentTarget.blur()
+          toggleOrderTime(icuChartOrderId, time)
+        }
       },
       [icuChartOrderId, time, toggleOrderTime],
     )
@@ -194,17 +199,6 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
       [],
     )
 
-    const hasOrder = useMemo(() => orderer !== '0', [orderer])
-    const hasComment = useMemo(
-      () => !!treatment?.tx_comment,
-      [treatment?.tx_comment],
-    )
-    const isInPendingQueue = useMemo(() => {
-      return orderTimePendingQueue.some(
-        (item) => item.orderId === icuChartOrderId && item.orderTime === time,
-      )
-    }, [icuChartOrderId, orderTimePendingQueue, time])
-
     return (
       <TableCell className="p-0">
         <div className="relative overflow-hidden">
@@ -212,10 +206,10 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
             id={`${icuChartOrderId}&${time}`}
             className={cn(
               isHovered && 'bg-muted/50',
-              hasOrder && 'bg-rose-500/10',
+              hasOrder && 'bg-rose-400/10',
               isDone && 'bg-emerald-400/10',
               isInPendingQueue && 'ring-2',
-              'h-11 rounded-none border-none border-primary px-1 text-center outline-none ring-inset ring-primary focus-visible:ring-2 focus-visible:ring-primary',
+              'h-11 rounded-none border-none px-1 text-center outline-none ring-inset focus-visible:ring-2 focus-visible:ring-primary',
             )}
             disabled={preview}
             value={briefTxResultInput}
@@ -233,7 +227,7 @@ const Cell: React.FC<ChartTableCellProps> = React.memo(
           />
           <div
             className={cn(
-              'absolute inset-0 -z-10 flex items-center justify-center text-black transition',
+              'absolute inset-0 -z-10 flex items-center justify-center',
               isFocused && 'opacity-20',
             )}
           >
