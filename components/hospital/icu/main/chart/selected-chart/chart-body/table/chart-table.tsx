@@ -13,6 +13,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import useIsCommandPressed from '@/hooks/use-is-command-pressed'
+import useLocalStorage from '@/hooks/use-local-storage'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
@@ -58,6 +59,20 @@ export default function ChartTable({
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
   const isCommandPressed = useIsCommandPressed()
+
+  // -------- 시간 가이드라인 --------
+  const [guidelineTimes, setGuidelineTimes] = useLocalStorage(
+    'guideline-times',
+    [2, 10, 18],
+  )
+  const handleToggleGuidelineTimes = (time: number) => {
+    if (guidelineTimes.includes(time)) {
+      setGuidelineTimes(guidelineTimes.filter((t) => t !== time))
+    } else {
+      setGuidelineTimes([...guidelineTimes, time])
+    }
+  }
+  // -----------------------------
 
   useEffect(() => {
     setIsSorting(true)
@@ -136,7 +151,7 @@ export default function ChartTable({
     showOrderer,
   ])
 
-  // -----다중 오더 붙여넣기, 삭제 기능-----
+  // ----- 다중 오더 붙여넣기, 삭제 기능 -----
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
@@ -193,7 +208,11 @@ export default function ChartTable({
           </TableHead>
 
           {TIMES.map((time) => (
-            <TableHead className="border text-center" key={time}>
+            <TableHead
+              className="cursor-pointer border text-center"
+              key={time}
+              onClick={() => handleToggleGuidelineTimes(time)}
+            >
               {time.toString().padStart(2, '0')}
             </TableHead>
           ))}
@@ -212,6 +231,7 @@ export default function ChartTable({
               hoveredColumn={hoveredColumn}
               handleColumnHover={handleColumnHover}
               handleColumnLeave={handleColumnLeave}
+              guidelineTimes={guidelineTimes}
             />
           </TableRow>
         ))}
