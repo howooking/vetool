@@ -13,6 +13,7 @@ type CellsRowProps = {
   hoveredColumn: number | null
   handleColumnHover: (columnIndex: number) => void
   handleColumnLeave: () => void
+  guidelineTimes: number[]
 }
 
 export default function CellsRow({
@@ -22,6 +23,7 @@ export default function CellsRow({
   hoveredColumn,
   handleColumnHover,
   handleColumnLeave,
+  guidelineTimes,
 }: CellsRowProps) {
   const { order_times, order_id, treatments } = order
   const { setOrderTimePendingQueue, step } = useIcuOrderStore()
@@ -63,6 +65,7 @@ export default function CellsRow({
         const orderer = orderTimeState[time - 1]
         const tx = treatments.find((treatment) => treatment.time === time)
         const isHovered = hoveredColumn === index + 1
+        const isGuidelineTime = guidelineTimes.includes(time)
 
         return (
           <Cell
@@ -79,6 +82,7 @@ export default function CellsRow({
             isHovered={isHovered}
             onMouseEnter={handleColumnHover}
             onMouseLeave={handleColumnLeave}
+            isGuidelineTime={isGuidelineTime}
           />
         )
       })}

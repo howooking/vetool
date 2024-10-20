@@ -22,6 +22,7 @@ type CellProps = {
   isHovered: boolean
   onMouseEnter: (columnIndex: number) => void
   onMouseLeave: () => void
+  isGuidelineTime: boolean
 }
 
 const Cell: React.FC<CellProps> = React.memo(
@@ -38,6 +39,7 @@ const Cell: React.FC<CellProps> = React.memo(
     isHovered,
     onMouseEnter,
     onMouseLeave,
+    isGuidelineTime,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
@@ -205,6 +207,7 @@ const Cell: React.FC<CellProps> = React.memo(
           <Input
             id={`${icuChartOrderId}&${time}`}
             className={cn(
+              isGuidelineTime && 'bg-amber-300/10',
               isHovered && 'bg-muted/50',
               hasOrder && 'bg-rose-400/10',
               isDone && 'bg-emerald-400/10',
