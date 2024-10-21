@@ -5,6 +5,8 @@ import { useIcuRealtime } from '@/hooks/use-icu-realtime'
 import { cn } from '@/lib/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import RealtimeStatus from './realtime-status'
+import { useEffect } from 'react'
+import { toast } from '@/components/ui/use-toast'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
@@ -44,12 +46,21 @@ export default function IcuFooter({
   hosId: string
   targetDate: string
 }) {
-  const isSubscriptionReady = useIcuRealtime(hosId, targetDate)
+  const isSubscriptionReady = useIcuRealtime(hosId)
   const { push } = useRouter()
   const path = usePathname()
   const currentIcuPath = path.split('/').at(5)
   const searchParams = useSearchParams()
   const params = new URLSearchParams(searchParams)
+
+  useEffect(() => {
+    if (isSubscriptionReady) {
+      toast({
+        title: '차트의 실시간 변경을 감지하고 있습니다',
+        className: 'bg-green-600 text-white',
+      })
+    }
+  }, [isSubscriptionReady])
 
   return (
     <footer

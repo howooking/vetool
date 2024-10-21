@@ -6,22 +6,21 @@ import { useDebouncedCallback } from 'use-debounce'
 
 const supabase = createClient()
 const TABLES = ['icu_io', 'icu_charts', 'icu_orders', 'icu_txs'] as const
-type TableName = (typeof TABLES)[number]
 
-export function useIcuRealtime(hosId: string, targetDate: string) {
+export function useIcuRealtime(hosId: string) {
   const subscriptionRef = useRef<RealtimeChannel | null>(null)
   const [isSubscriptionReady, setIsSubscriptionReady] = useState(false)
   const { refresh } = useRouter()
 
   const deboucedRefresh = useDebouncedCallback(() => {
-    console.log('deboucedRefresh')
+    console.log('Debouced Refresh')
     refresh()
   }, 500)
 
   const handleChange = useCallback(
     (payload: any) => {
       console.log(
-        `%c${payload.table.toUpperCase()} ${payload.eventType}`,
+        `%c${payload.table} ${payload.eventType}`,
         `background:${getLogColor(payload.table)}; color:white`,
       )
       deboucedRefresh()
