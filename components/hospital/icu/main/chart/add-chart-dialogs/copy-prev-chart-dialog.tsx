@@ -39,6 +39,7 @@ export default function CopyPrevChartDialog({
         description: '전날 차트가 있는지 확인해주세요',
         variant: 'destructive',
       })
+      setIsChartLoading(false)
       return
     }
 

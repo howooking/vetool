@@ -1,6 +1,6 @@
 'use client'
 
-import useIcuSidebarFilter from '@/hooks/useIcuSidebarFilter'
+import useIcuSidebarFilter from '@/hooks/use-icu-sidebar-filter'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
 import { useCallback, useMemo } from 'react'
 import { MobileSidebarSheet } from './mobile/mobile-sidebar-sheet'
