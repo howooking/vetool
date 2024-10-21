@@ -6,22 +6,21 @@ import { useDebouncedCallback } from 'use-debounce'
 
 const supabase = createClient()
 const TABLES = ['icu_io', 'icu_charts', 'icu_orders', 'icu_txs'] as const
-type TableName = (typeof TABLES)[number]
 
-export function useIcuRealtime(hosId: string, targetDate: string) {
+export function useIcuRealtime(hosId: string) {
   const subscriptionRef = useRef<RealtimeChannel | null>(null)
   const [isSubscriptionReady, setIsSubscriptionReady] = useState(false)
   const { refresh } = useRouter()
 
   const deboucedRefresh = useDebouncedCallback(() => {
-    console.log('deboucedRefresh')
+    console.log('Debouced Refresh')
     refresh()
   }, 500)
 
   const handleChange = useCallback(
     (payload: any) => {
       console.log(
-        `%c${payload.table.toUpperCase()} ${payload.eventType}`,
+        `%c${payload.table} ${payload.eventType}`,
         `background:${getLogColor(payload.table)}; color:white`,
       )
       deboucedRefresh()
@@ -35,6 +34,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
       return
     }
 
+    console.log('Creating new subscription...')
     const channel = supabase.channel(`icu_realtime_${hosId}`)
 
     TABLES.forEach((table) => {
@@ -71,7 +71,7 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
         console.log('Subscribed to all tables')
         setIsSubscriptionReady(true)
       } else {
-        console.log('Subscription failed')
+        console.log('Subscription failed with status:', status)
         setIsSubscriptionReady(false)
       }
     })
@@ -79,34 +79,35 @@ export function useIcuRealtime(hosId: string, targetDate: string) {
 
   const unsubscribe = useCallback(() => {
     if (subscriptionRef.current) {
+      console.log('Unsubscribing from channel...')
       supabase.removeChannel(subscriptionRef.current)
       subscriptionRef.current = null
       setIsSubscriptionReady(false)
     }
   }, [])
 
-  useEffect(() => {
-    subscribeToChannel()
-
-    return () => {
+  const handleVisibilityChange = useCallback(() => {
+    if (document.hidden) {
+      console.log('Page is hidden, unsubscribing...')
       unsubscribe()
+    } else {
+      console.log('Page is visible, resubscribing...')
+      subscribeToChannel()
     }
   }, [subscribeToChannel, unsubscribe])
 
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden && !subscriptionRef.current) {
-        subscribeToChannel()
-      }
-    }
+    console.log('initial subscription')
+    subscribeToChannel()
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {
+      console.log('Cleanup: unsubscribing and removing event listener...')
       unsubscribe()
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [subscribeToChannel, unsubscribe])
+  }, [handleVisibilityChange, subscribeToChannel, unsubscribe])
 
   return isSubscriptionReady
 }
