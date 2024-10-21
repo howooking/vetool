@@ -34,6 +34,7 @@ export function useIcuRealtime(hosId: string) {
       return
     }
 
+    console.log('Creating new subscription...')
     const channel = supabase.channel(`icu_realtime_${hosId}`)
 
     TABLES.forEach((table) => {
@@ -70,7 +71,7 @@ export function useIcuRealtime(hosId: string) {
         console.log('Subscribed to all tables')
         setIsSubscriptionReady(true)
       } else {
-        console.log('Subscription failed')
+        console.log('Subscription failed with status:', status)
         setIsSubscriptionReady(false)
       }
     })
@@ -78,34 +79,35 @@ export function useIcuRealtime(hosId: string) {
 
   const unsubscribe = useCallback(() => {
     if (subscriptionRef.current) {
+      console.log('Unsubscribing from channel...')
       supabase.removeChannel(subscriptionRef.current)
       subscriptionRef.current = null
       setIsSubscriptionReady(false)
     }
   }, [])
 
-  useEffect(() => {
-    subscribeToChannel()
-
-    return () => {
+  const handleVisibilityChange = useCallback(() => {
+    if (document.hidden) {
+      console.log('Page is hidden, unsubscribing...')
       unsubscribe()
+    } else {
+      console.log('Page is visible, resubscribing...')
+      subscribeToChannel()
     }
   }, [subscribeToChannel, unsubscribe])
 
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden && !subscriptionRef.current) {
-        subscribeToChannel()
-      }
-    }
+    console.log('initial subscription')
+    subscribeToChannel()
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {
+      console.log('Cleanup: unsubscribing and removing event listener...')
       unsubscribe()
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [subscribeToChannel, unsubscribe])
+  }, [handleVisibilityChange, subscribeToChannel, unsubscribe])
 
   return isSubscriptionReady
 }
