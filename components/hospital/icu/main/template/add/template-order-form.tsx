@@ -24,9 +24,14 @@ import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function TemplateOrderForm() {
+export default function TemplateOrderForm({
+  isEditModalOpen,
+}: {
+  isEditModalOpen?: boolean
+}) {
   const { setStep, selectedChartOrder, isEditMode, reset } = useIcuOrderStore()
-  const { setTemplateOrders } = useTemplateStore()
+  const { addTemplateOrder, updateTemplateOrder, orderIndex } =
+    useTemplateStore()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -47,11 +52,20 @@ export default function TemplateOrderForm() {
       const orderComment = values.icu_chart_order_comment ?? ''
       const orderType = values.icu_chart_order_type
 
-      setTemplateOrders({
-        icu_chart_order_name: trimmedOrderName,
-        icu_chart_order_comment: orderComment,
-        icu_chart_order_type: orderType,
-      })
+      const updatedOrder = {
+        order_name: trimmedOrderName,
+        order_comment: orderComment,
+        order_type: orderType,
+      }
+
+      if (isEditMode) {
+        updateTemplateOrder(updatedOrder, orderIndex)
+        setStep('closed')
+      } else {
+        addTemplateOrder(updatedOrder)
+
+        if (isEditModalOpen) setStep('closed')
+      }
 
       reset()
       form.resetField('icu_chart_order_name')
@@ -59,7 +73,15 @@ export default function TemplateOrderForm() {
 
       setIsSubmitting(false)
     },
-    [setTemplateOrders, reset, form],
+    [
+      isEditMode,
+      reset,
+      form,
+      updateTemplateOrder,
+      selectedChartOrder,
+      addTemplateOrder,
+      setStep,
+    ],
   )
 
   return (

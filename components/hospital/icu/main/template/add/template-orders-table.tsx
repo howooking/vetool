@@ -27,8 +27,12 @@ import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 
-export default function AddTemplateTable() {
-  const { templateOrders } = useTemplateStore()
+export default function TemplateOrdersTable({
+  isEditModalOpen,
+}: {
+  isEditModalOpen?: boolean
+}) {
+  const { templateOrders, setOrderIndex } = useTemplateStore()
   const {
     step,
     setStep,
@@ -41,21 +45,16 @@ export default function AddTemplateTable() {
     basicHosData: { orderColorsData },
   } = useBasicHosDataContext()
 
-  const handleAddDialogOpen = useCallback(() => {
-    setIsEditMode(false)
-    reset()
-  }, [reset, setIsEditMode])
-
   const sortedOrders = useMemo(() => {
     if (templateOrders.length === 0) return []
 
     return templateOrders.sort(
       (prev, next) =>
         DEFAULT_ICU_ORDER_TYPE.findIndex(
-          (order) => order.value === prev.icu_chart_order_type,
+          (order) => order.value === prev.order_type,
         ) -
         DEFAULT_ICU_ORDER_TYPE.findIndex(
-          (order) => order.value === next.icu_chart_order_type,
+          (order) => order.value === next.order_type,
         ),
     )
   }, [templateOrders])
@@ -69,10 +68,14 @@ export default function AddTemplateTable() {
     reset()
   }, [step, setStep, reset])
 
-  const handleEditOrderDialogOpen = (order: Partial<SelectedIcuOrder>) => {
+  const handleEditOrderDialogOpen = (
+    order: Partial<SelectedIcuOrder>,
+    index: number,
+  ) => {
     setStep('upsert')
     setIsEditMode(true)
     setSelectedChartOrder(order)
+    setOrderIndex(index)
   }
 
   return (
@@ -87,7 +90,6 @@ export default function AddTemplateTable() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={handleAddDialogOpen}
                   className="absolute right-1 top-0.5"
                 >
                   <Plus size={18} />
@@ -100,7 +102,7 @@ export default function AddTemplateTable() {
                   <DialogDescription />
                 </DialogHeader>
 
-                {step === 'upsert' && <TemplateOrderForm />}
+                {step === 'upsert' && <TemplateOrderForm isEditModalOpen />}
               </DialogContent>
             </Dialog>
           </TableHead>
@@ -121,25 +123,27 @@ export default function AddTemplateTable() {
                 className="p-0"
                 style={{
                   background:
-                    orderColorsData[
-                      order.icu_chart_order_type as keyof IcuOrderColors
-                    ],
+                    orderColorsData[order.order_type as keyof IcuOrderColors],
                 }}
               >
                 <Button
                   variant="ghost"
                   onClick={() =>
-                    handleEditOrderDialogOpen({
-                      order_comment: order.icu_chart_order_comment,
-                      order_name: order.icu_chart_order_name,
-                      order_type: order.icu_chart_order_type,
-                    })
+                    handleEditOrderDialogOpen(
+                      {
+                        order_id: order.order_id,
+                        order_comment: order.order_comment,
+                        order_name: order.order_name,
+                        order_type: order.order_type,
+                      },
+                      index,
+                    )
                   }
                   className="flex w-full justify-between rounded-none bg-transparent px-2"
                 >
-                  <span className="truncate">{order.icu_chart_order_name}</span>
+                  <span className="truncate">{order.order_name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {order.icu_chart_order_comment}
+                    {order.order_comment}
                   </span>
                 </Button>
               </TableCell>

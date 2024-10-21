@@ -1,14 +1,15 @@
-import AddTemplateDialog from '@/components/hospital/icu/main/template/add/add-template-dialog'
-import AddTemplateTable from '@/components/hospital/icu/main/template/add/add-template-table'
+import AddTemplateOrdersDialog from '@/components/hospital/icu/main/template/add/add-template-orders-dialog'
+import TemplateOrdersTable from '@/components/hospital/icu/main/template/add/template-orders-table'
 import { Button } from '@/components/ui/button'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTemplateStore } from '@/lib/store/icu/template'
 
-export default function AddTemplateOrdersSetting() {
+export default function AddTemplateOrders() {
   const { templateOrders, reset } = useTemplateStore()
 
   return (
     <div className="flex max-w-3xl flex-col gap-2">
-      <AddTemplateTable />
+      <TemplateOrdersTable />
 
       <div className="flex gap-2">
         <Button
@@ -20,7 +21,7 @@ export default function AddTemplateOrdersSetting() {
           초기화
         </Button>
 
-        <AddTemplateDialog />
+        <AddTemplateOrdersDialog />
       </div>
     </div>
   )

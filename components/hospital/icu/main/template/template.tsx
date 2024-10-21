@@ -1,12 +1,14 @@
 'use client'
 
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
-import AddTemplateOrdersSetting from '@/components/hospital/icu/main/template/add/add-template-orders-setting'
+import AddTemplateOrders from '@/components/hospital/icu/main/template/add/add-template-orders'
 import { templateColumns } from '@/components/hospital/icu/main/template/table/template-columns'
 import DataTable from '@/components/ui/data-table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
+import { useTemplateStore } from '@/lib/store/icu/template'
 import type { TemplateChart } from '@/types/icu/template'
+import EditTemplateDialogs from './edit/edit-template-dialogs'
 
 export default function Template({
   templateCharts,
@@ -14,6 +16,7 @@ export default function Template({
   templateCharts: TemplateChart[]
 }) {
   const { isPreviewDialogOpen } = usePreviewDialogStore()
+  const { isTemplateDialogOpen } = useTemplateStore()
 
   return (
     <Tabs defaultValue="search" className="p-2">
@@ -22,6 +25,7 @@ export default function Template({
         <TabsTrigger value="add">템플릿 추가</TabsTrigger>
       </TabsList>
 
+      {/* 템플릿 검색 */}
       <TabsContent value="search">
         <DataTable
           columns={templateColumns}
@@ -30,11 +34,15 @@ export default function Template({
         />
       </TabsContent>
 
+      {/* 템플릿 추가 */}
       <TabsContent value="add">
-        <AddTemplateOrdersSetting />
+        <AddTemplateOrders />
       </TabsContent>
 
       <div className="p-2">{isPreviewDialogOpen && <PreviewDialog />}</div>
+      <div className="p-2">
+        {isTemplateDialogOpen && <EditTemplateDialogs />}
+      </div>
     </Tabs>
   )
 }

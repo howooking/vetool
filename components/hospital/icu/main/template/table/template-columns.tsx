@@ -1,13 +1,13 @@
 'use client'
 
 import PreviewButton from '@/components/hospital/icu/common-dialogs/preview/preview-button'
+import EditTemplateButton from '@/components/hospital/icu/main/template/edit/edit-template-button'
 import DeleteTemplateDialog from '@/components/hospital/icu/main/template/table/delete-template-dialog'
 import GotoIcuButton from '@/components/hospital/icu/main/template/table/goto-icu-button'
 import { Button } from '@/components/ui/button'
 import type { TemplateChart } from '@/types/icu/template'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown, FilePenLine } from 'lucide-react'
-import EditTemplateDialog from './edit-template-dialog'
+import { ArrowUpDown } from 'lucide-react'
 
 export const templateColumns: ColumnDef<TemplateChart>[] = [
   {
@@ -95,12 +95,22 @@ export const templateColumns: ColumnDef<TemplateChart>[] = [
     cell: ({ row }) => {
       const patientId = row.original.patient.patient_id
       const targetDate = row.original.target_date
+      const chartId = row.original.icu_chart_id
+      const templateName = row.original.template_name
+      const templateComment = row.original.template_comment
+      const templateId = row.original.template_id
+
       return (
         <div className="flex justify-center">
           {patientId ? (
             <GotoIcuButton patientId={patientId!} targetDate={targetDate} />
           ) : (
-            <EditTemplateDialog />
+            <EditTemplateButton
+              chartId={chartId}
+              templateId={templateId}
+              templateName={templateName}
+              templateComment={templateComment}
+            />
           )}
         </div>
       )

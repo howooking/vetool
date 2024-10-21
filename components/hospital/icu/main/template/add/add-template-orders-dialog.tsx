@@ -29,13 +29,13 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function AddTemplateDialog() {
+export default function AddTemplateOrdersDialog() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const { refresh } = useRouter()
   const { hos_id, target_date } = useParams()
-  const { templateOrders, setTemplateOrders, reset } = useTemplateStore()
+  const { templateOrders, reset } = useTemplateStore()
 
   const templateOrdersLength = templateOrders.length
 
