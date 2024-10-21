@@ -26,6 +26,7 @@ export default async function IcuPageLayout({
         memoNameListData: basicHosData.icu_memo_names,
         showOrderer: basicHosData.show_orderer,
         maintenanceRateCalcMethod: basicHosData.maintenance_rate_calc_method,
+        rerCalcMethod: basicHosData.rer_calc_method,
         sidebarData: icuSidebarData ?? [],
       }}
     >

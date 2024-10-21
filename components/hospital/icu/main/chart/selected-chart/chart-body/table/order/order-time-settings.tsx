@@ -59,7 +59,9 @@ export default function OrderTimeSettings({
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
         <span className="text-sm font-semibold">오더 시간 설정</span>
-        <HelperTooltip>표에서 우클릭으로도 설정이 가능합니다</HelperTooltip>
+        <HelperTooltip>
+          표에서 ctrl + 우클릭 으로도 설정이 가능합니다
+        </HelperTooltip>
       </div>
       <div className="flex flex-col justify-between gap-2 md:flex-row">
         <div className="flex gap-2">

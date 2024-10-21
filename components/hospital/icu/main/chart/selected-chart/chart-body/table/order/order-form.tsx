@@ -25,6 +25,7 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import FeedOrderField from './feed-order/feed-order-filed'
 import FluidOrderFiled from './fluid-order/fluid-order-filed'
 import OrderFormField from './order-form-field'
 
@@ -169,7 +170,19 @@ export default function OrderForm({
             weight={weight}
           />
         )}
-        {orderType !== 'fluid' && <OrderFormField form={form} />}
+
+        {orderType === 'feed' && (
+          <FeedOrderField
+            form={form}
+            species={species}
+            ageInDays={ageInDays}
+            weight={weight}
+          />
+        )}
+
+        {orderType !== 'fluid' && orderType !== 'feed' && (
+          <OrderFormField form={form} />
+        )}
 
         <OrderTimeSettings
           startTime={startTime}

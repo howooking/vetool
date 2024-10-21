@@ -16,6 +16,7 @@ type BasicHosData = {
   memoNameListData: string[]
   showOrderer: boolean
   maintenanceRateCalcMethod: string
+  rerCalcMethod: string
   sidebarData: IcuSidebarIoData[]
   patientsData: PatientData[]
 }
