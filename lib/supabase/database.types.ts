@@ -292,6 +292,7 @@ export type Database = {
           name: string
           order_color: Json | null
           plan: string
+          rer_calc_method: string
           show_orderer: boolean
         }
         Insert: {
@@ -308,6 +309,7 @@ export type Database = {
           name: string
           order_color?: Json | null
           plan?: string
+          rer_calc_method?: string
           show_orderer?: boolean
         }
         Update: {
@@ -324,6 +326,7 @@ export type Database = {
           name?: string
           order_color?: Json | null
           plan?: string
+          rer_calc_method?: string
           show_orderer?: boolean
         }
         Relationships: [
@@ -1283,6 +1286,12 @@ export type Database = {
         }
         Returns: Json
       }
+      get_icu_bookmarked_data: {
+        Args: {
+          hos_id_input: string
+        }
+        Returns: Json
+      }
       get_icu_chart_data: {
         Args: {
           hos_id_input: string
@@ -1312,7 +1321,7 @@ export type Database = {
         }
         Returns: Json
       }
-      get_icu_templates_data: {
+      get_icu_template_data: {
         Args: {
           hos_id_input: string
         }

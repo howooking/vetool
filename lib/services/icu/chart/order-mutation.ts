@@ -76,3 +76,20 @@ export const getOrder = async (icuChartId: string) => {
 
   return data
 }
+
+export const upsertTemplateOrders = async (
+  templateChartId: string,
+  icuChartId: string,
+) => {
+  const supabase = createClient()
+
+  const { error } = await supabase.rpc('copy_prev_orders', {
+    prev_chart_id_input: templateChartId,
+    new_chart_id_input: icuChartId,
+  })
+
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
+  }
+}

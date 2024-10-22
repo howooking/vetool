@@ -99,7 +99,7 @@ export const getTemplateCharts = async (hosId: string) => {
   const supabase = createClient()
 
   const { data, error } = await supabase
-    .rpc('get_icu_templates_data', {
+    .rpc('get_icu_bookmarked_data', {
       hos_id_input: hosId,
     })
     .returns<TemplateChart[]>()

@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
@@ -30,7 +31,6 @@ export default function EditTemplateDetails({
   templateId,
   templateName,
   templateComment,
-
   isNextStep,
   setIsNextStep,
 }: {
@@ -55,6 +55,15 @@ export default function EditTemplateDetails({
   })
 
   const handleSubmit = async (values: z.infer<typeof templateFormSchema>) => {
+    if (
+      values.template_name === templateName &&
+      values.template_comment === templateComment
+    ) {
+      setIsTemplateDialogOpen(false)
+
+      return
+    }
+
     setIsSubmitting(true)
 
     await updateTemplate(
@@ -78,7 +87,10 @@ export default function EditTemplateDetails({
     <Dialog open={isNextStep} onOpenChange={setIsTemplateDialogOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>템플릿 수정</DialogTitle>
+          <DialogTitle>{templateName} 템플릿 수정</DialogTitle>
+          <DialogDescription>
+            {templateName} 템플릿의 오더를 수정합니다
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -133,7 +145,7 @@ export default function EditTemplateDetails({
                   이전
                 </Button>
                 <Button type="submit" disabled={isSubmitting} className="ml-2">
-                  저장
+                  수정
                   <LoaderCircle
                     className={cn(
                       isSubmitting ? 'ml-2 animate-spin' : 'hidden',
