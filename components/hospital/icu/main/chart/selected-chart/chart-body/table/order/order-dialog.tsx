@@ -1,8 +1,12 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
 import OrderForm from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-form'
+import OrdererSelectStep from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/orderer/orderer-select-step'
+import ConfirmCopyTemplateOrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/template/confirm-copy-template-order-dialog'
+import { templateOrderColumns } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/template/template-order-columns'
 import { Button } from '@/components/ui/button'
+import DataTable from '@/components/ui/data-table'
 import {
   Dialog,
   DialogContent,
@@ -11,10 +15,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
+import { useTemplateStore } from '@/lib/store/icu/template'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { Patient, SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
-import OrdererSelectStep from './orderer/orderer-select-step'
+import { useCallback } from 'react'
 
 export default function OrderDialog({
   icuChartId,
@@ -32,6 +40,11 @@ export default function OrderDialog({
   ageInDays: number
 }) {
   const { step, isEditMode, setStep, reset } = useIcuOrderStore()
+  const { isPreviewDialogOpen } = usePreviewDialogStore()
+  const { isTemplateDialogOpen } = useTemplateStore()
+  const {
+    basicHosData: { templateData },
+  } = useBasicHosDataContext()
 
   const handleOpenChange = useCallback(() => {
     if (step === 'closed') {
@@ -66,13 +79,37 @@ export default function OrderDialog({
           <DialogDescription />
         </DialogHeader>
         {step === 'upsert' && (
-          <OrderForm
-            showOrderer={showOrderer}
-            icuChartId={icuChartId}
-            species={patient.species}
-            weight={weight}
-            ageInDays={ageInDays}
-          />
+          <Tabs defaultValue="default">
+            <TabsList className="grid grid-cols-2">
+              <TabsTrigger value="default">직접 입력</TabsTrigger>
+              <TabsTrigger value="template">템플릿 오더 추가</TabsTrigger>
+            </TabsList>
+
+            {/* 오더 직접 추가 (기본값) */}
+            <TabsContent value="default">
+              <OrderForm
+                showOrderer={showOrderer}
+                icuChartId={icuChartId}
+                species={patient.species}
+                weight={weight}
+                ageInDays={ageInDays}
+              />
+            </TabsContent>
+
+            {/* 템플릿 오더 추가 */}
+            <TabsContent value="template">
+              <DataTable
+                columns={templateOrderColumns}
+                data={templateData || []}
+                searchPlaceHolder="템플릿 이름, 설명, 환자명으로 검색"
+              />
+
+              {isTemplateDialogOpen && (
+                <ConfirmCopyTemplateOrderDialog icuChartId={icuChartId} />
+              )}
+              {isPreviewDialogOpen && <PreviewDialog />}
+            </TabsContent>
+          </Tabs>
         )}
         {step === 'selectOrderer' && (
           <OrdererSelectStep icuChartId={icuChartId} orders={orders} />

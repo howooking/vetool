@@ -8,6 +8,7 @@ import type { Treatment, TxLog } from '@/types/icu/chart'
 import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { TxDetailHover } from './tx/tx-detail-hover'
+import useIsCommandPressed from '@/hooks/use-is-command-pressed'
 
 type CellProps = {
   time: number
@@ -41,6 +42,7 @@ const Cell: React.FC<CellProps> = React.memo(
     onMouseLeave,
     isGuidelineTime,
   }) => {
+    const isCommandPressed = useIsCommandPressed()
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
 
