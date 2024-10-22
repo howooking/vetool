@@ -455,7 +455,7 @@ export default function PatientForm({
             name="weight"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>몸무게</FormLabel>
+                <FormLabel>몸무게*</FormLabel>
                 <div className="relative flex">
                   <FormControl>
                     <Input {...field} className="h-8 text-sm" />

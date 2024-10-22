@@ -30,7 +30,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function IconWeightIcon({
+export default function Weight({
   weight,
   weightMeasuredDate,
   icuChartId,

@@ -66,17 +66,16 @@ const FACTORS = [
   },
 ]
 
-export default function FeedToolTip({
+export default function RerDerToolTip({
   rerCalcMethod,
 }: {
   rerCalcMethod: 'a' | 'b'
 }) {
   return (
     <HelperTooltip side="right">
-      <div className="space-y-2 px-1 py-2">
-        <div className="text-sm font-semibold">RER & DER</div>
-
-        <div className="flex gap-10">
+      <div className="px-1 py-2">
+        <div className="">
+          <h4 className="text-base font-bold">- RER 계산</h4>
           {rerCalcMethod === 'a' ? (
             <>
               <div>개 : (몸무게) * 30 + 70 kcal/day</div>
@@ -91,12 +90,10 @@ export default function FeedToolTip({
           )}
         </div>
 
-        <div>
+        <div className="pt-4">
+          <h4 className="text-base font-bold">- DER 인자</h4>
           <Table className="text-sm">
-            <TableCaption className="text-xs text-white">
-              *The 2021 AAHA Nutrition and Weight Management Guidelines for Dogs
-              and Cats
-            </TableCaption>
+            <TableCaption className="text-xs text-white"></TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px] text-xs text-white">
@@ -121,8 +118,14 @@ export default function FeedToolTip({
         </div>
 
         <div>
-          *Sedentary, indoor, hopitalized pets may require less caloric intake
-          than indicated above.
+          <p>
+            * The 2021 AAHA Nutrition and Weight Management Guidelines for Dogs
+            and Cats
+          </p>
+          <p>
+            * Sedentary, indoor, hopitalized pets may require less caloric
+            intake than indicated above.
+          </p>
         </div>
       </div>
     </HelperTooltip>

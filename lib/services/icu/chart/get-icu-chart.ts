@@ -20,7 +20,7 @@ export const getIcuChart = async (
     .returns<SelectedChart>()
 
   if (error) {
-    console.error('Error while while getIcuChart:', error)
+    console.error('Error while fetching getIcuChart:', error)
     redirect(`/error?message=${error?.message}`)
   }
   return data
