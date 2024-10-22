@@ -15,49 +15,37 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { pasteChart } from '@/lib/services/icu/chart/paste-chart'
-import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
+import { upsertTemplateOrders } from '@/lib/services/icu/chart/order-mutation'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useTemplateStore } from '@/lib/store/icu/template'
 import { cn } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
-import { useState, type Dispatch, type SetStateAction } from 'react'
+import { useState } from 'react'
 
-export function ConfirmCopyDialog({
-  setIsChartLoading,
-  setTemplateDialogOpen,
+export default function ConfirmCopyTemplateOrderDialog({
+  icuChartId,
 }: {
-  setIsChartLoading: Dispatch<SetStateAction<boolean>>
-  setTemplateDialogOpen: (isTemplateDialogOpen: boolean) => void
+  icuChartId: string
 }) {
-  const { target_date, patient_id } = useParams()
-  const {
-    isConfirmCopyDialogOpen,
-    setIsConfirmCopyDialogOpen,
-    copiedChartId,
-    reset,
-  } = useCopiedChartStore()
+  const { setStep } = useIcuOrderStore()
+  const { isTemplateDialogOpen, setIsTemplateDialogOpen, reset, template } =
+    useTemplateStore()
   const {
     basicHosData: { vetsListData, showOrderer },
   } = useBasicHosDataContext()
   const [orderer, setOrderer] = useState(vetsListData[0].name)
 
   const handleConfirmCopy = async () => {
-    setIsChartLoading(true)
-
-    await pasteChart(
-      patient_id as string,
-      copiedChartId!,
-      target_date as string,
-      orderer,
-    )
+    await upsertTemplateOrders(template.icu_chart_id!, icuChartId)
 
     toast({
-      title: '차트를 생성하였습니다',
+      title: '오더를 추가하였습니다',
     })
 
     reset()
-    setTemplateDialogOpen(false)
+    setIsTemplateDialogOpen(false)
+    setStep('closed')
   }
 
   const handleOrdererChange = (value: string) => {
@@ -65,13 +53,10 @@ export function ConfirmCopyDialog({
   }
 
   return (
-    <Dialog
-      open={isConfirmCopyDialogOpen}
-      onOpenChange={setIsConfirmCopyDialogOpen}
-    >
+    <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>차트를 생성하시겠습니까?</DialogTitle>
+          <DialogTitle>오더를 추가하시겠습니까?</DialogTitle>
           {showOrderer && (
             <div>
               <Label className="pt-4">오더결정 수의사</Label>
@@ -120,7 +105,7 @@ export function ConfirmCopyDialog({
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={() => setIsConfirmCopyDialogOpen(false)}
+            onClick={() => setIsTemplateDialogOpen(false)}
           >
             취소
           </Button>

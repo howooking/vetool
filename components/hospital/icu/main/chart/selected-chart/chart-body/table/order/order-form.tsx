@@ -1,6 +1,8 @@
 'use client'
 
 import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/delete-order-alert-dialog'
+import FluidOrderFiled from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/fluid-order/fluid-order-filed'
+import OrderFormField from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-form-field'
 import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-schema'
 import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-time-settings'
 import { Button } from '@/components/ui/button'
@@ -25,8 +27,6 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import FluidOrderFiled from './fluid-order/fluid-order-filed'
-import OrderFormField from './order-form-field'
 
 export default function OrderForm({
   showOrderer,
@@ -53,6 +53,7 @@ export default function OrderForm({
   const {
     basicHosData: { vetsListData },
   } = useBasicHosDataContext()
+
   const [isUpdating, setIsUpdating] = useState(false)
   const [startTime, setStartTime] = useState<string>('undefined')
   const [timeTerm, setTimeTerm] = useState<string>('undefined')

@@ -13,8 +13,13 @@ export default async function IcuPageLayout({
   children: React.ReactNode
   params: { target_date: string; hos_id: string }
 }) {
-  const { basicHosData, icuSidebarData, patientsData, vetsListData } =
-    await getIcuData(params.hos_id, params.target_date)
+  const {
+    basicHosData,
+    icuSidebarData,
+    patientsData,
+    vetsListData,
+    templateData,
+  } = await getIcuData(params.hos_id, params.target_date)
 
   return (
     <BasicHosDataProvider
@@ -27,6 +32,7 @@ export default async function IcuPageLayout({
         showOrderer: basicHosData.show_orderer,
         maintenanceRateCalcMethod: basicHosData.maintenance_rate_calc_method,
         sidebarData: icuSidebarData ?? [],
+        templateData: templateData ?? [],
       }}
     >
       <IcuHeader

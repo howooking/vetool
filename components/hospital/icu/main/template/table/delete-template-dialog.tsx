@@ -14,24 +14,26 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { deleteBookmarkChart } from '@/lib/services/icu/bookmark/bookmark'
+import { deleteTemplateChart } from '@/lib/services/icu/template/template'
 import { Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
-export default function DeleteBookmarkDialog({
-  bookmarkId,
-  bookmarkName,
+export default function DeleteTemplateDialog({
+  templateId,
+  templateName,
+  chartId,
 }: {
-  bookmarkId: string
-  bookmarkName: string
+  templateId: string
+  templateName: string
+  chartId: string
 }) {
   const { refresh } = useRouter()
 
   const handleDelete = async () => {
-    await deleteBookmarkChart(bookmarkId)
+    await deleteTemplateChart(templateId, chartId)
 
     toast({
-      title: '즐겨찾기가 삭제되었습니다',
+      title: '템플릿이 삭제되었습니다',
     })
 
     refresh()
@@ -48,7 +50,7 @@ export default function DeleteBookmarkDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {bookmarkName} 북마크를 삭제하시겠습니까?
+            {templateName} 템플릿을 삭제하시겠습니까?
           </AlertDialogTitle>
           <AlertDialogDescription>
             <WarningMessage text="해당 작업은 되돌릴 수 없습니다" />
