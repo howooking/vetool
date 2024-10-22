@@ -384,6 +384,7 @@ export type Database = {
       icu_charts: {
         Row: {
           created_at: string
+          der_calc_factor: number | null
           hos_id: string
           icu_chart_id: string
           icu_io_id: string | null
@@ -400,6 +401,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          der_calc_factor?: number | null
           hos_id: string
           icu_chart_id?: string
           icu_io_id?: string | null
@@ -416,6 +418,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          der_calc_factor?: number | null
           hos_id?: string
           icu_chart_id?: string
           icu_io_id?: string | null
@@ -625,6 +628,7 @@ export type Database = {
           icu_chart_order_comment: string | null
           icu_chart_order_id: string
           icu_chart_order_name: string
+          icu_chart_order_priority: number
           icu_chart_order_time: string[]
           icu_chart_order_type: string
           updated_at: string
@@ -636,6 +640,7 @@ export type Database = {
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
           icu_chart_order_name: string
+          icu_chart_order_priority?: number
           icu_chart_order_time?: string[]
           icu_chart_order_type: string
           updated_at?: string
@@ -647,6 +652,7 @@ export type Database = {
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
           icu_chart_order_name?: string
+          icu_chart_order_priority?: number
           icu_chart_order_time?: string[]
           icu_chart_order_type?: string
           updated_at?: string

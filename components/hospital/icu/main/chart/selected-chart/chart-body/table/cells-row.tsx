@@ -3,7 +3,7 @@
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
-import { useCallback, useEffect, useState } from 'react'
+import { RefObject, useCallback, useEffect, useState } from 'react'
 import Cell from './cell'
 
 type CellsRowProps = {
