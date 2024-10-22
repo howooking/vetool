@@ -1286,17 +1286,17 @@ export type Database = {
         }
         Returns: Json
       }
-      get_icu_bookmarked_data: {
-        Args: {
-          hos_id_input: string
-        }
-        Returns: Json
-      }
       get_icu_chart_data: {
         Args: {
           hos_id_input: string
           target_date_input: string
           patient_id_input: string
+        }
+        Returns: Json
+      }
+      get_icu_custom_template_data: {
+        Args: {
+          hos_id_input: string
         }
         Returns: Json
       }

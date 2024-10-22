@@ -14,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { getTemplateCharts } from '@/lib/services/icu/template/template'
+import { getBookmarkedCharts } from '@/lib/services/icu/template/template'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { useTemplateStore } from '@/lib/store/icu/template'
@@ -40,7 +40,7 @@ export default function AddTemplateChartDialog({
   const handleOpenTemplateDialog = async () => {
     setIsFetching(true)
 
-    getTemplateCharts(hos_id as string)
+    getBookmarkedCharts(hos_id as string)
       .then(setTemplateCharts)
       .then(() => setIsTemplateDialogOpen(true))
       .then(() => setIsFetching(false))
