@@ -72,7 +72,7 @@ export default function FeedOrderField({
         name="icu_chart_order_comment"
         render={({ field }) => (
           <FormItem className="w-full space-y-2">
-            <FormLabel className="font-semibold">오더 설명</FormLabel>
+            <FormLabel className="font-semibold">급여방법, 설명</FormLabel>
             <FormControl>
               <Input
                 placeholder={`${'오더에 대한 설명을 입력해주세요'}`}

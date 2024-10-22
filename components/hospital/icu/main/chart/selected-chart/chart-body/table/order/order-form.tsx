@@ -93,8 +93,8 @@ export default function OrderForm({
       selectedChartOrder.order_id!,
       orderTime.map((time) => (time === '1' ? vetsListData[0].name : '0')),
       {
-        icu_chart_order_name: values.icu_chart_order_name,
-        icu_chart_order_comment: values.icu_chart_order_comment!,
+        icu_chart_order_name: values.icu_chart_order_name.trim(),
+        icu_chart_order_comment: values.icu_chart_order_comment!.trim(),
         icu_chart_order_type: values.icu_chart_order_type!,
       },
     )

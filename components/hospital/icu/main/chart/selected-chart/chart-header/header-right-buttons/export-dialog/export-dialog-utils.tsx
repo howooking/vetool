@@ -89,6 +89,7 @@ export const renderAndCaptureExportChartBody = (
       <BasicHosDataProvider
         basicHosData={{
           //todo
+          rerCalcMethod: 'a',
           patientsData: initialIcuData.patientsData,
           maintenanceRateCalcMethod: 'b',
           showOrderer: true,
