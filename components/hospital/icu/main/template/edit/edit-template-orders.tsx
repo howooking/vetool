@@ -73,7 +73,7 @@ export default function EditTemplateOrders({
       reset()
       setInitialOrders([])
     }
-  }, [isTemplateDialogOpen, reset])
+  }, [isTemplateDialogOpen, reset, fetchOrders])
 
   const handleEditClick = async () => {
     const hasChanges = initialOrders !== templateOrders

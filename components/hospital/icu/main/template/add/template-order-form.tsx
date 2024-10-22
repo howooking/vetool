@@ -74,13 +74,14 @@ export default function TemplateOrderForm({
       setIsSubmitting(false)
     },
     [
-      isEditMode,
-      reset,
-      form,
-      updateTemplateOrder,
-      selectedChartOrder,
       addTemplateOrder,
+      form,
+      isEditMode,
+      isEditModalOpen,
+      orderIndex,
+      reset,
       setStep,
+      updateTemplateOrder,
     ],
   )
 

@@ -6,9 +6,10 @@ import { getIoDateRange } from '@/lib/services/icu/chart/get-io-date-range'
 import { getIcuData } from '@/lib/services/icu/get-icu-data'
 import { Json } from '@/lib/supabase/database.types'
 import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-provider'
-import { IcuOrderColors } from '@/types/adimin'
+import type { IcuOrderColors } from '@/types/adimin'
 import type { IcuSidebarIoData, SelectedChart, Vet } from '@/types/icu/chart'
-import { PatientData } from '@/types/patients'
+import type { TemplateChart } from '@/types/icu/template'
+import type { PatientData } from '@/types/patients'
 import html2canvas from 'html2canvas'
 import React, { useEffect, useRef } from 'react'
 import { createRoot } from 'react-dom/client'
@@ -60,6 +61,7 @@ export const renderAndCaptureExportChartBody = (
       icu_memo_names: string[]
     }
     patientsData: PatientData[]
+    templateData: TemplateChart[]
   },
 ): Promise<HTMLCanvasElement> => {
   return new Promise((resolve, reject) => {
@@ -98,6 +100,7 @@ export const renderAndCaptureExportChartBody = (
           orderColorsData: initialIcuData.basicHosData
             .order_color as IcuOrderColors,
           memoNameListData: initialIcuData.basicHosData.icu_memo_names,
+          templateData: initialIcuData.templateData ?? [],
         }}
       >
         <ExportChartBody chartData={chartData} onRender={handleRender} />,
