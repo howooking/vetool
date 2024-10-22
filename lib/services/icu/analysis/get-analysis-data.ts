@@ -19,5 +19,5 @@ export const getAnalysisData = async (hosId: string, targetDate: string) => {
     redirect(`/error?message=${error?.message}`)
   }
 
-  return data
+  return data.filter((chart) => chart.patient.name !== null)
 }
