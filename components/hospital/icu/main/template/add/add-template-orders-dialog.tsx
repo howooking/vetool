@@ -1,5 +1,4 @@
-'use client'
-
+import { templateFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/weght-template-schema'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -20,105 +19,73 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import {
-  deleteBookmarkChart,
-  upsertBookmarkChart,
-} from '@/lib/services/icu/bookmark/bookmark'
+import { insertCustomTemplateChart } from '@/lib/services/icu/template/template'
+import { useTemplateStore } from '@/lib/store/icu/template'
 import { cn } from '@/lib/utils'
-import { IcuBookmark } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LoaderCircle, Star } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { bookmarkFormSchema } from './bookmark-form-schema'
 
-export default function BookmarkDialog({
-  icuChartId,
-  bookmarkData,
-}: {
-  icuChartId: string
-  bookmarkData: Pick<
-    IcuBookmark,
-    'bookmark_id' | 'bookmark_name' | 'bookmark_comment'
-  > | null
-}) {
-  const { hos_id } = useParams()
-  const { refresh } = useRouter()
+export default function AddTemplateOrdersDialog() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  const form = useForm<z.infer<typeof bookmarkFormSchema>>({
-    resolver: zodResolver(bookmarkFormSchema),
+  const { refresh } = useRouter()
+  const { hos_id, target_date } = useParams()
+  const { templateOrders, reset } = useTemplateStore()
+
+  const templateOrdersLength = templateOrders.length
+
+  const form = useForm<z.infer<typeof templateFormSchema>>({
+    resolver: zodResolver(templateFormSchema),
     defaultValues: {
-      bookmark_name: bookmarkData?.bookmark_name ?? undefined,
-      bookmark_comment: bookmarkData?.bookmark_comment ?? undefined,
+      template_name: undefined,
+      template_comment: undefined,
     },
   })
 
-  const handleSubmit = async (values: z.infer<typeof bookmarkFormSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof templateFormSchema>) => {
     setIsSubmitting(true)
 
-    await upsertBookmarkChart(
-      values.bookmark_name,
-      values.bookmark_comment ?? '',
-      icuChartId,
+    await insertCustomTemplateChart(
       hos_id as string,
+      target_date as string,
+      templateOrders,
+      values.template_name,
+      values.template_comment,
     )
 
     toast({
-      title: '즐겨찾기가 추가되었습니다',
+      title: '템플릿이 추가되었습니다',
     })
 
-    refresh()
     setIsSubmitting(false)
     setIsDialogOpen(false)
-  }
-
-  const handleDelete = async () => {
-    setIsDeleting(true)
-
-    await deleteBookmarkChart(bookmarkData?.bookmark_id!)
-
-    toast({
-      title: '즐겨찾기가 삭제되었습니다',
-    })
-
+    reset()
     refresh()
-    setIsDeleting(false)
-    setIsDialogOpen(false)
   }
 
   useEffect(() => {
     if (!isDialogOpen) {
       form.reset({
-        bookmark_name: bookmarkData?.bookmark_name || undefined,
-        bookmark_comment: bookmarkData?.bookmark_comment || undefined,
+        template_name: undefined,
+        template_comment: undefined,
       })
     }
-  }, [
-    bookmarkData?.bookmark_comment,
-    bookmarkData?.bookmark_name,
-    form,
-    isDialogOpen,
-  ])
+  }, [isDialogOpen, form])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger>
-        <Star
-          className={cn(
-            'text-amber-300 transition hover:scale-110',
-            bookmarkData?.bookmark_id!! && 'fill-amber-300',
-          )}
-        />
+      <DialogTrigger asChild>
+        <Button disabled={!templateOrdersLength}>저장</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle>차트 즐겨찾기</DialogTitle>
-          <DialogDescription />
+          <DialogTitle>템플릿 저장</DialogTitle>
+          <DialogDescription>{`${templateOrdersLength}개의 오더를 저장합니다`}</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -128,15 +95,15 @@ export default function BookmarkDialog({
           >
             <FormField
               control={form.control}
-              name="bookmark_name"
+              name="template_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>즐겨찾기 이름*</FormLabel>
+                  <FormLabel>템플릿 이름*</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       value={field.value || ''}
-                      placeholder="즐겨찾기 이름을 입력해주세요"
+                      placeholder="템플릿 이름을 입력해주세요"
                     />
                   </FormControl>
                   <FormMessage />
@@ -146,7 +113,7 @@ export default function BookmarkDialog({
 
             <FormField
               control={form.control}
-              name="bookmark_comment"
+              name="template_comment"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>설명</FormLabel>
@@ -163,21 +130,6 @@ export default function BookmarkDialog({
             />
 
             <div className="flex">
-              {bookmarkData?.bookmark_id!! && (
-                <Button
-                  type="button"
-                  variant="destructive"
-                  disabled={isDeleting}
-                  className="mr-auto"
-                  onClick={handleDelete}
-                >
-                  삭제
-                  <LoaderCircle
-                    className={cn(isDeleting ? 'ml-2 animate-spin' : 'hidden')}
-                  />
-                </Button>
-              )}
-
               <div className="ml-auto">
                 <DialogClose asChild>
                   <Button type="button" variant="outline" tabIndex={-1}>

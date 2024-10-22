@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
+import type { TemplateChart } from '@/types/icu/template'
 import type { PatientData } from '@/types/patients'
 import { redirect } from 'next/navigation'
 
@@ -46,6 +47,12 @@ export const getIcuData = async (hosId: string, targetDate: string) => {
       .match({ is_alive: true })
       .order('created_at', { ascending: false })
       .returns<PatientData[]>(),
+
+    supabase
+      .rpc('get_icu_custom_template_data', {
+        hos_id_input: hosId,
+      })
+      .returns<TemplateChart[]>(),
   ])
 
   const [
@@ -53,26 +60,30 @@ export const getIcuData = async (hosId: string, targetDate: string) => {
     { data: vetsListData, error: vetsListDataError },
     { data: basicHosData, error: basicHosDataError },
     { data: patientsData, error: patientsDataError },
+    { data: templateData, error: templateDataError },
   ] = await promiseArray
 
   if (
     icuSidebarDataError ||
     vetsListDataError ||
     basicHosDataError ||
-    patientsDataError
+    patientsDataError ||
+    templateDataError
   ) {
     console.error({
       icuSidebarDataError,
       vetsListDataError,
       basicHosDataError,
       patientsDataError,
+      templateDataError,
     })
     redirect(
       `/error?message=${
         icuSidebarDataError?.message ||
         vetsListDataError?.message ||
         basicHosDataError?.message ||
-        patientsDataError?.message
+        patientsDataError?.message ||
+        templateDataError?.message
       }`,
     )
   }
@@ -81,5 +92,6 @@ export const getIcuData = async (hosId: string, targetDate: string) => {
     vetsListData,
     basicHosData,
     patientsData,
+    templateData,
   }
 }

@@ -2,6 +2,7 @@
 
 import { IcuOrderColors } from '@/types/adimin'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
+import type { TemplateChart } from '@/types/icu/template'
 import type { PatientData } from '@/types/patients'
 import React, { createContext, useContext } from 'react'
 
@@ -19,6 +20,7 @@ type BasicHosData = {
   rerCalcMethod: string
   sidebarData: IcuSidebarIoData[]
   patientsData: PatientData[]
+  templateData: TemplateChart[]
 }
 
 const BasicHosDataContext = createContext<IcuContextType | undefined>(undefined)

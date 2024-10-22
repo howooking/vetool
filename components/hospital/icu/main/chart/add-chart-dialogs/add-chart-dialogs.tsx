@@ -1,9 +1,9 @@
+import AddDefaultChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-default-chart-dialog'
+import CopyPrevChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/copy-prev-chart-dialog'
+import PasteCopiedChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/paste-copied-chart-dialog'
+import AddTemplateChartDialog from '@/components/hospital/icu/main/chart/add-chart-dialogs/template/add-template-chart-dialog'
 import type { SelectedChart } from '@/types/icu/chart'
 import { Dispatch, SetStateAction } from 'react'
-import AddDefaultChartDialog from './add-default-chart-dialog'
-import AddBookmarkChartDialog from './bookmark/add-bookmark-chart-dialog'
-import CopyPrevChartDialog from './copy-prev-chart-dialog'
-import PasteCopiedChartDialog from './paste-copied-chart-dialog'
 
 export default function AddChartDialogs({
   chartData,
@@ -27,7 +27,7 @@ export default function AddChartDialogs({
 
       <PasteCopiedChartDialog setIsChartLoading={setIsChartLoading} />
 
-      <AddBookmarkChartDialog setIsChartLoading={setIsChartLoading} />
+      <AddTemplateChartDialog setIsChartLoading={setIsChartLoading} />
     </div>
   )
 }

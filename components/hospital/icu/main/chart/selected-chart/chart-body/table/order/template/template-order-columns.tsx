@@ -1,30 +1,29 @@
 'use client'
 
+import PreviewButton from '@/components/hospital/icu/common-dialogs/preview/preview-button'
 import { Button } from '@/components/ui/button'
-import type { BookmarkedChart } from '@/types/icu/bookmark'
+import type { TemplateChart } from '@/types/icu/template'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
-import PreviewButton from '../../../../common-dialogs/preview/preview-button'
-import PasteBookmarkButton from './paste-bookmark-button'
+import PasteTemplateOrderButton from './paste-template-order-button'
 
-export const bookmarkColumns: ColumnDef<BookmarkedChart>[] = [
+export const templateOrderColumns: ColumnDef<TemplateChart>[] = [
   {
-    accessorKey: 'bookmark_name',
+    accessorKey: 'template_name',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          즐겨찾기 이름
+          탬플릿 이름
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
   },
   {
-    accessorKey: 'bookmark_comment',
-
+    accessorKey: 'template_comment',
     header: ({ column }) => {
       return (
         <Button
@@ -36,10 +35,6 @@ export const bookmarkColumns: ColumnDef<BookmarkedChart>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => {
-      const comment = row.original.bookmark_comment
-      return <div>{comment ?? '없음'}</div>
-    },
   },
   {
     accessorKey: 'target_date',
@@ -49,18 +44,14 @@ export const bookmarkColumns: ColumnDef<BookmarkedChart>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          입원일
+          차트 생성일
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => {
-      const targetDate = row.original.icu_chart_id.target_date
-      return <span>{targetDate}</span>
-    },
   },
   {
-    accessorKey: 'icu_chart_id',
+    accessorKey: 'patient.name',
     header: ({ column }) => {
       return (
         <Button
@@ -68,30 +59,45 @@ export const bookmarkColumns: ColumnDef<BookmarkedChart>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           환자명
-          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
     cell: ({ row }) => {
-      const patientName = row.original.icu_chart_id.patient_id.name
-      return <div>{patientName}</div>
+      const patientName = row.original.patient.name
+      return <span>{patientName ?? '-'}</span>
     },
   },
+
   {
-    accessorKey: 'preview',
+    id: 'preview',
     header: '미리보기',
     cell: ({ row }) => {
-      const patientId = row.original.icu_chart_id.patient_id.patient_id
-      const targetDate = row.original.icu_chart_id.target_date
-      return <PreviewButton patientId={patientId} targetDate={targetDate} />
+      const chartId = row.original.icu_chart_id
+      const targetDate = row.original.target_date
+      const patientId = row.original.patient.patient_id
+
+      return (
+        <div className="flex justify-center">
+          <PreviewButton
+            chartId={chartId}
+            patientId={patientId}
+            targetDate={targetDate}
+          />
+        </div>
+      )
     },
   },
   {
-    accessorKey: 'action',
+    id: 'action',
     header: '선택',
     cell: ({ row }) => {
-      const chartId = row.original.icu_chart_id.icu_chart_id
-      return <PasteBookmarkButton chartId={chartId} />
+      const icuChartId = row.original.icu_chart_id
+
+      return (
+        <div className="flex justify-center">
+          <PasteTemplateOrderButton icuChartId={icuChartId} />
+        </div>
+      )
     },
   },
 ]

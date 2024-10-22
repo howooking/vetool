@@ -1,10 +1,10 @@
 'use client'
 
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
+import AddChartDialogs from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-chart-dialogs'
+import Chart from '@/components/hospital/icu/main/chart/chart'
 import type { SelectedChart } from '@/types/icu/chart'
 import { useEffect, useState } from 'react'
-import AddChartDialogs from './add-chart-dialogs/add-chart-dialogs'
-import Chart from './chart'
 
 export default function ChartEntry({
   chartData,

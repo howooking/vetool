@@ -1,6 +1,9 @@
 'use client'
 
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
+import CellsRow from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row'
+import CellsRowTitle from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row-title'
+import DeleteOrdersAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/delete-orders-alert-dialog'
 import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-dialog'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
 import {
@@ -21,9 +24,6 @@ import { formatOrders, sortOrders } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useState } from 'react'
-import CellsRow from './cells-row'
-import CellsRowTitle from './cells-row-title'
-import DeleteOrdersAlertDialog from './order/delete-orders-alert-dialog'
 
 export default function ChartTable({
   chartData,
