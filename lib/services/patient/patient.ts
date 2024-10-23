@@ -96,7 +96,7 @@ export const deletePatient = async (patientId: string) => {
   }
 }
 
-export const updatePatient = async (
+export const updatePatientFromIcu = async (
   updatePatient: {
     species: string
     name: string
@@ -113,10 +113,11 @@ export const updatePatient = async (
   patientId: string,
   icuChartId: string,
   weightMeasuredDate: string,
+  isWeightChanged: boolean,
 ) => {
   const supabase = createClient()
 
-  const { error } = await supabase.rpc('update_patient', {
+  const { error } = await supabase.rpc('update_patient_from_icu_route', {
     birth_input: updatePatient.birth,
     breed_input: updatePatient.breed,
     gender_input: updatePatient.gender,
@@ -130,6 +131,47 @@ export const updatePatient = async (
     weight_input: updatePatient.weight,
     icu_chart_id_input: icuChartId,
     weight_measured_date_input: weightMeasuredDate,
+    is_weight_changed_input: isWeightChanged,
+  })
+
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
+  }
+}
+export const updatePatientFromPatientRoute = async (
+  updatePatient: {
+    species: string
+    name: string
+    weight: string
+    owner_name: string
+    birth: string
+    breed: string
+    gender: string
+    hos_patient_id: string
+    memo: string
+    microchip_no: string
+    hos_owner_id: string
+  },
+  patientId: string,
+  isWeightChanged: boolean,
+) => {
+  const supabase = createClient()
+
+  const { error } = await supabase.rpc('update_patient_from_patient_route', {
+    birth_input: updatePatient.birth,
+    breed_input: updatePatient.breed,
+    gender_input: updatePatient.gender,
+    patient_id_input: patientId,
+    memo_input: updatePatient.memo,
+    microchip_no_input: updatePatient.microchip_no,
+    name_input: updatePatient.name,
+    species_input: updatePatient.species,
+    owner_name_input: updatePatient.owner_name,
+    hos_owner_id_input: updatePatient.hos_owner_id,
+    weight_input: updatePatient.weight,
+    hos_patient_id_input: updatePatient.hos_patient_id,
+    is_weight_changed_input: isWeightChanged,
   })
 
   if (error) {

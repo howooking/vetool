@@ -68,8 +68,8 @@ export default function UpdatePatientDialog({
         </DialogHeader>
 
         <PatientForm
+          mode="updateFromIcuRoute"
           hosId={hos_id as string}
-          edit
           editingPatient={patientData}
           setIsPatientUpdateDialogOpen={setIsPatientUpdateDialogOpen}
           hosPatientIds={hosPatientIds}

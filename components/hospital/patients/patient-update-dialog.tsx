@@ -59,7 +59,7 @@ export default function PatientUpdateDialog({
       })
     }
     fetchWeightInfo()
-  }, [editingPatient.patient_id, push, supabase])
+  }, [editingPatient.patient_id, push, supabase, isPatientUpdateDialogOpen])
 
   return (
     <Dialog
@@ -79,12 +79,11 @@ export default function PatientUpdateDialog({
         </DialogHeader>
 
         <PatientForm
-          patient
+          mode="updateFromPatientRoute"
           weight={weightInfo.weight}
           weightMeasuredDate={weightInfo.weightMeasuredDate}
           hosPatientIds={hosPatientIds}
           hosId={hosId}
-          edit
           editingPatient={editingPatient}
           setIsPatientUpdateDialogOpen={setIsPatientUpdateDialogOpen}
         />
