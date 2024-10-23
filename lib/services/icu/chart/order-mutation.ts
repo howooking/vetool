@@ -67,6 +67,7 @@ export const getOrder = async (icuChartId: string) => {
   const { data, error } = await supabase
     .from('icu_orders')
     .select('*')
+    .order('icu_chart_order_priority')
     .match({ icu_chart_id: icuChartId })
 
   if (error) {

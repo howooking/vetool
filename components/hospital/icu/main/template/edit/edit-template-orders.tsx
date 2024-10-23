@@ -67,16 +67,13 @@ export default function EditTemplateOrders({
   }, [chartId, setTemplateOrders])
 
   useEffect(() => {
-    if (isTemplateDialogOpen) {
-      fetchOrders()
-    } else {
-      reset()
-      setInitialOrders([])
-    }
-  }, [isTemplateDialogOpen, reset, fetchOrders])
+    fetchOrders()
+  }, [fetchOrders])
 
-  const handleEditClick = async () => {
-    const hasChanges = initialOrders !== templateOrders
+  const handleNextButtonClick = async () => {
+    const hasChanges =
+      JSON.stringify(initialOrders) !== JSON.stringify(templateOrders)
+
     if (!hasChanges) {
       setIsNextStep(true)
       return
@@ -101,8 +98,13 @@ export default function EditTemplateOrders({
     setIsNextStep(true)
   }
 
+  const handleDialogOpen = () => {
+    setIsTemplateDialogOpen(!isTemplateDialogOpen)
+    reset()
+  }
+
   return (
-    <Dialog open={!isNextStep} onOpenChange={setIsTemplateDialogOpen}>
+    <Dialog open={!isNextStep} onOpenChange={handleDialogOpen}>
       <DialogTrigger asChild></DialogTrigger>
 
       <DialogContent>
@@ -116,7 +118,7 @@ export default function EditTemplateOrders({
         {isEditing ? (
           <LargeLoaderCircle />
         ) : (
-          templateOrders.length > 0 && <TemplateOrdersTable isEditModalOpen />
+          templateOrders.length > 0 && <TemplateOrdersTable editMode />
         )}
 
         <DialogFooter>
@@ -126,7 +128,7 @@ export default function EditTemplateOrders({
             </Button>
           </DialogClose>
 
-          <Button onClick={handleEditClick}>다음</Button>
+          <Button onClick={handleNextButtonClick}>다음</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

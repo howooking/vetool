@@ -222,17 +222,19 @@ export default function ChartTable({
       <TableHeader className="sticky top-0 z-10 bg-white shadow-sm">
         <TableRow>
           <TableHead className="relative flex w-[320px] max-w-[320px] items-center justify-center gap-2 text-center">
-            <Button
-              variant="ghost"
-              size="icon"
-              className={cn(
-                'absolute left-1',
-                isSorting && 'animate-pulse text-primary',
-              )}
-              onClick={() => setIsSorting(!isSorting)}
-            >
-              <ArrowUpDown size={18} />
-            </Button>
+            {!preview && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  'absolute left-1',
+                  isSorting && 'animate-pulse text-primary',
+                )}
+                onClick={() => setIsSorting(!isSorting)}
+              >
+                <ArrowUpDown size={18} />
+              </Button>
+            )}
             <span>오더 목록</span>
             {!preview && (
               <OrderDialog

@@ -158,12 +158,15 @@ export const getReadOnlyChartOrders = async (chartId: string) => {
     .select(
       'icu_chart_order_id, icu_chart_order_name, icu_chart_order_comment, icu_chart_order_type, icu_chart_order_time',
     )
+    .order('icu_chart_order_priority')
     .match({ icu_chart_id: chartId })
 
   if (error) {
     console.error(error)
     redirect(`/error/?message=${error.message}`)
   }
+
+  console.log(data)
 
   return data
 }
