@@ -10,7 +10,7 @@ export default async function DefaultOrdersTab({ hosId }: { hosId: string }) {
   return (
     <DefaultOrdersSetting
       defaultChartOrders={defaultChartOrders}
-      orderColor={orderColor as IcuOrderColors}
+      orderColorsData={orderColor as IcuOrderColors}
     />
   )
 }

@@ -1,11 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import CellsRow from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row'
 import CellsRowTitle from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row-title'
 import DeleteOrdersAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/delete-orders-alert-dialog'
 import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-dialog'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -17,13 +18,19 @@ import { toast } from '@/components/ui/use-toast'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import useIsCommandPressed from '@/hooks/use-is-command-pressed'
 import useLocalStorage from '@/hooks/use-local-storage'
-import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
+import {
+  reorderOrders,
+  upsertOrder,
+} from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
-import { formatOrders, sortOrders } from '@/lib/utils'
+import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
-import { useCallback, useEffect, useState } from 'react'
+import { ArrowUpDown } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Sortable } from 'react-sortablejs'
+import SortableOrderWrapper from './order/sortable-order-wrapper'
 
 export default function ChartTable({
   chartData,
@@ -32,6 +39,7 @@ export default function ChartTable({
   chartData: SelectedChart
   preview?: boolean
 }) {
+  const orderTitleRef = useRef<HTMLTableCellElement>(null)
   const {
     icu_chart_id,
     orders,
@@ -39,11 +47,11 @@ export default function ChartTable({
     weight,
     icu_io: { age_in_days },
   } = chartData
-  const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
-  const [isSorting, setIsSorting] = useState(true)
+  const [isSorting, setIsSorting] = useState(false)
+  const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>(orders)
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
     useState(false)
-
   const {
     setStep,
     reset,
@@ -52,13 +60,17 @@ export default function ChartTable({
     selectedOrderPendingQueue,
     copiedOrderPendingQueue,
   } = useIcuOrderStore()
-
   const { setStep: setTxStep } = useTxMutationStore()
-
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
   const isCommandPressed = useIsCommandPressed()
+
+  useEffect(() => {
+    if (isSorting) {
+      setSortedOrders([...orders])
+    }
+  }, [isSorting])
 
   // -------- 시간 가이드라인 --------
   const [guidelineTimes, setGuidelineTimes] = useLocalStorage(
@@ -73,12 +85,6 @@ export default function ChartTable({
     }
   }
   // -----------------------------
-
-  useEffect(() => {
-    setIsSorting(true)
-    setSortedOrders(sortOrders(orders))
-    setIsSorting(false)
-  }, [orders])
 
   // ----- 표에서 수직 안내선 -----
   const [hoveredColumn, setHoveredColumn] = useState<number | null>(null)
@@ -185,15 +191,58 @@ export default function ChartTable({
   ])
   // ------------------------------------
 
-  if (isSorting) {
-    return <LargeLoaderCircle className="h-icu-chart" />
+  useEffect(() => {
+    if (shouldScrollToBottom && orderTitleRef.current) {
+      orderTitleRef.current.scrollIntoView({ behavior: 'smooth' })
+      setShouldScrollToBottom(false)
+    }
+  }, [orders, shouldScrollToBottom])
+
+  const handleSortButtonClick = async () => {
+    if (isSorting && !hasOrderSortingChanges(chartData.orders, sortedOrders)) {
+      setIsSorting(!isSorting)
+      return
+    }
+
+    if (isSorting) {
+      const orderIds = sortedOrders.map((order) => order.order_id)
+
+      await reorderOrders(orderIds)
+
+      toast({
+        title: '오더 목록을 변경하였습니다',
+      })
+    }
+
+    setIsSorting(!isSorting)
+  }
+
+  const handleReorder = (event: Sortable.SortableEvent) => {
+    const newOrders = [...sortedOrders]
+    const [movedOrder] = newOrders.splice(event.oldIndex as number, 1)
+
+    newOrders.splice(event.newIndex as number, 0, movedOrder)
+    setSortedOrders(newOrders)
   }
 
   return (
     <Table className="border">
       <TableHeader className="sticky top-0 z-10 bg-white shadow-sm">
         <TableRow>
-          <TableHead className="relative flex w-[320px] items-center justify-center gap-2 text-center">
+          <TableHead className="relative flex w-[320px] max-w-[320px] items-center justify-center gap-2 text-center">
+            {!preview && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  'absolute left-1',
+                  isSorting && 'animate-pulse text-primary',
+                )}
+                onClick={handleSortButtonClick}
+              >
+                <ArrowUpDown size={18} />
+              </Button>
+            )}
             <span>오더 목록</span>
             {!preview && (
               <OrderDialog
@@ -218,24 +267,58 @@ export default function ChartTable({
           ))}
         </TableRow>
       </TableHeader>
-      <TableBody>
-        {!preview && <TxUpsertDialog />}
+      {!preview && <TxUpsertDialog />}
 
-        {sortedOrders.map((order) => (
-          <TableRow className="divide-x" key={order.order_id}>
-            <CellsRowTitle order={order} preview={preview} />
-            <CellsRow
-              preview={preview}
-              order={order}
-              showOrderer={showOrderer}
-              hoveredColumn={hoveredColumn}
-              handleColumnHover={handleColumnHover}
-              handleColumnLeave={handleColumnLeave}
-              guidelineTimes={guidelineTimes}
-            />
-          </TableRow>
-        ))}
-      </TableBody>
+      {isSorting ? (
+        <SortableOrderWrapper
+          orders={sortedOrders}
+          onOrdersChange={setSortedOrders}
+          onSortEnd={handleReorder}
+        >
+          {sortedOrders.map((order, index) => (
+            <TableRow className="divide-x" key={order.order_id}>
+              <CellsRowTitle
+                index={index}
+                order={order}
+                orderTitleRef={orderTitleRef}
+                preview={preview}
+                isSorting={isSorting}
+              />
+              <CellsRow
+                preview={preview}
+                order={order}
+                showOrderer={showOrderer}
+                hoveredColumn={hoveredColumn}
+                handleColumnHover={handleColumnHover}
+                handleColumnLeave={handleColumnLeave}
+                guidelineTimes={guidelineTimes}
+              />
+            </TableRow>
+          ))}
+        </SortableOrderWrapper>
+      ) : (
+        <TableBody>
+          {sortedOrders.map((order, index) => (
+            <TableRow className="w-full divide-x" key={order.order_id}>
+              <CellsRowTitle
+                index={index}
+                order={order}
+                preview={preview}
+                isSorting={isSorting}
+              />
+              <CellsRow
+                preview={preview}
+                order={order}
+                showOrderer={showOrderer}
+                hoveredColumn={hoveredColumn}
+                handleColumnHover={handleColumnHover}
+                handleColumnLeave={handleColumnLeave}
+                guidelineTimes={guidelineTimes}
+              />
+            </TableRow>
+          ))}
+        </TableBody>
+      )}
 
       <DeleteOrdersAlertDialog
         isDeleteOrdersDialogOpen={isDeleteOrdersDialogOpen}

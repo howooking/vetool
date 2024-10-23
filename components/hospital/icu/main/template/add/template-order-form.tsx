@@ -56,6 +56,7 @@ export default function TemplateOrderForm({
         order_name: trimmedOrderName,
         order_comment: orderComment,
         order_type: orderType,
+        id: 999,
       }
 
       if (isEditMode) {

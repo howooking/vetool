@@ -86,6 +86,7 @@ export type SelectedIcuOrder = {
     tx_comment: string | null
   }[]
   order_comment: string | null
+  id: number
 }
 
 export type Treatment = {
