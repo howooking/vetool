@@ -8,40 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { IcuOrderColors } from '@/types/adimin'
 import type { IcuReadOnlyOrderData } from '@/types/icu/chart'
-import { useEffect, useState } from 'react'
 
 export default function ReadOnlyChartTable({
   chartOrderData,
 }: {
   chartOrderData: IcuReadOnlyOrderData[]
 }) {
-  const [sortedOrders, setSortedOrders] = useState<IcuReadOnlyOrderData[]>([])
   const {
     basicHosData: { orderColorsData },
   } = useBasicHosDataContext()
-
-  useEffect(() => {
-    const sorted = chartOrderData
-      .sort((prev, next) =>
-        prev.icu_chart_order_name.localeCompare(next.icu_chart_order_name),
-      )
-      .sort(
-        (prev, next) =>
-          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-            (order) => order === prev.icu_chart_order_type,
-          ) -
-          DEFAULT_ICU_ORDER_TYPE.map((order) => order.value).findIndex(
-            (order) => order === next.icu_chart_order_type,
-          ),
-      )
-
-    setSortedOrders(sorted)
-  }, [chartOrderData])
 
   return (
     <Table className="border">
@@ -57,7 +36,7 @@ export default function ReadOnlyChartTable({
       </TableHeader>
 
       <TableBody>
-        {sortedOrders.map((order) => (
+        {chartOrderData.map((order) => (
           <TableRow className="divide-x" key={order.icu_chart_order_id}>
             <TableCell
               className="w-[320px] p-0"

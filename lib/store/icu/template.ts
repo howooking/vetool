@@ -10,7 +10,7 @@ type TemplateState = {
   setTemplateOrders: (newOrders: Partial<SelectedIcuOrder>[]) => void
 
   orderIndex: number
-  setOrderIndex: (orderIndex: number) => void
+  setOrderIndex: (orderIndex?: number) => void
 
   addTemplateOrder: (newOrder: Partial<SelectedIcuOrder>) => void
 

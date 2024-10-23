@@ -61,6 +61,10 @@ export default function EditTemplateDetails({
     ) {
       setIsTemplateDialogOpen(false)
 
+      toast({
+        title: '템플릿을 수정하였습니다',
+      })
+
       return
     }
 

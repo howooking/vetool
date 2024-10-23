@@ -29,7 +29,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function AddTemplateOrdersDialog() {
+export default function AddTemplateOrdersButton() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
