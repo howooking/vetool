@@ -384,6 +384,7 @@ export type Database = {
       icu_charts: {
         Row: {
           created_at: string
+          der_calc_factor: number | null
           hos_id: string
           icu_chart_id: string
           icu_io_id: string | null
@@ -400,6 +401,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          der_calc_factor?: number | null
           hos_id: string
           icu_chart_id?: string
           icu_io_id?: string | null
@@ -416,6 +418,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          der_calc_factor?: number | null
           hos_id?: string
           icu_chart_id?: string
           icu_io_id?: string | null
@@ -474,6 +477,7 @@ export type Database = {
           default_chart_id: string
           default_chart_order_comment: string
           default_chart_order_name: string
+          default_chart_order_priority: number
           default_chart_order_type: string
           hos_id: string
         }
@@ -482,6 +486,7 @@ export type Database = {
           default_chart_id?: string
           default_chart_order_comment: string
           default_chart_order_name: string
+          default_chart_order_priority?: number
           default_chart_order_type: string
           hos_id: string
         }
@@ -490,6 +495,7 @@ export type Database = {
           default_chart_id?: string
           default_chart_order_comment?: string
           default_chart_order_name?: string
+          default_chart_order_priority?: number
           default_chart_order_type?: string
           hos_id?: string
         }
@@ -625,6 +631,7 @@ export type Database = {
           icu_chart_order_comment: string | null
           icu_chart_order_id: string
           icu_chart_order_name: string
+          icu_chart_order_priority: number
           icu_chart_order_time: string[]
           icu_chart_order_type: string
           updated_at: string
@@ -636,6 +643,7 @@ export type Database = {
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
           icu_chart_order_name: string
+          icu_chart_order_priority?: number
           icu_chart_order_time?: string[]
           icu_chart_order_type: string
           updated_at?: string
@@ -647,6 +655,7 @@ export type Database = {
           icu_chart_order_comment?: string | null
           icu_chart_order_id?: string
           icu_chart_order_name?: string
+          icu_chart_order_priority?: number
           icu_chart_order_time?: string[]
           icu_chart_order_type?: string
           updated_at?: string
@@ -1267,6 +1276,12 @@ export type Database = {
         }
         Returns: undefined
       }
+      get_default_chart_data: {
+        Args: {
+          hos_id_input: string
+        }
+        Returns: Json
+      }
       get_drug_product_details: {
         Args: {
           hos_id_input: string
@@ -1427,6 +1442,23 @@ export type Database = {
         }
         Returns: undefined
       }
+      register_patient: {
+        Args: {
+          hos_id_input: string
+          name_input: string
+          hos_patient_id_input: string
+          species_input: string
+          breed_input: string
+          gender_input: string
+          microchip_no_input: string
+          body_weight_input: string
+          owner_name_input: string
+          hos_owner_id_input: string
+          memo_input: string
+          birth_input: string
+        }
+        Returns: string
+      }
       search_icu_templates_data: {
         Args: {
           hos_id_input: string
@@ -1454,6 +1486,94 @@ export type Database = {
           icu_chart_id_input: string
           weight_input: string
           weight_measured_date_input: string
+        }
+        Returns: undefined
+      }
+      update_patient: {
+        Args: {
+          birth_input: string
+          species_input: string
+          breed_input: string
+          gender_input: string
+          name_input: string
+          memo_input: string
+          microchip_no_input: string
+          owner_name_input: string
+          hos_owner_id_input: string
+          patient_id_input: string
+          weight_input: string
+          weight_measured_date_input: string
+          icu_chart_id_input: string
+        }
+        Returns: undefined
+      }
+      update_patient_from_icu_route: {
+        Args: {
+          birth_input: string
+          species_input: string
+          breed_input: string
+          gender_input: string
+          name_input: string
+          memo_input: string
+          microchip_no_input: string
+          owner_name_input: string
+          hos_owner_id_input: string
+          patient_id_input: string
+          weight_input: string
+          is_weight_changed_input: boolean
+          weight_measured_date_input: string
+          icu_chart_id_input: string
+        }
+        Returns: undefined
+      }
+      update_patient_from_patient_route: {
+        Args: {
+          birth_input: string
+          species_input: string
+          breed_input: string
+          gender_input: string
+          name_input: string
+          memo_input: string
+          microchip_no_input: string
+          owner_name_input: string
+          hos_owner_id_input: string
+          hos_patient_id_input: string
+          patient_id_input: string
+          weight_input: string
+          is_weight_changed_input: boolean
+        }
+        Returns: undefined
+      }
+      "update_patient_from_patient_route`": {
+        Args: {
+          birth_input: string
+          species_input: string
+          breed_input: string
+          gender_input: string
+          name_input: string
+          memo_input: string
+          microchip_no_input: string
+          owner_name_input: string
+          hos_owner_id_input: string
+          patient_id_input: string
+          weight_input: string
+        }
+        Returns: undefined
+      }
+      update_patient_from_patient_route1: {
+        Args: {
+          birth_input: string
+          species_input: string
+          breed_input: string
+          gender_input: string
+          name_input: string
+          memo_input: string
+          microchip_no_input: string
+          owner_name_input: string
+          hos_owner_id_input: string
+          hos_patient_id_input: string
+          patient_id_input: string
+          weight_input: string
         }
         Returns: undefined
       }

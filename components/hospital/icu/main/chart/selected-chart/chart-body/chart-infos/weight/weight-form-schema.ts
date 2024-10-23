@@ -1,3 +1,5 @@
+// 삭제 예정
+
 import { z } from 'zod'
 
 export const weightFormSchema = z.object({

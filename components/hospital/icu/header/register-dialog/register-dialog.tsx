@@ -104,10 +104,10 @@ export default function RegisterDialog({
           <TabsContent value="register">
             {step === 'patientRegister' && (
               <PatientForm
+                mode="registerFromIcuRoute"
                 setStep={setStep}
                 hosId={hosId}
-                icu
-                setIsIcuDialogOpen={setIsRegisterDialogOpen}
+                setIsPatientRegisterDialogOpen={setIsRegisterDialogOpen}
                 hosPatientIds={hosPatientIds}
               />
             )}

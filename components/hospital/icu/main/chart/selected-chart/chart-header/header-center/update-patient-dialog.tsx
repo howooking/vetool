@@ -18,11 +18,15 @@ import { useMemo, useState } from 'react'
 export default function UpdatePatientDialog({
   patientData,
   ageInDays,
-  isPatientOut,
+  weight,
+  weightMeasuredDate,
+  icuChartId,
 }: {
   patientData: PatientDataTable
   ageInDays: number
-  isPatientOut: boolean
+  weight: string
+  weightMeasuredDate: string | null
+  icuChartId: string
 }) {
   const { hos_id } = useParams()
   const { name, breed, gender, species } = patientData
@@ -45,12 +49,15 @@ export default function UpdatePatientDialog({
       <DialogTrigger asChild>
         <Button variant="ghost" className="flex gap-2">
           {species === 'canine' ? <Dog size={20} /> : <Cat size={20} />}
+          <span>{name}</span> ·<span>{breed}</span> ·
+          <span className="uppercase">{gender}</span> ·
+          <span>{getAgeFromAgeInDays(ageInDays)} </span> ·
+          <span className="uppercase">{gender}</span> ·{' '}
           <span>
-            {name}
-            {isPatientOut && '(퇴원)'}
-          </span>{' '}
-          ·<span>{breed}</span> ·<span className="uppercase">{gender}</span> ·
-          <span>{getAgeFromAgeInDays(ageInDays)} </span>
+            {weight === ''
+              ? '체중 입력'
+              : `${weight}kg (${weightMeasuredDate!})`}
+          </span>
         </Button>
       </DialogTrigger>
 
@@ -61,11 +68,14 @@ export default function UpdatePatientDialog({
         </DialogHeader>
 
         <PatientForm
+          mode="updateFromIcuRoute"
           hosId={hos_id as string}
-          edit
           editingPatient={patientData}
           setIsPatientUpdateDialogOpen={setIsPatientUpdateDialogOpen}
           hosPatientIds={hosPatientIds}
+          weight={weight}
+          weightMeasuredDate={weightMeasuredDate}
+          icuChartId={icuChartId}
         />
       </DialogContent>
     </Dialog>

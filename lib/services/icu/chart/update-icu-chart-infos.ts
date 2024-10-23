@@ -215,3 +215,19 @@ export const updateCpcrEtTube = async (
     redirect(`/error/?message=${error.message}`)
   }
 }
+export const updateDerCalcFactor = async (
+  icuChartId: string,
+  factor: number,
+) => {
+  const supabase = createClient()
+
+  const { error } = await supabase
+    .from('icu_charts')
+    .update({ der_calc_factor: factor })
+    .match({ icu_chart_id: icuChartId })
+
+  if (error) {
+    console.error(error)
+    redirect(`/error/?message=${error.message}`)
+  }
+}

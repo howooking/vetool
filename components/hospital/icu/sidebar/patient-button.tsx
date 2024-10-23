@@ -14,7 +14,7 @@ export default function PatientButton({ data }: { data: IcuSidebarIoData }) {
     push(
       `/hospital/${hos_id}/icu/${target_date}/chart/${data.patient.patient_id}`,
     )
-  }, [hos_id, target_date, data.patient.patient_id, push, orderQueueReset])
+  }, [hos_id, target_date, data.patient.patient_id, push])
   return (
     <Button
       variant="outline"

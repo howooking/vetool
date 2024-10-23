@@ -41,7 +41,11 @@ import {
   FELINE_BREEDS,
   SEX,
 } from '@/constants/hospital/register/breed'
-import { insertPatient, updatePatient } from '@/lib/services/patient/patient'
+import {
+  insertPatient,
+  updatePatientFromIcu,
+  updatePatientFromPatientRoute,
+} from '@/lib/services/patient/patient'
 import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
 import { cn, getDaysSince } from '@/lib/utils'
 import type { PatientDataTable } from '@/types/patients'
@@ -54,62 +58,80 @@ import { type Dispatch, type SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-type PatientFormRegisterProps = {
+type BaseProps = {
   hosId: string
-  edit?: false
-  icu?: false
-  setStep?: null
-  editingPatient?: null
-  isRegister?: boolean
+  hosPatientIds: string[]
+}
+
+type RegisterFromPatientRoute = BaseProps & {
+  mode: 'registerFromPatientRoute'
   setIsPatientRegisterDialogOpen: Dispatch<SetStateAction<boolean>>
-  setIsPatientUpdateDialogOpen?: null
-  setIsIcuDialogOpen?: null
-  hosPatientIds: string[]
-}
-type PatientFormIcuRegisterProps = {
-  hosId: string
-  edit?: false
-  icu?: true
-  setStep?: (step: 'patientRegister' | 'icuRegister' | 'patientSearch') => void
   editingPatient?: null
-  setIsPatientRegisterDialogOpen?: null
+  weight?: null
+  weightMeasuredDate?: null
   setIsPatientUpdateDialogOpen?: null
-  setIsIcuDialogOpen: (isRegisterDialogOpen: boolean) => void
-  isRegister?: null
-  hosPatientIds: string[]
-}
-type PatientFormEditProps = {
-  hosId: string
-  edit: true
-  icu?: false
   setStep?: null
+  icuChartId?: null
+}
+
+type UpdateFromPatientRoute = BaseProps & {
+  mode: 'updateFromPatientRoute'
   editingPatient: PatientDataTable
   setIsPatientRegisterDialogOpen?: null
+  weight: string
+  weightMeasuredDate: string
   setIsPatientUpdateDialogOpen: Dispatch<SetStateAction<boolean>>
-  setIsIcuDialogOpen?: null
-  isRegister?: null
-  hosPatientIds: string[]
+  setStep?: null
+  icuChartId?: null
+}
+
+type RegisterFromIcuRoute = BaseProps & {
+  mode: 'registerFromIcuRoute'
+  setIsPatientRegisterDialogOpen: Dispatch<SetStateAction<boolean>>
+  editingPatient?: null
+  weight?: null
+  weightMeasuredDate?: null
+  setIsPatientUpdateDialogOpen?: null
+  setStep: (step: 'patientRegister' | 'icuRegister' | 'patientSearch') => void
+  icuChartId?: null
+}
+
+type UpdateFromIcuRoute = BaseProps & {
+  mode: 'updateFromIcuRoute'
+  editingPatient: PatientDataTable
+  setIsPatientRegisterDialogOpen?: null
+  weight: string
+  weightMeasuredDate: string | null
+  setIsPatientUpdateDialogOpen: Dispatch<SetStateAction<boolean>>
+  setStep?: null
+  icuChartId: string
 }
 
 type PatientFormProps =
-  | PatientFormEditProps
-  | PatientFormRegisterProps
-  | PatientFormIcuRegisterProps
+  | RegisterFromPatientRoute
+  | UpdateFromPatientRoute
+  | RegisterFromIcuRoute
+  | UpdateFromIcuRoute
 
 export default function PatientForm({
   hosId,
-  setStep,
-  edit,
-  icu,
-  editingPatient,
-  setIsPatientRegisterDialogOpen,
-  setIsPatientUpdateDialogOpen,
-  setIsIcuDialogOpen,
   hosPatientIds,
+  mode,
+  setIsPatientRegisterDialogOpen,
+  editingPatient,
+  weight,
+  weightMeasuredDate,
+  setIsPatientUpdateDialogOpen,
+  setStep,
+  icuChartId,
 }: PatientFormProps) {
+  const isEdit =
+    mode === 'updateFromPatientRoute' || mode === 'updateFromIcuRoute'
+  const isRegisterFromIcuRoute = mode === 'registerFromIcuRoute'
+
   const [breedOpen, setBreedOpen] = useState(false)
   const [selectedSpecies, setSelectedSpecies] = useState<string>(
-    edit ? editingPatient?.species! : '',
+    isEdit ? editingPatient?.species! : '',
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { setRegisteringPatient } = useIcuRegisterStore()
@@ -122,7 +144,7 @@ export default function PatientForm({
     resolver: zodResolver(
       registerPatientFormSchema.refine(
         (data) => {
-          if (edit) {
+          if (isEdit) {
             return (
               data.hos_patient_id === editingPatient?.hos_patient_id ||
               !hosPatientIds.includes(data.hos_patient_id)
@@ -136,7 +158,7 @@ export default function PatientForm({
         },
       ),
     ),
-    defaultValues: edit
+    defaultValues: isEdit
       ? {
           name: editingPatient?.name,
           hos_patient_id: editingPatient?.hos_patient_id,
@@ -146,9 +168,9 @@ export default function PatientForm({
           birth: new Date(editingPatient?.birth!),
           microchip_no: editingPatient?.microchip_no ?? '',
           memo: editingPatient?.memo ?? '',
-          weight: '',
+          weight,
           owner_name: editingPatient?.owner_name,
-          owner_id: editingPatient?.hos_owner_id ?? '',
+          hos_owner_id: editingPatient?.hos_owner_id ?? '',
         }
       : {
           name: undefined,
@@ -161,17 +183,17 @@ export default function PatientForm({
           memo: '',
           weight: '',
           owner_name: '',
-          owner_id: '',
+          hos_owner_id: '',
         },
   })
 
   const watchHosPatientId = form.watch('hos_patient_id')
   useEffect(() => {
     const isDuplicate = hosPatientIds.includes(watchHosPatientId)
-    const hasChanged =
-      edit && watchHosPatientId !== editingPatient?.hos_patient_id
+    const hasChanged = false
+    isEdit && watchHosPatientId !== editingPatient?.hos_patient_id
 
-    if ((!edit && isDuplicate) || (edit && hasChanged && isDuplicate)) {
+    if ((!isEdit && isDuplicate) || (isEdit && hasChanged && isDuplicate)) {
       setIsDuplicateId(true)
       form.setError('hos_patient_id', {
         type: 'manual',
@@ -181,7 +203,13 @@ export default function PatientForm({
       setIsDuplicateId(false)
       form.clearErrors('hos_patient_id')
     }
-  }, [watchHosPatientId, hosPatientIds, form, edit, editingPatient])
+  }, [
+    watchHosPatientId,
+    hosPatientIds,
+    form,
+    isEdit,
+    editingPatient?.hos_patient_id,
+  ])
 
   const handleSpeciesChange = (selected: string) => {
     form.setValue('species', selected)
@@ -196,17 +224,48 @@ export default function PatientForm({
     }
     setIsSubmitting(true)
 
-    const patientId = await insertPatient(values, hosId)
+    const {
+      birth,
+      breed,
+      gender,
+      hos_owner_id,
+      hos_patient_id,
+      memo,
+      microchip_no,
+      name,
+      species,
+      owner_name,
+      weight,
+    } = values
+
+    const patientId = await insertPatient(
+      {
+        birth: format(birth, 'yyyy-MM-dd'),
+        breed,
+        gender,
+        hos_patient_id,
+        memo,
+        microchip_no,
+        name,
+        species,
+        owner_name,
+        hos_owner_id,
+        weight,
+      },
+      hosId,
+    )
     const formattedBirth = format(values.birth, 'yyyy-MM-dd')
 
     toast({
       title: '환자가 등록되었습니다',
-      description: icu ? '입원을 이어서 진행합니다' : '',
+      description: isRegisterFromIcuRoute ? '입원을 이어서 진행합니다' : '',
     })
 
-    icu ? setStep!('icuRegister') : setIsPatientRegisterDialogOpen!(false)
+    isRegisterFromIcuRoute
+      ? setStep!('icuRegister')
+      : setIsPatientRegisterDialogOpen!(false)
 
-    icu &&
+    isRegisterFromIcuRoute &&
       setRegisteringPatient({
         patientId,
         birth: formattedBirth,
@@ -225,9 +284,64 @@ export default function PatientForm({
     if (isDuplicateId) {
       return
     }
+    const {
+      birth,
+      breed,
+      gender,
+      hos_owner_id,
+      hos_patient_id,
+      memo,
+      microchip_no,
+      name,
+      owner_name,
+      species,
+      weight: weightInput,
+    } = values
+    const isWeightChanged = weightInput !== weight
+
     setIsSubmitting(true)
 
-    await updatePatient(values, hosId, editingPatient?.patient_id!)
+    if (mode === 'updateFromPatientRoute') {
+      await updatePatientFromPatientRoute(
+        {
+          birth: format(birth, 'yyyy-MM-dd'),
+          breed,
+          gender,
+          hos_owner_id,
+          hos_patient_id,
+          memo,
+          microchip_no,
+          name,
+          owner_name,
+          species,
+          weight: weightInput,
+        },
+        editingPatient?.patient_id!,
+        isWeightChanged,
+      )
+    }
+
+    if (mode === 'updateFromIcuRoute') {
+      await updatePatientFromIcu(
+        {
+          birth: format(birth, 'yyyy-MM-dd'),
+          breed,
+          gender,
+          hos_owner_id,
+          hos_patient_id,
+          memo,
+          microchip_no,
+          name,
+          owner_name,
+          species,
+          weight: weightInput,
+        },
+        editingPatient?.patient_id!,
+        icuChartId,
+        format(new Date(), 'yyyy-MM-dd'),
+        isWeightChanged,
+      )
+    }
 
     toast({
       title: '환자 정보가 수정되었습니다',
@@ -241,7 +355,7 @@ export default function PatientForm({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(edit ? handleUpdate : handleRegister)}
+        onSubmit={form.handleSubmit(isEdit ? handleUpdate : handleRegister)}
         className="grid grid-cols-2 gap-4"
       >
         <FormField
@@ -431,7 +545,7 @@ export default function PatientForm({
 
         <BirthDatePicker
           form={form}
-          birth={edit ? new Date(editingPatient?.birth!) : undefined}
+          birth={isEdit ? new Date(editingPatient?.birth!) : undefined}
         />
 
         <FormField
@@ -449,25 +563,28 @@ export default function PatientForm({
           )}
         />
 
-        {!edit && (
-          <FormField
-            control={form.control}
-            name="weight"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>몸무게</FormLabel>
-                <div className="relative flex">
-                  <FormControl>
-                    <Input {...field} className="h-8 text-sm" />
-                  </FormControl>
-                  <span className="absolute right-2 top-2 text-xs">kg</span>
-                </div>
+        <FormField
+          control={form.control}
+          name="weight"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                몸무게{' '}
+                <span className="text-xs text-muted-foreground">
+                  {weightMeasuredDate ? `(${weightMeasuredDate} 측정)` : ''}
+                </span>
+              </FormLabel>
+              <div className="relative flex">
+                <FormControl>
+                  <Input {...field} className="h-8 text-sm" />
+                </FormControl>
+                <span className="absolute right-2 top-2 text-xs">kg</span>
+              </div>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -486,7 +603,7 @@ export default function PatientForm({
 
         <FormField
           control={form.control}
-          name="owner_id"
+          name="hos_owner_id"
           render={({ field }) => (
             <FormItem>
               <FormLabel>보호자 번호</FormLabel>
@@ -517,25 +634,21 @@ export default function PatientForm({
 
         <div className="col-span-2 ml-auto flex gap-2">
           <Button
+            tabIndex={-1}
             type="button"
             disabled={isSubmitting}
             variant="outline"
             onClick={() => {
-              if (icu && setStep) {
-                setStep('patientRegister')
-                setIsIcuDialogOpen(false)
-              } else if (edit) {
-                setIsPatientUpdateDialogOpen(false)
-              } else {
-                setIsPatientRegisterDialogOpen!(false)
-              }
+              isEdit
+                ? setIsPatientUpdateDialogOpen(false)
+                : setIsPatientRegisterDialogOpen!(false)
             }}
           >
-            {edit ? '취소' : '닫기'}
+            {isEdit ? '취소' : '닫기'}
           </Button>
 
           <Button type="submit" disabled={isSubmitting}>
-            {icu ? '다음' : edit ? '수정' : '등록'}
+            {isRegisterFromIcuRoute ? '다음' : isEdit ? '수정' : '등록'}
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />

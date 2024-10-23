@@ -43,6 +43,7 @@ export function PatientRegisterDialog({
         </DialogHeader>
 
         <PatientForm
+          mode="registerFromPatientRoute"
           hosPatientIds={hosPatientIds}
           hosId={hosId}
           setIsPatientRegisterDialogOpen={setIsPatientRegisterDialogOpen}

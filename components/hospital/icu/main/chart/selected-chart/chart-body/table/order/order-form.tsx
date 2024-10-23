@@ -1,8 +1,6 @@
 'use client'
 
 import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/delete-order-alert-dialog'
-import FluidOrderFiled from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/fluid-order/fluid-order-filed'
-import OrderFormField from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-form-field'
 import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-schema'
 import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-time-settings'
 import { Button } from '@/components/ui/button'
@@ -27,6 +25,9 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import FeedOrderField from './feed-order/feed-order-filed'
+import FluidOrderFiled from './fluid-order/fluid-order-filed'
+import OrderFormField from './order-form-field'
 
 export default function OrderForm({
   showOrderer,
@@ -93,8 +94,8 @@ export default function OrderForm({
       selectedChartOrder.order_id!,
       orderTime.map((time) => (time === '1' ? vetsListData[0].name : '0')),
       {
-        icu_chart_order_name: values.icu_chart_order_name,
-        icu_chart_order_comment: values.icu_chart_order_comment!,
+        icu_chart_order_name: values.icu_chart_order_name.trim(),
+        icu_chart_order_comment: values.icu_chart_order_comment!.trim(),
         icu_chart_order_type: values.icu_chart_order_type!,
       },
     )
@@ -170,7 +171,12 @@ export default function OrderForm({
             weight={weight}
           />
         )}
-        {orderType !== 'fluid' && <OrderFormField form={form} />}
+
+        {orderType === 'feed' && <FeedOrderField form={form} />}
+
+        {orderType !== 'fluid' && orderType !== 'feed' && (
+          <OrderFormField form={form} />
+        )}
 
         <OrderTimeSettings
           startTime={startTime}
