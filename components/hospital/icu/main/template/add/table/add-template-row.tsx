@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 import type { IcuOrderColors } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { RefObject } from 'react'
@@ -10,18 +11,24 @@ export default function AddTemplateRow({
   orderColors,
   onEdit,
   orderRef,
+  isSorting,
 }: {
   order: SelectedIcuOrder
   index: number
   orderColors: IcuOrderColors
   onEdit: (order: Partial<SelectedIcuOrder>, index?: number) => void
   orderRef: RefObject<HTMLTableCellElement>
+  isSorting?: boolean
 }) {
   return (
     <TableRow className="divide-x">
       <TableCell
+        className={cn(
+          'handle group cursor-grab p-0',
+          isSorting && index % 2 === 0 && 'animate-shake',
+          isSorting && index % 2 !== 0 && 'animate-shake-reverse',
+        )}
         ref={orderRef}
-        className="handle group cursor-grab p-0"
         style={{
           background: orderColors[order.order_type as keyof IcuOrderColors],
         }}
@@ -36,7 +43,10 @@ export default function AddTemplateRow({
               order_type: order.order_type,
             })
           }
-          className="flex w-full justify-between rounded-none bg-transparent px-2"
+          className={cn(
+            'flex w-full justify-between rounded-none bg-transparent px-2',
+            isSorting ? 'cursor-grab' : 'cursor-pointer',
+          )}
         >
           <span className="truncate">{order.order_name}</span>
           <span className="text-xs text-muted-foreground">

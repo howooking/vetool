@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import CellsRow from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row'
@@ -23,7 +24,7 @@ import {
 } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
-import { cn, formatOrders } from '@/lib/utils'
+import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { ArrowUpDown } from 'lucide-react'
@@ -38,7 +39,7 @@ export default function ChartTable({
   chartData: SelectedChart
   preview?: boolean
 }) {
-  const lastOrderRef = useRef<HTMLTableCellElement>(null)
+  const orderTitleRef = useRef<HTMLTableCellElement>(null)
   const {
     icu_chart_id,
     orders,
@@ -47,11 +48,10 @@ export default function ChartTable({
     icu_io: { age_in_days },
   } = chartData
   const [isSorting, setIsSorting] = useState(false)
-  const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
+  const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>(orders)
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
     useState(false)
-
   const {
     setStep,
     reset,
@@ -60,13 +60,17 @@ export default function ChartTable({
     selectedOrderPendingQueue,
     copiedOrderPendingQueue,
   } = useIcuOrderStore()
-
   const { setStep: setTxStep } = useTxMutationStore()
-
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
   const isCommandPressed = useIsCommandPressed()
+
+  useEffect(() => {
+    if (isSorting) {
+      setSortedOrders([...orders])
+    }
+  }, [isSorting])
 
   // -------- 시간 가이드라인 --------
   const [guidelineTimes, setGuidelineTimes] = useLocalStorage(
@@ -134,16 +138,6 @@ export default function ChartTable({
   ])
 
   useEffect(() => {
-    if (Array.isArray(chartData.orders)) {
-      const orders = chartData.orders
-
-      setSortedOrders(orders)
-    } else {
-      setSortedOrders([])
-    }
-  }, [chartData])
-
-  useEffect(() => {
     if (!isCommandPressed && orderTimePendingQueue.length >= 1) {
       showOrderer
         ? setStep('selectOrderer')
@@ -198,23 +192,37 @@ export default function ChartTable({
   // ------------------------------------
 
   useEffect(() => {
-    if (shouldScrollToBottom && lastOrderRef.current) {
-      lastOrderRef.current.scrollIntoView({ behavior: 'smooth' })
+    if (shouldScrollToBottom && orderTitleRef.current) {
+      orderTitleRef.current.scrollIntoView({ behavior: 'smooth' })
       setShouldScrollToBottom(false)
     }
   }, [orders, shouldScrollToBottom])
 
-  const handleReorder = async (event: Sortable.SortableEvent) => {
-    const orderIds = chartData.orders.map((order) => order.order_id)
+  const handleSortButtonClick = async () => {
+    if (isSorting && !hasOrderSortingChanges(chartData.orders, sortedOrders)) {
+      setIsSorting(!isSorting)
+      return
+    }
 
-    const item = orderIds.splice(event.oldIndex as number, 1)[0]
-    orderIds.splice(event.newIndex as number, 0, item)
+    if (isSorting) {
+      const orderIds = sortedOrders.map((order) => order.order_id)
 
-    await reorderOrders(orderIds)
+      await reorderOrders(orderIds)
 
-    toast({
-      title: '오더 목록을 변경하였습니다',
-    })
+      toast({
+        title: '오더 목록을 변경하였습니다',
+      })
+    }
+
+    setIsSorting(!isSorting)
+  }
+
+  const handleReorder = (event: Sortable.SortableEvent) => {
+    const newOrders = [...sortedOrders]
+    const [movedOrder] = newOrders.splice(event.oldIndex as number, 1)
+
+    newOrders.splice(event.newIndex as number, 0, movedOrder)
+    setSortedOrders(newOrders)
   }
 
   return (
@@ -230,7 +238,7 @@ export default function ChartTable({
                   'absolute left-1',
                   isSorting && 'animate-pulse text-primary',
                 )}
-                onClick={() => setIsSorting(!isSorting)}
+                onClick={handleSortButtonClick}
               >
                 <ArrowUpDown size={18} />
               </Button>
@@ -267,12 +275,14 @@ export default function ChartTable({
           onOrdersChange={setSortedOrders}
           onSortEnd={handleReorder}
         >
-          {sortedOrders.map((order) => (
+          {sortedOrders.map((order, index) => (
             <TableRow className="divide-x" key={order.order_id}>
               <CellsRowTitle
+                index={index}
                 order={order}
-                orderTitleRef={lastOrderRef}
+                orderTitleRef={orderTitleRef}
                 preview={preview}
+                isSorting={isSorting}
               />
               <CellsRow
                 preview={preview}
@@ -288,9 +298,14 @@ export default function ChartTable({
         </SortableOrderWrapper>
       ) : (
         <TableBody>
-          {chartData.orders.map((order) => (
+          {sortedOrders.map((order, index) => (
             <TableRow className="w-full divide-x" key={order.order_id}>
-              <CellsRowTitle order={order} preview={preview} />
+              <CellsRowTitle
+                index={index}
+                order={order}
+                preview={preview}
+                isSorting={isSorting}
+              />
               <CellsRow
                 preview={preview}
                 order={order}

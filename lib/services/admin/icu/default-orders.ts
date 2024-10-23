@@ -13,8 +13,6 @@ export const getDefaultChartOrders = async (hosId: string) => {
     })
     .returns<SelectedIcuOrder[]>()
 
-  console.log(data)
-
   if (error) {
     console.error(error)
     redirect(`/error?message=${error.message}`)
