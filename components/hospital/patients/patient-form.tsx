@@ -55,6 +55,7 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 type PatientFormRegisterProps = {
+  patient?: boolean
   hosId: string
   edit?: false
   icu?: false
@@ -65,8 +66,12 @@ type PatientFormRegisterProps = {
   setIsPatientUpdateDialogOpen?: null
   setIsIcuDialogOpen?: null
   hosPatientIds: string[]
+  weight?: null
+  weightMeasuredDate?: null
+  icuChartId?: string
 }
 type PatientFormIcuRegisterProps = {
+  patient?: boolean
   hosId: string
   edit?: false
   icu?: true
@@ -77,8 +82,12 @@ type PatientFormIcuRegisterProps = {
   setIsIcuDialogOpen: (isRegisterDialogOpen: boolean) => void
   isRegister?: null
   hosPatientIds: string[]
+  weight?: null
+  weightMeasuredDate?: null
+  icuChartId?: string
 }
 type PatientFormEditProps = {
+  patient?: boolean
   hosId: string
   edit: true
   icu?: false
@@ -89,6 +98,9 @@ type PatientFormEditProps = {
   setIsIcuDialogOpen?: null
   isRegister?: null
   hosPatientIds: string[]
+  weight?: string
+  weightMeasuredDate?: string | null
+  icuChartId?: string
 }
 
 type PatientFormProps =
@@ -106,6 +118,11 @@ export default function PatientForm({
   setIsPatientUpdateDialogOpen,
   setIsIcuDialogOpen,
   hosPatientIds,
+  weight,
+  weightMeasuredDate,
+  icuChartId,
+  patient,
+  isRegister,
 }: PatientFormProps) {
   const [breedOpen, setBreedOpen] = useState(false)
   const [selectedSpecies, setSelectedSpecies] = useState<string>(
@@ -146,9 +163,9 @@ export default function PatientForm({
           birth: new Date(editingPatient?.birth!),
           microchip_no: editingPatient?.microchip_no ?? '',
           memo: editingPatient?.memo ?? '',
-          weight: '',
+          weight,
           owner_name: editingPatient?.owner_name,
-          owner_id: editingPatient?.hos_owner_id ?? '',
+          hos_owner_id: editingPatient?.hos_owner_id ?? '',
         }
       : {
           name: undefined,
@@ -161,7 +178,7 @@ export default function PatientForm({
           memo: '',
           weight: '',
           owner_name: '',
-          owner_id: '',
+          hos_owner_id: '',
         },
   })
 
@@ -196,13 +213,44 @@ export default function PatientForm({
     }
     setIsSubmitting(true)
 
-    const patientId = await insertPatient(values, hosId)
+    const {
+      birth,
+      breed,
+      gender,
+      hos_owner_id,
+      hos_patient_id,
+      memo,
+      microchip_no,
+      name,
+      species,
+      owner_name,
+      weight,
+    } = values
+
+    const patientId = await insertPatient(
+      {
+        birth: format(birth, 'yyyy-MM-dd'),
+        breed,
+        gender,
+        hos_patient_id,
+        memo,
+        microchip_no,
+        name,
+        species,
+        owner_name,
+        hos_owner_id,
+        weight,
+      },
+      hosId,
+    )
     const formattedBirth = format(values.birth, 'yyyy-MM-dd')
 
     toast({
       title: '환자가 등록되었습니다',
       description: icu ? '입원을 이어서 진행합니다' : '',
     })
+
+    console.log(values)
 
     icu ? setStep!('icuRegister') : setIsPatientRegisterDialogOpen!(false)
 
@@ -226,8 +274,38 @@ export default function PatientForm({
       return
     }
     setIsSubmitting(true)
+    const {
+      birth,
+      breed,
+      gender,
+      hos_owner_id,
+      hos_patient_id,
+      memo,
+      microchip_no,
+      name,
+      owner_name,
+      species,
+      weight,
+    } = values
 
-    await updatePatient(values, hosId, editingPatient?.patient_id!)
+    await updatePatient(
+      {
+        birth: format(birth, 'yyyy-MM-dd'),
+        breed,
+        gender,
+        hos_owner_id,
+        hos_patient_id,
+        memo,
+        microchip_no,
+        name,
+        owner_name,
+        species,
+        weight,
+      },
+      editingPatient?.patient_id!,
+      icuChartId!,
+      format(new Date(), 'yyyy-MM-dd'),
+    )
 
     toast({
       title: '환자 정보가 수정되었습니다',
@@ -449,25 +527,28 @@ export default function PatientForm({
           )}
         />
 
-        {!edit && (
-          <FormField
-            control={form.control}
-            name="weight"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>몸무게*</FormLabel>
-                <div className="relative flex">
-                  <FormControl>
-                    <Input {...field} className="h-8 text-sm" />
-                  </FormControl>
-                  <span className="absolute right-2 top-2 text-xs">kg</span>
-                </div>
+        <FormField
+          control={form.control}
+          name="weight"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                몸무게{' '}
+                <span className="text-xs text-muted-foreground">
+                  {weightMeasuredDate ? `(${weightMeasuredDate} 측정)` : ''}
+                </span>
+              </FormLabel>
+              <div className="relative flex">
+                <FormControl>
+                  <Input {...field} className="h-8 text-sm" />
+                </FormControl>
+                <span className="absolute right-2 top-2 text-xs">kg</span>
+              </div>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -486,7 +567,7 @@ export default function PatientForm({
 
         <FormField
           control={form.control}
-          name="owner_id"
+          name="hos_owner_id"
           render={({ field }) => (
             <FormItem>
               <FormLabel>보호자 번호</FormLabel>

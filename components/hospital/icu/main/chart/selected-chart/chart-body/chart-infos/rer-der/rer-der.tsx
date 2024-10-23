@@ -38,6 +38,7 @@ export default function RerDer({
   )
   const [isFactorNan, setIsFactorNan] = useState(false)
   const factorRef = useRef<HTMLInputElement>(null)
+  const hasNoWeight = weight === ''
 
   useEffect(() => {
     factorRef.current?.focus()
@@ -76,6 +77,9 @@ export default function RerDer({
       factorRef.current?.focus()
       return
     }
+    if (hasNoWeight) {
+      return
+    }
 
     if (derCalcFactor === Number(factor)) {
       setIsDialogOpen(false)
@@ -108,7 +112,7 @@ export default function RerDer({
               <span className="hidden text-xs text-muted-foreground md:block">
                 RER
               </span>
-              <span>{calculatedRer}</span>
+              <span>{hasNoWeight ? '체중 입력' : calculatedRer}</span>
             </div>
 
             <Separator orientation="vertical" className="h-4" />
@@ -117,7 +121,9 @@ export default function RerDer({
               <span className="hidden text-xs text-muted-foreground md:block">
                 DER
               </span>
-              <span>{factor ? calculatedDer : '미정'}</span>
+              <span>
+                {hasNoWeight ? '체중 입력' : factor ? calculatedDer : '미정'}
+              </span>
             </div>
           </div>
         </Button>
@@ -135,7 +141,10 @@ export default function RerDer({
           className="mt-2 grid grid-cols-9 items-center justify-center gap-2"
           onSubmit={handleSubmit}
         >
-          <RerDerDisplay calcuatedVal={calculatedRer} prefix="RER" />
+          <RerDerDisplay
+            calcuatedVal={hasNoWeight ? '체중 입력' : calculatedRer}
+            prefix="RER"
+          />
 
           <X className="col-span-1 w-full" />
 
@@ -143,7 +152,7 @@ export default function RerDer({
             ref={factorRef}
             className={cn(
               isFactorNan &&
-                'focus:ring-error focus-visible:ring-2 focus-visible:ring-rose-400',
+                'focus:ring-error focus-visible:ring-2 focus-visible:ring-rose-300',
               'col-span-1',
             )}
             placeholder="배수"
@@ -154,7 +163,13 @@ export default function RerDer({
           <Equal className="col-span-1 w-full" />
 
           <RerDerDisplay
-            calcuatedVal={isFactorNan ? '숫자입력' : calculatedDer}
+            calcuatedVal={
+              hasNoWeight
+                ? '체중 입력'
+                : isFactorNan
+                  ? '숫자입력'
+                  : calculatedDer
+            }
             prefix="DER"
           />
 

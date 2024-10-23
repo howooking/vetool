@@ -172,14 +172,7 @@ export default function OrderForm({
           />
         )}
 
-        {orderType === 'feed' && (
-          <FeedOrderField
-            form={form}
-            species={species}
-            ageInDays={ageInDays}
-            weight={weight}
-          />
-        )}
+        {orderType === 'feed' && <FeedOrderField form={form} />}
 
         {orderType !== 'fluid' && orderType !== 'feed' && (
           <OrderFormField form={form} />

@@ -1,3 +1,5 @@
+// 삭제 예정
+
 import DialogFooterButtons from '@/components/common/dialog-footer-buttons'
 import { weightFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/weght-template-schema'
 import { Button } from '@/components/ui/button'
