@@ -70,7 +70,7 @@ export default function ChartTable({
     if (isSorting) {
       setSortedOrders([...orders])
     }
-  }, [isSorting])
+  }, [orders, isSorting])
 
   // -------- 시간 가이드라인 --------
   const [guidelineTimes, setGuidelineTimes] = useLocalStorage(
