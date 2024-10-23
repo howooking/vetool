@@ -158,6 +158,8 @@ const Cell: React.FC<CellProps> = React.memo(
 
     const handleMouseUp = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
+        if (e.button === 2) return
+
         // Mouse Down 시간 게산
         const pressDuration = Date.now() - mouseDownTimeRef.current
         cleanupPressTimeout()
