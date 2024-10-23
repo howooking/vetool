@@ -44,6 +44,7 @@ export default function EditTemplateOrders({
   } = useTemplateStore()
 
   const [isEditing, setIsEditing] = useState(false)
+  const [isSorting, setIsSorting] = useState(false)
   const [initialOrders, setInitialOrders] = useState<
     Partial<SelectedIcuOrder>[]
   >([])
@@ -118,7 +119,13 @@ export default function EditTemplateOrders({
         {isEditing ? (
           <LargeLoaderCircle />
         ) : (
-          templateOrders.length > 0 && <TemplateOrdersTable editMode />
+          templateOrders.length > 0 && (
+            <TemplateOrdersTable
+              isSorting={isSorting}
+              setIsSorting={setIsSorting}
+              editMode
+            />
+          )
         )}
 
         <DialogFooter>
@@ -128,7 +135,9 @@ export default function EditTemplateOrders({
             </Button>
           </DialogClose>
 
-          <Button onClick={handleNextButtonClick}>다음</Button>
+          <Button disabled={isSorting} onClick={handleNextButtonClick}>
+            다음
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

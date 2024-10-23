@@ -11,7 +11,7 @@ export default function SortableOrderWrapper({
   children: ReactNode
   orders: SelectedIcuOrder[]
   onOrdersChange: Dispatch<SetStateAction<SelectedIcuOrder[]>>
-  onSortEnd: (event: Sortable.SortableEvent) => Promise<void>
+  onSortEnd: (event: Sortable.SortableEvent) => void
 }) {
   return (
     <ReactSortable

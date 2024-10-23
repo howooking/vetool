@@ -9,14 +9,26 @@ import { toast } from '@/components/ui/use-toast'
 import { reorderOrders } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTemplateStore } from '@/lib/store/icu/template'
+import { hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { Sortable } from 'react-sortablejs'
 
 export default function TemplateOrdersTable({
+  isSorting,
+  setIsSorting,
   editMode,
 }: {
+  isSorting?: boolean
+  setIsSorting?: Dispatch<SetStateAction<boolean>>
   editMode?: boolean
 }) {
   const lastOrderRef = useRef<HTMLTableCellElement>(null)
@@ -33,7 +45,6 @@ export default function TemplateOrdersTable({
   const {
     basicHosData: { orderColorsData },
   } = useBasicHosDataContext()
-  const [isSorting, setIsSorting] = useState(false)
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
 
@@ -73,27 +84,45 @@ export default function TemplateOrdersTable({
     }
   }, [sortedOrders, shouldScrollToBottom])
 
-  const handleReorder = async (event: Sortable.SortableEvent) => {
-    if (editMode) {
-      const orderIds = sortedOrders.map((order) => order.order_id)
-      const item = orderIds.splice(event.oldIndex as number, 1)[0]
-      orderIds.splice(event.newIndex as number, 0, item)
+  const handleSortButtonClick = async () => {
+    if (!templateOrders.length && setIsSorting) return
 
-      await reorderOrders(orderIds as string[])
+    if (
+      setIsSorting &&
+      isSorting &&
+      !hasOrderSortingChanges(
+        templateOrders as SelectedIcuOrder[],
+        sortedOrders,
+      )
+    ) {
+      setIsSorting(!isSorting)
+      return
     }
 
-    const item = templateOrders.splice(event.oldIndex as number, 1)[0]
-    templateOrders.splice(event.newIndex as number, 0, item)
-    setTemplateOrders(templateOrders)
+    if (isSorting && editMode) {
+      const orderIds = sortedOrders.map((order) => order.order_id)
+      await reorderOrders(orderIds)
 
-    toast({
-      title: '오더 목록을 변경하였습니다',
-    })
+      toast({
+        title: '오더 목록을 변경하였습니다',
+      })
+    }
+
+    if (setIsSorting) setIsSorting(!isSorting)
+  }
+
+  const handleReorder = async (event: Sortable.SortableEvent) => {
+    const newOrders = [...sortedOrders]
+    const [movedOrder] = newOrders.splice(event.oldIndex as number, 1)
+
+    newOrders.splice(event.newIndex as number, 0, movedOrder)
+    setSortedOrders(newOrders)
+    setTemplateOrders(newOrders)
   }
 
   return (
     <Table className="h-full border">
-      <AddTemplateHeader isSorting={isSorting} onSortingChange={setIsSorting}>
+      <AddTemplateHeader isSorting={isSorting!} onClick={handleSortButtonClick}>
         <AddTemplateDialog
           isOpen={step !== 'closed'}
           onOpenChange={handleOpenChange}
@@ -117,6 +146,7 @@ export default function TemplateOrdersTable({
               orderColors={orderColorsData}
               onEdit={handleEditOrderDialogOpen}
               orderRef={lastOrderRef}
+              isSorting
             />
           ))}
         </SortableOrderWrapper>

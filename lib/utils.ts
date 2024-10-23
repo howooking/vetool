@@ -258,3 +258,10 @@ export const sortOrders = (orders: SelectedIcuOrder[]): SelectedIcuOrder[] => {
         ),
     )
 }
+
+export const hasOrderSortingChanges = (
+  prevOrders: SelectedIcuOrder[],
+  sortedOrders: SelectedIcuOrder[],
+) => {
+  return JSON.stringify(prevOrders) !== JSON.stringify(sortedOrders)
+}

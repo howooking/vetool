@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import NoResultSquirrel from '@/components/common/no-result-squirrel'
+import DefaultOrderForm from '@/components/hospital/admin/icu-settings/default-orders/default-order-form'
 import SortableOrderWrapper from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/sortable-order-wrapper'
 import AddTemplateDialog from '@/components/hospital/icu/main/template/add/table/add-template-dialog'
 import AddTemplateHeader from '@/components/hospital/icu/main/template/add/table/add-template-header'
@@ -9,11 +11,12 @@ import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { toast } from '@/components/ui/use-toast'
 import { reorderDefaultOrders } from '@/lib/services/admin/icu/default-orders'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { hasOrderSortingChanges } from '@/lib/utils'
 import type { IcuOrderColors } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Sortable } from 'react-sortablejs'
-import DefaultOrderForm from './default-order-form'
 
 export default function DefaultOrdersSetting({
   defaultChartOrders,
@@ -23,6 +26,7 @@ export default function DefaultOrdersSetting({
   orderColorsData: IcuOrderColors
 }) {
   const lastOrderRef = useRef<HTMLTableCellElement>(null)
+  const { refresh } = useRouter()
   const {
     step,
     setStep,
@@ -33,17 +37,14 @@ export default function DefaultOrdersSetting({
   } = useIcuOrderStore()
   const [isSorting, setIsSorting] = useState(false)
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
-  const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
+  const [sortedOrders, setSortedOrders] =
+    useState<SelectedIcuOrder[]>(defaultChartOrders)
 
   useEffect(() => {
-    if (Array.isArray(defaultChartOrders)) {
-      const orders = defaultChartOrders
-
-      setSortedOrders(orders)
-    } else {
-      setSortedOrders([])
+    if (isSorting) {
+      setSortedOrders([...defaultChartOrders])
     }
-  }, [defaultChartOrders])
+  }, [isSorting])
 
   const handleOpenChange = useCallback(() => {
     if (step === 'closed') {
@@ -67,21 +68,41 @@ export default function DefaultOrdersSetting({
     }
   }, [sortedOrders, shouldScrollToBottom])
 
+  const handleSortButtonClick = async () => {
+    if (
+      (isSorting &&
+        !hasOrderSortingChanges(sortedOrders, defaultChartOrders)) ||
+      !sortedOrders.length
+    ) {
+      setIsSorting(!isSorting)
+      return
+    }
+
+    if (isSorting) {
+      const orderIds = sortedOrders.map((order) => order.order_id)
+
+      await reorderDefaultOrders(orderIds)
+
+      toast({
+        title: '오더 목록을 변경하였습니다',
+      })
+    }
+
+    setIsSorting(!isSorting)
+    refresh()
+  }
+
   const handleReorder = async (event: Sortable.SortableEvent) => {
-    const orderIds = sortedOrders.map((order) => order.order_id)
-    const item = orderIds.splice(event.oldIndex as number, 1)[0]
-    orderIds.splice(event.newIndex as number, 0, item)
+    const newOrders = [...sortedOrders]
+    const [movedOrder] = newOrders.splice(event.oldIndex as number, 1)
 
-    await reorderDefaultOrders(orderIds as string[])
-
-    toast({
-      title: '오더 목록을 변경하였습니다',
-    })
+    newOrders.splice(event.newIndex as number, 0, movedOrder)
+    setSortedOrders(newOrders)
   }
 
   return (
     <Table className="h-full max-w-3xl border">
-      <AddTemplateHeader isSorting={isSorting} onSortingChange={setIsSorting}>
+      <AddTemplateHeader isSorting={isSorting} onClick={handleSortButtonClick}>
         <AddTemplateDialog
           isOpen={step !== 'closed'}
           onOpenChange={handleOpenChange}
@@ -105,6 +126,7 @@ export default function DefaultOrdersSetting({
               orderColors={orderColorsData}
               onEdit={handleEditOrderDialogOpen}
               orderRef={lastOrderRef}
+              isSorting={isSorting}
             />
           ))}
         </SortableOrderWrapper>

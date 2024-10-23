@@ -6,11 +6,11 @@ import { ReactNode } from 'react'
 
 export default function AddTemplateHeader({
   isSorting,
-  onSortingChange,
+  onClick,
   children,
 }: {
   isSorting: boolean
-  onSortingChange: (isSorting: boolean) => void
+  onClick: () => Promise<void>
   children: ReactNode
 }) {
   return (
@@ -24,7 +24,7 @@ export default function AddTemplateHeader({
               'absolute left-1',
               isSorting && 'animate-pulse text-primary',
             )}
-            onClick={() => onSortingChange(!isSorting)}
+            onClick={onClick}
           >
             <ArrowUpDown size={18} />
           </Button>
