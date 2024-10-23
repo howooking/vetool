@@ -67,9 +67,7 @@ export default function ChartTable({
   const isCommandPressed = useIsCommandPressed()
 
   useEffect(() => {
-    if (isSorting) {
       setSortedOrders([...orders])
-    }
   }, [orders, isSorting])
 
   // -------- 시간 가이드라인 --------
