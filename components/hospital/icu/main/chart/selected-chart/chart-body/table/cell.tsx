@@ -51,7 +51,7 @@ const Cell: React.FC<CellProps> = React.memo(
     const {
       isMutationCanceled,
       setIsMutationCanceled,
-      setStep,
+      setTxStep,
       setTxLocalState,
     } = useTxMutationStore()
 
@@ -106,11 +106,11 @@ const Cell: React.FC<CellProps> = React.memo(
         txLog: treatment?.tx_log as TxLog[] | null,
       })
 
-      setStep('detailInsert')
+      setTxStep('detailInsert')
     }, [
       icuChartOrderId,
       icuChartTxId,
-      setStep,
+      setTxStep,
       isFocused,
       setTxLocalState,
       time,
@@ -209,12 +209,12 @@ const Cell: React.FC<CellProps> = React.memo(
         txId: icuChartTxId,
       })
 
-      setStep('seletctUser')
+      setTxStep('seletctUser')
     }, [
       briefTxResultInput,
       icuChartOrderId,
       icuChartTxId,
-      setStep,
+      setTxStep,
       setTxLocalState,
       time,
       treatment?.tx_result,

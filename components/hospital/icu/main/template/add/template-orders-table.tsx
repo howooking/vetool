@@ -35,8 +35,8 @@ export default function TemplateOrdersTable({
   const { templateOrders, setTemplateOrders, setOrderIndex } =
     useTemplateStore()
   const {
-    step,
-    setStep,
+    orderStep,
+    setOrderStep,
     setSelectedChartOrder,
     isEditMode,
     setIsEditMode,
@@ -59,19 +59,19 @@ export default function TemplateOrdersTable({
   }, [templateOrders])
 
   const handleOpenChange = useCallback(() => {
-    if (step === 'closed') {
-      setStep('upsert')
+    if (orderStep === 'closed') {
+      setOrderStep('upsert')
     } else {
-      setStep('closed')
+      setOrderStep('closed')
     }
     reset()
-  }, [step, setStep, reset])
+  }, [orderStep, setOrderStep, reset])
 
   const handleEditOrderDialogOpen = (
     order: Partial<SelectedIcuOrder>,
     index?: number,
   ) => {
-    setStep('upsert')
+    setOrderStep('upsert')
     setIsEditMode(true)
     setSelectedChartOrder(order)
     setOrderIndex(index)
@@ -124,7 +124,7 @@ export default function TemplateOrdersTable({
     <Table className="h-full border">
       <AddTemplateHeader isSorting={isSorting!} onClick={handleSortButtonClick}>
         <AddTemplateDialog
-          isOpen={step !== 'closed'}
+          isOpen={orderStep !== 'closed'}
           onOpenChange={handleOpenChange}
           isEditMode={isEditMode}
         >

@@ -3,7 +3,7 @@
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
-import { RefObject, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Cell from './cell'
 
 type CellsRowProps = {
@@ -26,12 +26,12 @@ export default function CellsRow({
   guidelineTimes,
 }: CellsRowProps) {
   const { order_times, order_id, treatments } = order
-  const { setOrderTimePendingQueue, step } = useIcuOrderStore()
+  const { setOrderTimePendingQueue, setOrderStep } = useIcuOrderStore()
   const [orderTimeState, setOrderTimeState] = useState(order_times)
 
   useEffect(() => {
     setOrderTimeState(order_times)
-  }, [order_times, step])
+  }, [order_times, setOrderStep])
 
   const toggleOrderTime = useCallback(
     (orderId: string, time: number) => {

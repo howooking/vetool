@@ -25,7 +25,7 @@ import { z } from 'zod'
 export default function TxSelectUserStep() {
   const {
     txLocalState,
-    setStep,
+    setTxStep,
     setIsMutationCanceled,
     reset: txLocalStateReset,
   } = useTxMutationStore()
@@ -71,7 +71,7 @@ export default function TxSelectUserStep() {
               updatedLogs,
             ),
         )
-        setStep('closed')
+        setTxStep('closed')
         orderQueueReset()
         txLocalStateReset()
 
@@ -80,7 +80,7 @@ export default function TxSelectUserStep() {
         })
       }
 
-      setStep('closed')
+      setTxStep('closed')
 
       await upsertIcuTx(hos_id as string, txLocalState, updatedLogs)
 
@@ -93,17 +93,17 @@ export default function TxSelectUserStep() {
       hos_id,
       selectedTxPendingQueue,
       txLocalStateReset,
-      setStep,
+      setTxStep,
       txLocalState,
       orderQueueReset,
     ],
   )
 
   const handleCancel = useCallback(() => {
-    setStep('closed')
+    setTxStep('closed')
     setIsMutationCanceled(true)
     txLocalStateReset()
-  }, [txLocalStateReset, setIsMutationCanceled, setStep])
+  }, [txLocalStateReset, setIsMutationCanceled, setTxStep])
 
   return (
     <>

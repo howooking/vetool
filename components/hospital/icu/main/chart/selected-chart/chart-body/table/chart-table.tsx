@@ -53,14 +53,14 @@ export default function ChartTable({
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
     useState(false)
   const {
-    setStep,
+    setOrderStep,
     reset,
     selectedTxPendingQueue,
     orderTimePendingQueue,
     selectedOrderPendingQueue,
     copiedOrderPendingQueue,
   } = useIcuOrderStore()
-  const { setStep: setTxStep } = useTxMutationStore()
+
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
@@ -137,10 +137,12 @@ export default function ChartTable({
     vetsListData,
   ])
 
+  // -------- 커멘드키 뗐을 때 작업 --------
+  const { setTxStep } = useTxMutationStore()
   useEffect(() => {
     if (!isCommandPressed && orderTimePendingQueue.length >= 1) {
       showOrderer
-        ? setStep('selectOrderer')
+        ? setOrderStep('selectOrderer')
         : handleUpsertOrderTimesWithoutOrderer()
     }
     if (!isCommandPressed && selectedTxPendingQueue.length >= 1) {
@@ -152,10 +154,11 @@ export default function ChartTable({
     orderTimePendingQueue,
     selectedTxPendingQueue,
     selectedTxPendingQueue.length,
-    setStep,
+    setOrderStep,
     setTxStep,
     showOrderer,
   ])
+  // ---------------------------------
 
   // ----- 다중 오더 붙여넣기, 삭제 기능 -----
   useEffect(() => {
@@ -166,7 +169,8 @@ export default function ChartTable({
         copiedOrderPendingQueue.length > 0
       ) {
         event.preventDefault()
-        setStep('selectOrderer')
+        // !TODO : showOrderer가 아닌 경우
+        setOrderStep('selectOrderer')
       }
 
       if (
@@ -184,7 +188,7 @@ export default function ChartTable({
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [
-    setStep,
+    setTxStep,
     orderTimePendingQueue,
     copiedOrderPendingQueue.length,
     selectedOrderPendingQueue.length,

@@ -28,7 +28,7 @@ export default function CellsRowTitle({
     basicHosData: { orderColorsData },
   } = useBasicHosDataContext()
   const {
-    setStep,
+    setOrderStep,
     setIsEditMode,
     setSelectedChartOrder,
     selectedOrderPendingQueue,
@@ -104,7 +104,7 @@ export default function CellsRowTitle({
       }
 
       reset()
-      setStep('upsert')
+      setOrderStep('upsert')
       setIsEditMode(true)
       setSelectedChartOrder(order)
     },
@@ -113,7 +113,7 @@ export default function CellsRowTitle({
       order,
       setSelectedOrderPendingQueue,
       setSelectedChartOrder,
-      setStep,
+      setOrderStep,
       setIsEditMode,
       reset,
     ],

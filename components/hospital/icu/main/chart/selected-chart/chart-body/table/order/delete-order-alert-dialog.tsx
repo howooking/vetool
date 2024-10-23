@@ -17,10 +17,10 @@ import type { SelectedIcuOrder } from '@/types/icu/chart'
 
 export default function DeleteOrderAlertDialog({
   selectedChartOrder,
-  setStep,
+  setOrderStep,
 }: {
   selectedChartOrder: Partial<SelectedIcuOrder>
-  setStep: (step: 'closed' | 'upsert' | 'selectOrderer') => void
+  setOrderStep: (orderStep: 'closed' | 'upsert' | 'selectOrderer') => void
 }) {
   const handleDeleteOrderClick = async () => {
     await deleteOrder(selectedChartOrder.order_id!)
@@ -28,7 +28,7 @@ export default function DeleteOrderAlertDialog({
     toast({
       title: `${selectedChartOrder.order_name} 오더를 삭제하였습니다`,
     })
-    setStep('closed')
+    setOrderStep('closed')
   }
 
   return (

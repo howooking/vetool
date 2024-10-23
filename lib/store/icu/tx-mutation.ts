@@ -12,8 +12,8 @@ export type TxLocalState = {
 } | null
 
 type IcuUpsertTxState = {
-  step: 'closed' | 'detailInsert' | 'seletctUser'
-  setStep: (step: 'closed' | 'detailInsert' | 'seletctUser') => void
+  txStep: 'closed' | 'detailInsert' | 'seletctUser'
+  setTxStep: (txStep: 'closed' | 'detailInsert' | 'seletctUser') => void
 
   txLocalState: TxLocalState
   setTxLocalState: (updates: Partial<TxLocalState>) => void
@@ -31,8 +31,8 @@ type IcuUpsertTxState = {
 }
 
 export const useTxMutationStore = create<IcuUpsertTxState>((set) => ({
-  step: 'closed',
-  setStep: (step) => set({ step }),
+  txStep: 'closed',
+  setTxStep: (txStep) => set({ txStep }),
 
   txLocalState: null,
   setTxLocalState: (updates) =>
@@ -49,7 +49,7 @@ export const useTxMutationStore = create<IcuUpsertTxState>((set) => ({
 
   reset: () =>
     set({
-      step: 'closed',
+      txStep: 'closed',
       txLocalState: null,
     }),
 }))

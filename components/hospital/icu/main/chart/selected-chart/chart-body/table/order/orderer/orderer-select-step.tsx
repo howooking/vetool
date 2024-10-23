@@ -49,7 +49,7 @@ export default function OrdererSelectStep({
     orderTimePendingQueue,
     copiedOrderPendingQueue,
     isEditMode,
-    setStep,
+    setOrderStep,
   } = useIcuOrderStore()
   const isSingleTx = useMemo(
     () => orderTimePendingQueue.length === 0,
@@ -90,7 +90,7 @@ export default function OrdererSelectStep({
         title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
       })
       reset()
-      setStep('closed')
+      setOrderStep('closed')
       setIsUpdating(false)
     },
     [
@@ -103,7 +103,7 @@ export default function OrdererSelectStep({
       selectedChartOrder.order_name,
       selectedChartOrder.order_times,
       selectedChartOrder.order_type,
-      setStep,
+      setOrderStep,
     ],
   )
 
@@ -139,10 +139,10 @@ export default function OrdererSelectStep({
         title: '오더시간을 변경하였습니다',
       })
       reset()
-      setStep('closed')
+      setOrderStep('closed')
       setIsUpdating(false)
     },
-    [hos_id, icuChartId, orderTimePendingQueue, orders, reset, setStep],
+    [hos_id, icuChartId, orderTimePendingQueue, orders, reset, setOrderStep],
   )
 
   const handleUpsertOrder = useCallback(
@@ -172,10 +172,10 @@ export default function OrdererSelectStep({
         title: '오더를 붙여넣었습니다',
       })
       reset()
-      setStep('closed')
+      setOrderStep('closed')
       setIsUpdating(false)
     },
-    [hos_id, icuChartId, copiedOrderPendingQueue, reset, setStep],
+    [hos_id, icuChartId, copiedOrderPendingQueue, reset, setOrderStep],
   )
 
   const handleSubmit = useCallback(
@@ -265,7 +265,7 @@ export default function OrdererSelectStep({
 
         <div className="flex justify-between">
           <Button
-            onClick={() => setStep('upsert')}
+            onClick={() => setOrderStep('upsert')}
             variant="outline"
             type="button"
             className={isSingleTx ? '' : 'hidden'}

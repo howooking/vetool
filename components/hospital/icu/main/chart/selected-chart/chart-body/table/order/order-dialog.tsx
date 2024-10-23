@@ -2,7 +2,6 @@
 
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
 import OrderForm from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-form'
-import OrdererSelectStep from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/orderer/orderer-select-step'
 import ConfirmCopyTemplateOrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/template/confirm-copy-template-order-dialog'
 import { templateOrderColumns } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/template/template-order-columns'
 import { Button } from '@/components/ui/button'
@@ -23,6 +22,7 @@ import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provi
 import type { Patient, SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
 import { useCallback } from 'react'
+import OrdererSelectStep from './orderer/orderer-select-step'
 
 export default function OrderDialog({
   icuChartId,
@@ -39,7 +39,7 @@ export default function OrderDialog({
   weight: string
   ageInDays: number
 }) {
-  const { step, isEditMode, setStep, reset } = useIcuOrderStore()
+  const { orderStep, isEditMode, setOrderStep, reset } = useIcuOrderStore()
   const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isTemplateDialogOpen } = useTemplateStore()
   const {
@@ -47,16 +47,16 @@ export default function OrderDialog({
   } = useBasicHosDataContext()
 
   const handleOpenChange = useCallback(() => {
-    if (step === 'closed') {
-      setStep('upsert')
+    if (orderStep === 'closed') {
+      setOrderStep('upsert')
     } else {
-      setStep('closed')
+      setOrderStep('closed')
     }
     reset()
-  }, [step, setStep, reset])
+  }, [orderStep, setOrderStep, reset])
 
   return (
-    <Dialog open={step !== 'closed'} onOpenChange={handleOpenChange}>
+    <Dialog open={orderStep !== 'closed'} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button
           variant="ghost"
@@ -69,16 +69,18 @@ export default function OrderDialog({
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          {step === 'upsert' && (
+          {orderStep === 'upsert' && (
             <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
           )}
-          {step === 'multipleEdit' && (
+          {orderStep === 'multipleEdit' && (
             <DialogTitle>오더 복사 / 오더 삭제</DialogTitle>
           )}
-          {step === 'selectOrderer' && <DialogTitle>수의사 선택</DialogTitle>}
+          {orderStep === 'selectOrderer' && (
+            <DialogTitle>수의사 선택</DialogTitle>
+          )}
           <DialogDescription />
         </DialogHeader>
-        {step === 'upsert' && (
+        {orderStep === 'upsert' && (
           <Tabs defaultValue="default">
             <TabsList className="grid grid-cols-2">
               <TabsTrigger value="default">직접 입력</TabsTrigger>
@@ -111,7 +113,7 @@ export default function OrderDialog({
             </TabsContent>
           </Tabs>
         )}
-        {step === 'selectOrderer' && (
+        {orderStep === 'selectOrderer' && (
           <OrdererSelectStep icuChartId={icuChartId} orders={orders} />
         )}
       </DialogContent>
