@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
-import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { OrderTimePendingQueue } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { cn } from '@/lib/utils'
 import type { Treatment, TxLog } from '@/types/icu/chart'
@@ -22,6 +22,13 @@ type CellProps = {
   onMouseEnter: (columnIndex: number) => void
   onMouseLeave: () => void
   isGuidelineTime: boolean
+  isSorting?: boolean
+  setSelectedTxPendingQueue: (
+    updater:
+      | OrderTimePendingQueue[]
+      | ((prev: OrderTimePendingQueue[]) => OrderTimePendingQueue[]),
+  ) => void
+  selectedTxPendingQueue: OrderTimePendingQueue[]
 }
 
 const Cell: React.FC<CellProps> = React.memo(
@@ -39,6 +46,9 @@ const Cell: React.FC<CellProps> = React.memo(
     onMouseEnter,
     onMouseLeave,
     isGuidelineTime,
+    isSorting,
+    selectedTxPendingQueue,
+    setSelectedTxPendingQueue,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
@@ -46,8 +56,6 @@ const Cell: React.FC<CellProps> = React.memo(
     const mouseDownTimeRef = useRef<number>(0)
     const isLongPressRef = useRef(false)
 
-    const { setSelectedTxPendingQueue, selectedTxPendingQueue } =
-      useIcuOrderStore()
     const {
       isMutationCanceled,
       setIsMutationCanceled,
@@ -249,6 +257,7 @@ const Cell: React.FC<CellProps> = React.memo(
         <div className="relative overflow-hidden">
           <Input
             id={`${icuChartOrderId}&${time}`}
+            style={{ cursor: isSorting ? 'grab' : 'auto' }}
             className={cn(
               isGuidelineTime && 'bg-amber-300/10',
               isHovered && 'bg-muted/50',
@@ -257,7 +266,7 @@ const Cell: React.FC<CellProps> = React.memo(
               isInPendingQueue && 'ring-2',
               'h-11 rounded-none border-none px-1 text-center outline-none ring-inset focus-visible:ring-2 focus-visible:ring-primary',
             )}
-            disabled={preview}
+            disabled={preview || isSorting}
             value={briefTxResultInput}
             onChange={(e) => setBriefTxResultInput(e.target.value)}
             onBlur={() => {

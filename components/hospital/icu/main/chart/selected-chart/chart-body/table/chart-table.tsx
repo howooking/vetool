@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import CellsRow from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row'
@@ -28,7 +27,7 @@ import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { ArrowUpDown } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Sortable } from 'react-sortablejs'
 import SortableOrderWrapper from './order/sortable-order-wrapper'
 
@@ -182,6 +181,7 @@ export default function ChartTable({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     setTxStep,
     orderTimePendingQueue,
@@ -282,6 +282,7 @@ export default function ChartTable({
               />
               <CellsRow
                 preview={preview}
+                isSorting={isSorting}
                 order={order}
                 showOrderer={showOrderer}
                 hoveredColumn={hoveredColumn}
@@ -296,12 +297,7 @@ export default function ChartTable({
         <TableBody>
           {sortedOrders.map((order, index) => (
             <TableRow className="w-full divide-x" key={order.order_id}>
-              <CellsRowTitle
-                index={index}
-                order={order}
-                preview={preview}
-                isSorting={isSorting}
-              />
+              <CellsRowTitle index={index} order={order} preview={preview} />
               <CellsRow
                 preview={preview}
                 order={order}
@@ -310,6 +306,7 @@ export default function ChartTable({
                 handleColumnHover={handleColumnHover}
                 handleColumnLeave={handleColumnLeave}
                 guidelineTimes={guidelineTimes}
+                setOrderStep={setOrderStep}
               />
             </TableRow>
           ))}

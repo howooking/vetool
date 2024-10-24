@@ -14,6 +14,10 @@ type CellsRowProps = {
   handleColumnHover: (columnIndex: number) => void
   handleColumnLeave: () => void
   guidelineTimes: number[]
+  isSorting?: boolean
+  setOrderStep?: (
+    orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
+  ) => void
 }
 
 export default function CellsRow({
@@ -24,9 +28,15 @@ export default function CellsRow({
   handleColumnHover,
   handleColumnLeave,
   guidelineTimes,
+  isSorting,
+  setOrderStep,
 }: CellsRowProps) {
   const { order_times, order_id, treatments } = order
-  const { setOrderTimePendingQueue, setOrderStep } = useIcuOrderStore()
+  const {
+    setOrderTimePendingQueue,
+    setSelectedTxPendingQueue,
+    selectedTxPendingQueue,
+  } = useIcuOrderStore()
   const [orderTimeState, setOrderTimeState] = useState(order_times)
 
   useEffect(() => {
@@ -83,6 +93,9 @@ export default function CellsRow({
             onMouseEnter={handleColumnHover}
             onMouseLeave={handleColumnLeave}
             isGuidelineTime={isGuidelineTime}
+            isSorting={isSorting}
+            setSelectedTxPendingQueue={setSelectedTxPendingQueue}
+            selectedTxPendingQueue={selectedTxPendingQueue}
           />
         )
       })}
