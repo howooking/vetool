@@ -31,6 +31,7 @@ import { ArrowUpDown } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Sortable } from 'react-sortablejs'
 import SortableOrderWrapper from './order/sortable-order-wrapper'
+import { useParams } from 'next/navigation'
 
 export default function ChartTable({
   chartData,
@@ -47,6 +48,7 @@ export default function ChartTable({
     weight,
     icu_io: { age_in_days },
   } = chartData
+  const { hos_id } = useParams()
   const [isSorting, setIsSorting] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>(orders)
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
@@ -67,7 +69,7 @@ export default function ChartTable({
   const isCommandPressed = useIsCommandPressed()
 
   useEffect(() => {
-      setSortedOrders([...orders])
+    setSortedOrders([...orders])
   }, [orders])
 
   // -------- 시간 가이드라인 --------
@@ -117,6 +119,7 @@ export default function ChartTable({
           icu_chart_order_name: currentOrder.order_name,
           icu_chart_order_comment: currentOrder.order_comment,
           icu_chart_order_type: currentOrder.order_type,
+          icu_chart_order_priority: currentOrder.id,
         },
       )
     }
@@ -156,6 +159,33 @@ export default function ChartTable({
   ])
 
   // ----- 다중 오더 붙여넣기, 삭제 기능 -----
+  const handleUpsertOrderWithoutOrderer = useCallback(
+    async () => {
+      for (const order of copiedOrderPendingQueue) {
+
+        await upsertOrder(
+          hos_id as string,
+          icu_chart_id,
+          undefined,
+          order.order_times!,
+          {
+            icu_chart_order_name: order.order_name!,
+            icu_chart_order_comment: order.order_comment!,
+            icu_chart_order_type: order.order_type!,
+            icu_chart_order_priority: order.id!,
+          },
+        )
+      }
+
+      toast({
+        title: '오더를 붙여넣었습니다',
+      })
+
+      reset()
+    },
+    [hos_id, icu_chart_id, copiedOrderPendingQueue, reset],
+  )
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
@@ -164,7 +194,9 @@ export default function ChartTable({
         copiedOrderPendingQueue.length > 0
       ) {
         event.preventDefault()
-        setStep('selectOrderer')
+        showOrderer
+          ? setStep('selectOrderer')
+          : handleUpsertOrderWithoutOrderer()
       }
 
       if (

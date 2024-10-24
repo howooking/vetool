@@ -46,7 +46,7 @@ const Cell: React.FC<CellProps> = React.memo(
     const mouseDownTimeRef = useRef<number>(0)
     const isLongPressRef = useRef(false)
 
-    const { setSelectedTxPendingQueue, selectedTxPendingQueue } =
+    const { setSelectedTxPendingQueue, selectedTxPendingQueue, setSelectedOrderPendingQueue } =
       useIcuOrderStore()
     const {
       isMutationCanceled,
@@ -144,6 +144,9 @@ const Cell: React.FC<CellProps> = React.memo(
 
     const handleMouseDown = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
+        // Order Pending Queue Reset  
+        setSelectedOrderPendingQueue([])
+
         mouseDownTimeRef.current = Date.now()
 
         // 0.8s 동안 마우스를 누르고 있으면 LongPress
