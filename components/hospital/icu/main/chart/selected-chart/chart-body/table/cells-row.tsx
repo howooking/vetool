@@ -1,7 +1,10 @@
 'use client'
 
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import {
+  type OrderTimePendingQueue,
+  useIcuOrderStore,
+} from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useState } from 'react'
@@ -19,6 +22,7 @@ type CellsRowProps = {
   setOrderStep?: (
     orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
   ) => void
+  selectedTxPendingQueue: OrderTimePendingQueue[]
 }
 
 export default function CellsRow({
@@ -31,13 +35,13 @@ export default function CellsRow({
   guidelineTimes,
   isSorting,
   setOrderStep,
+  selectedTxPendingQueue,
 }: CellsRowProps) {
   const { order_times, order_id, treatments } = order
   const {
     setSelectedOrderPendingQueue,
     setOrderTimePendingQueue,
     setSelectedTxPendingQueue,
-    selectedTxPendingQueue,
   } = useIcuOrderStore()
 
   const {

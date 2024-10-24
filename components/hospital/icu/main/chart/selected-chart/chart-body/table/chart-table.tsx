@@ -320,6 +320,7 @@ export default function ChartTable({
                 handleColumnHover={handleColumnHover}
                 handleColumnLeave={handleColumnLeave}
                 guidelineTimes={guidelineTimes}
+                selectedTxPendingQueue={selectedTxPendingQueue}
               />
             </TableRow>
           ))}
@@ -338,6 +339,7 @@ export default function ChartTable({
                 handleColumnLeave={handleColumnLeave}
                 guidelineTimes={guidelineTimes}
                 setOrderStep={setOrderStep}
+                selectedTxPendingQueue={selectedTxPendingQueue}
               />
             </TableRow>
           ))}
