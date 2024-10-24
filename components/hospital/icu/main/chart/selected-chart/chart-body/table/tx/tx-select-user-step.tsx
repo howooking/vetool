@@ -46,6 +46,12 @@ export default function TxSelectUserStep() {
     },
   })
 
+  const handleCancel = useCallback(() => {
+    setStep('closed')
+    setIsMutationCanceled(true)
+    txLocalStateReset()
+  }, [txLocalStateReset, setIsMutationCanceled, setStep])
+
   const handleUpsertTx = useCallback(
     async (values: z.infer<typeof userLogFormSchema>) => {
       const newLog: TxLog = {
@@ -53,13 +59,12 @@ export default function TxSelectUserStep() {
         name: values.userLog,
         createdAt: format(new Date(), 'yyyy-MM-dd HH:mm'),
       }
-
       const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
       if (selectedTxPendingQueue.length) {
-        selectedTxPendingQueue.forEach(
-          async (item) =>
-            await upsertIcuTx(
+        await Promise.all(
+          selectedTxPendingQueue.map((item) =>
+            upsertIcuTx(
               hos_id as string,
               {
                 txId: item.txId,
@@ -70,40 +75,44 @@ export default function TxSelectUserStep() {
               },
               updatedLogs,
             ),
+          ),
         )
-        setStep('closed')
-        orderQueueReset()
-        txLocalStateReset()
 
-        return toast({
-          title: '처치 내역이 업데이트 되었습니다',
-        })
+        handleCancel()
+        return toast({ title: '처치 내역이 업데이트 되었습니다' })
       }
 
-      setStep('closed')
+      if (txLocalState?.txResult?.includes('$')) {
+        const [result, comment] = txLocalState.txResult.split('$')
+        const newLog: TxLog = {
+          result,
+          name: values.userLog,
+          createdAt: format(new Date(), 'yyyy-MM-dd HH:mm'),
+        }
+        const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
+
+        await upsertIcuTx(
+          hos_id as string,
+          {
+            ...txLocalState,
+            txResult: result.trim(),
+            txComment: comment.trim(),
+          },
+          updatedLogs,
+        )
+
+        handleCancel()
+        return toast({ title: '처치 내역이 업데이트 되었습니다' })
+      }
 
       await upsertIcuTx(hos_id as string, txLocalState, updatedLogs)
-
-      txLocalStateReset()
+      handleCancel()
       toast({
         title: '처치 내역이 업데이트 되었습니다',
       })
     },
-    [
-      hos_id,
-      selectedTxPendingQueue,
-      txLocalStateReset,
-      setStep,
-      txLocalState,
-      orderQueueReset,
-    ],
+    [hos_id, selectedTxPendingQueue, txLocalState, handleCancel, upsertIcuTx],
   )
-
-  const handleCancel = useCallback(() => {
-    setStep('closed')
-    setIsMutationCanceled(true)
-    txLocalStateReset()
-  }, [txLocalStateReset, setIsMutationCanceled, setStep])
 
   return (
     <>
