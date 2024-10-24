@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
 import { OrderTimePendingQueue } from '@/lib/store/icu/icu-order'
-import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
+import { TxLocalState } from '@/lib/store/icu/tx-mutation'
 import { cn } from '@/lib/utils'
 import type { Treatment, TxLog } from '@/types/icu/chart'
 import { useSearchParams } from 'next/navigation'
@@ -29,6 +29,10 @@ type CellProps = {
       | ((prev: OrderTimePendingQueue[]) => OrderTimePendingQueue[]),
   ) => void
   selectedTxPendingQueue: OrderTimePendingQueue[]
+  isMutationCanceled: boolean
+  setIsMutationCanceled: (isMutationCanceled: boolean) => void
+  setTxStep: (txStep: 'closed' | 'detailInsert' | 'seletctUser') => void
+  setTxLocalState: (updates: Partial<TxLocalState>) => void
 }
 
 const Cell: React.FC<CellProps> = React.memo(
@@ -49,19 +53,16 @@ const Cell: React.FC<CellProps> = React.memo(
     isSorting,
     selectedTxPendingQueue,
     setSelectedTxPendingQueue,
+    isMutationCanceled,
+    setIsMutationCanceled,
+    setTxStep,
+    setTxLocalState,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
     const pressTimeoutRef = useRef<NodeJS.Timeout | null>(null)
     const mouseDownTimeRef = useRef<number>(0)
     const isLongPressRef = useRef(false)
-
-    const {
-      isMutationCanceled,
-      setIsMutationCanceled,
-      setTxStep,
-      setTxLocalState,
-    } = useTxMutationStore()
 
     const hasOrder = useMemo(() => orderer !== '0', [orderer])
     const hasComment = useMemo(

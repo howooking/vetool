@@ -2,6 +2,7 @@
 
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useState } from 'react'
 import Cell from './cell'
@@ -37,6 +38,14 @@ export default function CellsRow({
     setSelectedTxPendingQueue,
     selectedTxPendingQueue,
   } = useIcuOrderStore()
+
+  const {
+    isMutationCanceled,
+    setIsMutationCanceled,
+    setTxStep,
+    setTxLocalState,
+  } = useTxMutationStore()
+
   const [orderTimeState, setOrderTimeState] = useState(order_times)
 
   useEffect(() => {
@@ -96,6 +105,10 @@ export default function CellsRow({
             isSorting={isSorting}
             setSelectedTxPendingQueue={setSelectedTxPendingQueue}
             selectedTxPendingQueue={selectedTxPendingQueue}
+            isMutationCanceled={isMutationCanceled}
+            setIsMutationCanceled={setIsMutationCanceled}
+            setTxStep={setTxStep}
+            setTxLocalState={setTxLocalState}
           />
         )
       })}
