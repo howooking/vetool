@@ -32,6 +32,7 @@ export type SelectedChart = Pick<
   | 'target_date'
   | 'icu_chart_id'
   | 'in_charge'
+  | 'der_calc_factor'
 > & {
   icu_io: Pick<
     IcuIo,
@@ -85,6 +86,7 @@ export type SelectedIcuOrder = {
     tx_comment: string | null
   }[]
   order_comment: string | null
+  id: number
 }
 
 export type Treatment = {

@@ -29,7 +29,8 @@ export default function TemplateOrderForm({
 }: {
   isEditModalOpen?: boolean
 }) {
-  const { setStep, selectedChartOrder, isEditMode, reset } = useIcuOrderStore()
+  const { setOrderStep, selectedChartOrder, isEditMode, reset } =
+    useIcuOrderStore()
   const { addTemplateOrder, updateTemplateOrder, orderIndex } =
     useTemplateStore()
 
@@ -56,15 +57,16 @@ export default function TemplateOrderForm({
         order_name: trimmedOrderName,
         order_comment: orderComment,
         order_type: orderType,
+        id: 999,
       }
 
       if (isEditMode) {
         updateTemplateOrder(updatedOrder, orderIndex)
-        setStep('closed')
+        setOrderStep('closed')
       } else {
         addTemplateOrder(updatedOrder)
 
-        if (isEditModalOpen) setStep('closed')
+        if (isEditModalOpen) setOrderStep('closed')
       }
 
       reset()
@@ -80,7 +82,7 @@ export default function TemplateOrderForm({
       isEditModalOpen,
       orderIndex,
       reset,
-      setStep,
+      setOrderStep,
       updateTemplateOrder,
     ],
   )
@@ -184,7 +186,7 @@ export default function TemplateOrderForm({
           {isEditMode && (
             <DeleteDefaultOrderAlertDialog
               selectedChartOrder={selectedChartOrder}
-              setStep={setStep}
+              setOrderStep={setOrderStep}
             />
           )}
 

@@ -1,41 +1,42 @@
 import NoResultSquirrel from '@/components/common/no-result-squirrel'
+import SortableOrderWrapper from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/sortable-order-wrapper'
+import AddTemplateDialog from '@/components/hospital/icu/main/template/add/table/add-template-dialog'
+import AddTemplateHeader from '@/components/hospital/icu/main/template/add/table/add-template-header'
+import AddTemplateRow from '@/components/hospital/icu/main/template/add/table/add-template-row'
 import TemplateOrderForm from '@/components/hospital/icu/main/template/add/template-order-form'
-import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
+import { toast } from '@/components/ui/use-toast'
+import { reorderOrders } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTemplateStore } from '@/lib/store/icu/template'
-import { cn } from '@/lib/utils'
+import { hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
-import type { IcuOrderColors } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
-import { Plus } from 'lucide-react'
-import { useCallback, useMemo } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import { Sortable } from 'react-sortablejs'
 
 export default function TemplateOrdersTable({
-  isEditModalOpen,
+  isSorting,
+  setIsSorting,
+  editMode,
 }: {
-  isEditModalOpen?: boolean
+  isSorting?: boolean
+  setIsSorting?: Dispatch<SetStateAction<boolean>>
+  editMode?: boolean
 }) {
-  const { templateOrders, setOrderIndex } = useTemplateStore()
+  const lastOrderRef = useRef<HTMLTableCellElement>(null)
+  const { templateOrders, setTemplateOrders, setOrderIndex } =
+    useTemplateStore()
   const {
-    step,
-    setStep,
+    orderStep,
+    setOrderStep,
     setSelectedChartOrder,
     isEditMode,
     setIsEditMode,
@@ -44,113 +45,133 @@ export default function TemplateOrdersTable({
   const {
     basicHosData: { orderColorsData },
   } = useBasicHosDataContext()
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
+  const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
 
-  const sortedOrders = useMemo(() => {
-    if (templateOrders.length === 0) return []
+  useEffect(() => {
+    if (Array.isArray(templateOrders)) {
+      const orders = templateOrders
 
-    return templateOrders.sort(
-      (prev, next) =>
-        DEFAULT_ICU_ORDER_TYPE.findIndex(
-          (order) => order.value === prev.order_type,
-        ) -
-        DEFAULT_ICU_ORDER_TYPE.findIndex(
-          (order) => order.value === next.order_type,
-        ),
-    )
+      setSortedOrders(orders as SelectedIcuOrder[])
+    } else {
+      setSortedOrders([])
+    }
   }, [templateOrders])
 
   const handleOpenChange = useCallback(() => {
-    if (step === 'closed') {
-      setStep('upsert')
+    if (orderStep === 'closed') {
+      setOrderStep('upsert')
     } else {
-      setStep('closed')
+      setOrderStep('closed')
     }
     reset()
-  }, [step, setStep, reset])
+  }, [orderStep, setOrderStep, reset])
 
   const handleEditOrderDialogOpen = (
     order: Partial<SelectedIcuOrder>,
-    index: number,
+    index?: number,
   ) => {
-    setStep('upsert')
+    setOrderStep('upsert')
     setIsEditMode(true)
     setSelectedChartOrder(order)
     setOrderIndex(index)
   }
 
+  useEffect(() => {
+    if (shouldScrollToBottom && lastOrderRef.current) {
+      lastOrderRef.current.scrollIntoView({ behavior: 'smooth' })
+      setShouldScrollToBottom(false)
+    }
+  }, [sortedOrders, shouldScrollToBottom])
+
+  const handleSortButtonClick = async () => {
+    if (!templateOrders.length && setIsSorting) return
+
+    if (
+      setIsSorting &&
+      isSorting &&
+      !hasOrderSortingChanges(
+        templateOrders as SelectedIcuOrder[],
+        sortedOrders,
+      )
+    ) {
+      setIsSorting(!isSorting)
+      return
+    }
+
+    if (isSorting && editMode) {
+      const orderIds = sortedOrders.map((order) => order.order_id)
+      await reorderOrders(orderIds)
+
+      toast({
+        title: '오더 목록을 변경하였습니다',
+      })
+    }
+
+    if (setIsSorting) setIsSorting(!isSorting)
+  }
+
+  const handleReorder = async (event: Sortable.SortableEvent) => {
+    const newOrders = [...sortedOrders]
+    const [movedOrder] = newOrders.splice(event.oldIndex as number, 1)
+
+    newOrders.splice(event.newIndex as number, 0, movedOrder)
+    setSortedOrders(newOrders)
+    setTemplateOrders(newOrders)
+  }
+
   return (
     <Table className="h-full border">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="relative flex items-center justify-center gap-2 text-center">
-            <span>오더 목록</span>
+      <AddTemplateHeader isSorting={isSorting!} onClick={handleSortButtonClick}>
+        <AddTemplateDialog
+          isOpen={orderStep !== 'closed'}
+          onOpenChange={handleOpenChange}
+          isEditMode={isEditMode}
+        >
+          <TemplateOrderForm isEditModalOpen />
+        </AddTemplateDialog>
+      </AddTemplateHeader>
 
-            <Dialog open={step !== 'closed'} onOpenChange={handleOpenChange}>
-              <DialogTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-0.5"
-                >
-                  <Plus size={18} />
-                </Button>
-              </DialogTrigger>
-
-              <DialogContent className="max-w-3xl">
-                <DialogHeader>
-                  <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
-                  <DialogDescription />
-                </DialogHeader>
-
-                {step === 'upsert' && <TemplateOrderForm isEditModalOpen />}
-              </DialogContent>
-            </Dialog>
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-
-      <TableBody>
-        {!sortedOrders.length ? (
-          <TableRow className="h-[360px]">
-            <TableCell className="text-center" colSpan={5}>
-              <NoResultSquirrel text="저장할 오더를 추가해주세요" />
-            </TableCell>
-          </TableRow>
-        ) : (
-          sortedOrders.map((order, index) => (
-            <TableRow className={cn('divide-x')} key={index}>
-              <TableCell
-                className="p-0"
-                style={{
-                  background:
-                    orderColorsData[order.order_type as keyof IcuOrderColors],
-                }}
-              >
-                <Button
-                  variant="ghost"
-                  onClick={() =>
-                    handleEditOrderDialogOpen(
-                      {
-                        order_id: order.order_id,
-                        order_comment: order.order_comment,
-                        order_name: order.order_name,
-                        order_type: order.order_type,
-                      },
-                      index,
-                    )
-                  }
-                  className="flex w-full justify-between rounded-none bg-transparent px-2"
-                >
-                  <span className="truncate">{order.order_name}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {order.order_comment}
-                  </span>
-                </Button>
+      {isSorting ? (
+        <SortableOrderWrapper
+          orders={sortedOrders}
+          onOrdersChange={setSortedOrders}
+          onSortEnd={handleReorder}
+        >
+          {sortedOrders.map((order, index) => (
+            <AddTemplateRow
+              key={index}
+              order={order}
+              index={index}
+              orderColors={orderColorsData}
+              onEdit={handleEditOrderDialogOpen}
+              orderRef={lastOrderRef}
+              isSorting
+            />
+          ))}
+        </SortableOrderWrapper>
+      ) : (
+        <TableBody>
+          {!sortedOrders.length ? (
+            <TableRow className="h-[360px]">
+              <TableCell className="text-center" colSpan={5}>
+                <NoResultSquirrel text="저장할 오더를 추가해주세요" />
               </TableCell>
             </TableRow>
-          ))
-        )}
-      </TableBody>
+          ) : (
+            sortedOrders.map((order, index) => (
+              <AddTemplateRow
+                key={index}
+                order={order}
+                index={index}
+                orderColors={orderColorsData}
+                onEdit={handleEditOrderDialogOpen}
+                orderRef={lastOrderRef}
+              />
+            ))
+          )}
+        </TableBody>
+      )}
     </Table>
   )
 }

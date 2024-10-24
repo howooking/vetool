@@ -1,7 +1,6 @@
-import AddTemplateOrdersDialog from '@/components/hospital/icu/main/template/add/add-template-orders-dialog'
+import AddTemplateOrdersButton from '@/components/hospital/icu/main/template/add/add-template-orders-button'
 import TemplateOrdersTable from '@/components/hospital/icu/main/template/add/template-orders-table'
 import { Button } from '@/components/ui/button'
-import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTemplateStore } from '@/lib/store/icu/template'
 
 export default function AddTemplateOrders() {
@@ -21,7 +20,7 @@ export default function AddTemplateOrders() {
           초기화
         </Button>
 
-        <AddTemplateOrdersDialog />
+        <AddTemplateOrdersButton />
       </div>
     </div>
   )

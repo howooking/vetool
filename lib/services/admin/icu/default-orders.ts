@@ -1,24 +1,17 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { IcuDefaultChartJoined } from '@/types/adimin'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { redirect } from 'next/navigation'
 
 export const getDefaultChartOrders = async (hosId: string) => {
   const supabase = createClient()
 
   const { data, error } = await supabase
-    .from('icu_default_chart')
-    .select(
-      `
-        default_chart_id,
-        default_chart_order_name,
-        default_chart_order_comment,
-        default_chart_order_type
-      `,
-    )
-    .match({ hos_id: hosId })
-    .returns<IcuDefaultChartJoined[]>()
+    .rpc('get_default_chart_data', {
+      hos_id_input: hosId,
+    })
+    .returns<SelectedIcuOrder[]>()
 
   if (error) {
     console.error(error)
@@ -70,4 +63,20 @@ export const upsertDefaultChartOrder = async (
     console.error(error)
     redirect(`/error?message=${error.message}`)
   }
+}
+
+export const reorderDefaultOrders = async (orderIds: string[]) => {
+  const supabase = createClient()
+
+  orderIds.forEach(async (orderId, index) => {
+    const { error: reorderOrdersError } = await supabase
+      .from('icu_default_chart')
+      .update({ default_chart_order_priority: index })
+      .match({ default_chart_id: orderId })
+
+    if (reorderOrdersError) {
+      console.error(reorderOrdersError)
+      redirect(`/error?message=${reorderOrdersError.message}`)
+    }
+  })
 }

@@ -37,7 +37,7 @@ export default function HeaderDateSelector() {
       setTargetDate(newDate)
       setSelectedOrderPendingQueue([])
     },
-    [pathname, router, searchParams],
+    [pathname, router, searchParams, setSelectedOrderPendingQueue],
   )
 
   const handleUpdateDate = useCallback(

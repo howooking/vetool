@@ -1,8 +1,6 @@
 'use client'
 
 import DeleteOrderAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/delete-order-alert-dialog'
-import FluidOrderFiled from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/fluid-order/fluid-order-filed'
-import OrderFormField from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-form-field'
 import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-schema'
 import OrderTimeSettings from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-time-settings'
 import { Button } from '@/components/ui/button'
@@ -27,6 +25,9 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import FeedOrderField from './feed-order/feed-order-filed'
+import FluidOrderFiled from './fluid-order/fluid-order-filed'
+import OrderFormField from './order-form-field'
 
 export default function OrderForm({
   showOrderer,
@@ -42,7 +43,7 @@ export default function OrderForm({
   ageInDays: number
 }) {
   const {
-    setStep,
+    setOrderStep,
     selectedChartOrder,
     isEditMode,
     setSelectedChartOrder,
@@ -80,7 +81,7 @@ export default function OrderForm({
       order_times: orderTime,
       order_id: selectedChartOrder.order_id,
     })
-    setStep('selectOrderer')
+    setOrderStep('selectOrderer')
   }
   const handleSubmitWithoutOrderer = async (
     values: z.infer<typeof orderSchema>,
@@ -90,21 +91,20 @@ export default function OrderForm({
     await upsertOrder(
       hos_id as string,
       icuChartId,
-      selectedChartOrder.order_id!,
+      selectedChartOrder.order_id,
       orderTime.map((time) => (time === '1' ? vetsListData[0].name : '0')),
       {
-        icu_chart_order_name: values.icu_chart_order_name,
-        icu_chart_order_comment: values.icu_chart_order_comment!,
+        icu_chart_order_name: values.icu_chart_order_name.trim(),
+        icu_chart_order_comment: values.icu_chart_order_comment ? values.icu_chart_order_comment.trim() : '',
         icu_chart_order_type: values.icu_chart_order_type!,
       },
     )
-
     toast({
-      title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+      title: `오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
     })
 
     reset()
-    setStep('closed')
+    setOrderStep('closed')
     setIsUpdating(false)
   }
 
@@ -170,7 +170,12 @@ export default function OrderForm({
             weight={weight}
           />
         )}
-        {orderType !== 'fluid' && <OrderFormField form={form} />}
+
+        {orderType === 'feed' && <FeedOrderField form={form} />}
+
+        {orderType !== 'fluid' && orderType !== 'feed' && (
+          <OrderFormField form={form} />
+        )}
 
         <OrderTimeSettings
           startTime={startTime}
@@ -185,7 +190,7 @@ export default function OrderForm({
           {isEditMode && (
             <DeleteOrderAlertDialog
               selectedChartOrder={selectedChartOrder}
-              setStep={setStep}
+              setOrderStep={setOrderStep}
             />
           )}
 

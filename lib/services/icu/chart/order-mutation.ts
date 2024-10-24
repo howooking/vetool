@@ -26,6 +26,7 @@ export const upsertOrder = async (
     icu_chart_order_name: string
     icu_chart_order_comment: string | null
     icu_chart_order_type: string
+    icu_chart_order_priority?: number
   },
 ) => {
   const supabase = createClient()
@@ -67,6 +68,7 @@ export const getOrder = async (icuChartId: string) => {
   const { data, error } = await supabase
     .from('icu_orders')
     .select('*')
+    .order('icu_chart_order_priority')
     .match({ icu_chart_id: icuChartId })
 
   if (error) {
@@ -92,4 +94,20 @@ export const upsertTemplateOrders = async (
     console.error(error)
     redirect(`/error?message=${error.message}`)
   }
+}
+
+export const reorderOrders = async (orderIds: string[]) => {
+  const supabase = createClient()
+
+  orderIds.forEach(async (orderId, index) => {
+    const { error: reorderOrdersError } = await supabase
+      .from('icu_orders')
+      .update({ icu_chart_order_priority: index })
+      .match({ icu_chart_order_id: orderId })
+
+    if (reorderOrdersError) {
+      console.error(reorderOrdersError)
+      redirect(`/error?message=${reorderOrdersError.message}`)
+    }
+  })
 }

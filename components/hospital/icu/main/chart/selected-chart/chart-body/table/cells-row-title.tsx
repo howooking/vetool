@@ -1,5 +1,3 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import { TableCell } from '@/components/ui/table'
 import { toast } from '@/components/ui/use-toast'
@@ -8,13 +6,17 @@ import { cn } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { IcuOrderColors } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export default function CellsRowTitle({
   order,
+  isSorting,
+  index,
   preview,
 }: {
   order: SelectedIcuOrder
+  isSorting?: boolean
+  index: number
   preview?: boolean
 }) {
   const { order_comment, order_type, order_id } = order
@@ -22,7 +24,7 @@ export default function CellsRowTitle({
     basicHosData: { orderColorsData },
   } = useBasicHosDataContext()
   const {
-    setStep,
+    setOrderStep,
     setIsEditMode,
     setSelectedChartOrder,
     selectedOrderPendingQueue,
@@ -30,6 +32,8 @@ export default function CellsRowTitle({
     setCopiedOrderPendingQueue,
     reset,
   } = useIcuOrderStore()
+
+  const [offset, setOffset] = useState({ x: 0, y: 0 }) // x, y 오프셋 관리
 
   const isInPendingQueue = useMemo(() => {
     return selectedOrderPendingQueue.some(
@@ -39,9 +43,17 @@ export default function CellsRowTitle({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
-        event.preventDefault()
+      const activeElement = document.activeElement
+      const isInputFocused =
+        activeElement instanceof HTMLInputElement ||
+        activeElement instanceof HTMLTextAreaElement ||
+        activeElement?.hasAttribute('contenteditable')
 
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key === 'c' &&
+        !isInputFocused
+      ) {
         if (selectedOrderPendingQueue.length > 0) {
           setCopiedOrderPendingQueue(selectedOrderPendingQueue)
           setSelectedOrderPendingQueue([])
@@ -88,7 +100,7 @@ export default function CellsRowTitle({
       }
 
       reset()
-      setStep('upsert')
+      setOrderStep('upsert')
       setIsEditMode(true)
       setSelectedChartOrder(order)
     },
@@ -97,25 +109,50 @@ export default function CellsRowTitle({
       order,
       setSelectedOrderPendingQueue,
       setSelectedChartOrder,
-      setStep,
+      setOrderStep,
       setIsEditMode,
       reset,
     ],
   )
 
+  useEffect(() => {
+    let interval: any
+
+    if (isSorting) {
+      interval = setInterval(() => {
+        setOffset((prevOffset) => ({
+          x: prevOffset.x === 1 ? -1 : 1,
+          y: prevOffset.y === 0.5 ? -0.5 : 0.5,
+        }))
+      }, 150)
+    } else {
+      setOffset({ x: 0, y: 0 })
+    }
+
+    return () => clearInterval(interval)
+  }, [isSorting])
+
   return (
     <TableCell
-      className="w-[320px] p-0"
+      className={cn(
+        'handle group w-[320px] p-0',
+        isSorting && index % 2 === 0 && 'animate-shake-strong',
+        isSorting && index % 2 !== 0 && 'animate-shake-strong-reverse',
+      )}
       style={{
         background: orderColorsData[order_type as keyof IcuOrderColors],
       }}
     >
       <Button
         variant="ghost"
-        onClick={handleEditOrderDialogOpen}
+        onClick={isSorting ? undefined : handleEditOrderDialogOpen}
         className={cn(
           'flex h-11 w-[320px] justify-between rounded-none bg-transparent px-2 outline-none ring-inset ring-primary',
-          preview ? 'cursor-not-allowed' : 'cursor-pointer',
+          preview
+            ? 'cursor-not-allowed'
+            : isSorting
+              ? 'cursor-grab'
+              : 'cursor-pointer',
           isInPendingQueue && 'ring-2',
         )}
       >

@@ -28,7 +28,7 @@ import { z } from 'zod'
 
 export default function TxDetailInsertStep() {
   const {
-    setStep,
+    setTxStep,
     txLocalState,
     setTxLocalState,
     setIsDeleting,
@@ -58,18 +58,18 @@ export default function TxDetailInsertStep() {
       // isNotificationChecked: values.isNotificationChecked,
     })
 
-    setStep('seletctUser')
+    setTxStep('seletctUser')
   }
 
   const handleCloseClick = () => {
-    setStep('closed')
+    setTxStep('closed')
     txLocalStateReset()
     orderQueueReset()
   }
 
   const handleDeleteTx = async () => {
     setIsDeleting(true)
-    setStep('closed')
+    setTxStep('closed')
 
     if (hasTxOrder) {
       selectedTxPendingQueue.forEach(async (order) => {

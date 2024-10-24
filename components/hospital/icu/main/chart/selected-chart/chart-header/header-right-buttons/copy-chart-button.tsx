@@ -31,11 +31,22 @@ export default function CopyChartButton({
     if (selectedOrderPendingQueue.length) return
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
-        if (!window.getSelection()?.toString()) {
-          event.preventDefault()
-          handleCopy()
+      const activeElement = document.activeElement
+      const isInputFocused =
+        activeElement instanceof HTMLInputElement ||
+        activeElement instanceof HTMLTextAreaElement ||
+        activeElement?.hasAttribute('contenteditable')
+
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key === 'c' &&
+        !isInputFocused
+      ) {
+        if (window.getSelection()?.toString()) {
+          return
         }
+
+        handleCopy()
       }
     }
 

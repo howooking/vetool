@@ -6,7 +6,7 @@ import InAndOutDate from '@/components/hospital/icu/main/chart/selected-chart/ch
 import OwnerName from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/owner-name'
 import Vets from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-infos/vets/vets'
 import type { SelectedChart } from '@/types/icu/chart'
-import Weight from './weight/weight'
+import RerDer from './rer-der/rer-der'
 
 export default function ChartInfos({
   chartData,
@@ -21,7 +21,7 @@ export default function ChartInfos({
     icu_chart_id,
     in_charge,
     weight,
-    weight_measured_date,
+    der_calc_factor,
   } = chartData
 
   return (
@@ -60,10 +60,11 @@ export default function ChartInfos({
       </div>
 
       <div className="col-span-2 md:order-none">
-        <Weight
-          weight={weight}
-          weightMeasuredDate={weight_measured_date}
+        <RerDer
           icuChartId={icu_chart_id}
+          weight={weight}
+          species={patient.species}
+          derCalcFactor={der_calc_factor}
         />
       </div>
 
