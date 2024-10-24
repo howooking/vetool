@@ -34,6 +34,7 @@ export default function CellsRow({
 }: CellsRowProps) {
   const { order_times, order_id, treatments } = order
   const {
+    setSelectedOrderPendingQueue,
     setOrderTimePendingQueue,
     setSelectedTxPendingQueue,
     selectedTxPendingQueue,
@@ -109,6 +110,7 @@ export default function CellsRow({
             setIsMutationCanceled={setIsMutationCanceled}
             setTxStep={setTxStep}
             setTxLocalState={setTxLocalState}
+            setSelectedOrderPendingQueue={setSelectedOrderPendingQueue}
           />
         )
       })}
