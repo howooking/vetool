@@ -68,7 +68,7 @@ export default function ChartTable({
 
   useEffect(() => {
       setSortedOrders([...orders])
-  }, [orders, isSorting])
+  }, [orders])
 
   // -------- 시간 가이드라인 --------
   const [guidelineTimes, setGuidelineTimes] = useLocalStorage(
