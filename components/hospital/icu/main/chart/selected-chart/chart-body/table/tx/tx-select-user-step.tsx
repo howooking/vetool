@@ -13,20 +13,22 @@ import { toast } from '@/components/ui/use-toast'
 import { upsertIcuTx } from '@/lib/services/icu/chart/tx-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
+import { cn } from '@/lib/utils'
 import type { TxLog } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { format } from 'date-fns'
+import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { set, z } from 'zod'
+import { z } from 'zod'
 
 export default function TxSelectUserStep() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const {
     txLocalState,
     setTxStep,
-    setIsMutationCanceled,
     reset: txLocalStateReset,
   } = useTxMutationStore()
   const { selectedTxPendingQueue, reset: orderQueueReset } = useIcuOrderStore()
@@ -46,14 +48,16 @@ export default function TxSelectUserStep() {
     },
   })
 
-  const handleCancel = useCallback(() => {
+  const handleReset = useCallback(() => {
     setTxStep('closed')
-    setIsMutationCanceled(true)
     txLocalStateReset()
-  }, [txLocalStateReset, setIsMutationCanceled, setTxStep])
+    orderQueueReset()
+  }, [setTxStep, txLocalStateReset, orderQueueReset])
 
   const handleUpsertTx = useCallback(
     async (values: z.infer<typeof userLogFormSchema>) => {
+      setIsSubmitting(true)
+
       const newLog: TxLog = {
         result: txLocalState?.txResult ?? '',
         name: values.userLog,
@@ -61,6 +65,7 @@ export default function TxSelectUserStep() {
       }
       const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
+      // 다중 Tx 입력
       if (selectedTxPendingQueue.length) {
         await Promise.all(
           selectedTxPendingQueue.map((item) =>
@@ -77,22 +82,14 @@ export default function TxSelectUserStep() {
             ),
           ),
         )
-        setTxStep('closed')
-        orderQueueReset()
-        txLocalStateReset()
-
-        handleCancel()
-        return toast({ title: '처치 내역이 업데이트 되었습니다' })
+        handleReset()
+        toast({ title: '처치 내역이 업데이트 되었습니다' })
+        return
       }
 
+      // 단일 간편 코멘트($) 입력한 경우
       if (txLocalState?.txResult?.includes('$')) {
         const [result, comment] = txLocalState.txResult.split('$')
-        const newLog: TxLog = {
-          result,
-          name: values.userLog,
-          createdAt: format(new Date(), 'yyyy-MM-dd HH:mm'),
-        }
-        const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
         await upsertIcuTx(
           hos_id as string,
@@ -104,25 +101,19 @@ export default function TxSelectUserStep() {
           updatedLogs,
         )
 
-        handleCancel()
-        return toast({ title: '처치 내역이 업데이트 되었습니다' })
+        handleReset()
+        toast({ title: '처치 내역이 업데이트 되었습니다' })
+        return
       }
 
+      // 단일 Tx 일반적인 경우
       await upsertIcuTx(hos_id as string, txLocalState, updatedLogs)
-      handleCancel()
+      handleReset()
       toast({
         title: '처치 내역이 업데이트 되었습니다',
       })
     },
-    [
-      txLocalState,
-      selectedTxPendingQueue,
-      hos_id,
-      handleCancel,
-      setTxStep,
-      orderQueueReset,
-      txLocalStateReset,
-    ],
+    [txLocalState, selectedTxPendingQueue, hos_id, handleReset],
   )
 
   return (
@@ -162,13 +153,16 @@ export default function TxSelectUserStep() {
               type="button"
               variant="outline"
               tabIndex={-1}
-              onClick={handleCancel}
+              onClick={handleReset}
             >
               취소
             </Button>
 
-            <Button type="submit" className="ml-2">
+            <Button type="submit" className="ml-2" disabled={isSubmitting}>
               확인
+              <LoaderCircle
+                className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
+              />
             </Button>
           </div>
         </form>

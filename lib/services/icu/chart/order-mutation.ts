@@ -85,7 +85,7 @@ export const upsertTemplateOrders = async (
 ) => {
   const supabase = createClient()
 
-  const { error } = await supabase.rpc('copy_prev_orders', {
+  const { error } = await supabase.rpc('copy_template_orders', {
     prev_chart_id_input: templateChartId,
     new_chart_id_input: icuChartId,
   })
