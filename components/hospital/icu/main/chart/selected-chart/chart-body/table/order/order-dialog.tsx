@@ -62,7 +62,7 @@ export default function OrderDialog({
           variant="ghost"
           size="icon"
           onClick={handleOpenChange}
-          className="absolute right-1 top-0.5"
+          className="shrink-0"
         >
           <Plus size={18} />
         </Button>

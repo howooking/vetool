@@ -39,7 +39,6 @@ export default function ChartTable({
   chartData: SelectedChart
   preview?: boolean
 }) {
-  const orderTitleRef = useRef<HTMLTableCellElement>(null)
   const {
     icu_chart_id,
     orders,
@@ -49,7 +48,6 @@ export default function ChartTable({
   } = chartData
   const [isSorting, setIsSorting] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>(orders)
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
     useState(false)
   const {
@@ -67,7 +65,7 @@ export default function ChartTable({
   const isCommandPressed = useIsCommandPressed()
 
   useEffect(() => {
-      setSortedOrders([...orders])
+    setSortedOrders(orders)
   }, [orders])
 
   // -------- 시간 가이드라인 --------
@@ -167,7 +165,6 @@ export default function ChartTable({
         copiedOrderPendingQueue.length > 0
       ) {
         event.preventDefault()
-        // !TODO : showOrderer가 아닌 경우
         setOrderStep('selectOrderer')
       }
 
@@ -193,16 +190,9 @@ export default function ChartTable({
   ])
   // ------------------------------------
 
-  useEffect(() => {
-    if (shouldScrollToBottom && orderTitleRef.current) {
-      orderTitleRef.current.scrollIntoView({ behavior: 'smooth' })
-      setShouldScrollToBottom(false)
-    }
-  }, [orders, shouldScrollToBottom])
-
   const handleSortButtonClick = async () => {
     if (isSorting && !hasOrderSortingChanges(chartData.orders, sortedOrders)) {
-      setIsSorting(!isSorting)
+      setIsSorting(false)
       return
     }
 
@@ -212,7 +202,7 @@ export default function ChartTable({
       await reorderOrders(orderIds)
 
       toast({
-        title: '오더 목록을 변경하였습니다',
+        title: '오더 순서를 변경하였습니다',
       })
     }
 
@@ -222,7 +212,6 @@ export default function ChartTable({
   const handleReorder = (event: Sortable.SortableEvent) => {
     const newOrders = [...sortedOrders]
     const [movedOrder] = newOrders.splice(event.oldIndex as number, 1)
-
     newOrders.splice(event.newIndex as number, 0, movedOrder)
     setSortedOrders(newOrders)
   }
@@ -231,21 +220,23 @@ export default function ChartTable({
     <Table className="border">
       <TableHeader className="sticky top-0 z-10 bg-white shadow-sm">
         <TableRow>
-          <TableHead className="relative flex w-[320px] max-w-[320px] items-center justify-center gap-2 text-center">
+          <TableHead className="flex w-[320px] items-center justify-between px-0.5 text-center">
             {!preview && (
               <Button
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  'absolute left-1',
                   isSorting && 'animate-pulse text-primary',
+                  'shrink-0',
                 )}
                 onClick={handleSortButtonClick}
               >
                 <ArrowUpDown size={18} />
               </Button>
             )}
-            <span>오더 목록</span>
+
+            <span className="w-full text-center">오더 목록</span>
+
             {!preview && (
               <OrderDialog
                 icuChartId={icu_chart_id}
@@ -260,16 +251,20 @@ export default function ChartTable({
 
           {TIMES.map((time) => (
             <TableHead
-              className="cursor-pointer border text-center"
+              className={cn(
+                preview ? 'cursor-default' : 'cursor-pointer',
+                'border text-center',
+              )}
               key={time}
-              onClick={() => handleToggleGuidelineTimes(time)}
+              onClick={
+                preview ? undefined : () => handleToggleGuidelineTimes(time)
+              }
             >
               {time.toString().padStart(2, '0')}
             </TableHead>
           ))}
         </TableRow>
       </TableHeader>
-      {!preview && <TxUpsertDialog />}
 
       {isSorting ? (
         <SortableOrderWrapper
@@ -282,7 +277,6 @@ export default function ChartTable({
               <CellsRowTitle
                 index={index}
                 order={order}
-                orderTitleRef={orderTitleRef}
                 preview={preview}
                 isSorting={isSorting}
               />
@@ -322,6 +316,7 @@ export default function ChartTable({
         </TableBody>
       )}
 
+      <TxUpsertDialog />
       <DeleteOrdersAlertDialog
         isDeleteOrdersDialogOpen={isDeleteOrdersDialogOpen}
         setIsDeleteOrdersDialogOpen={setIsDeleteOrdersDialogOpen}
