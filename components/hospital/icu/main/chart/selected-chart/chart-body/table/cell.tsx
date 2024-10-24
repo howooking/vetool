@@ -3,7 +3,7 @@ import { TableCell } from '@/components/ui/table'
 import { OrderTimePendingQueue } from '@/lib/store/icu/icu-order'
 import { TxLocalState } from '@/lib/store/icu/tx-mutation'
 import { cn } from '@/lib/utils'
-import type { Treatment, TxLog } from '@/types/icu/chart'
+import type { SelectedIcuOrder, Treatment, TxLog } from '@/types/icu/chart'
 import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { TxDetailHover } from './tx/tx-detail-hover'
@@ -33,6 +33,11 @@ type CellProps = {
   setIsMutationCanceled: (isMutationCanceled: boolean) => void
   setTxStep: (txStep: 'closed' | 'detailInsert' | 'seletctUser') => void
   setTxLocalState: (updates: Partial<TxLocalState>) => void
+  setSelectedOrderPendingQueue: (
+    updater:
+      | Partial<SelectedIcuOrder>[]
+      | ((prev: Partial<SelectedIcuOrder>[]) => Partial<SelectedIcuOrder>[]),
+  ) => void
 }
 
 const Cell: React.FC<CellProps> = React.memo(
@@ -57,6 +62,7 @@ const Cell: React.FC<CellProps> = React.memo(
     setIsMutationCanceled,
     setTxStep,
     setTxLocalState,
+    setSelectedOrderPendingQueue,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
@@ -153,6 +159,9 @@ const Cell: React.FC<CellProps> = React.memo(
 
     const handleMouseDown = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
+        // Order Pending Queue Reset
+        setSelectedOrderPendingQueue([])
+
         mouseDownTimeRef.current = Date.now()
 
         // 0.8s 동안 마우스를 누르고 있으면 LongPress
@@ -162,7 +171,7 @@ const Cell: React.FC<CellProps> = React.memo(
           handleOpenTxDetail()
         }, 800)
       },
-      [handleOpenTxDetail],
+      [handleOpenTxDetail, setSelectedOrderPendingQueue],
     )
 
     const handleMouseUp = useCallback(

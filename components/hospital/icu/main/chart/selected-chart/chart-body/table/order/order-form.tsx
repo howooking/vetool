@@ -91,17 +91,16 @@ export default function OrderForm({
     await upsertOrder(
       hos_id as string,
       icuChartId,
-      selectedChartOrder.order_id!,
+      selectedChartOrder.order_id,
       orderTime.map((time) => (time === '1' ? vetsListData[0].name : '0')),
       {
         icu_chart_order_name: values.icu_chart_order_name.trim(),
-        icu_chart_order_comment: values.icu_chart_order_comment!.trim(),
+        icu_chart_order_comment: values.icu_chart_order_comment ? values.icu_chart_order_comment.trim() : '',
         icu_chart_order_type: values.icu_chart_order_type!,
       },
     )
-
     toast({
-      title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+      title: `오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
     })
 
     reset()
