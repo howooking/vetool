@@ -159,6 +159,8 @@ const Cell: React.FC<CellProps> = React.memo(
 
     const handleMouseDown = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
+        // 우클릭무시
+        if (e.button === 2) return
         // Order Pending Queue Reset
         setSelectedOrderPendingQueue([])
 
@@ -286,8 +288,8 @@ const Cell: React.FC<CellProps> = React.memo(
             onKeyDown={handleKeyDown}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseLeave}
             onContextMenu={handleRightClick}
+            onMouseLeave={handleMouseLeave}
             onMouseEnter={() => onMouseEnter(time)}
             onFocus={() => setIsFocused(true)}
           />

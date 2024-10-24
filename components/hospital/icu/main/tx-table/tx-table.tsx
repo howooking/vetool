@@ -79,7 +79,7 @@ export default function TxTable({
     <div className="h-icu-chart overflow-auto p-2 pb-[48px]">
       <ScrollArea className="h-full w-full">
         <Table className="border">
-          <TableHeader>
+          <TableHeader className="sticky top-0 z-10 bg-white shadow-sm">
             <TableRow>
               <TableHead className="w-[120px] text-center">환자목록</TableHead>
 

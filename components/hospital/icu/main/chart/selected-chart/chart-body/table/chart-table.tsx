@@ -27,10 +27,10 @@ import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { ArrowUpDown } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { Sortable } from 'react-sortablejs'
 import SortableOrderWrapper from './order/sortable-order-wrapper'
-import { useParams } from 'next/navigation'
 
 export default function ChartTable({
   chartData,
@@ -90,7 +90,7 @@ export default function ChartTable({
     [],
   )
   const handleColumnLeave = useCallback(() => setHoveredColumn(null), [])
-  // ------------------------
+  // --------------------------
 
   const handleUpsertOrderTimesWithoutOrderer = useCallback(async () => {
     const formattedOrders = formatOrders(orderTimePendingQueue)
@@ -237,12 +237,15 @@ export default function ChartTable({
     setIsSorting(!isSorting)
   }
 
-  const handleReorder = (event: Sortable.SortableEvent) => {
-    const newOrders = [...sortedOrders]
-    const [movedOrder] = newOrders.splice(event.oldIndex as number, 1)
-    newOrders.splice(event.newIndex as number, 0, movedOrder)
-    setSortedOrders(newOrders)
-  }
+  const handleReorder = useCallback(
+    (event: Sortable.SortableEvent) => {
+      const newOrders = [...sortedOrders]
+      const [movedOrder] = newOrders.splice(event.oldIndex as number, 1)
+      newOrders.splice(event.newIndex as number, 0, movedOrder)
+      setSortedOrders(newOrders)
+    },
+    [sortedOrders],
+  )
 
   return (
     <Table className="border">
