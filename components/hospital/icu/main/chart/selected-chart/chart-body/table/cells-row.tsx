@@ -2,6 +2,7 @@
 
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useState } from 'react'
 import Cell from './cell'
@@ -14,6 +15,10 @@ type CellsRowProps = {
   handleColumnHover: (columnIndex: number) => void
   handleColumnLeave: () => void
   guidelineTimes: number[]
+  isSorting?: boolean
+  setOrderStep?: (
+    orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
+  ) => void
 }
 
 export default function CellsRow({
@@ -24,14 +29,29 @@ export default function CellsRow({
   handleColumnHover,
   handleColumnLeave,
   guidelineTimes,
+  isSorting,
+  setOrderStep,
 }: CellsRowProps) {
   const { order_times, order_id, treatments } = order
-  const { setOrderTimePendingQueue, step } = useIcuOrderStore()
+  const {
+    setSelectedOrderPendingQueue,
+    setOrderTimePendingQueue,
+    setSelectedTxPendingQueue,
+    selectedTxPendingQueue,
+  } = useIcuOrderStore()
+
+  const {
+    isMutationCanceled,
+    setIsMutationCanceled,
+    setTxStep,
+    setTxLocalState,
+  } = useTxMutationStore()
+
   const [orderTimeState, setOrderTimeState] = useState(order_times)
 
   useEffect(() => {
     setOrderTimeState(order_times)
-  }, [order_times, step])
+  }, [order_times, setOrderStep])
 
   const toggleOrderTime = useCallback(
     (orderId: string, time: number) => {
@@ -83,6 +103,14 @@ export default function CellsRow({
             onMouseEnter={handleColumnHover}
             onMouseLeave={handleColumnLeave}
             isGuidelineTime={isGuidelineTime}
+            isSorting={isSorting}
+            setSelectedTxPendingQueue={setSelectedTxPendingQueue}
+            selectedTxPendingQueue={selectedTxPendingQueue}
+            isMutationCanceled={isMutationCanceled}
+            setIsMutationCanceled={setIsMutationCanceled}
+            setTxStep={setTxStep}
+            setTxLocalState={setTxLocalState}
+            setSelectedOrderPendingQueue={setSelectedOrderPendingQueue}
           />
         )
       })}

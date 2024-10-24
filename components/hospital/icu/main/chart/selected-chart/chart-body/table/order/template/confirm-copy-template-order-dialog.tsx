@@ -28,7 +28,7 @@ export default function ConfirmCopyTemplateOrderDialog({
 }: {
   icuChartId: string
 }) {
-  const { setStep } = useIcuOrderStore()
+  const { setOrderStep } = useIcuOrderStore()
   const { isTemplateDialogOpen, setIsTemplateDialogOpen, reset, template } =
     useTemplateStore()
   const {
@@ -45,7 +45,7 @@ export default function ConfirmCopyTemplateOrderDialog({
 
     reset()
     setIsTemplateDialogOpen(false)
-    setStep('closed')
+    setOrderStep('closed')
   }
 
   const handleOrdererChange = (value: string) => {

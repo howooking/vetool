@@ -20,12 +20,12 @@ import { format } from 'date-fns'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { set, z } from 'zod'
 
 export default function TxSelectUserStep() {
   const {
     txLocalState,
-    setStep,
+    setTxStep,
     setIsMutationCanceled,
     reset: txLocalStateReset,
   } = useTxMutationStore()
@@ -47,10 +47,10 @@ export default function TxSelectUserStep() {
   })
 
   const handleCancel = useCallback(() => {
-    setStep('closed')
+    setTxStep('closed')
     setIsMutationCanceled(true)
     txLocalStateReset()
-  }, [txLocalStateReset, setIsMutationCanceled, setStep])
+  }, [txLocalStateReset, setIsMutationCanceled, setTxStep])
 
   const handleUpsertTx = useCallback(
     async (values: z.infer<typeof userLogFormSchema>) => {
@@ -77,6 +77,9 @@ export default function TxSelectUserStep() {
             ),
           ),
         )
+        setTxStep('closed')
+        orderQueueReset()
+        txLocalStateReset()
 
         handleCancel()
         return toast({ title: '처치 내역이 업데이트 되었습니다' })
@@ -111,7 +114,15 @@ export default function TxSelectUserStep() {
         title: '처치 내역이 업데이트 되었습니다',
       })
     },
-    [hos_id, selectedTxPendingQueue, txLocalState, handleCancel, upsertIcuTx],
+    [
+      txLocalState,
+      selectedTxPendingQueue,
+      hos_id,
+      handleCancel,
+      setTxStep,
+      orderQueueReset,
+      txLocalStateReset,
+    ],
   )
 
   return (

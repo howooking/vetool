@@ -8,9 +8,9 @@ export type OrderTimePendingQueue = {
 }
 
 type IcuOrderState = {
-  step: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
-  setStep: (
-    step: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
+  orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
+  setOrderStep: (
+    orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
   ) => void
 
   isEditMode?: boolean
@@ -51,8 +51,8 @@ type IcuOrderState = {
 }
 
 export const useIcuOrderStore = create<IcuOrderState>((set) => ({
-  step: 'closed',
-  setStep: (step) => set({ step }),
+  orderStep: 'closed',
+  setOrderStep: (orderStep) => set({ orderStep }),
 
   isEditMode: false,
   setIsEditMode: (isEditMode) => set({ isEditMode }),

@@ -28,8 +28,8 @@ export default function DefaultOrdersSetting({
   const lastOrderRef = useRef<HTMLTableCellElement>(null)
   const { refresh } = useRouter()
   const {
-    step,
-    setStep,
+    orderStep,
+    setOrderStep,
     setSelectedChartOrder,
     isEditMode,
     setIsEditMode,
@@ -47,16 +47,16 @@ export default function DefaultOrdersSetting({
   }, [isSorting])
 
   const handleOpenChange = useCallback(() => {
-    if (step === 'closed') {
-      setStep('upsert')
+    if (orderStep === 'closed') {
+      setOrderStep('upsert')
     } else {
-      setStep('closed')
+      setOrderStep('closed')
     }
     reset()
-  }, [step, setStep, reset])
+  }, [orderStep, setOrderStep, reset])
 
   const handleEditOrderDialogOpen = (order: Partial<SelectedIcuOrder>) => {
-    setStep('upsert')
+    setOrderStep('upsert')
     setIsEditMode(true)
     setSelectedChartOrder(order)
   }
@@ -104,7 +104,7 @@ export default function DefaultOrdersSetting({
     <Table className="h-full max-w-3xl border">
       <AddTemplateHeader isSorting={isSorting} onClick={handleSortButtonClick}>
         <AddTemplateDialog
-          isOpen={step !== 'closed'}
+          isOpen={orderStep !== 'closed'}
           onOpenChange={handleOpenChange}
           isEditMode={isEditMode}
         >

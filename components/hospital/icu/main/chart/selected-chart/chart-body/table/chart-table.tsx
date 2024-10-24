@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import CellsRow from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row'
@@ -28,7 +27,7 @@ import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { ArrowUpDown } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Sortable } from 'react-sortablejs'
 import SortableOrderWrapper from './order/sortable-order-wrapper'
 import { useParams } from 'next/navigation'
@@ -40,7 +39,6 @@ export default function ChartTable({
   chartData: SelectedChart
   preview?: boolean
 }) {
-  const orderTitleRef = useRef<HTMLTableCellElement>(null)
   const {
     icu_chart_id,
     orders,
@@ -51,25 +49,24 @@ export default function ChartTable({
   const { hos_id } = useParams()
   const [isSorting, setIsSorting] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>(orders)
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
     useState(false)
   const {
-    setStep,
+    setOrderStep,
     reset,
     selectedTxPendingQueue,
     orderTimePendingQueue,
     selectedOrderPendingQueue,
     copiedOrderPendingQueue,
   } = useIcuOrderStore()
-  const { setStep: setTxStep } = useTxMutationStore()
+
   const {
     basicHosData: { showOrderer, vetsListData },
   } = useBasicHosDataContext()
   const isCommandPressed = useIsCommandPressed()
 
   useEffect(() => {
-    setSortedOrders([...orders])
+    setSortedOrders(orders)
   }, [orders])
 
   // -------- 시간 가이드라인 --------
@@ -138,10 +135,12 @@ export default function ChartTable({
     vetsListData,
   ])
 
+  // -------- 커멘드키 뗐을 때 작업 --------
+  const { setTxStep } = useTxMutationStore()
   useEffect(() => {
     if (!isCommandPressed && orderTimePendingQueue.length >= 1) {
       showOrderer
-        ? setStep('selectOrderer')
+        ? setOrderStep('selectOrderer')
         : handleUpsertOrderTimesWithoutOrderer()
     }
     if (!isCommandPressed && selectedTxPendingQueue.length >= 1) {
@@ -153,38 +152,35 @@ export default function ChartTable({
     orderTimePendingQueue,
     selectedTxPendingQueue,
     selectedTxPendingQueue.length,
-    setStep,
+    setOrderStep,
     setTxStep,
     showOrderer,
   ])
+  // ---------------------------------
 
   // ----- 다중 오더 붙여넣기, 삭제 기능 -----
-  const handleUpsertOrderWithoutOrderer = useCallback(
-    async () => {
-      for (const order of copiedOrderPendingQueue) {
+  const handleUpsertOrderWithoutOrderer = useCallback(async () => {
+    for (const order of copiedOrderPendingQueue) {
+      await upsertOrder(
+        hos_id as string,
+        icu_chart_id,
+        undefined,
+        order.order_times!,
+        {
+          icu_chart_order_name: order.order_name!,
+          icu_chart_order_comment: order.order_comment!,
+          icu_chart_order_type: order.order_type!,
+          icu_chart_order_priority: order.id!,
+        },
+      )
+    }
 
-        await upsertOrder(
-          hos_id as string,
-          icu_chart_id,
-          undefined,
-          order.order_times!,
-          {
-            icu_chart_order_name: order.order_name!,
-            icu_chart_order_comment: order.order_comment!,
-            icu_chart_order_type: order.order_type!,
-            icu_chart_order_priority: order.id!,
-          },
-        )
-      }
+    toast({
+      title: '오더를 붙여넣었습니다',
+    })
 
-      toast({
-        title: '오더를 붙여넣었습니다',
-      })
-
-      reset()
-    },
-    [hos_id, icu_chart_id, copiedOrderPendingQueue, reset],
-  )
+    reset()
+  }, [hos_id, icu_chart_id, copiedOrderPendingQueue, reset])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -195,7 +191,7 @@ export default function ChartTable({
       ) {
         event.preventDefault()
         showOrderer
-          ? setStep('selectOrderer')
+          ? setOrderStep('selectOrderer')
           : handleUpsertOrderWithoutOrderer()
       }
 
@@ -213,24 +209,18 @@ export default function ChartTable({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    setStep,
+    setTxStep,
     orderTimePendingQueue,
     copiedOrderPendingQueue.length,
     selectedOrderPendingQueue.length,
   ])
   // ------------------------------------
 
-  useEffect(() => {
-    if (shouldScrollToBottom && orderTitleRef.current) {
-      orderTitleRef.current.scrollIntoView({ behavior: 'smooth' })
-      setShouldScrollToBottom(false)
-    }
-  }, [orders, shouldScrollToBottom])
-
   const handleSortButtonClick = async () => {
     if (isSorting && !hasOrderSortingChanges(chartData.orders, sortedOrders)) {
-      setIsSorting(!isSorting)
+      setIsSorting(false)
       return
     }
 
@@ -240,7 +230,7 @@ export default function ChartTable({
       await reorderOrders(orderIds)
 
       toast({
-        title: '오더 목록을 변경하였습니다',
+        title: '오더 순서를 변경하였습니다',
       })
     }
 
@@ -250,7 +240,6 @@ export default function ChartTable({
   const handleReorder = (event: Sortable.SortableEvent) => {
     const newOrders = [...sortedOrders]
     const [movedOrder] = newOrders.splice(event.oldIndex as number, 1)
-
     newOrders.splice(event.newIndex as number, 0, movedOrder)
     setSortedOrders(newOrders)
   }
@@ -259,21 +248,23 @@ export default function ChartTable({
     <Table className="border">
       <TableHeader className="sticky top-0 z-10 bg-white shadow-sm">
         <TableRow>
-          <TableHead className="relative flex w-[320px] max-w-[320px] items-center justify-center gap-2 text-center">
+          <TableHead className="flex w-[320px] items-center justify-between px-0.5 text-center">
             {!preview && (
               <Button
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  'absolute left-1',
                   isSorting && 'animate-pulse text-primary',
+                  'shrink-0',
                 )}
                 onClick={handleSortButtonClick}
               >
                 <ArrowUpDown size={18} />
               </Button>
             )}
-            <span>오더 목록</span>
+
+            <span className="w-full text-center">오더 목록</span>
+
             {!preview && (
               <OrderDialog
                 icuChartId={icu_chart_id}
@@ -288,16 +279,20 @@ export default function ChartTable({
 
           {TIMES.map((time) => (
             <TableHead
-              className="cursor-pointer border text-center"
+              className={cn(
+                preview ? 'cursor-default' : 'cursor-pointer',
+                'border text-center',
+              )}
               key={time}
-              onClick={() => handleToggleGuidelineTimes(time)}
+              onClick={
+                preview ? undefined : () => handleToggleGuidelineTimes(time)
+              }
             >
               {time.toString().padStart(2, '0')}
             </TableHead>
           ))}
         </TableRow>
       </TableHeader>
-      {!preview && <TxUpsertDialog />}
 
       {isSorting ? (
         <SortableOrderWrapper
@@ -310,12 +305,12 @@ export default function ChartTable({
               <CellsRowTitle
                 index={index}
                 order={order}
-                orderTitleRef={orderTitleRef}
                 preview={preview}
                 isSorting={isSorting}
               />
               <CellsRow
                 preview={preview}
+                isSorting={isSorting}
                 order={order}
                 showOrderer={showOrderer}
                 hoveredColumn={hoveredColumn}
@@ -330,12 +325,7 @@ export default function ChartTable({
         <TableBody>
           {sortedOrders.map((order, index) => (
             <TableRow className="w-full divide-x" key={order.order_id}>
-              <CellsRowTitle
-                index={index}
-                order={order}
-                preview={preview}
-                isSorting={isSorting}
-              />
+              <CellsRowTitle index={index} order={order} preview={preview} />
               <CellsRow
                 preview={preview}
                 order={order}
@@ -344,12 +334,14 @@ export default function ChartTable({
                 handleColumnHover={handleColumnHover}
                 handleColumnLeave={handleColumnLeave}
                 guidelineTimes={guidelineTimes}
+                setOrderStep={setOrderStep}
               />
             </TableRow>
           ))}
         </TableBody>
       )}
 
+      <TxUpsertDialog />
       <DeleteOrdersAlertDialog
         isDeleteOrdersDialogOpen={isDeleteOrdersDialogOpen}
         setIsDeleteOrdersDialogOpen={setIsDeleteOrdersDialogOpen}

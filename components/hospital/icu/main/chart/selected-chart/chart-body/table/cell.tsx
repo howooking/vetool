@@ -1,9 +1,9 @@
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
-import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
-import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
+import { OrderTimePendingQueue } from '@/lib/store/icu/icu-order'
+import { TxLocalState } from '@/lib/store/icu/tx-mutation'
 import { cn } from '@/lib/utils'
-import type { Treatment, TxLog } from '@/types/icu/chart'
+import type { SelectedIcuOrder, Treatment, TxLog } from '@/types/icu/chart'
 import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { TxDetailHover } from './tx/tx-detail-hover'
@@ -22,6 +22,22 @@ type CellProps = {
   onMouseEnter: (columnIndex: number) => void
   onMouseLeave: () => void
   isGuidelineTime: boolean
+  isSorting?: boolean
+  setSelectedTxPendingQueue: (
+    updater:
+      | OrderTimePendingQueue[]
+      | ((prev: OrderTimePendingQueue[]) => OrderTimePendingQueue[]),
+  ) => void
+  selectedTxPendingQueue: OrderTimePendingQueue[]
+  isMutationCanceled: boolean
+  setIsMutationCanceled: (isMutationCanceled: boolean) => void
+  setTxStep: (txStep: 'closed' | 'detailInsert' | 'seletctUser') => void
+  setTxLocalState: (updates: Partial<TxLocalState>) => void
+  setSelectedOrderPendingQueue: (
+    updater:
+      | Partial<SelectedIcuOrder>[]
+      | ((prev: Partial<SelectedIcuOrder>[]) => Partial<SelectedIcuOrder>[]),
+  ) => void
 }
 
 const Cell: React.FC<CellProps> = React.memo(
@@ -39,21 +55,20 @@ const Cell: React.FC<CellProps> = React.memo(
     onMouseEnter,
     onMouseLeave,
     isGuidelineTime,
+    isSorting,
+    selectedTxPendingQueue,
+    setSelectedTxPendingQueue,
+    isMutationCanceled,
+    setIsMutationCanceled,
+    setTxStep,
+    setTxLocalState,
+    setSelectedOrderPendingQueue,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
     const pressTimeoutRef = useRef<NodeJS.Timeout | null>(null)
     const mouseDownTimeRef = useRef<number>(0)
     const isLongPressRef = useRef(false)
-
-    const { setSelectedTxPendingQueue, selectedTxPendingQueue, setSelectedOrderPendingQueue } =
-      useIcuOrderStore()
-    const {
-      isMutationCanceled,
-      setIsMutationCanceled,
-      setStep,
-      setTxLocalState,
-    } = useTxMutationStore()
 
     const hasOrder = useMemo(() => orderer !== '0', [orderer])
     const hasComment = useMemo(
@@ -106,11 +121,11 @@ const Cell: React.FC<CellProps> = React.memo(
         txLog: treatment?.tx_log as TxLog[] | null,
       })
 
-      setStep('detailInsert')
+      setTxStep('detailInsert')
     }, [
       icuChartOrderId,
       icuChartTxId,
-      setStep,
+      setTxStep,
       isFocused,
       setTxLocalState,
       time,
@@ -144,7 +159,7 @@ const Cell: React.FC<CellProps> = React.memo(
 
     const handleMouseDown = useCallback(
       (e: React.MouseEvent<HTMLInputElement>) => {
-        // Order Pending Queue Reset  
+        // Order Pending Queue Reset
         setSelectedOrderPendingQueue([])
 
         mouseDownTimeRef.current = Date.now()
@@ -156,7 +171,7 @@ const Cell: React.FC<CellProps> = React.memo(
           handleOpenTxDetail()
         }, 800)
       },
-      [handleOpenTxDetail],
+      [handleOpenTxDetail, setSelectedOrderPendingQueue],
     )
 
     const handleMouseUp = useCallback(
@@ -212,12 +227,12 @@ const Cell: React.FC<CellProps> = React.memo(
         txId: icuChartTxId,
       })
 
-      setStep('seletctUser')
+      setTxStep('seletctUser')
     }, [
       briefTxResultInput,
       icuChartOrderId,
       icuChartTxId,
-      setStep,
+      setTxStep,
       setTxLocalState,
       time,
       treatment?.tx_result,
@@ -252,6 +267,7 @@ const Cell: React.FC<CellProps> = React.memo(
         <div className="relative overflow-hidden">
           <Input
             id={`${icuChartOrderId}&${time}`}
+            style={{ cursor: isSorting ? 'grab' : 'auto' }}
             className={cn(
               isGuidelineTime && 'bg-amber-300/10',
               isHovered && 'bg-muted/50',
@@ -260,7 +276,7 @@ const Cell: React.FC<CellProps> = React.memo(
               isInPendingQueue && 'ring-2',
               'h-11 rounded-none border-none px-1 text-center outline-none ring-inset focus-visible:ring-2 focus-visible:ring-primary',
             )}
-            disabled={preview}
+            disabled={preview || isSorting}
             value={briefTxResultInput}
             onChange={(e) => setBriefTxResultInput(e.target.value)}
             onBlur={() => {

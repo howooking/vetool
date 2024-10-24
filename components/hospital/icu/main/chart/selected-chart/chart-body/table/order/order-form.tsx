@@ -43,7 +43,7 @@ export default function OrderForm({
   ageInDays: number
 }) {
   const {
-    setStep,
+    setOrderStep,
     selectedChartOrder,
     isEditMode,
     setSelectedChartOrder,
@@ -81,7 +81,7 @@ export default function OrderForm({
       order_times: orderTime,
       order_id: selectedChartOrder.order_id,
     })
-    setStep('selectOrderer')
+    setOrderStep('selectOrderer')
   }
   const handleSubmitWithoutOrderer = async (
     values: z.infer<typeof orderSchema>,
@@ -104,7 +104,7 @@ export default function OrderForm({
     })
 
     reset()
-    setStep('closed')
+    setOrderStep('closed')
     setIsUpdating(false)
   }
 
@@ -190,7 +190,7 @@ export default function OrderForm({
           {isEditMode && (
             <DeleteOrderAlertDialog
               selectedChartOrder={selectedChartOrder}
-              setStep={setStep}
+              setOrderStep={setOrderStep}
             />
           )}
 

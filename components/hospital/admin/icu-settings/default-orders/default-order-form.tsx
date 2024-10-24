@@ -29,7 +29,8 @@ import DeleteDefaultOrderAlertDialog from './delete-default-order-alert-dialog'
 export default function DefaultOrderForm() {
   const { hos_id } = useParams()
   const { refresh } = useRouter()
-  const { setStep, selectedChartOrder, isEditMode, reset } = useIcuOrderStore()
+  const { setOrderStep, selectedChartOrder, isEditMode, reset } =
+    useIcuOrderStore()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -67,9 +68,9 @@ export default function DefaultOrderForm() {
 
       reset()
       setIsSubmitting(false)
-      setStep('closed')
+      setOrderStep('closed')
     },
-    [hos_id, selectedChartOrder.order_id, refresh, reset, setStep],
+    [hos_id, selectedChartOrder.order_id, refresh, reset, setOrderStep],
   )
 
   return (
@@ -145,7 +146,7 @@ export default function DefaultOrderForm() {
           {isEditMode && (
             <DeleteDefaultOrderAlertDialog
               selectedChartOrder={selectedChartOrder}
-              setStep={setStep}
+              setOrderStep={setOrderStep}
             />
           )}
 
