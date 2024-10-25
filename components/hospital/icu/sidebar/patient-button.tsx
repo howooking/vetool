@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { cn } from '@/lib/utils'
 import type { IcuSidebarIoData } from '@/types/icu/chart'
 import { useParams, useRouter } from 'next/navigation'
@@ -8,7 +7,6 @@ import { useCallback } from 'react'
 export default function PatientButton({ data }: { data: IcuSidebarIoData }) {
   const { push } = useRouter()
   const { hos_id, target_date, patient_id } = useParams()
-  const { reset: orderQueueReset } = useIcuOrderStore()
 
   const handlePatientButtonClick = useCallback(() => {
     push(

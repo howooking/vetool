@@ -32,6 +32,10 @@ export default function OrderDialog({
   patient,
   weight,
   ageInDays,
+  orderStep,
+  isEditMode,
+  setOrderStep,
+  reset,
 }: {
   icuChartId: string
   orders: SelectedIcuOrder[]
@@ -39,8 +43,13 @@ export default function OrderDialog({
   patient: Patient
   weight: string
   ageInDays: number
+  orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
+  isEditMode?: boolean
+  setOrderStep: (
+    orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
+  ) => void
+  reset: () => void
 }) {
-  const { orderStep, isEditMode, setOrderStep, reset } = useIcuOrderStore()
   const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isTemplateDialogOpen } = useTemplateStore()
   const {
