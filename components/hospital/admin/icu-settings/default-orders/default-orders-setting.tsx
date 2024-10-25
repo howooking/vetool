@@ -40,10 +40,8 @@ export default function DefaultOrdersSetting({
     useState<SelectedIcuOrder[]>(defaultChartOrders)
 
   useEffect(() => {
-    if (isSorting) {
-      setSortedOrders([...defaultChartOrders])
-    }
-  }, [isSorting])
+    setSortedOrders(defaultChartOrders)
+  }, [defaultChartOrders])
 
   const handleOpenChange = useCallback(() => {
     if (orderStep === 'closed') {

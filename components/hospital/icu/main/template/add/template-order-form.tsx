@@ -27,7 +27,7 @@ import { z } from 'zod'
 export default function TemplateOrderForm({
   isEditModalOpen,
 }: {
-  isEditModalOpen: boolean
+  isEditModalOpen?: boolean
 }) {
   const { setOrderStep, selectedChartOrder, isEditMode, reset } =
     useIcuOrderStore()

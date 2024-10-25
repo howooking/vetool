@@ -121,9 +121,10 @@ export default function EditTemplateOrders({
         ) : (
           templateOrders.length > 0 && (
             <TemplateOrdersTable
+              initialOrders={initialOrders}
               isSorting={isSorting}
               setIsSorting={setIsSorting}
-              editMode
+              editMode={true}
             />
           )
         )}
