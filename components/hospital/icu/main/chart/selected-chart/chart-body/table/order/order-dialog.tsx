@@ -58,7 +58,7 @@ export default function OrderDialog({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.key === 'p') {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
         event.preventDefault()
         handleOpenChange()
       }
