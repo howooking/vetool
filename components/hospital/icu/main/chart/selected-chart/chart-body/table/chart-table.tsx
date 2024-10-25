@@ -52,6 +52,7 @@ export default function ChartTable({
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
     useState(false)
   const {
+    orderStep,
     setOrderStep,
     reset,
     selectedTxPendingQueue,
@@ -218,7 +219,7 @@ export default function ChartTable({
   ])
   // ------------------------------------
 
-  const handleSortButtonClick = async () => {
+  const handleSortButtonClick = useCallback(async () => {
     if (isSorting && !hasOrderSortingChanges(chartData.orders, sortedOrders)) {
       setIsSorting(false)
       return
@@ -235,7 +236,7 @@ export default function ChartTable({
     }
 
     setIsSorting(!isSorting)
-  }
+  }, [chartData.orders, isSorting, sortedOrders])
 
   const handleReorder = useCallback(
     (event: Sortable.SortableEvent) => {
@@ -246,6 +247,26 @@ export default function ChartTable({
     },
     [sortedOrders],
   )
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault()
+        handleSortButtonClick()
+      }
+
+      if (isSorting && event.key === 'Escape') {
+        event.preventDefault()
+        handleSortButtonClick()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleSortButtonClick, isSorting])
 
   return (
     <Table className="border">
@@ -337,7 +358,7 @@ export default function ChartTable({
                 handleColumnHover={handleColumnHover}
                 handleColumnLeave={handleColumnLeave}
                 guidelineTimes={guidelineTimes}
-                setOrderStep={setOrderStep}
+                orderStep={orderStep}
               />
             </TableRow>
           ))}
