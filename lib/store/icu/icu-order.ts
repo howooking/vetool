@@ -1,10 +1,11 @@
-import type { SelectedIcuOrder } from '@/types/icu/chart'
+import type { SelectedIcuOrder, TxLog } from '@/types/icu/chart'
 import { create } from 'zustand'
 
 export type OrderTimePendingQueue = {
   orderTime: number
   orderId: string
   txId?: string
+  txLog?: TxLog[] | null
 }
 
 type IcuOrderState = {
