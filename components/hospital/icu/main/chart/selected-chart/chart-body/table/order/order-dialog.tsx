@@ -21,7 +21,7 @@ import { useTemplateStore } from '@/lib/store/icu/template'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { Patient, SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import OrdererSelectStep from './orderer/orderer-select-step'
 
 export default function OrderDialog({
@@ -54,6 +54,21 @@ export default function OrderDialog({
     }
     reset()
   }, [orderStep, setOrderStep, reset])
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'p') {
+        event.preventDefault()
+        handleOpenChange()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleOpenChange])
 
   return (
     <Dialog open={orderStep !== 'closed'} onOpenChange={handleOpenChange}>
