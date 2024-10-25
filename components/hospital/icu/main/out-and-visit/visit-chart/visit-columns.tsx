@@ -41,6 +41,7 @@ export const visitColumns: ColumnDef<VisitPatientData>[] = [
 
       return (
         <ChecklistTime
+          key={visitId}
           checkType="time"
           icuIoId={icuIoId}
           time={visitTime}
