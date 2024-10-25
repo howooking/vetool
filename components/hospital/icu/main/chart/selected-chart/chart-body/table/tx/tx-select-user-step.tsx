@@ -148,6 +148,7 @@ export default function TxSelectUserStep() {
                     className="h-8 text-sm"
                     autoComplete="off"
                     ref={inputRef}
+                    disabled={isSubmitting}
                   />
                 </FormControl>
                 <FormMessage className="text-xs" />
