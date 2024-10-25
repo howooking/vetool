@@ -83,7 +83,7 @@ export default function CellsRow({
           order_times[index] !== '0' &&
           treatments.some((treatment) => treatment.time === time)
         const orderer = orderTimeState[time - 1]
-        const tx = treatments.find((treatment) => treatment.time === time)
+        const tx = treatments.findLast((treatment) => treatment.time === time)
         const isHovered = hoveredColumn === index + 1
         const isGuidelineTime = guidelineTimes.includes(time)
 
