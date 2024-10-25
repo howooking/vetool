@@ -23,14 +23,14 @@ import {
 import { Sortable } from 'react-sortablejs'
 
 export default function TemplateOrdersTable({
-  initialOrders,
   isSorting,
   setIsSorting,
+  initialOrders,
   editMode = false,
 }: {
-  initialOrders: Partial<SelectedIcuOrder>[]
   isSorting: boolean
   setIsSorting: Dispatch<SetStateAction<boolean>>
+  initialOrders?: Partial<SelectedIcuOrder>[]
   editMode?: boolean
 }) {
   const lastOrderRef = useRef<HTMLTableCellElement>(null)
