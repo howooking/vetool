@@ -52,7 +52,6 @@ export default function UpdatePatientDialog({
           <span>{name}</span> ·<span>{breed}</span> ·
           <span className="uppercase">{gender}</span> ·
           <span>{getAgeFromAgeInDays(ageInDays)} </span> ·
-          <span className="uppercase">{gender}</span> ·{' '}
           <span>
             {weight === ''
               ? '체중 입력'
