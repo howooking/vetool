@@ -25,10 +25,10 @@ import { Sortable } from 'react-sortablejs'
 export default function TemplateOrdersTable({
   isSorting,
   setIsSorting,
-  editMode,
+  editMode = false,
 }: {
-  isSorting?: boolean
-  setIsSorting?: Dispatch<SetStateAction<boolean>>
+  isSorting: boolean
+  setIsSorting: Dispatch<SetStateAction<boolean>>
   editMode?: boolean
 }) {
   const lastOrderRef = useRef<HTMLTableCellElement>(null)
@@ -45,7 +45,6 @@ export default function TemplateOrdersTable({
   const {
     basicHosData: { orderColorsData },
   } = useBasicHosDataContext()
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
 
   useEffect(() => {
@@ -77,19 +76,10 @@ export default function TemplateOrdersTable({
     setOrderIndex(index)
   }
 
-  useEffect(() => {
-    if (shouldScrollToBottom && lastOrderRef.current) {
-      lastOrderRef.current.scrollIntoView({ behavior: 'smooth' })
-      setShouldScrollToBottom(false)
-    }
-  }, [sortedOrders, shouldScrollToBottom])
-
   const handleSortButtonClick = async () => {
-    if (!templateOrders.length && setIsSorting) return
+    if (!templateOrders.length) return
 
     if (
-      setIsSorting &&
-      isSorting &&
       !hasOrderSortingChanges(
         templateOrders as SelectedIcuOrder[],
         sortedOrders,
@@ -99,7 +89,7 @@ export default function TemplateOrdersTable({
       return
     }
 
-    if (isSorting && editMode) {
+    if (editMode) {
       const orderIds = sortedOrders.map((order) => order.order_id)
       await reorderOrders(orderIds)
 
@@ -107,8 +97,6 @@ export default function TemplateOrdersTable({
         title: '오더 목록을 변경하였습니다',
       })
     }
-
-    if (setIsSorting) setIsSorting(!isSorting)
   }
 
   const handleReorder = async (event: Sortable.SortableEvent) => {
@@ -128,7 +116,7 @@ export default function TemplateOrdersTable({
           onOpenChange={handleOpenChange}
           isEditMode={isEditMode}
         >
-          <TemplateOrderForm isEditModalOpen />
+          <TemplateOrderForm isEditModalOpen={editMode} />
         </AddTemplateDialog>
       </AddTemplateHeader>
 
