@@ -16,9 +16,7 @@ type CellsRowProps = {
   handleColumnLeave: () => void
   guidelineTimes: number[]
   isSorting?: boolean
-  setOrderStep?: (
-    orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
-  ) => void
+  orderStep?: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
 }
 
 export default function CellsRow({
@@ -30,7 +28,7 @@ export default function CellsRow({
   handleColumnLeave,
   guidelineTimes,
   isSorting,
-  setOrderStep,
+  orderStep,
 }: CellsRowProps) {
   const { order_times, order_id, treatments } = order
   const {
@@ -50,8 +48,10 @@ export default function CellsRow({
   const [orderTimeState, setOrderTimeState] = useState(order_times)
 
   useEffect(() => {
-    setOrderTimeState(order_times)
-  }, [order_times, setOrderStep])
+    if (orderStep === 'closed') {
+      setOrderTimeState(order_times)
+    }
+  }, [order_times, orderStep])
 
   const toggleOrderTime = useCallback(
     (orderId: string, time: number) => {

@@ -23,6 +23,7 @@ import type { Patient, SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
 import { useCallback, useEffect } from 'react'
 import OrdererSelectStep from './orderer/orderer-select-step'
+import { useRouter } from 'next/navigation'
 
 export default function OrderDialog({
   icuChartId,

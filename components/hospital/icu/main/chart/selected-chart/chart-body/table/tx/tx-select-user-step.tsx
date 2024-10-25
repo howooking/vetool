@@ -70,8 +70,6 @@ export default function TxSelectUserStep() {
 
       const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
-      console.log(selectedTxPendingQueue)
-
       // 다중 Tx 입력
       if (selectedTxPendingQueue.length) {
         await Promise.all(

@@ -52,6 +52,7 @@ export default function ChartTable({
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
     useState(false)
   const {
+    orderStep,
     setOrderStep,
     reset,
     selectedTxPendingQueue,
@@ -357,7 +358,7 @@ export default function ChartTable({
                 handleColumnHover={handleColumnHover}
                 handleColumnLeave={handleColumnLeave}
                 guidelineTimes={guidelineTimes}
-                setOrderStep={setOrderStep}
+                orderStep={orderStep}
               />
             </TableRow>
           ))}
