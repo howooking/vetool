@@ -22,6 +22,10 @@ export default function ChecklistTime({
   const [timeInput, setTimeInput] = useState(time)
   const { refresh } = useRouter()
 
+  useEffect(() => {
+    setTimeInput(time)
+  }, [time])
+
   const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.currentTarget.blur()
@@ -38,10 +42,6 @@ export default function ChecklistTime({
     })
     refresh()
   }
-
-  useEffect(() => {
-    setTimeInput(time)
-  }, [time])
 
   return (
     <div className="flex justify-center">
