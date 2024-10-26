@@ -21,8 +21,9 @@ import { useTemplateStore } from '@/lib/store/icu/template'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { Patient, SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import OrdererSelectStep from './orderer/orderer-select-step'
+import { useRouter } from 'next/navigation'
 
 export default function OrderDialog({
   icuChartId,
@@ -31,6 +32,10 @@ export default function OrderDialog({
   patient,
   weight,
   ageInDays,
+  orderStep,
+  isEditMode,
+  setOrderStep,
+  reset,
 }: {
   icuChartId: string
   orders: SelectedIcuOrder[]
@@ -38,8 +43,13 @@ export default function OrderDialog({
   patient: Patient
   weight: string
   ageInDays: number
+  orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
+  isEditMode?: boolean
+  setOrderStep: (
+    orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
+  ) => void
+  reset: () => void
 }) {
-  const { orderStep, isEditMode, setOrderStep, reset } = useIcuOrderStore()
   const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isTemplateDialogOpen } = useTemplateStore()
   const {
@@ -54,6 +64,21 @@ export default function OrderDialog({
     }
     reset()
   }, [orderStep, setOrderStep, reset])
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
+        event.preventDefault()
+        handleOpenChange()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleOpenChange])
 
   return (
     <Dialog open={orderStep !== 'closed'} onOpenChange={handleOpenChange}>

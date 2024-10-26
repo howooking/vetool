@@ -36,15 +36,12 @@ export default function DefaultOrdersSetting({
     reset,
   } = useIcuOrderStore()
   const [isSorting, setIsSorting] = useState(false)
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
   const [sortedOrders, setSortedOrders] =
     useState<SelectedIcuOrder[]>(defaultChartOrders)
 
   useEffect(() => {
-    if (isSorting) {
-      setSortedOrders([...defaultChartOrders])
-    }
-  }, [isSorting])
+    setSortedOrders(defaultChartOrders)
+  }, [defaultChartOrders])
 
   const handleOpenChange = useCallback(() => {
     if (orderStep === 'closed') {
@@ -60,13 +57,6 @@ export default function DefaultOrdersSetting({
     setIsEditMode(true)
     setSelectedChartOrder(order)
   }
-
-  useEffect(() => {
-    if (shouldScrollToBottom && lastOrderRef.current) {
-      lastOrderRef.current.scrollIntoView({ behavior: 'smooth' })
-      setShouldScrollToBottom(false)
-    }
-  }, [sortedOrders, shouldScrollToBottom])
 
   const handleSortButtonClick = async () => {
     if (

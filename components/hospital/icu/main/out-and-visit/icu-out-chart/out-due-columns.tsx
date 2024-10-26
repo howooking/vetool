@@ -39,10 +39,10 @@ export const outDueColumns: ColumnDef<OutDuePatientsData>[] = [
 
       return (
         <ChecklistTime
-          icuIoId={icuIoId}
-          isDischarged={isDischarged}
           checkType="out_time"
+          icuIoId={icuIoId}
           time={outTime}
+          isDischarged={isDischarged}
         />
       )
     },

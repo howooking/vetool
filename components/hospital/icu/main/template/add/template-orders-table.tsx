@@ -25,10 +25,12 @@ import { Sortable } from 'react-sortablejs'
 export default function TemplateOrdersTable({
   isSorting,
   setIsSorting,
-  editMode,
+  initialOrders,
+  editMode = false,
 }: {
-  isSorting?: boolean
-  setIsSorting?: Dispatch<SetStateAction<boolean>>
+  isSorting: boolean
+  setIsSorting: Dispatch<SetStateAction<boolean>>
+  initialOrders?: Partial<SelectedIcuOrder>[]
   editMode?: boolean
 }) {
   const lastOrderRef = useRef<HTMLTableCellElement>(null)
@@ -45,7 +47,6 @@ export default function TemplateOrdersTable({
   const {
     basicHosData: { orderColorsData },
   } = useBasicHosDataContext()
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>([])
 
   useEffect(() => {
@@ -77,38 +78,30 @@ export default function TemplateOrdersTable({
     setOrderIndex(index)
   }
 
-  useEffect(() => {
-    if (shouldScrollToBottom && lastOrderRef.current) {
-      lastOrderRef.current.scrollIntoView({ behavior: 'smooth' })
-      setShouldScrollToBottom(false)
-    }
-  }, [sortedOrders, shouldScrollToBottom])
-
   const handleSortButtonClick = async () => {
-    if (!templateOrders.length && setIsSorting) return
+    // 오더가 없다면 버튼 작동 X
+    if (!sortedOrders.length) return
 
+    // 최초 오더와 변경한 오더의 차이가 없다면 reorder X 버튼만 toggle
     if (
-      setIsSorting &&
-      isSorting &&
-      !hasOrderSortingChanges(
-        templateOrders as SelectedIcuOrder[],
-        sortedOrders,
-      )
+      !hasOrderSortingChanges(initialOrders as SelectedIcuOrder[], sortedOrders)
     ) {
       setIsSorting(!isSorting)
       return
     }
 
+    // 오더 수정 중 정렬하면 reorder 통신
     if (isSorting && editMode) {
       const orderIds = sortedOrders.map((order) => order.order_id)
       await reorderOrders(orderIds)
+      setIsSorting(!isSorting)
 
       toast({
         title: '오더 목록을 변경하였습니다',
       })
     }
 
-    if (setIsSorting) setIsSorting(!isSorting)
+    setIsSorting(!isSorting)
   }
 
   const handleReorder = async (event: Sortable.SortableEvent) => {
@@ -128,7 +121,7 @@ export default function TemplateOrdersTable({
           onOpenChange={handleOpenChange}
           isEditMode={isEditMode}
         >
-          <TemplateOrderForm isEditModalOpen />
+          <TemplateOrderForm />
         </AddTemplateDialog>
       </AddTemplateHeader>
 
@@ -144,7 +137,7 @@ export default function TemplateOrdersTable({
               order={order}
               index={index}
               orderColors={orderColorsData}
-              onEdit={handleEditOrderDialogOpen}
+              onEdit={() => handleEditOrderDialogOpen(order, index)}
               orderRef={lastOrderRef}
               isSorting
             />
@@ -165,7 +158,7 @@ export default function TemplateOrdersTable({
                 order={order}
                 index={index}
                 orderColors={orderColorsData}
-                onEdit={handleEditOrderDialogOpen}
+                onEdit={() => handleEditOrderDialogOpen(order, index)}
                 orderRef={lastOrderRef}
               />
             ))

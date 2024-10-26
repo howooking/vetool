@@ -33,8 +33,6 @@ export default function CellsRowTitle({
     reset,
   } = useIcuOrderStore()
 
-  const [offset, setOffset] = useState({ x: 0, y: 0 }) // x, y 오프셋 관리
-
   const isInPendingQueue = useMemo(() => {
     return selectedOrderPendingQueue.some(
       (order) => order.order_id === order_id,
@@ -114,23 +112,6 @@ export default function CellsRowTitle({
       reset,
     ],
   )
-
-  useEffect(() => {
-    let interval: any
-
-    if (isSorting) {
-      interval = setInterval(() => {
-        setOffset((prevOffset) => ({
-          x: prevOffset.x === 1 ? -1 : 1,
-          y: prevOffset.y === 0.5 ? -0.5 : 0.5,
-        }))
-      }, 150)
-    } else {
-      setOffset({ x: 0, y: 0 })
-    }
-
-    return () => clearInterval(interval)
-  }, [isSorting])
 
   return (
     <TableCell

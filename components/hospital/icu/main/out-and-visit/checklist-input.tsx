@@ -27,9 +27,9 @@ export default function ChecklistInput({
   }, [value])
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const trimmedValue = e.target.value.trim()
+    const value = e.target.value
 
-    if (trimmedValue.length <= 50) setInputValue(trimmedValue)
+    if (value.length <= 50) setInputValue(value)
   }
 
   const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -44,7 +44,7 @@ export default function ChecklistInput({
   const handleUpdateChecklist = async () => {
     if (value === inputValue) return
 
-    await updatePatientMovement(icuIoId, inputValue, checkType, visitId)
+    await updatePatientMovement(icuIoId, inputValue.trim(), checkType, visitId)
 
     toast({
       title: '관리 사항을 변경하였습니다',

@@ -63,13 +63,20 @@ export default function TxSelectUserStep() {
         name: values.userLog,
         createdAt: format(new Date(), 'yyyy-MM-dd HH:mm'),
       }
+
+      if (newLog.result && newLog.result.includes('$')) {
+        newLog.result = newLog.result.split('$')[0].trim()
+      }
+
       const updatedLogs = [...(txLocalState?.txLog ?? []), newLog]
 
       // 다중 Tx 입력
       if (selectedTxPendingQueue.length) {
         await Promise.all(
-          selectedTxPendingQueue.map((item) =>
-            upsertIcuTx(
+          selectedTxPendingQueue.map((item) => {
+            const updatedLogs = [...(item.txLog ?? []), newLog]
+
+            return upsertIcuTx(
               hos_id as string,
               {
                 txId: item.txId,
@@ -79,8 +86,8 @@ export default function TxSelectUserStep() {
                 icuChartOrderId: item.orderId,
               },
               updatedLogs,
-            ),
-          ),
+            )
+          }),
         )
         handleReset()
         toast({ title: '처치 내역이 업데이트 되었습니다' })
@@ -141,6 +148,7 @@ export default function TxSelectUserStep() {
                     className="h-8 text-sm"
                     autoComplete="off"
                     ref={inputRef}
+                    disabled={isSubmitting}
                   />
                 </FormControl>
                 <FormMessage className="text-xs" />

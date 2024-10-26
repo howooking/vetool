@@ -166,7 +166,5 @@ export const getReadOnlyChartOrders = async (chartId: string) => {
     redirect(`/error/?message=${error.message}`)
   }
 
-  console.log(data)
-
   return data
 }

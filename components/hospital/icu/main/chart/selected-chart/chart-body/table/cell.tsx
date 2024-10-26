@@ -149,12 +149,13 @@ const Cell: React.FC<CellProps> = React.memo(
                 txId: icuChartTxId,
                 orderId,
                 orderTime: time,
+                txLog: treatment?.tx_log as TxLog[] | null,
               },
             ]
           }
         })
       },
-      [setSelectedTxPendingQueue, icuChartTxId],
+      [setSelectedTxPendingQueue, icuChartTxId, treatment?.tx_log],
     )
 
     const handleMouseDown = useCallback(
@@ -227,6 +228,7 @@ const Cell: React.FC<CellProps> = React.memo(
         txResult: briefTxResultInput.trim(),
         icuChartOrderId,
         txId: icuChartTxId,
+        txLog: treatment?.tx_log as TxLog[] | null,
       })
 
       setTxStep('seletctUser')
@@ -238,6 +240,7 @@ const Cell: React.FC<CellProps> = React.memo(
       setTxLocalState,
       time,
       treatment?.tx_result,
+      treatment?.tx_log,
     ])
 
     const handleKeyDown = useCallback(

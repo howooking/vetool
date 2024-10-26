@@ -1,7 +1,10 @@
 'use client'
 
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import {
+  type OrderTimePendingQueue,
+  useIcuOrderStore,
+} from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useState } from 'react'
@@ -16,9 +19,9 @@ type CellsRowProps = {
   handleColumnLeave: () => void
   guidelineTimes: number[]
   isSorting?: boolean
-  setOrderStep?: (
-    orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
-  ) => void
+
+  selectedTxPendingQueue: OrderTimePendingQueue[]
+  orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
 }
 
 export default function CellsRow({
@@ -30,14 +33,14 @@ export default function CellsRow({
   handleColumnLeave,
   guidelineTimes,
   isSorting,
-  setOrderStep,
+  selectedTxPendingQueue,
+  orderStep,
 }: CellsRowProps) {
   const { order_times, order_id, treatments } = order
   const {
     setSelectedOrderPendingQueue,
     setOrderTimePendingQueue,
     setSelectedTxPendingQueue,
-    selectedTxPendingQueue,
   } = useIcuOrderStore()
 
   const {
@@ -50,8 +53,10 @@ export default function CellsRow({
   const [orderTimeState, setOrderTimeState] = useState(order_times)
 
   useEffect(() => {
-    setOrderTimeState(order_times)
-  }, [order_times, setOrderStep])
+    if (orderStep === 'closed') {
+      setOrderTimeState(order_times)
+    }
+  }, [order_times, orderStep])
 
   const toggleOrderTime = useCallback(
     (orderId: string, time: number) => {
@@ -83,7 +88,7 @@ export default function CellsRow({
           order_times[index] !== '0' &&
           treatments.some((treatment) => treatment.time === time)
         const orderer = orderTimeState[time - 1]
-        const tx = treatments.find((treatment) => treatment.time === time)
+        const tx = treatments.findLast((treatment) => treatment.time === time)
         const isHovered = hoveredColumn === index + 1
         const isGuidelineTime = guidelineTimes.includes(time)
 
