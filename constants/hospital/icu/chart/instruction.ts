@@ -27,17 +27,22 @@ export const INSTRUCTIONS = [
       {
         id: 1,
         video: '/instruction/chart1.mp4',
-        description: '1-1. 기본차트 생성',
+        description: '1. 기본차트 생성',
       },
       {
         id: 2,
         video: '/instruction/chart2.mp4',
-        description: '1-2. 차트 붙여넣기',
+        description: '2. 차트 붙여넣기',
       },
       {
         id: 3,
         video: '/instruction/chart3.mp4',
-        description: '1-3. 템플릿 붙여넣기',
+        description: '3. 템플릿 붙여넣기',
+      },
+      {
+        id: 4,
+        video: '/instruction/chart3.mp4',
+        description: '4. 전일차트 붙여넣기 (전날의 차트가 있는 경우)',
       },
     ],
   },
@@ -75,7 +80,7 @@ export const INSTRUCTIONS = [
         id: 6,
         video: '/instruction/order6.mp4',
         description:
-          '4. 오더 복사 : 다수 오더 선택(ctrl + 오더클릭) → ctrl + c → ctrl + v (타 차트에 붙여넣기 가능)',
+          '4. 오더 복사 : 다수 오더 선택(ctrl + 오더클릭) → ctrl + c → ctrl + v (동일 또는 타른 차트에 붙여넣기 가능)',
       },
     ],
   },
