@@ -1,7 +1,7 @@
 export const INSTRUCTIONS = [
   {
     id: 1,
-    title: '환자 입원',
+    title: '환자 입원 / 퇴원',
     slides: [
       {
         id: 1,
@@ -17,6 +17,11 @@ export const INSTRUCTIONS = [
         id: 3,
         video: '/instruction/register3.mp4',
         description: '3. 환자가 없을 경우 신규 환자 등록을 진행',
+      },
+      {
+        id: 4,
+        video: '/instruction/register4.mp4',
+        description: '4. 퇴원, 퇴원 취소',
       },
     ],
   },
@@ -90,18 +95,31 @@ export const INSTRUCTIONS = [
     slides: [
       {
         id: 1,
-        video: '/instruction/register1.mp4',
-        description: '1. 간단 처치 입력',
+        video: '/instruction/treatment1.mp4',
+        description: '1. 처치표 확인 → 간단 처치 입력',
       },
       {
         id: 2,
-        video: '/instruction/order2.mp4',
-        description: '2. 상세 처치 입력',
+        video: '/instruction/treatment2.mp4',
+        description: '2. 상세 처치 입력(마우스 0.8초간 좌클릭)',
       },
       {
         id: 3,
-        video: '/instruction/register3.mp4',
-        description: '3. 다중 처치 입력',
+        video: '/instruction/treatment3.mp4',
+        description:
+          '2-1. 간편 상세 처치 입력("처치결과" + "$" + "처치코멘트")',
+      },
+      {
+        id: 4,
+        video: '/instruction/treatment4.mp4',
+        description:
+          '3. 다중 처치 입력 - 다수 처치 선택(ctrl누른 상태 + 좌클릭)',
+      },
+      {
+        id: 5,
+        video: '/instruction/treatment5.mp4',
+        description:
+          '4. 처치 삭제 - 마우스 0.8초간 좌클릭 → 삭제버튼 or 다수 처치 선택(ctrl누른 상태 + 좌클릭) → 삭제 버튼',
       },
     ],
   },
