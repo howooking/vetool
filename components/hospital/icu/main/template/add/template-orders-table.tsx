@@ -26,22 +26,22 @@ export default function TemplateOrdersTable({
   isSorting,
   setIsSorting,
   initialOrders,
-  editMode = false,
+  editTemplateMode = false,
 }: {
   isSorting: boolean
   setIsSorting: Dispatch<SetStateAction<boolean>>
   initialOrders?: Partial<SelectedIcuOrder>[]
-  editMode?: boolean
+  editTemplateMode?: boolean
 }) {
-  const lastOrderRef = useRef<HTMLTableCellElement>(null)
+  const orderRef = useRef<HTMLTableCellElement>(null)
   const { templateOrders, setTemplateOrders, setOrderIndex } =
     useTemplateStore()
   const {
     orderStep,
     setOrderStep,
     setSelectedChartOrder,
-    isEditMode,
-    setIsEditMode,
+    isEditOrderMode,
+    setIsEditOrderMode,
     reset,
   } = useIcuOrderStore()
   const {
@@ -52,6 +52,7 @@ export default function TemplateOrdersTable({
   useEffect(() => {
     if (Array.isArray(templateOrders)) {
       const orders = templateOrders
+      console.log(orders)
 
       setSortedOrders(orders as SelectedIcuOrder[])
     } else {
@@ -73,7 +74,7 @@ export default function TemplateOrdersTable({
     index?: number,
   ) => {
     setOrderStep('upsert')
-    setIsEditMode(true)
+    setIsEditOrderMode(true)
     setSelectedChartOrder(order)
     setOrderIndex(index)
   }
@@ -91,7 +92,7 @@ export default function TemplateOrdersTable({
     }
 
     // 오더 수정 중 정렬하면 reorder 통신
-    if (isSorting && editMode) {
+    if (isSorting && editTemplateMode) {
       const orderIds = sortedOrders.map((order) => order.order_id)
       await reorderOrders(orderIds)
       setIsSorting(!isSorting)
@@ -119,9 +120,9 @@ export default function TemplateOrdersTable({
         <AddTemplateDialog
           isOpen={orderStep !== 'closed'}
           onOpenChange={handleOpenChange}
-          isEditMode={isEditMode}
+          isEditOrderMode={isEditOrderMode}
         >
-          <TemplateOrderForm />
+          <TemplateOrderForm editTemplateMode={editTemplateMode} />
         </AddTemplateDialog>
       </AddTemplateHeader>
 
@@ -138,7 +139,7 @@ export default function TemplateOrdersTable({
               index={index}
               orderColors={orderColorsData}
               onEdit={() => handleEditOrderDialogOpen(order, index)}
-              orderRef={lastOrderRef}
+              orderRef={orderRef}
               isSorting
             />
           ))}
@@ -159,7 +160,7 @@ export default function TemplateOrdersTable({
                 index={index}
                 orderColors={orderColorsData}
                 onEdit={() => handleEditOrderDialogOpen(order, index)}
-                orderRef={lastOrderRef}
+                orderRef={orderRef}
               />
             ))
           )}

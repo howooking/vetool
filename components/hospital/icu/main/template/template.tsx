@@ -2,13 +2,13 @@
 
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
 import AddTemplateOrders from '@/components/hospital/icu/main/template/add/add-template-orders'
+import EditTemplateDialogs from '@/components/hospital/icu/main/template/edit/edit-template-dialogs'
 import { templateColumns } from '@/components/hospital/icu/main/template/table/template-columns'
 import DataTable from '@/components/ui/data-table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { useTemplateStore } from '@/lib/store/icu/template'
 import type { TemplateChart } from '@/types/icu/template'
-import EditTemplateDialogs from './edit/edit-template-dialogs'
 
 export default function Template({
   templateCharts,

@@ -1,7 +1,7 @@
 'use client'
 
-import DeleteDefaultOrderAlertDialog from '@/components/hospital/admin/icu-settings/default-orders/delete-default-order-alert-dialog'
 import { orderSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-schema'
+import DeleteOrdersAlertDialog from '@/components/hospital/icu/main/template/delete-order-alert-dialog'
 import { Button } from '@/components/ui/button'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import {
@@ -23,13 +23,12 @@ import { LoaderCircle } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-
 export default function TemplateOrderForm({
-  isEditModalOpen,
+  editTemplateMode,
 }: {
-  isEditModalOpen?: boolean
+  editTemplateMode?: boolean
 }) {
-  const { setOrderStep, selectedChartOrder, isEditMode, reset } =
+  const { setOrderStep, selectedChartOrder, isEditOrderMode, reset } =
     useIcuOrderStore()
   const { addTemplateOrder, updateTemplateOrder, orderIndex } =
     useTemplateStore()
@@ -60,13 +59,15 @@ export default function TemplateOrderForm({
         id: 999,
       }
 
-      if (isEditMode) {
+      if (isEditOrderMode) {
         updateTemplateOrder(updatedOrder, orderIndex)
         setOrderStep('closed')
       } else {
         addTemplateOrder(updatedOrder)
 
-        if (isEditModalOpen) setOrderStep('closed')
+        if (editTemplateMode) {
+          setOrderStep('closed')
+        }
       }
 
       reset()
@@ -78,8 +79,8 @@ export default function TemplateOrderForm({
     [
       addTemplateOrder,
       form,
-      isEditMode,
-      isEditModalOpen,
+      isEditOrderMode,
+      editTemplateMode,
       orderIndex,
       reset,
       setOrderStep,
@@ -183,10 +184,11 @@ export default function TemplateOrderForm({
         />
 
         <DialogFooter className="ml-auto w-full gap-2 md:gap-0">
-          {isEditMode && (
-            <DeleteDefaultOrderAlertDialog
-              selectedChartOrder={selectedChartOrder}
-              setOrderStep={setOrderStep}
+          {isEditOrderMode && (
+            <DeleteOrdersAlertDialog
+              orderIndex={orderIndex}
+              orderName={selectedChartOrder.order_name!}
+              orderId={selectedChartOrder.order_id}
             />
           )}
 
@@ -197,7 +199,7 @@ export default function TemplateOrderForm({
           </DialogClose>
 
           <Button type="submit" disabled={isSubmitting}>
-            {isEditMode ? '변경' : '추가'}
+            {isEditOrderMode ? '변경' : '추가'}
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />
