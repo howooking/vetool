@@ -8,7 +8,7 @@ const pasteOrders = async (
   new_chart_id: string,
   orderer: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.rpc('copy_selected_orders', {
     selected_chart_id_input: prev_chart_id,
@@ -28,7 +28,7 @@ export const pasteChart = async (
   targetDate: string,
   orderer: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data: returningChartData, error: returningChartDataError } =
     await supabase

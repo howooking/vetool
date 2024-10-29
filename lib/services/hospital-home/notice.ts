@@ -5,7 +5,7 @@ import { NoticeWithUser } from '@/types/hospital/notice'
 import { redirect } from 'next/navigation'
 
 export const getNotices = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: noticesData, error: noticesDataError } = await supabase
     .from('notices')
     .select(
@@ -31,7 +31,7 @@ export const createNotice = async (
   colorInput: string,
   hosId: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error: createNoticeError } = await supabase.from('notices').insert({
     hos_id: hosId,
     notice_color: colorInput,
@@ -50,7 +50,7 @@ export const updateNotice = async (
   noticeInput: string,
   colorInput: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error: updateNoticeError } = await supabase
     .from('notices')
     .update({
@@ -66,7 +66,7 @@ export const updateNotice = async (
 }
 
 export const deleteNotice = async (noticeId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error: deleteNoticeError } = await supabase
     .from('notices')
     .delete()
@@ -79,7 +79,7 @@ export const deleteNotice = async (noticeId: string) => {
 }
 
 export const reorderNotices = async (noticeIds: string[]) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   noticeIds.forEach(async (noticeId, index) => {
     const { error: reorderNoticesError } = await supabase

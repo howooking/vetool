@@ -19,6 +19,8 @@ export type IcuTemplate = Database['public']['Tables']['icu_templates']['Row']
 export type IcuOut = Database['public']['Tables']['icu_out']['Row']
 export type IcuVisit = Database['public']['Tables']['icu_visit']['Row']
 
+export type Params = { slug: string }
+
 // supabase.auth.getUser() 시 return되는 유져타입
 export type AuthUser = {
   id: string

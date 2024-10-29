@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export const getMemoNames = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error: error } = await supabase
     .from('hospitals')
@@ -21,7 +21,7 @@ export const getMemoNames = async (hosId: string) => {
 }
 
 export const updateMemoNames = async (memoNames: string[], hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('hospitals')

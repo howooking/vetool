@@ -21,7 +21,7 @@ export const insertPatient = async (
   },
   hosId: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase.rpc('register_patient', {
     birth_input: newPatient.birth,
@@ -47,7 +47,7 @@ export const insertPatient = async (
 }
 
 export const getPatients = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('patients')
@@ -83,7 +83,7 @@ export const getPatients = async (hosId: string) => {
 }
 
 export const deletePatient = async (patientId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('patients')
@@ -115,7 +115,7 @@ export const updatePatientFromIcu = async (
   weightMeasuredDate: string,
   isWeightChanged: boolean,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.rpc('update_patient_from_icu_route', {
     birth_input: updatePatient.birth,
@@ -156,7 +156,7 @@ export const updatePatientFromPatientRoute = async (
   patientId: string,
   isWeightChanged: boolean,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.rpc('update_patient_from_patient_route', {
     birth_input: updatePatient.birth,

@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export const getLatestIoByPatientId = async (patientId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data, error } = await supabase
     .from('icu_io')
     .select('in_date, out_date')

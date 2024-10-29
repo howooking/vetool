@@ -8,7 +8,7 @@ export const updateDiagnosis = async (
   icuIoId: string,
   diagnosisInput: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_io')
@@ -27,7 +27,7 @@ export const updateChiefComplaint = async (
   icuIoId: string,
   chiefComplaint: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_io')
@@ -48,7 +48,7 @@ export const updateMainSubVet = async (
   inCharge: IcuChartsInCharge,
   subVetId?: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_charts')
@@ -65,7 +65,7 @@ export const updateMainSubVet = async (
 }
 
 export const updateGroup = async (icuIoId: string, groupList: string[]) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_io')
@@ -85,7 +85,7 @@ export const updateWeight = async (
   weight: string,
   weightMesuredDate: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.rpc('update_icu_patient_weight', {
     icu_chart_id_input: icuChartId,
@@ -103,7 +103,7 @@ export const updateOutDueDate = async (
   icuIoId: string,
   outDueDate: string | null,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_io')
@@ -120,7 +120,7 @@ export const updateMemoName = async (
   hosId: string,
   hosIcuMemoNamesInput: string[],
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('hospitals')
@@ -137,7 +137,7 @@ export const updateMemo = async (
   query: { [key: string]: string },
   icuChartId: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_charts')
@@ -161,7 +161,7 @@ export const toggleOutPatient = async (
   patientName: string,
   ageInDays: number,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.rpc('toggle_patient_out', {
     icu_io_id_input: icuIoId,
@@ -185,7 +185,7 @@ export const updateOwnerName = async (
   patientId: string,
   ownerNameInput: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('patients')
@@ -203,7 +203,7 @@ export const updateCpcrEtTube = async (
   cpcr: string,
   etTube: string | null | undefined,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_io')
@@ -219,7 +219,7 @@ export const updateDerCalcFactor = async (
   icuChartId: string,
   factor: number,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_charts')

@@ -13,7 +13,7 @@ export const searchIos = async (
   timeRange: string,
   order: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const safeWords = searchInput
     .trim()
@@ -65,7 +65,7 @@ export const searchIos = async (
 }
 
 export const getSelectedCharts = async (icuIoId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error: error } = await supabase
     .from('icu_charts')

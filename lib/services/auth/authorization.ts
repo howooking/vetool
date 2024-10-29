@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export async function getUser() {
-  const supabase = createClient()
+  const supabase = await createClient()
   const {
     data: { user: authUser },
     error,
@@ -19,7 +19,7 @@ export async function getUser() {
 }
 
 export async function checkIsAdmin(hosId: string, userId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('users')
@@ -39,7 +39,7 @@ export async function checkIsAdmin(hosId: string, userId: string) {
 }
 
 export const getUserData = async () => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const {
     data: { user },
     error: userError,

@@ -5,7 +5,7 @@ import type { ApprovalData } from '@/types/adimin'
 import { redirect } from 'next/navigation'
 
 export const getStaffApprovals = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('user_approvals')
@@ -28,7 +28,7 @@ export const getStaffApprovals = async (hosId: string) => {
 }
 
 export const approveStaff = async (hosId: string, userId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error } = await supabase.rpc(
     'update_user_approval_and_user_hos_id_when_approved',
     {

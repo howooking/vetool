@@ -10,7 +10,7 @@ export const insertVisitPatient = async (
   mainVet: string,
   patientId: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.from('icu_visit').insert({
     icu_io_id: icuIoId,
@@ -27,7 +27,7 @@ export const insertVisitPatient = async (
 }
 
 export const updateIsVisitDone = async (visitId: string, isDone: boolean) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_visit')

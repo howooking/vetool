@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 
 export const copyPrevChart = async (targetDate: string, patientId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const newDate = new Date(targetDate)
   const prevDate = format(newDate.setDate(newDate.getDate() - 1), 'yyyy-MM-dd')
@@ -109,7 +109,7 @@ export const copyPrevChart = async (targetDate: string, patientId: string) => {
 }
 
 export const registerDefaultChart = async (hosId: string, chartId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.rpc('insert_default_orders', {
     hos_id_input: hosId,

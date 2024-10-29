@@ -5,7 +5,7 @@ import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { redirect } from 'next/navigation'
 
 export const getDefaultChartOrders = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .rpc('get_default_chart_data', {
@@ -22,7 +22,7 @@ export const getDefaultChartOrders = async (hosId: string) => {
 }
 
 export const deleteDefaultChartOrder = async (defaultChartId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_default_chart')
@@ -44,7 +44,7 @@ export const upsertDefaultChartOrder = async (
     default_chart_order_type: string
   },
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const {
     default_chart_order_name,
     default_chart_order_comment,
@@ -66,7 +66,7 @@ export const upsertDefaultChartOrder = async (
 }
 
 export const reorderDefaultOrders = async (orderIds: string[]) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   orderIds.forEach(async (orderId, index) => {
     const { error: reorderOrdersError } = await supabase
