@@ -265,3 +265,11 @@ export const hasOrderSortingChanges = (
 ) => {
   return JSON.stringify(prevOrders) !== JSON.stringify(sortedOrders)
 }
+
+export const parsingOrderName = (orderType: string, orderName: string) => {
+  if (orderType === 'fluid') {
+    return orderName.split('#')[0]
+  }
+
+  return orderName
+}
