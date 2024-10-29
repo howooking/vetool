@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation'
 
 export const getIcuData = async (hosId: string, targetDate: string) => {
   console.log('Initial Icu Data Fetching')
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const promiseArray = Promise.all([
     supabase

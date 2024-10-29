@@ -65,8 +65,8 @@ export default function OrderForm({
   const form = useForm<z.infer<typeof orderSchema>>({
     resolver: zodResolver(orderSchema),
     defaultValues: {
-      icu_chart_order_type: selectedChartOrder.order_type ?? undefined,
-      icu_chart_order_name: selectedChartOrder.order_name ?? undefined,
+      icu_chart_order_type: selectedChartOrder.order_type ?? '',
+      icu_chart_order_name: selectedChartOrder.order_name ?? '',
       icu_chart_order_comment: selectedChartOrder.order_comment ?? undefined,
     },
   })
@@ -95,7 +95,9 @@ export default function OrderForm({
       orderTime.map((time) => (time === '1' ? vetsListData[0].name : '0')),
       {
         icu_chart_order_name: values.icu_chart_order_name.trim(),
-        icu_chart_order_comment: values.icu_chart_order_comment ? values.icu_chart_order_comment.trim() : '',
+        icu_chart_order_comment: values.icu_chart_order_comment
+          ? values.icu_chart_order_comment.trim()
+          : '',
         icu_chart_order_type: values.icu_chart_order_type!,
       },
     )

@@ -19,7 +19,7 @@ export const updatePatientMovement = async (
   checkType: string,
   visitId?: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const updateData: Partial<OutDuePatientsData> = {
     [checkType]: value,

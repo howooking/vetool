@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 
 export const getHosName = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data } = await supabase
     .from('hospitals')
     .select('name')

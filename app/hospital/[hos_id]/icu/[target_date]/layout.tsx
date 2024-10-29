@@ -6,13 +6,12 @@ import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-provide
 import type { IcuOrderColors } from '@/types/adimin'
 import React from 'react'
 
-export default async function IcuPageLayout({
-  children,
-  params,
-}: {
+export default async function IcuPageLayout(props: {
   children: React.ReactNode
-  params: { target_date: string; hos_id: string }
+  params: Promise<{ target_date: string; hos_id: string }>
 }) {
+  const params = await props.params
+
   const {
     basicHosData,
     icuSidebarData,
@@ -51,7 +50,7 @@ export default async function IcuPageLayout({
         />
 
         <main className="h-icu-chart w-full overflow-scroll md:w-[calc(100vw-198px)]">
-          {children}
+          {props.children}
         </main>
       </div>
 

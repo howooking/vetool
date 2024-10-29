@@ -2,15 +2,16 @@ import ChartEntry from '@/components/hospital/icu/main/chart/chart-entry'
 import CheckBeforeIndate from '@/components/hospital/icu/main/chart/check-before-in-date'
 import { getIcuChart } from '@/lib/services/icu/chart/get-icu-chart'
 
-export default async function PatientChartPage({
-  params,
-}: {
-  params: {
-    hos_id: string
-    target_date: string
-    patient_id: string
+export default async function PatientChartPage(
+  props: {
+    params: Promise<{
+      hos_id: string
+      target_date: string
+      patient_id: string
+    }>
   }
-}) {
+) {
+  const params = await props.params;
   const selectedChartData = await getIcuChart(
     params.hos_id,
     params.target_date,

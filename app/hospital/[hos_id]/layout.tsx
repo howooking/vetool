@@ -5,24 +5,23 @@ import { getUserData } from '@/lib/services/auth/authorization'
 import { getHosName } from '@/lib/services/hospital-home/get-hos-name'
 import { redirect } from 'next/navigation'
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { hos_id: string }
+export async function generateMetadata(props: {
+  params: Promise<{ hos_id: string }>
 }) {
+  const params = await props.params
   const hosName = await getHosName(params.hos_id)
   return {
     title: hosName,
   }
 }
 
-export default async function Layout({
-  children,
-  params,
-}: {
+export default async function Layout(props: {
   children: React.ReactNode
-  params: { hos_id: string }
+  params: Promise<{ hos_id: string }>
 }) {
+  const params = await props.params
+  const { children } = props
+
   const userData = await getUserData()
   const hosName = await getHosName(params.hos_id)
 

@@ -1,15 +1,22 @@
-'use client'
+'use client';
+import { use } from "react";
 
 import { Button } from '@/components/ui/button'
 import { AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-export default function ErrorPage({
-  searchParams: { message },
-}: {
-  searchParams: { message: string }
-}) {
+export default function ErrorPage(
+  props: {
+    searchParams: Promise<{ message: string }>
+  }
+) {
+  const searchParams = use(props.searchParams);
+
+  const {
+    message
+  } = searchParams;
+
   const { back } = useRouter()
   return (
     <div className="flex h-screen items-center justify-center bg-teal-50">

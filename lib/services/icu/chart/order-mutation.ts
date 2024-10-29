@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export const deleteOrder = async (chartOrderId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_orders')
@@ -29,7 +29,7 @@ export const upsertOrder = async (
     icu_chart_order_priority?: number
   },
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.from('icu_orders').upsert({
     hos_id: hosId,
@@ -49,7 +49,7 @@ export const updateOrderTime = async (
   icuChartOrderId: string,
   orderTime: string[],
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_orders')
@@ -63,7 +63,7 @@ export const updateOrderTime = async (
 }
 
 export const getOrder = async (icuChartId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('icu_orders')
@@ -83,7 +83,7 @@ export const upsertTemplateOrders = async (
   templateChartId: string,
   icuChartId: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.rpc('copy_template_orders', {
     prev_chart_id_input: templateChartId,
@@ -97,7 +97,7 @@ export const upsertTemplateOrders = async (
 }
 
 export const reorderOrders = async (orderIds: string[]) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   console.log(orderIds)
 

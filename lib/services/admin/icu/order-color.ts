@@ -5,7 +5,7 @@ import { IcuOrderColors } from '@/types/adimin'
 import { redirect } from 'next/navigation'
 
 export const getHosOrderColor = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('hospitals')
@@ -25,7 +25,7 @@ export const updateOrderColor = async (
   hosId: string,
   orderTypeColorsInput: IcuOrderColors,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('hospitals')

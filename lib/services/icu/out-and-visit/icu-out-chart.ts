@@ -13,7 +13,7 @@ export const getNotOutDuePatients = async (
   hosId: string,
   targetDate: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .rpc('get_not_out_due_patients', {
@@ -34,7 +34,7 @@ export const getVisitablePatients = async (
   hosId: string,
   targetDate: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .rpc('get_icu_visitable_patients', {
@@ -52,7 +52,7 @@ export const getVisitablePatients = async (
 }
 
 export const deleteVisitPatient = async (visitId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.from('icu_visit').delete().match({
     icu_visit_id: visitId,
@@ -65,7 +65,7 @@ export const deleteVisitPatient = async (visitId: string) => {
 }
 
 export const getVisitPatients = async (hosId: string, targetDate: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .rpc('get_icu_visit_patients', {
@@ -86,7 +86,7 @@ export const getIcuOutDuePatients = async (
   hosId: string,
   targetDate: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .rpc('get_icu_out_due_patients', {
@@ -108,7 +108,7 @@ export const updatePatientOutDueDate = async (
   hosId: string,
   targetDate: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_io')

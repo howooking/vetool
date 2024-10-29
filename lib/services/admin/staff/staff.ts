@@ -8,7 +8,7 @@ export const updateHosGroupList = async (
   hosId: string,
   groupList: string[],
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error } = await supabase
     .from('hospitals')
     .update({ group_list: groupList })
@@ -21,7 +21,7 @@ export const updateHosGroupList = async (
 }
 
 export const getStaffs = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data, error } = await supabase
     .from('users')
     .select(
@@ -43,7 +43,7 @@ export const getStaffs = async (hosId: string) => {
 }
 
 export const updateStaffRank = async (userId: string, rankInput: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error: rankUpdateError } = await supabase
     .from('users')
@@ -60,7 +60,7 @@ export const updateStaffPosition = async (
   userId: string,
   positionInput: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('users')
@@ -77,7 +77,7 @@ export const updateStaffGroup = async (
   userId: string,
   groupInput: string[],
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('users')
@@ -91,7 +91,7 @@ export const updateStaffGroup = async (
 }
 
 export const updateStaffIsVet = async (userId: string, isVetInput: boolean) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('users')
@@ -108,7 +108,7 @@ export const updateStaffIsAdmin = async (
   userId: string,
   isAdminInput: boolean,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('users')
@@ -122,7 +122,7 @@ export const updateStaffIsAdmin = async (
 }
 
 export const deleteStaff = async (userId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error: deleteStaffError } = await supabase
     .from('users')
     .update({
@@ -151,7 +151,7 @@ export const deleteStaff = async (userId: string) => {
 }
 
 export const updateStaffName = async (userId: string, nameInput: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('users')

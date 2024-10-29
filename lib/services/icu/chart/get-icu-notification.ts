@@ -5,7 +5,7 @@ import type { IcuNotificationJoined } from '@/types/icu/chart'
 import { redirect } from 'next/navigation'
 
 export const getIcuNotification = async (hosId: string, page: number = 1) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const itemsPerPage = 10
   const startRange = (page - 1) * itemsPerPage

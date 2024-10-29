@@ -5,7 +5,7 @@ import { SummaryData } from '@/types/icu/summary'
 import { redirect } from 'next/navigation'
 
 export const getIcuSummaryData = async (hosId: string, targetDate: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .rpc('get_icu_summary_data', {
