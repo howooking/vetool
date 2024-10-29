@@ -19,6 +19,8 @@ type TemplateState = {
     index: number,
   ) => void
 
+  deleteTemplateOrder: (index: number) => void
+
   isTemplateDialogOpen: boolean
   setIsTemplateDialogOpen: (isTemplateDialogOpen: boolean) => void
 
@@ -49,6 +51,11 @@ export const useTemplateStore = create<TemplateState>((set) => ({
       templateOrders: state.templateOrders.map((order, index) =>
         index === orderIndex ? { ...order, ...updatedOrder } : order,
       ),
+    })),
+
+  deleteTemplateOrder: (index) =>
+    set((state) => ({
+      templateOrders: state.templateOrders.filter((_, i) => i !== index),
     })),
 
   isTemplateDialogOpen: false,

@@ -33,7 +33,7 @@ export default function OrderDialog({
   weight,
   ageInDays,
   orderStep,
-  isEditMode,
+  isEditOrderMode,
   setOrderStep,
   reset,
 }: {
@@ -44,7 +44,7 @@ export default function OrderDialog({
   weight: string
   ageInDays: number
   orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
-  isEditMode?: boolean
+  isEditOrderMode?: boolean
   setOrderStep: (
     orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
   ) => void
@@ -95,7 +95,7 @@ export default function OrderDialog({
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           {orderStep === 'upsert' && (
-            <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
+            <DialogTitle>오더 {isEditOrderMode ? '수정' : '추가'}</DialogTitle>
           )}
           {orderStep === 'multipleEdit' && (
             <DialogTitle>오더 복사 / 오더 삭제</DialogTitle>

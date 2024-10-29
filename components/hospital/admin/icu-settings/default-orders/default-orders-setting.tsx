@@ -31,8 +31,8 @@ export default function DefaultOrdersSetting({
     orderStep,
     setOrderStep,
     setSelectedChartOrder,
-    isEditMode,
-    setIsEditMode,
+    isEditOrderMode,
+    setIsEditOrderMode,
     reset,
   } = useIcuOrderStore()
   const [isSorting, setIsSorting] = useState(false)
@@ -54,7 +54,7 @@ export default function DefaultOrdersSetting({
 
   const handleEditOrderDialogOpen = (order: Partial<SelectedIcuOrder>) => {
     setOrderStep('upsert')
-    setIsEditMode(true)
+    setIsEditOrderMode(true)
     setSelectedChartOrder(order)
   }
 
@@ -96,7 +96,7 @@ export default function DefaultOrdersSetting({
         <AddTemplateDialog
           isOpen={orderStep !== 'closed'}
           onOpenChange={handleOpenChange}
-          isEditMode={isEditMode}
+          isEditOrderMode={isEditOrderMode}
         >
           <DefaultOrderForm />
         </AddTemplateDialog>

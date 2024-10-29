@@ -1,6 +1,6 @@
 import CustomTooltip from '@/components/ui/custom-tooltip'
 import { TableCell } from '@/components/ui/table'
-import { cn } from '@/lib/utils'
+import { cn, parsingOrderName } from '@/lib/utils'
 import { IcuOrders, IcuTxs } from '@/types'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
@@ -46,10 +46,13 @@ export default function TxTableCell({
       return (
         <div className="flex flex-col whitespace-nowrap py-4">
           <span className="text-sm">
-            {order.icu_chart_order_name.split('#')[0]}
+            {parsingOrderName(
+              order.icu_chart_order_type,
+              order.icu_chart_order_name,
+            )}
           </span>
           <span className="text-xs text-muted-foreground">
-            {order.icu_chart_order_comment}{' '}
+            {order.icu_chart_order_comment}
             {order.icu_chart_order_type === 'fluid' && 'ml/hr'}
           </span>
         </div>

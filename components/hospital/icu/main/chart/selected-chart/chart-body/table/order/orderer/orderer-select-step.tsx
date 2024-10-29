@@ -48,7 +48,7 @@ export default function OrdererSelectStep({
     selectedChartOrder,
     orderTimePendingQueue,
     copiedOrderPendingQueue,
-    isEditMode,
+    isEditOrderMode,
     setOrderStep,
   } = useIcuOrderStore()
   const isSingleTx = useMemo(
@@ -87,7 +87,7 @@ export default function OrdererSelectStep({
       )
 
       toast({
-        title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+        title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditOrderMode ? '수정' : '추가'} 하였습니다`,
       })
       reset()
       setOrderStep('closed')
@@ -96,7 +96,7 @@ export default function OrdererSelectStep({
     [
       hos_id,
       icuChartId,
-      isEditMode,
+      isEditOrderMode,
       reset,
       selectedChartOrder.order_comment,
       selectedChartOrder.order_id,

@@ -9,6 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
+import { parsingOrderName } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { IcuOrderColors } from '@/types/adimin'
 import type { IcuReadOnlyOrderData } from '@/types/icu/chart'
@@ -53,10 +54,13 @@ export default function ReadOnlyChartTable({
                 }
               >
                 <span className="truncate">
-                  {order.icu_chart_order_name.split('#')[0]}
+                  {parsingOrderName(
+                    order.icu_chart_order_type,
+                    order.icu_chart_order_name,
+                  )}
                 </span>
                 <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
-                  {order.icu_chart_order_comment}{' '}
+                  {order.icu_chart_order_comment}
                   {order.icu_chart_order_type === 'fluid' && 'ml/hr'}
                 </span>
               </div>

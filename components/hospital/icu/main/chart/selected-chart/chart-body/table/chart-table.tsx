@@ -59,7 +59,7 @@ export default function ChartTable({
     orderTimePendingQueue,
     selectedOrderPendingQueue,
     copiedOrderPendingQueue,
-    isEditMode,
+    isEditOrderMode,
   } = useIcuOrderStore()
 
   const {
@@ -300,7 +300,7 @@ export default function ChartTable({
                 ageInDays={age_in_days}
                 orderStep={orderStep}
                 reset={reset}
-                isEditMode={isEditMode}
+                isEditOrderMode={isEditOrderMode}
                 setOrderStep={setOrderStep}
               />
             )}

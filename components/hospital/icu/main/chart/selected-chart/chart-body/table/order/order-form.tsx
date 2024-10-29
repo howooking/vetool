@@ -45,7 +45,7 @@ export default function OrderForm({
   const {
     setOrderStep,
     selectedChartOrder,
-    isEditMode,
+    isEditOrderMode,
     setSelectedChartOrder,
     reset,
   } = useIcuOrderStore()
@@ -67,7 +67,7 @@ export default function OrderForm({
     defaultValues: {
       icu_chart_order_type: selectedChartOrder.order_type ?? '',
       icu_chart_order_name: selectedChartOrder.order_name ?? '',
-      icu_chart_order_comment: selectedChartOrder.order_comment ?? undefined,
+      icu_chart_order_comment: selectedChartOrder.order_comment ?? '',
     },
   })
 
@@ -102,7 +102,7 @@ export default function OrderForm({
       },
     )
     toast({
-      title: `오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+      title: `오더를 ${isEditOrderMode ? '수정' : '추가'} 하였습니다`,
     })
 
     reset()
@@ -189,7 +189,7 @@ export default function OrderForm({
         />
 
         <DialogFooter className="ml-auto w-full gap-2 md:gap-0">
-          {isEditMode && (
+          {isEditOrderMode && (
             <DeleteOrderAlertDialog
               selectedChartOrder={selectedChartOrder}
               setOrderStep={setOrderStep}
@@ -206,7 +206,7 @@ export default function OrderForm({
             {isUpdating ? (
               <LoaderCircle className="animate-spin" />
             ) : (
-              <>{isEditMode ? '변경' : '추가'}</>
+              <>{isEditOrderMode ? '변경' : '추가'}</>
             )}
           </Button>
         </DialogFooter>

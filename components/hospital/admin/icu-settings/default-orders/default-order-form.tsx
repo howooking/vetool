@@ -29,7 +29,7 @@ import DeleteDefaultOrderAlertDialog from './delete-default-order-alert-dialog'
 export default function DefaultOrderForm() {
   const { hos_id } = useParams()
   const { refresh } = useRouter()
-  const { setOrderStep, selectedChartOrder, isEditMode, reset } =
+  const { setOrderStep, selectedChartOrder, isEditOrderMode, reset } =
     useIcuOrderStore()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -38,8 +38,8 @@ export default function DefaultOrderForm() {
     resolver: zodResolver(orderSchema),
     defaultValues: {
       icu_chart_order_type: selectedChartOrder.order_type ?? undefined,
-      icu_chart_order_name: selectedChartOrder.order_name ?? undefined,
-      icu_chart_order_comment: selectedChartOrder.order_comment ?? undefined,
+      icu_chart_order_name: selectedChartOrder.order_name ?? '',
+      icu_chart_order_comment: selectedChartOrder.order_comment ?? '',
     },
   })
 
@@ -143,7 +143,7 @@ export default function DefaultOrderForm() {
         />
 
         <DialogFooter className="ml-auto w-full gap-2 md:gap-0">
-          {isEditMode && (
+          {isEditOrderMode && (
             <DeleteDefaultOrderAlertDialog
               selectedChartOrder={selectedChartOrder}
               setOrderStep={setOrderStep}
@@ -157,7 +157,7 @@ export default function DefaultOrderForm() {
           </DialogClose>
 
           <Button type="submit" disabled={isSubmitting}>
-            {isEditMode ? '변경' : '추가'}
+            {isEditOrderMode ? '변경' : '추가'}
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />
