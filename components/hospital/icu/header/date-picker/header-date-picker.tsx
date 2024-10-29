@@ -19,17 +19,19 @@ export default function HeaderDatePicker({
 }: {
   targetDate: string
 }) {
+  const { push } = useRouter()
+  const [open, setOpen] = useState(false)
   const searchParams = useSearchParams()
   const params = new URLSearchParams(searchParams)
-  const [open, setOpen] = useState(false)
   const path = usePathname()
-  const { push } = useRouter()
 
   const handleSelectDate = (date: Date | undefined) => {
-    const formattedDate = format(date!, 'yyyy-MM-dd')
-    const newPath = changeTargetDateInUrl(path, formattedDate, params)
-    push(newPath)
-    setOpen(false)
+    if (date) {
+      const formattedDate = format(date, 'yyyy-MM-dd')
+      const newPath = changeTargetDateInUrl(path, formattedDate, params)
+      push(newPath)
+      setOpen(false)
+    }
   }
 
   return (
