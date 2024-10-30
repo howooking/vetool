@@ -12,6 +12,8 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { deleteOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
+import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react'
 
 export default function DeleteOrdersAlertDialog({
@@ -21,6 +23,8 @@ export default function DeleteOrdersAlertDialog({
   isDeleteOrdersDialogOpen: boolean
   setIsDeleteOrdersDialogOpen: Dispatch<SetStateAction<boolean>>
 }) {
+  const { refresh } = useRouter()
+  const { isSubscriptionReady } = useRealtimeSubscriptionStore()
   const { reset, selectedOrderPendingQueue } = useIcuOrderStore()
   const deleteButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -40,6 +44,10 @@ export default function DeleteOrdersAlertDialog({
     })
     setIsDeleteOrdersDialogOpen(false)
     reset()
+
+    if (!isSubscriptionReady) {
+      refresh()
+    }
   }
 
   return (
