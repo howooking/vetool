@@ -130,7 +130,14 @@ export default function TxSelectUserStep() {
 
       if (!isSubscriptionReady) refresh()
     },
-    [txLocalState, selectedTxPendingQueue, hos_id, handleReset],
+    [
+      hos_id,
+      txLocalState,
+      selectedTxPendingQueue,
+      handleReset,
+      isSubscriptionReady,
+      refresh,
+    ],
   )
 
   return (
