@@ -19,10 +19,11 @@ import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import FeedOrderField from './feed-order/feed-order-filed'
@@ -35,12 +36,14 @@ export default function OrderForm({
   weight,
   species,
   ageInDays,
+  setSortedOrders,
 }: {
   showOrderer: boolean
   icuChartId: string
   weight: string
   species: string
   ageInDays: number
+  setSortedOrders: Dispatch<SetStateAction<SelectedIcuOrder[]>>
 }) {
   const {
     setOrderStep,
@@ -193,6 +196,7 @@ export default function OrderForm({
             <DeleteOrderAlertDialog
               selectedChartOrder={selectedChartOrder}
               setOrderStep={setOrderStep}
+              setSortedOrders={setSortedOrders}
             />
           )}
 
