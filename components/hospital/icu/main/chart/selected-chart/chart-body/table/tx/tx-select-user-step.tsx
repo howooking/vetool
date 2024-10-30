@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { upsertIcuTx } from '@/lib/services/icu/chart/tx-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { cn } from '@/lib/utils'
 import type { TxLog } from '@/types/icu/chart'
@@ -19,7 +20,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -32,6 +33,8 @@ export default function TxSelectUserStep() {
     reset: txLocalStateReset,
   } = useTxMutationStore()
   const { selectedTxPendingQueue, reset: orderQueueReset } = useIcuOrderStore()
+  const { isSubscriptionReady } = useRealtimeSubscriptionStore()
+  const { refresh } = useRouter()
   const { hos_id } = useParams()
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -91,6 +94,8 @@ export default function TxSelectUserStep() {
         )
         handleReset()
         toast({ title: '처치 내역이 업데이트 되었습니다' })
+
+        if (!isSubscriptionReady) refresh()
         return
       }
 
@@ -110,6 +115,9 @@ export default function TxSelectUserStep() {
 
         handleReset()
         toast({ title: '처치 내역이 업데이트 되었습니다' })
+
+        if (!isSubscriptionReady) refresh()
+
         return
       }
 
@@ -119,6 +127,8 @@ export default function TxSelectUserStep() {
       toast({
         title: '처치 내역이 업데이트 되었습니다',
       })
+
+      if (!isSubscriptionReady) refresh()
     },
     [txLocalState, selectedTxPendingQueue, hos_id, handleReset],
   )

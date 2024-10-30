@@ -20,13 +20,14 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
 import { cn, formatOrders } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -39,6 +40,7 @@ export default function OrdererSelectStep({
   orders: SelectedIcuOrder[]
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
+  const { refresh } = useRouter()
   const { hos_id } = useParams()
   const {
     basicHosData: { vetsListData },
@@ -51,6 +53,8 @@ export default function OrdererSelectStep({
     isEditOrderMode,
     setOrderStep,
   } = useIcuOrderStore()
+  const { isSubscriptionReady } = useRealtimeSubscriptionStore()
+
   const isSingleTx = useMemo(
     () => orderTimePendingQueue.length === 0,
     [orderTimePendingQueue],
@@ -92,6 +96,8 @@ export default function OrdererSelectStep({
       reset()
       setOrderStep('closed')
       setIsUpdating(false)
+
+      if (!isSubscriptionReady) refresh()
     },
     [
       hos_id,
@@ -141,6 +147,8 @@ export default function OrdererSelectStep({
       reset()
       setOrderStep('closed')
       setIsUpdating(false)
+
+      if (!isSubscriptionReady) refresh()
     },
     [hos_id, icuChartId, orderTimePendingQueue, orders, reset, setOrderStep],
   )
@@ -174,6 +182,8 @@ export default function OrdererSelectStep({
       reset()
       setOrderStep('closed')
       setIsUpdating(false)
+
+      if (!isSubscriptionReady) refresh()
     },
     [hos_id, icuChartId, copiedOrderPendingQueue, reset, setOrderStep],
   )

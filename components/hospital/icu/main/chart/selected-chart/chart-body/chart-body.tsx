@@ -2,7 +2,6 @@ import ChartInfos from '@/components/hospital/icu/main/chart/selected-chart/char
 import ChartMemos from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/chart-memos'
 import ChartTable from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/chart-table'
 import type { SelectedChart } from '@/types/icu/chart'
-import QuickOrderInsertInput from './quick-order-insert-input'
 
 export default function ChartBody({ chartData }: { chartData: SelectedChart }) {
   const { memo_a, memo_b, memo_c, icu_chart_id } = chartData
@@ -12,7 +11,6 @@ export default function ChartBody({ chartData }: { chartData: SelectedChart }) {
       <ChartInfos chartData={chartData} />
 
       <ChartTable chartData={chartData} />
-      <QuickOrderInsertInput icuChartId={icu_chart_id} />
 
       <ChartMemos
         memoA={memo_a}

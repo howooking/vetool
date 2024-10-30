@@ -13,7 +13,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { deleteOrder } from '@/lib/services/icu/chart/order-mutation'
+import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
+import { useRouter } from 'next/navigation'
 
 export default function DeleteOrderAlertDialog({
   selectedChartOrder,
@@ -22,6 +24,9 @@ export default function DeleteOrderAlertDialog({
   selectedChartOrder: Partial<SelectedIcuOrder>
   setOrderStep: (orderStep: 'closed' | 'upsert' | 'selectOrderer') => void
 }) {
+  const { refresh } = useRouter()
+  const { isSubscriptionReady } = useRealtimeSubscriptionStore()
+
   const handleDeleteOrderClick = async () => {
     await deleteOrder(selectedChartOrder.order_id!)
 
@@ -29,6 +34,10 @@ export default function DeleteOrderAlertDialog({
       title: `${selectedChartOrder.order_name} 오더를 삭제하였습니다`,
     })
     setOrderStep('closed')
+
+    if (!isSubscriptionReady) {
+      refresh()
+    }
   }
 
   return (
