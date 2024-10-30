@@ -35,7 +35,7 @@ export function InstructionDialog() {
           <Info size={18} />
         </Button>
       </DialogTrigger>
-      <DialogContent className="h-[751.45px] p-0 sm:max-w-[1400px]">
+      <DialogContent className="p-0 sm:max-w-[1400px]">
         <DialogTitle className="hidden" />
         <DialogDescription className="hidden" />
         <div className="flex">
