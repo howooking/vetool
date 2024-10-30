@@ -36,9 +36,11 @@ import QuickOrderInsertInput from '../quick-order-insert-input'
 export default function ChartTable({
   chartData,
   preview,
+  isExport,
 }: {
   chartData: SelectedChart
   preview?: boolean
+  isExport?: boolean
 }) {
   const {
     icu_chart_id,
@@ -47,7 +49,16 @@ export default function ChartTable({
     weight,
     icu_io: { age_in_days },
   } = chartData
-  const { hos_id } = useParams()
+
+  let hosId = ''
+
+  if (!isExport) {
+    const { hos_id } = useParams()
+    hosId = hos_id as string
+  } else {
+    hosId = chartData.patient.hos_id
+  }
+
   const [isSorting, setIsSorting] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>(orders)
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
@@ -110,18 +121,12 @@ export default function ChartTable({
           : time,
       )
 
-      await upsertOrder(
-        chartData.patient.hos_id,
-        icu_chart_id,
-        order.orderId,
-        updatedOrderTimes,
-        {
-          icu_chart_order_name: currentOrder.order_name,
-          icu_chart_order_comment: currentOrder.order_comment,
-          icu_chart_order_type: currentOrder.order_type,
-          icu_chart_order_priority: currentOrder.id,
-        },
-      )
+      await upsertOrder(hosId, icu_chart_id, order.orderId, updatedOrderTimes, {
+        icu_chart_order_name: currentOrder.order_name,
+        icu_chart_order_comment: currentOrder.order_comment,
+        icu_chart_order_type: currentOrder.order_type,
+        icu_chart_order_priority: currentOrder.id,
+      })
     }
 
     toast({
@@ -129,14 +134,7 @@ export default function ChartTable({
     })
 
     reset()
-  }, [
-    chartData.patient.hos_id,
-    icu_chart_id,
-    orderTimePendingQueue,
-    orders,
-    reset,
-    vetsListData,
-  ])
+  }, [hosId, icu_chart_id, orderTimePendingQueue, orders, reset, vetsListData])
 
   // -------- 커멘드키 뗐을 때 작업 --------
   const { setTxStep } = useTxMutationStore()
@@ -165,7 +163,7 @@ export default function ChartTable({
   const handleUpsertOrderWithoutOrderer = useCallback(async () => {
     for (const order of copiedOrderPendingQueue) {
       await upsertOrder(
-        hos_id as string,
+        hosId as string,
         icu_chart_id,
         undefined,
         order.order_times!,
@@ -183,7 +181,7 @@ export default function ChartTable({
     })
 
     reset()
-  }, [hos_id, icu_chart_id, copiedOrderPendingQueue, reset])
+  }, [hosId, icu_chart_id, copiedOrderPendingQueue, reset])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -304,6 +302,7 @@ export default function ChartTable({
                   reset={reset}
                   isEditOrderMode={isEditOrderMode}
                   setOrderStep={setOrderStep}
+                  isExport={isExport}
                 />
               )}
             </TableHead>
@@ -376,16 +375,21 @@ export default function ChartTable({
         )}
 
         <TxUpsertDialog />
-        <DeleteOrdersAlertDialog
-          isDeleteOrdersDialogOpen={isDeleteOrdersDialogOpen}
-          setIsDeleteOrdersDialogOpen={setIsDeleteOrdersDialogOpen}
-        />
+        {!isExport && (
+          <DeleteOrdersAlertDialog
+            isDeleteOrdersDialogOpen={isDeleteOrdersDialogOpen}
+            setIsDeleteOrdersDialogOpen={setIsDeleteOrdersDialogOpen}
+            setSortedOrders={setSortedOrders}
+          />
+        )}
       </Table>
 
-      <QuickOrderInsertInput
-        icuChartId={icu_chart_id}
-        setSortedOrders={setSortedOrders}
-      />
+      {!isExport && (
+        <QuickOrderInsertInput
+          icuChartId={icu_chart_id}
+          setSortedOrders={setSortedOrders}
+        />
+      )}
     </>
   )
 }
