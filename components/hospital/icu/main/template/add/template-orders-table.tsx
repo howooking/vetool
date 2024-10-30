@@ -52,7 +52,6 @@ export default function TemplateOrdersTable({
   useEffect(() => {
     if (Array.isArray(templateOrders)) {
       const orders = templateOrders
-      console.log(orders)
 
       setSortedOrders(orders as SelectedIcuOrder[])
     } else {
