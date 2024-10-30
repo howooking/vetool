@@ -2,16 +2,21 @@
 
 import { Input } from '@/components/ui/input'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
+import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 
 export default function QuickOrderInsertInput({
   icuChartId,
+  setSortedOrders,
 }: {
   icuChartId: string
+  setSortedOrders: Dispatch<SetStateAction<SelectedIcuOrder[]>>
 }) {
   const { hos_id } = useParams()
   const { refresh } = useRouter()
+  const { isSubscriptionReady } = useRealtimeSubscriptionStore()
   const [orderNameInput, setOrderNameInput] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -32,9 +37,23 @@ export default function QuickOrderInsertInput({
       },
     )
 
+    setSortedOrders((prev) => [
+      ...prev,
+      {
+        id: 1,
+        order_id: crypto.randomUUID(),
+        order_name: orderNameInput,
+        order_comment: '',
+        order_type: 'manual',
+        order_times: Array(24).fill('0'),
+        treatments: [],
+      },
+    ])
+
     setOrderNameInput('')
     setIsSubmitting(false)
-    refresh()
+
+    if (!isSubscriptionReady) refresh()
   }
   return (
     <Input
