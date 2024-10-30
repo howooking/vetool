@@ -43,7 +43,7 @@ export const ExportChartBody: React.FC<{
       <Badge className="mb-4">{chartData.target_date}</Badge>
       <div className="flex flex-col gap-2">
         <ChartInfos chartData={chartData} />
-        <ChartTable chartData={chartData} />
+        <ChartTable chartData={chartData} isExport />
       </div>
     </div>
   )

@@ -36,6 +36,7 @@ export default function OrderDialog({
   isEditOrderMode,
   setOrderStep,
   reset,
+  isExport,
 }: {
   icuChartId: string
   orders: SelectedIcuOrder[]
@@ -49,6 +50,7 @@ export default function OrderDialog({
     orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
   ) => void
   reset: () => void
+  isExport?: boolean
 }) {
   const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isTemplateDialogOpen } = useTemplateStore()
@@ -114,13 +116,15 @@ export default function OrderDialog({
 
             {/* 오더 직접 추가 (기본값) */}
             <TabsContent value="default">
-              <OrderForm
-                showOrderer={showOrderer}
-                icuChartId={icuChartId}
-                species={patient.species}
-                weight={weight}
-                ageInDays={ageInDays}
-              />
+              {!isExport && (
+                <OrderForm
+                  showOrderer={showOrderer}
+                  icuChartId={icuChartId}
+                  species={patient.species}
+                  weight={weight}
+                  ageInDays={ageInDays}
+                />
+              )}
             </TabsContent>
 
             {/* 템플릿 오더 추가 */}

@@ -110,6 +110,8 @@ export default function OrdererSelectStep({
       selectedChartOrder.order_times,
       selectedChartOrder.order_type,
       setOrderStep,
+      refresh,
+      isSubscriptionReady,
     ],
   )
 
@@ -150,7 +152,16 @@ export default function OrdererSelectStep({
 
       if (!isSubscriptionReady) refresh()
     },
-    [hos_id, icuChartId, orderTimePendingQueue, orders, reset, setOrderStep],
+    [
+      hos_id,
+      icuChartId,
+      orderTimePendingQueue,
+      orders,
+      reset,
+      setOrderStep,
+      refresh,
+      isSubscriptionReady,
+    ],
   )
 
   const handleUpsertOrder = useCallback(
@@ -185,7 +196,16 @@ export default function OrdererSelectStep({
 
       if (!isSubscriptionReady) refresh()
     },
-    [hos_id, icuChartId, copiedOrderPendingQueue, reset, setOrderStep],
+    [
+      hos_id,
+      icuChartId,
+      copiedOrderPendingQueue,
+      reset,
+      setOrderStep,
+      setIsUpdating,
+      refresh,
+      isSubscriptionReady,
+    ],
   )
 
   const handleSubmit = useCallback(

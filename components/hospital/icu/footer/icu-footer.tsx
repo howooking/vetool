@@ -66,7 +66,7 @@ export default function IcuFooter({
 
       refresh()
     }
-  }, [isSubscriptionReady])
+  }, [isSubscriptionReady, refresh])
 
   return (
     <footer

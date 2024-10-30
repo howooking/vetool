@@ -25,18 +25,6 @@ export default function QuickOrderInsertInput({
 
     setIsSubmitting(true)
 
-    await upsertOrder(
-      hos_id as string,
-      icuChartId,
-      undefined,
-      Array(24).fill('0'),
-      {
-        icu_chart_order_name: orderNameInput.trim(),
-        icu_chart_order_comment: '',
-        icu_chart_order_type: 'manual',
-      },
-    )
-
     setSortedOrders((prev) => [
       ...prev,
       {
@@ -49,6 +37,18 @@ export default function QuickOrderInsertInput({
         treatments: [],
       },
     ])
+
+    await upsertOrder(
+      hos_id as string,
+      icuChartId,
+      undefined,
+      Array(24).fill('0'),
+      {
+        icu_chart_order_name: orderNameInput.trim(),
+        icu_chart_order_comment: '',
+        icu_chart_order_type: 'manual',
+      },
+    )
 
     setOrderNameInput('')
     setIsSubmitting(false)
