@@ -50,15 +50,7 @@ export default function ChartTable({
     icu_io: { age_in_days },
   } = chartData
 
-  let hosId = ''
-
-  if (!isExport) {
-    const { hos_id } = useParams()
-    hosId = hos_id as string
-  } else {
-    hosId = chartData.patient.hos_id
-  }
-
+  const hosId = chartData.patient.hos_id
   const [isSorting, setIsSorting] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>(orders)
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
