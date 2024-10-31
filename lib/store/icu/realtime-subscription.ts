@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 type RealtimeSubscriptionState = {
   isSubscriptionReady: boolean
-  setIsSubscriptionReady: (isOpen: boolean) => void
+  setIsSubscriptionReady: (isSubscriptionReady: boolean) => void
 }
 
 export const useRealtimeSubscriptionStore = create<RealtimeSubscriptionState>(
