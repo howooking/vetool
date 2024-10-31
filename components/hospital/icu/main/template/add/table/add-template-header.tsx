@@ -26,7 +26,8 @@ export default function AddTemplateHeader({
             )}
             onClick={onClick}
           >
-            <ArrowUpDown size={18} />
+            {/* TODO: 순서 변경 논의 필요 */}
+            {/* <ArrowUpDown size={18} /> */}
           </Button>
           <span>오더 목록</span>
           {children}
