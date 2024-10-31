@@ -99,8 +99,6 @@ export const upsertTemplateOrders = async (
 export const reorderOrders = async (orderIds: string[]) => {
   const supabase = await createClient()
 
-  console.log(orderIds)
-
   orderIds.forEach(async (orderId, index) => {
     const { error: reorderOrdersError } = await supabase
       .from('icu_orders')

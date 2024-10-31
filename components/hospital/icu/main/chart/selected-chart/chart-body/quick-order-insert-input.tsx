@@ -1,6 +1,7 @@
 'use client'
 
 import { Input } from '@/components/ui/input'
+import { toast } from '@/components/ui/use-toast'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
@@ -53,8 +54,14 @@ export default function QuickOrderInsertInput({
       setOrderNameInput('')
       setIsSubmitting(false)
 
-      if (!isSubscriptionReady) refresh()
-    }
+    toast({
+      title: `${orderNameInput} 오더를 생성하였습니다`,
+    })
+
+    setOrderNameInput('')
+    setIsSubmitting(false)
+
+    if (!isSubscriptionReady) refresh()
   }
   return (
     <Input
