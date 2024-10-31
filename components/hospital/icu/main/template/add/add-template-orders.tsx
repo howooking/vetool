@@ -1,6 +1,6 @@
 import AddTemplateOrdersButton from '@/components/hospital/icu/main/template/add/add-template-orders-button'
+import ResetTemplateOrdersButton from '@/components/hospital/icu/main/template/add/reset-template-orders-button'
 import TemplateOrdersTable from '@/components/hospital/icu/main/template/add/template-orders-table'
-import { Button } from '@/components/ui/button'
 import { useTemplateStore } from '@/lib/store/icu/template'
 import { useState } from 'react'
 
@@ -13,15 +13,7 @@ export default function AddTemplateOrders() {
       <TemplateOrdersTable isSorting={isSorting} setIsSorting={setIsSorting} />
 
       <div className="flex gap-2">
-        <Button
-          disabled={!templateOrders.length}
-          variant="outline"
-          className="ml-auto"
-          onClick={() => reset()}
-        >
-          초기화
-        </Button>
-
+        <ResetTemplateOrdersButton />
         <AddTemplateOrdersButton />
       </div>
     </div>
