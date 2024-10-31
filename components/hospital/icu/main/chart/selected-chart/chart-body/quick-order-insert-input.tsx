@@ -54,14 +54,15 @@ export default function QuickOrderInsertInput({
       setOrderNameInput('')
       setIsSubmitting(false)
 
-    toast({
-      title: `${orderNameInput} 오더를 생성하였습니다`,
-    })
+      toast({
+        title: `${orderNameInput} 오더를 생성하였습니다`,
+      })
 
-    setOrderNameInput('')
-    setIsSubmitting(false)
+      setOrderNameInput('')
+      setIsSubmitting(false)
 
-    if (!isSubscriptionReady) refresh()
+      if (!isSubscriptionReady) refresh()
+    }
   }
   return (
     <Input
