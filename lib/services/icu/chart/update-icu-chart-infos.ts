@@ -160,6 +160,7 @@ export const toggleOutPatient = async (
   patientBreed: string,
   patientName: string,
   ageInDays: number,
+  isAlive: boolean,
 ) => {
   const supabase = await createClient()
 
@@ -173,6 +174,7 @@ export const toggleOutPatient = async (
     patient_breed_input: patientBreed,
     patient_name_input: patientName,
     age_in_days_input: ageInDays,
+    is_alive_input: isAlive,
   })
 
   if (error) {

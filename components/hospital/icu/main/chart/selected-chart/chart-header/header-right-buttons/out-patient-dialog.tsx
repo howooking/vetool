@@ -26,7 +26,7 @@ export default function OutPatientDialog({
 
   const isPatientOut = icu_io.out_date !== null
 
-  const handleOutPatient = async () => {
+  const handleOutPatient = async (isAlive: boolean) => {
     setIsSubmitting(true)
 
     const hashtaggedDxCc = hashtagKeyword(
@@ -48,6 +48,7 @@ export default function OutPatientDialog({
       patient.breed,
       patient.name,
       icu_io.age_in_days,
+      isAlive,
     )
 
     toast({
@@ -78,12 +79,26 @@ export default function OutPatientDialog({
         </DialogHeader>
 
         <DialogFooter>
+          {!isPatientOut && (
+            <Button
+              variant="destructive"
+              className="mr-auto"
+              onClick={() => handleOutPatient(false)}
+              disabled={isSubmitting}
+            >
+              사망
+            </Button>
+          )}
+
           <DialogClose asChild>
             <Button type="button" variant="outline">
               취소
             </Button>
           </DialogClose>
-          <Button onClick={handleOutPatient} disabled={isSubmitting}>
+          <Button
+            onClick={() => handleOutPatient(true)}
+            disabled={isSubmitting}
+          >
             {isPatientOut ? '퇴원취소' : '퇴원'}
             <LoaderCircle
               className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
