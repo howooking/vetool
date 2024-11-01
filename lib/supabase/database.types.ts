@@ -1484,6 +1484,21 @@ export type Database = {
           patient_name_input: string
           patient_species_input: string
           age_in_days_input: number
+          is_alive_input: boolean
+        }
+        Returns: undefined
+      }
+      toggle_patient_out_old: {
+        Args: {
+          icu_io_id_input: string
+          patient_id_input: string
+          is_patient_out_input: boolean
+          chart_orders_input: string
+          keywords_input: string
+          patient_breed_input: string
+          patient_name_input: string
+          patient_species_input: string
+          age_in_days_input: number
         }
         Returns: undefined
       }

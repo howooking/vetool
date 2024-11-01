@@ -81,7 +81,7 @@ export default function OutPatientDialog({
         <DialogFooter>
           {!isPatientOut && (
             <Button
-              variant="secondary"
+              variant="destructive"
               className="mr-auto"
               onClick={() => handleOutPatient(false)}
               disabled={isSubmitting}
