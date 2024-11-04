@@ -1221,34 +1221,26 @@ export type Database = {
           description: string
           error_id: number
           error_json: Json
-          hos_id: string
           is_server: boolean
+          user_id: string
         }
         Insert: {
           created_at?: string
           description: string
           error_id?: number
           error_json: Json
-          hos_id: string
           is_server: boolean
+          user_id: string
         }
         Update: {
           created_at?: string
           description?: string
           error_id?: number
           error_json?: Json
-          hos_id?: string
           is_server?: boolean
+          user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "vetool_errors_hos_id_fkey"
-            columns: ["hos_id"]
-            isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
-          },
-        ]
+        Relationships: []
       }
       vitals: {
         Row: {

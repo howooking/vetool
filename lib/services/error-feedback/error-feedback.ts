@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export const sendErrorFeedback = async (
-  hosId: string,
+  userId: string,
   description: string,
   isServer: boolean,
   errorJson: Json,
@@ -13,7 +13,7 @@ export const sendErrorFeedback = async (
   const supabase = await createClient()
 
   const { error } = await supabase.from('vetool_errors').insert({
-    hos_id: hosId,
+    user_id: userId,
     description,
     is_server: isServer,
     error_json: errorJson,

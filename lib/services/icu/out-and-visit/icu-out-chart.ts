@@ -23,8 +23,7 @@ export const getNotOutDuePatients = async (
     .returns<NotOutDuePatientsData[] | null>()
 
   if (error) {
-    console.error(error)
-    redirect(`/error?message=${error?.message}`)
+    throw new Error(error.message)
   }
 
   return data
@@ -44,8 +43,7 @@ export const getVisitablePatients = async (
     .returns<VisitablePatientsData[]>()
 
   if (error) {
-    console.error(error)
-    redirect(`/error?message=${error?.message}`)
+    throw new Error(error.message)
   }
 
   return data || []
@@ -96,8 +94,7 @@ export const getIcuOutDuePatients = async (
     .returns<OutDuePatientsData[]>()
 
   if (error) {
-    console.error(error)
-    redirect(`/error?message=${error?.message}`)
+    throw new Error(error.message)
   }
 
   return data || []

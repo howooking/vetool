@@ -13,8 +13,7 @@ export const getMaintenaceRateCalcMethod = async (hosId: string) => {
     .single()
 
   if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data.maintenance_rate_calc_method

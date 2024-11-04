@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { getUser } from '@/lib/services/auth/authorization'
 import { sendErrorFeedback } from '@/lib/services/error-feedback/error-feedback'
 import { cn } from '@/lib/utils'
 import {
@@ -21,7 +22,7 @@ import {
   RotateCw,
   Send,
 } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Error({
@@ -31,15 +32,21 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  useEffect(() => {
-    console.error(error)
-  }, [error])
-
-  const { hos_id } = useParams()
+  const [userId, setUserId] = useState<string>()
   const { replace } = useRouter()
   const [description, setDescription] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+
+  useEffect(() => {
+    console.error(error)
+
+    const getUserId = async () => {
+      const user = await getUser()
+      setUserId(user?.id)
+    }
+    getUserId()
+  }, [error])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,7 +63,7 @@ export default function Error({
 
     setIsSubmitting(true)
     await sendErrorFeedback(
-      hos_id as string,
+      userId!,
       description,
       true,
       JSON.stringify(errorInfo),

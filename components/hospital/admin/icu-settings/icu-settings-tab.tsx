@@ -11,13 +11,13 @@ import RerCalcTab from './rer-calc/rer-calc-tab'
 export default function IcuSettingsTab({ hosId }: { hosId: string }) {
   return (
     <Tabs defaultValue="defaultOrder">
-      <TabsList className="grid w-[600px] grid-cols-6">
+      <TabsList className="grid grid-cols-6">
         <TabsTrigger value="defaultOrder">기본차트</TabsTrigger>
         <TabsTrigger value="orderColor">오더색상</TabsTrigger>
         <TabsTrigger value="memo">메모이름</TabsTrigger>
         <TabsTrigger value="orderer">오더자</TabsTrigger>
-        <TabsTrigger value="maintenanceRate">수액유지속도</TabsTrigger>
-        <TabsTrigger value="rerCalc">RER 계산</TabsTrigger>
+        <TabsTrigger value="maintenanceRate">유지속도</TabsTrigger>
+        <TabsTrigger value="rerCalc">RER</TabsTrigger>
       </TabsList>
 
       <TabsContent value="defaultOrder">

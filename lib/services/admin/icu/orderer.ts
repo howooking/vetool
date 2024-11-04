@@ -13,8 +13,7 @@ export const getShowOrderer = async (hosId: string) => {
     .single()
 
   if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data.show_orderer

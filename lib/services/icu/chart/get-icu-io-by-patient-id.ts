@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 
 export const getLatestIoByPatientId = async (patientId: string) => {
   const supabase = await createClient()
@@ -14,8 +13,7 @@ export const getLatestIoByPatientId = async (patientId: string) => {
     .maybeSingle()
 
   if (error) {
-    console.error(error)
-    redirect(`/error?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data
