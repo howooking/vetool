@@ -72,8 +72,7 @@ export const getOrder = async (icuChartId: string) => {
     .match({ icu_chart_id: icuChartId })
 
   if (error) {
-    console.error(error)
-    redirect(`/error?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data

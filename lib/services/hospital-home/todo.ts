@@ -5,17 +5,16 @@ import { redirect } from 'next/navigation'
 
 export const getTodos = async (hosId: string) => {
   const supabase = await createClient()
-  const { data: todosData, error: todosDataError } = await supabase
+  const { data, error } = await supabase
     .from('todos')
     .select('id, is_done, target_date, target_user, todo_title')
     .match({ hos_id: hosId })
     .order('created_at')
 
-  if (todosDataError) {
-    console.error(todosDataError)
-    redirect(`/error?message=${todosDataError.message}`)
+  if (error) {
+    throw new Error(error.message)
   }
-  return todosData
+  return data
 }
 
 export const createTodo = async (

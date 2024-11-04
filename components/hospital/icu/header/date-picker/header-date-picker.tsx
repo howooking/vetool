@@ -16,8 +16,10 @@ import { useState } from 'react'
 
 export default function HeaderDatePicker({
   targetDate,
+  setIsSubscriptionReady,
 }: {
   targetDate: string
+  setIsSubscriptionReady: (isSubscriptionReady: boolean) => void
 }) {
   const { push } = useRouter()
   const [open, setOpen] = useState(false)
@@ -31,6 +33,7 @@ export default function HeaderDatePicker({
       const newPath = changeTargetDateInUrl(path, formattedDate, params)
       push(newPath)
       setOpen(false)
+      setIsSubscriptionReady(false)
     }
   }
 

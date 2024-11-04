@@ -15,9 +15,14 @@ export const getIcuNotification = async (hosId: string, page: number = 1) => {
     .from('icu_notification')
     .select(
       `
-          *,
-          patient_id(name, breed, patient_id, gender)
-        `,
+        *,
+        patient_id(
+          name, 
+          breed, 
+          patient_id,
+          gender
+        )
+      `,
     )
     .match({ hos_id: hosId })
     .order('created_at', { ascending: false })

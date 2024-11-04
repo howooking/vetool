@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -27,11 +28,10 @@ import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { ArrowUpDown } from 'lucide-react'
-import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { Sortable } from 'react-sortablejs'
-import SortableOrderWrapper from './order/sortable-order-wrapper'
 import QuickOrderInsertInput from '../quick-order-insert-input'
+import SortableOrderWrapper from './order/sortable-order-wrapper'
 
 export default function ChartTable({
   chartData,
@@ -261,127 +261,132 @@ export default function ChartTable({
   }, [handleSortButtonClick, isSorting])
 
   return (
-    <>
-      <Table className="border">
-        <TableHeader className="sticky top-0 z-20 bg-white shadow-sm">
-          <TableRow>
-            <TableHead className="flex w-[320px] items-center justify-between px-0.5 text-center">
-              {!preview && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={cn(
-                    isSorting && 'animate-pulse text-primary',
-                    'shrink-0',
-                  )}
-                  onClick={handleSortButtonClick}
-                >
-                  <ArrowUpDown size={18} />
-                </Button>
-              )}
-
-              <span className="w-full text-center">오더 목록</span>
-
-              {!preview && (
-                <OrderDialog
-                  icuChartId={icu_chart_id}
-                  orders={orders}
-                  showOrderer={showOrderer}
-                  patient={patient}
-                  weight={weight}
-                  ageInDays={age_in_days}
-                  orderStep={orderStep}
-                  reset={reset}
-                  isEditOrderMode={isEditOrderMode}
-                  setOrderStep={setOrderStep}
-                  isExport={isExport}
-                />
-              )}
-            </TableHead>
-
-            {TIMES.map((time) => (
-              <TableHead
+    <Table className="border">
+      <TableHeader className="sticky top-0 z-20 bg-white shadow-sm">
+        <TableRow>
+          <TableHead className="flex w-[320px] items-center justify-between px-0.5 text-center">
+            {!preview && (
+              <Button
+                variant="ghost"
+                size="icon"
                 className={cn(
-                  preview ? 'cursor-default' : 'cursor-pointer',
-                  'border text-center',
+                  isSorting && 'animate-pulse text-primary',
+                  'shrink-0',
                 )}
-                key={time}
-                onClick={
-                  preview ? undefined : () => handleToggleGuidelineTimes(time)
-                }
+                onClick={handleSortButtonClick}
               >
-                {time.toString().padStart(2, '0')}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
+                <ArrowUpDown size={18} />
+              </Button>
+            )}
 
-        {isSorting ? (
-          <SortableOrderWrapper
-            orders={sortedOrders}
-            onOrdersChange={setSortedOrders}
-            onSortEnd={handleReorder}
-          >
-            {sortedOrders.map((order, index) => (
-              <TableRow className="divide-x" key={order.order_id}>
-                <CellsRowTitle
-                  index={index}
-                  order={order}
-                  preview={preview}
-                  isSorting={isSorting}
-                />
-                <CellsRow
-                  orderStep={orderStep}
-                  preview={preview}
-                  isSorting={isSorting}
-                  order={order}
-                  showOrderer={showOrderer}
-                  hoveredColumn={hoveredColumn}
-                  handleColumnHover={handleColumnHover}
-                  handleColumnLeave={handleColumnLeave}
-                  guidelineTimes={guidelineTimes}
-                  selectedTxPendingQueue={selectedTxPendingQueue}
-                />
-              </TableRow>
-            ))}
-          </SortableOrderWrapper>
-        ) : (
-          <TableBody>
-            {sortedOrders.map((order, index) => (
-              <TableRow className="w-full divide-x" key={order.order_id}>
-                <CellsRowTitle index={index} order={order} preview={preview} />
-                <CellsRow
-                  preview={preview}
-                  order={order}
-                  showOrderer={showOrderer}
-                  hoveredColumn={hoveredColumn}
-                  handleColumnHover={handleColumnHover}
-                  handleColumnLeave={handleColumnLeave}
-                  guidelineTimes={guidelineTimes}
-                  selectedTxPendingQueue={selectedTxPendingQueue}
-                  orderStep={orderStep}
-                />
-              </TableRow>
-            ))}
-          </TableBody>
-        )}
+            <span className="w-full text-center">오더 목록</span>
 
-        <TxUpsertDialog />
-        {!isExport && (
+            {!preview && (
+              <OrderDialog
+                icuChartId={icu_chart_id}
+                orders={orders}
+                showOrderer={showOrderer}
+                patient={patient}
+                weight={weight}
+                ageInDays={age_in_days}
+                orderStep={orderStep}
+                reset={reset}
+                isEditOrderMode={isEditOrderMode}
+                setOrderStep={setOrderStep}
+                isExport={isExport}
+                setSortedOrders={setSortedOrders}
+              />
+            )}
+          </TableHead>
+
+          {TIMES.map((time) => (
+            <TableHead
+              className={cn(
+                preview ? 'cursor-default' : 'cursor-pointer',
+                'border text-center',
+              )}
+              key={time}
+              onClick={
+                preview ? undefined : () => handleToggleGuidelineTimes(time)
+              }
+            >
+              {time.toString().padStart(2, '0')}
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+
+      {isSorting ? (
+        <SortableOrderWrapper
+          orders={sortedOrders}
+          onOrdersChange={setSortedOrders}
+          onSortEnd={handleReorder}
+        >
+          {sortedOrders.map((order, index) => (
+            <TableRow className="divide-x" key={order.order_id}>
+              <CellsRowTitle
+                index={index}
+                order={order}
+                preview={preview}
+                isSorting={isSorting}
+              />
+              <CellsRow
+                orderStep={orderStep}
+                preview={preview}
+                isSorting={isSorting}
+                order={order}
+                showOrderer={showOrderer}
+                hoveredColumn={hoveredColumn}
+                handleColumnHover={handleColumnHover}
+                handleColumnLeave={handleColumnLeave}
+                guidelineTimes={guidelineTimes}
+                selectedTxPendingQueue={selectedTxPendingQueue}
+              />
+            </TableRow>
+          ))}
+        </SortableOrderWrapper>
+      ) : (
+        <TableBody>
+          {sortedOrders.map((order, index) => (
+            <TableRow className="w-full divide-x" key={order.order_id}>
+              <CellsRowTitle index={index} order={order} preview={preview} />
+              <CellsRow
+                preview={preview}
+                order={order}
+                showOrderer={showOrderer}
+                hoveredColumn={hoveredColumn}
+                handleColumnHover={handleColumnHover}
+                handleColumnLeave={handleColumnLeave}
+                guidelineTimes={guidelineTimes}
+                selectedTxPendingQueue={selectedTxPendingQueue}
+                orderStep={orderStep}
+              />
+            </TableRow>
+          ))}
+
+          {!isExport && (
+            <TableRow className="hover:bg-transparent">
+              <TableCell className="p-0">
+                <QuickOrderInsertInput
+                  icuChartId={icu_chart_id}
+                  setSortedOrders={setSortedOrders}
+                />
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      )}
+
+      {!isExport && (
+        <>
+          <TxUpsertDialog />
           <DeleteOrdersAlertDialog
             isDeleteOrdersDialogOpen={isDeleteOrdersDialogOpen}
             setIsDeleteOrdersDialogOpen={setIsDeleteOrdersDialogOpen}
             setSortedOrders={setSortedOrders}
           />
-        )}
-      </Table>
-
-      {!isExport && (
-        <QuickOrderInsertInput
-          icuChartId={icu_chart_id}
-          setSortedOrders={setSortedOrders}
-        />
+        </>
       )}
-    </>
+    </Table>
   )
 }

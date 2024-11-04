@@ -143,8 +143,7 @@ export const getSearchedTemplateCharts = async (
     .returns<TemplateChart[]>()
 
   if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data

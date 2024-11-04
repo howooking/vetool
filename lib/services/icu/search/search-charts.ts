@@ -74,8 +74,7 @@ export const getSelectedCharts = async (icuIoId: string) => {
     .match({ icu_io_id: icuIoId })
 
   if (error) {
-    console.error(error)
-    redirect(`/error?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data

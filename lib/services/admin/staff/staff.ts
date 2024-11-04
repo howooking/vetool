@@ -26,17 +26,26 @@ export const getStaffs = async (hosId: string) => {
     .from('users')
     .select(
       `
-      name, position, rank, group, is_admin, user_id, is_vet, avatar_url,
-      hos_id(master_user_id, group_list)
-    `,
+        name,
+        position,
+        rank,
+        group,
+        is_admin,
+        user_id,
+        is_vet,
+        avatar_url,
+        hos_id(
+          master_user_id, 
+          group_list
+        )
+      `,
     )
     .match({ hos_id: hosId })
     .returns<UserHospitalJoined[]>()
     .order('rank', { ascending: true })
 
   if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data

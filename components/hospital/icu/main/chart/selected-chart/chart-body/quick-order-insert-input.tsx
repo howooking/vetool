@@ -21,63 +21,57 @@ export default function QuickOrderInsertInput({
   const [orderNameInput, setOrderNameInput] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!orderNameInput) return
+    if (e.key === 'Enter') {
+      setIsSubmitting(true)
 
-    setIsSubmitting(true)
+      setSortedOrders((prev) => [
+        ...prev,
+        {
+          id: 1,
+          order_id: crypto.randomUUID(),
+          order_name: orderNameInput,
+          order_comment: '',
+          order_type: 'manual',
+          order_times: Array(24).fill('0'),
+          treatments: [],
+        },
+      ])
 
-    setSortedOrders((prev) => [
-      ...prev,
-      {
-        id: 1,
-        order_id: crypto.randomUUID(),
-        order_name: orderNameInput,
-        order_comment: '',
-        order_type: 'manual',
-        order_times: Array(24).fill('0'),
-        treatments: [],
-      },
-    ])
+      await upsertOrder(
+        hos_id as string,
+        icuChartId,
+        undefined,
+        Array(24).fill('0'),
+        {
+          icu_chart_order_name: orderNameInput.trim(),
+          icu_chart_order_comment: '',
+          icu_chart_order_type: 'manual',
+        },
+      )
 
-    await upsertOrder(
-      hos_id as string,
-      icuChartId,
-      undefined,
-      Array(24).fill('0'),
-      {
-        icu_chart_order_name: orderNameInput.trim(),
-        icu_chart_order_comment: '',
-        icu_chart_order_type: 'manual',
-      },
-    )
+      setOrderNameInput('')
+      setIsSubmitting(false)
 
-    toast({
-      title: `${orderNameInput} 오더를 생성하였습니다`,
-    })
+      toast({
+        title: `${orderNameInput} 오더를 생성하였습니다`,
+      })
 
-    setOrderNameInput('')
-    setIsSubmitting(false)
+      setOrderNameInput('')
+      setIsSubmitting(false)
 
-    if (!isSubscriptionReady) refresh()
+      if (!isSubscriptionReady) refresh()
+    }
   }
   return (
     <Input
-      className="w-[320px]"
+      className="h-11 rounded-none border-b-0 border-l-0 border-t-0 focus-visible:ring-0"
       disabled={isSubmitting}
-      placeholder="오더명 입력 후 Enter"
-      value={isSubmitting ? '전송중...' : orderNameInput}
+      placeholder="빠른 오더 등록"
+      value={isSubmitting ? '' : orderNameInput}
       onChange={(e) => setOrderNameInput(e.target.value)}
-      onBlur={handleSubmit}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          const target = e.currentTarget
-          setTimeout(() => {
-            if (target) {
-              target.blur()
-            }
-          }, 0)
-        }
-      }}
+      onKeyDown={handleSubmit}
     />
   )
 }

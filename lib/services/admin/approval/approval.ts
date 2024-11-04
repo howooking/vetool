@@ -11,17 +11,23 @@ export const getStaffApprovals = async (hosId: string) => {
     .from('user_approvals')
     .select(
       `
-          is_approved, created_at, updated_at,
-          user_id(user_id, name, avatar_url, is_vet)
-        `,
+        is_approved,
+        created_at, 
+        updated_at,
+        user_id(
+          user_id, 
+          name, 
+          avatar_url,
+          is_vet
+        )
+      `,
     )
     .match({ hos_id: hosId })
     .order('is_approved')
     .returns<ApprovalData[]>()
 
   if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data
