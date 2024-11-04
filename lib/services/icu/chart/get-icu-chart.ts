@@ -2,7 +2,6 @@
 
 import { createClient } from '@/lib/supabase/server'
 import type { SelectedChart } from '@/types/icu/chart'
-import { redirect } from 'next/navigation'
 
 export const getIcuChart = async (
   hosId: string,
@@ -20,8 +19,8 @@ export const getIcuChart = async (
     .returns<SelectedChart>()
 
   if (error) {
-    console.error('Error while fetching getIcuChart:', error)
-    redirect(`/error?message=${error?.message}`)
+    throw new Error(error.message)
   }
+
   return data
 }

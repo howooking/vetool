@@ -122,27 +122,6 @@ export const getTemplateCharts = async (hosId: string) => {
     .returns<TemplateChart[]>()
 
   if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
-  }
-
-  return data
-}
-
-export const getSearchedTemplateCharts = async (
-  hosId: string,
-  value: string,
-) => {
-  const supabase = await createClient()
-
-  const { data, error } = await supabase
-    .rpc('search_icu_templates_data', {
-      hos_id_input: hosId,
-      search_value: value,
-    })
-    .returns<TemplateChart[]>()
-
-  if (error) {
     throw new Error(error.message)
   }
 

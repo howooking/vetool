@@ -79,26 +79,6 @@ export const updateGroup = async (icuIoId: string, groupList: string[]) => {
   }
 }
 
-export const updateWeight = async (
-  patientId: string,
-  icuChartId: string,
-  weight: string,
-  weightMesuredDate: string,
-) => {
-  const supabase = await createClient()
-
-  const { error } = await supabase.rpc('update_icu_patient_weight', {
-    icu_chart_id_input: icuChartId,
-    patient_id_input: patientId,
-    weight_input: weight,
-    weight_measured_date_input: weightMesuredDate,
-  })
-
-  if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
-  }
-}
 export const updateOutDueDate = async (
   icuIoId: string,
   outDueDate: string | null,
@@ -109,23 +89,6 @@ export const updateOutDueDate = async (
     .from('icu_io')
     .update({ out_due_date: outDueDate })
     .match({ icu_io_id: icuIoId })
-
-  if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
-  }
-}
-
-export const updateMemoName = async (
-  hosId: string,
-  hosIcuMemoNamesInput: string[],
-) => {
-  const supabase = await createClient()
-
-  const { error } = await supabase
-    .from('hospitals')
-    .update({ icu_memo_names: hosIcuMemoNamesInput })
-    .match({ hos_id: hosId })
 
   if (error) {
     console.error(error)

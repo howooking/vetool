@@ -30,8 +30,7 @@ export const getIcuNotification = async (hosId: string, page: number = 1) => {
     .returns<IcuNotificationJoined[]>()
 
   if (error) {
-    console.error(error)
-    redirect(`/error?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data

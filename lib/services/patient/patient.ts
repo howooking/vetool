@@ -2,7 +2,6 @@
 
 import { createClient } from '@/lib/supabase/server'
 import type { PatientData, PatientDataTable } from '@/types/patients'
-import { format } from 'date-fns'
 import { redirect } from 'next/navigation'
 
 export const insertPatient = async (
@@ -58,8 +57,7 @@ export const getPatients = async (hosId: string) => {
     .returns<PatientData[]>()
 
   if (error) {
-    console.error(error.message)
-    redirect(`/error/?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data.map((patient) => ({

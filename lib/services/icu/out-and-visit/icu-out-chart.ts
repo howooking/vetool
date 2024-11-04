@@ -73,8 +73,7 @@ export const getVisitPatients = async (hosId: string, targetDate: string) => {
     .returns<VisitPatientData[]>()
 
   if (error) {
-    console.error(error)
-    redirect(`/error?message=${error?.message}`)
+    throw new Error(error.message)
   }
 
   return data || []
