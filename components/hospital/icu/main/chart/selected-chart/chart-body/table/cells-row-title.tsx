@@ -125,10 +125,12 @@ export default function CellsRowTitle({
       }}
     >
       <Button
+        disabled={order.order_id === 'temp_order_id'}
         variant="ghost"
         onClick={isSorting ? undefined : handleEditOrderDialogOpen}
         className={cn(
           'flex h-11 w-[320px] justify-between rounded-none bg-transparent px-2 outline-none ring-inset ring-primary',
+          order.order_id === 'temp_order_id' && 'animate-shake-strong',
           preview
             ? 'cursor-not-allowed'
             : isSorting
