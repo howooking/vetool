@@ -30,7 +30,7 @@ export default function QuickOrderInsertInput({
         ...prev,
         {
           id: 1,
-          order_id: crypto.randomUUID(),
+          order_id: 'temp_order_id',
           order_name: orderNameInput,
           order_comment: '',
           order_type: 'manual',
