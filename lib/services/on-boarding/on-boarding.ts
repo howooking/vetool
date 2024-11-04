@@ -24,8 +24,7 @@ export const getUserAppoval = async () => {
     .single()
 
   if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data
@@ -53,8 +52,7 @@ export const getHospitals = async () => {
     .order('name', { ascending: true })
 
   if (error) {
-    console.error(error)
-    redirect(`/error?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data
