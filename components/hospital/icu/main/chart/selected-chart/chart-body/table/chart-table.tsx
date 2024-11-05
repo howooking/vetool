@@ -67,7 +67,7 @@ export default function ChartTable({
   } = useIcuOrderStore()
 
   const {
-    basicHosData: { showOrderer, vetsListData },
+    basicHosData: { showOrderer, vetsListData, orderColorsData },
   } = useBasicHosDataContext()
   const isCommandPressed = useIsCommandPressed()
 
@@ -370,6 +370,7 @@ export default function ChartTable({
                 <QuickOrderInsertInput
                   icuChartId={icu_chart_id}
                   setSortedOrders={setSortedOrders}
+                  orderColorsData={orderColorsData}
                 />
               </TableCell>
             </TableRow>

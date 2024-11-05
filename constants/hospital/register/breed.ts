@@ -496,6 +496,8 @@ export const FELINE_BREEDS = [
 
   '코니시 렉스',
 
+  '코숏',
+
   '데본 렉스',
 
   '도메스틱 롱 헤어',
