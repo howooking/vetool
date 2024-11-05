@@ -1,4 +1,3 @@
-import HospitalHeader from '@/components/hospital/header/hospital-header'
 import MobileSidebar from '@/components/hospital/sidebar/mobile-sidebar'
 import Sidebar from '@/components/hospital/sidebar/sidebar'
 import { getUserData } from '@/lib/services/auth/authorization'
@@ -24,11 +23,9 @@ export default async function Layout(props: {
 
   const userData = await getUserData()
   const hosName = await getHosName(params.hos_id)
+  const isSuperAccount = userData.email === process.env.NEXT_PUBLIC_SUPER_SHY
 
-  if (
-    userData.email !== process.env.NEXT_PUBLIC_SUPER_SHY! &&
-    userData.hos_id !== params.hos_id
-  ) {
+  if (!isSuperAccount && userData.hos_id !== params.hos_id) {
     redirect(`/hospital/${userData.hos_id}`)
   }
 
@@ -43,7 +40,8 @@ export default async function Layout(props: {
       />
 
       <div className="relative w-full">
-        <HospitalHeader />
+        <header className="h-12 border-b" />
+
         <main className="w-full">{children}</main>
       </div>
     </div>
