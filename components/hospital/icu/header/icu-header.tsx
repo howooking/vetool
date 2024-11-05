@@ -16,7 +16,7 @@ export default async function IcuHeader({
   groupList: string[]
 }) {
   return (
-    <div className="absolute top-1.5 z-10 flex w-full items-center justify-center gap-2 px-2 md:left-0 md:w-auto md:justify-start">
+    <div className="absolute top-1.5 z-10 flex w-full items-center justify-center gap-2 bg-white px-2 md:left-0 md:w-auto md:justify-start">
       <InstructionDialog />
 
       <RegisterDialog
