@@ -15,15 +15,13 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { useTemplateStore } from '@/lib/store/icu/template'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { Patient, SelectedIcuOrder } from '@/types/icu/chart'
 import { Plus } from 'lucide-react'
-import { useCallback, useEffect } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect } from 'react'
 import OrdererSelectStep from './orderer/orderer-select-step'
-import { useRouter } from 'next/navigation'
 
 export default function OrderDialog({
   icuChartId,
@@ -33,9 +31,11 @@ export default function OrderDialog({
   weight,
   ageInDays,
   orderStep,
-  isEditMode,
+  isEditOrderMode,
   setOrderStep,
   reset,
+  isExport,
+  setSortedOrders,
 }: {
   icuChartId: string
   orders: SelectedIcuOrder[]
@@ -44,11 +44,13 @@ export default function OrderDialog({
   weight: string
   ageInDays: number
   orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
-  isEditMode?: boolean
+  isEditOrderMode?: boolean
   setOrderStep: (
     orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit',
   ) => void
   reset: () => void
+  isExport?: boolean
+  setSortedOrders: Dispatch<SetStateAction<SelectedIcuOrder[]>>
 }) {
   const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isTemplateDialogOpen } = useTemplateStore()
@@ -95,7 +97,7 @@ export default function OrderDialog({
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           {orderStep === 'upsert' && (
-            <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
+            <DialogTitle>오더 {isEditOrderMode ? '수정' : '추가'}</DialogTitle>
           )}
           {orderStep === 'multipleEdit' && (
             <DialogTitle>오더 복사 / 오더 삭제</DialogTitle>
@@ -114,13 +116,16 @@ export default function OrderDialog({
 
             {/* 오더 직접 추가 (기본값) */}
             <TabsContent value="default">
-              <OrderForm
-                showOrderer={showOrderer}
-                icuChartId={icuChartId}
-                species={patient.species}
-                weight={weight}
-                ageInDays={ageInDays}
-              />
+              {!isExport && (
+                <OrderForm
+                  showOrderer={showOrderer}
+                  icuChartId={icuChartId}
+                  species={patient.species}
+                  weight={weight}
+                  ageInDays={ageInDays}
+                  setSortedOrders={setSortedOrders}
+                />
+              )}
             </TabsContent>
 
             {/* 템플릿 오더 추가 */}

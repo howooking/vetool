@@ -11,7 +11,7 @@ export const upsertTemplateChart = async (
   icuChartId: string,
   hosId: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.from('icu_templates').upsert(
     {
@@ -39,7 +39,7 @@ export const insertCustomTemplateChart = async (
   templateName: string,
   templateComment?: string | null,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.rpc('insert_template_orders', {
     hos_id_input: hosId,
@@ -61,7 +61,7 @@ export const updateTemplate = async (
   template_name: string,
   template_comment: string | null,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_templates')
@@ -78,7 +78,7 @@ export const deleteTemplateChart = async (
   templateId: string,
   chartId?: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('icu_templates')
@@ -96,7 +96,7 @@ export const deleteTemplateChart = async (
 }
 
 export const getBookmarkedCharts = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .rpc('get_icu_template_data', {
@@ -109,11 +109,11 @@ export const getBookmarkedCharts = async (hosId: string) => {
     redirect(`/error/?message=${error.message}`)
   }
 
-  return data.filter((chart) => chart.patient.name !== null)
+  return data ? data.filter((chart) => chart.patient.name !== null) : []
 }
 
 export const getTemplateCharts = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .rpc('get_icu_template_data', {
@@ -122,36 +122,14 @@ export const getTemplateCharts = async (hosId: string) => {
     .returns<TemplateChart[]>()
 
   if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
-  }
-
-  return data
-}
-
-export const getSearchedTemplateCharts = async (
-  hosId: string,
-  value: string,
-) => {
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .rpc('search_icu_templates_data', {
-      hos_id_input: hosId,
-      search_value: value,
-    })
-    .returns<TemplateChart[]>()
-
-  if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data
 }
 
 export const getReadOnlyChartOrders = async (chartId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('icu_orders')

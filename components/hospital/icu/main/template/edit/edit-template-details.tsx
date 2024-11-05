@@ -93,7 +93,7 @@ export default function EditTemplateDetails({
         <DialogHeader>
           <DialogTitle>{templateName} 템플릿 수정</DialogTitle>
           <DialogDescription>
-            {templateName} 템플릿의 오더를 수정합니다
+            {templateName} 템플릿의 정보를 수정합니다
           </DialogDescription>
         </DialogHeader>
 

@@ -4,11 +4,12 @@ import { getStaffs } from '@/lib/services/admin/staff/staff'
 import { getUser } from '@/lib/services/auth/authorization'
 import type { HospitalUserDataTable } from '@/types/adimin'
 
-export default async function AdminStaffPage({
-  params,
-}: {
-  params: { hos_id: string }
-}) {
+export default async function AdminStaffPage(
+  props: {
+    params: Promise<{ hos_id: string }>
+  }
+) {
+  const params = await props.params;
   const authUser = await getUser()
   const staffs = await getStaffs(params.hos_id)
   const isMaster = staffs[0].hos_id.master_user_id === authUser?.id

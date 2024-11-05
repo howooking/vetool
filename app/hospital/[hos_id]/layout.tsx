@@ -1,35 +1,31 @@
-import HospitalHeader from '@/components/hospital/header/hospital-header'
 import MobileSidebar from '@/components/hospital/sidebar/mobile-sidebar'
 import Sidebar from '@/components/hospital/sidebar/sidebar'
 import { getUserData } from '@/lib/services/auth/authorization'
 import { getHosName } from '@/lib/services/hospital-home/get-hos-name'
 import { redirect } from 'next/navigation'
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { hos_id: string }
+export async function generateMetadata(props: {
+  params: Promise<{ hos_id: string }>
 }) {
+  const params = await props.params
   const hosName = await getHosName(params.hos_id)
   return {
     title: hosName,
   }
 }
 
-export default async function Layout({
-  children,
-  params,
-}: {
+export default async function Layout(props: {
   children: React.ReactNode
-  params: { hos_id: string }
+  params: Promise<{ hos_id: string }>
 }) {
+  const params = await props.params
+  const { children } = props
+
   const userData = await getUserData()
   const hosName = await getHosName(params.hos_id)
+  const isSuperAccount = userData.email === process.env.NEXT_PUBLIC_SUPER_SHY
 
-  if (
-    userData.email !== process.env.NEXT_PUBLIC_SUPER_SHY! &&
-    userData.hos_id !== params.hos_id
-  ) {
+  if (!isSuperAccount && userData.hos_id !== params.hos_id) {
     redirect(`/hospital/${userData.hos_id}`)
   }
 
@@ -44,7 +40,8 @@ export default async function Layout({
       />
 
       <div className="relative w-full">
-        <HospitalHeader />
+        <header className="h-12 border-b" />
+
         <main className="w-full">{children}</main>
       </div>
     </div>

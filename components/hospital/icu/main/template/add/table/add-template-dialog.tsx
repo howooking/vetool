@@ -14,12 +14,12 @@ export default function AddTemplateDialog({
   isOpen,
   onOpenChange,
   children,
-  isEditMode,
+  isEditOrderMode,
 }: {
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
   children: ReactNode
-  isEditMode?: boolean
+  isEditOrderMode?: boolean
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -34,7 +34,7 @@ export default function AddTemplateDialog({
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>오더 {isEditMode ? '수정' : '추가'}</DialogTitle>
+          <DialogTitle>오더 {isEditOrderMode ? '수정' : '추가'}</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         {isOpen ? children : null}

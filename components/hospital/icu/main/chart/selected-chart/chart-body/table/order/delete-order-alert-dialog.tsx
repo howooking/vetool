@@ -13,26 +13,50 @@ import {
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { deleteOrder } from '@/lib/services/icu/chart/order-mutation'
+import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
+import { useRouter } from 'next/navigation'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 export default function DeleteOrderAlertDialog({
   selectedChartOrder,
   setOrderStep,
+  setSortedOrders,
 }: {
   selectedChartOrder: Partial<SelectedIcuOrder>
   setOrderStep: (orderStep: 'closed' | 'upsert' | 'selectOrderer') => void
+  setSortedOrders: Dispatch<SetStateAction<SelectedIcuOrder[]>>
 }) {
+  const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
+    useState(false)
+  const { refresh } = useRouter()
+  const { isSubscriptionReady } = useRealtimeSubscriptionStore()
+
   const handleDeleteOrderClick = async () => {
+    setIsDeleteOrdersDialogOpen(false)
+    setOrderStep('closed')
+
+    setSortedOrders((prev) =>
+      prev.filter((order) => order.order_id !== selectedChartOrder.order_id),
+    )
+
     await deleteOrder(selectedChartOrder.order_id!)
 
     toast({
       title: `${selectedChartOrder.order_name} 오더를 삭제하였습니다`,
     })
     setOrderStep('closed')
+
+    if (!isSubscriptionReady) {
+      refresh()
+    }
   }
 
   return (
-    <AlertDialog>
+    <AlertDialog
+      open={isDeleteOrdersDialogOpen}
+      onOpenChange={setIsDeleteOrdersDialogOpen}
+    >
       <AlertDialogTrigger asChild>
         <Button
           type="button"

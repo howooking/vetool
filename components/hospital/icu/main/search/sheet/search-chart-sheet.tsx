@@ -36,7 +36,7 @@ export default function SearchChartSheet({
         <CalendarSearch className="cursor-pointer text-primary" size={18} />
       </SheetTrigger>
 
-      <SheetContent>
+      <SheetContent className="max-w-[400px]">
         <SheetHeader>
           <SheetTitle>검색 필터 설정</SheetTitle>
           <SheetDescription>

@@ -12,15 +12,22 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { deleteOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
+import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react'
 
 export default function DeleteOrdersAlertDialog({
   isDeleteOrdersDialogOpen,
   setIsDeleteOrdersDialogOpen,
+  setSortedOrders,
 }: {
   isDeleteOrdersDialogOpen: boolean
   setIsDeleteOrdersDialogOpen: Dispatch<SetStateAction<boolean>>
+  setSortedOrders: Dispatch<SetStateAction<SelectedIcuOrder[]>>
 }) {
+  const { refresh } = useRouter()
+  const { isSubscriptionReady } = useRealtimeSubscriptionStore()
   const { reset, selectedOrderPendingQueue } = useIcuOrderStore()
   const deleteButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -31,6 +38,10 @@ export default function DeleteOrdersAlertDialog({
   }, [isDeleteOrdersDialogOpen])
 
   const handleDeleteOrderClick = async () => {
+    setSortedOrders((prev) =>
+      prev.filter((order) => !selectedOrderPendingQueue.includes(order)),
+    )
+
     selectedOrderPendingQueue.forEach(async (order) => {
       await deleteOrder(order.order_id!)
     })
@@ -40,6 +51,10 @@ export default function DeleteOrdersAlertDialog({
     })
     setIsDeleteOrdersDialogOpen(false)
     reset()
+
+    if (!isSubscriptionReady) {
+      refresh()
+    }
   }
 
   return (

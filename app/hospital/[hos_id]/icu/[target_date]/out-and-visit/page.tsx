@@ -6,14 +6,15 @@ import VisitChart from '@/components/hospital/icu/main/out-and-visit/visit-chart
 import { Separator } from '@/components/ui/separator'
 import { Suspense } from 'react'
 
-export default async function OutAndVisitPage({
-  params,
-}: {
-  params: {
-    hos_id: string
-    target_date: string
+export default async function OutAndVisitPage(
+  props: {
+    params: Promise<{
+      hos_id: string
+      target_date: string
+    }>
   }
-}) {
+) {
+  const params = await props.params;
   return (
     <div className="p-2">
       <div className="min-h-[360px]">

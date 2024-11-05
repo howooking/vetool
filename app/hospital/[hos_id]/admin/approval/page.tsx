@@ -3,11 +3,12 @@ import DataTable from '@/components/ui/data-table'
 import { getStaffApprovals } from '@/lib/services/admin/approval/approval'
 import type { ApprovalDataTable } from '@/types/adimin'
 
-export default async function AdminApprovalPage({
-  params,
-}: {
-  params: { hos_id: string }
-}) {
+export default async function AdminApprovalPage(
+  props: {
+    params: Promise<{ hos_id: string }>
+  }
+) {
+  const params = await props.params;
   const approvalData = await getStaffApprovals(params.hos_id)
 
   const data: ApprovalDataTable[] = approvalData.map((approval) => ({

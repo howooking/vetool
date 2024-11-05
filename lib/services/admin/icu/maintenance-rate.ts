@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export const getMaintenaceRateCalcMethod = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('hospitals')
@@ -13,8 +13,7 @@ export const getMaintenaceRateCalcMethod = async (hosId: string) => {
     .single()
 
   if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data.maintenance_rate_calc_method
@@ -24,7 +23,7 @@ export const updateMaintenanceRateCalcMethod = async (
   hosId: string,
   maintenanceRateCalcMethodInput: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('hospitals')

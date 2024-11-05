@@ -20,13 +20,14 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
 import { cn, formatOrders } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -39,6 +40,7 @@ export default function OrdererSelectStep({
   orders: SelectedIcuOrder[]
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
+  const { refresh } = useRouter()
   const { hos_id } = useParams()
   const {
     basicHosData: { vetsListData },
@@ -48,9 +50,11 @@ export default function OrdererSelectStep({
     selectedChartOrder,
     orderTimePendingQueue,
     copiedOrderPendingQueue,
-    isEditMode,
+    isEditOrderMode,
     setOrderStep,
   } = useIcuOrderStore()
+  const { isSubscriptionReady } = useRealtimeSubscriptionStore()
+
   const isSingleTx = useMemo(
     () => orderTimePendingQueue.length === 0,
     [orderTimePendingQueue],
@@ -87,16 +91,18 @@ export default function OrdererSelectStep({
       )
 
       toast({
-        title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+        title: `${selectedChartOrder.order_name!.split('#')[0]} 오더를 ${isEditOrderMode ? '수정' : '추가'} 하였습니다`,
       })
       reset()
       setOrderStep('closed')
       setIsUpdating(false)
+
+      if (!isSubscriptionReady) refresh()
     },
     [
       hos_id,
       icuChartId,
-      isEditMode,
+      isEditOrderMode,
       reset,
       selectedChartOrder.order_comment,
       selectedChartOrder.order_id,
@@ -104,6 +110,8 @@ export default function OrdererSelectStep({
       selectedChartOrder.order_times,
       selectedChartOrder.order_type,
       setOrderStep,
+      refresh,
+      isSubscriptionReady,
     ],
   )
 
@@ -141,8 +149,19 @@ export default function OrdererSelectStep({
       reset()
       setOrderStep('closed')
       setIsUpdating(false)
+
+      if (!isSubscriptionReady) refresh()
     },
-    [hos_id, icuChartId, orderTimePendingQueue, orders, reset, setOrderStep],
+    [
+      hos_id,
+      icuChartId,
+      orderTimePendingQueue,
+      orders,
+      reset,
+      setOrderStep,
+      refresh,
+      isSubscriptionReady,
+    ],
   )
 
   const handleUpsertOrder = useCallback(
@@ -174,8 +193,19 @@ export default function OrdererSelectStep({
       reset()
       setOrderStep('closed')
       setIsUpdating(false)
+
+      if (!isSubscriptionReady) refresh()
     },
-    [hos_id, icuChartId, copiedOrderPendingQueue, reset, setOrderStep],
+    [
+      hos_id,
+      icuChartId,
+      copiedOrderPendingQueue,
+      reset,
+      setOrderStep,
+      setIsUpdating,
+      refresh,
+      isSubscriptionReady,
+    ],
   )
 
   const handleSubmit = useCallback(

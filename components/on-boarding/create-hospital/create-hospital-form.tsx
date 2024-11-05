@@ -41,10 +41,10 @@ export default function CreateHospitalForm() {
   const form = useForm<z.infer<typeof newHospitalFormSchema>>({
     resolver: zodResolver(newHospitalFormSchema),
     defaultValues: {
-      name: undefined,
+      name: '',
       city: '서울특별시',
       district: undefined,
-      businessNumber: undefined,
+      businessNumber: '',
     },
   })
   const city = form.watch('city')

@@ -10,7 +10,9 @@ export const registerPatientFormSchema = z.object({
     .string({ required_error: '메인차트에 등록된 환자번호를 입력해주세요' })
     .trim()
     .min(1, { message: '환자 번호를 입력해주세요' }),
-  breed: z.string({ required_error: '품종을 선택해주세요' }),
+  breed: z
+    .string({ required_error: '품종을 선택해주세요' })
+    .min(1, { message: '품종을 선택해주세요' }),
   species: z.string({ required_error: '종을 선택해주세요' }),
   weight: z
     .string({ required_error: '몸무게를 입력해주세요' })

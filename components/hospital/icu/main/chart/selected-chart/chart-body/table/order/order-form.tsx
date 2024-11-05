@@ -19,10 +19,11 @@ import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { upsertOrder } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
+import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import FeedOrderField from './feed-order/feed-order-filed'
@@ -35,17 +36,19 @@ export default function OrderForm({
   weight,
   species,
   ageInDays,
+  setSortedOrders,
 }: {
   showOrderer: boolean
   icuChartId: string
   weight: string
   species: string
   ageInDays: number
+  setSortedOrders: Dispatch<SetStateAction<SelectedIcuOrder[]>>
 }) {
   const {
     setOrderStep,
     selectedChartOrder,
-    isEditMode,
+    isEditOrderMode,
     setSelectedChartOrder,
     reset,
   } = useIcuOrderStore()
@@ -65,9 +68,9 @@ export default function OrderForm({
   const form = useForm<z.infer<typeof orderSchema>>({
     resolver: zodResolver(orderSchema),
     defaultValues: {
-      icu_chart_order_type: selectedChartOrder.order_type ?? undefined,
-      icu_chart_order_name: selectedChartOrder.order_name ?? undefined,
-      icu_chart_order_comment: selectedChartOrder.order_comment ?? undefined,
+      icu_chart_order_type: selectedChartOrder.order_type ?? '',
+      icu_chart_order_name: selectedChartOrder.order_name ?? '',
+      icu_chart_order_comment: selectedChartOrder.order_comment ?? '',
     },
   })
 
@@ -95,12 +98,14 @@ export default function OrderForm({
       orderTime.map((time) => (time === '1' ? vetsListData[0].name : '0')),
       {
         icu_chart_order_name: values.icu_chart_order_name.trim(),
-        icu_chart_order_comment: values.icu_chart_order_comment ? values.icu_chart_order_comment.trim() : '',
+        icu_chart_order_comment: values.icu_chart_order_comment
+          ? values.icu_chart_order_comment.trim()
+          : '',
         icu_chart_order_type: values.icu_chart_order_type!,
       },
     )
     toast({
-      title: `오더를 ${isEditMode ? '수정' : '추가'} 하였습니다`,
+      title: `오더를 ${isEditOrderMode ? '수정' : '추가'} 하였습니다`,
     })
 
     reset()
@@ -187,10 +192,11 @@ export default function OrderForm({
         />
 
         <DialogFooter className="ml-auto w-full gap-2 md:gap-0">
-          {isEditMode && (
+          {isEditOrderMode && (
             <DeleteOrderAlertDialog
               selectedChartOrder={selectedChartOrder}
               setOrderStep={setOrderStep}
+              setSortedOrders={setSortedOrders}
             />
           )}
 
@@ -204,7 +210,7 @@ export default function OrderForm({
             {isUpdating ? (
               <LoaderCircle className="animate-spin" />
             ) : (
-              <>{isEditMode ? '변경' : '추가'}</>
+              <>{isEditOrderMode ? '변경' : '추가'}</>
             )}
           </Button>
         </DialogFooter>

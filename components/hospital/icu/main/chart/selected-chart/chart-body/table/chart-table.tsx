@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -27,17 +28,19 @@ import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { ArrowUpDown } from 'lucide-react'
-import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { Sortable } from 'react-sortablejs'
+import QuickOrderInsertInput from '../quick-order-insert-input'
 import SortableOrderWrapper from './order/sortable-order-wrapper'
 
 export default function ChartTable({
   chartData,
   preview,
+  isExport,
 }: {
   chartData: SelectedChart
   preview?: boolean
+  isExport?: boolean
 }) {
   const {
     icu_chart_id,
@@ -46,7 +49,8 @@ export default function ChartTable({
     weight,
     icu_io: { age_in_days },
   } = chartData
-  const { hos_id } = useParams()
+
+  const hosId = chartData.patient.hos_id
   const [isSorting, setIsSorting] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>(orders)
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
@@ -59,7 +63,7 @@ export default function ChartTable({
     orderTimePendingQueue,
     selectedOrderPendingQueue,
     copiedOrderPendingQueue,
-    isEditMode,
+    isEditOrderMode,
   } = useIcuOrderStore()
 
   const {
@@ -109,18 +113,12 @@ export default function ChartTable({
           : time,
       )
 
-      await upsertOrder(
-        chartData.patient.hos_id,
-        icu_chart_id,
-        order.orderId,
-        updatedOrderTimes,
-        {
-          icu_chart_order_name: currentOrder.order_name,
-          icu_chart_order_comment: currentOrder.order_comment,
-          icu_chart_order_type: currentOrder.order_type,
-          icu_chart_order_priority: currentOrder.id,
-        },
-      )
+      await upsertOrder(hosId, icu_chart_id, order.orderId, updatedOrderTimes, {
+        icu_chart_order_name: currentOrder.order_name,
+        icu_chart_order_comment: currentOrder.order_comment,
+        icu_chart_order_type: currentOrder.order_type,
+        icu_chart_order_priority: currentOrder.id,
+      })
     }
 
     toast({
@@ -128,14 +126,7 @@ export default function ChartTable({
     })
 
     reset()
-  }, [
-    chartData.patient.hos_id,
-    icu_chart_id,
-    orderTimePendingQueue,
-    orders,
-    reset,
-    vetsListData,
-  ])
+  }, [hosId, icu_chart_id, orderTimePendingQueue, orders, reset, vetsListData])
 
   // -------- 커멘드키 뗐을 때 작업 --------
   const { setTxStep } = useTxMutationStore()
@@ -164,7 +155,7 @@ export default function ChartTable({
   const handleUpsertOrderWithoutOrderer = useCallback(async () => {
     for (const order of copiedOrderPendingQueue) {
       await upsertOrder(
-        hos_id as string,
+        hosId as string,
         icu_chart_id,
         undefined,
         order.order_times!,
@@ -182,7 +173,7 @@ export default function ChartTable({
     })
 
     reset()
-  }, [hos_id, icu_chart_id, copiedOrderPendingQueue, reset])
+  }, [hosId, icu_chart_id, copiedOrderPendingQueue, reset])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -300,8 +291,10 @@ export default function ChartTable({
                 ageInDays={age_in_days}
                 orderStep={orderStep}
                 reset={reset}
-                isEditMode={isEditMode}
+                isEditOrderMode={isEditOrderMode}
                 setOrderStep={setOrderStep}
+                isExport={isExport}
+                setSortedOrders={setSortedOrders}
               />
             )}
           </TableHead>
@@ -370,14 +363,30 @@ export default function ChartTable({
               />
             </TableRow>
           ))}
+
+          {!isExport && (
+            <TableRow className="hover:bg-transparent">
+              <TableCell className="p-0">
+                <QuickOrderInsertInput
+                  icuChartId={icu_chart_id}
+                  setSortedOrders={setSortedOrders}
+                />
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       )}
 
-      <TxUpsertDialog />
-      <DeleteOrdersAlertDialog
-        isDeleteOrdersDialogOpen={isDeleteOrdersDialogOpen}
-        setIsDeleteOrdersDialogOpen={setIsDeleteOrdersDialogOpen}
-      />
+      {!isExport && (
+        <>
+          <TxUpsertDialog />
+          <DeleteOrdersAlertDialog
+            isDeleteOrdersDialogOpen={isDeleteOrdersDialogOpen}
+            setIsDeleteOrdersDialogOpen={setIsDeleteOrdersDialogOpen}
+            setSortedOrders={setSortedOrders}
+          />
+        </>
+      )}
     </Table>
   )
 }

@@ -63,6 +63,7 @@ export default function ChecklistInput({
       onChange={handleValueChange}
       onBlur={handleUpdateChecklist}
       onKeyDown={handlePressEnter}
+      className="truncate"
     />
   )
 }

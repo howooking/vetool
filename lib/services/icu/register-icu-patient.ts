@@ -16,7 +16,7 @@ export const registerIcuPatient = async (
   main_vet: string,
   sub_vet?: string,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.rpc('register_icu', {
     hos_id_input: hosId,

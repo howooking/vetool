@@ -130,15 +130,10 @@ export default function PatientForm({
   const isRegisterFromIcuRoute = mode === 'registerFromIcuRoute'
 
   const [breedOpen, setBreedOpen] = useState(false)
-  const [selectedSpecies, setSelectedSpecies] = useState<string>(
-    isEdit ? editingPatient?.species! : '',
-  )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { setRegisteringPatient } = useIcuRegisterStore()
   const [isDuplicateId, setIsDuplicateId] = useState(false)
   const { refresh } = useRouter()
-
-  const BREEDS = selectedSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS
 
   const form = useForm<z.infer<typeof registerPatientFormSchema>>({
     resolver: zodResolver(
@@ -173,8 +168,8 @@ export default function PatientForm({
           hos_owner_id: editingPatient?.hos_owner_id ?? '',
         }
       : {
-          name: undefined,
-          hos_patient_id: undefined,
+          name: '',
+          hos_patient_id: '',
           species: undefined,
           breed: undefined,
           gender: undefined,
@@ -188,6 +183,10 @@ export default function PatientForm({
   })
 
   const watchHosPatientId = form.watch('hos_patient_id')
+  const watchSpecies = form.watch('species')
+  const watchBreed = form.watch('breed')
+  const BREEDS = watchSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS
+
   useEffect(() => {
     const isDuplicate = hosPatientIds.includes(watchHosPatientId)
     const hasChanged = false
@@ -211,10 +210,11 @@ export default function PatientForm({
     editingPatient?.hos_patient_id,
   ])
 
-  const handleSpeciesChange = (selected: string) => {
-    form.setValue('species', selected)
-    setSelectedSpecies(selected)
-  }
+  useEffect(() => {
+    if (watchBreed) {
+      setBreedOpen(false)
+    }
+  }, [watchBreed])
 
   const handleRegister = async (
     values: z.infer<typeof registerPatientFormSchema>,
@@ -300,6 +300,8 @@ export default function PatientForm({
     const isWeightChanged = weightInput !== weight
 
     setIsSubmitting(true)
+
+    console.log(breed)
 
     if (mode === 'updateFromPatientRoute') {
       await updatePatientFromPatientRoute(
@@ -402,7 +404,10 @@ export default function PatientForm({
             <FormItem>
               <FormLabel>종*</FormLabel>
               <Select
-                onValueChange={handleSpeciesChange}
+                onValueChange={(value) => {
+                  field.onChange(value)
+                  form.setValue('breed', '')
+                }}
                 defaultValue={field.value}
                 name="species"
               >
@@ -441,19 +446,19 @@ export default function PatientForm({
                 onOpenChange={setBreedOpen}
                 modal={true}
               >
-                <PopoverTrigger asChild disabled={!selectedSpecies}>
+                <PopoverTrigger asChild disabled={!watchSpecies}>
                   <FormControl>
                     <Button
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        'relative h-8 justify-start overflow-hidden border border-input bg-inherit px-3 text-sm font-normal',
+                        'relative h-8 w-full justify-start overflow-hidden border border-input bg-inherit px-3 text-sm font-normal',
                         !field.value && 'text-muted-foreground',
                       )}
                     >
                       {field.value
                         ? BREEDS.find((breed) => breed === field.value)
-                        : selectedSpecies
+                        : watchSpecies
                           ? '품종을 선택해주세요'
                           : '종을 먼저 선택해주세요'}
                       <CaretSortIcon className="absolute right-3 h-4 w-4 shrink-0 opacity-50" />
@@ -461,8 +466,12 @@ export default function PatientForm({
                   </FormControl>
                 </PopoverTrigger>
 
-                <PopoverContent className="p-0 sm:w-[568px]">
-                  <Command>
+                <PopoverContent
+                  className="w-[var(--radix-popover-trigger-width)] p-0"
+                  align="start"
+                  side="bottom"
+                >
+                  <Command className="w-full">
                     <CommandInput
                       placeholder="품종 검색"
                       className="h-8 text-xs"
@@ -476,10 +485,7 @@ export default function PatientForm({
                             <CommandItem
                               value={breed}
                               key={breed}
-                              onSelect={() => {
-                                form.setValue('breed', breed)
-                                setBreedOpen(false)
-                              }}
+                              onSelect={field.onChange}
                               className="text-xs"
                             >
                               {breed}
@@ -503,7 +509,6 @@ export default function PatientForm({
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="gender"

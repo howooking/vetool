@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export const getShowOrderer = async (hosId: string) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('hospitals')
@@ -13,8 +13,7 @@ export const getShowOrderer = async (hosId: string) => {
     .single()
 
   if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
+    throw new Error(error.message)
   }
 
   return data.show_orderer
@@ -24,7 +23,7 @@ export const updateShowOrderer = async (
   hosId: string,
   showOrderInput: boolean,
 ) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('hospitals')

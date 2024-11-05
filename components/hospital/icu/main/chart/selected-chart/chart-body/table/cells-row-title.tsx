@@ -2,11 +2,11 @@ import { Button } from '@/components/ui/button'
 import { TableCell } from '@/components/ui/table'
 import { toast } from '@/components/ui/use-toast'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
-import { cn } from '@/lib/utils'
+import { cn, parsingOrderName } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { IcuOrderColors } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 
 export default function CellsRowTitle({
   order,
@@ -25,7 +25,7 @@ export default function CellsRowTitle({
   } = useBasicHosDataContext()
   const {
     setOrderStep,
-    setIsEditMode,
+    setIsEditOrderMode,
     setSelectedChartOrder,
     selectedOrderPendingQueue,
     setSelectedOrderPendingQueue,
@@ -99,7 +99,7 @@ export default function CellsRowTitle({
 
       reset()
       setOrderStep('upsert')
-      setIsEditMode(true)
+      setIsEditOrderMode(true)
       setSelectedChartOrder(order)
     },
     [
@@ -108,7 +108,7 @@ export default function CellsRowTitle({
       setSelectedOrderPendingQueue,
       setSelectedChartOrder,
       setOrderStep,
-      setIsEditMode,
+      setIsEditOrderMode,
       reset,
     ],
   )
@@ -125,10 +125,12 @@ export default function CellsRowTitle({
       }}
     >
       <Button
+        disabled={order.order_id === 'temp_order_id'}
         variant="ghost"
         onClick={isSorting ? undefined : handleEditOrderDialogOpen}
         className={cn(
           'flex h-11 w-[320px] justify-between rounded-none bg-transparent px-2 outline-none ring-inset ring-primary',
+          order.order_id === 'temp_order_id' && 'animate-shake-strong',
           preview
             ? 'cursor-not-allowed'
             : isSorting
@@ -137,7 +139,9 @@ export default function CellsRowTitle({
           isInPendingQueue && 'ring-2',
         )}
       >
-        <span className="truncate">{order.order_name.split('#')[0]}</span>
+        <span className="truncate">
+          {parsingOrderName(order_type, order.order_name)}
+        </span>
         <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
           {order_comment} {order_type === 'fluid' && 'ml/hr'}
         </span>
