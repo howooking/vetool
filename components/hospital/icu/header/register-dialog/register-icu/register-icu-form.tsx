@@ -99,43 +99,49 @@ export default function RegisterIcuForm({
   ) => {
     const { dx, cc, in_date, out_due_date, main_vet, sub_vet, group_list } =
       values
-    setIsSubmitting(true)
+    if (
+      confirm(
+        `${registeringPatient?.patientName} 환자를 "${format(in_date, 'yyyy-MM-dd')}"에 입원시키겠습니까?`,
+      )
+    ) {
+      setIsSubmitting(true)
 
-    await registerIcuPatient(
-      hosId,
-      registeringPatient!.patientId,
-      registeringPatient!.birth,
-      dx,
-      cc,
-      format(in_date, 'yyyy-MM-dd'),
-      out_due_date ? format(out_due_date, 'yyyy-MM-dd') : '',
-      group_list,
-      main_vet,
-      sub_vet,
-    )
+      await registerIcuPatient(
+        hosId,
+        registeringPatient!.patientId,
+        registeringPatient!.birth,
+        dx,
+        cc,
+        format(in_date, 'yyyy-MM-dd'),
+        out_due_date ? format(out_due_date, 'yyyy-MM-dd') : '',
+        group_list,
+        main_vet,
+        sub_vet,
+      )
 
-    toast({
-      title: '입원 환자가 등록되었습니다',
-    })
-    setIsRegisterDialogOpen(false)
-    setIsSubmitting(false)
+      toast({
+        title: '입원 환자가 등록되었습니다',
+      })
+      setIsRegisterDialogOpen(false)
+      setIsSubmitting(false)
 
-    const splittedPath = path.split('/')
-    if (splittedPath[6]) {
-      splittedPath[splittedPath.length - 1] = registeringPatient!.patientId
-    } else {
-      splittedPath[5] = 'chart'
-      splittedPath.push(registeringPatient!.patientId)
+      const splittedPath = path.split('/')
+      if (splittedPath[6]) {
+        splittedPath[splittedPath.length - 1] = registeringPatient!.patientId
+      } else {
+        splittedPath[5] = 'chart'
+        splittedPath.push(registeringPatient!.patientId)
+      }
+
+      const newPatientPath = splittedPath.join('/')
+
+      const newPath = changeTargetDateInUrl(
+        newPatientPath,
+        format(in_date, 'yyyy-MM-dd'),
+      )
+
+      push(newPath)
     }
-
-    const newPatientPath = splittedPath.join('/')
-
-    const newPath = changeTargetDateInUrl(
-      newPatientPath,
-      format(in_date, 'yyyy-MM-dd'),
-    )
-
-    push(newPath)
   }
 
   const handlePreviousButtonClick = () => {
