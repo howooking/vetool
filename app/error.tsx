@@ -27,10 +27,8 @@ import { useEffect, useState } from 'react'
 
 export default function Error({
   error,
-  reset,
 }: {
   error: Error & { digest?: string }
-  reset: () => void
 }) {
   const [userId, setUserId] = useState<string>()
   const { replace } = useRouter()
@@ -117,7 +115,11 @@ export default function Error({
         </CardContent>
 
         <CardFooter className="justify-center gap-2">
-          <Button className="w-full" variant="outline" onClick={() => reset()}>
+          <Button
+            className="w-full"
+            variant="outline"
+            onClick={() => window.location.reload()}
+          >
             <RotateCw />
             재시도
           </Button>
