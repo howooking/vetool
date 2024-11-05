@@ -211,12 +211,6 @@ export default function PatientForm({
   ])
 
   useEffect(() => {
-    if (watchSpecies !== undefined) {
-      form.setValue('breed', '')
-    }
-  }, [watchSpecies, form])
-
-  useEffect(() => {
     if (watchBreed) {
       setBreedOpen(false)
     }
@@ -306,6 +300,8 @@ export default function PatientForm({
     const isWeightChanged = weightInput !== weight
 
     setIsSubmitting(true)
+
+    console.log(breed)
 
     if (mode === 'updateFromPatientRoute') {
       await updatePatientFromPatientRoute(
@@ -408,7 +404,10 @@ export default function PatientForm({
             <FormItem>
               <FormLabel>종*</FormLabel>
               <Select
-                onValueChange={field.onChange}
+                onValueChange={(value) => {
+                  field.onChange(value)
+                  form.setValue('breed', '')
+                }}
                 defaultValue={field.value}
                 name="species"
               >
@@ -453,7 +452,7 @@ export default function PatientForm({
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        'relative h-8 justify-start overflow-hidden border border-input bg-inherit px-3 text-sm font-normal',
+                        'relative h-8 w-full justify-start overflow-hidden border border-input bg-inherit px-3 text-sm font-normal',
                         !field.value && 'text-muted-foreground',
                       )}
                     >
@@ -467,8 +466,12 @@ export default function PatientForm({
                   </FormControl>
                 </PopoverTrigger>
 
-                <PopoverContent className="p-0 sm:w-[568px]">
-                  <Command>
+                <PopoverContent
+                  className="w-[var(--radix-popover-trigger-width)] p-0"
+                  align="start"
+                  side="bottom"
+                >
+                  <Command className="w-full">
                     <CommandInput
                       placeholder="품종 검색"
                       className="h-8 text-xs"
@@ -506,7 +509,6 @@ export default function PatientForm({
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="gender"

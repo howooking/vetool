@@ -18,6 +18,7 @@ export type IcuTxs = Database['public']['Tables']['icu_txs']['Row']
 export type IcuTemplate = Database['public']['Tables']['icu_templates']['Row']
 export type IcuOut = Database['public']['Tables']['icu_out']['Row']
 export type IcuVisit = Database['public']['Tables']['icu_visit']['Row']
+export type VetoolErrors = Database['public']['Tables']['vetool_errors']['Row']
 
 export type Params = { slug: string }
 
