@@ -47,11 +47,7 @@ export function DeleteUserColumn({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          disabled={!isMaster || userId === masterUserId}
-        >
+        <Button variant="ghost" size="icon" disabled={userId === masterUserId}>
           <UserRoundMinus size={14} />
         </Button>
       </AlertDialogTrigger>

@@ -163,9 +163,9 @@ export const staffColumns: ColumnDef<HospitalUserDataTable>[] = [
       const isMaster = row.original.isMaster
       const masterUserId = row.original.master_user_id
 
-      if (!isMaster) {
-        return null
-      }
+      // if (!isMaster) {
+      //   return null
+      // }
 
       return (
         <DeleteUserColumn
