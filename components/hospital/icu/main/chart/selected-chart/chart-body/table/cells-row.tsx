@@ -19,9 +19,9 @@ type CellsRowProps = {
   handleColumnLeave: () => void
   guidelineTimes: number[]
   isSorting?: boolean
-
   selectedTxPendingQueue: OrderTimePendingQueue[]
   orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
+  orderTimePendingQueueLength: number
 }
 
 export default function CellsRow({
@@ -35,6 +35,7 @@ export default function CellsRow({
   isSorting,
   selectedTxPendingQueue,
   orderStep,
+  orderTimePendingQueueLength,
 }: CellsRowProps) {
   const { order_times, order_id, treatments } = order
   const {
@@ -60,6 +61,8 @@ export default function CellsRow({
 
   const toggleOrderTime = useCallback(
     (orderId: string, time: number) => {
+      if (selectedTxPendingQueue.length > 0) return
+
       setOrderTimeState((prevOrderTime) => {
         const newOrderTime = [...prevOrderTime]
         newOrderTime[time - 1] = newOrderTime[time - 1] !== '0' ? '0' : '...'
@@ -78,7 +81,7 @@ export default function CellsRow({
         }
       })
     },
-    [setOrderTimePendingQueue],
+    [setOrderTimePendingQueue, selectedTxPendingQueue],
   )
 
   return (
@@ -116,6 +119,7 @@ export default function CellsRow({
             setTxStep={setTxStep}
             setTxLocalState={setTxLocalState}
             setSelectedOrderPendingQueue={setSelectedOrderPendingQueue}
+            orderTimePendingQueueLength={orderTimePendingQueueLength}
           />
         )
       })}
