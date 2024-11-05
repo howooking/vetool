@@ -129,7 +129,7 @@ export default function ChartTable({
   }, [hosId, icu_chart_id, orderTimePendingQueue, orders, reset, vetsListData])
 
   // -------- 커멘드키 뗐을 때 작업 --------
-  const { setTxStep } = useTxMutationStore()
+  const { txStep, setTxStep } = useTxMutationStore()
   useEffect(() => {
     if (!isCommandPressed && orderTimePendingQueue.length >= 1) {
       showOrderer
@@ -137,7 +137,9 @@ export default function ChartTable({
         : handleUpsertOrderTimesWithoutOrderer()
     }
     if (!isCommandPressed && selectedTxPendingQueue.length >= 1) {
-      setTxStep('detailInsert')
+      if (txStep === 'closed') {
+        setTxStep('detailInsert')
+      }
     }
   }, [
     handleUpsertOrderTimesWithoutOrderer,
@@ -341,6 +343,7 @@ export default function ChartTable({
                 handleColumnLeave={handleColumnLeave}
                 guidelineTimes={guidelineTimes}
                 selectedTxPendingQueue={selectedTxPendingQueue}
+                orderTimePendingQueueLength={orderTimePendingQueue.length}
               />
             </TableRow>
           ))}
@@ -360,6 +363,7 @@ export default function ChartTable({
                 guidelineTimes={guidelineTimes}
                 selectedTxPendingQueue={selectedTxPendingQueue}
                 orderStep={orderStep}
+                orderTimePendingQueueLength={orderTimePendingQueue.length}
               />
             </TableRow>
           ))}

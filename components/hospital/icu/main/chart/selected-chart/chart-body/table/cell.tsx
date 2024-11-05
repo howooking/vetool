@@ -38,6 +38,7 @@ type CellProps = {
       | Partial<SelectedIcuOrder>[]
       | ((prev: Partial<SelectedIcuOrder>[]) => Partial<SelectedIcuOrder>[]),
   ) => void
+  orderTimePendingQueueLength: number
 }
 
 const Cell: React.FC<CellProps> = React.memo(
@@ -63,6 +64,7 @@ const Cell: React.FC<CellProps> = React.memo(
     setTxStep,
     setTxLocalState,
     setSelectedOrderPendingQueue,
+    orderTimePendingQueueLength,
   }) => {
     const [briefTxResultInput, setBriefTxResultInput] = useState('')
     const [isFocused, setIsFocused] = useState(false)
@@ -136,6 +138,7 @@ const Cell: React.FC<CellProps> = React.memo(
 
     const toggleCellInQueue = useCallback(
       (orderId: string, time: number) => {
+        if (orderTimePendingQueueLength > 0) return
         setSelectedTxPendingQueue((prev) => {
           const existingIndex = prev.findIndex(
             (item) => item.orderId === orderId && item.orderTime === time,
@@ -155,7 +158,12 @@ const Cell: React.FC<CellProps> = React.memo(
           }
         })
       },
-      [setSelectedTxPendingQueue, icuChartTxId, treatment?.tx_log],
+      [
+        setSelectedTxPendingQueue,
+        icuChartTxId,
+        treatment?.tx_log,
+        orderTimePendingQueueLength,
+      ],
     )
 
     const handleMouseDown = useCallback(
