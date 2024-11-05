@@ -108,8 +108,6 @@ export default function QuickOrderInsertInput({
         </SelectContent>
       </Select>
 
-      {/* <Separator orientation="vertical" className="h-6" /> */}
-
       <Input
         className="h-11 rounded-none border-b-0 border-l-0 border-t-0 focus-visible:ring-0"
         disabled={isSubmitting}

@@ -173,7 +173,7 @@ export default function Autocomplete({
       )}
 
       <HelperTooltip className="absolute right-2 top-2">
-        키워드는 콤마 또는 스페이스로 구분됩니다
+        키워드는 콤마로 구분됩니다
       </HelperTooltip>
     </div>
   )
