@@ -467,6 +467,8 @@ export const CANINE_BREEDS = [
   '휘핏',
 
   '요크셔 테리어',
+
+  '꼬똥',
 ] as const
 
 export const FELINE_BREEDS = [
@@ -569,6 +571,10 @@ export const FELINE_BREEDS = [
   '턱시도',
 
   '두색털 고양이',
+
+  '카오마니',
+
+  '먼치킨',
 ] as const
 
 export const COLORS = [
