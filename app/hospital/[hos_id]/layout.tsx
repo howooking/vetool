@@ -1,3 +1,4 @@
+import Feedback from '@/components/hospital/feedback/feedback'
 import MobileSidebar from '@/components/hospital/sidebar/mobile-sidebar'
 import Sidebar from '@/components/hospital/sidebar/sidebar'
 import { getUserData } from '@/lib/services/auth/authorization'
@@ -41,9 +42,10 @@ export default async function Layout(props: {
 
       <div className="relative w-full">
         <header className="h-12 border-b" />
-
         <main className="w-full">{children}</main>
       </div>
+
+      <Feedback />
     </div>
   )
 }
