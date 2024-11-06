@@ -8,7 +8,7 @@ export async function SuperPageTabs({ hosList }: { hosList: HosListData[] }) {
   const errorLogs = await getErrorFeedback()
 
   return (
-    <Tabs defaultValue="hosList" className="w-full">
+    <Tabs defaultValue="hosList" className="w-full p-2">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="hosList">병원 목록</TabsTrigger>
         <TabsTrigger value="errors">에러 로그</TabsTrigger>
