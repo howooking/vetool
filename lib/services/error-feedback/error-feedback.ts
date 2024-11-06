@@ -24,3 +24,18 @@ export const sendErrorFeedback = async (
     redirect(`/error?message=${error.message}`)
   }
 }
+
+export const getErrorFeedback = async () => {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('vetool_errors')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return data ?? []
+}
