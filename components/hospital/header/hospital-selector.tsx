@@ -19,13 +19,12 @@ import { ChevronsUpDown } from 'lucide-react'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export default function NavigateHospitalSelects({
+export default function HospitalSelector({
   hosList,
 }: {
   hosList: HosListData[]
 }) {
   const { hos_id } = useParams()
-
   const pathname = usePathname()
   const router = useRouter()
   const currentHosName = hosList.find(

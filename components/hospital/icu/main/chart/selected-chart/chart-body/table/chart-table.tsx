@@ -150,6 +150,7 @@ export default function ChartTable({
     setOrderStep,
     setTxStep,
     showOrderer,
+    txStep,
   ])
   // ---------------------------------
 

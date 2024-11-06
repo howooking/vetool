@@ -63,3 +63,9 @@ export const getUserData = async () => {
 
   return userData
 }
+
+export const isSuperAccount = async () => {
+  const authUser = await getUser()
+
+  return authUser?.email === process.env.NEXT_PUBLIC_SUPER_SHY
+}

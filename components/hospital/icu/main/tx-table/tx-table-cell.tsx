@@ -1,7 +1,7 @@
 import CustomTooltip from '@/components/ui/custom-tooltip'
 import { TableCell } from '@/components/ui/table'
 import { cn, parsingOrderName } from '@/lib/utils'
-import { IcuOrders, IcuTxs } from '@/types'
+import type { IcuOrders, IcuTxs } from '@/types'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 

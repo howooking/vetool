@@ -1,5 +1,6 @@
 'use client'
 
+import Autocomplete from '@/components/common/auto-complete/auto-complete'
 import HelperTooltip from '@/components/common/helper-tooltip'
 import SearchChartTable from '@/components/hospital/icu/main/search/search-chart-table'
 import SearchChartSheet from '@/components/hospital/icu/main/search/sheet/search-chart-sheet'
@@ -34,10 +35,19 @@ export default function IcuSearchChart() {
   const getSearchValue = useCallback(
     (value: string) => {
       if (searchOptions.searchType === 'keyword') {
-        const result = trie
-          ?.search(value)
-          .sort((a, b) => a.keyword.length - b.keyword.length)[0]
-        return result?.searchKeyword ?? ''
+        // ','를 기준하여 키워드 분할
+        const splittedSearchValue = value.split(',').map((term) => term.trim())
+
+        // 순회하여 검색어 변환
+        const keywords = splittedSearchValue.map((term) => {
+          const result = trie
+            ?.search(term)
+            .sort((a, b) => a.keyword.length - b.keyword.length)[0]
+          return result?.searchKeyword ?? term
+        })
+
+        // 공백을 기준으로 조인
+        return keywords.join(' ')
       }
       return value
     },
@@ -78,14 +88,14 @@ export default function IcuSearchChart() {
   return (
     <div className="flex flex-col gap-2 p-2">
       <div className="flex items-center gap-4 pr-2">
-        <Input
+        {/* <Input
           placeholder="환자명, 종(canine, feline), 품종, DX, CC, 처치명, 사용약물명"
           onChange={(e) => handleInputChange(e.target.value)}
           id="search-chart"
           className="w-full"
-        />
+        /> */}
 
-        {/* <Autocomplete label="DX" handleUpdate={handleInputChange} /> */}
+        <Autocomplete handleUpdate={handleInputChange} />
 
         <SearchTypeRadio setOptions={setSearchOptions} />
         <HelperTooltip>
