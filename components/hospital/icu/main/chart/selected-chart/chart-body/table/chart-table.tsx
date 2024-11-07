@@ -77,20 +77,6 @@ export default function ChartTable({
     setSortedOrders(orders)
   }, [orders])
 
-  // -------- 시간 가이드라인 --------
-  const [guidelineTimes, setGuidelineTimes] = useLocalStorage(
-    'guideline-times',
-    [2, 10, 18],
-  )
-  const handleToggleGuidelineTimes = (time: number) => {
-    if (guidelineTimes.includes(time)) {
-      setGuidelineTimes(guidelineTimes.filter((t) => t !== time))
-    } else {
-      setGuidelineTimes([...guidelineTimes, time])
-    }
-  }
-  // -----------------------------
-
   // ----- 표에서 수직 안내선 -----
   const [hoveredColumn, setHoveredColumn] = useState<number | null>(null)
   const handleColumnHover = useCallback(
@@ -313,9 +299,6 @@ export default function ChartTable({
                 'border text-center',
               )}
               key={time}
-              onClick={
-                preview ? undefined : () => handleToggleGuidelineTimes(time)
-              }
             >
               {time.toString().padStart(2, '0')}
             </TableHead>
@@ -346,7 +329,6 @@ export default function ChartTable({
                 hoveredColumn={hoveredColumn}
                 handleColumnHover={handleColumnHover}
                 handleColumnLeave={handleColumnLeave}
-                guidelineTimes={guidelineTimes}
                 selectedTxPendingQueue={selectedTxPendingQueue}
                 orderTimePendingQueueLength={orderTimePendingQueue.length}
               />
@@ -365,7 +347,6 @@ export default function ChartTable({
                 hoveredColumn={hoveredColumn}
                 handleColumnHover={handleColumnHover}
                 handleColumnLeave={handleColumnLeave}
-                guidelineTimes={guidelineTimes}
                 selectedTxPendingQueue={selectedTxPendingQueue}
                 orderStep={orderStep}
                 orderTimePendingQueueLength={orderTimePendingQueue.length}

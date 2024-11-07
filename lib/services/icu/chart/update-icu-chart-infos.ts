@@ -96,7 +96,7 @@ export const updateOutDueDate = async (
   }
 }
 
-export const updateMemo = async (
+export const updateMemos = async (
   query: { [key: string]: string },
   icuChartId: string,
 ) => {

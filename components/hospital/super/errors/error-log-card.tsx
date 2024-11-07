@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { cn, getTimeSince } from '@/lib/utils'
+import { cn, formatTimeDifference } from '@/lib/utils'
 import type { VetoolErrors } from '@/types'
 import { ParsedError } from '@/types/hospital'
 import { ChevronDown } from 'lucide-react'
@@ -44,7 +44,7 @@ export default function ErrorLogCard({ errorLog }: { errorLog: VetoolErrors }) {
 
           <div className="flex items-center space-x-4">
             <span className="text-sm text-gray-500">
-              {getTimeSince(errorLog.created_at)}
+              {formatTimeDifference(errorLog.created_at)}
             </span>
             <ChevronDown
               className={cn(
