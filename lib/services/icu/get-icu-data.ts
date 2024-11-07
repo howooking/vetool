@@ -49,7 +49,7 @@ export const getIcuData = async (hosId: string, targetDate: string) => {
       .returns<PatientData[]>(),
 
     supabase
-      .rpc('get_icu_custom_template_data', {
+      .rpc('get_icu_template_data', {
         hos_id_input: hosId,
       })
       .returns<TemplateChart[]>(),

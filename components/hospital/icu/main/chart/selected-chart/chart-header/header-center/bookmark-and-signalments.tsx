@@ -1,4 +1,4 @@
-import TemplateDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/template-dialog'
+import BookmarkDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/bookmark-dialog'
 import UpdatePatientDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/update-patient-dialog'
 import type { SelectedChart } from '@/types/icu/chart'
 
@@ -11,9 +11,9 @@ export default function HeaderCenter({
 
   return (
     <div className="flex w-full flex-wrap items-center justify-center gap-2 rounded-md bg-muted p-2 text-xs md:h-12 md:bg-transparent md:text-sm">
-      <TemplateDialog
+      <BookmarkDialog
         icuChartId={chartData.icu_chart_id}
-        templateData={chartData.template}
+        bookmarkData={chartData.template}
       />
       <UpdatePatientDialog
         patientData={{ ...patient, isIcu: true }}

@@ -1,6 +1,6 @@
 'use client'
 
-import { templateFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/weght-template-schema'
+import { bookmarkFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/weght-bookmark-schema'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -34,12 +34,12 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function TemplateDialog({
+export default function BookmarkDialog({
   icuChartId,
-  templateData,
+  bookmarkData,
 }: {
   icuChartId: string
-  templateData: Pick<
+  bookmarkData: Pick<
     IcuTemplate,
     'template_id' | 'template_name' | 'template_comment'
   > | null
@@ -50,20 +50,20 @@ export default function TemplateDialog({
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  const form = useForm<z.infer<typeof templateFormSchema>>({
-    resolver: zodResolver(templateFormSchema),
+  const form = useForm<z.infer<typeof bookmarkFormSchema>>({
+    resolver: zodResolver(bookmarkFormSchema),
     defaultValues: {
-      template_name: templateData?.template_name ?? undefined,
-      template_comment: templateData?.template_comment ?? undefined,
+      bookmark_name: bookmarkData?.template_name ?? undefined,
+      bookmark_comment: bookmarkData?.template_comment ?? undefined,
     },
   })
 
-  const handleSubmit = async (values: z.infer<typeof templateFormSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof bookmarkFormSchema>) => {
     setIsSubmitting(true)
 
     await upsertTemplateChart(
-      values.template_name,
-      values.template_comment ?? '',
+      values.bookmark_name,
+      values.bookmark_comment ?? '',
       icuChartId,
       hos_id as string,
     )
@@ -80,7 +80,7 @@ export default function TemplateDialog({
   const handleDelete = async () => {
     setIsDeleting(true)
 
-    await deleteTemplateChart(templateData?.template_id!)
+    await deleteTemplateChart(bookmarkData?.template_id!)
 
     toast({
       title: '템플릿이 삭제되었습니다',
@@ -94,13 +94,13 @@ export default function TemplateDialog({
   useEffect(() => {
     if (!isDialogOpen) {
       form.reset({
-        template_name: templateData?.template_name || undefined,
-        template_comment: templateData?.template_comment || undefined,
+        bookmark_name: bookmarkData?.template_name || undefined,
+        bookmark_comment: bookmarkData?.template_comment || undefined,
       })
     }
   }, [
-    templateData?.template_comment,
-    templateData?.template_name,
+    bookmarkData?.template_comment,
+    bookmarkData?.template_name,
     form,
     isDialogOpen,
   ])
@@ -111,13 +111,13 @@ export default function TemplateDialog({
         <Star
           className={cn(
             'text-amber-300',
-            templateData?.template_id!! && 'fill-amber-300',
+            bookmarkData?.template_id!! && 'fill-amber-300',
           )}
         />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>차트 템플릿 생성</DialogTitle>
+          <DialogTitle>차트 북마크 생성</DialogTitle>
           <DialogDescription />
         </DialogHeader>
 
@@ -128,15 +128,15 @@ export default function TemplateDialog({
           >
             <FormField
               control={form.control}
-              name="template_name"
+              name="bookmark_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>템플릿 이름*</FormLabel>
+                  <FormLabel>북마크 이름*</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       value={field.value || ''}
-                      placeholder="템플릿 이름을 입력해주세요"
+                      placeholder="북마크 이름을 입력해주세요"
                     />
                   </FormControl>
                   <FormMessage />
@@ -146,7 +146,7 @@ export default function TemplateDialog({
 
             <FormField
               control={form.control}
-              name="template_comment"
+              name="bookmark_comment"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>설명</FormLabel>
@@ -163,7 +163,7 @@ export default function TemplateDialog({
             />
 
             <div className="flex">
-              {templateData?.template_id!! && (
+              {bookmarkData?.template_id!! && (
                 <Button
                   type="button"
                   variant="destructive"

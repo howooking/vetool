@@ -7,8 +7,9 @@ import { Button } from '@/components/ui/button'
 import type { TemplateChart } from '@/types/icu/template'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
+import GotoIcuButton from '../template/table/goto-icu-button'
 
-export const templateColumns: ColumnDef<TemplateChart>[] = [
+export const bookmarkColumns: ColumnDef<TemplateChart>[] = [
   {
     accessorKey: 'template_name',
     header: ({ column }) => {
@@ -17,7 +18,7 @@ export const templateColumns: ColumnDef<TemplateChart>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          탬플릿 이름
+          북마크 이름
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -72,21 +73,14 @@ export const templateColumns: ColumnDef<TemplateChart>[] = [
   },
   {
     id: 'action',
-    header: '수정',
+    header: '이동',
     cell: ({ row }) => {
-      const chartId = row.original.icu_chart_id
-      const templateName = row.original.template_name
-      const templateComment = row.original.template_comment
-      const templateId = row.original.template_id
+      const patientId = row.original.patient.patient_id
+      const targetDate = row.original.target_date
 
       return (
         <div className="flex justify-center">
-          <EditTemplateButton
-            chartId={chartId}
-            templateId={templateId}
-            templateName={templateName}
-            templateComment={templateComment}
-          />
+          <GotoIcuButton patientId={patientId} targetDate={targetDate} />
         </div>
       )
     },

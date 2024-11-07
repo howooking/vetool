@@ -95,28 +95,11 @@ export const deleteTemplateChart = async (
   }
 }
 
-export const getBookmarkedCharts = async (hosId: string) => {
-  const supabase = await createClient()
-
-  const { data, error } = await supabase
-    .rpc('get_icu_template_data', {
-      hos_id_input: hosId,
-    })
-    .returns<TemplateChart[]>()
-
-  if (error) {
-    console.error(error)
-    redirect(`/error/?message=${error.message}`)
-  }
-
-  return data ? data.filter((chart) => chart.patient.name !== null) : []
-}
-
 export const getTemplateCharts = async (hosId: string) => {
   const supabase = await createClient()
 
   const { data, error } = await supabase
-    .rpc('get_icu_template_data', {
+    .rpc('get_icu_custom_order_data', {
       hos_id_input: hosId,
     })
     .returns<TemplateChart[]>()
