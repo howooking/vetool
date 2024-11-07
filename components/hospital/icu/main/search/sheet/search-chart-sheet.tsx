@@ -30,6 +30,13 @@ export default function SearchChartSheet({
     setSearchOptions(options)
   }
 
+  const handleValueChange = (value: string) => {
+    setOptions((prevOptions) => ({
+      ...prevOptions,
+      timeRange: value,
+    }))
+  }
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -45,7 +52,7 @@ export default function SearchChartSheet({
         </SheetHeader>
 
         <div className="grid gap-4 py-4">
-          <DateRagneSelect timeRange={timeRange} setOptions={setOptions} />
+          <DateRagneSelect timeRange={timeRange} onChange={handleValueChange} />
           <OrderSelect order={order} setOptions={setOptions} />
         </div>
 

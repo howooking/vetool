@@ -3,12 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { cn, formatTimeDifference } from '@/lib/utils'
-import type { VetoolErrors } from '@/types'
 import { ParsedError } from '@/types/hospital'
+import type { ErrorFeedbackType } from '@/types/vetool'
 import { ChevronDown } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
-export default function ErrorLogCard({ errorLog }: { errorLog: VetoolErrors }) {
+export default function ErrorLogCard({
+  errorLog,
+}: {
+  errorLog: ErrorFeedbackType
+}) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const parsedError: ParsedError = useMemo(() => {
@@ -42,10 +46,12 @@ export default function ErrorLogCard({ errorLog }: { errorLog: VetoolErrors }) {
             </CardTitle>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-500">
+          <div className="flex items-center gap-2">
+            <div className="flex shrink-0 flex-col items-end space-x-4 text-sm">
+              <span>{errorLog.user_id.hos_id.city}</span>
+              <span>{errorLog.user_id.hos_id.name}</span>
               {formatTimeDifference(errorLog.created_at)}
-            </span>
+            </div>
             <ChevronDown
               className={cn(
                 'h-5 w-5 transition-transform duration-300',
