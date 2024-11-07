@@ -899,6 +899,30 @@ export type Database = {
       }
       keywords: {
         Row: {
+          keyword: string | null
+          keyword_id: number
+          main_keyword: string | null
+          search_keyword: string | null
+          tags: string | null
+        }
+        Insert: {
+          keyword?: string | null
+          keyword_id?: number
+          main_keyword?: string | null
+          search_keyword?: string | null
+          tags?: string | null
+        }
+        Update: {
+          keyword?: string | null
+          keyword_id?: number
+          main_keyword?: string | null
+          search_keyword?: string | null
+          tags?: string | null
+        }
+        Relationships: []
+      }
+      keywords_old: {
+        Row: {
           keyword: string
           keyword_id: number
           main_keyword: string
@@ -1386,6 +1410,12 @@ export type Database = {
         }
         Returns: Json
       }
+      get_icu_bookmarked_data: {
+        Args: {
+          hos_id_input: string
+        }
+        Returns: Json
+      }
       get_icu_chart_data: {
         Args: {
           hos_id_input: string
@@ -1394,7 +1424,7 @@ export type Database = {
         }
         Returns: Json
       }
-      get_icu_custom_template_data: {
+      get_icu_custom_order_data: {
         Args: {
           hos_id_input: string
         }
@@ -1561,6 +1591,22 @@ export type Database = {
           patient_breed_input: string
           patient_name_input: string
           patient_species_input: string
+          owner_name_input: string
+          age_in_days_input: number
+          is_alive_input: boolean
+        }
+        Returns: undefined
+      }
+      toggle_patient_out_old: {
+        Args: {
+          icu_io_id_input: string
+          patient_id_input: string
+          is_patient_out_input: boolean
+          chart_orders_input: string
+          keywords_input: string
+          patient_breed_input: string
+          patient_name_input: string
+          patient_species_input: string
           age_in_days_input: number
           is_alive_input: boolean
         }
@@ -1693,15 +1739,6 @@ export type Database = {
         Args: {
           is_vet_input: boolean
           name_input: string
-          hos_id_input: string
-        }
-        Returns: undefined
-      }
-      upsert_icu_bookmark: {
-        Args: {
-          icu_chart_id_input: string
-          bookmark_name_input: string
-          bookmark_comment_input: string
           hos_id_input: string
         }
         Returns: undefined

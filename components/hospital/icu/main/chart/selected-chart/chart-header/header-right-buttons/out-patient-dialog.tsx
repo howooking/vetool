@@ -22,13 +22,13 @@ export default function OutPatientDialog({
 }) {
   const { icu_io, orders, patient } = chartData
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isOutSubmitting, setIsOutSubmitting] = useState(false)
+  const [isAliveSubmitting, setIsAliveSubmitting] = useState(false)
 
   const isPatientOut = icu_io.out_date !== null
 
   const handleOutPatient = async (isAlive: boolean) => {
-    setIsSubmitting(true)
-
+    isAlive ? setIsOutSubmitting(true) : setIsAliveSubmitting(true)
     const hashtaggedDxCc = hashtagKeyword(
       `${icu_io.icu_io_dx}, ${icu_io.icu_io_cc}`,
     )
@@ -47,6 +47,7 @@ export default function OutPatientDialog({
       patient.species,
       patient.breed,
       patient.name,
+      patient.owner_name,
       icu_io.age_in_days,
       isAlive,
     )
@@ -57,7 +58,7 @@ export default function OutPatientDialog({
         : `${patient.name}을(를) 퇴원처리 하였습니다`,
     })
 
-    setIsSubmitting(false)
+    isAlive ? setIsOutSubmitting(false) : setIsAliveSubmitting(false)
     setIsDialogOpen(false)
   }
 
@@ -84,9 +85,14 @@ export default function OutPatientDialog({
               variant="destructive"
               className="mr-auto"
               onClick={() => handleOutPatient(false)}
-              disabled={isSubmitting}
+              disabled={isAliveSubmitting}
             >
               사망
+              <LoaderCircle
+                className={cn(
+                  isAliveSubmitting ? 'ml-2 animate-spin' : 'hidden',
+                )}
+              />
             </Button>
           )}
 
@@ -97,11 +103,11 @@ export default function OutPatientDialog({
           </DialogClose>
           <Button
             onClick={() => handleOutPatient(true)}
-            disabled={isSubmitting}
+            disabled={isOutSubmitting}
           >
             {isPatientOut ? '퇴원취소' : '퇴원'}
             <LoaderCircle
-              className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
+              className={cn(isOutSubmitting ? 'ml-2 animate-spin' : 'hidden')}
             />
           </Button>
         </DialogFooter>
