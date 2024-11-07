@@ -899,6 +899,30 @@ export type Database = {
       }
       keywords: {
         Row: {
+          keyword: string | null
+          keyword_id: number
+          main_keyword: string | null
+          search_keyword: string | null
+          tags: string | null
+        }
+        Insert: {
+          keyword?: string | null
+          keyword_id?: number
+          main_keyword?: string | null
+          search_keyword?: string | null
+          tags?: string | null
+        }
+        Update: {
+          keyword?: string | null
+          keyword_id?: number
+          main_keyword?: string | null
+          search_keyword?: string | null
+          tags?: string | null
+        }
+        Relationships: []
+      }
+      keywords_old: {
+        Row: {
           keyword: string
           keyword_id: number
           main_keyword: string
