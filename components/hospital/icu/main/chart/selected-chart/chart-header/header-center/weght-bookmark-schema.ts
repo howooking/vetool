@@ -10,6 +10,21 @@ export const weightFormSchema = z.object({
     }),
 })
 
+export const bookmarkFormSchema = z.object({
+  bookmark_name: z
+    .string({ required_error: '북마크 이름을 입력해주세요' })
+    .trim()
+    .min(1, {
+      message: '북마크 이름을 입력해주세요',
+    }),
+
+  bookmark_comment: z
+    .string({ message: '텍스트로 입력해주세요' })
+    .trim()
+    .optional()
+    .nullable(),
+})
+
 export const templateFormSchema = z.object({
   template_name: z
     .string({ required_error: '템플릿 이름을 입력해주세요' })

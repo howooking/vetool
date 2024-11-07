@@ -1,4 +1,4 @@
-import { templateFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/weght-template-schema'
+import { templateFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/weght-bookmark-schema'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -20,6 +20,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { insertCustomTemplateChart } from '@/lib/services/icu/template/template'
+import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTemplateStore } from '@/lib/store/icu/template'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -29,14 +30,22 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function AddTemplateOrdersButton() {
+export default function AddTemplateOrdersButton({
+  showButton,
+}: {
+  showButton?: boolean
+}) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [selectedOrdersLength, setSelectedOrdersLength] = useState(0)
 
   const { refresh } = useRouter()
   const { hos_id, target_date } = useParams()
-  const { templateOrders, reset } = useTemplateStore()
+  const { templateOrders, setTemplateOrders, reset } = useTemplateStore()
+  const { selectedOrderPendingQueue, setSelectedOrderPendingQueue } =
+    useIcuOrderStore()
 
+  // 템플릿 페이지에서 만든 템플릿 오더
   const templateOrdersLength = templateOrders.length
 
   const form = useForm<z.infer<typeof templateFormSchema>>({
@@ -74,18 +83,53 @@ export default function AddTemplateOrdersButton() {
         template_name: undefined,
         template_comment: undefined,
       })
+
+      setSelectedOrderPendingQueue([])
     }
-  }, [isDialogOpen, form])
+  }, [isDialogOpen, form, setSelectedOrderPendingQueue])
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const activeElement = document.activeElement
+      const isInputFocused =
+        activeElement instanceof HTMLInputElement ||
+        activeElement instanceof HTMLTextAreaElement ||
+        activeElement?.hasAttribute('contenteditable')
+
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key === 'a' &&
+        !isInputFocused
+      ) {
+        if (selectedOrderPendingQueue.length > 0) {
+          setTemplateOrders(selectedOrderPendingQueue)
+          setIsDialogOpen(true)
+          setSelectedOrdersLength(selectedOrderPendingQueue.length)
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [
+    selectedOrderPendingQueue,
+    setTemplateOrders,
+    setIsDialogOpen,
+    setSelectedOrdersLength,
+  ])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button disabled={!templateOrdersLength}>저장</Button>
+        {showButton && <Button disabled={!templateOrdersLength}>저장</Button>}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>템플릿 저장</DialogTitle>
-          <DialogDescription>{`${templateOrdersLength}개의 오더를 저장합니다`}</DialogDescription>
+          <DialogDescription>{`${selectedOrdersLength || templateOrdersLength}개의 오더를 저장합니다`}</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>

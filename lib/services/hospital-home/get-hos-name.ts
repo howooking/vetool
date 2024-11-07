@@ -7,13 +7,13 @@ export const getHosName = async (hosId: string) => {
     .from('hospitals')
     .select('name')
     .match({ hos_id: hosId })
-    .single()
+    .maybeSingle()
 
   if (error) {
     throw new Error(error.message)
   }
 
-  return data.name ?? '벳툴'
+  return data?.name ?? '벳툴'
 }
 
 export const getHosList = async () => {

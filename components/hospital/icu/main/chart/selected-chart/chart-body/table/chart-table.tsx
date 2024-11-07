@@ -1,10 +1,13 @@
 'use client'
 
+import QuickOrderInsertInput from '@/components/hospital/icu/main/chart/selected-chart/chart-body/quick-order-insert-input'
 import CellsRow from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row'
 import CellsRowTitle from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row-title'
 import DeleteOrdersAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/delete-orders-alert-dialog'
 import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-dialog'
+import SortableOrderWrapper from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/sortable-order-wrapper'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
+import AddTemplateOrdersButton from '@/components/hospital/icu/main/template/add/add-template-orders-button'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -23,6 +26,7 @@ import {
   upsertOrder,
 } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useTemplateStore } from '@/lib/store/icu/template'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
@@ -30,8 +34,6 @@ import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { ArrowUpDown } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Sortable } from 'react-sortablejs'
-import QuickOrderInsertInput from '../quick-order-insert-input'
-import SortableOrderWrapper from './order/sortable-order-wrapper'
 
 export default function ChartTable({
   chartData,
@@ -74,20 +76,6 @@ export default function ChartTable({
   useEffect(() => {
     setSortedOrders(orders)
   }, [orders])
-
-  // -------- 시간 가이드라인 --------
-  const [guidelineTimes, setGuidelineTimes] = useLocalStorage(
-    'guideline-times',
-    [2, 10, 18],
-  )
-  const handleToggleGuidelineTimes = (time: number) => {
-    if (guidelineTimes.includes(time)) {
-      setGuidelineTimes(guidelineTimes.filter((t) => t !== time))
-    } else {
-      setGuidelineTimes([...guidelineTimes, time])
-    }
-  }
-  // -----------------------------
 
   // ----- 표에서 수직 안내선 -----
   const [hoveredColumn, setHoveredColumn] = useState<number | null>(null)
@@ -300,6 +288,8 @@ export default function ChartTable({
                 setSortedOrders={setSortedOrders}
               />
             )}
+
+            {<AddTemplateOrdersButton />}
           </TableHead>
 
           {TIMES.map((time) => (
@@ -309,9 +299,6 @@ export default function ChartTable({
                 'border text-center',
               )}
               key={time}
-              onClick={
-                preview ? undefined : () => handleToggleGuidelineTimes(time)
-              }
             >
               {time.toString().padStart(2, '0')}
             </TableHead>
@@ -342,7 +329,6 @@ export default function ChartTable({
                 hoveredColumn={hoveredColumn}
                 handleColumnHover={handleColumnHover}
                 handleColumnLeave={handleColumnLeave}
-                guidelineTimes={guidelineTimes}
                 selectedTxPendingQueue={selectedTxPendingQueue}
                 orderTimePendingQueueLength={orderTimePendingQueue.length}
               />
@@ -361,7 +347,6 @@ export default function ChartTable({
                 hoveredColumn={hoveredColumn}
                 handleColumnHover={handleColumnHover}
                 handleColumnLeave={handleColumnLeave}
-                guidelineTimes={guidelineTimes}
                 selectedTxPendingQueue={selectedTxPendingQueue}
                 orderStep={orderStep}
                 orderTimePendingQueueLength={orderTimePendingQueue.length}
@@ -369,7 +354,7 @@ export default function ChartTable({
             </TableRow>
           ))}
 
-          {!isExport && (
+          {!isExport && !preview && (
             <TableRow className="hover:bg-transparent">
               <TableCell className="p-0">
                 <QuickOrderInsertInput

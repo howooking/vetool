@@ -22,6 +22,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { getVisitablePatients } from '@/lib/services/icu/out-and-visit/icu-out-chart'
 import { insertVisitPatient } from '@/lib/services/icu/out-and-visit/visit-chart'
+import { convertPascalCased } from '@/lib/utils'
 import { VisitablePatientsData } from '@/types/icu/movement'
 import { Plus } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -86,6 +87,10 @@ export default function AddVisitPatientDialog() {
     [visitablePatients],
   )
 
+  function pascalCased(breed: string): import('react').ReactNode {
+    throw new Error('Function not implemented.')
+  }
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
@@ -113,7 +118,7 @@ export default function AddVisitPatientDialog() {
                   ? '입원중인 환자목록 가져오는 중...'
                   : noPatientToAdd
                     ? '면회할 환자가 없습니다'
-                    : '환자선택'
+                    : '환자 선택'
               }
             />
           </SelectTrigger>
@@ -131,7 +136,7 @@ export default function AddVisitPatientDialog() {
                   <div className="flex items-center gap-1">
                     <span>{patient.patient.name}</span>
                     <span className="pl-1 text-xs leading-[10px] text-muted-foreground">
-                      {patient.patient.breed}
+                      {convertPascalCased(patient.patient.breed)}
                     </span>
                   </div>
                 </SelectItem>

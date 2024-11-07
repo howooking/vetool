@@ -59,7 +59,10 @@ export default function SidebarItem({
     [path],
   )
 
-  const isSuperOnly = useMemo(() => name === '벳툴' && !isSuper, [])
+  const isSuperOnly = useMemo(
+    () => name === '벳툴' && !isSuper,
+    [isSuper, name],
+  )
 
   return (
     <li key={name} className={isSuperOnly ? 'hidden' : ''}>

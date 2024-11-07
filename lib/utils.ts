@@ -141,13 +141,12 @@ export const hashtagKeyword = (stringKeywords: string) => {
     .join('')
 }
 
-export const getTimeSince = (inputTime: string) => {
+export const formatTimeDifference = (inputTime: string) => {
   const now = new Date()
   const input = new Date(inputTime)
   const diff = now.getTime() - input.getTime()
 
-  const seconds = Math.floor(diff / 1000)
-  const minutes = Math.floor(seconds / 60)
+  const minutes = Math.floor(diff / (1000 * 60))
   const hours = Math.floor(minutes / 60)
   const days = Math.floor(hours / 24)
   const weeks = Math.floor(days / 7)
@@ -166,8 +165,6 @@ export const getTimeSince = (inputTime: string) => {
     return `${hours}시간 전`
   } else if (minutes > 0) {
     return `${minutes}분 전`
-  } else if (seconds > 0) {
-    return `${seconds}초 전`
   } else {
     return '방금 전'
   }
@@ -272,4 +269,12 @@ export const parsingOrderName = (orderType: string, orderName: string) => {
   }
 
   return orderName
+}
+
+export const convertPascalCased = (value: string) => {
+  if (!value) return value
+
+  return value
+    .toLowerCase()
+    .replace(/\b[a-z]/g, (letter) => letter.toUpperCase())
 }

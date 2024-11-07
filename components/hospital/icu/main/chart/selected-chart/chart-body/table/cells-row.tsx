@@ -17,7 +17,6 @@ type CellsRowProps = {
   hoveredColumn: number | null
   handleColumnHover: (columnIndex: number) => void
   handleColumnLeave: () => void
-  guidelineTimes: number[]
   isSorting?: boolean
   selectedTxPendingQueue: OrderTimePendingQueue[]
   orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
@@ -31,7 +30,6 @@ export default function CellsRow({
   hoveredColumn,
   handleColumnHover,
   handleColumnLeave,
-  guidelineTimes,
   isSorting,
   selectedTxPendingQueue,
   orderStep,
@@ -93,7 +91,7 @@ export default function CellsRow({
         const orderer = orderTimeState[time - 1]
         const tx = treatments.findLast((treatment) => treatment.time === time)
         const isHovered = hoveredColumn === index + 1
-        const isGuidelineTime = guidelineTimes.includes(time)
+        const isGuidelineTime = [2, 10, 18].includes(time)
 
         return (
           <Cell

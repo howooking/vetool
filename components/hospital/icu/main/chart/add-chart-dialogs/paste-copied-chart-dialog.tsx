@@ -60,6 +60,7 @@ export default function PasteCopiedChartDialog({
     }
 
     setIsChartLoading(true)
+
     await pasteChart(
       patient_id as string,
       copiedChartId,
@@ -84,7 +85,15 @@ export default function PasteCopiedChartDialog({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.key === 'v') {
+      const activeElement = document.activeElement
+      const isInputFocused =
+        activeElement instanceof HTMLInputElement ||
+        activeElement instanceof HTMLTextAreaElement
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key === 'v' &&
+        !isInputFocused
+      ) {
         event.preventDefault()
         setIsDialogOpen(true)
       }

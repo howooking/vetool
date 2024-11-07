@@ -35,6 +35,10 @@ export const FOOTER_MAIN_VIEW_MENUS = [
     value: 'template',
   },
   {
+    label: '북마크',
+    value: 'bookmark',
+  },
+  {
     label: '입원 통계',
     value: 'analysis',
   },
