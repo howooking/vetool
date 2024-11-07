@@ -150,7 +150,7 @@ export default function MemoGroup({
     },
     [sortedMemos, handleUpdateDbMemo],
   )
-
+  console.log(memo)
   return (
     <div className="relative flex w-full flex-col gap-1">
       <Label
@@ -178,9 +178,6 @@ export default function MemoGroup({
                 memo={memo}
                 memoIndex={index}
                 handleEditMemo={handleEditMemo}
-                onEdit={(editedSingleMemo) =>
-                  handleEditMemo(editedSingleMemo, index)
-                }
                 onDelete={() => handleDeleteMemo(index)}
                 ref={index === sortedMemos.length - 1 ? lastMemoRef : null}
               />
