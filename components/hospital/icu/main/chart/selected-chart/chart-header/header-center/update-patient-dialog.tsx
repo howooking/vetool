@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { getAgeFromAgeInDays } from '@/lib/utils'
+import { getAgeFromAgeInDays, convertPascalCased } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { PatientDataTable } from '@/types/patients'
 import { Cat, Dog } from 'lucide-react'
@@ -49,7 +49,7 @@ export default function UpdatePatientDialog({
       <DialogTrigger asChild>
         <Button variant="ghost" className="flex gap-2">
           {species === 'canine' ? <Dog size={20} /> : <Cat size={20} />}
-          <span>{name}</span> ·<span>{breed}</span> ·
+          <span>{name}</span> ·<span>{convertPascalCased(breed)}</span> ·
           <span className="uppercase">{gender}</span> ·
           <span>{getAgeFromAgeInDays(ageInDays)} </span> ·
           <span>

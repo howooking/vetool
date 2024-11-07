@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn, convertPascalCased } from '@/lib/utils'
 import type { IcuSidebarIoData } from '@/types/icu/chart'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback } from 'react'
@@ -30,7 +30,9 @@ export default function PatientButton({ data }: { data: IcuSidebarIoData }) {
         )}
       >
         <span>{data.patient.name}</span>
-        <span className="truncate text-[10px]">{data.patient.breed}</span>
+        <span className="truncate text-[10px]">
+          {convertPascalCased(data.patient.breed)}
+        </span>
       </div>
     </Button>
   )

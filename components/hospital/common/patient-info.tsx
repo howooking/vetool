@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { convertPascalCased, cn } from '@/lib/utils'
 import { Cat, Dog } from 'lucide-react'
 
 export default function PatientInfo({
@@ -36,14 +36,14 @@ export default function PatientInfo({
                 isDone && 'line-through',
               )}
             >
-              {breed}
+              {convertPascalCased(breed)}
             </span>
           )}
         </div>
       </div>
       {col && (
         <div className="line-clamp-1 text-[10px] text-muted-foreground">
-          {breed}
+          {convertPascalCased(breed)}
         </div>
       )}
     </div>
