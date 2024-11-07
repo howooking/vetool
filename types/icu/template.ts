@@ -8,8 +8,3 @@ export type TemplateChart = Pick<
   target_date: string
   patient: Pick<Patients, 'name' | 'patient_id'>
 }
-
-export type TemplateChartOrders = Pick<
-  IcuOrders,
-  'icu_chart_order_name' | 'icu_chart_order_comment' | 'icu_chart_order_type'
->

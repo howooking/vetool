@@ -373,7 +373,7 @@ export default function ChartTable({
             </TableRow>
           ))}
 
-          {!isExport && (
+          {!isExport && !preview && (
             <TableRow className="hover:bg-transparent">
               <TableCell className="p-0">
                 <QuickOrderInsertInput

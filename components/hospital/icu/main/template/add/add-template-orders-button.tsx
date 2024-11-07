@@ -1,4 +1,4 @@
-import { templateFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/weght-template-schema'
+import { templateFormSchema } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/weght-bookmark-schema'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,

@@ -14,36 +14,27 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { getBookmarkedCharts } from '@/lib/services/icu/template/template'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { useTemplateStore } from '@/lib/store/icu/template'
-import { cn } from '@/lib/utils'
-import type { TemplateChart } from '@/types/icu/template'
-import { LoaderCircle, Star } from 'lucide-react'
-import { useParams } from 'next/navigation'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
+import { Star } from 'lucide-react'
+import { Dispatch, SetStateAction } from 'react'
 
 export default function AddTemplateChartDialog({
   setIsChartLoading,
 }: {
   setIsChartLoading: Dispatch<SetStateAction<boolean>>
 }) {
-  const [isFetching, setIsFetching] = useState(false)
-  const [templateCharts, setTemplateCharts] = useState<TemplateChart[]>([])
-
-  const { hos_id } = useParams()
   const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isTemplateDialogOpen, setIsTemplateDialogOpen } = useTemplateStore()
   const { isConfirmCopyDialogOpen } = useCopiedChartStore()
+  const {
+    basicHosData: { templateData },
+  } = useBasicHosDataContext()
 
   const handleOpenTemplateDialog = async () => {
-    setIsFetching(true)
-
-    getBookmarkedCharts(hos_id as string)
-      .then(setTemplateCharts)
-      .then(() => setIsTemplateDialogOpen(true))
-      .then(() => setIsFetching(false))
+    setIsTemplateDialogOpen(!isTemplateDialogOpen)
   }
 
   return (
@@ -52,13 +43,9 @@ export default function AddTemplateChartDialog({
         variant="outline"
         className="hidden h-[200px] w-full items-center justify-center gap-2 md:flex md:h-1/3 md:w-1/4"
         onClick={handleOpenTemplateDialog}
-        disabled={isFetching}
       >
         <Star size={20} />
         <span>템플릿 차트 선택</span>
-        <LoaderCircle
-          className={cn(isFetching ? 'block animate-spin' : 'hidden')}
-        />
       </Button>
 
       <DialogContent className="md:max-w-[1040px]">
@@ -69,7 +56,7 @@ export default function AddTemplateChartDialog({
 
         <DataTable
           columns={pasteTemplateColumns}
-          data={templateCharts}
+          data={templateData}
           rowLength={10}
           searchPlaceHolder="템플릿 이름 · 템플릿 설명 · 환자명 검색"
         />

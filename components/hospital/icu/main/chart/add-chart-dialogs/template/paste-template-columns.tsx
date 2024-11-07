@@ -65,7 +65,7 @@ export const pasteTemplateColumns: ColumnDef<TemplateChart>[] = [
     },
     cell: ({ row }) => {
       const patientName = row.original.patient.name
-      return <div>{patientName}</div>
+      return <div>{patientName ?? '-'}</div>
     },
   },
   {
@@ -74,7 +74,15 @@ export const pasteTemplateColumns: ColumnDef<TemplateChart>[] = [
     cell: ({ row }) => {
       const patientId = row.original.patient.patient_id
       const targetDate = row.original.target_date
-      return <PreviewButton patientId={patientId} targetDate={targetDate} />
+      const chartId = row.original.icu_chart_id
+
+      return (
+        <PreviewButton
+          patientId={patientId}
+          targetDate={targetDate}
+          chartId={chartId}
+        />
+      )
     },
   },
   {

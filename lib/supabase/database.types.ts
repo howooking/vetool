@@ -1410,6 +1410,12 @@ export type Database = {
         }
         Returns: Json
       }
+      get_icu_bookmarked_data: {
+        Args: {
+          hos_id_input: string
+        }
+        Returns: Json
+      }
       get_icu_chart_data: {
         Args: {
           hos_id_input: string
@@ -1418,7 +1424,7 @@ export type Database = {
         }
         Returns: Json
       }
-      get_icu_custom_template_data: {
+      get_icu_custom_order_data: {
         Args: {
           hos_id_input: string
         }
@@ -1733,15 +1739,6 @@ export type Database = {
         Args: {
           is_vet_input: boolean
           name_input: string
-          hos_id_input: string
-        }
-        Returns: undefined
-      }
-      upsert_icu_bookmark: {
-        Args: {
-          icu_chart_id_input: string
-          bookmark_name_input: string
-          bookmark_comment_input: string
           hos_id_input: string
         }
         Returns: undefined
