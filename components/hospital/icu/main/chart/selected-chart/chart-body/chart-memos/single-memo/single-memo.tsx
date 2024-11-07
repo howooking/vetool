@@ -9,14 +9,13 @@ import MemoTimeStamp from './memo-time-stamp'
 
 type SingleMemoProps = {
   memo: Memo
-  onEdit: (editedSingleMemo: Memo) => void
   onDelete: () => void
   handleEditMemo: (editedMemo: Memo, memoIndex: number) => Promise<void>
   memoIndex: number
 }
 
 const SingleMemo = React.forwardRef<HTMLLIElement, SingleMemoProps>(
-  ({ memo, onEdit, onDelete, handleEditMemo, memoIndex }, ref) => {
+  ({ memo, onDelete, handleEditMemo, memoIndex }, ref) => {
     const [isEditMode, setIsEditMode] = useState(false)
     const [editedMemo, setEditedMemo] = useState(memo.memo)
     const editingTextAreaRef = useRef<HTMLTextAreaElement>(null)
@@ -102,7 +101,9 @@ const SingleMemo = React.forwardRef<HTMLLIElement, SingleMemoProps>(
               />
             </div>
           ) : (
-            <p className="mr-2 break-all text-sm">{memo.memo}</p>
+            <p className="mr-2 whitespace-pre-wrap break-all text-sm">
+              {memo.memo}
+            </p>
           )}
         </div>
       </li>
