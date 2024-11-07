@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 export default async function SuperPage({
   searchParams,
 }: {
-  searchParams: { date?: string }
+  searchParams: Promise<{ date?: string }>
 }) {
   const hosList = await getHosList()
   const isSuper = await isSuperAccount()
