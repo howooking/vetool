@@ -2,10 +2,26 @@
 
 import HideAndShowButton from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/hide-and-show-button'
 import { Separator } from '@/components/ui/separator'
-import { type Memo } from '@/hooks/use-memo-management'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { useState } from 'react'
 import MemoGroup from './memo-group'
+
+export type Memo = {
+  id: string
+  memo: string
+  create_timestamp: string
+  edit_timestamp: string | null
+  color: string
+  chosen?: boolean
+}
+
+export const MEMO_COLORS = [
+  '#fef9c3', // yellow-100
+  '#d1fae5', // emerald-100
+  '#e0f2fe', // sky-100
+  '#ede9fe', // violet-100
+  '#fce7f3', // pink-100
+] as const
 
 export default function ChartMemos({
   memoA,

@@ -4,10 +4,10 @@ import { Label } from '@/components/ui/label'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
-import { MEMO_COLORS, type Memo } from '@/hooks/use-memo-management'
 import { updateMemos } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ReactSortable, Sortable } from 'react-sortablejs'
+import { type Memo, MEMO_COLORS } from './chart-memos'
 import MemoColorPicker from './memo-color-picker'
 
 export default function MemoGroup({
@@ -59,7 +59,7 @@ export default function MemoGroup({
     [icuChartId, memoIndex],
   )
 
-  const handlePushMemo = useCallback(async () => {
+  const handleAddMemo = useCallback(async () => {
     if (memoInput.trim() === '') return
 
     const createdAt = new Date().toISOString()
@@ -97,10 +97,10 @@ export default function MemoGroup({
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault()
-        handlePushMemo()
+        handleAddMemo()
       }
     },
-    [handlePushMemo],
+    [handleAddMemo],
   )
 
   const handleEditMemo = useCallback(

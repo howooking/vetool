@@ -1,7 +1,7 @@
-import type { Memo } from '@/hooks/use-memo-management'
 import { formatTimeDifference } from '@/lib/utils'
 import { format } from 'date-fns'
 import { ChangeEvent } from 'react'
+import type { Memo } from '../chart-memos'
 
 export default function MemoTimeStamp({
   memo,
