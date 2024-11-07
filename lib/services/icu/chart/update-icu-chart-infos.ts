@@ -122,6 +122,7 @@ export const toggleOutPatient = async (
   patientSpecies: string,
   patientBreed: string,
   patientName: string,
+  ownerName: string,
   ageInDays: number,
   isAlive: boolean,
 ) => {
@@ -136,6 +137,7 @@ export const toggleOutPatient = async (
     patient_species_input: patientSpecies,
     patient_breed_input: patientBreed,
     patient_name_input: patientName,
+    owner_name_input: ownerName,
     age_in_days_input: ageInDays,
     is_alive_input: isAlive,
   })

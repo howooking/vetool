@@ -10,10 +10,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
-import {
-  CANINE_BREEDS,
-  FELINE_BREEDS,
-} from '@/constants/hospital/register/breed'
 import { toggleOutPatient } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { cn, hashtagKeyword } from '@/lib/utils'
 import type { SelectedChart } from '@/types/icu/chart'
@@ -51,6 +47,7 @@ export default function OutPatientDialog({
       patient.species,
       patient.breed,
       patient.name,
+      patient.owner_name,
       icu_io.age_in_days,
       isAlive,
     )
