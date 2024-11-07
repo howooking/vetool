@@ -72,7 +72,7 @@ export const DEFAULT_ICU_ORDER_TYPE = [
     value: 'checklist',
   },
   {
-    label: '정맥수액',
+    label: '수액',
     value: 'fluid',
   },
   {

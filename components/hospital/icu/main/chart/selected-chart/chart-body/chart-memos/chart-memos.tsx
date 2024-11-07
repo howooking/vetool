@@ -1,11 +1,11 @@
 'use client'
 
 import HideAndShowButton from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/hide-and-show-button'
-import Memo from '@/components/hospital/icu/main/chart/selected-chart/chart-body/chart-memos/memo'
 import { Separator } from '@/components/ui/separator'
-import { Json } from '@/lib/supabase/database.types'
+import { type Memo } from '@/hooks/use-memo-management'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { useState } from 'react'
+import MemoGroup from './memo-group'
 
 export default function ChartMemos({
   memoA,
@@ -13,9 +13,9 @@ export default function ChartMemos({
   memoC,
   icuChartId,
 }: {
-  memoA: Json
-  memoB: Json
-  memoC: Json
+  memoA: Memo[] | null
+  memoB: Memo[] | null
+  memoC: Memo[] | null
   icuChartId: string
 }) {
   const [showMemos, setShowMemos] = useState(true)
@@ -26,26 +26,30 @@ export default function ChartMemos({
   return (
     <div className="relative">
       {showMemos && (
-        <div className="flex flex-col gap-2 md:flex-row">
-          <Memo
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+          <MemoGroup
             memo={memoA}
             memoIndex={0}
             icuChartId={icuChartId}
-            memoNameListData={memoNameListData}
+            memoName={memoNameListData[0]}
           />
+
           <Separator className="mt-4 md:hidden" />
-          <Memo
+
+          <MemoGroup
             memo={memoB}
             memoIndex={1}
             icuChartId={icuChartId}
-            memoNameListData={memoNameListData}
+            memoName={memoNameListData[1]}
           />
+
           <Separator className="mt-4 md:hidden" />
-          <Memo
+
+          <MemoGroup
             memo={memoC}
             memoIndex={2}
             icuChartId={icuChartId}
-            memoNameListData={memoNameListData}
+            memoName={memoNameListData[2]}
           />
         </div>
       )}
