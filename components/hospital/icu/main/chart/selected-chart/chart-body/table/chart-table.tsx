@@ -1,10 +1,13 @@
 'use client'
 
+import QuickOrderInsertInput from '@/components/hospital/icu/main/chart/selected-chart/chart-body/quick-order-insert-input'
 import CellsRow from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row'
 import CellsRowTitle from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/cells-row-title'
 import DeleteOrdersAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/delete-orders-alert-dialog'
 import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-dialog'
+import SortableOrderWrapper from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/sortable-order-wrapper'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
+import AddTemplateOrdersButton from '@/components/hospital/icu/main/template/add/add-template-orders-button'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -23,6 +26,7 @@ import {
   upsertOrder,
 } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
+import { useTemplateStore } from '@/lib/store/icu/template'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
@@ -30,8 +34,6 @@ import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { ArrowUpDown } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Sortable } from 'react-sortablejs'
-import QuickOrderInsertInput from '../quick-order-insert-input'
-import SortableOrderWrapper from './order/sortable-order-wrapper'
 
 export default function ChartTable({
   chartData,
@@ -300,6 +302,8 @@ export default function ChartTable({
                 setSortedOrders={setSortedOrders}
               />
             )}
+
+            {<AddTemplateOrdersButton />}
           </TableHead>
 
           {TIMES.map((time) => (

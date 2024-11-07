@@ -24,6 +24,7 @@ import {
   getNotOutDuePatients,
   updatePatientOutDueDate,
 } from '@/lib/services/icu/out-and-visit/icu-out-chart'
+import { convertPascalCased } from '@/lib/utils'
 import type { NotOutDuePatientsData } from '@/types/icu/movement'
 import { Plus } from 'lucide-react'
 import { useParams } from 'next/navigation'
@@ -98,7 +99,7 @@ export default function AddOutDuePatientDialog() {
                   ? '입원중인 환자목록 가져오는 중...'
                   : noPatientToAdd
                     ? '퇴원할 환자가 없습니다'
-                    : '환자선택'
+                    : '환자 선택'
               }
             />
           </SelectTrigger>
@@ -109,7 +110,7 @@ export default function AddOutDuePatientDialog() {
                   <div className="flex items-center gap-1">
                     <span>{patient.patient.name}</span>
                     <span className="pl-1 text-xs leading-[10px] text-muted-foreground">
-                      {patient.patient.breed}
+                      {convertPascalCased(patient.patient.breed)}
                     </span>
                   </div>
                 </SelectItem>
