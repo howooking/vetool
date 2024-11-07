@@ -2,6 +2,8 @@
 
 import type { Json } from '@/lib/supabase/database.types'
 import { createClient } from '@/lib/supabase/server'
+import { getDateMonthsAgo } from '@/lib/utils'
+import type { ErrorFeedbackType } from '@/types/vetool'
 import { redirect } from 'next/navigation'
 
 export const sendErrorFeedback = async (
@@ -25,13 +27,24 @@ export const sendErrorFeedback = async (
   }
 }
 
-export const getErrorFeedback = async () => {
+export const getErrorFeedback = async (dateRange: string) => {
   const supabase = await createClient()
 
-  const { data, error } = await supabase
-    .from('vetool_errors')
-    .select('*')
+  let query = supabase.from('vetool_errors').select(
+    `
+      *,
+      user_id(hos_id(name, city))
+    `,
+  )
+
+  if (dateRange !== 'all') {
+    const monthsAgo = getDateMonthsAgo(dateRange)
+
+    query = query.gte('created_at', monthsAgo)
+  }
+  const { data, error } = await query
     .order('created_at', { ascending: false })
+    .returns<ErrorFeedbackType[]>()
 
   if (error) {
     throw new Error(error.message)
