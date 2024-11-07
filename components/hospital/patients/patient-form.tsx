@@ -131,9 +131,24 @@ export default function PatientForm({
 
   const [breedOpen, setBreedOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { setRegisteringPatient } = useIcuRegisterStore()
   const [isDuplicateId, setIsDuplicateId] = useState(false)
+  const { setRegisteringPatient } = useIcuRegisterStore()
   const { refresh } = useRouter()
+
+  let defaultBreed: string
+
+  if (editingPatient?.species === 'canine') {
+    defaultBreed = [
+      editingPatient?.breed,
+      CANINE_BREEDS.find((breed) => breed.eng === editingPatient?.breed)?.kor,
+    ].join('#')
+  }
+  if (editingPatient?.species === 'feline') {
+    defaultBreed = [
+      editingPatient?.breed,
+      FELINE_BREEDS.find((breed) => breed.eng === editingPatient?.breed)?.kor,
+    ].join('#')
+  }
 
   const form = useForm<z.infer<typeof registerPatientFormSchema>>({
     resolver: zodResolver(
@@ -158,7 +173,7 @@ export default function PatientForm({
           name: editingPatient?.name,
           hos_patient_id: editingPatient?.hos_patient_id,
           species: editingPatient?.species,
-          breed: editingPatient?.breed,
+          breed: defaultBreed!,
           gender: editingPatient?.gender,
           birth: new Date(editingPatient?.birth!),
           microchip_no: editingPatient?.microchip_no ?? '',
@@ -241,7 +256,7 @@ export default function PatientForm({
     const patientId = await insertPatient(
       {
         birth: format(birth, 'yyyy-MM-dd'),
-        breed,
+        breed: breed.split('#')[0],
         gender,
         hos_patient_id,
         memo,
@@ -301,13 +316,11 @@ export default function PatientForm({
 
     setIsSubmitting(true)
 
-    console.log(breed)
-
     if (mode === 'updateFromPatientRoute') {
       await updatePatientFromPatientRoute(
         {
           birth: format(birth, 'yyyy-MM-dd'),
-          breed,
+          breed: breed.split('#')[0],
           gender,
           hos_owner_id,
           hos_patient_id,
@@ -327,7 +340,7 @@ export default function PatientForm({
       await updatePatientFromIcu(
         {
           birth: format(birth, 'yyyy-MM-dd'),
-          breed,
+          breed: breed.split('#')[0],
           gender,
           hos_owner_id,
           hos_patient_id,
@@ -457,7 +470,7 @@ export default function PatientForm({
                       )}
                     >
                       {field.value
-                        ? BREEDS.find((breed) => breed === field.value)
+                        ? `${field.value.split('#')[1]} (${field.value.split('#')[0]})`
                         : watchSpecies
                           ? '품종을 선택해주세요'
                           : '종을 먼저 선택해주세요'}
@@ -483,16 +496,16 @@ export default function PatientForm({
                         <CommandGroup>
                           {BREEDS.map((breed) => (
                             <CommandItem
-                              value={breed}
-                              key={breed}
+                              value={breed.eng + '#' + breed.kor}
+                              key={breed.id}
                               onSelect={field.onChange}
                               className="text-xs"
                             >
-                              {breed}
+                              {`${breed.kor} (${breed.eng})`}
                               <CheckIcon
                                 className={cn(
                                   'ml-auto h-4 w-4',
-                                  breed === field.value
+                                  breed.eng === field.value
                                     ? 'opacity-100'
                                     : 'opacity-0',
                                 )}

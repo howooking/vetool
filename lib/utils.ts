@@ -273,3 +273,11 @@ export const parsingOrderName = (orderType: string, orderName: string) => {
 
   return orderName
 }
+
+export const convertPascalCased = (value: string) => {
+  if (!value) return value
+
+  return value
+    .toLowerCase()
+    .replace(/\b[a-z]/g, (letter) => letter.toUpperCase())
+}

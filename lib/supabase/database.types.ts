@@ -899,6 +899,30 @@ export type Database = {
       }
       keywords: {
         Row: {
+          keyword: string | null
+          keyword_id: number
+          main_keyword: string | null
+          search_keyword: string | null
+          tags: string | null
+        }
+        Insert: {
+          keyword?: string | null
+          keyword_id?: number
+          main_keyword?: string | null
+          search_keyword?: string | null
+          tags?: string | null
+        }
+        Update: {
+          keyword?: string | null
+          keyword_id?: number
+          main_keyword?: string | null
+          search_keyword?: string | null
+          tags?: string | null
+        }
+        Relationships: []
+      }
+      keywords_old: {
+        Row: {
           keyword: string
           keyword_id: number
           main_keyword: string
@@ -1552,6 +1576,22 @@ export type Database = {
         Returns: Json
       }
       toggle_patient_out: {
+        Args: {
+          icu_io_id_input: string
+          patient_id_input: string
+          is_patient_out_input: boolean
+          chart_orders_input: string
+          keywords_input: string
+          patient_breed_input: string
+          patient_name_input: string
+          patient_species_input: string
+          owner_name_input: string
+          age_in_days_input: number
+          is_alive_input: boolean
+        }
+        Returns: undefined
+      }
+      toggle_patient_out_old: {
         Args: {
           icu_io_id_input: string
           patient_id_input: string
