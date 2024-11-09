@@ -49,7 +49,7 @@ export default async function IcuPageLayout(props: {
           vetsListData={vetsListData}
         />
 
-        <main className="h-icu-chart w-full overflow-scroll md:w-[calc(100vw-198px)]">
+        <main className="h-icu-chart w-full overflow-y-scroll md:w-[calc(100vw-198px)]">
           {props.children}
         </main>
       </div>
