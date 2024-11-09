@@ -30,7 +30,7 @@ export function InstructionDialog() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild className="hidden md:block">
+      <DialogTrigger asChild className="hidden md:inline-flex">
         <Button variant="ghost" size="icon">
           <Info size={18} />
         </Button>
