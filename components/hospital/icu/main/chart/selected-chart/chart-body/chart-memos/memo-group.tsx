@@ -150,7 +150,6 @@ export default function MemoGroup({
     },
     [sortedMemos, handleUpdateDbMemo],
   )
-  console.log(memo)
   return (
     <div className="relative flex w-full flex-col gap-1">
       <Label

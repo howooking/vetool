@@ -1,13 +1,12 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useIcuRealtime } from '@/hooks/use-icu-realtime'
-import { cn } from '@/lib/utils'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import RealtimeStatus from './realtime-status'
-import { useEffect } from 'react'
 import { toast } from '@/components/ui/use-toast'
 import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
+import { cn } from '@/lib/utils'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
+import RealtimeStatus from './realtime-status'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
@@ -51,11 +50,8 @@ export default function IcuFooter({
   hosId: string
   targetDate: string
 }) {
-  useIcuRealtime(hosId)
-
   const { isSubscriptionReady } = useRealtimeSubscriptionStore()
   const { push, refresh } = useRouter()
-
   const path = usePathname()
   const currentIcuPath = path.split('/').at(5)
   const searchParams = useSearchParams()
