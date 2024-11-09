@@ -3,14 +3,33 @@
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
 import AddChartDialogs from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-chart-dialogs'
 import Chart from '@/components/hospital/icu/main/chart/chart'
+import { useIcuRealtime } from '@/hooks/use-icu-realtime'
 import type { SelectedChart } from '@/types/icu/chart'
+import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function ChartEntry({
-  chartData,
+  initialChartData,
+  hosId,
+  targetDate,
+  patientId,
 }: {
-  chartData: SelectedChart
+  initialChartData: SelectedChart
+  hosId: string
+  targetDate: string
+  patientId: string
 }) {
+  const { data: chartData, error } = useIcuRealtime(
+    hosId,
+    targetDate,
+    patientId,
+    initialChartData,
+  )
+
+  if (error) {
+    redirect(`/error/?message=${error.message}`)
+  }
+
   const [isChartLoading, setIsChartLoading] = useState(false)
 
   useEffect(() => {
