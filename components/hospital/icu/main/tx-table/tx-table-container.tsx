@@ -72,7 +72,7 @@ export default function TxTableContainer({
   )
 
   return (
-    <div className="h-icu-chart overflow-auto p-2 pb-[48px]">
+    <div className="m-2 h-icu-chart overflow-x-auto overflow-y-scroll pb-[48px]">
       <TxTableFilter
         localFilterState={localFilterState}
         setLocalFilterState={setLocalFilterState}

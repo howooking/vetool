@@ -51,11 +51,11 @@ export default function UpdatePatientDialog({
           {species === 'canine' ? <Dog size={20} /> : <Cat size={20} />}
           <span>{name}</span> ·<span>{convertPascalCased(breed)}</span> ·
           <span className="uppercase">{gender}</span> ·
-          <span>{getAgeFromAgeInDays(ageInDays)} </span> ·
-          <span>
-            {weight === ''
-              ? '체중 입력'
-              : `${weight}kg (${weightMeasuredDate!})`}
+          <span>{getAgeFromAgeInDays(ageInDays)} </span>
+          <span>·</span>
+          <span className="">
+            {weight === '' ? '체중 입력' : `${weight}kg`}
+            <span className="hidden md:inline">{` (${weightMeasuredDate!})`}</span>
           </span>
         </Button>
       </DialogTrigger>

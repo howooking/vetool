@@ -1,21 +1,36 @@
+import { getIcuChart } from '@/lib/services/icu/chart/get-icu-chart'
 import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
 import { createClient } from '@/lib/supabase/client'
+import { type SelectedChart } from '@/types/icu/chart'
 import type { RealtimeChannel } from '@supabase/supabase-js'
-import { useRouter } from 'next/navigation'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 const supabase = createClient()
 const TABLES = ['icu_io', 'icu_charts', 'icu_orders', 'icu_txs'] as const
 
-export function useIcuRealtime(hosId: string) {
+export function useIcuRealtime(
+  hosId: string,
+  targetDate: string,
+  patientId: string,
+  initialChartData: SelectedChart,
+) {
   const subscriptionRef = useRef<RealtimeChannel | null>(null)
   const { setIsSubscriptionReady } = useRealtimeSubscriptionStore()
-  const { refresh } = useRouter()
+  const queryClient = useQueryClient()
 
-  const deboucedRefresh = useDebouncedCallback(() => {
-    console.log('Debouced Refresh')
-    refresh()
+  const { data, error } = useQuery({
+    queryKey: ['icu_realtime', hosId, targetDate, patientId],
+    queryFn: () => getIcuChart(hosId, targetDate, patientId),
+    initialData: initialChartData,
+  })
+
+  const debouncedQueryInvalidation = useDebouncedCallback(() => {
+    console.log('Debouced invalidation')
+    queryClient.invalidateQueries({
+      queryKey: ['icu_realtime', hosId, targetDate, patientId],
+    })
   }, 500)
 
   const handleChange = useCallback(
@@ -24,9 +39,9 @@ export function useIcuRealtime(hosId: string) {
         `%c${payload.table} ${payload.eventType}`,
         `background:${getLogColor(payload.table)}; color:white`,
       )
-      deboucedRefresh()
+      debouncedQueryInvalidation()
     },
-    [deboucedRefresh],
+    [debouncedQueryInvalidation],
   )
 
   const subscribeToChannel = useCallback(() => {
@@ -111,6 +126,11 @@ export function useIcuRealtime(hosId: string) {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [handleVisibilityChange, subscribeToChannel, unsubscribe])
+
+  return {
+    data,
+    error,
+  }
 }
 
 export function getLogColor(table: string): string {

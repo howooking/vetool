@@ -1,13 +1,12 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useIcuRealtime } from '@/hooks/use-icu-realtime'
-import { cn } from '@/lib/utils'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import RealtimeStatus from './realtime-status'
-import { useEffect } from 'react'
 import { toast } from '@/components/ui/use-toast'
 import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
+import { cn } from '@/lib/utils'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
+import RealtimeStatus from './realtime-status'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
@@ -51,11 +50,8 @@ export default function IcuFooter({
   hosId: string
   targetDate: string
 }) {
-  useIcuRealtime(hosId)
-
   const { isSubscriptionReady } = useRealtimeSubscriptionStore()
   const { push, refresh } = useRouter()
-
   const path = usePathname()
   const currentIcuPath = path.split('/').at(5)
   const searchParams = useSearchParams()
@@ -75,37 +71,41 @@ export default function IcuFooter({
   return (
     <footer
       className={cn(
-        'fixed bottom-0 z-20 flex h-10 w-full items-center justify-between border-t bg-white transition-all duration-200',
+        'fixed bottom-0 z-20 h-[calc(2.5rem+env(safe-area-inset-bottom))] w-full border-t bg-white transition-all duration-200',
       )}
     >
-      <ul className="flex h-full items-center gap-2 pl-1">
-        <RealtimeStatus isSubscriptionReady={isSubscriptionReady} />
+      <div className="flex h-10 w-full items-center justify-between">
+        <ul className="flex h-full items-center gap-2 pl-1">
+          <RealtimeStatus isSubscriptionReady={isSubscriptionReady} />
 
-        {FOOTER_MAIN_VIEW_MENUS.map(({ label, value }) => (
-          <li
-            key={value}
-            className={cn(
-              value === 'search' || value === 'template' || value === 'analysis'
-                ? 'hidden md:block'
-                : '',
-            )}
-          >
-            <Button
-              size="sm"
-              variant="ghost"
-              className={currentIcuPath === value ? 'bg-muted' : ''}
-              onClick={() =>
-                push(`/hospital/${hosId}/icu/${targetDate}/${value}?${params}`)
-              }
+          {FOOTER_MAIN_VIEW_MENUS.map(({ label, value }) => (
+            <li
+              key={value}
+              className={cn(
+                value === 'search' ||
+                  value === 'template' ||
+                  value === 'analysis' ||
+                  value === 'bookmark'
+                  ? 'hidden md:block'
+                  : '',
+              )}
             >
-              {label}
-            </Button>
-          </li>
-        ))}
-      </ul>
-
-      {/* ICU 알림 기능 일단 보류 */}
-      {/* <IcuNotification hosId={hosId} /> */}
+              <Button
+                size="sm"
+                variant="ghost"
+                className={currentIcuPath === value ? 'bg-muted' : ''}
+                onClick={() =>
+                  push(
+                    `/hospital/${hosId}/icu/${targetDate}/${value}?${params}`,
+                  )
+                }
+              >
+                {label}
+              </Button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </footer>
   )
 }
