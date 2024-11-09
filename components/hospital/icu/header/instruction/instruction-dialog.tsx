@@ -1,6 +1,7 @@
 'use client'
 
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
+import InstructionSidebar from '@/components/hospital/icu/header/instruction/instruction-sidebar'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -12,7 +13,6 @@ import {
 import { Info } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
-import InstructionSidebar from './instruction-sidebar'
 
 const DynamicInstructionContents = dynamic(
   () => import('./instruction-contents'),
@@ -30,7 +30,7 @@ export function InstructionDialog() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild className="hidden md:inline-flex">
         <Button variant="ghost" size="icon">
           <Info size={18} />
         </Button>
