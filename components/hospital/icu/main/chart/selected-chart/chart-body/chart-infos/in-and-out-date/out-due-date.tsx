@@ -65,7 +65,7 @@ export default function OutDueDate({
           <LogOut className="text-muted-foreground" size={16} />
 
           {outDueDateInput ? (
-            <span className="text-sm font-normal">
+            <span className="text-xs font-normal md:text-sm">
               {format(outDueDateInput, 'yyyy-MM-dd')}
             </span>
           ) : (

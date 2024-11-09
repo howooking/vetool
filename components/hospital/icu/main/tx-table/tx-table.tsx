@@ -41,58 +41,54 @@ export default function TxTable({
   }
 
   return (
-    <ScrollArea className="h-full w-full">
-      <Table className="border">
-        <TableHeader className="sticky top-0 z-10 bg-white shadow-sm">
-          <TableRow>
-            <TableHead className="w-[120px] text-center">환자목록</TableHead>
+    <Table className="border">
+      <TableHeader className="sticky top-0 z-20 bg-white shadow-sm">
+        <TableRow>
+          <TableHead className="w-[120px] text-center">환자목록</TableHead>
 
-            {TIMES.map((time) => (
-              <TableHead className="border text-center" key={time}>
-                {time.toString().padStart(2, '0')}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
+          {TIMES.map((time) => (
+            <TableHead className="border text-center" key={time}>
+              {time.toString().padStart(2, '0')}
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
 
-        <TableBody>
-          {filteredTxData.flatMap((txData) =>
-            txData.orders.map((order) => (
-              <TableRow
-                key={order.icu_chart_order_id}
-                style={{
-                  background:
-                    chartBackgroundMap[txData.icu_charts.icu_chart_id],
-                }}
-                className="divide-x"
-              >
-                <TableCell className="min-w-[120px] text-center">
-                  <PatientInfo
-                    name={txData.patient.name}
-                    breed={txData.patient.breed}
-                    species={txData.patient.species}
-                    size={18}
-                    col
-                  />
+      <TableBody>
+        {filteredTxData.flatMap((txData) =>
+          txData.orders.map((order) => (
+            <TableRow
+              key={order.icu_chart_order_id}
+              style={{
+                background: chartBackgroundMap[txData.icu_charts.icu_chart_id],
+              }}
+              className="divide-x"
+            >
+              <TableCell className="min-w-[120px] text-center">
+                <PatientInfo
+                  name={txData.patient.name}
+                  breed={txData.patient.breed}
+                  species={txData.patient.species}
+                  size={18}
+                  col
+                />
 
-                  <div className="text-xs">{txData.icu_charts.weight}kg</div>
-                </TableCell>
+                <div className="text-xs">{txData.icu_charts.weight}kg</div>
+              </TableCell>
 
-                {TIMES.map((time) => (
-                  <TxTableCell
-                    patientName={txData.patient.name}
-                    key={time}
-                    time={time}
-                    order={order}
-                    patientId={txData.patient_id}
-                  />
-                ))}
-              </TableRow>
-            )),
-          )}
-        </TableBody>
-      </Table>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
+              {TIMES.map((time) => (
+                <TxTableCell
+                  patientName={txData.patient.name}
+                  key={time}
+                  time={time}
+                  order={order}
+                  patientId={txData.patient_id}
+                />
+              ))}
+            </TableRow>
+          )),
+        )}
+      </TableBody>
+    </Table>
   )
 }
