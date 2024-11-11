@@ -34,9 +34,11 @@ import * as z from 'zod'
 
 export default function OrdererSelectStep({
   icuChartId,
+  mainVetName,
   orders,
 }: {
   icuChartId: string
+  mainVetName: string
   orders: SelectedIcuOrder[]
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
@@ -233,7 +235,7 @@ export default function OrdererSelectStep({
   const form = useForm<z.infer<typeof ordererSchema>>({
     resolver: zodResolver(ordererSchema),
     defaultValues: {
-      orderer: vetsListData[0].name,
+      orderer: mainVetName,
     },
   })
 
@@ -246,10 +248,7 @@ export default function OrdererSelectStep({
           render={({ field }) => (
             <FormItem>
               <FormLabel>오더결정 수의사</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value ?? undefined}
-              >
+              <Select onValueChange={field.onChange} defaultValue={mainVetName}>
                 <FormControl>
                   <SelectTrigger
                     className={cn(

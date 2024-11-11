@@ -1,7 +1,7 @@
 'use client'
 
 import LargeLoaderCircle from '@/components/common/large-loader-circle'
-import InstructionSidebar from '@/components/hospital/icu/header/instruction/instruction-sidebar'
+import InstructionSidebar from '@/components/hospital/icu/header/(unused)/instruction/instruction-sidebar'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
