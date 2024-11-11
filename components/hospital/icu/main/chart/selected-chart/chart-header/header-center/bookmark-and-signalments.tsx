@@ -14,6 +14,7 @@ export default function HeaderCenter({
       <BookmarkDialog
         icuChartId={chartData.icu_chart_id}
         bookmarkData={chartData.template}
+        icon="star"
       />
       <UpdatePatientDialog
         patientData={{ ...patient, isIcu: true }}
