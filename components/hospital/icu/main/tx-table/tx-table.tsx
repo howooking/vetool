@@ -34,7 +34,7 @@ export default function TxTable({
   if (filteredTxData.length === 0) {
     return (
       <NoResult
-        title={`모든 ${orderType} 처치를 완료했습니다`}
+        title={`모든 ${orderType ?? ''} 처치를 완료했습니다`}
         className="h-icu-chart"
       />
     )

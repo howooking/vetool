@@ -1272,13 +1272,6 @@ export type Database = {
             referencedRelation: "users"
             referencedColumns: ["user_id"]
           },
-          {
-            foreignKeyName: "vetool_errors_user_id_fkey1"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["user_id"]
-          },
         ]
       }
       vetool_feedbacks: {
