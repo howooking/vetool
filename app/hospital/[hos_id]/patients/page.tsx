@@ -1,14 +1,12 @@
 import { patientsColumns } from '@/components/hospital/patients/patient-columns'
-import { PatientRegisterDialog } from '@/components/hospital/patients/patient-register-dialog'
+import PatientRegisterDialog from '@/components/hospital/patients/patient-register-dialog'
 import DataTable from '@/components/ui/data-table'
 import { getPatients } from '@/lib/services/patient/patient'
 
-export default async function HospitalPatientsPage(
-  props: {
-    params: Promise<{ hos_id: string }>
-  }
-) {
-  const params = await props.params;
+export default async function HospitalPatientsPage(props: {
+  params: Promise<{ hos_id: string }>
+}) {
+  const params = await props.params
   const patientsData = await getPatients(params.hos_id)
 
   return (
