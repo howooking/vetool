@@ -20,13 +20,11 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import useIsCommandPressed from '@/hooks/use-is-command-pressed'
-import useLocalStorage from '@/hooks/use-local-storage'
 import {
   reorderOrders,
   upsertOrder,
 } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
-import { useTemplateStore } from '@/lib/store/icu/template'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
