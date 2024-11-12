@@ -129,7 +129,7 @@ export default function CellsRowTitle({
     return foundVital
       ? foundVital[species as keyof Omit<VitalRefRange, 'order_name'>]
       : undefined
-  }, [vitalRefRange, species])
+  }, [species, order.order_name, vitalRefRange])
 
   return (
     <TableCell

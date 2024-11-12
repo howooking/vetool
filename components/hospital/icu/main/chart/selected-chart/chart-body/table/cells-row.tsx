@@ -93,7 +93,7 @@ export default function CellsRow({
     return foundVital
       ? foundVital[species as keyof Omit<VitalRefRange, 'order_name'>]
       : undefined
-  }, [])
+  }, [order.order_name, species, vitalRefRange])
 
   const noFecalOrUrineResult = useMemo(
     () =>

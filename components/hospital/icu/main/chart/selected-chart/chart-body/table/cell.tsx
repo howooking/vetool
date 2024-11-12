@@ -291,7 +291,7 @@ export default function Cell({
         return 'normal'
       }
     }
-  }, [treatment?.tx_log, rowVitalRefRange])
+  }, [rowVitalRefRange, treatment?.tx_result])
 
   const isAbnormalVital = useMemo(() => {
     return calcVitalResult === 'below' || calcVitalResult === 'above'
