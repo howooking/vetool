@@ -5,15 +5,15 @@ export default function PatientInfo({
   name,
   species,
   breed,
-  size = 16,
+  iconSize = 16,
   className,
   col = false,
   isDone = false,
 }: {
   name: string
   species: string
-  breed: string
-  size?: number
+  breed: string | null
+  iconSize?: number
   className?: string
   col?: boolean
   isDone?: boolean
@@ -25,7 +25,7 @@ export default function PatientInfo({
       className={cn(`${className}`, !col && 'flex w-full items-center gap-1')}
     >
       <div className={cn('flex items-center gap-1', col && 'justify-center')}>
-        <Icon size={size} />
+        <Icon size={iconSize} />
 
         <div className={cn('flex items-center gap-1', !col && 'line-clamp-1')}>
           <span className={cn(isDone && 'line-through')}>{name}</span>

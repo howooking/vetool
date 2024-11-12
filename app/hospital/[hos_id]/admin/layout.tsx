@@ -17,7 +17,9 @@ export default async function AdminLayout(props: {
 
       <AdminMobileSidebar />
 
-      <div className="w-full p-2">{props.children}</div>
+      <div className="h-icu-chart w-full overflow-auto p-2">
+        {props.children}
+      </div>
     </div>
   )
 }

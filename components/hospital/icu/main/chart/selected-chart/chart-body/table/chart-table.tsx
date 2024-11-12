@@ -20,13 +20,11 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
 import useIsCommandPressed from '@/hooks/use-is-command-pressed'
-import useLocalStorage from '@/hooks/use-local-storage'
 import {
   reorderOrders,
   upsertOrder,
 } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
-import { useTemplateStore } from '@/lib/store/icu/template'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
 import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
@@ -69,7 +67,7 @@ export default function ChartTable({
   } = useIcuOrderStore()
 
   const {
-    basicHosData: { showOrderer, vetsListData, orderColorsData },
+    basicHosData: { showOrderer, vetsListData, orderColorsData, vitalRefRange },
   } = useBasicHosDataContext()
   const isCommandPressed = useIsCommandPressed()
 
@@ -320,26 +318,20 @@ export default function ChartTable({
                 preview={preview}
                 isSorting={isSorting}
               />
-              <CellsRow
-                orderStep={orderStep}
-                preview={preview}
-                isSorting={isSorting}
-                order={order}
-                showOrderer={showOrderer}
-                hoveredColumn={hoveredColumn}
-                handleColumnHover={handleColumnHover}
-                handleColumnLeave={handleColumnLeave}
-                selectedTxPendingQueue={selectedTxPendingQueue}
-                orderTimePendingQueueLength={orderTimePendingQueue.length}
-              />
             </TableRow>
           ))}
         </SortableOrderWrapper>
       ) : (
         <TableBody>
           {sortedOrders.map((order, index) => (
-            <TableRow className="w-full divide-x" key={order.order_id}>
-              <CellsRowTitle index={index} order={order} preview={preview} />
+            <TableRow className="relative w-full divide-x" key={order.order_id}>
+              <CellsRowTitle
+                index={index}
+                order={order}
+                preview={preview}
+                vitalRefRange={vitalRefRange}
+                species={patient.species}
+              />
               <CellsRow
                 preview={preview}
                 order={order}
@@ -350,6 +342,8 @@ export default function ChartTable({
                 selectedTxPendingQueue={selectedTxPendingQueue}
                 orderStep={orderStep}
                 orderTimePendingQueueLength={orderTimePendingQueue.length}
+                vitalRefRange={vitalRefRange}
+                species={patient.species}
               />
             </TableRow>
           ))}

@@ -45,7 +45,7 @@ export default function SummaryTableRow({ summary }: { summary: SummaryData }) {
           name={patient.name}
           species={patient.species}
           breed={patient.breed}
-          size={18}
+          iconSize={18}
         />
         <span className="shrink-0 text-xs">{hospitalizationDays}일차</span>
       </TableCell>

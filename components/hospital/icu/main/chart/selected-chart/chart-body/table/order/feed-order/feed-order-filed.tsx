@@ -6,9 +6,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { calculateRer } from '@/lib/calculators/rer'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
-import { useMemo, useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 import { orderSchema } from '../order-schema'
