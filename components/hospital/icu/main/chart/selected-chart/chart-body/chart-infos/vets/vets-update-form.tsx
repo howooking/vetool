@@ -21,7 +21,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { updateMainSubVet } from '@/lib/services/icu/chart/update-icu-chart-infos'
 import { Json } from '@/lib/supabase/database.types'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { IcuChartsInCharge } from '@/types/adimin'
 import type { MainAndSubVet, Vet } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'

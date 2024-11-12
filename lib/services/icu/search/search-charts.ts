@@ -3,7 +3,7 @@
 const SPECIAL_CHAR_REGEX = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]+/g
 
 import { createClient } from '@/lib/supabase/server'
-import { getDateMonthsAgo } from '@/lib/utils'
+import { getDateMonthsAgo } from '@/lib/utils/utils'
 import type { SearchedIcuIos } from '@/types/icu/search'
 import { redirect } from 'next/navigation'
 

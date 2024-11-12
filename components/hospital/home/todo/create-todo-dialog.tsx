@@ -21,7 +21,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { createTodo } from '@/lib/services/hospital-home/todo'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle, Plus } from 'lucide-react'
 import { useRouter } from 'next/navigation'

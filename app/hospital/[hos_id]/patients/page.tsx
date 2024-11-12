@@ -1,14 +1,13 @@
 import { patientsColumns } from '@/components/hospital/patients/patient-columns'
-import { PatientRegisterDialog } from '@/components/hospital/patients/patient-register-dialog'
+import PatientRegisterDialog from '@/components/hospital/patients/patient-register-dialog'
+import UploadPatientArea from '@/components/hospital/patients/upload-patient-area'
 import DataTable from '@/components/ui/data-table'
 import { getPatients } from '@/lib/services/patient/patient'
 
-export default async function HospitalPatientsPage(
-  props: {
-    params: Promise<{ hos_id: string }>
-  }
-) {
-  const params = await props.params;
+export default async function HospitalPatientsPage(props: {
+  params: Promise<{ hos_id: string }>
+}) {
+  const params = await props.params
   const patientsData = await getPatients(params.hos_id)
 
   return (
@@ -17,6 +16,8 @@ export default async function HospitalPatientsPage(
         hosId={params.hos_id}
         hosPatientIds={patientsData.map((patient) => patient.hos_patient_id)}
       />
+
+      <UploadPatientArea />
 
       <DataTable
         columns={patientsColumns}

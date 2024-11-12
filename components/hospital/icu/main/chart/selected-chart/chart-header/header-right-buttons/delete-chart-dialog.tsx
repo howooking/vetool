@@ -16,7 +16,7 @@ import {
   deleteChart,
   deleteOrders,
 } from '@/lib/services/icu/chart/delete-icu-chart'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { LoaderCircle, Trash2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'

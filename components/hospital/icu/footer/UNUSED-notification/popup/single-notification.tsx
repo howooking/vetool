@@ -1,5 +1,5 @@
 import { LI_MOTION } from '@/constants/hospital/icu/notification/aniimations'
-import { cn, formatTimeDifference, isDaysBehind } from '@/lib/utils'
+import { cn, formatTimeDifference, isDaysBehind } from '@/lib/utils/utils'
 import type { IcuNotificationJoined } from '@/types/icu/chart'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'

@@ -1,4 +1,4 @@
-import { formatTimeDifference } from '@/lib/utils'
+import { formatTimeDifference } from '@/lib/utils/utils'
 import { format } from 'date-fns'
 import { ChangeEvent } from 'react'
 import type { Memo } from '../chart-memos'

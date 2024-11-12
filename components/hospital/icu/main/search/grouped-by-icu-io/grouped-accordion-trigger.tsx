@@ -1,6 +1,6 @@
 import PatientInfo from '@/components/hospital/common/patient-info'
 import { AccordionTrigger } from '@/components/ui/accordion'
-import { getAgeFromAgeInDays } from '@/lib/utils'
+import { getAgeFromAgeInDays } from '@/lib/utils/utils'
 import { Cat, Dog } from 'lucide-react'
 
 export default function GroupedAccordionTrigger({

@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dialog'
 import { useState } from 'react'
 
-export function PatientRegisterDialog({
+export default function PatientRegisterDialog({
   hosId,
   hosPatientIds,
 }: {

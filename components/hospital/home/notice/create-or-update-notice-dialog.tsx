@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { createNotice, updateNotice } from '@/lib/services/hospital-home/notice'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle, Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'

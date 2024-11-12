@@ -21,7 +21,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { ADDRESS } from '@/constants/hospital/create/address'
 import { createHospital } from '@/lib/services/on-boarding/on-boarding'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'

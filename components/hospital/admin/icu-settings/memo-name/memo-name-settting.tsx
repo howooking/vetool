@@ -20,7 +20,7 @@ import { memoNameFormSchema } from './memo-name-schema'
 import { updateMemoNames } from '@/lib/services/admin/icu/memo-name'
 import { useState } from 'react'
 import { LoaderCircle } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 
 export default function MemoNameSetting({
   memoNames,
