@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import RealtimeStatus from './realtime-status'

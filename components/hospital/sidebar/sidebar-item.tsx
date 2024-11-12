@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import CustomTooltip from '@/components/ui/custom-tooltip'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { format } from 'date-fns'
 import {
   BarChart4,

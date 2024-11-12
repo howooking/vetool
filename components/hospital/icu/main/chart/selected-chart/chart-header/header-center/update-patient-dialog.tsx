@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { getAgeFromAgeInDays, convertPascalCased } from '@/lib/utils'
+import { getAgeFromAgeInDays, convertPascalCased } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { PatientDataTable } from '@/types/patients'
 import { Cat, Dog } from 'lucide-react'

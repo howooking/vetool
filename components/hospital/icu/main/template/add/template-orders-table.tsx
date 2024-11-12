@@ -9,7 +9,7 @@ import { toast } from '@/components/ui/use-toast'
 import { reorderOrders } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTemplateStore } from '@/lib/store/icu/template'
-import { hasOrderSortingChanges } from '@/lib/utils'
+import { hasOrderSortingChanges } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import {

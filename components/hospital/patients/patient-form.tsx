@@ -47,7 +47,7 @@ import {
   updatePatientFromPatientRoute,
 } from '@/lib/services/patient/patient'
 import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
-import { cn, getDaysSince } from '@/lib/utils'
+import { cn, getDaysSince } from '@/lib/utils/utils'
 import type { PatientDataTable } from '@/types/patients'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'

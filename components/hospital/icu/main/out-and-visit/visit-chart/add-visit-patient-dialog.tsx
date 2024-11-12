@@ -22,7 +22,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { getVisitablePatients } from '@/lib/services/icu/out-and-visit/icu-out-chart'
 import { insertVisitPatient } from '@/lib/services/icu/out-and-visit/visit-chart'
-import { convertPascalCased } from '@/lib/utils'
+import { convertPascalCased } from '@/lib/utils/utils'
 import { VisitablePatientsData } from '@/types/icu/movement'
 import { Plus } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'

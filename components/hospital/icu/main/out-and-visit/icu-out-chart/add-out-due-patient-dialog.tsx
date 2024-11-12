@@ -24,7 +24,7 @@ import {
   getNotOutDuePatients,
   updatePatientOutDueDate,
 } from '@/lib/services/icu/out-and-visit/icu-out-chart'
-import { convertPascalCased } from '@/lib/utils'
+import { convertPascalCased } from '@/lib/utils/utils'
 import type { NotOutDuePatientsData } from '@/types/icu/movement'
 import { Plus } from 'lucide-react'
 import { useParams } from 'next/navigation'

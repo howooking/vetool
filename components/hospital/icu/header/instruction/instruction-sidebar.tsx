@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { INSTRUCTIONS } from '@/constants/hospital/icu/chart/instruction'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { Info } from 'lucide-react'
 import { Dispatch, SetStateAction } from 'react'
 

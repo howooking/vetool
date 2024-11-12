@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
-import { formatTimeDifference } from '@/lib/utils'
+import { formatTimeDifference } from '@/lib/utils/utils'
 import type { UserFeedbackType } from '@/types/vetool'
 import { useState } from 'react'
 

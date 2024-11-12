@@ -25,7 +25,7 @@ import {
   deleteTemplateChart,
   upsertTemplateChart,
 } from '@/lib/services/icu/template/template'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import type { IcuTemplate } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle, Star } from 'lucide-react'

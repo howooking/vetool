@@ -2,7 +2,7 @@
 
 import { TableCell, TableRow } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { cn, getDaysDifference } from '@/lib/utils'
+import { cn, getDaysDifference } from '@/lib/utils/utils'
 import type { SummaryData } from '@/types/icu/summary'
 import { Cat, Dog } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'

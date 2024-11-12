@@ -1,4 +1,4 @@
-import { convertPascalCased, cn } from '@/lib/utils'
+import { convertPascalCased, cn } from '@/lib/utils/utils'
 import { Cat, Dog } from 'lucide-react'
 
 export default function PatientInfo({

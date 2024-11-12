@@ -37,7 +37,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { registerIcuPatient } from '@/lib/services/icu/register-icu-patient'
 import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
-import { changeTargetDateInUrl, cn } from '@/lib/utils'
+import { changeTargetDateInUrl, cn } from '@/lib/utils/utils'
 import type { Vet } from '@/types/icu/chart'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
