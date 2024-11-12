@@ -28,7 +28,7 @@ import {
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTemplateStore } from '@/lib/store/icu/template'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
-import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
+import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { ArrowUpDown } from 'lucide-react'

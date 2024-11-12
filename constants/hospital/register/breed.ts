@@ -50,7 +50,7 @@ export const CANINE_BREEDS = [
   {
     id: 8,
     kor: '기타종',
-    eng: 'OTHER DOG BREED',
+    eng: 'OTHER BREED',
   },
   {
     id: 9,
@@ -270,12 +270,12 @@ export const CANINE_BREEDS = [
   {
     id: 52,
     kor: '믹스',
-    eng: 'MIXED BREED DOG',
+    eng: 'MIXED',
   },
   {
     id: 53,
     kor: '믹스견',
-    eng: 'MIXED BREED DOG',
+    eng: 'MIXED',
   },
   {
     id: 54,
@@ -820,7 +820,7 @@ export const CANINE_BREEDS = [
   {
     id: 162,
     kor: '잡종',
-    eng: 'MIXED BREED DOG',
+    eng: 'MIXED',
   },
   {
     id: 163,
@@ -1165,17 +1165,37 @@ export const CANINE_BREEDS = [
   {
     id: 231,
     kor: '혼합견종',
-    eng: 'MIXED BREED DOG',
+    eng: 'MIXED',
   },
   {
     id: 232,
     kor: '혼합종',
-    eng: 'MIXED BREED DOG',
+    eng: 'MIXED',
   },
   {
     id: 233,
     kor: '휘핏',
     eng: 'WHIPPET',
+  },
+  {
+    id: 234,
+    kor: '아이누견',
+    eng: 'AINU DOG',
+  },
+  {
+    id: 235,
+    kor: '아이누견',
+    eng: 'AINU DOG',
+  },
+  {
+    id: 236,
+    kor: '스피츠',
+    eng: 'SPITZ',
+  },
+  {
+    id: 237,
+    kor: 'Polish Greyhound(폴리쉬 그레이 하운드)',
+    eng: 'POLISH GREYHOUND',
   },
 ] as const
 
@@ -1183,7 +1203,7 @@ export const FELINE_BREEDS = [
   {
     id: 1,
     kor: '기타종',
-    eng: '\bOTHER CAT BREED',
+    eng: 'OTHER BREED',
   },
   {
     id: 2,
@@ -1243,17 +1263,17 @@ export const FELINE_BREEDS = [
   {
     id: 13,
     kor: '믹스',
-    eng: 'MIXED BREED CAT',
+    eng: 'MIXED',
   },
   {
     id: 14,
     kor: '믹스고양이',
-    eng: 'MIXED BREED CAT',
+    eng: 'MIXED',
   },
   {
     id: 15,
     kor: '믹스묘',
-    eng: 'MIXED BREED CAT',
+    eng: 'MIXED',
   },
   {
     id: 16,
@@ -1383,7 +1403,7 @@ export const FELINE_BREEDS = [
   {
     id: 41,
     kor: '잡종',
-    eng: 'MIXED BREED CAT',
+    eng: 'MIXED',
   },
   {
     id: 42,
@@ -1458,12 +1478,12 @@ export const FELINE_BREEDS = [
   {
     id: 56,
     kor: '혼합묘종',
-    eng: 'MIXED BREED CAT',
+    eng: 'MIXED',
   },
   {
     id: 57,
     kor: '혼합종',
-    eng: 'MIXED BREED CAT',
+    eng: 'MIXED',
   },
   {
     id: 58,

@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { Activity } from 'lucide-react'
 import { useState } from 'react'
 import CpcrEtTubeUpdateForm from './cpcr-et-tube-update-form'

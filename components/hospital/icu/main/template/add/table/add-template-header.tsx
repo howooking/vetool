@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { ArrowUpDown } from 'lucide-react'
 import { ReactNode } from 'react'
 

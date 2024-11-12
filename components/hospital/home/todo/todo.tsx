@@ -1,7 +1,7 @@
 import TodoList from '@/components/hospital/home/todo/todo-list'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { getYesterdayTodayTomorrow } from '@/lib/utils'
+import { getYesterdayTodayTomorrow } from '@/lib/utils/utils'
 import type { QueriedTodo } from '@/types/hospital/todo'
 
 export default function Todo({

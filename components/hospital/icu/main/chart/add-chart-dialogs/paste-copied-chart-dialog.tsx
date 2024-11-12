@@ -32,7 +32,7 @@ import {
   useState,
 } from 'react'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { Label } from '@/components/ui/label'
 export default function PasteCopiedChartDialog({
   setIsChartLoading,

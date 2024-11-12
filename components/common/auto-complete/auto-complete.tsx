@@ -4,7 +4,7 @@ import HelperTooltip from '@/components/common/helper-tooltip'
 import { Input } from '@/components/ui/input'
 import { useOutsideClick } from '@/hooks/use-outside-click'
 import { useKeywordTrieStore } from '@/lib/store/hospital/keyword-trie'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { Keyword } from '@/types/hospital/keywords'
 import {
   ChangeEvent,

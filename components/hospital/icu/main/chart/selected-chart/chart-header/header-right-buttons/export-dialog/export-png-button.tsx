@@ -1,6 +1,6 @@
 import { handleExport } from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-right-buttons/export-dialog/export-dialog-utils'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import type { SelectedChart } from '@/types/icu/chart'
 import { addDays, format } from 'date-fns'
 import { LoaderCircle } from 'lucide-react'

@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { changeTargetDateInUrl } from '@/lib/utils'
+import { changeTargetDateInUrl } from '@/lib/utils/utils'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { CalendarDays } from 'lucide-react'

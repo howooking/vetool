@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { Dispatch, SetStateAction } from 'react'
 
 export default function TxTableFilter({

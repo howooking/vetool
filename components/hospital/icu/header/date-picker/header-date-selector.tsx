@@ -4,7 +4,7 @@ import IcuHeaderDatePicker from '@/components/hospital/icu/header/date-picker/he
 import { Button } from '@/components/ui/button'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
-import { changeTargetDateInUrl } from '@/lib/utils'
+import { changeTargetDateInUrl } from '@/lib/utils/utils'
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
 import { addDays, format, isToday } from 'date-fns'
 import {

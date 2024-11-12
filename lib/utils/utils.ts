@@ -3,7 +3,7 @@ import { SelectedIcuOrder } from '@/types/icu/chart'
 import { type ClassValue, clsx } from 'clsx'
 import { differenceInDays, isValid, parseISO } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
-import { OrderTimePendingQueue } from './store/icu/icu-order'
+import { OrderTimePendingQueue } from '@/lib/store/icu/icu-order'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

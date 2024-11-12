@@ -2,7 +2,7 @@
 
 import { Checkbox } from '@/components/ui/checkbox'
 import { toggleIsDone } from '@/lib/services/hospital-home/todo'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import type { QueriedTodo } from '@/types/hospital/todo'
 import { LoaderCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'

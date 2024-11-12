@@ -21,7 +21,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
 import { sendFeedback } from '@/lib/services/feedback/feedback'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 import {

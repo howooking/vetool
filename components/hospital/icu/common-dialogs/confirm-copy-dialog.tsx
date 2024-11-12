@@ -17,7 +17,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { pasteChart } from '@/lib/services/icu/chart/paste-chart'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
