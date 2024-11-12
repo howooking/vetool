@@ -271,8 +271,8 @@ export const parsingOrderName = (orderType: string, orderName: string) => {
   return orderName
 }
 
-export const convertPascalCased = (value: string) => {
-  if (!value) return value
+export const convertPascalCased = (value: string | null) => {
+  if (!value) return '품종 선택'
 
   return value
     .toLowerCase()

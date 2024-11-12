@@ -69,7 +69,7 @@ export default function TxTable({
                   name={txData.patient.name}
                   breed={txData.patient.breed}
                   species={txData.patient.species}
-                  size={18}
+                  iconSize={18}
                   col
                 />
 

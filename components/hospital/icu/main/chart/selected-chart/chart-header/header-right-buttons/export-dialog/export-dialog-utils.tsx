@@ -102,6 +102,7 @@ export const renderAndCaptureExportChartBody = (
             .order_color as IcuOrderColors,
           memoNameListData: initialIcuData.basicHosData.icu_memo_names,
           templateData: initialIcuData.templateData ?? [],
+          vitalRefRange: [],
         }}
       >
         <ExportChartBody chartData={chartData} onRender={handleRender} />,

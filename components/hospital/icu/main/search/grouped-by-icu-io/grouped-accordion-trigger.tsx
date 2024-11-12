@@ -15,7 +15,7 @@ export default function GroupedAccordionTrigger({
 }: {
   species: string
   name: string
-  breed: string
+  breed: string | null
   owner_name: string
   inAndOutDate: string
   age_in_days: number
