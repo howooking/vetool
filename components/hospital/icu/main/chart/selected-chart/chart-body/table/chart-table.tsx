@@ -67,7 +67,7 @@ export default function ChartTable({
   } = useIcuOrderStore()
 
   const {
-    basicHosData: { showOrderer, vetsListData, orderColorsData },
+    basicHosData: { showOrderer, vetsListData, orderColorsData, vitalRefRange },
   } = useBasicHosDataContext()
   const isCommandPressed = useIsCommandPressed()
 
@@ -318,18 +318,6 @@ export default function ChartTable({
                 preview={preview}
                 isSorting={isSorting}
               />
-              <CellsRow
-                orderStep={orderStep}
-                preview={preview}
-                isSorting={isSorting}
-                order={order}
-                showOrderer={showOrderer}
-                hoveredColumn={hoveredColumn}
-                handleColumnHover={handleColumnHover}
-                handleColumnLeave={handleColumnLeave}
-                selectedTxPendingQueue={selectedTxPendingQueue}
-                orderTimePendingQueueLength={orderTimePendingQueue.length}
-              />
             </TableRow>
           ))}
         </SortableOrderWrapper>
@@ -348,6 +336,8 @@ export default function ChartTable({
                 selectedTxPendingQueue={selectedTxPendingQueue}
                 orderStep={orderStep}
                 orderTimePendingQueueLength={orderTimePendingQueue.length}
+                vitalRefRange={vitalRefRange}
+                species={patient.species}
               />
             </TableRow>
           ))}

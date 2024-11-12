@@ -27,10 +27,6 @@ export default function VitalRefRangeSettings({
   const handleUpdateVitalRefRange = async () => {
     setIsUpdating(true)
 
-    const stringifiedVitalRefRange = JSON.stringify(localVitalRefRangeState)
-
-    console.log(stringifiedVitalRefRange)
-
     await updateVitalRefRange(hosId, localVitalRefRangeState)
 
     toast({

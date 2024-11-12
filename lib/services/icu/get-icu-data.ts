@@ -34,7 +34,8 @@ export const getIcuData = async (hosId: string, targetDate: string) => {
           icu_memo_names,
           maintenance_rate_calc_method,
           show_orderer,
-          rer_calc_method
+          rer_calc_method,
+          vital_ref_range
         `,
       )
       .match({ hos_id: hosId })

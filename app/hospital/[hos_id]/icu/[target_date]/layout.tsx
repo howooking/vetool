@@ -3,7 +3,7 @@ import IcuHeader from '@/components/hospital/icu/header/icu-header'
 import IcuSidebar from '@/components/hospital/icu/sidebar/icu-sidebar'
 import { getIcuData } from '@/lib/services/icu/get-icu-data'
 import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-provider'
-import type { IcuOrderColors } from '@/types/adimin'
+import type { IcuOrderColors, VitalRefRange } from '@/types/adimin'
 import React from 'react'
 
 export default async function IcuPageLayout(props: {
@@ -33,6 +33,7 @@ export default async function IcuPageLayout(props: {
         rerCalcMethod: basicHosData.rer_calc_method,
         sidebarData: icuSidebarData ?? [],
         templateData: templateData ?? [],
+        vitalRefRange: basicHosData.vital_ref_range as VitalRefRange[],
       }}
     >
       <IcuHeader
