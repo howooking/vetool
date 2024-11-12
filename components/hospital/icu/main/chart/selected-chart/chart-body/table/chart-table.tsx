@@ -324,7 +324,7 @@ export default function ChartTable({
       ) : (
         <TableBody>
           {sortedOrders.map((order, index) => (
-            <TableRow className="w-full divide-x" key={order.order_id}>
+            <TableRow className="relative w-full divide-x" key={order.order_id}>
               <CellsRowTitle
                 index={index}
                 order={order}

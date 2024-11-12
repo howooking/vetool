@@ -10,6 +10,7 @@ import type { VitalRefRange } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Cell from './cell'
+import NoFecalOrUrineAlert from './tx/no-fecal-urine-alert'
 
 type CellsRowProps = {
   preview?: boolean
@@ -94,6 +95,13 @@ export default function CellsRow({
       : undefined
   }, [])
 
+  const noFecalOrUrineResult = useMemo(
+    () =>
+      (order.order_name === '배변' || order.order_name === '배뇨') &&
+      order.treatments.length === 0,
+    [order.order_name, order.treatments.length],
+  )
+
   return (
     <>
       {TIMES.map((time, index) => {
@@ -133,6 +141,10 @@ export default function CellsRow({
           />
         )
       })}
+
+      {noFecalOrUrineResult && (
+        <NoFecalOrUrineAlert orderName={order.order_name} />
+      )}
     </>
   )
 }
