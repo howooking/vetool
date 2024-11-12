@@ -11,7 +11,7 @@ import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import FeedbackForm from './feedback-form'
 import useIsMobile from '@/hooks/use-is-mobile'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 
 const DynamicFeedbackForm = dynamic(() => import('./feedback-form'), {
   ssr: false,
