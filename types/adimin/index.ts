@@ -66,3 +66,15 @@ export type IcuChartsInCharge = {
     pm: string
   }
 }
+
+export type VitalRefRange = {
+  order_name: string
+  canine: {
+    min: number
+    max: number
+  }
+  feline: {
+    min: number
+    max: number
+  }
+}
