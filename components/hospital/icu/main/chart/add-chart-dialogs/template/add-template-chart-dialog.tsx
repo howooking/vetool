@@ -19,13 +19,8 @@ import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { useTemplateStore } from '@/lib/store/icu/template'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { Star } from 'lucide-react'
-import { Dispatch, SetStateAction } from 'react'
 
-export default function AddTemplateChartDialog({
-  setIsChartLoading,
-}: {
-  setIsChartLoading: Dispatch<SetStateAction<boolean>>
-}) {
+export default function AddTemplateChartDialog() {
   const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isTemplateDialogOpen, setIsTemplateDialogOpen } = useTemplateStore()
   const { isConfirmCopyDialogOpen } = useCopiedChartStore()
@@ -63,10 +58,7 @@ export default function AddTemplateChartDialog({
 
         {isPreviewDialogOpen && <PreviewDialog />}
         {isConfirmCopyDialogOpen && (
-          <ConfirmCopyDialog
-            setIsChartLoading={setIsChartLoading}
-            setTemplateDialogOpen={setIsTemplateDialogOpen}
-          />
+          <ConfirmCopyDialog setTemplateDialogOpen={setIsTemplateDialogOpen} />
         )}
 
         <DialogFooter>

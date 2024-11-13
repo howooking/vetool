@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import RealtimeStatus from './realtime-status'
+import { useIcuRealtime } from '@/hooks/use-icu-realtime'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
@@ -56,6 +57,7 @@ export default function IcuFooter({
   const currentIcuPath = path.split('/').at(5)
   const searchParams = useSearchParams()
   const params = new URLSearchParams(searchParams)
+  useIcuRealtime(hosId)
 
   useEffect(() => {
     if (isSubscriptionReady) {
