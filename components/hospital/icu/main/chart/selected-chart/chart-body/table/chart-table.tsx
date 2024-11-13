@@ -6,8 +6,8 @@ import CellsRowTitle from '@/components/hospital/icu/main/chart/selected-chart/c
 import DeleteOrdersAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/delete-orders-alert-dialog'
 import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-dialog'
 import SortableOrderWrapper from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/sortable-order-wrapper'
+import AddTemplateOrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/template/add-template-order-dialog'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
-import AddTemplateOrdersButton from '@/components/hospital/icu/main/template/add/add-template-orders-button'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -51,6 +51,7 @@ export default function ChartTable({
   } = chartData
 
   const hosId = chartData.patient.hos_id
+  const targetDate = chartData.target_date
   const [isSorting, setIsSorting] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>(orders)
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
@@ -287,7 +288,7 @@ export default function ChartTable({
               />
             )}
 
-            {<AddTemplateOrdersButton />}
+            {<AddTemplateOrderDialog hosId={hosId} targetDate={targetDate} />}
           </TableHead>
 
           {TIMES.map((time) => (

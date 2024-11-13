@@ -54,15 +54,14 @@ export const transformCsvData = (row: string[], header: string[]) => {
 }
 
 const transformGender = (value: string): string => {
-  if (!value) return 'unknown'
-
   const genderMap: Record<string, string> = {
     Female: 'if',
     Male: 'im',
     'Castrated Male': 'cm',
     'Spayed Female': 'sf',
   }
-  return genderMap[value] ?? 'Unknown'
+
+  return genderMap[value] ?? 'un'
 }
 
 const transformBirthDate = (value: string): string => {
@@ -82,24 +81,24 @@ const transformSpecies = (value: string) => {
     return value.toLocaleLowerCase()
   }
 
-  return 'un'
+  return 'Unknown'
 }
 
-const transformBreed = (value: string): string => {
+const transformBreed = (value: string) => {
   if (!value) {
-    return 'OTHER BREED'
+    return null
   }
 
   const engBreedName = value.split('(')[0].trim().toLowerCase()
 
   // 추출된 영문명이 빈 문자열인 경우 원본값 반환
   if (!engBreedName) {
-    return value
+    return null
   }
 
   // 한글만 포함된 경우 원본값 반환
   if (/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(engBreedName)) {
-    return value
+    return null
   }
 
   // Korean Shorthaired -> Domestic Shorthaired 변환
@@ -112,5 +111,5 @@ const transformBreed = (value: string): string => {
     .find((breed) => breed.eng.toLowerCase() === engBreedName)
     ?.eng.toUpperCase()
 
-  return matchedBreed ?? value
+  return matchedBreed ?? null
 }
