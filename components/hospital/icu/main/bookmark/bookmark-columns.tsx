@@ -1,13 +1,13 @@
 'use client'
 
 import PreviewButton from '@/components/hospital/icu/common-dialogs/preview/preview-button'
-import EditTemplateButton from '@/components/hospital/icu/main/template/edit/edit-template-button'
-import DeleteTemplateDialog from '@/components/hospital/icu/main/template/table/delete-template-dialog'
+import DeleteBookmarkDialog from '@/components/hospital/icu/main/bookmark/delete-bookmark-dialog'
+import BookmarkDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-header/header-center/bookmark-dialog'
+import GotoIcuButton from '@/components/hospital/icu/main/template/table/goto-icu-button'
 import { Button } from '@/components/ui/button'
 import type { TemplateChart } from '@/types/icu/template'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
-import GotoIcuButton from '../template/table/goto-icu-button'
 
 export const bookmarkColumns: ColumnDef<TemplateChart>[] = [
   {
@@ -85,18 +85,37 @@ export const bookmarkColumns: ColumnDef<TemplateChart>[] = [
       )
     },
   },
+
   {
-    id: 'delete',
-    header: '삭제',
+    id: 'edit',
+    header: '수정',
     cell: ({ row }) => {
       const chartId = row.original.icu_chart_id
 
       return (
         <div className="flex justify-center">
-          <DeleteTemplateDialog
-            templateId={row.original.template_id}
-            templateName={row.original.template_name}
-            chartId={chartId}
+          <BookmarkDialog
+            icuChartId={chartId}
+            bookmarkData={row.original}
+            icon="edit"
+          />
+        </div>
+      )
+    },
+  },
+
+  {
+    id: 'delete',
+    header: '삭제',
+    cell: ({ row }) => {
+      const templateId = row.original.template_id
+      const templateName = row.original.template_name
+
+      return (
+        <div className="flex justify-center">
+          <DeleteBookmarkDialog
+            templateId={templateId}
+            templateName={templateName}
           />
         </div>
       )

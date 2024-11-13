@@ -28,7 +28,7 @@ import {
 import { cn } from '@/lib/utils/utils'
 import type { IcuTemplate } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LoaderCircle, Star } from 'lucide-react'
+import { Edit, LoaderCircle, Star } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -37,12 +37,14 @@ import { z } from 'zod'
 export default function BookmarkDialog({
   icuChartId,
   bookmarkData,
+  icon,
 }: {
   icuChartId: string
   bookmarkData: Pick<
     IcuTemplate,
     'template_id' | 'template_name' | 'template_comment'
   > | null
+  icon: 'star' | 'edit'
 }) {
   const { hos_id } = useParams()
   const { refresh } = useRouter()
@@ -69,7 +71,7 @@ export default function BookmarkDialog({
     )
 
     toast({
-      title: '템플릿이 추가되었습니다',
+      title: `북마크를 ${bookmarkData?.template_id!! ? '수정' : '생성'}하였습니다`,
     })
 
     refresh()
@@ -83,7 +85,7 @@ export default function BookmarkDialog({
     await deleteTemplateChart(bookmarkData?.template_id!)
 
     toast({
-      title: '템플릿이 삭제되었습니다',
+      title: `${bookmarkData?.template_name} 북마크가 삭제되었습니다`,
     })
 
     refresh()
@@ -108,16 +110,21 @@ export default function BookmarkDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
-        <Star
-          className={cn(
-            'text-amber-300',
-            bookmarkData?.template_id!! && 'fill-amber-300',
-          )}
-        />
+        {icon === 'star' && (
+          <Star
+            className={cn(
+              'text-amber-300',
+              bookmarkData?.template_id!! && 'fill-amber-300',
+            )}
+          />
+        )}
+        {icon === 'edit' && <Edit size={18} />}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>차트 북마크 생성</DialogTitle>
+          <DialogTitle>
+            {`차트 북마크 ${bookmarkData?.template_id!! ? '수정' : '생성'}`}
+          </DialogTitle>
           <DialogDescription />
         </DialogHeader>
 
@@ -137,6 +144,7 @@ export default function BookmarkDialog({
                       {...field}
                       value={field.value || ''}
                       placeholder="북마크 이름을 입력해주세요"
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -155,6 +163,7 @@ export default function BookmarkDialog({
                       {...field}
                       value={field.value || ''}
                       placeholder="설명을 입력해주세요"
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />

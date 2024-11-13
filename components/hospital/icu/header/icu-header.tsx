@@ -2,6 +2,7 @@ import IcuHeaderDateSelector from '@/components/hospital/icu/header/date-picker/
 import type { Vet } from '@/types/icu/chart'
 import type { PatientData } from '@/types/patients'
 import RegisterDialog from './register-dialog/register-dialog'
+// import { InstructionDialog } from './instruction/instruction-dialog'
 
 export default async function IcuHeader({
   hosId,

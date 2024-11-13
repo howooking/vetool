@@ -58,7 +58,7 @@ export const INSTRUCTIONS = [
       {
         id: 1,
         video: '/instruction/order/order1.mp4',
-        description: '1. 단일 오더 추가 (단축키 CTRL + O)',
+        description: '1. 단일 오더 추가 (단축키 "CTRL + O")',
       },
       {
         id: 2,
@@ -68,18 +68,18 @@ export const INSTRUCTIONS = [
       {
         id: 3,
         video: '/instruction/order/order3.mp4',
-        description: '3. 오더 시간 추가, 변경 (CTRL 누른상태 + 우클릭)',
+        description: '3. 오더 시간 추가, 변경 ("CTRL 누른상태 + 우클릭")',
       },
       {
         id: 4,
         video: '/instruction/order/order4.mp4',
-        description: '4. 오더 순서 변경 (단축키 CTRL + S)',
+        description: '4. 오더 순서 변경 (단축키 "CTRL + S")',
       },
       {
         id: 5,
         video: '/instruction/order/order5.mp4',
         description:
-          '5. 오더 삭제 - 개별 삭제, 다수 오더 선택(CTRL + 오더클릭) → delete 키',
+          '5. 오더 삭제 - 개별 삭제, 다수 오더 선택("CTRL + 오더클릭") → delete 키',
       },
       {
         id: 6,
@@ -90,7 +90,7 @@ export const INSTRUCTIONS = [
         id: 7,
         video: '/instruction/order/order7.mp4',
         description:
-          '7. 오더 복사: 다수 오더 선택(CTRL + 오더 클릭) → CTRL + C → CTRL + V (동일 또는 다른 차트에 붙여넣기 가능)',
+          '7. 오더 복사: 다수 오더 선택("CTRL + 오더 클릭") → "CTRL + C → CTRL + V" (동일 또는 다른 차트에 붙여넣기 가능)',
       },
     ],
   },
@@ -118,19 +118,61 @@ export const INSTRUCTIONS = [
         id: 4,
         video: '/instruction/treatment/treatment4.mp4',
         description:
-          '3. 다중 처치 입력 - 다수 처치 선택(CTRL 누른 상태 + 좌클릭)',
+          '3. 다중 처치 입력 - 다수 처치 선택("CTRL 누른 상태 + 좌클릭")',
       },
       {
         id: 5,
         video: '/instruction/treatment/treatment5.mp4',
         description:
-          '4. 처치 삭제 - 마우스 0.8초간 좌클릭 → 삭제버튼 or 다수 처치 선택(CTRL 누른 상태 + 좌클릭) → 삭제 버튼',
+          '4. 처치 삭제 - 마우스 0.8초간 좌클릭 → 삭제버튼 or 다수 처치 선택("CTRL 누른 상태 + 좌클릭") → 삭제 버튼',
       },
     ],
   },
   {
     id: 5,
     title: '템플릿',
+    slides: [
+      {
+        id: 1,
+        video: '/instruction/template/template1.mp4',
+        description: '1. 커스텀 템플릿 생성',
+      },
+      {
+        id: 2,
+        video: '/instruction/template/template2.mp4',
+        description: '2. 빠른 템플릿 생성 - 오더 선택 후 "CTRL + A"',
+      },
+      {
+        id: 3,
+        video: '/instruction/template/template3.mp4',
+        description: '3. 템플릿 검색 및 수정·삭제',
+      },
+    ],
+  },
+  {
+    id: 6,
+    title: '북마크',
+    slides: [
+      {
+        id: 1,
+        video: '/instruction/bookmark/bookmark1.mp4',
+        description: '1. 차트 북마크 생성',
+      },
+      {
+        id: 2,
+        video: '/instruction/bookmark/bookmark2.mp4',
+        description: '2. 북마크 검색 및 미리보기·이동',
+      },
+      {
+        id: 2,
+        video: '/instruction/bookmark/bookmark3.mp4',
+        description: '3. 북마크 수정·삭제',
+      },
+    ],
+  },
+  {
+    id: 7,
+    title: '단축키 안내',
     slides: [
       {
         id: 1,

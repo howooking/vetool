@@ -72,7 +72,7 @@ export default function QuickOrderInsertInput({
       setIsSubmitting(false)
 
       toast({
-        title: `${quickOrderInput} 오더를 생성하였습니다`,
+        title: `${quickOrderInput.split('$')[0]} 오더를 생성하였습니다`,
       })
 
       setQuickOrderInput('')

@@ -36,6 +36,7 @@ export default function OrderDialog({
   reset,
   isExport,
   setSortedOrders,
+  mainVetName,
 }: {
   icuChartId: string
   orders: SelectedIcuOrder[]
@@ -51,6 +52,7 @@ export default function OrderDialog({
   reset: () => void
   isExport?: boolean
   setSortedOrders: Dispatch<SetStateAction<SelectedIcuOrder[]>>
+  mainVetName: string
 }) {
   const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isTemplateDialogOpen } = useTemplateStore()
@@ -144,7 +146,11 @@ export default function OrderDialog({
           </Tabs>
         )}
         {orderStep === 'selectOrderer' && (
-          <OrdererSelectStep icuChartId={icuChartId} orders={orders} />
+          <OrdererSelectStep
+            icuChartId={icuChartId}
+            orders={orders}
+            mainVetName={mainVetName}
+          />
         )}
       </DialogContent>
     </Dialog>
