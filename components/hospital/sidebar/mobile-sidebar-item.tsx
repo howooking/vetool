@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { format } from 'date-fns'
 import {
   BarChart4,

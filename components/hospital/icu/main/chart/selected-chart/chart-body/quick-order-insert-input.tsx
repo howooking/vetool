@@ -93,7 +93,9 @@ export default function QuickOrderInsertInput({
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="p-0">
-          {DEFAULT_ICU_ORDER_TYPE.map((item) => (
+          {DEFAULT_ICU_ORDER_TYPE.filter(
+            (item) => item.value !== 'checklist',
+          ).map((item) => (
             <SelectItem
               key={item.value}
               value={item.value}

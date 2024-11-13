@@ -294,6 +294,7 @@ export type Database = {
           plan: string
           rer_calc_method: string
           show_orderer: boolean
+          vital_ref_range: Json
         }
         Insert: {
           business_number?: string
@@ -311,6 +312,7 @@ export type Database = {
           plan?: string
           rer_calc_method?: string
           show_orderer?: boolean
+          vital_ref_range?: Json
         }
         Update: {
           business_number?: string
@@ -328,6 +330,7 @@ export type Database = {
           plan?: string
           rer_calc_method?: string
           show_orderer?: boolean
+          vital_ref_range?: Json
         }
         Relationships: [
           {
@@ -1040,7 +1043,7 @@ export type Database = {
       patients: {
         Row: {
           birth: string
-          breed: string
+          breed: string | null
           created_at: string
           gender: string
           hos_id: string
@@ -1057,7 +1060,7 @@ export type Database = {
         }
         Insert: {
           birth: string
-          breed: string
+          breed?: string | null
           created_at?: string
           gender: string
           hos_id: string
@@ -1074,7 +1077,7 @@ export type Database = {
         }
         Update: {
           birth?: string
-          breed?: string
+          breed?: string | null
           created_at?: string
           gender?: string
           hos_id?: string

@@ -12,6 +12,14 @@ export async function googleLogin(formData: FormData) {
     provider: 'google',
     options: {
       redirectTo: `${path}/auth/callback`,
+      queryParams: {
+        // Force account selection even when one account is available
+        prompt: 'select_account',
+        // Don't use OAuth browser state to prevent auto-login
+        access_type: 'offline',
+        // Clear any login hints
+        login_hint: '',
+      },
     },
   })
 

@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { getDaysSince } from '@/lib/utils'
+import { getDaysSince } from '@/lib/utils/utils'
 import { redirect } from 'next/navigation'
 
 export const registerIcuPatient = async (

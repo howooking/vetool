@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { getUser } from '@/lib/services/auth/authorization'
 import { sendErrorFeedback } from '@/lib/services/error-feedback/error-feedback'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import {
   AlertCircle,
   CheckCircle2,

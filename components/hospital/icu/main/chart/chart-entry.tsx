@@ -1,65 +1,53 @@
 'use client'
 
-import LargeLoaderCircle from '@/components/common/large-loader-circle'
+import NoResult from '@/components/common/no-result'
 import AddChartDialogs from '@/components/hospital/icu/main/chart/add-chart-dialogs/add-chart-dialogs'
 import Chart from '@/components/hospital/icu/main/chart/chart'
-import { useIcuRealtime } from '@/hooks/use-icu-realtime'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart } from '@/types/icu/chart'
-import { redirect } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 
 export default function ChartEntry({
-  initialChartData,
-  hosId,
-  targetDate,
+  chartData,
   patientId,
 }: {
-  initialChartData: SelectedChart
-  hosId: string
-  targetDate: string
+  chartData: SelectedChart
   patientId: string
 }) {
-  const { data: chartData, error } = useIcuRealtime(
-    hosId,
-    targetDate,
-    patientId,
-    initialChartData,
+  const {
+    basicHosData: { sidebarData },
+  } = useBasicHosDataContext()
+
+  const hasIcuIo = useMemo(
+    () => sidebarData.find((io) => io.patient.patient_id === patientId),
+    [patientId, sidebarData],
   )
 
-  if (error) {
-    redirect(`/error/?message=${error.message}`)
+  // 입원 전 or 퇴원 후
+  if (!chartData && !hasIcuIo) {
+    return (
+      <NoResult
+        title={
+          <>
+            해당환자는 선택한 날짜의 차트가 없습니다 <br /> 선택한 날짜에 아직
+            입원을 하지 않았거나 이미 퇴원을 하였습니다
+          </>
+        }
+        className="h-icu-chart"
+      />
+    )
   }
 
-  const [isChartLoading, setIsChartLoading] = useState(false)
-
-  useEffect(() => {
-    setIsChartLoading(false)
-  }, [chartData])
-
-  if (isChartLoading) {
-    return <LargeLoaderCircle className="h-icu-chart" />
-  }
-
-  // chart가 없는 경우 => 첫날 차트가 아님
+  // io가 있고 chart가 없음 => 첫날 차트가 아님
   if (!chartData) {
-    return (
-      <AddChartDialogs
-        chartData={chartData}
-        setIsChartLoading={setIsChartLoading}
-      />
-    )
+    return <AddChartDialogs chartData={chartData} />
   }
 
-  // chart가 있고 order가 없는 경우 => 첫날차트
+  // io가 있고 chart가 있고 order가 없는 경우 => 첫날차트
   if (chartData.orders.length === 0) {
-    return (
-      <AddChartDialogs
-        isFirstChart
-        chartData={chartData}
-        setIsChartLoading={setIsChartLoading}
-      />
-    )
+    return <AddChartDialogs isFirstChart chartData={chartData} />
   }
 
+  // io가 있고 chart가 있고 order가 있음 => 정상차트
   return <Chart chartData={chartData} />
 }

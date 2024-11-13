@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { parsingOrderName } from '@/lib/utils'
+import { parsingOrderName } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import { IcuOrderColors } from '@/types/adimin'
 import type { IcuReadOnlyOrderData } from '@/types/icu/chart'

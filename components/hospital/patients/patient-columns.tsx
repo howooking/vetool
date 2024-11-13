@@ -3,7 +3,7 @@
 import PatientSelectButton from '@/components/hospital/icu/header/register-dialog/patient-search/patient-select-button'
 import PatientActions from '@/components/hospital/patients/patient-actions'
 import { Button } from '@/components/ui/button'
-import { calculateAge, convertPascalCased, cn } from '@/lib/utils'
+import { calculateAge, convertPascalCased, cn } from '@/lib/utils/utils'
 import { PatientDataTable } from '@/types/patients'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, Cat, Dog } from 'lucide-react'

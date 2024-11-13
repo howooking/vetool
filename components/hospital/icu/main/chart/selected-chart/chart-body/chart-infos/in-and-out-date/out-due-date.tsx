@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/popover'
 import { toast } from '@/components/ui/use-toast'
 import { updateOutDueDate } from '@/lib/services/icu/chart/update-icu-chart-infos'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { format, parseISO } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { LogOut } from 'lucide-react'

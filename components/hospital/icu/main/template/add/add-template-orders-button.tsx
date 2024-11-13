@@ -22,7 +22,7 @@ import { toast } from '@/components/ui/use-toast'
 import { insertCustomTemplateChart } from '@/lib/services/icu/template/template'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTemplateStore } from '@/lib/store/icu/template'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -37,13 +37,11 @@ export default function AddTemplateOrdersButton({
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [selectedOrdersLength, setSelectedOrdersLength] = useState(0)
 
   const { refresh } = useRouter()
   const { hos_id, target_date } = useParams()
-  const { templateOrders, setTemplateOrders, reset } = useTemplateStore()
-  const { selectedOrderPendingQueue, setSelectedOrderPendingQueue } =
-    useIcuOrderStore()
+  const { templateOrders, reset } = useTemplateStore()
+  const { setSelectedOrderPendingQueue } = useIcuOrderStore()
 
   // 템플릿 페이지에서 만든 템플릿 오더
   const templateOrdersLength = templateOrders.length
@@ -88,39 +86,6 @@ export default function AddTemplateOrdersButton({
     }
   }, [isDialogOpen, form, setSelectedOrderPendingQueue])
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const activeElement = document.activeElement
-      const isInputFocused =
-        activeElement instanceof HTMLInputElement ||
-        activeElement instanceof HTMLTextAreaElement ||
-        activeElement?.hasAttribute('contenteditable')
-
-      if (
-        (event.ctrlKey || event.metaKey) &&
-        event.key === 'a' &&
-        !isInputFocused
-      ) {
-        if (selectedOrderPendingQueue.length > 0) {
-          setTemplateOrders(selectedOrderPendingQueue)
-          setIsDialogOpen(true)
-          setSelectedOrdersLength(selectedOrderPendingQueue.length)
-        }
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [
-    selectedOrderPendingQueue,
-    setTemplateOrders,
-    setIsDialogOpen,
-    setSelectedOrdersLength,
-  ])
-
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
@@ -129,7 +94,7 @@ export default function AddTemplateOrdersButton({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>템플릿 저장</DialogTitle>
-          <DialogDescription>{`${selectedOrdersLength || templateOrdersLength}개의 오더를 저장합니다`}</DialogDescription>
+          <DialogDescription>{`${templateOrdersLength}개의 오더를 저장합니다`}</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>

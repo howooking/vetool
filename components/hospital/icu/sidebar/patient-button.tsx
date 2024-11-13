@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { cn, convertPascalCased } from '@/lib/utils'
+import { cn, convertPascalCased } from '@/lib/utils/utils'
 import type { IcuSidebarIoData } from '@/types/icu/chart'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback } from 'react'

@@ -1,6 +1,6 @@
 'use client'
 
-import { IcuOrderColors } from '@/types/adimin'
+import { IcuOrderColors, VitalRefRange } from '@/types/adimin'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
 import type { TemplateChart } from '@/types/icu/template'
 import type { PatientData } from '@/types/patients'
@@ -21,6 +21,7 @@ type BasicHosData = {
   sidebarData: IcuSidebarIoData[]
   patientsData: PatientData[]
   templateData: TemplateChart[]
+  vitalRefRange: VitalRefRange[]
 }
 
 const BasicHosDataContext = createContext<IcuContextType | undefined>(undefined)

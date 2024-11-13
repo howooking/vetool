@@ -6,9 +6,11 @@ import {
   useIcuOrderStore,
 } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
+import type { VitalRefRange } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Cell from './cell'
+import NoFecalOrUrineAlert from './tx/no-fecal-urine-alert'
 
 type CellsRowProps = {
   preview?: boolean
@@ -17,10 +19,11 @@ type CellsRowProps = {
   hoveredColumn: number | null
   handleColumnHover: (columnIndex: number) => void
   handleColumnLeave: () => void
-  isSorting?: boolean
   selectedTxPendingQueue: OrderTimePendingQueue[]
   orderStep: 'closed' | 'upsert' | 'selectOrderer' | 'multipleEdit'
   orderTimePendingQueueLength: number
+  vitalRefRange: VitalRefRange[]
+  species: string
 }
 
 export default function CellsRow({
@@ -30,10 +33,11 @@ export default function CellsRow({
   hoveredColumn,
   handleColumnHover,
   handleColumnLeave,
-  isSorting,
   selectedTxPendingQueue,
   orderStep,
   orderTimePendingQueueLength,
+  vitalRefRange,
+  species,
 }: CellsRowProps) {
   const { order_times, order_id, treatments } = order
   const {
@@ -82,6 +86,22 @@ export default function CellsRow({
     [setOrderTimePendingQueue, selectedTxPendingQueue],
   )
 
+  const rowVitalRefRange = useMemo(() => {
+    const foundVital = vitalRefRange.find(
+      (vital) => vital.order_name === order.order_name,
+    )
+    return foundVital
+      ? foundVital[species as keyof Omit<VitalRefRange, 'order_name'>]
+      : undefined
+  }, [order.order_name, species, vitalRefRange])
+
+  const noFecalOrUrineResult = useMemo(
+    () =>
+      (order.order_name === '배변' || order.order_name === '배뇨') &&
+      order.treatments.length === 0,
+    [order.order_name, order.treatments.length],
+  )
+
   return (
     <>
       {TIMES.map((time, index) => {
@@ -109,7 +129,6 @@ export default function CellsRow({
             onMouseEnter={handleColumnHover}
             onMouseLeave={handleColumnLeave}
             isGuidelineTime={isGuidelineTime}
-            isSorting={isSorting}
             setSelectedTxPendingQueue={setSelectedTxPendingQueue}
             selectedTxPendingQueue={selectedTxPendingQueue}
             isMutationCanceled={isMutationCanceled}
@@ -118,9 +137,14 @@ export default function CellsRow({
             setTxLocalState={setTxLocalState}
             setSelectedOrderPendingQueue={setSelectedOrderPendingQueue}
             orderTimePendingQueueLength={orderTimePendingQueueLength}
+            rowVitalRefRange={rowVitalRefRange}
           />
         )
       })}
+
+      {noFecalOrUrineResult && (
+        <NoFecalOrUrineAlert orderName={order.order_name} />
+      )}
     </>
   )
 }

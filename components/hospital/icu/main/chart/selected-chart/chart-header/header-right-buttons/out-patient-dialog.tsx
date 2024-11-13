@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from '@/components/ui/use-toast'
 import { toggleOutPatient } from '@/lib/services/icu/chart/update-icu-chart-infos'
-import { cn, hashtagKeyword } from '@/lib/utils'
+import { cn, hashtagKeyword } from '@/lib/utils/utils'
 import type { SelectedChart } from '@/types/icu/chart'
 import { LoaderCircle, LogOut, Undo2 } from 'lucide-react'
 import { useState } from 'react'
@@ -45,7 +45,7 @@ export default function OutPatientDialog({
       patient.patient_id,
       hashtaggedDxCc,
       patient.species,
-      patient.breed,
+      patient.breed ?? '미정',
       patient.name,
       patient.owner_name,
       icu_io.age_in_days,

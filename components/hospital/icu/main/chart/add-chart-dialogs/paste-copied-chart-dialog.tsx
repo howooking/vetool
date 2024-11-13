@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import Image from 'next/image'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -22,23 +22,13 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { pasteChart } from '@/lib/services/icu/chart/paste-chart'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
-import { CopyCheck } from 'lucide-react'
-import { useParams } from 'next/navigation'
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
+import { cn } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
-import { cn } from '@/lib/utils'
-import { Label } from '@/components/ui/label'
-export default function PasteCopiedChartDialog({
-  setIsChartLoading,
-}: {
-  setIsChartLoading: Dispatch<SetStateAction<boolean>>
-}) {
+import { CopyCheck, LoaderCircle } from 'lucide-react'
+import Image from 'next/image'
+import { useParams } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
+export default function PasteCopiedChartDialog() {
   const { target_date, patient_id } = useParams()
   const { copiedChartId, reset } = useCopiedChartStore()
   const {
@@ -46,6 +36,7 @@ export default function PasteCopiedChartDialog({
   } = useBasicHosDataContext()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [orderer, setOrderer] = useState(vetsListData[0].name)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handlePasteCopiedChart = useCallback(async () => {
     if (!copiedChartId) {
@@ -59,7 +50,7 @@ export default function PasteCopiedChartDialog({
       return
     }
 
-    setIsChartLoading(true)
+    setIsLoading(true)
 
     await pasteChart(
       patient_id as string,
@@ -72,16 +63,10 @@ export default function PasteCopiedChartDialog({
       title: '차트를 붙여넣었습니다',
       description: '복사한 차트는 클립보드에서 제거됩니다',
     })
-
+    setIsLoading(false)
+    setIsDialogOpen(false)
     reset()
-  }, [
-    copiedChartId,
-    patient_id,
-    reset,
-    setIsChartLoading,
-    target_date,
-    orderer,
-  ])
+  }, [copiedChartId, patient_id, reset, target_date, orderer])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -180,7 +165,12 @@ export default function PasteCopiedChartDialog({
               취소
             </Button>
           </DialogClose>
-          <Button onClick={handlePasteCopiedChart}>붙여넣기</Button>
+          <Button onClick={handlePasteCopiedChart} disabled={isLoading}>
+            붙여넣기
+            <LoaderCircle
+              className={cn(isLoading ? 'animate-spin' : 'hidden')}
+            />
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

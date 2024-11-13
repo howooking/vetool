@@ -1,47 +1,36 @@
-import { getIcuChart } from '@/lib/services/icu/chart/get-icu-chart'
 import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
 import { createClient } from '@/lib/supabase/client'
-import { type SelectedChart } from '@/types/icu/chart'
 import type { RealtimeChannel } from '@supabase/supabase-js'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 const supabase = createClient()
 const TABLES = ['icu_io', 'icu_charts', 'icu_orders', 'icu_txs'] as const
 
-export function useIcuRealtime(
-  hosId: string,
-  targetDate: string,
-  patientId: string,
-  initialChartData: SelectedChart,
-) {
+export function useIcuRealtime(hosId: string) {
   const subscriptionRef = useRef<RealtimeChannel | null>(null)
   const { setIsSubscriptionReady } = useRealtimeSubscriptionStore()
-  const queryClient = useQueryClient()
+  const { refresh } = useRouter()
 
-  const { data, error } = useQuery({
-    queryKey: ['icu_realtime', hosId, targetDate, patientId],
-    queryFn: () => getIcuChart(hosId, targetDate, patientId),
-    initialData: initialChartData,
-  })
-
-  const debouncedQueryInvalidation = useDebouncedCallback(() => {
-    console.log('Debouced invalidation')
-    queryClient.invalidateQueries({
-      queryKey: ['icu_realtime', hosId, targetDate, patientId],
-    })
-  }, 500)
+  const debouncedRefresh = useDebouncedCallback(() => {
+    console.log('Debouced refresh')
+    refresh()
+  }, 1000)
 
   const handleChange = useCallback(
     (payload: any) => {
+      if (payload.table === 'icu_io') {
+        refresh()
+      }
+      debouncedRefresh()
+
       console.log(
         `%c${payload.table} ${payload.eventType}`,
         `background:${getLogColor(payload.table)}; color:white`,
       )
-      debouncedQueryInvalidation()
     },
-    [debouncedQueryInvalidation],
+    [debouncedRefresh],
   )
 
   const subscribeToChannel = useCallback(() => {
@@ -126,21 +115,24 @@ export function useIcuRealtime(
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [handleVisibilityChange, subscribeToChannel, unsubscribe])
-
-  return {
-    data,
-    error,
-  }
 }
 
-export function getLogColor(table: string): string {
+function getLogColor(table: string): string {
   switch (table) {
     case 'icu_io':
       return 'blue'
     case 'icu_charts':
       return 'red'
+
     case 'icu_orders':
-      return 'green'
+      /*************  ✨ Codeium Command ⭐  *************/
+      /**
+       * Get the color for a given table's log.
+       *
+       * @param {string} table - The table name.
+       * @returns {string} The color for the given table's log.
+       */
+      /******  be861dde-2353-4b83-856c-89f6ea4f5dee  *******/ return 'green'
     case 'icu_txs':
       return 'purple'
     default:

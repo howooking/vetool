@@ -6,8 +6,8 @@ import CellsRowTitle from '@/components/hospital/icu/main/chart/selected-chart/c
 import DeleteOrdersAlertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/delete-orders-alert-dialog'
 import OrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-dialog'
 import SortableOrderWrapper from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/sortable-order-wrapper'
+import AddTemplateOrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/template/add-template-order-dialog'
 import TxUpsertDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/tx/tx-upsert-dialog'
-import AddTemplateOrdersButton from '@/components/hospital/icu/main/template/add/add-template-orders-button'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -26,7 +26,7 @@ import {
 } from '@/lib/services/icu/chart/order-mutation'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
 import { useTxMutationStore } from '@/lib/store/icu/tx-mutation'
-import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils'
+import { cn, formatOrders, hasOrderSortingChanges } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { SelectedChart, SelectedIcuOrder } from '@/types/icu/chart'
 import { ArrowUpDown } from 'lucide-react'
@@ -52,6 +52,7 @@ export default function ChartTable({
   } = chartData
 
   const hosId = chartData.patient.hos_id
+  const targetDate = chartData.target_date
   const [isSorting, setIsSorting] = useState(false)
   const [sortedOrders, setSortedOrders] = useState<SelectedIcuOrder[]>(orders)
   const [isDeleteOrdersDialogOpen, setIsDeleteOrdersDialogOpen] =
@@ -68,7 +69,7 @@ export default function ChartTable({
   } = useIcuOrderStore()
 
   const {
-    basicHosData: { showOrderer, vetsListData, orderColorsData },
+    basicHosData: { showOrderer, vetsListData, orderColorsData, vitalRefRange },
   } = useBasicHosDataContext()
   const isCommandPressed = useIsCommandPressed()
 
@@ -289,7 +290,7 @@ export default function ChartTable({
               />
             )}
 
-            {<AddTemplateOrdersButton />}
+            {<AddTemplateOrderDialog hosId={hosId} targetDate={targetDate} />}
           </TableHead>
 
           {TIMES.map((time) => (
@@ -320,26 +321,20 @@ export default function ChartTable({
                 preview={preview}
                 isSorting={isSorting}
               />
-              <CellsRow
-                orderStep={orderStep}
-                preview={preview}
-                isSorting={isSorting}
-                order={order}
-                showOrderer={showOrderer}
-                hoveredColumn={hoveredColumn}
-                handleColumnHover={handleColumnHover}
-                handleColumnLeave={handleColumnLeave}
-                selectedTxPendingQueue={selectedTxPendingQueue}
-                orderTimePendingQueueLength={orderTimePendingQueue.length}
-              />
             </TableRow>
           ))}
         </SortableOrderWrapper>
       ) : (
         <TableBody>
           {sortedOrders.map((order, index) => (
-            <TableRow className="w-full divide-x" key={order.order_id}>
-              <CellsRowTitle index={index} order={order} preview={preview} />
+            <TableRow className="relative w-full divide-x" key={order.order_id}>
+              <CellsRowTitle
+                index={index}
+                order={order}
+                preview={preview}
+                vitalRefRange={vitalRefRange}
+                species={patient.species}
+              />
               <CellsRow
                 preview={preview}
                 order={order}
@@ -350,6 +345,8 @@ export default function ChartTable({
                 selectedTxPendingQueue={selectedTxPendingQueue}
                 orderStep={orderStep}
                 orderTimePendingQueueLength={orderTimePendingQueue.length}
+                vitalRefRange={vitalRefRange}
+                species={patient.species}
               />
             </TableRow>
           ))}

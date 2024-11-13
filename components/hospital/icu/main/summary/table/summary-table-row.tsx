@@ -2,7 +2,7 @@
 
 import { TableCell, TableRow } from '@/components/ui/table'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
-import { cn, getDaysDifference } from '@/lib/utils'
+import { cn, getDaysDifference } from '@/lib/utils/utils'
 import type { SummaryData } from '@/types/icu/summary'
 import { Cat, Dog } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -45,7 +45,7 @@ export default function SummaryTableRow({ summary }: { summary: SummaryData }) {
           name={patient.name}
           species={patient.species}
           breed={patient.breed}
-          size={18}
+          iconSize={18}
         />
         <span className="shrink-0 text-xs">{hospitalizationDays}일차</span>
       </TableCell>

@@ -2,7 +2,7 @@
 
 import type { Json } from '@/lib/supabase/database.types'
 import { createClient } from '@/lib/supabase/server'
-import { getDateMonthsAgo } from '@/lib/utils'
+import { getDateMonthsAgo } from '@/lib/utils/utils'
 import type { ErrorFeedbackType } from '@/types/vetool'
 import { redirect } from 'next/navigation'
 

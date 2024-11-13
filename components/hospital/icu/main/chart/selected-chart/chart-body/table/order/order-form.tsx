@@ -26,6 +26,7 @@ import { useParams } from 'next/navigation'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import ChecklistOrderField from './checklist-order/checklist-order-field'
 import FeedOrderField from './feed-order/feed-order-filed'
 import FluidOrderFiled from './fluid-order/fluid-order-filed'
 import OrderFormField from './order-form-field'
@@ -167,6 +168,8 @@ export default function OrderForm({
           )}
         />
 
+        {orderType === 'checklist' && <ChecklistOrderField form={form} />}
+
         {orderType === 'fluid' && (
           <FluidOrderFiled
             form={form}
@@ -178,9 +181,9 @@ export default function OrderForm({
 
         {orderType === 'feed' && <FeedOrderField form={form} />}
 
-        {orderType !== 'fluid' && orderType !== 'feed' && (
-          <OrderFormField form={form} />
-        )}
+        {orderType !== 'fluid' &&
+          orderType !== 'feed' &&
+          orderType !== 'checklist' && <OrderFormField form={form} />}
 
         <OrderTimeSettings
           startTime={startTime}

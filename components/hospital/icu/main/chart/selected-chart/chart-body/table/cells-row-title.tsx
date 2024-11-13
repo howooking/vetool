@@ -2,9 +2,9 @@ import { Button } from '@/components/ui/button'
 import { TableCell } from '@/components/ui/table'
 import { toast } from '@/components/ui/use-toast'
 import { useIcuOrderStore } from '@/lib/store/icu/icu-order'
-import { cn, parsingOrderName } from '@/lib/utils'
+import { cn, parsingOrderName } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
-import { IcuOrderColors } from '@/types/adimin'
+import type { IcuOrderColors, VitalRefRange } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { useCallback, useEffect, useMemo } from 'react'
 
@@ -13,11 +13,15 @@ export default function CellsRowTitle({
   isSorting,
   index,
   preview,
+  vitalRefRange,
+  species,
 }: {
   order: SelectedIcuOrder
   isSorting?: boolean
   index: number
   preview?: boolean
+  vitalRefRange?: VitalRefRange[]
+  species?: string
 }) {
   const { order_comment, order_type, order_id } = order
   const {
@@ -117,6 +121,16 @@ export default function CellsRowTitle({
     return order.order_id.startsWith('temp_order_id')
   }, [order])
 
+  // 바이탈 참조범위
+  const rowVitalRefRange = useMemo(() => {
+    const foundVital = vitalRefRange?.find(
+      (vital) => vital.order_name === order.order_name,
+    )
+    return foundVital
+      ? foundVital[species as keyof Omit<VitalRefRange, 'order_name'>]
+      : undefined
+  }, [species, order.order_name, vitalRefRange])
+
   return (
     <TableCell
       className={cn(
@@ -143,9 +157,15 @@ export default function CellsRowTitle({
           isInPendingQueue && 'ring-2',
         )}
       >
-        <span className="truncate">
-          {parsingOrderName(order_type, order.order_name)}
-        </span>
+        <div className="flex items-center gap-1 truncate">
+          <span>{parsingOrderName(order_type, order.order_name)}</span>
+          {rowVitalRefRange && (
+            <span className="text-xs text-muted-foreground">
+              ({rowVitalRefRange.min}~{rowVitalRefRange.max})
+            </span>
+          )}
+        </div>
+
         <span className="min-w-16 truncate text-right text-xs text-muted-foreground">
           {order_comment} {order_type === 'fluid' && 'ml/hr'}
         </span>

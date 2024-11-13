@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import type { IcuOrderColors } from '@/types/adimin'
 import type { SelectedIcuOrder } from '@/types/icu/chart'
 import { RefObject } from 'react'
