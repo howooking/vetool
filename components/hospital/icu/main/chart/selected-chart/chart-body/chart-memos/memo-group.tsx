@@ -29,6 +29,10 @@ export default function MemoGroup({
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
 
   useEffect(() => {
+    setSortedMemos(memo ?? [])
+  }, [memo])
+
+  useEffect(() => {
     if (shouldScrollToBottom && lastMemoRef.current) {
       lastMemoRef.current.scrollIntoView({ behavior: 'smooth' })
       setShouldScrollToBottom(false)

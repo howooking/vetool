@@ -7,17 +7,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { toast } from '@/components/ui/use-toast'
 import { calculateRer } from '@/lib/calculators/rer'
-import { updateDerCalcFactor } from '@/lib/services/icu/chart/update-icu-chart-infos'
-import { cn } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
-import { Equal, LoaderCircle, X, Zap } from 'lucide-react'
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
-import RerDerDisplay from './rer-der-display'
+import { Zap } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import RerDerForm from './rer-der-form'
 import RerDerToolTip from './rer-der-tool-tip'
 
 export default function RerDer({
@@ -32,17 +28,14 @@ export default function RerDer({
   derCalcFactor: number | null
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [factor, setFactor] = useState(
     derCalcFactor ? derCalcFactor.toString() : '',
   )
-  const [isFactorNan, setIsFactorNan] = useState(false)
-  const factorRef = useRef<HTMLInputElement>(null)
   const hasNoWeight = weight === ''
 
   useEffect(() => {
-    factorRef.current?.focus()
-  }, [])
+    setFactor(derCalcFactor ? derCalcFactor.toString() : '')
+  }, [derCalcFactor])
 
   const {
     basicHosData: { rerCalcMethod },
@@ -62,40 +55,6 @@ export default function RerDer({
     () => (Number(calculatedRer) * Number(factor)).toFixed(0),
     [calculatedRer, factor],
   )
-
-  useEffect(() => {
-    if (Number.isNaN(Number(factor))) {
-      setIsFactorNan(true)
-    } else {
-      setIsFactorNan(false)
-    }
-  }, [factor])
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (isFactorNan) {
-      factorRef.current?.focus()
-      return
-    }
-    if (hasNoWeight) {
-      return
-    }
-
-    if (derCalcFactor === Number(factor)) {
-      setIsDialogOpen(false)
-      return
-    }
-
-    setIsSubmitting(true)
-    await updateDerCalcFactor(icuChartId, Number(factor))
-
-    toast({
-      title: 'DER이 수정되었습니다',
-    })
-
-    setIsSubmitting(false)
-    setIsDialogOpen(false)
-  }
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -137,59 +96,16 @@ export default function RerDer({
           <DialogDescription />
         </DialogHeader>
 
-        <form
-          className="mt-2 grid grid-cols-9 items-center justify-center gap-2"
-          onSubmit={handleSubmit}
-        >
-          <RerDerDisplay
-            calcuatedVal={hasNoWeight ? '체중 입력' : calculatedRer}
-            prefix="RER"
-          />
-
-          <X className="col-span-1 w-full" />
-
-          <Input
-            ref={factorRef}
-            className={cn(
-              isFactorNan &&
-                'focus:ring-error focus-visible:ring-2 focus-visible:ring-rose-300',
-              'col-span-1',
-            )}
-            placeholder="배수"
-            value={factor}
-            onChange={(e) => setFactor(e.target.value)}
-          />
-
-          <Equal className="col-span-1 w-full" />
-
-          <RerDerDisplay
-            calcuatedVal={
-              hasNoWeight
-                ? '체중 입력'
-                : isFactorNan
-                  ? '숫자입력'
-                  : calculatedDer
-            }
-            prefix="DER"
-          />
-
-          <div className="col-span-9 ml-auto flex w-full justify-end">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsDialogOpen(false)}
-            >
-              취소
-            </Button>
-
-            <Button type="submit" className="ml-2" disabled={isSubmitting}>
-              확인
-              <LoaderCircle
-                className={cn(isSubmitting ? 'ml-2 animate-spin' : 'hidden')}
-              />
-            </Button>
-          </div>
-        </form>
+        <RerDerForm
+          factor={factor}
+          setFactor={setFactor}
+          hasNoWeight={hasNoWeight}
+          icuChartId={icuChartId}
+          derCalcFactor={derCalcFactor}
+          setIsDialogOpen={setIsDialogOpen}
+          calculatedRer={calculatedRer}
+          calculatedDer={calculatedDer}
+        />
       </DialogContent>
     </Dialog>
   )

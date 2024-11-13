@@ -19,15 +19,14 @@ import { pasteChart } from '@/lib/services/icu/chart/paste-chart'
 import { useCopiedChartStore } from '@/lib/store/icu/copied-chart'
 import { cn } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
+import { LoaderCircle } from 'lucide-react'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
-import { useState, type Dispatch, type SetStateAction } from 'react'
+import { useState } from 'react'
 
 export function ConfirmCopyDialog({
-  setIsChartLoading,
   setTemplateDialogOpen,
 }: {
-  setIsChartLoading: Dispatch<SetStateAction<boolean>>
   setTemplateDialogOpen: (isTemplateDialogOpen: boolean) => void
 }) {
   const { target_date, patient_id } = useParams()
@@ -41,10 +40,10 @@ export function ConfirmCopyDialog({
     basicHosData: { vetsListData, showOrderer },
   } = useBasicHosDataContext()
   const [orderer, setOrderer] = useState(vetsListData[0].name)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleConfirmCopy = async () => {
-    setIsChartLoading(true)
-
+    setIsLoading(true)
     await pasteChart(
       patient_id as string,
       copiedChartId!,
@@ -56,6 +55,7 @@ export function ConfirmCopyDialog({
       title: '차트를 생성하였습니다',
     })
 
+    setIsLoading(false)
     reset()
     setTemplateDialogOpen(false)
   }
@@ -124,7 +124,12 @@ export function ConfirmCopyDialog({
           >
             취소
           </Button>
-          <Button onClick={handleConfirmCopy}>확인</Button>
+          <Button onClick={handleConfirmCopy} disabled={isLoading}>
+            확인
+            <LoaderCircle
+              className={cn(isLoading ? 'animate-spin' : 'hidden')}
+            />
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
