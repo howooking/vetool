@@ -29,6 +29,11 @@ const SingleMemo = React.forwardRef<HTMLLIElement, SingleMemoProps>(
       }
     }, [isEditMode, editedMemo])
 
+    useEffect(() => {
+      setEditedMemo(memo.memo)
+      setEditedMemoColor(memo.color)
+    }, [memo])
+
     const handleUpdateSingleMemo = () => {
       if (editedMemo.trim().length === 0) {
         toast({
