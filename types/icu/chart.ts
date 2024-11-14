@@ -33,6 +33,7 @@ export type SelectedChart = Pick<
   | 'icu_chart_id'
   | 'in_charge'
   | 'der_calc_factor'
+  | 'main_vet'
 > & {
   icu_io: Pick<
     IcuIo,
