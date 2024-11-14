@@ -5,7 +5,7 @@ import { ADMIN_SIDEBAR_ITEMS } from '@/constants/admin/admin-sidebar-items'
 
 export default function AdminSidebar() {
   return (
-    <aside className="hidden h-icu-chart w-48 border-r md:block">
+    <aside className="h-exclude-header hidden w-48 border-r md:block">
       <ul className="flex flex-col gap-2 p-2">
         {ADMIN_SIDEBAR_ITEMS.map((item) => (
           <AdminSidebarItem

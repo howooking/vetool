@@ -14,10 +14,7 @@ export default async function TxTablePage(props: {
 
   if (!txTableData) {
     return (
-      <NoResult
-        title="실행할 처치가 존재하지 않습니다"
-        className="h-icu-chart"
-      />
+      <NoResult title="실행할 처치가 없습니다" className="h-icu-chart-main" />
     )
   }
 

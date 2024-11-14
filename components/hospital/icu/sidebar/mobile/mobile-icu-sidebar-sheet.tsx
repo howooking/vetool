@@ -12,9 +12,9 @@ import { Menu } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import { Filter } from '../icu-sidebar'
-import MobileSidebar from './mobile-sidebar'
+import MobileSidebar from './mobile-icu-sidebar'
 
-export function MobileSidebarSheet({
+export function MobileIcuSidebarSheet({
   hosGroupList,
   vetsListData,
   filteredData,

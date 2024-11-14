@@ -5,10 +5,10 @@ import NoPatients from '@/components/hospital/icu/sidebar/no-patients'
 import PatientList from '@/components/hospital/icu/sidebar/patient-list'
 import { Separator } from '@/components/ui/separator'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
-import { Filter } from './icu-sidebar'
 import type { Dispatch, SetStateAction } from 'react'
+import { Filter } from './icu-sidebar'
 
-export default function NormalSidebar({
+export default function DesktopIcuSidebar({
   filteredData,
   vetsListData,
   hosGroupList,
@@ -29,7 +29,7 @@ export default function NormalSidebar({
   handleCloseMobileDrawer?: () => void
 }) {
   return (
-    <aside className="hidden h-[calc(100vh-88px)] w-[144px] shrink-0 flex-col gap-3 border-r p-2 md:flex">
+    <aside className="h-icu-chart-main fixed z-20 hidden w-[144px] shrink-0 flex-col gap-3 border-r bg-white p-2 md:flex">
       {isEmpty ? (
         <>
           <NoPatients />

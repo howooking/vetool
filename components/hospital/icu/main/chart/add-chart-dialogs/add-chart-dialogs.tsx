@@ -12,7 +12,7 @@ export default function AddChartDialogs({
   chartData?: SelectedChart
 }) {
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-5 p-5 md:h-icu-chart md:flex-row md:gap-10">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-5 p-5 ring md:flex-row md:gap-10">
       {isFirstChart ? (
         <AddDefaultChartDialog chartData={chartData} />
       ) : (
