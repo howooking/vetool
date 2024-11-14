@@ -173,7 +173,7 @@ export default function MemoGroup({
           onEnd={handleReorder}
         >
           {sortedMemos.length === 0 ? (
-            <NoResultSquirrel text="메모 없음" />
+            <NoResultSquirrel text="메모 없음" size="sm" className="h-52" />
           ) : (
             sortedMemos.map((memo, index) => (
               <SingleMemo
