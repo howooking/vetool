@@ -55,13 +55,13 @@ export default function RegisterIcuForm({
   groupList,
   vetsData,
   tab,
-  setIsRegisterDialogOpen,
+  handleCloseDialog,
 }: {
   hosId: string
   groupList: string[]
   vetsData: Vet[]
   tab: string
-  setIsRegisterDialogOpen: (isRegisterDialogOpen: boolean) => void
+  handleCloseDialog: () => void
 }) {
   const path = usePathname()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -122,7 +122,7 @@ export default function RegisterIcuForm({
       toast({
         title: '입원 환자가 등록되었습니다',
       })
-      setIsRegisterDialogOpen(false)
+      handleCloseDialog()
       setIsSubmitting(false)
 
       const splittedPath = path.split('/')

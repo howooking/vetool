@@ -2,19 +2,18 @@ import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { getLatestIoByPatientId } from '@/lib/services/icu/chart/get-icu-io-by-patient-id'
 import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
-import { cn, getDaysSince } from '@/lib/utils/utils'
+import { getDaysSince } from '@/lib/utils/utils'
 import { Check, LoaderCircle } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function PatientSelectButton({
   patientId,
-  isIcu,
+
   birth,
   patientName,
 }: {
   patientId: string
-  isIcu: boolean
   birth: string
   patientName: string
 }) {
@@ -66,7 +65,6 @@ export default function PatientSelectButton({
       size="icon"
       variant="ghost"
       onClick={handlePatientClick}
-      className={cn(isIcu ? 'flex' : 'hidden')}
       disabled={isLoading}
     >
       {isLoading ? (
