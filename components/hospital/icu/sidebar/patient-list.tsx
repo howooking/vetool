@@ -47,7 +47,11 @@ export default function PatientList({
               필터링 제외 ({excludedIcuIoData.length})
             </span>
             {excludedIcuIoData.map((data) => (
-              <li key={data.icu_io_id} className="w-full">
+              <li
+                key={data.icu_io_id}
+                className="w-full"
+                onClick={handleCloseMobileDrawer}
+              >
                 <PatientButton data={data} />
               </li>
             ))}

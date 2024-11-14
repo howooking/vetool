@@ -1,5 +1,5 @@
-import AdminMobileSidebar from '@/components/hospital/admin/admin-mobile-sidebar'
-import AdminSidebar from '@/components/hospital/admin/admin-sidebar'
+import DesktopAdminSidebar from '@/components/hospital/admin/desktop-admin-sidebar'
+import MobileAdminSidebar from '@/components/hospital/admin/mobile-admin-sidebar'
 import { checkIsAdmin, getUser } from '@/lib/services/auth/authorization'
 
 export default async function AdminLayout(props: {
@@ -13,11 +13,11 @@ export default async function AdminLayout(props: {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <AdminSidebar />
+      <DesktopAdminSidebar />
 
-      <AdminMobileSidebar />
+      <MobileAdminSidebar />
 
-      <div className="h-exclude-header w-full overflow-auto p-2 ring">
+      <div className="h-exclude-header w-full overflow-auto p-2">
         {props.children}
       </div>
     </div>

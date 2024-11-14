@@ -73,7 +73,7 @@ export default function IcuFooter({
   return (
     <footer
       className={cn(
-        'fixed bottom-0 left-14 right-0 z-20 h-[calc(2.5rem+env(safe-area-inset-bottom))] border-t bg-white',
+        'fixed bottom-0 left-0 right-0 z-20 h-[calc(2.5rem+env(safe-area-inset-bottom))] border-t bg-white md:left-14',
       )}
     >
       <ul className="flex h-10 items-center gap-2 pl-1">

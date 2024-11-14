@@ -27,7 +27,7 @@ export default function PatientRegisterDialog({
       open={isPatientRegisterDialogOpen}
       onOpenChange={setIsPatientRegisterDialogOpen}
     >
-      <DialogTrigger asChild className="absolute left-2 top-2">
+      <DialogTrigger asChild>
         <Button size="sm">환자 등록</Button>
       </DialogTrigger>
 

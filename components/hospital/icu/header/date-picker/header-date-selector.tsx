@@ -70,6 +70,7 @@ export default function HeaderDateSelector() {
       >
         <ArrowLeftIcon />
       </Button>
+
       <div className="flex items-center gap-1">
         <span className="min-w-20 text-sm">
           {format(targetDate, 'yyyy-MM-dd')}
@@ -79,6 +80,7 @@ export default function HeaderDateSelector() {
           setIsSubscriptionReady={setIsSubscriptionReady}
         />
       </div>
+
       <Button
         onClick={() => handleUpdateDate(1)}
         size="icon"

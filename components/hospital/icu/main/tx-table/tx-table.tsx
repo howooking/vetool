@@ -41,7 +41,7 @@ export default function TxTable({
   }
 
   return (
-    <ScrollArea className="h-icu-chart-main w-[calc(100vw-200px)] overflow-scroll whitespace-nowrap">
+    <ScrollArea className="h-icu-chart-main overflow-scroll whitespace-nowrap md:w-[calc(100vw-200px)]">
       <Table className="border">
         <TableHeader className="sticky top-0 z-10 bg-white shadow-sm">
           <TableRow>
