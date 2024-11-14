@@ -6,12 +6,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import useIsMobile from '@/hooks/use-is-mobile'
+import { cn } from '@/lib/utils/utils'
 import { MessageCircle } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import FeedbackForm from './feedback-form'
-import useIsMobile from '@/hooks/use-is-mobile'
-import { cn } from '@/lib/utils/utils'
 
 const DynamicFeedbackForm = dynamic(() => import('./feedback-form'), {
   ssr: false,
@@ -23,7 +23,7 @@ export default function Feedback() {
   const isMobile = useIsMobile()
 
   return (
-    <div className={cn(isMobile ? 'hidden' : 'fixed bottom-5 right-8 z-20')}>
+    <div className={cn(isMobile ? 'hidden' : 'fixed bottom-5 right-12 z-20')}>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <Button

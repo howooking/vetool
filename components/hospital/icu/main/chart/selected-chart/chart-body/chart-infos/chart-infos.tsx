@@ -54,7 +54,7 @@ export default function ChartInfos({
 
       <div className="col-span-4 md:col-span-1">
         <OwnerName
-          ownerName={patient.owner_name}
+          ownerName={patient.owner_name ?? ''}
           patientId={patient.patient_id}
         />
       </div>

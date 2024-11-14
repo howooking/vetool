@@ -119,8 +119,8 @@ const config = {
         'shake-strong-reverse': 'shake-strong-reverse 1.2s ease-out infinite',
       },
       height: {
-        'chart-sidebar': 'calc(100vh - 96px)',
-        'icu-chart': 'calc(100vh - 48px)',
+        'exclude-header': 'calc(100vh - 48px)',
+        'icu-chart-main': 'calc(100vh - 88px)',
       },
     },
   },

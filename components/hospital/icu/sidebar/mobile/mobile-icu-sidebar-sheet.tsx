@@ -12,9 +12,9 @@ import { Menu } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import { Filter } from '../icu-sidebar'
-import MobileSidebar from './mobile-sidebar'
+import MobileSidebar from './mobile-icu-sidebar'
 
-export function MobileSidebarSheet({
+export function MobileIcuSidebarSheet({
   hosGroupList,
   vetsListData,
   filteredData,
@@ -41,7 +41,7 @@ export function MobileSidebarSheet({
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
           <Button
-            className="absolute top-0 z-20 h-12 w-12 rounded-none"
+            className="fixed top-0 z-40 h-12 w-12 rounded-none"
             size="icon"
           >
             <Menu size={24} />

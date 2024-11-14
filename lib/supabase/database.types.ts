@@ -1054,7 +1054,7 @@ export type Database = {
           microchip_no: string | null
           name: string
           owner_id: string | null
-          owner_name: string
+          owner_name: string | null
           patient_id: string
           species: string
         }
@@ -1071,7 +1071,7 @@ export type Database = {
           microchip_no?: string | null
           name?: string
           owner_id?: string | null
-          owner_name?: string
+          owner_name?: string | null
           patient_id?: string
           species: string
         }
@@ -1088,7 +1088,7 @@ export type Database = {
           microchip_no?: string | null
           name?: string
           owner_id?: string | null
-          owner_name?: string
+          owner_name?: string | null
           patient_id?: string
           species?: string
         }
@@ -1574,6 +1574,15 @@ export type Database = {
         Args: {
           hos_id_input: string
           search_value: string
+        }
+        Returns: Json
+      }
+      search_patients: {
+        Args: {
+          hos_id_input: string
+          search_term_input: string
+          page_number?: number
+          items_per_page?: number
         }
         Returns: Json
       }

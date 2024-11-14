@@ -3,5 +3,5 @@ import React from 'react'
 
 export default function IcuPageLoading() {
   //test
-  return <LargeLoaderCircle className="h-icu-chart" />
+  return <LargeLoaderCircle className="h-icu-chart-main" />
 }

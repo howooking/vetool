@@ -17,11 +17,19 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { useTemplateStore } from '@/lib/store/icu/template'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { Patient, SelectedIcuOrder } from '@/types/icu/chart'
+import { TemplateChart } from '@/types/icu/template'
 import { Plus } from 'lucide-react'
-import { Dispatch, SetStateAction, useCallback, useEffect } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 import OrdererSelectStep from './orderer/orderer-select-step'
+import { getTemplateCharts } from '@/lib/services/icu/template/template'
+import { useParams } from 'next/navigation'
 
 export default function OrderDialog({
   icuChartId,
@@ -56,9 +64,9 @@ export default function OrderDialog({
 }) {
   const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isTemplateDialogOpen } = useTemplateStore()
-  const {
-    basicHosData: { templateData },
-  } = useBasicHosDataContext()
+  const { hos_id } = useParams()
+  const [tabValue, setTabValue] = useState('default')
+  const [templateCharts, setTemplateCharts] = useState<TemplateChart[]>([])
 
   const handleOpenChange = useCallback(() => {
     if (orderStep === 'closed') {
@@ -83,6 +91,30 @@ export default function OrderDialog({
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [handleOpenChange])
+
+  useEffect(() => {
+    if (tabValue === 'template' && templateCharts.length === 0) {
+      const fetchTemplateData = async () => {
+        const templateChartData = await getTemplateCharts(hos_id as string)
+
+        setTemplateCharts(templateChartData)
+      }
+
+      fetchTemplateData()
+    }
+  }, [tabValue, templateCharts.length, hos_id])
+
+  const handleTabValueChange = (value: string) => {
+    if (value === 'default') {
+      setTabValue('default')
+      return
+    }
+
+    if (value === 'template') {
+      setTabValue('template')
+      return
+    }
+  }
 
   return (
     <Dialog open={orderStep !== 'closed'} onOpenChange={handleOpenChange}>
@@ -109,8 +141,9 @@ export default function OrderDialog({
           )}
           <DialogDescription />
         </DialogHeader>
+
         {orderStep === 'upsert' && (
-          <Tabs defaultValue="default">
+          <Tabs defaultValue="default" onValueChange={handleTabValueChange}>
             <TabsList className="grid grid-cols-2">
               <TabsTrigger value="default">직접 입력</TabsTrigger>
               <TabsTrigger value="template">템플릿 오더 추가</TabsTrigger>
@@ -134,8 +167,9 @@ export default function OrderDialog({
             <TabsContent value="template">
               <DataTable
                 columns={templateOrderColumns}
-                data={templateData || []}
+                data={templateCharts || []}
                 searchPlaceHolder="템플릿 이름, 설명, 환자명으로 검색"
+                rowLength={5}
               />
 
               {isTemplateDialogOpen && (

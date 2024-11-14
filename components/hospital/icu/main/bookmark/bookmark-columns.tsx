@@ -108,14 +108,14 @@ export const bookmarkColumns: ColumnDef<TemplateChart>[] = [
     id: 'delete',
     header: '삭제',
     cell: ({ row }) => {
-      const templateId = row.original.template_id
-      const templateName = row.original.template_name
+      const bookmarkId = row.original.template_id
+      const bookmarkName = row.original.template_name
 
       return (
         <div className="flex justify-center">
           <DeleteBookmarkDialog
-            templateId={templateId}
-            templateName={templateName}
+            bookmarkId={bookmarkId}
+            bookmarkName={bookmarkName}
           />
         </div>
       )

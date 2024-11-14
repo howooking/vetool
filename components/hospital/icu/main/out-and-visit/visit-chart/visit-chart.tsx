@@ -13,7 +13,7 @@ export default async function VisitChart({
   const visitPatients = await getVisitPatients(hosId, targetDate)
 
   if (visitPatients.length === 0) {
-    return <NoResultSquirrel text="퇴원예정 환자 없음" />
+    return <NoResultSquirrel text="면회예정 환자 없음" className="h-64" />
   }
 
   return <DataTable columns={visitColumns} data={visitPatients} />

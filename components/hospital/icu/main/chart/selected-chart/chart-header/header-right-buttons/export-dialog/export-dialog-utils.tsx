@@ -9,7 +9,6 @@ import { BasicHosDataProvider } from '@/providers/basic-hos-data-context-provide
 import type { IcuOrderColors } from '@/types/adimin'
 import type { IcuSidebarIoData, SelectedChart, Vet } from '@/types/icu/chart'
 import type { TemplateChart } from '@/types/icu/template'
-import type { PatientData } from '@/types/patients'
 import html2canvas from 'html2canvas'
 import React, { useEffect, useRef } from 'react'
 import { createRoot } from 'react-dom/client'
@@ -60,8 +59,6 @@ export const renderAndCaptureExportChartBody = (
       group_list: string[]
       icu_memo_names: string[]
     }
-    patientsData: PatientData[]
-    templateData: TemplateChart[]
   },
 ): Promise<HTMLCanvasElement> => {
   return new Promise((resolve, reject) => {
@@ -92,7 +89,6 @@ export const renderAndCaptureExportChartBody = (
         basicHosData={{
           //todo
           rerCalcMethod: 'a',
-          patientsData: initialIcuData.patientsData,
           maintenanceRateCalcMethod: 'b',
           showOrderer: true,
           vetsListData: initialIcuData.vetsListData,
@@ -101,7 +97,6 @@ export const renderAndCaptureExportChartBody = (
           orderColorsData: initialIcuData.basicHosData
             .order_color as IcuOrderColors,
           memoNameListData: initialIcuData.basicHosData.icu_memo_names,
-          templateData: initialIcuData.templateData ?? [],
           vitalRefRange: [],
         }}
       >

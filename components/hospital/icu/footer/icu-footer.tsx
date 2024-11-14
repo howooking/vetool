@@ -2,12 +2,12 @@
 
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
+import { useIcuRealtime } from '@/hooks/use-icu-realtime'
 import { useRealtimeSubscriptionStore } from '@/lib/store/icu/realtime-subscription'
 import { cn } from '@/lib/utils/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import RealtimeStatus from './realtime-status'
-import { useIcuRealtime } from '@/hooks/use-icu-realtime'
 
 export const FOOTER_MAIN_VIEW_MENUS = [
   {
@@ -73,41 +73,37 @@ export default function IcuFooter({
   return (
     <footer
       className={cn(
-        'fixed bottom-0 z-20 h-[calc(2.5rem+env(safe-area-inset-bottom))] w-full border-t bg-white transition-all duration-200',
+        'fixed bottom-0 left-0 right-0 z-20 h-[calc(2.5rem+env(safe-area-inset-bottom))] border-t bg-white md:left-14',
       )}
     >
-      <div className="flex h-10 w-full items-center justify-between">
-        <ul className="flex h-full items-center gap-2 pl-1">
-          <RealtimeStatus isSubscriptionReady={isSubscriptionReady} />
+      <ul className="flex h-10 items-center gap-1 pl-1 md:gap-2">
+        <RealtimeStatus isSubscriptionReady={isSubscriptionReady} />
 
-          {FOOTER_MAIN_VIEW_MENUS.map(({ label, value }) => (
-            <li
-              key={value}
-              className={cn(
-                value === 'search' ||
-                  value === 'template' ||
-                  value === 'analysis' ||
-                  value === 'bookmark'
-                  ? 'hidden md:block'
-                  : '',
-              )}
+        {FOOTER_MAIN_VIEW_MENUS.map(({ label, value }) => (
+          <li
+            key={value}
+            className={cn(
+              value === 'search' ||
+                value === 'template' ||
+                value === 'analysis' ||
+                value === 'bookmark'
+                ? 'hidden md:block'
+                : '',
+            )}
+          >
+            <Button
+              size="sm"
+              variant="ghost"
+              className={currentIcuPath === value ? 'bg-muted' : ''}
+              onClick={() =>
+                push(`/hospital/${hosId}/icu/${targetDate}/${value}?${params}`)
+              }
             >
-              <Button
-                size="sm"
-                variant="ghost"
-                className={currentIcuPath === value ? 'bg-muted' : ''}
-                onClick={() =>
-                  push(
-                    `/hospital/${hosId}/icu/${targetDate}/${value}?${params}`,
-                  )
-                }
-              >
-                {label}
-              </Button>
-            </li>
-          ))}
-        </ul>
-      </div>
+              {label}
+            </Button>
+          </li>
+        ))}
+      </ul>
     </footer>
   )
 }

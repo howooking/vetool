@@ -1,13 +1,13 @@
 'use client'
 
 import PreviewButton from '@/components/hospital/icu/common-dialogs/preview/preview-button'
-import PasteTemplateButton from '@/components/hospital/icu/main/chart/add-chart-dialogs/template/paste-template-button'
+import PasteBookmarkButton from './paste-bookmark-button'
 import { Button } from '@/components/ui/button'
 import { TemplateChart } from '@/types/icu/template'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 
-export const pasteTemplateColumns: ColumnDef<TemplateChart>[] = [
+export const pasteBookmarkColumns: ColumnDef<TemplateChart>[] = [
   {
     accessorKey: 'template_name',
     header: ({ column }) => {
@@ -16,7 +16,7 @@ export const pasteTemplateColumns: ColumnDef<TemplateChart>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          템플릿 이름
+          북마크 이름
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -90,7 +90,7 @@ export const pasteTemplateColumns: ColumnDef<TemplateChart>[] = [
     header: '선택',
     cell: ({ row }) => {
       const chartId = row.original.icu_chart_id
-      return <PasteTemplateButton chartId={chartId} />
+      return <PasteBookmarkButton chartId={chartId} />
     },
   },
 ]

@@ -6,19 +6,17 @@ import VisitChart from '@/components/hospital/icu/main/out-and-visit/visit-chart
 import { Separator } from '@/components/ui/separator'
 import { Suspense } from 'react'
 
-export default async function OutAndVisitPage(
-  props: {
-    params: Promise<{
-      hos_id: string
-      target_date: string
-    }>
-  }
-) {
-  const params = await props.params;
+export default async function OutAndVisitPage(props: {
+  params: Promise<{
+    hos_id: string
+    target_date: string
+  }>
+}) {
+  const params = await props.params
   return (
-    <div className="p-2">
-      <div className="min-h-[360px]">
-        <div className="mb-1 flex items-center gap-1 font-semibold">
+    <div className="flex h-icu-chart-main flex-col p-2">
+      <div className="flex-1">
+        <div className="mb-1 flex items-center gap-2 font-semibold">
           <span>퇴원차트</span>
           <AddOutDuePatientDialog />
         </div>
@@ -27,10 +25,10 @@ export default async function OutAndVisitPage(
         </Suspense>
       </div>
 
-      <Separator className="my-8" />
+      <Separator className="mb-2" />
 
-      <div className="min-h-[360px]">
-        <div className="mb-1 flex items-center gap-1 font-semibold">
+      <div className="flex-1">
+        <div className="mb-1 flex items-center gap-2 font-semibold">
           <span>면회리스트</span>
           <AddVisitPatientDialog />
         </div>

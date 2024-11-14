@@ -94,8 +94,8 @@ export default function AddVisitPatientDialog() {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button size="icon" variant="ghost">
-          <Plus size={18} />
+        <Button variant="default" size="icon" className="h-6 w-6 rounded-full">
+          <Plus size={14} />
         </Button>
       </DialogTrigger>
 

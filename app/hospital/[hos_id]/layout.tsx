@@ -20,12 +20,11 @@ export default async function Layout(props: {
   params: Promise<{ hos_id: string }>
 }) {
   const params = await props.params
-  const { children } = props
   const userData = await getUserData()
   const hosName = await getHosName(params.hos_id)
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <Sidebar hosId={params.hos_id} userData={userData} />
 
       <MobileSidebar
@@ -34,9 +33,11 @@ export default async function Layout(props: {
         hosName={hosName}
       />
 
-      <div className="relative w-full">
+      <div className="ml-0 flex-1 md:ml-14">
+        {/* 가짜 헤더 */}
         <HospitalHeader />
-        <main className="w-full">{children}</main>
+
+        <main className="mt-12 w-screen md:w-auto">{props.children}</main>
       </div>
 
       <Feedback />
