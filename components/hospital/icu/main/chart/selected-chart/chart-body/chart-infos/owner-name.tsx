@@ -54,7 +54,7 @@ export default function OwnerName({
         onBlur={handleUpdateOwnerName}
         onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
         className="w-full pl-8"
-        title={ownerName ?? ''}
+        title={ownerName ?? '미등록'}
       />
     </div>
   )
