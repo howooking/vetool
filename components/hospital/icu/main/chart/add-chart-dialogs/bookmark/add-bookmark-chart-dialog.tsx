@@ -35,7 +35,7 @@ export default function AddBookmarkChartDialog() {
   const handleOpenTemplateDialog = async () => {
     setIsLoading(true)
 
-    if (bookmarkCharts.length === 0) {
+    if (bookmarkCharts?.length === 0) {
       const bookmarkChartData = await getBookmarkedChartData(hos_id as string)
       setBookmarkCharts(bookmarkChartData)
     }
@@ -43,10 +43,6 @@ export default function AddBookmarkChartDialog() {
     setIsLoading(false)
     setIsDialogOpen(!isDialogOpen)
   }
-
-  // useEffect(() => {
-
-  // }, [isDialogOpen, hos_id])
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

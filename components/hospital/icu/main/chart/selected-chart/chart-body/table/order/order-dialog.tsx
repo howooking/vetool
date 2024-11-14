@@ -93,7 +93,7 @@ export default function OrderDialog({
   }, [handleOpenChange])
 
   useEffect(() => {
-    if (tabValue === 'template' && templateCharts.length === 0) {
+    if (tabValue === 'template' && templateCharts?.length === 0) {
       const fetchTemplateData = async () => {
         const templateChartData = await getTemplateCharts(hos_id as string)
 
@@ -102,7 +102,7 @@ export default function OrderDialog({
 
       fetchTemplateData()
     }
-  }, [tabValue, templateCharts.length, hos_id])
+  }, [tabValue, templateCharts, hos_id])
 
   const handleTabValueChange = (value: string) => {
     if (value === 'default') {
@@ -167,7 +167,7 @@ export default function OrderDialog({
             <TabsContent value="template">
               <DataTable
                 columns={templateOrderColumns}
-                data={templateCharts || []}
+                data={templateCharts ?? []}
                 searchPlaceHolder="템플릿 이름, 설명, 환자명으로 검색"
                 rowLength={5}
               />
