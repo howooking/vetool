@@ -2,6 +2,7 @@
 
 import RegisterDialogHeader from '@/components/hospital/icu/header/register-dialog/register-dialog-header'
 import RegisterIcuForm from '@/components/hospital/icu/header/register-dialog/register-icu/register-icu-form'
+import SearchPatientContainer from '@/components/hospital/icu/header/register-dialog/search-patient/search-patient-containter'
 import PatientForm from '@/components/hospital/patients/patient-form'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -9,33 +10,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
 import { cn } from '@/lib/utils/utils'
 import type { Vet } from '@/types/icu/chart'
-import type { PatientData } from '@/types/patients'
-import { useEffect, useMemo, useState } from 'react'
-import PatientSearchTable from './patient-search/patient-search-table'
+import { useEffect, useState } from 'react'
 
 export default function RegisterDialog({
   hosId,
-  patientsData,
   groupList,
   vetsData,
 }: {
   hosId: string
-  patientsData: PatientData[]
   groupList: string[]
   vetsData: Vet[]
 }) {
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false)
   const { step, setStep } = useIcuRegisterStore()
   const [tab, setTab] = useState('search')
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (!isRegisterDialogOpen) {
-        setTab('search')
-        setStep('patientSearch')
-      }
-    }, 1000)
-  }, [isRegisterDialogOpen, setStep])
 
   const handleTabValueChange = (value: string) => {
     if (value === 'search') {
@@ -50,11 +38,6 @@ export default function RegisterDialog({
       return
     }
   }
-
-  const hosPatientIds = useMemo(
-    () => patientsData.map((patient) => patient.hos_patient_id),
-    [patientsData],
-  )
 
   return (
     <Dialog open={isRegisterDialogOpen} onOpenChange={setIsRegisterDialogOpen}>
@@ -88,7 +71,7 @@ export default function RegisterDialog({
 
           <TabsContent value="search">
             {step === 'patientSearch' && (
-              <PatientSearchTable patientData={patientsData} />
+              <SearchPatientContainer itemsPerPage={8} />
             )}
             {step === 'icuRegister' && (
               <RegisterIcuForm
@@ -108,7 +91,6 @@ export default function RegisterDialog({
                 setStep={setStep}
                 hosId={hosId}
                 setIsPatientRegisterDialogOpen={setIsRegisterDialogOpen}
-                hosPatientIds={hosPatientIds}
               />
             )}
             {step === 'icuRegister' && (

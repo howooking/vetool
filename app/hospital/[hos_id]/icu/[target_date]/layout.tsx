@@ -12,18 +12,14 @@ export default async function IcuPageLayout(props: {
 }) {
   const params = await props.params
 
-  const {
-    basicHosData,
-    icuSidebarData,
-    patientsData,
-    vetsListData,
-    templateData,
-  } = await getIcuData(params.hos_id, params.target_date)
+  const { basicHosData, icuSidebarData, vetsListData } = await getIcuData(
+    params.hos_id,
+    params.target_date,
+  )
 
   return (
     <BasicHosDataProvider
       basicHosData={{
-        patientsData: patientsData,
         vetsListData: vetsListData,
         groupListData: basicHosData.group_list,
         orderColorsData: basicHosData.order_color as IcuOrderColors,
@@ -32,14 +28,12 @@ export default async function IcuPageLayout(props: {
         maintenanceRateCalcMethod: basicHosData.maintenance_rate_calc_method,
         rerCalcMethod: basicHosData.rer_calc_method,
         sidebarData: icuSidebarData ?? [],
-        templateData: templateData ?? [],
         vitalRefRange: basicHosData.vital_ref_range as VitalRefRange[],
       }}
     >
       <IcuHeader
         hosId={params.hos_id}
         groupList={basicHosData.group_list}
-        patientsData={patientsData}
         vetsData={vetsListData}
       />
 
