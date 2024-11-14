@@ -45,7 +45,7 @@ export default function SearchPatientTable({
               <LargeLoaderCircle className="h-[400px]" />
             </TableCell>
           </TableRow>
-        ) : searchedPatients.length === 0 ? (
+        ) : searchedPatients && searchedPatients.length === 0 ? (
           <TableRow>
             <TableCell colSpan={10}>
               <NoResult title="검색 결과가 없습니다" className="h-[400px]" />

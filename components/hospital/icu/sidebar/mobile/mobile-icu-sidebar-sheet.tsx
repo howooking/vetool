@@ -41,7 +41,7 @@ export function MobileIcuSidebarSheet({
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
           <Button
-            className="fixed top-0 z-20 h-12 w-12 rounded-none"
+            className="fixed top-0 z-40 h-12 w-12 rounded-none"
             size="icon"
           >
             <Menu size={24} />
