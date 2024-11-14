@@ -125,7 +125,7 @@ export default function DefaultOrdersSetting({
           {!sortedOrders.length ? (
             <TableRow className="h-[360px]">
               <TableCell className="text-center" colSpan={5}>
-                <NoResultSquirrel text="저장할 오더를 추가해주세요" />
+                <NoResultSquirrel text="기본차트 오더를 추가해주세요" />
               </TableCell>
             </TableRow>
           ) : (

@@ -95,7 +95,7 @@ export default function CreateOrUpdateNoticeDialog({
           <div className="absolute inset-0 cursor-pointer" />
         ) : (
           <Button
-            variant={'default'}
+            variant="default"
             size="icon"
             className="h-6 w-6 rounded-full"
           >

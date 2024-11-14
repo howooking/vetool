@@ -13,7 +13,7 @@ export default async function IcuOutChart({
   const outDuePatients = await getIcuOutDuePatients(hosId, targetDate)
 
   if (outDuePatients.length === 0) {
-    return <NoResultSquirrel text="퇴원예정 환자 없음" />
+    return <NoResultSquirrel text="퇴원예정 환자 없음" className="h-64" />
   }
 
   return <DataTable columns={outDueColumns} data={outDuePatients} />
