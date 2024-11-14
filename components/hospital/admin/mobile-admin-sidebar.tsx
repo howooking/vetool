@@ -15,20 +15,19 @@ import { Menu } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-export default function AdminMobileSidebar() {
+export default function MobileAdminSidebar() {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const path = usePathname()
   const currentAdminPath = path.split('/').at(-1)
-
-  const activePath = ADMIN_SIDEBAR_ITEMS.find(
-    (item) => item.path === currentAdminPath,
-  )
 
   return (
     <div className="flex items-center gap-2 border-b md:hidden">
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
-          <Button className="rounded-none" size="icon">
+          <Button
+            className="fixed top-0 z-20 h-12 w-12 rounded-none"
+            size="icon"
+          >
             <Menu size={18} />
           </Button>
         </SheetTrigger>
@@ -44,16 +43,13 @@ export default function AdminMobileSidebar() {
                 icon={item.icon}
                 name={item.name}
                 path={item.path}
+                isReady={item.isReady}
                 setIsSheetOpen={setIsSheetOpen}
               />
             ))}
           </ul>
         </SheetContent>
       </Sheet>
-
-      <div className="w-full pr-9 text-center font-semibold">
-        {activePath?.name}
-      </div>
     </div>
   )
 }

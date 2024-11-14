@@ -17,9 +17,13 @@ type SingleMemoProps = {
 const SingleMemo = React.forwardRef<HTMLLIElement, SingleMemoProps>(
   ({ memo, onDelete, handleEditMemo, memoIndex }, ref) => {
     const [isEditMode, setIsEditMode] = useState(false)
-    const [editedMemo, setEditedMemo] = useState(memo.memo)
     const editingTextAreaRef = useRef<HTMLTextAreaElement>(null)
+
+    const [editedMemo, setEditedMemo] = useState(memo.memo)
     const [editedMemoColor, setEditedMemoColor] = useState(memo.color)
+    const [editedCreateTimestamp, setEditedCreateTimestamp] = useState(
+      memo.create_timestamp,
+    )
 
     useEffect(() => {
       if (isEditMode && editingTextAreaRef.current) {
@@ -28,6 +32,12 @@ const SingleMemo = React.forwardRef<HTMLLIElement, SingleMemoProps>(
         textarea.style.height = `${textarea.scrollHeight + 20}px`
       }
     }, [isEditMode, editedMemo])
+
+    useEffect(() => {
+      setEditedMemo(memo.memo)
+      setEditedMemoColor(memo.color)
+      setEditedCreateTimestamp(memo.create_timestamp)
+    }, [memo])
 
     const handleUpdateSingleMemo = () => {
       if (editedMemo.trim().length === 0) {
@@ -38,7 +48,13 @@ const SingleMemo = React.forwardRef<HTMLLIElement, SingleMemoProps>(
         return
       }
       handleEditMemo(
-        { ...memo, memo: editedMemo.trim(), color: editedMemoColor },
+        {
+          ...memo,
+          memo: editedMemo.trim(),
+          color: editedMemoColor,
+          create_timestamp: editedCreateTimestamp,
+          edit_timestamp: new Date().toISOString(),
+        },
         memoIndex,
       )
       setIsEditMode(false)
@@ -62,10 +78,10 @@ const SingleMemo = React.forwardRef<HTMLLIElement, SingleMemoProps>(
         <div className="flex w-full flex-col gap-1">
           <div className="flex items-center justify-between">
             <MemoTimeStamp
-              memo={memo}
+              editedCreateTimestamp={editedCreateTimestamp}
               isEditMode={isEditMode}
-              handleEditMemo={handleEditMemo}
-              memoIndex={memoIndex}
+              setEditedCreateTimestamp={setEditedCreateTimestamp}
+              editTimestamp={memo.edit_timestamp}
             />
 
             {!isEditMode && (

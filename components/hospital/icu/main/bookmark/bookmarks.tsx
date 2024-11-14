@@ -20,7 +20,7 @@ export default function Bookmarks({
         data={bookmarkedChartData || []}
         searchPlaceHolder="북마크 이름, 설명으로 검색"
       />
-      <div className="p-2">{isPreviewDialogOpen && <PreviewDialog />}</div>
+      {isPreviewDialogOpen && <PreviewDialog />}
     </div>
   )
 }

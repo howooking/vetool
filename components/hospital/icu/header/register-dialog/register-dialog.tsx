@@ -59,7 +59,7 @@ export default function RegisterDialog({
   return (
     <Dialog open={isRegisterDialogOpen} onOpenChange={setIsRegisterDialogOpen}>
       <DialogTrigger asChild className="hidden md:block">
-        <Button size="sm">환자입원</Button>
+        <Button size="sm">환자 입원</Button>
       </DialogTrigger>
 
       <DialogContent

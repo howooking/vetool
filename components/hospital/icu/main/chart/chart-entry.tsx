@@ -33,7 +33,7 @@ export default function ChartEntry({
             입원을 하지 않았거나 이미 퇴원을 하였습니다
           </>
         }
-        className="h-icu-chart"
+        className="h-full ring"
       />
     )
   }

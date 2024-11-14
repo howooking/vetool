@@ -53,7 +53,7 @@ export default function HospitalSelector({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild className="absolute top-1.5">
+      <PopoverTrigger asChild className="fixed top-1.5 z-30">
         <Button
           variant="ghost"
           role="combobox"

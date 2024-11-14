@@ -1,4 +1,4 @@
-export const SIDE_BAR_ITEMS = [
+export const SIDEBAR_ITEMS = [
   {
     name: '병원 홈',
     path: '',
@@ -6,7 +6,7 @@ export const SIDE_BAR_ITEMS = [
     isReady: true,
   },
   {
-    name: '환자관리',
+    name: '환자목록',
     path: 'patients',
     iconName: 'PawPrint',
     isReady: true,
