@@ -6,6 +6,37 @@ import {
 
 // Date를 다뤄야하는 경우가 있으므로 클라이언트 상에서 처리해야하므로 서버 컴포넌트가 아닌 유틸 함수화
 export const transformCsvData = (row: string[], header: string[]) => {
+  // 먼저 hos_patient_id와 name의 인덱스와 값을 확인
+  const hosPatientIdMapping = CSV_HEADER_MAPPING.find(
+    (mapping) => mapping.dbColumn === 'hos_patient_id',
+  )
+  const nameMapping = CSV_HEADER_MAPPING.find(
+    (mapping) => mapping.dbColumn === 'name',
+  )
+
+  const hosPatientIdIndex = hosPatientIdMapping
+    ? header.indexOf(hosPatientIdMapping.csvColumn)
+    : -1
+  const nameIndex = nameMapping ? header.indexOf(nameMapping.csvColumn) : -1
+
+  // hos_patient_id 값이 없거나 빈 문자열인 경우 즉시 null 반환
+  if (
+    hosPatientIdIndex === -1 ||
+    !row[hosPatientIdIndex] ||
+    row[hosPatientIdIndex].toString().trim() === ''
+  ) {
+    return null
+  }
+
+  // 이름이 없는 경우도 null 반환
+  if (
+    nameIndex === -1 ||
+    !row[nameIndex] ||
+    row[nameIndex].toString().trim() === ''
+  ) {
+    return null
+  }
+
   const transformedData: Record<string, any> = {}
 
   // Key: CSV COLUMN KOREAN 헤더!! ,Value: DB COLUMN NAME!!
