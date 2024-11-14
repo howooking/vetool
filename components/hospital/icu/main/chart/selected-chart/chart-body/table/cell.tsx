@@ -238,7 +238,7 @@ export default function Cell({
     }
     setTxLocalState({
       time,
-      txResult: briefTxResultInput.trim(),
+      txResult: briefTxResultInput.replace(/^"|"$/g, '').trim(),
       icuChartOrderId,
       txId: icuChartTxId,
       txLog: treatment?.tx_log as TxLog[] | null,
