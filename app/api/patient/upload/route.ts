@@ -30,13 +30,11 @@ export async function POST(req: NextRequest) {
       })
       .filter((row: any): row is NonNullable<typeof row> => {
         if (!row || !row.hos_patient_id!) {
-          console.log('Filtered out invalid row:', row)
           return false
         }
         return true
       })
 
-    // 처리할 데이터가 있는지 확인
     if (patientData.length === 0) {
       return NextResponse.json(
         { error: '유효한 데이터가 없습니다.' },
