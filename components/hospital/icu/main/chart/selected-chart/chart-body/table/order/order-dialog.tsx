@@ -93,7 +93,11 @@ export default function OrderDialog({
   }, [handleOpenChange])
 
   useEffect(() => {
-    if (tabValue === 'template' && templateCharts.length === 0) {
+    if (
+      tabValue === 'template' &&
+      templateCharts &&
+      templateCharts.length === 0
+    ) {
       const fetchTemplateData = async () => {
         const templateChartData = await getTemplateCharts(hos_id as string)
 
