@@ -16,25 +16,47 @@ export default function SearchPatientTable({
   isSearching,
   searchedPatients,
   setIsEdited,
+  isIcu,
 }: {
   isSearching: boolean
   searchedPatients: SearchedPatientsData[]
   setIsEdited: Dispatch<SetStateAction<boolean>>
+  isIcu?: boolean
 }) {
   return (
     <Table className="border">
       <TableHeader>
         <TableRow>
-          <TableHead className="w-16 text-center">종</TableHead>
-          <TableHead className="w-24 text-center">환자 번호</TableHead>
-          <TableHead className="w-24 text-center">이름</TableHead>
-          <TableHead className="w-32 text-center">품종</TableHead>
-          <TableHead className="w-16 text-center">성별</TableHead>
-          <TableHead className="w-32 text-center">나이 (생일)</TableHead>
-          <TableHead className="w-24 text-center">보호자</TableHead>
-          <TableHead className="w-24 text-center">등록일</TableHead>
-          <TableHead className="w-16 text-center">수정</TableHead>
-          <TableHead className="w-16 text-center">삭제</TableHead>
+          <TableHead className="whitespace-nowrap text-center">종</TableHead>
+          <TableHead className="whitespace-nowrap text-center">
+            환자 번호
+          </TableHead>
+          <TableHead className="whitespace-nowrap text-center">이름</TableHead>
+          <TableHead className="whitespace-nowrap text-center">품종</TableHead>
+          <TableHead className="whitespace-nowrap text-center">성별</TableHead>
+          <TableHead className="whitespace-nowrap text-center">
+            나이 (생일)
+          </TableHead>
+          <TableHead className="whitespace-nowrap text-center">
+            보호자
+          </TableHead>
+          <TableHead className="whitespace-nowrap text-center">
+            등록일
+          </TableHead>
+          {isIcu ? (
+            <TableHead className="whitespace-nowrap text-center">
+              환자선택
+            </TableHead>
+          ) : (
+            <>
+              <TableHead className="whitespace-nowrap text-center">
+                수정
+              </TableHead>
+              <TableHead className="whitespace-nowrap text-center">
+                삭제
+              </TableHead>
+            </>
+          )}
         </TableRow>
       </TableHeader>
 
@@ -57,6 +79,7 @@ export default function SearchPatientTable({
               key={patient.patient_id}
               patientData={patient}
               setIsEdited={setIsEdited}
+              isIcu={isIcu}
             />
           ))
         )}
