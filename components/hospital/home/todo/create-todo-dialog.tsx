@@ -77,11 +77,7 @@ export default function CreateTodoDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant={'default'}
-          size="icon"
-          className="h-6 w-6 rounded-full"
-        >
+        <Button variant="default" size="icon" className="h-6 w-6 rounded-full">
           <Plus size={14} />
         </Button>
       </DialogTrigger>

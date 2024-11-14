@@ -16,7 +16,7 @@ export default async function OutAndVisitPage(props: {
   return (
     <div className="flex h-icu-chart-main flex-col p-2">
       <div className="flex-1">
-        <div className="mb-1 flex items-center gap-1 font-semibold">
+        <div className="mb-1 flex items-center gap-2 font-semibold">
           <span>퇴원차트</span>
           <AddOutDuePatientDialog />
         </div>
@@ -28,7 +28,7 @@ export default async function OutAndVisitPage(props: {
       <Separator className="mb-2" />
 
       <div className="flex-1">
-        <div className="mb-1 flex items-center gap-1 font-semibold">
+        <div className="mb-1 flex items-center gap-2 font-semibold">
           <span>면회리스트</span>
           <AddVisitPatientDialog />
         </div>

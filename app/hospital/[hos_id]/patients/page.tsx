@@ -12,7 +12,7 @@ export default async function HospitalPatientsPage(props: {
 
   return (
     <div className="p-2">
-      <div className="l fixed top-2 z-30 flex items-center gap-2">
+      <div className="fixed top-2 z-30 hidden items-center gap-2 md:flex">
         <PatientRegisterDialog
           hosId={params.hos_id}
           hosPatientIds={patientsData.map((patient) => patient.hos_patient_id)}

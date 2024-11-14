@@ -43,14 +43,16 @@ export default async function IcuPageLayout(props: {
         vetsData={vetsListData}
       />
 
-      <div className="h-icu-chart-main flex">
+      <div className="flex h-icu-chart-main">
         <IcuSidebar
           hosGroupList={basicHosData.group_list}
           icuSidebarData={icuSidebarData ?? []}
           vetsListData={vetsListData}
         />
 
-        <div className="ml-0 flex-1 md:ml-[144px]">{props.children}</div>
+        <div className="ml-0 w-screen flex-1 md:ml-[144px] md:w-auto">
+          {props.children}
+        </div>
       </div>
 
       <IcuFooter hosId={params.hos_id} targetDate={params.target_date} />
