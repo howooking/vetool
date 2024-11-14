@@ -95,11 +95,27 @@ export const deleteTemplateChart = async (
   }
 }
 
-export const getTemplateCharts = async (hosId: string) => {
+export const getIcuCustomOrders = async (hosId: string) => {
   const supabase = await createClient()
 
   const { data, error } = await supabase
     .rpc('get_icu_custom_order_data', {
+      hos_id_input: hosId,
+    })
+    .returns<TemplateChart[]>()
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return data
+}
+
+export const getTemplateCharts = async (hosId: string) => {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .rpc('get_icu_template_data', {
       hos_id_input: hosId,
     })
     .returns<TemplateChart[]>()
