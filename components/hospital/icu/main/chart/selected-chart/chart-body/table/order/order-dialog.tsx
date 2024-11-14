@@ -169,6 +169,7 @@ export default function OrderDialog({
                 columns={templateOrderColumns}
                 data={templateCharts || []}
                 searchPlaceHolder="템플릿 이름, 설명, 환자명으로 검색"
+                rowLength={5}
               />
 
               {isTemplateDialogOpen && (

@@ -9,9 +9,11 @@ export default async function HospitalPatientsPage(props: {
 
   return (
     <div className="p-2">
-      <PatientRegisterDialog hosId={params.hos_id} />
+      <div className="fixed top-2 z-30 hidden items-center gap-2 md:flex">
+        <PatientRegisterDialog hosId={params.hos_id} />
 
-      <UploadPatientArea />
+        <UploadPatientArea />
+      </div>
 
       <SearchPatientContainer itemsPerPage={10} />
     </div>
