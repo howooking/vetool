@@ -2,8 +2,6 @@
 
 import { createClient } from '@/lib/supabase/server'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
-import type { TemplateChart } from '@/types/icu/template'
-import type { PatientData } from '@/types/patients'
 import { redirect } from 'next/navigation'
 
 export const getIcuData = async (hosId: string, targetDate: string) => {
@@ -40,51 +38,25 @@ export const getIcuData = async (hosId: string, targetDate: string) => {
       )
       .match({ hos_id: hosId })
       .single(),
-
-    supabase
-      .from('patients')
-      .select('*')
-      .match({ hos_id: hosId })
-      .match({ is_alive: true })
-      .order('created_at', { ascending: false })
-      .returns<PatientData[]>(),
-
-    supabase
-      .rpc('get_icu_template_data', {
-        hos_id_input: hosId,
-      })
-      .returns<TemplateChart[]>(),
   ])
 
   const [
     { data: icuSidebarData, error: icuSidebarDataError },
     { data: vetsListData, error: vetsListDataError },
     { data: basicHosData, error: basicHosDataError },
-    { data: patientsData, error: patientsDataError },
-    { data: templateData, error: templateDataError },
   ] = await promiseArray
 
-  if (
-    icuSidebarDataError ||
-    vetsListDataError ||
-    basicHosDataError ||
-    patientsDataError ||
-    templateDataError
-  ) {
+  if (icuSidebarDataError || vetsListDataError || basicHosDataError) {
     console.error({
       icuSidebarDataError,
       vetsListDataError,
       basicHosDataError,
-      patientsDataError,
-      templateDataError,
     })
     redirect(
       `/error?message=${
         icuSidebarDataError?.message ||
         vetsListDataError?.message ||
-        basicHosDataError?.message ||
-        patientsDataError?.message ||
-        templateDataError?.message
+        basicHosDataError?.message
       }`,
     )
   }
@@ -92,7 +64,5 @@ export const getIcuData = async (hosId: string, targetDate: string) => {
     icuSidebarData,
     vetsListData,
     basicHosData,
-    patientsData,
-    templateData,
   }
 }
