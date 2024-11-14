@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { PatientData, PatientDataTable } from '@/types/patients'
+import type { PaginatedPatientsData, PatientDataTable } from '@/types/patients'
 import { redirect } from 'next/navigation'
 
 export const insertPatient = async (
@@ -45,7 +45,7 @@ export const insertPatient = async (
   return data
 }
 
-export const getPatients = async (hosId: string) => {
+export const getPatientsData = async (hosId: string) => {
   const supabase = await createClient()
 
   const { data, error } = await supabase
@@ -54,7 +54,7 @@ export const getPatients = async (hosId: string) => {
     .match({ hos_id: hosId })
     .order('is_alive', { ascending: false })
     .order('created_at', { ascending: false })
-    .returns<PatientData[]>()
+    .returns<PatientDataTable[]>()
 
   if (error) {
     throw new Error(error.message)
@@ -176,4 +176,48 @@ export const updatePatientFromPatientRoute = async (
     console.error(error)
     redirect(`/error?message=${error.message}`)
   }
+}
+
+export const searchPatientsData = async (
+  searchTerm: string,
+  hosId: string,
+  currentPage: number,
+  itemsPerPage: number,
+) => {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .rpc('search_patients', {
+      search_term_input: searchTerm,
+      hos_id_input: hosId,
+      page_number: currentPage,
+      items_per_page: itemsPerPage,
+    })
+    .returns<PaginatedPatientsData>()
+
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
+  }
+
+  return data
+}
+
+export const isHosPatientIdDuplicated = async (
+  hosPatientId: string,
+  hos_id: string,
+) => {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('patients')
+    .select('patient_id')
+    .match({ hos_id: hos_id, hos_patient_id: hosPatientId })
+
+  if (error) {
+    console.error(error)
+    redirect(`/error?message=${error.message}`)
+  }
+
+  return data.length ? true : false
 }
