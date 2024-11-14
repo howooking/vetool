@@ -47,7 +47,7 @@ export default function OutPatientDialog({
       patient.species,
       patient.breed ?? '미정',
       patient.name,
-      patient.owner_name,
+      patient.owner_name ?? '',
       icu_io.age_in_days,
       isAlive,
     )

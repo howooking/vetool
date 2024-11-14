@@ -8,12 +8,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { getAgeFromAgeInDays, convertPascalCased } from '@/lib/utils/utils'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
+import { convertPascalCased, getAgeFromAgeInDays } from '@/lib/utils/utils'
 import type { PatientDataTable } from '@/types/patients'
 import { Cat, Dog } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 export default function UpdatePatientDialog({
   patientData,
@@ -32,14 +31,6 @@ export default function UpdatePatientDialog({
   const { name, breed, gender, species } = patientData
   const [isPatientUpdateDialogOpen, setIsPatientUpdateDialogOpen] =
     useState(false)
-  const {
-    basicHosData: { patientsData },
-  } = useBasicHosDataContext()
-
-  const hosPatientIds = useMemo(
-    () => patientsData.map((patient) => patient.hos_patient_id),
-    [patientsData],
-  )
 
   return (
     <Dialog
@@ -71,7 +62,6 @@ export default function UpdatePatientDialog({
           hosId={hos_id as string}
           editingPatient={patientData}
           setIsPatientUpdateDialogOpen={setIsPatientUpdateDialogOpen}
-          hosPatientIds={hosPatientIds}
           weight={weight}
           weightMeasuredDate={weightMeasuredDate}
           icuChartId={icuChartId}

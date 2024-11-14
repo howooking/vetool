@@ -43,12 +43,13 @@ import {
 } from '@/constants/hospital/register/breed'
 import {
   insertPatient,
+  isHosPatientIdDuplicated,
   updatePatientFromIcu,
   updatePatientFromPatientRoute,
 } from '@/lib/services/patient/patient'
 import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
 import { cn, getDaysSince } from '@/lib/utils/utils'
-import type { PatientDataTable } from '@/types/patients'
+import type { SearchedPatientsData } from '@/types/patients'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
@@ -56,11 +57,11 @@ import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { type Dispatch, type SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useDebouncedCallback } from 'use-debounce'
 import * as z from 'zod'
 
 type BaseProps = {
   hosId: string
-  hosPatientIds: string[]
 }
 
 type RegisterFromPatientRoute = BaseProps & {
@@ -72,17 +73,19 @@ type RegisterFromPatientRoute = BaseProps & {
   setIsPatientUpdateDialogOpen?: null
   setStep?: null
   icuChartId?: null
+  setIsEdited?: Dispatch<SetStateAction<boolean>>
 }
 
 type UpdateFromPatientRoute = BaseProps & {
   mode: 'updateFromPatientRoute'
-  editingPatient: PatientDataTable
+  editingPatient: SearchedPatientsData
   setIsPatientRegisterDialogOpen?: null
   weight: string
   weightMeasuredDate: string
   setIsPatientUpdateDialogOpen: Dispatch<SetStateAction<boolean>>
   setStep?: null
   icuChartId?: null
+  setIsEdited?: Dispatch<SetStateAction<boolean>>
 }
 
 type RegisterFromIcuRoute = BaseProps & {
@@ -94,17 +97,19 @@ type RegisterFromIcuRoute = BaseProps & {
   setIsPatientUpdateDialogOpen?: null
   setStep: (step: 'patientRegister' | 'icuRegister' | 'patientSearch') => void
   icuChartId?: null
+  setIsEdited?: Dispatch<SetStateAction<boolean>>
 }
 
 type UpdateFromIcuRoute = BaseProps & {
   mode: 'updateFromIcuRoute'
-  editingPatient: PatientDataTable
+  editingPatient: SearchedPatientsData
   setIsPatientRegisterDialogOpen?: null
   weight: string
   weightMeasuredDate: string | null
   setIsPatientUpdateDialogOpen: Dispatch<SetStateAction<boolean>>
   setStep?: null
   icuChartId: string
+  setIsEdited?: Dispatch<SetStateAction<boolean>>
 }
 
 type PatientFormProps =
@@ -115,7 +120,6 @@ type PatientFormProps =
 
 export default function PatientForm({
   hosId,
-  hosPatientIds,
   mode,
   setIsPatientRegisterDialogOpen,
   editingPatient,
@@ -124,6 +128,7 @@ export default function PatientForm({
   setIsPatientUpdateDialogOpen,
   setStep,
   icuChartId,
+  setIsEdited,
 }: PatientFormProps) {
   const isEdit =
     mode === 'updateFromPatientRoute' || mode === 'updateFromIcuRoute'
@@ -131,7 +136,8 @@ export default function PatientForm({
 
   const [breedOpen, setBreedOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isDuplicateId, setIsDuplicateId] = useState(false)
+  const [isDuplicatedId, setIsDuplicatedId] = useState(false)
+
   const { setRegisteringPatient } = useIcuRegisterStore()
   const { refresh } = useRouter()
 
@@ -153,17 +159,25 @@ export default function PatientForm({
   const form = useForm<z.infer<typeof registerPatientFormSchema>>({
     resolver: zodResolver(
       registerPatientFormSchema.refine(
-        (data) => {
-          if (isEdit) {
-            return (
-              data.hos_patient_id === editingPatient?.hos_patient_id ||
-              !hosPatientIds.includes(data.hos_patient_id)
-            )
+        async (data) => {
+          // 중복 확인을 비동기로 처리
+          if (
+            isEdit &&
+            data.hos_patient_id === editingPatient?.hos_patient_id
+          ) {
+            // 편집 모드일 때, 기존 환자 번호와 동일하면 통과
+            return true
           }
-          return !hosPatientIds.includes(data.hos_patient_id)
+
+          // 중복 여부 확인
+          const isDuplicate = await isHosPatientIdDuplicated(
+            data.hos_patient_id,
+            hosId,
+          )
+          return !isDuplicate
         },
         {
-          message: '이 환자번호는 이미 존재합니다',
+          message: '이 환자 번호는 이미 존재합니다',
           path: ['hos_patient_id'],
         },
       ),
@@ -179,7 +193,7 @@ export default function PatientForm({
           microchip_no: editingPatient?.microchip_no ?? '',
           memo: editingPatient?.memo ?? '',
           weight,
-          owner_name: editingPatient?.owner_name,
+          owner_name: editingPatient?.owner_name ?? '',
           hos_owner_id: editingPatient?.hos_owner_id ?? '',
         }
       : {
@@ -203,29 +217,6 @@ export default function PatientForm({
   const BREEDS = watchSpecies === 'canine' ? CANINE_BREEDS : FELINE_BREEDS
 
   useEffect(() => {
-    const isDuplicate = hosPatientIds.includes(watchHosPatientId)
-    const hasChanged = false
-    isEdit && watchHosPatientId !== editingPatient?.hos_patient_id
-
-    if ((!isEdit && isDuplicate) || (isEdit && hasChanged && isDuplicate)) {
-      setIsDuplicateId(true)
-      form.setError('hos_patient_id', {
-        type: 'manual',
-        message: '이 환자 번호는 이미 존재합니다',
-      })
-    } else {
-      setIsDuplicateId(false)
-      form.clearErrors('hos_patient_id')
-    }
-  }, [
-    watchHosPatientId,
-    hosPatientIds,
-    form,
-    isEdit,
-    editingPatient?.hos_patient_id,
-  ])
-
-  useEffect(() => {
     if (watchBreed) {
       setBreedOpen(false)
     }
@@ -234,7 +225,7 @@ export default function PatientForm({
   const handleRegister = async (
     values: z.infer<typeof registerPatientFormSchema>,
   ) => {
-    if (isDuplicateId) {
+    if (isDuplicatedId) {
       return
     }
     setIsSubmitting(true)
@@ -296,7 +287,7 @@ export default function PatientForm({
   const handleUpdate = async (
     values: z.infer<typeof registerPatientFormSchema>,
   ) => {
-    if (isDuplicateId) {
+    if (isDuplicatedId) {
       return
     }
     const {
@@ -362,10 +353,33 @@ export default function PatientForm({
       title: '환자 정보가 수정되었습니다',
     })
 
+    if (setIsEdited) setIsEdited(true)
     setIsSubmitting(false)
     setIsPatientUpdateDialogOpen!(false)
     refresh()
   }
+
+  const handleHosPatientIdInputChange = useDebouncedCallback(async () => {
+    if (
+      watchHosPatientId.trim() === '' ||
+      watchHosPatientId === editingPatient?.hos_patient_id
+    ) {
+      form.clearErrors('hos_patient_id')
+      return
+    }
+
+    const result = await isHosPatientIdDuplicated(watchHosPatientId, hosId)
+    setIsDuplicatedId(result)
+
+    if ((!isEdit && result) || (isEdit && result)) {
+      form.setError('hos_patient_id', {
+        type: 'manual',
+        message: '이 환자 번호는 이미 존재합니다',
+      })
+    } else {
+      form.clearErrors('hos_patient_id')
+    }
+  }, 700)
 
   return (
     <Form {...form}>
@@ -402,7 +416,15 @@ export default function PatientForm({
                 <HelperTooltip>메인차트에 등록되어있는 환자번호</HelperTooltip>
               </div>
               <FormControl>
-                <Input {...field} className="h-8 text-sm" />
+                <Input
+                  {...field}
+                  value={field.value || ''}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    handleHosPatientIdInputChange()
+                  }}
+                  className="h-8 text-sm"
+                />
               </FormControl>
 
               <FormMessage className="text-xs" />

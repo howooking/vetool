@@ -2,8 +2,6 @@
 
 import { IcuOrderColors, VitalRefRange } from '@/types/adimin'
 import type { IcuSidebarIoData, Vet } from '@/types/icu/chart'
-import type { TemplateChart } from '@/types/icu/template'
-import type { PatientData } from '@/types/patients'
 import React, { createContext, useContext } from 'react'
 
 interface IcuContextType {
@@ -19,8 +17,6 @@ type BasicHosData = {
   maintenanceRateCalcMethod: string
   rerCalcMethod: string
   sidebarData: IcuSidebarIoData[]
-  patientsData: PatientData[]
-  templateData: TemplateChart[]
   vitalRefRange: VitalRefRange[]
 }
 

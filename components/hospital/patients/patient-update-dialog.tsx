@@ -11,55 +11,58 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { createClient } from '@/lib/supabase/client'
-import type { PatientDataTable } from '@/types/patients'
+import type { SearchedPatientsData } from '@/types/patients'
 import { format } from 'date-fns'
 import { Edit } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 export default function PatientUpdateDialog({
   hosId,
   editingPatient,
-  hosPatientIds,
+  setIsEdited,
 }: {
   hosId: string
-  editingPatient: PatientDataTable
-  hosPatientIds: string[]
+  editingPatient: SearchedPatientsData
+  setIsEdited: Dispatch<SetStateAction<boolean>>
 }) {
   const supabase = createClient()
+  const { push } = useRouter()
+  const [isPatientUpdateDialogOpen, setIsPatientUpdateDialogOpen] =
+    useState(false)
   const [weightInfo, setWeightInfo] = useState({
     weight: '',
     weightMeasuredDate: '',
   })
-  const { push } = useRouter()
-
-  const [isPatientUpdateDialogOpen, setIsPatientUpdateDialogOpen] =
-    useState(false)
 
   useEffect(() => {
-    const fetchWeightInfo = async () => {
-      const { data, error } = await supabase
-        .from('vitals')
-        .select('body_weight, created_at')
-        .match({ patient_id: editingPatient.patient_id })
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
+    if (isPatientUpdateDialogOpen) {
+      const fetchWeightInfo = async () => {
+        const { data, error } = await supabase
+          .from('vitals')
+          .select('body_weight, created_at')
+          .match({ patient_id: editingPatient.patient_id })
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
 
-      if (error) {
-        console.error(error)
-        push(`/error/?message=${error.message}`)
+        if (error) {
+          console.error(error)
+          push(`/error/?message=${error.message}`)
+        }
+
+        setWeightInfo({
+          weight: data?.body_weight ?? '',
+          weightMeasuredDate: data?.created_at
+            ? format(data?.created_at, 'yyyy-MM-dd')
+            : '',
+        })
       }
 
-      setWeightInfo({
-        weight: data?.body_weight ?? '',
-        weightMeasuredDate: data?.created_at
-          ? format(data?.created_at, 'yyyy-MM-dd')
-          : '',
-      })
+      fetchWeightInfo()
     }
-    fetchWeightInfo()
-  }, [editingPatient.patient_id, push, supabase, isPatientUpdateDialogOpen])
+  }, [isPatientUpdateDialogOpen, editingPatient.patient_id, push, supabase])
 
   return (
     <Dialog
@@ -82,10 +85,10 @@ export default function PatientUpdateDialog({
           mode="updateFromPatientRoute"
           weight={weightInfo.weight}
           weightMeasuredDate={weightInfo.weightMeasuredDate}
-          hosPatientIds={hosPatientIds}
           hosId={hosId}
           editingPatient={editingPatient}
           setIsPatientUpdateDialogOpen={setIsPatientUpdateDialogOpen}
+          setIsEdited={setIsEdited}
         />
       </DialogContent>
     </Dialog>
