@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useIcuRegisterStore } from '@/lib/store/icu/icu-register'
 import { cn } from '@/lib/utils/utils'
 import type { Vet } from '@/types/icu/chart'
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 export default function RegisterDialog({
   hosId,
@@ -22,22 +22,31 @@ export default function RegisterDialog({
   vetsData: Vet[]
 }) {
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false)
-  const { step, setStep } = useIcuRegisterStore()
+  const { step, setStep, reset } = useIcuRegisterStore()
   const [tab, setTab] = useState('search')
 
-  const handleTabValueChange = (value: string) => {
-    if (value === 'search') {
-      setTab('search')
-      setStep('patientSearch')
-      return
-    }
+  const handleTabValueChange = useCallback(
+    (value: string) => {
+      if (value === 'search') {
+        setTab('search')
+        setStep('patientSearch')
+        return
+      }
 
-    if (value === 'register') {
-      setTab('register')
-      setStep('patientRegister')
-      return
-    }
-  }
+      if (value === 'register') {
+        setTab('register')
+        setStep('patientRegister')
+        return
+      }
+    },
+    [setTab, setStep],
+  )
+
+  const handleCloseDialog = useCallback(() => {
+    setIsRegisterDialogOpen(false)
+    setTab('search')
+    reset()
+  }, [setIsRegisterDialogOpen, reset])
 
   return (
     <Dialog open={isRegisterDialogOpen} onOpenChange={setIsRegisterDialogOpen}>
@@ -71,11 +80,11 @@ export default function RegisterDialog({
 
           <TabsContent value="search">
             {step === 'patientSearch' && (
-              <SearchPatientContainer itemsPerPage={8} />
+              <SearchPatientContainer itemsPerPage={8} isIcu />
             )}
             {step === 'icuRegister' && (
               <RegisterIcuForm
-                setIsRegisterDialogOpen={setIsRegisterDialogOpen}
+                handleCloseDialog={handleCloseDialog}
                 hosId={hosId}
                 groupList={groupList}
                 vetsData={vetsData}
@@ -95,7 +104,7 @@ export default function RegisterDialog({
             )}
             {step === 'icuRegister' && (
               <RegisterIcuForm
-                setIsRegisterDialogOpen={setIsRegisterDialogOpen}
+                handleCloseDialog={handleCloseDialog}
                 hosId={hosId}
                 groupList={groupList}
                 vetsData={vetsData}

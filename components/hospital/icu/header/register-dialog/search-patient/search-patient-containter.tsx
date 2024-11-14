@@ -11,8 +11,10 @@ import { useDebouncedCallback } from 'use-debounce'
 
 export default function SearchPatientContainer({
   itemsPerPage,
+  isIcu,
 }: {
   itemsPerPage: number
+  isIcu?: boolean
 }) {
   const { hos_id } = useParams()
   const [isEdited, setIsEdited] = useState(false)
@@ -46,6 +48,7 @@ export default function SearchPatientContainer({
     // 정상적인 검색어 값이면 검색
     if (inputValue.trim()) {
       setIsSearching(true)
+
       const data = await searchPatientsData(
         inputValue,
         hos_id as string,
@@ -79,13 +82,13 @@ export default function SearchPatientContainer({
         onChange={handleInputChange}
         id="search-chart"
         autoComplete="off"
-        className="w-full"
       />
 
       <SearchPatientTable
         isSearching={isSearching}
         searchedPatients={patientsData.data}
         setIsEdited={setIsEdited}
+        isIcu={isIcu}
       />
 
       {!isSearching && (
