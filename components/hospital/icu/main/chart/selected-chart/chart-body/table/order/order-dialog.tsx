@@ -2,6 +2,7 @@
 
 import PreviewDialog from '@/components/hospital/icu/common-dialogs/preview/preview-dialog'
 import OrderForm from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/order-form'
+import OrdererSelectStep from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/orderer/orderer-select-step'
 import ConfirmCopyTemplateOrderDialog from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/template/confirm-copy-template-order-dialog'
 import { templateOrderColumns } from '@/components/hospital/icu/main/chart/selected-chart/chart-body/table/order/template/template-order-columns'
 import { Button } from '@/components/ui/button'
@@ -15,13 +16,20 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { getTemplateCharts } from '@/lib/services/icu/template/template'
 import { usePreviewDialogStore } from '@/lib/store/icu/preview-dialog'
 import { useTemplateStore } from '@/lib/store/icu/template'
-import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { Patient, SelectedIcuOrder } from '@/types/icu/chart'
+import { TemplateChart } from '@/types/icu/template'
 import { Plus } from 'lucide-react'
-import { Dispatch, SetStateAction, useCallback, useEffect } from 'react'
-import OrdererSelectStep from './orderer/orderer-select-step'
+import { useParams } from 'next/navigation'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 
 export default function OrderDialog({
   icuChartId,
@@ -56,9 +64,22 @@ export default function OrderDialog({
 }) {
   const { isPreviewDialogOpen } = usePreviewDialogStore()
   const { isTemplateDialogOpen } = useTemplateStore()
-  const {
-    basicHosData: { templateData },
-  } = useBasicHosDataContext()
+  const { hos_id } = useParams()
+
+  const [templateCharts, setTemplateCharts] = useState<TemplateChart[]>([])
+  const [tab, setTab] = useState('default')
+
+  const handleTabValueChange = (value: string) => {
+    if (value === 'default') {
+      setTab('default')
+      return
+    }
+
+    if (value === 'template') {
+      setTab('template')
+      return
+    }
+  }
 
   const handleOpenChange = useCallback(() => {
     if (orderStep === 'closed') {
@@ -70,6 +91,7 @@ export default function OrderDialog({
   }, [orderStep, setOrderStep, reset])
 
   useEffect(() => {
+    setTab('default')
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
         event.preventDefault()
@@ -84,6 +106,18 @@ export default function OrderDialog({
     }
   }, [handleOpenChange])
 
+  useEffect(() => {
+    if (tab === 'template' && templateCharts.length === 0) {
+      const fetchTemplateData = async () => {
+        const templateChartData = await getTemplateCharts(hos_id as string)
+
+        setTemplateCharts(templateChartData)
+      }
+
+      fetchTemplateData()
+    }
+  }, [tab, templateCharts.length, hos_id])
+
   return (
     <Dialog open={orderStep !== 'closed'} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
@@ -96,6 +130,7 @@ export default function OrderDialog({
           <Plus size={18} />
         </Button>
       </DialogTrigger>
+
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           {orderStep === 'upsert' && (
@@ -109,8 +144,13 @@ export default function OrderDialog({
           )}
           <DialogDescription />
         </DialogHeader>
+
         {orderStep === 'upsert' && (
-          <Tabs defaultValue="default">
+          <Tabs
+            defaultValue="default"
+            value={tab}
+            onValueChange={handleTabValueChange}
+          >
             <TabsList className="grid grid-cols-2">
               <TabsTrigger value="default">직접 입력</TabsTrigger>
               <TabsTrigger value="template">템플릿 오더 추가</TabsTrigger>
@@ -134,7 +174,7 @@ export default function OrderDialog({
             <TabsContent value="template">
               <DataTable
                 columns={templateOrderColumns}
-                data={templateData || []}
+                data={templateCharts || []}
                 searchPlaceHolder="템플릿 이름, 설명, 환자명으로 검색"
               />
 
