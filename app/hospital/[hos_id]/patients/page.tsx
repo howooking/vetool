@@ -15,7 +15,7 @@ export default async function HospitalPatientsPage(props: {
         <UploadPatientArea />
       </div>
 
-      <SearchPatientContainer itemsPerPage={10} />
+      <SearchPatientContainer itemsPerPage={10} isIcu={false} />
     </div>
   )
 }

@@ -14,7 +14,7 @@ export default function SearchPatientContainer({
   isIcu,
 }: {
   itemsPerPage: number
-  isIcu?: boolean
+  isIcu: boolean
 }) {
   const { hos_id } = useParams()
   const [isEdited, setIsEdited] = useState(false)
@@ -52,6 +52,7 @@ export default function SearchPatientContainer({
       const data = await searchPatientsData(
         inputValue,
         hos_id as string,
+        isIcu,
         currentPage,
         itemsPerPage,
       )

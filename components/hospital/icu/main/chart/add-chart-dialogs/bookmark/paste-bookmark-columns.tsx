@@ -16,7 +16,7 @@ export const pasteBookmarkColumns: ColumnDef<TemplateChart>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          북마크 이름
+          제목
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
