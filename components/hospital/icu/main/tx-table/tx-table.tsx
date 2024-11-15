@@ -1,6 +1,7 @@
 'use client'
 
 import NoResult from '@/components/common/no-result'
+import NoResultSquirrel from '@/components/common/no-result-squirrel'
 import PatientInfo from '@/components/hospital/common/patient-info'
 import TxTableCell from '@/components/hospital/icu/main/tx-table/tx-table-cell'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -14,6 +15,7 @@ import {
 } from '@/components/ui/table'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
+import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { IcuTxTableData } from '@/types/icu/tx-table'
 
 export default function TxTable({
@@ -33,9 +35,10 @@ export default function TxTable({
 
   if (filteredTxData.length === 0) {
     return (
-      <NoResult
-        title={`모든 ${orderType ?? ''} 처치를 완료했습니다`}
-        className="h-icu-chart-main"
+      <NoResultSquirrel
+        text={`모든 ${orderType ?? ''} 처치를 완료했습니다`}
+        className="h-icu-chart-main flex-col"
+        size="lg"
       />
     )
   }
