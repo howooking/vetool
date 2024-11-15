@@ -181,6 +181,7 @@ export const updatePatientFromPatientRoute = async (
 export const searchPatientsData = async (
   searchTerm: string,
   hosId: string,
+  isIcu: boolean,
   currentPage: number,
   itemsPerPage: number,
 ) => {
@@ -190,8 +191,9 @@ export const searchPatientsData = async (
     .rpc('search_patients', {
       search_term_input: searchTerm,
       hos_id_input: hosId,
-      page_number: currentPage,
-      items_per_page: itemsPerPage,
+      is_icu_input: isIcu,
+      page_number_input: currentPage,
+      items_per_page_input: itemsPerPage,
     })
     .returns<PaginatedPatientsData>()
 
