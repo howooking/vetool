@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/table'
 import { DEFAULT_ICU_ORDER_TYPE } from '@/constants/hospital/icu/chart/order'
 import { TIMES } from '@/constants/hospital/icu/chart/time'
+import { cn } from '@/lib/utils/utils'
 import { useBasicHosDataContext } from '@/providers/basic-hos-data-context-provider'
 import type { IcuTxTableData } from '@/types/icu/tx-table'
 
@@ -69,7 +70,7 @@ export default function TxTable({
                 }}
                 className="divide-x"
               >
-                <TableCell className="min-w-[120px] text-center">
+                <TableCell className="sticky left-0 min-w-[120px] bg-white text-center shadow-md">
                   <PatientInfo
                     name={txData.patient.name}
                     breed={txData.patient.breed}
