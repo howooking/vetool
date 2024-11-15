@@ -1581,8 +1581,9 @@ export type Database = {
         Args: {
           hos_id_input: string
           search_term_input: string
-          page_number?: number
-          items_per_page?: number
+          is_icu_input?: boolean
+          page_number_input?: number
+          items_per_page_input?: number
         }
         Returns: Json
       }
